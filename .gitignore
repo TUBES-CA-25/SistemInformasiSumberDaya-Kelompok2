@@ -1,0 +1,25 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Logs
+storage/logs/*
+!storage/logs/.gitkeep
+
+# Uploads
+storage/uploads/*
+!storage/uploads/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
