@@ -29,6 +29,6 @@
         </div>
     </footer>
 
-    <script src="http://localhost/SistemManagementSumberDaya/public/js/script.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 </html>

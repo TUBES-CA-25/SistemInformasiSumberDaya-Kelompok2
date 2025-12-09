@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Informasi Sumber Daya Lab</title>
     
-    <link rel="stylesheet" href="http://localhost/SistemManagementSumberDaya/public/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     
     </head>
 <body>
