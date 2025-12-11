@@ -18,6 +18,20 @@ class KontakController extends Controller {
         $this->success($data, 'Kontak retrieved successfully');
     }
 
+    public function show($params) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->error('ID kontak tidak ditemukan', null, 400);
+        }
+
+        $data = $this->model->getById($id, 'idKontak');
+        if (!$data) {
+            $this->error('Kontak tidak ditemukan', null, 404);
+        }
+
+        $this->success($data, 'Kontak retrieved successfully');
+    }
+
     public function store() {
         $input = $this->getJson();
         
@@ -41,6 +55,25 @@ class KontakController extends Controller {
             $this->success([], 'Kontak updated successfully');
         }
         $this->error('Failed to update kontak', null, 500);
+    }
+
+    public function delete($params) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->error('ID kontak tidak ditemukan', null, 400);
+        }
+
+        $existing = $this->model->getById($id, 'idKontak');
+        if (!$existing) {
+            $this->error('Kontak tidak ditemukan', null, 404);
+        }
+
+        $result = $this->model->delete($id, 'idKontak');
+        
+        if ($result) {
+            $this->success([], 'Kontak deleted successfully');
+        }
+        $this->error('Failed to delete kontak', null, 500);
     }
 }
 ?>

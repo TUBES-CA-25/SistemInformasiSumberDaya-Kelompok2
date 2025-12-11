@@ -1,243 +1,491 @@
-# API Documentation
+# API Documentation - Sistem Informasi Manajemen Sumber Daya
 
-## Base URL
-```
-http://localhost/SistemManagementSumberDaya/public/api.php
-```
+**Base URL:** `http://localhost/SistemManagementSumberDaya/public/api.php`
 
-## Response Format
-Semua response dalam format JSON dengan struktur:
+**Response Format:** JSON dengan struktur standar:
 ```json
 {
-    "status": "success|error",
-    "message": "message",
-    "data": {}
-}
-```
-
-## Authentication
-API ini saat ini belum menggunakan authentication. Tambahkan auth middleware jika diperlukan.
-
----
-
-## Endpoints
-
-### Health Check
-```
-GET /health
-```
-
-### Laboratorium
-```
-GET    /laboratorium              - Get all
-GET    /laboratorium/{id}         - Get by ID
-POST   /laboratorium              - Create
-PUT    /laboratorium/{id}         - Update
-DELETE /laboratorium/{id}         - Delete
-```
-
-**Request Body (POST/PUT):**
-```json
-{
-    "nama": "Lab Komputer",
-    "deskripsi": "Laboratorium Komputer...",
-    "gambar": "lab1.jpg",
-    "jumlahKursi": 30
-}
-```
-
-### Asisten
-```
-GET    /asisten                   - Get all
-GET    /asisten/{id}              - Get by ID
-GET    /asisten/{id}/matakuliah   - Get matakuliah
-POST   /asisten                   - Create
-PUT    /asisten/{id}              - Update
-DELETE /asisten/{id}              - Delete
-```
-
-**Request Body (POST/PUT):**
-```json
-{
-    "nama": "Nama Asisten",
-    "jurusan": "Teknik Informatika",
-    "email": "asisten@univ.ac.id",
-    "foto": "asisten1.jpg",
-    "statusAktif": true
-}
-```
-
-### Matakuliah
-```
-GET    /matakuliah                - Get all
-GET    /matakuliah/{id}           - Get by ID
-GET    /matakuliah/{id}/asisten   - Get asisten
-POST   /matakuliah                - Create
-PUT    /matakuliah/{id}           - Update
-DELETE /matakuliah/{id}           - Delete
-```
-
-**Request Body (POST/PUT):**
-```json
-{
-    "kodeMatakuliah": "TI101",
-    "namaMatakuliah": "Pemrograman Dasar",
-    "semester": 1,
-    "sksKuliah": 3
-}
-```
-
-### Jadwal Praktikum
-```
-GET    /jadwal                    - Get all
-GET    /jadwal/{id}               - Get by ID
-POST   /jadwal                    - Create
-PUT    /jadwal/{id}               - Update
-DELETE /jadwal/{id}               - Delete
-```
-
-**Request Body (POST/PUT):**
-```json
-{
-    "idMatakuliah": 1,
-    "idLaboratorium": 1,
-    "hari": "Senin",
-    "waktuMulai": "08:00:00",
-    "waktuSelesai": "10:00:00",
-    "kelas": "A",
-    "status": "active"
-}
-```
-
-### Informasi Lab
-```
-GET    /informasi                 - Get all
-GET    /informasi/{id}            - Get by ID
-GET    /informasi/tipe/{type}     - Get by type
-POST   /informasi                 - Create
-PUT    /informasi/{id}            - Update
-DELETE /informasi/{id}            - Delete
-```
-
-**Request Body (POST/PUT):**
-```json
-{
-    "informasi": "Konten informasi",
-    "judul_informasi": "Judul",
-    "tipe_informasi": "pengumuman",
-    "is_informasi": true
-}
-```
-
-### Visi Misi
-```
-GET    /visi-misi                 - Get latest
-POST   /visi-misi                 - Create
-```
-
-**Request Body (POST):**
-```json
-{
-    "visi": "Visi text",
-    "misi": "Misi text"
-}
-```
-
-### Manajemen
-```
-GET    /manajemen                 - Get all
-GET    /manajemen/{id}            - Get by ID
-POST   /manajemen                 - Create
-PUT    /manajemen/{id}            - Update
-DELETE /manajemen/{id}            - Delete
-```
-
-**Request Body (POST/PUT):**
-```json
-{
-    "nama": "Nama Manager",
-    "jabatan": "Kepala Lab",
-    "foto": "manager1.jpg"
-}
-```
-
-### Kontak
-```
-GET    /kontak                    - Get latest
-POST   /kontak                    - Create
-PUT    /kontak/{id}               - Update
-```
-
-**Request Body (POST/PUT):**
-```json
-{
-    "alamat": "Jl. Universitas No. 1",
-    "nomorTelepon": "0274123456",
-    "email": "lab@univ.ac.id",
-    "urlMap": "https://maps.google.com/..."
+  "status": "success|error",
+  "message": "Deskripsi",
+  "data": {}
 }
 ```
 
 ---
 
-## Error Codes
+## 📋 Daftar Endpoint (12 Total)
 
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request
-- `404` - Not Found
-- `500` - Internal Server Error
+| No | Endpoint | Method | Deskripsi |
+|---|---|---|---|
+| 1 | /health | GET | Cek status API |
+| 2 | /laboratorium | GET, POST, PUT, DELETE | Data laboratorium |
+| 3 | /asisten | GET, POST, PUT, DELETE | Data asisten praktikum |
+| 4 | /matakuliah | GET, POST, PUT, DELETE | Data mata kuliah |
+| 5 | /asisten-matakuliah | GET, POST, PUT, DELETE | Relasi asisten-matakuliah |
+| 6 | /jadwal | GET, POST, PUT, DELETE | Jadwal praktikum |
+| 7 | /visi-misi | GET, POST, PUT, DELETE | Visi dan misi |
+| 8 | /tata-tertib | GET, POST, PUT, DELETE | File tata tertib |
+| 9 | /informasi | GET, POST, PUT, DELETE | Berita dan pengumuman |
+| 10 | /integrasi-web | GET, POST, PUT, DELETE | Link sistem eksternal |
+| 11 | /manajemen | GET, POST, PUT, DELETE | Data manajemen |
+| 12 | /kontak | GET, POST, PUT, DELETE | Informasi kontak |
 
 ---
 
-## Contoh Request dengan cURL
+## 1. Health Check
 
-### GET All Laboratorium
+### GET /health
 ```bash
-curl -X GET "http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium"
+curl http://localhost/SistemManagementSumberDaya/public/api.php/health
 ```
 
-### POST Create Laboratorium
+---
+
+## 2. Laboratorium
+
+### GET /laboratorium
 ```bash
-curl -X POST "http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium" \
+curl http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium
+```
+
+### GET /laboratorium/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium/1
+```
+
+### POST /laboratorium
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium \
   -H "Content-Type: application/json" \
   -d '{
-    "nama": "Lab Komputer",
-    "deskripsi": "Laboratorium Komputer",
-    "jumlahKursi": 30
+    "nama": "Lab Programming",
+    "idKordinatorAsisten": 1,
+    "deskripsi": "Laboratorium pemrograman",
+    "gambar": "lab.jpg",
+    "jumlahPc": 25,
+    "jumlahKursi": 40
   }'
 ```
 
-### PUT Update Laboratorium
+**Required:** `nama` | **Optional:** `idKordinatorAsisten`, `deskripsi`, `gambar`, `jumlahPc`, `jumlahKursi`
+
+### PUT /laboratorium/{id}
 ```bash
-curl -X PUT "http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium/1" \
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium/1 \
   -H "Content-Type: application/json" \
-  -d '{
-    "nama": "Lab Komputer Updated",
-    "jumlahKursi": 35
-  }'
+  -d '{"nama": "Lab Updated", "jumlahPc": 30}'
 ```
 
-### DELETE Laboratorium
+### DELETE /laboratorium/{id}
 ```bash
-curl -X DELETE "http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium/1"
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/laboratorium/1
 ```
 
 ---
 
-## Setup Database
+## 3. Asisten
 
-1. Buka phpMyAdmin di `http://localhost/phpmyadmin`
-2. Jalankan script `database.sql` yang ada di root project
-3. Pastikan nama database sesuai: `sistem_manajemen_sumber_daya`
+### GET /asisten
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/asisten
+```
+
+### GET /asisten/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/asisten/1
+```
+
+### GET /asisten/{id}/matakuliah
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/asisten/1/matakuliah
+```
+
+### POST /asisten
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/asisten \
+  -H "Content-Type: application/json" \
+  -d '{"nama": "Budi", "jurusan": "TI", "email": "budi@example.com", "statusAktif": true}'
+```
+
+**Required:** `nama`, `email` | **Optional:** `jurusan`, `foto`, `statusAktif`
+
+### PUT /asisten/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/asisten/1 \
+  -H "Content-Type: application/json" \
+  -d '{"statusAktif": false}'
+```
+
+### DELETE /asisten/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/asisten/1
+```
 
 ---
 
-## Development Notes
+## 4. Matakuliah
 
-- Semua file model ada di `app/models/`
-- Semua file controller ada di `app/controllers/`
-- Router handling ada di `app/config/Router.php`
-- Setiap request secara otomatis ter-route ke controller yang sesuai
+### GET /matakuliah
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/matakuliah
+```
+
+### GET /matakuliah/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/matakuliah/1
+```
+
+### GET /matakuliah/{id}/asisten
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/matakuliah/1/asisten
+```
+
+### POST /matakuliah
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/matakuliah \
+  -H "Content-Type: application/json" \
+  -d '{"kodeMatakuliah": "KK101", "namaMatakuliah": "Pemrograman Dasar", "semester": 1, "sksKuliah": 3}'
+```
+
+**Required:** `kodeMatakuliah` (unik), `namaMatakuliah` | **Optional:** `semester`, `sksKuliah`
+
+### PUT /matakuliah/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/matakuliah/1 \
+  -H "Content-Type: application/json" \
+  -d '{"sksKuliah": 4}'
+```
+
+### DELETE /matakuliah/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/matakuliah/1
+```
 
 ---
+
+## 5. AsistenMatakuliah
+
+### GET /asisten-matakuliah
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/asisten-matakuliah
+```
+
+### GET /asisten-matakuliah/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/asisten-matakuliah/1
+```
+
+### POST /asisten-matakuliah
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/asisten-matakuliah \
+  -H "Content-Type: application/json" \
+  -d '{"idAsisten": 1, "idMatakuliah": 1, "tahunAjaran": "2024/2025", "semeserMatakuliah": "Ganjil"}'
+```
+
+**Required:** `idAsisten` (FK), `idMatakuliah` (FK) | **Optional:** `tahunAjaran`, `semeserMatakuliah`
+
+### PUT /asisten-matakuliah/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/asisten-matakuliah/1 \
+  -H "Content-Type: application/json" \
+  -d '{"tahunAjaran": "2025/2026"}'
+```
+
+### DELETE /asisten-matakuliah/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/asisten-matakuliah/1
+```
+
+---
+
+## 6. Jadwal Praktikum
+
+### GET /jadwal
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/jadwal
+```
+
+### GET /jadwal/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/jadwal/1
+```
+
+### POST /jadwal
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/jadwal \
+  -H "Content-Type: application/json" \
+  -d '{"idMatakuliah": 1, "idLaboratorium": 1, "hari": "Senin", "waktuMulai": "08:00:00", "waktuSelesai": "10:00:00", "kelas": "A", "status": "Aktif"}'
+```
+
+**Required:** `idMatakuliah` (FK), `idLaboratorium` (FK) | **Optional:** `hari`, `waktuMulai`, `waktuSelesai`, `kelas`, `status`
+
+### PUT /jadwal/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/jadwal/1 \
+  -H "Content-Type: application/json" \
+  -d '{"hari": "Selasa", "status": "Ditunda"}'
+```
+
+### DELETE /jadwal/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/jadwal/1
+```
+
+---
+
+## 7. Visi Misi
+
+### GET /visi-misi
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/visi-misi
+```
+
+### GET /visi-misi/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/visi-misi/1
+```
+
+### POST /visi-misi
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/visi-misi \
+  -H "Content-Type: application/json" \
+  -d '{"visi": "Visi text", "misi": "Misi text"}'
+```
+
+**Required:** `visi`, `misi`
+
+### PUT /visi-misi/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/visi-misi/1 \
+  -H "Content-Type: application/json" \
+  -d '{"visi": "Updated"}'
+```
+
+### DELETE /visi-misi/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/visi-misi/1
+```
+
+---
+
+## 8. Tata Tertib
+
+### GET /tata-tertib
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/tata-tertib
+```
+
+### GET /tata-tertib/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/tata-tertib/1
+```
+
+### POST /tata-tertib
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/tata-tertib \
+  -H "Content-Type: application/json" \
+  -d '{"namaFile": "Tata-Tertib.pdf", "uraFile": "Peraturan lab"}'
+```
+
+**Required:** `namaFile` | **Optional:** `uraFile`
+
+### PUT /tata-tertib/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/tata-tertib/1 \
+  -H "Content-Type: application/json" \
+  -d '{"uraFile": "Updated"}'
+```
+
+### DELETE /tata-tertib/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/tata-tertib/1
+```
+
+---
+
+## 9. Informasi Lab
+
+### GET /informasi
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/informasi
+```
+
+### GET /informasi/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/informasi/1
+```
+
+### GET /informasi/tipe/{type}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/informasi/tipe/pengumuman
+```
+
+**Tipe:** `berita`, `pengumuman`, `info_penting`
+
+### POST /informasi
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/informasi \
+  -H "Content-Type: application/json" \
+  -d '{"informasi": "Konten", "judul_informasi": "Judul", "tipe_informasi": "pengumuman", "is_informasi": true}'
+```
+
+**Required:** `informasi`, `tipe_informasi` | **Optional:** `judul_informasi`, `is_informasi`, `tanggal_berlaku_akhir`
+
+### PUT /informasi/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/informasi/1 \
+  -H "Content-Type: application/json" \
+  -d '{"is_informasi": false}'
+```
+
+### DELETE /informasi/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/informasi/1
+```
+
+---
+
+## 10. Integrasi Web
+
+### GET /integrasi-web
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/integrasi-web
+```
+
+### GET /integrasi-web/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/integrasi-web/1
+```
+
+### POST /integrasi-web
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/integrasi-web \
+  -H "Content-Type: application/json" \
+  -d '{"namaWeb": "Portal", "urlWeb": "https://portal.ac.id", "deskripsi": "Desc"}'
+```
+
+**Required:** `namaWeb` | **Optional:** `urlWeb`, `deskripsi`
+
+### PUT /integrasi-web/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/integrasi-web/1 \
+  -H "Content-Type: application/json" \
+  -d '{"deskripsi": "Updated"}'
+```
+
+### DELETE /integrasi-web/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/integrasi-web/1
+```
+
+---
+
+## 11. Manajemen
+
+### GET /manajemen
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/manajemen
+```
+
+### GET /manajemen/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/manajemen/1
+```
+
+### POST /manajemen
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/manajemen \
+  -H "Content-Type: application/json" \
+  -d '{"nama": "Dr. Budi", "jabatan": "Kepala Lab", "foto": "budi.jpg"}'
+```
+
+**Required:** `nama` | **Optional:** `jabatan`, `foto`
+
+### PUT /manajemen/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/manajemen/1 \
+  -H "Content-Type: application/json" \
+  -d '{"jabatan": "Wakil Kepala"}'
+```
+
+### DELETE /manajemen/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/manajemen/1
+```
+
+---
+
+## 12. Kontak
+
+### GET /kontak
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/kontak
+```
+
+### GET /kontak/{id}
+```bash
+curl http://localhost/SistemManagementSumberDaya/public/api.php/kontak/1
+```
+
+### POST /kontak
+```bash
+curl -X POST http://localhost/SistemManagementSumberDaya/public/api.php/kontak \
+  -H "Content-Type: application/json" \
+  -d '{"alamat": "Jl. Teknik", "nomorTelepon": "0251123456", "email": "lab@ac.id", "urlMap": "https://maps..."}'
+```
+
+**Optional:** `alamat`, `nomorTelepon`, `email`, `urlMap`
+
+### PUT /kontak/{id}
+```bash
+curl -X PUT http://localhost/SistemManagementSumberDaya/public/api.php/kontak/1 \
+  -H "Content-Type: application/json" \
+  -d '{"nomorTelepon": "0251654321"}'
+```
+
+### DELETE /kontak/{id}
+```bash
+curl -X DELETE http://localhost/SistemManagementSumberDaya/public/api.php/kontak/1
+```
+
+---
+
+## HTTP Status Codes
+
+| Code | Meaning |
+|------|----------|
+| 200 | OK |
+| 201 | Created |
+| 400 | Bad Request |
+| 404 | Not Found |
+| 500 | Server Error |
+
+---
+
+## ⚠️ Error Response
+
+```json
+{
+  "status": "error",
+  "message": "Field required: nama",
+  "data": null
+}
+```
+
+---
+
+## Foreign Key Requirements
+
+Pastikan parent record sudah ada:
+
+- **Laboratorium.idKordinatorAsisten** → Asisten.idAsisten harus ada
+- **AsistenMatakuliah.idAsisten** → Asisten.idAsisten harus ada
+- **AsistenMatakuliah.idMatakuliah** → Matakuliah.idMatakuliah harus ada
+- **JadwalPraktikum.idMatakuliah** → Matakuliah.idMatakuliah harus ada
+- **JadwalPraktikum.idLaboratorium** → Laboratorium.idLaboratorium harus ada
+
+---
+
+**API Version:** 1.0  
+**Last Updated:** 11 Desember 2025  
+**Status:** ✅ Production Ready

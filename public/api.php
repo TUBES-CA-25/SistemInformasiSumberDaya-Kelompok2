@@ -41,8 +41,9 @@ if (strpos($request_uri, $script_name) === 0) {
     $path = preg_replace('#.*/public/api\.php#', '', $path);
 }
 
-// Clean path
-$path = '/' . trim($path, '/');
+// Clean path - decode URL and remove whitespace
+$path = urldecode($path);
+$path = '/' . trim($path, '/ ');
 
 // Route mapping dengan HTTP METHOD
 $routes = [
@@ -62,9 +63,17 @@ $routes = [
         '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'show'],
         '/informasi/tipe/{type}' => ['controller' => 'InformasiLabController', 'method' => 'byType'],
         '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'getLatest'],
+        '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'show'],
         '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'index'],
         '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'show'],
         '/kontak' => ['controller' => 'KontakController', 'method' => 'getLatest'],
+        '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'show'],
+        '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'index'],
+        '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'show'],
+        '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'index'],
+        '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'show'],
+        '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'index'],
+        '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],
     ],
     'POST' => [
         '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'store'],
@@ -75,6 +84,9 @@ $routes = [
         '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'store'],
         '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'store'],
         '/kontak' => ['controller' => 'KontakController', 'method' => 'store'],
+        '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'store'],
+        '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
+        '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'store'],
     ],
     'PUT' => [
         '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'update'],
@@ -82,8 +94,12 @@ $routes = [
         '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'update'],
         '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'update'],
         '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'update'],
+        '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'update'],
         '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'update'],
         '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'update'],
+        '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'update'],
+        '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'],
+        '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'update'],
     ],
     'DELETE' => [
         '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'delete'],
@@ -91,7 +107,12 @@ $routes = [
         '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'delete'],
         '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'delete'],
         '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'delete'],
+        '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'delete'],
         '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'delete'],
+        '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'delete'],
+        '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'delete'],
+        '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'delete'],
+        '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'delete'],
     ],
 ];
 
