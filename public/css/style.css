@@ -1,19 +1,280 @@
-/* Main Stylesheet */
+/* === REVISI STYLE FINAL (MATCHING WIREFRAME) === */
 
-* {
-    margin: 0;
-    padding: 0;
+/* 1. Global Reset & Font */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+body { background-color: #fff; color: #111; line-height: 1.6; }
+.container { width: 92%; max-width: 1280px; margin: 0 auto; }
+img { max-width: 100%; display: block; }
+
+/* 2. Navbar (Logo Pill Shape) */
+.navbar { background: #fff; padding: 20px 0; border-bottom: 1px solid #f0f0f0; }
+.navbar .container { display: flex; justify-content: space-between; align-items: center; }
+
+/* Logo Style seperti Wireframe (Abu-abu Lonjong) */
+.logo a { 
+    background-color: #e0e0e0; 
+    padding: 10px 25px; 
+    border-radius: 50px; /* Membuat lonjong */
+    text-decoration: none; 
+    color: #000; 
+    font-weight: bold; 
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.logo a::before { content: '★'; font-size: 1rem; } /* Ikon bintang dummy */
+
+.nav-links { list-style: none; display: flex; gap: 30px; }
+.nav-links a { text-decoration: none; color: #666; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
+.nav-links a:hover { color: #000; }
+
+/* 3. Hero Section */
+.hero-section { padding: 80px 0; background: #fff; }
+.hero-section .container { display: flex; align-items: center; justify-content: space-between; gap: 60px; }
+
+.hero-content { flex: 1; max-width: 500px; }
+.hero-content h1 { 
+    font-size: 3rem; 
+    font-weight: 800; 
+    color: #111; 
+    line-height: 1.1; 
+    margin-bottom: 20px; 
+    letter-spacing: -1px;
+}
+.hero-content p { font-size: 1rem; color: #666; margin-bottom: 30px; max-width: 90%; }
+
+/* Tombol Hitam Lonjong (Pill) */
+.btn-primary { 
+    background: #111; 
+    color: #fff; 
+    padding: 12px 30px; 
+    text-decoration: none; 
+    border-radius: 50px; 
+    font-weight: 600; 
+    font-size: 0.9rem;
+    display: inline-block; 
+}
+.btn-primary:hover { background: #333; }
+
+.hero-image { flex: 1; }
+.hero-image img { border-radius: 8px; width: 100%; height: auto; object-fit: cover; }
+
+/* 4. Features Section (LAYOUT DIPERBAIKI: Ikon di Kiri) */
+.features-section { padding: 60px 0; background: #fff; border-top: 1px solid #f5f5f5; }
+.features-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); /* 4 Kolom sejajar */
+    gap: 20px; 
+}
+
+/* Card Style Baru: Flexbox (Samping-sampingan) */
+.feature-card { 
+    display: flex; 
+    align-items: flex-start; /* Ikon dan teks rata atas */
+    gap: 15px; 
+    padding: 10px;
+}
+
+/* Ukuran Ikon Kotak Abu-abu */
+.feature-icon img { 
+    width: 60px; 
+    height: 60px; 
+    border-radius: 6px; 
+    background-color: #7f8c8d; /* Fallback color */
+    object-fit: cover;
+}
+
+.feature-card h3 { 
+    font-size: 1rem; 
+    font-weight: 700; 
+    margin-bottom: 5px; 
+    color: #000; 
+    line-height: 1.3;
+}
+.feature-card p { 
+    font-size: 0.75rem; /* Font kecil sesuai wireframe */
+    color: #555; 
+    line-height: 1.4;
+}
+
+/* Responsive: Jika layar kecil, jadi 2 kolom */
+@media (max-width: 900px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-section .container { flex-direction: column; text-align: center; }
+    .hero-content { margin: 0 auto; }
+}
+
+/* 5. Video Section */
+.video-section { padding: 80px 0; text-align: center; background: #fff; }
+.subtitle { font-size: 0.8rem; font-weight: bold; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.video-section h2 { font-size: 2rem; font-weight: 800; margin-bottom: 40px; }
+.video-placeholder img { width: 100%; max-width: 900px; margin: 0 auto; border-radius: 0; background: #ecf0f1; }
+
+/* 6. Footer Clean */
+footer { background: #f9f9f9; padding: 60px 0; margin-top: 50px; font-size: 0.9rem; }
+.footer-content { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 50px; margin-bottom: 40px; }
+.footer-section h3 { margin-bottom: 20px; font-size: 1.1rem; font-weight: 700; }
+.footer-section p, .footer-section li a { color: #444; text-decoration: none; margin-bottom: 10px; display: block; }
+.copyright { text-align: center; color: #888; font-size: 0.8rem; border-top: 1px solid #e0e0e0; padding-top: 20px; margin-top: 20px; }
+
+/* === TAMBAHAN STYLE (AKSES CEPAT & GALERI) === */
+
+/* Info Section (3 Kartu Bawah) */
+.info-section { padding: 80px 0; background: #fff; }
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+
+.info-card { background: #f8f9fa; border-radius: 10px; overflow: hidden; }
+.info-img img { width: 100%; height: 200px; object-fit: cover; }
+.info-body { padding: 20px; }
+.info-body h3 { font-size: 1.1rem; margin-bottom: 10px; color: #333; }
+.info-body p { font-size: 0.9rem; color: #666; }
+
+/* Responsive Info Cards */
+@media (max-width: 768px) {
+    .info-grid { grid-template-columns: 1fr; }
+}
+
+/* Gallery Section (Strip Foto Bawah) */
+.gallery-section { padding: 40px 0; background: #fff; border-top: 1px solid #eee; }
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+.gallery-grid img { width: 100%; border-radius: 8px; height: 150px; object-fit: cover; opacity: 0.8; transition: opacity 0.3s; }
+.gallery-grid img:hover { opacity: 1; }
+
+@media (max-width: 600px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* === STYLE SLIDER (CAROUSEL) - REVISI FULL WIDTH === */
+
+.features-slider-section {
+    padding: 60px 0;
+    background: #fff;
+    overflow: hidden;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Wadah Utama Slider */
+.slider-container {
+    position: relative;
+    width: 100%;      /* Memenuhi lebar container induk */
+    max-width: 100%;  /* Memastikan tidak dibatasi pixel tertentu */
+    margin: 0 auto;
+    padding-bottom: 20px; /* Ruang untuk dots */
+}
+
+/* Track Panjang */
+.slider-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Efek geser lebih smooth */
+    width: 100%;
+}
+
+/* Item Slide (1 Slide = 1 Layar Penuh) */
+.slide {
+    width: 100vw;       /* Lebar sama dengan lebar layar browser */
+    flex: 0 0 100vw;    /* Mencegah slide mengecil (shrink) */
+    max-width: 100%;    /* Mencegah horizontal scrollbar */
+    padding: 60px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+.slide-content-wrapper {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    gap: 80px; /* Jarak antara gambar dan teks */
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+/* Gambar Besar Kiri */
+.slide-image {
+    flex: 1;
+    max-width: 550px; /* Batas maksimal agar gambar tidak raksasa */
+}
+
+.slide-image img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: 12px;
+    background-color: #7f8c8d; /* Warna abu sesuai wireframe */
+    box-shadow: none; /* Wireframe terlihat flat/bersih */
+}
+
+/* Teks Kanan */
+.slide-text {
+    flex: 1;
+    text-align: left;
+}
+
+.slide-content {
+    flex: 1;
+    max-width: 500px;
+    text-align: left;
+}
+
+.slide-text h2 {
+    font-size: 2.8rem;
+    font-weight: 800; /* Font tebal seperti wireframe */
+    color: #111;
+    margin-bottom: 25px;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.slide-text p {
+    font-size: 1.1rem;
+    color: #444;
+    line-height: 1.6;
+    max-width: 90%; /* Membatasi panjang teks agar mudah dibaca */
+}
+
+/* Navigasi Dots (Titik-titik Bawah) - DIPERKECIL */
+.slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 40px; /* Jarak dari bawah */
+}
+
+.dot {
+    width: 8px;      /* Ukuran kecil */
+    height: 8px;
+    background-color: #d1d5db; /* Abu-abu muda */
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background-color: #111; /* Hitam saat aktif */
+    transform: scale(1);    /* Tidak perlu membesar, cukup berubah warna */
+}
+
+/* Responsive: Tablet & HP */
+@media (max-width: 900px) {
+    .slide-content-wrapper {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+    
+    .slide-text {
+        text-align: center;
+    }
+    
+    .slide-text p {
+        margin: 0 auto;
+    }
+    
+    .slide-text h2 {
+        font-size: 2rem;
+    }
 }
