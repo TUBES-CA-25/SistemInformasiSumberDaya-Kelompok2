@@ -41,7 +41,7 @@
                         <a href="/riset.php">Ruang Riset</a>
                     </div>
                 </li>
-                <li><a href="#">Alumni</a></li>
+                <li><a href="/alumni.php">Alumni</a></li>
                 <li><a href="/contact.php">Contact</a></li> </ul>
             </ul>
         </div>

@@ -808,3 +808,33 @@ footer { background: #f9f9f9; padding: 60px 0; margin-top: 50px; font-size: 0.9r
     .facility-content-grid { grid-template-columns: 1fr; }
     .coord-widget { position: static; margin-top: 30px; }
 }
+
+/* === TAMBAHAN DETAIL ALUMNI === */
+
+.current-job {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.testimony-box {
+    background: #f8fcfd;
+    border-left: 5px solid #3498db; /* Garis biru di kiri */
+    padding: 20px;
+    border-radius: 0 10px 10px 0;
+    margin-bottom: 30px;
+}
+
+.testimony-box h3 {
+    font-size: 1rem;
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.testimony-box p {
+    font-style: italic;
+    color: #555;
+    font-size: 0.95rem;
+}
