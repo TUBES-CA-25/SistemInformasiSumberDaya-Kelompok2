@@ -123,12 +123,21 @@
 </section>
 
 <section class="gallery-section">
-    <div class="container">
-        <div class="gallery-grid">
-            <img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Galeri+1" alt="G1">
-            <img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Galeri+2" alt="G2">
-            <img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Galeri+3" alt="G3">
-            <img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Galeri+4" alt="G4">
+    <div class="gallery-wrapper">
+        <div class="gallery-track">
+            
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Kegiatan+1" alt="G1"></div>
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Praktikum+2" alt="G2"></div>
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Fasilitas+3" alt="G3"></div>
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Alumni+4" alt="G4"></div>
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Riset+5" alt="G5"></div>
+
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Kegiatan+1" alt="G1"></div>
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Praktikum+2" alt="G2"></div>
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Fasilitas+3" alt="G3"></div>
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Alumni+4" alt="G4"></div>
+            <div class="gallery-item"><img src="https://placehold.co/300x200/ecf0f1/bdc3c7?text=Riset+5" alt="G5"></div>
+
         </div>
     </div>
 </section>

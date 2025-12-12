@@ -18,11 +18,19 @@
                 </a>
             </div>
             <ul class="nav-links">
-                <li><a href="http://localhost/SistemManagementSumberDaya/public">Home</a></li>
-                <li><a href="#">Praktikum</a></li> <li><a href="#">Sumber Daya</a></li>
+                <li><a href="/index.php">Home</a></li>
+                
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Praktikum ▾</a>
+                    <div class="dropdown-content">
+                        <a href="/praktikum.php">Peraturan & Ketentuan</a>
+                        <a href="/sanksi.php">Sanksi Pelanggaran</a> <a href="/jadwal.php">Jadwal Praktikum</a> </div>
+                </li>
+
+                <li><a href="#">Sumber Daya</a></li>
                 <li><a href="#">Fasilitas</a></li>
                 <li><a href="#">Alumni</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="/contact.php">Contact</a></li> </ul>
             </ul>
         </div>
     </nav>

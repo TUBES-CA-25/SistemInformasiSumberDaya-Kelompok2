@@ -4,7 +4,7 @@
                 <div class="footer-section">
                     <h3>Sweetdeli</h3>
                     <p>Contact us</p>
-                    <p>sweetdeli@gmail.com</p>
+                    <p>fikom.iclabs@umi.ac.id</p>
                     <p>+1-2345-6789</p>
                     <p>123 Ave, New York, USA</p>
                 </div>
@@ -20,8 +20,16 @@
                     </ul>
                 </div>
                 <div class="footer-map">
-                    <img src="http://localhost/SistemManagementSumberDaya/public/images/map-placeholder.png" alt="Peta Lokasi" style="max-width: 100%;">
-                </div>
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2576.6793103495506!2d119.45065575627538!3d-5.13857252734234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbefd3165008369%3A0x7af75b8baf265f2b!2sFakultas%20Ilmu%20Komputer%20UMI!5e0!3m2!1sid!2sid!4v1765506533052!5m2!1sid!2sid" 
+                    width="100%" 
+                    height="200" 
+                    style="border:0; border-radius: 10px;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
             </div>
             <div class="copyright">
                 <p>&copy; 2025. All rights reserved.</p>
