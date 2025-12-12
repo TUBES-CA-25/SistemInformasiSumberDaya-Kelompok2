@@ -27,7 +27,13 @@
                         <a href="/sanksi.php">Sanksi Pelanggaran</a> <a href="/jadwal.php">Jadwal Praktikum</a> </div>
                 </li>
 
-                <li><a href="#">Sumber Daya</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Sumber Daya ▾</a>
+                    <div class="dropdown-content">
+                        <a href="/kepala-lab.php">Kepala Laboratorium</a>
+                        <a href="/asisten.php">Asisten Laboratorium</a>
+                    </div>
+                </li>
                 <li><a href="#">Fasilitas</a></li>
                 <li><a href="#">Alumni</a></li>
                 <li><a href="/contact.php">Contact</a></li> </ul>
