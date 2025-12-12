@@ -838,3 +838,68 @@ footer { background: #f9f9f9; padding: 60px 0; margin-top: 50px; font-size: 0.9r
     color: #555;
     font-size: 0.95rem;
 }
+
+/* === HALAMAN CONTACT === */
+
+.contact-section { padding: 60px 0; background: #fdfdfd; }
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr; /* Kiri lebih lebar dari Kanan */
+    gap: 40px;
+}
+
+/* Kartu Formulir */
+.contact-form-card, .contact-info-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+.contact-form-card h2 { margin-bottom: 25px; color: #2c3e50; }
+
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    border-color: #2c3e50;
+    outline: none;
+}
+
+.btn-submit {
+    background: #2c3e50;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.btn-submit:hover { background: #34495e; }
+
+/* Kartu Info Kanan */
+.info-box { margin-bottom: 30px; }
+.info-box h3 { font-size: 1.1rem; color: #2c3e50; margin-bottom: 10px; border-left: 4px solid #27ae60; padding-left: 10px; }
+.info-box p { color: #666; line-height: 1.6; }
+
+/* Responsive */
+@media (max-width: 800px) {
+    .contact-grid { grid-template-columns: 1fr; } /* Jadi satu kolom di HP */
+}
