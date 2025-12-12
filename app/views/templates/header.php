@@ -34,7 +34,13 @@
                         <a href="/asisten.php">Asisten Laboratorium</a>
                     </div>
                 </li>
-                <li><a href="#">Fasilitas</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Fasilitas ▾</a>
+                    <div class="dropdown-content">
+                        <a href="/laboratorium.php">Ruang Laboratorium</a>
+                        <a href="/riset.php">Ruang Riset</a>
+                    </div>
+                </li>
                 <li><a href="#">Alumni</a></li>
                 <li><a href="/contact.php">Contact</a></li> </ul>
             </ul>
