@@ -26,7 +26,7 @@
             </li>
             
             <li>
-                <a href="#" class="<?= strpos($uri, 'admin-alumni') !== false ? 'active' : '' ?>">Data Alumni</a>
+                <a href="/admin-alumni.php" class="<?= strpos($uri, 'admin-alumni') !== false ? 'active' : '' ?>">Data Alumni</a>
             </li>
             
             <li>
