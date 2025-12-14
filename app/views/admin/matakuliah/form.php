@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Mata Kuliah</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-matakuliah.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 600px;">
@@ -60,7 +60,7 @@ document.getElementById('mkForm').addEventListener('submit', function(e) {
     btn.innerText = 'Menyimpan...';
 
     // Kirim ke Controller store()
-    fetch('/api/matakuliah', { 
+    fetch(API_URL + '/matakuliah', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -69,7 +69,7 @@ document.getElementById('mkForm').addEventListener('submit', function(e) {
     .then(data => {
         if (data.status === 'success' || data.code === 201) { 
             msg.innerHTML = '<span style="color:green">Berhasil disimpan! Redirecting...</span>';
-            setTimeout(() => { window.location.href = '/admin-matakuliah.php'; }, 1000);
+            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-matakuliah.php'; }, 1000);
         } else {
             msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Kode MK mungkin sudah ada') + '</span>';
             btn.disabled = false;

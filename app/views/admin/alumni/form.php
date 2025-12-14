@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Alumni</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-alumni.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-alumni.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
@@ -85,7 +85,7 @@ document.getElementById('alumniForm').addEventListener('submit', function(e) {
 
     const formData = new FormData(this);
 
-    fetch('/SistemManagementSumberDaya/public/api.php/alumni', {
+    fetch(API_URL + '/alumni', {
         method: 'POST',
         body: formData
     })
@@ -94,7 +94,7 @@ document.getElementById('alumniForm').addEventListener('submit', function(e) {
         console.log('Response:', data);
         if (data.status === 'success' || data.code === 201) {
             msg.innerHTML = '<span style="color:green">✓ Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/SistemManagementSumberDaya/public/admin-alumni.php'; }, 1500);
+            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-alumni.php'; }, 1500);
         } else {
             msg.innerHTML = '<span style="color:red">✗ Gagal: ' + (data.message || 'Error tidak diketahui') + '</span>';
             btn.disabled = false;

@@ -109,7 +109,7 @@
 document.addEventListener('DOMContentLoaded', loadAlumni);
 
 function loadAlumni() {
-    fetch('/SistemManagementSumberDaya/public/api.php/alumni')
+    fetch(API_URL + '/alumni')
     .then(res => res.json())
     .then(response => {
         if ((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
@@ -139,7 +139,7 @@ function loadAlumni() {
                     const pekerjaan = alumni.pekerjaan ? `🚀 ${alumni.pekerjaan}` : 'Belum bekerja';
                     
                     html += `
-                        <a href="/SistemManagementSumberDaya/public/detail-alumni.php?id=${alumni.id}" class="profile-card">
+                        <a href="<?php echo BASE_URL; ?>/public/detail-alumni.php?id=${alumni.id}" class="profile-card">
                             <div class="profile-img">
                                 <img src="${fotoUrl}" alt="${alumni.nama}" onerror="this.src='https://placehold.co/300x300/95a5a6/white?text=Alumni'">
                             </div>

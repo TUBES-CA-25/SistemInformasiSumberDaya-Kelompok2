@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Asisten</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-asisten.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
@@ -59,7 +59,7 @@ document.getElementById('asistenForm').addEventListener('submit', function(e) {
     formData.append('statusAktif', document.getElementById('statusAktif').value);
     // file foto otomatis sudah masuk jika dipilih
 
-    fetch('/SistemManagementSumberDaya/public/api.php/asisten', {
+    fetch(API_URL + '/asisten', {
         method: 'POST',
         body: formData
     })
@@ -67,7 +67,7 @@ document.getElementById('asistenForm').addEventListener('submit', function(e) {
     .then(data => {
         if (data.status === 'success' || data.code === 201) {
             msg.innerHTML = '<span style="color:green">Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/SistemManagementSumberDaya/public/admin-asisten.php'; }, 1000);
+            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-asisten.php'; }, 1000);
         } else {
             msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Error validasi') + '</span>';
             btn.disabled = false;

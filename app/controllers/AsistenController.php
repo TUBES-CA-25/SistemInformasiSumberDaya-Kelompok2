@@ -61,7 +61,9 @@ class AsistenController extends Controller {
                 $filename = 'asisten_' . time() . '_' . rand(1000,9999) . '.' . $ext;
                 $target = $uploadDir . $filename;
                 if (move_uploaded_file($file['tmp_name'], $target)) {
-                    $input['foto'] = '/SistemManagementSumberDaya/storage/uploads/' . $filename;
+                    // Get base path from request - for dynamic folder naming
+                    $scriptPath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+                    $input['foto'] = $scriptPath . '/storage/uploads/' . $filename;
                 } else {
                     $input['foto'] = '';
                 }

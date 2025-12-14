@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>📚 Data Asisten Laboratorium</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
 </div>
 
 <div class="card" style="padding: 0;">
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadAsisten() {
-    fetch('/SistemManagementSumberDaya/public/api.php/asisten')
+    fetch(API_URL + '/asisten')
     .then(response => response.json())
     .then(res => {
         const tbody = document.getElementById('tableBody');
@@ -136,7 +136,7 @@ function loadAsisten() {
                         <td>${statusBadge}</td>
                         <td>
                             <div class="action-buttons">
-                                <a href="/SistemManagementSumberDaya/public/admin-asisten-form.php?id=${item.idAsisten}" 
+                                <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php?id=${item.idAsisten}" 
                                    class="btn-edit">✏️ Edit</a>
                                 <button onclick="hapusAsisten(${item.idAsisten})" 
                                         class="btn-delete" 
@@ -159,7 +159,7 @@ function loadAsisten() {
 
 function hapusAsisten(id) {
     if(confirm('Apakah Anda yakin ingin menghapus data asisten ini?')) {
-        fetch('/SistemManagementSumberDaya/public/api.php/asisten/' + id, { method: 'DELETE' })
+        fetch(API_URL + '/asisten/' + id, { method: 'DELETE' })
         .then(response => response.json())
         .then(res => {
             if(res.status === 'success' || res.code === 200) {

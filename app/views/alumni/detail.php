@@ -1,6 +1,6 @@
 <section class="profile-detail-section">
     <div class="container">
-        <a href="/SistemManagementSumberDaya/public/alumni.php" class="back-link">← Kembali ke Daftar Alumni</a>
+        <a href="<?php echo BASE_URL; ?>/public/alumni.php" class="back-link">← Kembali ke Daftar Alumni</a>
 
         <div id="detailContainer">
             <div style="text-align: center; padding: 100px 20px;">
@@ -22,7 +22,7 @@ function loadAlumniDetail() {
         return;
     }
 
-    fetch(`/SistemManagementSumberDaya/public/api.php/alumni/${alumniId}`)
+    fetch(`${API_URL}/alumni/${alumniId}`)
     .then(res => res.json())
     .then(response => {
         if ((response.status === 'success' || response.code === 200) && response.data) {

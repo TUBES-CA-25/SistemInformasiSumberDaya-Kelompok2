@@ -51,7 +51,8 @@ class PeraturanLabController extends Controller {
             $filename = 'peraturan_' . time() . '_' . rand(1000,9999) . '.' . $ext;
             $target = $uploadDir . $filename;
             if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                $input['gambar'] = '/SistemManagementSumberDaya/storage/uploads/' . $filename;
+                $scriptPath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+                $input['gambar'] = $scriptPath . '/storage/uploads/' . $filename;
             }
         }
         $result = $this->model->insert($input);
@@ -91,7 +92,8 @@ class PeraturanLabController extends Controller {
             $filename = 'peraturan_' . time() . '_' . rand(1000,9999) . '.' . $ext;
             $target = $uploadDir . $filename;
             if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                $input['gambar'] = '/SistemManagementSumberDaya/storage/uploads/' . $filename;
+                $scriptPath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+                $input['gambar'] = $scriptPath . '/storage/uploads/' . $filename;
             }
         }
         $result = $this->model->update($id, $input);
