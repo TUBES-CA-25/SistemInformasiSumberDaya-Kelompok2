@@ -1,4 +1,12 @@
 -- ========================================
+-- Database: sistem_manajemen_sumber_daya
+-- Created: 2025-12-08
+-- ========================================
+
+CREATE DATABASE IF NOT EXISTS sistem_manajemen_sumber_daya;
+USE sistem_manajemen_sumber_daya;
+
+-- ========================================
 -- Table: peraturan_lab
 -- ========================================
 CREATE TABLE IF NOT EXISTS peraturan_lab (
@@ -9,23 +17,6 @@ CREATE TABLE IF NOT EXISTS peraturan_lab (
     urutan INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
--- Database: sistem_manajemen_sumber_daya
--- Created: 2025-12-08
-
-CREATE DATABASE IF NOT EXISTS sistem_manajemen_sumber_daya;
-USE sistem_manajemen_sumber_daya;
-
--- Table: Laboratorium
-CREATE TABLE IF NOT EXISTS Laboratorium (
-    idLaboratorium INT PRIMARY KEY AUTO_INCREMENT,
-    nama VARCHAR(100) NOT NULL,
-    idKordinatorAsisten INT,
-    deskripsi TEXT,
-    gambar VARCHAR(255),
-    jumlahPc INT,
-    jumlahKursi INT,
-    FOREIGN KEY (idKordinatorAsisten) REFERENCES Asisten(idAsisten) ON DELETE SET NULL
 );
 
 -- ========================================
@@ -38,6 +29,18 @@ CREATE TABLE IF NOT EXISTS Asisten (
     email VARCHAR(100) UNIQUE,
     foto VARCHAR(255),
     statusAktif BOOLEAN DEFAULT TRUE
+);
+
+-- Table: Laboratorium
+CREATE TABLE IF NOT EXISTS Laboratorium (
+    idLaboratorium INT PRIMARY KEY AUTO_INCREMENT,
+    nama VARCHAR(100) NOT NULL,
+    idKordinatorAsisten INT,
+    deskripsi TEXT,
+    gambar VARCHAR(255),
+    jumlahPc INT,
+    jumlahKursi INT,
+    FOREIGN KEY (idKordinatorAsisten) REFERENCES Asisten(idAsisten) ON DELETE SET NULL
 );
 
 -- ========================================
