@@ -81,6 +81,4 @@ function hapusJadwal(id) {
         .catch(err => alert('Error: ' + err.message));
     }
 };
-    }
-}
 </script>
