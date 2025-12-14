@@ -59,7 +59,7 @@ class AlumniController extends Controller {
             $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
             $target = $uploadDir . $filename;
             if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
-                $input['foto'] = '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' . $filename;
+                $input['foto'] = '/SistemManagementSumberDaya/storage/uploads/' . $filename;
             }
         }
         $result = $this->model->insert($input);
@@ -107,7 +107,7 @@ class AlumniController extends Controller {
             $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
             $target = $uploadDir . $filename;
             if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
-                $input['foto'] = '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' . $filename;
+                $input['foto'] = '/SistemManagementSumberDaya/storage/uploads/' . $filename;
             }
         }
         $result = $this->model->update($id, $input);

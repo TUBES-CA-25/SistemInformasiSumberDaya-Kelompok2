@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Jadwal Praktikum</h1>
-    <a href="/admin-jadwal.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="/SistemManagementSumberDaya/public/admin-jadwal.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
@@ -69,30 +69,34 @@ document.addEventListener('DOMContentLoaded', loadDependencies);
 
 function loadDependencies() {
     // 1. Ambil data Mata Kuliah
-    fetch('/api/matakuliah').then(res => res.json()).then(data => {
-        if(data.status === 'success') {
+    fetch('/SistemManagementSumberDaya/public/api.php/matakuliah').then(res => res.json()).then(data => {
+        if(data.status === 'success' || data.code === 200) {
             const select = document.getElementById('idMatakuliah');
-            data.data.forEach(mk => {
-                const option = document.createElement('option');
-                option.value = mk.idMatakuliah;
-                option.textContent = `${mk.namaMatakuliah} (${mk.kodeMatakuliah})`;
-                select.appendChild(option);
-            });
+            if (data.data && data.data.length > 0) {
+                data.data.forEach(mk => {
+                    const option = document.createElement('option');
+                    option.value = mk.idMatakuliah;
+                    option.textContent = `${mk.namaMatakuliah} (${mk.kodeMatakuliah})`;
+                    select.appendChild(option);
+                });
+            }
         }
-    });
+    }).catch(err => console.error('Error loading matakuliah:', err));
 
     // 2. Ambil data Laboratorium
-    fetch('/api/laboratorium').then(res => res.json()).then(data => {
-        if(data.status === 'success') {
+    fetch('/SistemManagementSumberDaya/public/api.php/laboratorium').then(res => res.json()).then(data => {
+        if(data.status === 'success' || data.code === 200) {
             const select = document.getElementById('idLaboratorium');
-            data.data.forEach(lab => {
-                const option = document.createElement('option');
-                option.value = lab.idLaboratorium;
-                option.textContent = lab.nama;
-                select.appendChild(option);
-            });
+            if (data.data && data.data.length > 0) {
+                data.data.forEach(lab => {
+                    const option = document.createElement('option');
+                    option.value = lab.idLaboratorium;
+                    option.textContent = lab.nama;
+                    select.appendChild(option);
+                });
+            }
         }
-    });
+    }).catch(err => console.error('Error loading laboratorium:', err));
 }
 
 // 3. Handle Simpan Data
@@ -114,7 +118,7 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     btn.disabled = true;
     btn.innerText = 'Menyimpan...';
 
-    fetch('/api/jadwalpraktikum', { 
+    fetch('/SistemManagementSumberDaya/public/api.php/jadwalpraktikum', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -122,17 +126,17 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     .then(res => res.json())
     .then(data => {
         if (data.status === 'success' || data.code === 201) { 
-            msg.innerHTML = '<span style="color:green">Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/admin-jadwal.php'; }, 1000);
+            msg.innerHTML = '<span style="color:green">✓ Berhasil disimpan! Mengalihkan...</span>';
+            setTimeout(() => { window.location.href = '/SistemManagementSumberDaya/public/admin-jadwal.php'; }, 1500);
         } else {
-            msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Error server') + '</span>';
+            msg.innerHTML = '<span style="color:red">✗ Gagal: ' + (data.message || 'Error server') + '</span>';
             btn.disabled = false;
             btn.innerText = 'Simpan Jadwal';
         }
     })
     .catch(err => {
         console.error(err);
-        msg.innerHTML = '<span style="color:red">Koneksi Error.</span>';
+        msg.innerHTML = '<span style="color:red">✗ Koneksi Error.</span>';
         btn.disabled = false;
         btn.innerText = 'Simpan Jadwal';
     });

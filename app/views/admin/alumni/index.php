@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Data Alumni Asisten</h1>
-    <a href="/admin-alumni-form.php" class="btn btn-add">+ Tambah Alumni</a>
+    <a href="/SistemManagementSumberDaya/public/admin-alumni-form.php" class="btn btn-add">+ Tambah Alumni</a>
 </div>
 
 <div class="card">
@@ -25,14 +25,13 @@
 document.addEventListener('DOMContentLoaded', loadAlumni);
 
 function loadAlumni() {
-    // Asumsi endpoint API teman Anda adalah /api/alumni
-    fetch('/api/alumni') 
+    fetch('/SistemManagementSumberDaya/public/api.php/alumni') 
     .then(res => res.json())
     .then(response => {
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '';
 
-        if(response.status === 'success' && response.data.length > 0) {
+        if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
             response.data.forEach((item, index) => {
                 const row = `
                     <tr>
@@ -40,13 +39,13 @@ function loadAlumni() {
                         <td><img src="${item.foto || 'https://placehold.co/50x50'}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;"></td>
                         <td>
                             <strong>${item.nama}</strong><br>
-                            <small style="color:#777;">Ex-${item.jabatanTerakhir || 'Asisten'}</small>
+                            <small style="color:#777;">${item.divisi || 'Asisten'}</small>
                         </td>
-                        <td>${item.tahunAngkatan || '-'}</td>
+                        <td>${item.angkatan || '-'}</td>
                         <td>${item.pekerjaan || '-'}</td>
                         <td>
-                            <a href="/admin-alumni-form.php?id=${item.idAlumni}" class="btn btn-edit">Edit</a>
-                            <button onclick="hapusAlumni(${item.idAlumni})" class="btn btn-delete">Hapus</button>
+                            <a href="/SistemManagementSumberDaya/public/admin-alumni-form.php?id=${item.id}" class="btn btn-edit">Edit</a>
+                            <button onclick="hapusAlumni(${item.id})" class="btn btn-delete">Hapus</button>
                         </td>
                     </tr>
                 `;
@@ -56,21 +55,25 @@ function loadAlumni() {
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Belum ada data alumni.</td></tr>';
         }
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+        console.error('Error:', err);
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Error: Gagal memuat data</td></tr>';
+    });
 }
 
 function hapusAlumni(id) {
     if(confirm('Yakin hapus data alumni ini?')) {
-        fetch('/api/alumni/' + id, { method: 'DELETE' })
+        fetch('/SistemManagementSumberDaya/public/api.php/alumni/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
-            if(data.status === 'success') {
+            if(data.status === 'success' || data.code === 200) {
                 alert('Data berhasil dihapus');
                 loadAlumni();
             } else {
-                alert('Gagal menghapus');
+                alert('Gagal menghapus: ' + (data.message || 'Error'));
             }
-        });
+        })
+        .catch(err => alert('Error: ' + err.message));
     }
 }
 </script>

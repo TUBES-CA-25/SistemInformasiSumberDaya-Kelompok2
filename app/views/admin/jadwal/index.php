@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Manajemen Jadwal Praktikum</h1>
-    <a href="/admin-jadwal-form.php" class="btn btn-add">+ Tambah Jadwal Baru</a>
+    <a href="/SistemManagementSumberDaya/public/admin-jadwal-form.php" class="btn btn-add">+ Tambah Jadwal Baru</a>
 </div>
 
 <div class="card">
@@ -26,13 +26,13 @@
 document.addEventListener('DOMContentLoaded', loadJadwal);
 
 function loadJadwal() {
-    fetch('/api/jadwalpraktikum') // Sesuai Controller index()
+    fetch('/SistemManagementSumberDaya/public/api.php/jadwalpraktikum') // Sesuai Controller index()
     .then(res => res.json())
     .then(response => {
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '';
 
-        if(response.status === 'success' && response.data.length > 0) {
+        if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
             response.data.forEach((item, index) => {
                 // Catatan: Item di bawah ini mengasumsikan Model / API 
                 // teman Anda sudah melakukan JOIN untuk menampilkan nama (namaMatakuliah, namaLab).
@@ -52,7 +52,7 @@ function loadJadwal() {
                         <td>${item.kelas || '-'}</td>
                         <td>${statusBadge}</td>
                         <td>
-                            <a href="/admin-jadwal-form.php?id=${item.idJadwal}" class="btn btn-edit">Edit</a>
+                            <a href="/SistemManagementSumberDaya/public/admin-jadwal-form.php?id=${item.idJadwal}" class="btn btn-edit">Edit</a>
                             <button onclick="hapusJadwal(${item.idJadwal})" class="btn btn-delete">Hapus</button>
                         </td>
                     </tr>
@@ -68,16 +68,19 @@ function loadJadwal() {
 
 function hapusJadwal(id) {
     if(confirm('Yakin hapus jadwal ini?')) {
-        fetch('/api/jadwalpraktikum/' + id, { method: 'DELETE' })
+        fetch('/SistemManagementSumberDaya/public/api.php/jadwalpraktikum/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
-            if(data.status === 'success') {
+            if(data.status === 'success' || data.code === 200) {
                 alert('Berhasil dihapus');
                 loadJadwal();
             } else {
                 alert('Gagal: ' + (data.message || 'Error'));
             }
-        });
+        })
+        .catch(err => alert('Error: ' + err.message));
+    }
+};
     }
 }
 </script>

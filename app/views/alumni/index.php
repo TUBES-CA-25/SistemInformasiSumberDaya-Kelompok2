@@ -9,7 +9,7 @@
             <h3 class="section-divider">Angkatan 2023</h3>
             <div class="profile-grid">
                 
-                <a href="/SistemInformasiSumberDaya-Kelompok2/public/detail-alumni.php?id=1" class="profile-card">
+                <a href="/SistemManagementSumberDaya/public/detail-alumni.php?id=1" class="profile-card">
                     <div class="profile-img">
                         <img src="https://placehold.co/300x300/95a5a6/white?text=Alumni+1" alt="Foto">
                     </div>
@@ -20,7 +20,7 @@
                     </div>
                 </a>
 
-                <a href="/SistemInformasiSumberDaya-Kelompok2/public/detail-alumni.php?id=2" class="profile-card">
+                <a href="/SistemManagementSumberDaya/public/detail-alumni.php?id=2" class="profile-card">
                     <div class="profile-img">
                         <img src="https://placehold.co/300x300/95a5a6/white?text=Alumni+2" alt="Foto">
                     </div>
@@ -38,7 +38,7 @@
             <h3 class="section-divider">Angkatan 2022</h3>
             <div class="profile-grid">
                 
-                <a href="/SistemInformasiSumberDaya-Kelompok2/public/detail-alumni.php?id=3" class="profile-card">
+                <a href="/SistemManagementSumberDaya/public/detail-alumni.php?id=3" class="profile-card">
                     <div class="profile-img">
                         <img src="https://placehold.co/300x300/7f8c8d/white?text=Alumni+3" alt="Foto">
                     </div>
@@ -49,7 +49,7 @@
                     </div>
                 </a>
 
-                <a href="/SistemInformasiSumberDaya-Kelompok2/public/detail-alumni.php?id=4" class="profile-card">
+                <a href="/SistemManagementSumberDaya/public/detail-alumni.php?id=4" class="profile-card">
                     <div class="profile-img">
                         <img src="https://placehold.co/300x300/7f8c8d/white?text=Alumni+4" alt="Foto">
                     </div>

@@ -61,7 +61,7 @@ class AsistenController extends Controller {
                 $filename = 'asisten_' . time() . '_' . rand(1000,9999) . '.' . $ext;
                 $target = $uploadDir . $filename;
                 if (move_uploaded_file($file['tmp_name'], $target)) {
-                    $input['foto'] = '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' . $filename;
+                    $input['foto'] = '/SistemManagementSumberDaya/storage/uploads/' . $filename;
                 } else {
                     $input['foto'] = '';
                 }

@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Data Asisten Laboratorium</h1>
-    <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+    <a href="/SistemManagementSumberDaya/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
 </div>
 
 <div class="card">
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadAsisten() {
-    fetch('/SistemInformasiSumberDaya-Kelompok2/public/api.php/asisten') // Memanggil method index() di Controller
+    fetch('/SistemManagementSumberDaya/public/api.php/asisten') // Memanggil method index() di Controller
     .then(response => response.json())
     .then(res => {
         const tbody = document.getElementById('tableBody');
@@ -51,7 +51,7 @@ function loadAsisten() {
                         <td>${item.jurusan || '-'}</td>
                         <td>${statusBadge}</td>
                         <td>
-                            <a href="#" class="btn btn-edit">Edit</a>
+                            <a href="/SistemManagementSumberDaya/public/admin-asisten-form.php?id=${item.idAsisten}" class="btn btn-edit">Edit</a>
                             <button onclick="hapusAsisten(${item.idAsisten})" class="btn btn-delete">Hapus</button>
                         </td>
                     </tr>
@@ -68,7 +68,7 @@ function loadAsisten() {
 // Fungsi Hapus (Menghubungkan ke method delete() di Controller)
 function hapusAsisten(id) {
     if(confirm('Yakin ingin menghapus data ini?')) {
-        fetch('/SistemInformasiSumberDaya-Kelompok2/public/api.php/asisten/' + id, { method: 'DELETE' })
+        fetch('/SistemManagementSumberDaya/public/api.php/asisten/' + id, { method: 'DELETE' })
         .then(response => response.json())
         .then(res => {
             if(res.status === 'success') {

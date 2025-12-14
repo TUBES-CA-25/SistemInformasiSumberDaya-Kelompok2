@@ -51,7 +51,7 @@ class SanksiLabController extends Controller {
             $filename = 'sanksi_' . time() . '_' . rand(1000,9999) . '.' . $ext;
             $target = $uploadDir . $filename;
             if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                $input['gambar'] = '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' . $filename;
+                $input['gambar'] = '/SistemManagementSumberDaya/storage/uploads/' . $filename;
             }
         }
         $result = $this->model->insert($input);
@@ -91,7 +91,7 @@ class SanksiLabController extends Controller {
             $filename = 'sanksi_' . time() . '_' . rand(1000,9999) . '.' . $ext;
             $target = $uploadDir . $filename;
             if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                $input['gambar'] = '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' . $filename;
+                $input['gambar'] = '/SistemManagementSumberDaya/storage/uploads/' . $filename;
             }
         }
         $result = $this->model->update($id, $input);

@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Mata Kuliah</h1>
-    <a href="/admin-matakuliah.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="/SistemManagementSumberDaya/public/admin-matakuliah.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 600px;">
