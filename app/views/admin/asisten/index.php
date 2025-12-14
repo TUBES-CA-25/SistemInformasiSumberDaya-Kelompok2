@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Data Asisten Laboratorium</h1>
-    <a href="/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+    <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
 </div>
 
 <div class="card">
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadAsisten() {
-    fetch('/api/asisten') // Memanggil method index() di Controller
+    fetch('/SistemInformasiSumberDaya-Kelompok2/public/api.php/asisten') // Memanggil method index() di Controller
     .then(response => response.json())
     .then(res => {
         const tbody = document.getElementById('tableBody');
@@ -68,7 +68,7 @@ function loadAsisten() {
 // Fungsi Hapus (Menghubungkan ke method delete() di Controller)
 function hapusAsisten(id) {
     if(confirm('Yakin ingin menghapus data ini?')) {
-        fetch('/api/asisten/' + id, { method: 'DELETE' })
+        fetch('/SistemInformasiSumberDaya-Kelompok2/public/api.php/asisten/' + id, { method: 'DELETE' })
         .then(response => response.json())
         .then(res => {
             if(res.status === 'success') {

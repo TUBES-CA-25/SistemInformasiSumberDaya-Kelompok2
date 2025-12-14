@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Sistem Lab</title>
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/SistemInformasiSumberDaya-Kelompok2/public/css/admin.css">
 </head>
 <body>
 
@@ -18,31 +18,31 @@
         <h2>Admin Panel</h2>
         <ul>
             <li>
-                <a href="/admin-dashboard.php" class="<?= strpos($uri, 'admin-dashboard') !== false ? 'active' : '' ?>">Dashboard</a>
+                <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-dashboard.php" class="<?= strpos($uri, 'admin-dashboard') !== false ? 'active' : '' ?>">Dashboard</a>
             </li>
             
             <li>
-                <a href="/admin-asisten.php" class="<?= strpos($uri, 'admin-asisten') !== false ? 'active' : '' ?>">Data Asisten</a>
+                <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-asisten.php" class="<?= strpos($uri, 'admin-asisten') !== false ? 'active' : '' ?>">Data Asisten</a>
             </li>
             
             <li>
-                <a href="/admin-alumni.php" class="<?= strpos($uri, 'admin-alumni') !== false ? 'active' : '' ?>">Data Alumni</a>
+                <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-alumni.php" class="<?= strpos($uri, 'admin-alumni') !== false ? 'active' : '' ?>">Data Alumni</a>
             </li>
             
             <li>
-                <a href="/admin-laboratorium.php" class="<?= strpos($uri, 'admin-laboratorium') !== false ? 'active' : '' ?>">Data Fasilitas</a>
+                <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-laboratorium.php" class="<?= strpos($uri, 'admin-laboratorium') !== false ? 'active' : '' ?>">Data Fasilitas</a>
             </li>
             
             <li>
-                <a href="/admin-matakuliah.php" class="<?= strpos($uri, 'admin-matakuliah') !== false ? 'active' : '' ?>">Data Mata Kuliah</a>
+                <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-matakuliah.php" class="<?= strpos($uri, 'admin-matakuliah') !== false ? 'active' : '' ?>">Data Mata Kuliah</a>
             </li>
             
             <li>
-                <li><a href="/admin-jadwal.php" class="<?= strpos($uri, 'admin-jadwal') !== false ? 'active' : '' ?>">Jadwal Praktikum</a></li>
+                <li><a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-jadwal.php" class="<?= strpos($uri, 'admin-jadwal') !== false ? 'active' : '' ?>">Jadwal Praktikum</a></li>
             </li>
             
             <li>
-                <a href="/index.php" style="margin-top: 50px; color: #e74c3c;">Logout / Ke Web Utama</a>
+                <a href="/SistemInformasiSumberDaya-Kelompok2/public/index.php" style="margin-top: 50px; color: #e74c3c;">Logout / Ke Web Utama</a>
             </li>
         </ul>
     </div>

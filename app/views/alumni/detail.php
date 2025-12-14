@@ -1,6 +1,6 @@
 <section class="profile-detail-section">
     <div class="container">
-        <a href="/alumni.php" class="back-link">← Kembali ke Daftar Alumni</a>
+        <a href="/SistemInformasiSumberDaya-Kelompok2/public/alumni.php" class="back-link">← Kembali ke Daftar Alumni</a>
 
         <div class="detail-card">
             <div class="detail-left">

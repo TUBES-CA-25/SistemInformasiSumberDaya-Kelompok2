@@ -30,24 +30,68 @@ class AsistenController extends Controller {
     }
 
     public function store() {
-        $input = $this->getJson();
-        $required = ['nama', 'email'];
-        $missing = $this->validateRequired($input, $required);
+        // Cek apakah request multipart/form-data (upload file)
+        if (isset($_FILES['foto'])) {
+            $input = [
+                'nama' => $_POST['nama'] ?? '',
+                'email' => $_POST['email'] ?? '',
+                'jurusan' => $_POST['jurusan'] ?? '',
+                'statusAktif' => $_POST['statusAktif'] ?? 1
+            ];
 
-        if (!empty($missing)) {
-            $this->error('Field required: ' . implode(', ', $missing), null, 400);
-        }
+            $required = ['nama', 'email'];
+            $missing = $this->validateRequired($input, $required);
+            if (!empty($missing)) {
+                $this->error('Field required: ' . implode(', ', $missing), null, 400);
+            }
 
-        $existing = $this->model->getAsistenByEmail($input['email']);
-        if ($existing) {
-            $this->error('Email sudah terdaftar', null, 400);
-        }
+            $existing = $this->model->getAsistenByEmail($input['email']);
+            if ($existing) {
+                $this->error('Email sudah terdaftar', null, 400);
+            }
 
-        $result = $this->model->insert($input);
-        if ($result) {
-            $this->success(['id' => $this->model->getLastInsertId()], 'Asisten created successfully', 201);
+            // Proses upload file
+            $uploadDir = dirname(__DIR__, 2) . '/storage/uploads/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+            $file = $_FILES['foto'];
+            if ($file['error'] === UPLOAD_ERR_OK) {
+                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $filename = 'asisten_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                $target = $uploadDir . $filename;
+                if (move_uploaded_file($file['tmp_name'], $target)) {
+                    $input['foto'] = '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' . $filename;
+                } else {
+                    $input['foto'] = '';
+                }
+            } else {
+                $input['foto'] = '';
+            }
+
+            $result = $this->model->insert($input);
+            if ($result) {
+                $this->success(['id' => $this->model->getLastInsertId()], 'Asisten created successfully', 201);
+            }
+            $this->error('Failed to create asisten', null, 500);
+        } else {
+            // Fallback: JSON (API lama)
+            $input = $this->getJson();
+            $required = ['nama', 'email'];
+            $missing = $this->validateRequired($input, $required);
+            if (!empty($missing)) {
+                $this->error('Field required: ' . implode(', ', $missing), null, 400);
+            }
+            $existing = $this->model->getAsistenByEmail($input['email']);
+            if ($existing) {
+                $this->error('Email sudah terdaftar', null, 400);
+            }
+            $result = $this->model->insert($input);
+            if ($result) {
+                $this->success(['id' => $this->model->getLastInsertId()], 'Asisten created successfully', 201);
+            }
+            $this->error('Failed to create asisten', null, 500);
         }
-        $this->error('Failed to create asisten', null, 500);
     }
 
     public function update($params) {

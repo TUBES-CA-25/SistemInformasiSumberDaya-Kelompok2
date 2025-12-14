@@ -1,3 +1,15 @@
+-- ========================================
+-- Table: peraturan_lab
+-- ========================================
+CREATE TABLE IF NOT EXISTS peraturan_lab (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    judul VARCHAR(150) NOT NULL,
+    deskripsi TEXT NOT NULL,
+    gambar VARCHAR(255),
+    urutan INT DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 -- Database: sistem_manajemen_sumber_daya
 -- Created: 2025-12-08
 
@@ -133,6 +145,41 @@ CREATE TABLE IF NOT EXISTS kontakt (
     urlMap VARCHAR(255),
     tanggalPembaruan DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ========================================
+-- Table: sanksi_lab
+-- ========================================
+CREATE TABLE IF NOT EXISTS sanksi_lab (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    judul VARCHAR(150) NOT NULL,
+    deskripsi TEXT NOT NULL,
+    gambar VARCHAR(255),
+    urutan INT DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- ========================================
+-- Table: alumni
+-- ========================================
+CREATE TABLE IF NOT EXISTS alumni (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nama VARCHAR(150) NOT NULL,
+    angkatan YEAR NOT NULL,
+    divisi VARCHAR(100),
+    foto VARCHAR(255),
+    pekerjaan VARCHAR(150),
+    perusahaan VARCHAR(150),
+    kesan_pesan TEXT,
+    tahun_lulus VARCHAR(50),
+    keahlian TEXT,
+    linkedin VARCHAR(255),
+    portfolio VARCHAR(255),
+    email VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 
 -- ========================================
 -- Indexes untuk performa query

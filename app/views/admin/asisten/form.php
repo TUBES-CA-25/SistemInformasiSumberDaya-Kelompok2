@@ -1,10 +1,10 @@
 <div class="admin-header">
     <h1>Formulir Asisten</h1>
-    <a href="/admin-asisten.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-asisten.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
-    <form id="asistenForm">
+    <form id="asistenForm" enctype="multipart/form-data">
         
         <input type="hidden" id="idAsisten">
 
@@ -23,7 +23,8 @@
         </div>
 
         <div class="form-group">
-            <label>Link Foto (URL)</label> <input type="text" id="foto" placeholder="https://...">
+            <label>Upload Foto</label>
+            <input type="file" id="foto" name="foto" accept="image/*">
         </div>
 
         <div class="form-group">
@@ -44,35 +45,30 @@
 document.getElementById('asistenForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // 1. Ambil data sesuai kolom DATABASE
-    const formData = {
-        nama: document.getElementById('nama').value,
-        email: document.getElementById('email').value,
-        jurusan: document.getElementById('jurusan').value,
-        foto: document.getElementById('foto').value,
-        statusAktif: document.getElementById('statusAktif').value
-    };
-
     const btn = document.getElementById('btnSave');
     const msg = document.getElementById('message');
-    
     btn.disabled = true;
     btn.innerText = 'Menyimpan...';
 
-    // 2. Kirim ke API (Sesuai Controller teman Anda)
-    fetch('/api/asisten', { 
+    // Pakai FormData agar bisa upload file
+    const form = document.getElementById('asistenForm');
+    const formData = new FormData(form);
+    formData.append('nama', document.getElementById('nama').value);
+    formData.append('email', document.getElementById('email').value);
+    formData.append('jurusan', document.getElementById('jurusan').value);
+    formData.append('statusAktif', document.getElementById('statusAktif').value);
+    // file foto otomatis sudah masuk jika dipilih
+
+    fetch('/SistemInformasiSumberDaya-Kelompok2/public/api.php/asisten', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: formData
     })
     .then(response => response.json())
     .then(data => {
-        // Cek response sesuai format Controller: $this->success(...)
-        if (data.status === 'success' || data.code === 201) { 
+        if (data.status === 'success' || data.code === 201) {
             msg.innerHTML = '<span style="color:green">Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/admin-asisten.php'; }, 1000);
+            setTimeout(() => { window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-asisten.php'; }, 1000);
         } else {
-            // Menangkap pesan error dari Controller (misal: "Email sudah terdaftar")
             msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Error validasi') + '</span>';
             btn.disabled = false;
             btn.innerText = 'Simpan Data';

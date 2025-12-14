@@ -48,6 +48,12 @@ $path = '/' . trim($path, '/ ');
 // Route mapping dengan HTTP METHOD
 $routes = [
     'GET' => [
+            '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'index'],
+            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'show'],
+            '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'index'],
+            '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'show'],
+            '/alumni' => ['controller' => 'AlumniController', 'method' => 'index'],
+            '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'show'],
         '/health' => ['controller' => 'HealthController', 'method' => 'check'],
         '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'index'],
         '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'show'],
@@ -76,6 +82,9 @@ $routes = [
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],
     ],
     'POST' => [
+            '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'store'],
+            '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'store'],
+            '/alumni' => ['controller' => 'AlumniController', 'method' => 'store'],
         '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'store'],
         '/asisten' => ['controller' => 'AsistenController', 'method' => 'store'],
         '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'store'],
@@ -89,9 +98,13 @@ $routes = [
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'store'],
     ],
     'PUT' => [
+            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'],
         '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'update'],
         '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'],
         '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'update'],
+        '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'],
+        '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'update'],
+        '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'update'],
         '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'update'],
         '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'update'],
         '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'update'],
@@ -102,9 +115,13 @@ $routes = [
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'update'],
     ],
     'DELETE' => [
+            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'delete'],
         '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'delete'],
         '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'delete'],
         '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'delete'],
+        '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'delete'],
+        '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'delete'],
+        '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'delete'],
         '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'delete'],
         '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'delete'],
         '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'delete'],
