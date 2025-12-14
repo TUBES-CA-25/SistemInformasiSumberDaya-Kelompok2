@@ -11,8 +11,21 @@ define('DB_NAME', 'sistem_manajemen_sumber_daya');
 
 // Application Settings
 define('APP_NAME', 'Sistem Management Sumber Daya');
-define('APP_URL', 'http://localhost/SistemManagementSumberDaya');
+define('APP_URL', 'http://localhost/SistemInformasiSumberDaya-Kelompok2');
 define('APP_ENV', 'development'); // development or production
+
+// Auto-detect URLs untuk fleksibilitas deployment
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$baseScriptPath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
+if (empty($baseScriptPath) || $baseScriptPath === '.') {
+    $baseScriptPath = '';
+}
+
+// Define URL constants
+define('BASE_URL', $protocol . $host . $baseScriptPath);
+define('API_URL', $baseScriptPath . '/public/api.php');
+define('ASSETS_URL', $baseScriptPath . '/public');
 
 // Display errors (disable in production)
 if (APP_ENV === 'development') {

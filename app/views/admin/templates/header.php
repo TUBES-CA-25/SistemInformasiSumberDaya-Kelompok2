@@ -5,14 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Sistem Lab</title>
     <?php
-    // Load config untuk URL yang konsisten - HARUS SEBELUM DIPAKAI!
-    require_once '../../../app/config.php';
+    // Config sudah di-load dari admin-dashboard.php
+    // Fallback jika tidak di-load, gunakan path absolut
+    if (!defined('DB_HOST')) {
+        // Gunakan __DIR__ untuk akurasi yang lebih baik
+        if (!defined('ROOT_PROJECT')) {
+            $currentDir = __DIR__;  // templates folder
+            $adminDir = dirname($currentDir);  // admin
+            $viewsDir = dirname($adminDir);  // views
+            $appDir = dirname($viewsDir);  // app
+            $rootDir = dirname($appDir);  // ROOT
+            define('ROOT_PROJECT', $rootDir);
+        }
+        
+        $configPath = ROOT_PROJECT . '/app/config/config.php';
+        
+        if (file_exists($configPath)) {
+            require_once $configPath;
+        } else {
+            die('Config file not found: ' . $configPath);
+        }
+    }
     ?>
     <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/css/admin.css">
     <script>
         // Global variable untuk semua JavaScript
         const API_URL = '<?php echo API_URL; ?>';
         const BASE_URL = '<?php echo BASE_URL; ?>';
+        const ASSETS_URL = '<?php echo ASSETS_URL; ?>';
+        console.log('BASE_URL:', BASE_URL);
+        console.log('ASSETS_URL:', ASSETS_URL);
+        console.log('API_URL:', API_URL);
     </script>
 </head>
 <body>
