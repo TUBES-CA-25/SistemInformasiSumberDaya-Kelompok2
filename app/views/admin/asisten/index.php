@@ -1,26 +1,113 @@
 <div class="admin-header">
-    <h1>Data Asisten Laboratorium</h1>
-    <a href="/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+    <h1>📚 Data Asisten Laboratorium</h1>
+    <div style="display: flex; gap: 10px;">
+        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-pilih-koordinator.php" class="btn" style="background: #2980b9; color: white;">👤 Pilih Koordinator</a>
+        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+    </div>
 </div>
 
-<div class="card">
-    <table class="crud-table">
-        <thead>
-            <tr>
-                <th style="width: 50px;">No</th>
-                <th style="width: 100px;">Foto</th>
-                <th>Nama Lengkap</th>
-                <th>Jurusan</th> <th>Status</th>
-                <th style="width: 150px;">Aksi</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            <tr>
-                <td colspan="6" style="text-align:center;">Sedang memuat data...</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card" style="padding: 0;">
+    <div style="overflow-x: auto;">
+        <table class="crud-table" style="margin: 0;">
+            <thead>
+                <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <th style="width: 50px; padding: 15px;">No</th>
+                    <th style="width: 100px; padding: 15px;">Foto</th>
+                    <th style="padding: 15px;">Nama Lengkap</th>
+                    <th style="padding: 15px;">Jurusan</th>
+                    <th style="width: 80px; padding: 15px;">Koordinator</th>
+                    <th style="width: 100px; padding: 15px;">Status</th>
+                    <th style="width: 150px; padding: 15px;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td colspan="6" style="text-align:center; padding: 30px; color: #999;">
+                        <div style="animation: spin 1s linear infinite; display: inline-block;">⟳</div> Sedang memuat data...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<style>
+.crud-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.crud-table tbody tr:hover {
+    background-color: #f8f9ff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.crud-table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+.crud-table tbody td img {
+    display: block;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-block;
+}
+
+.status-aktif {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-nonaktif {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-edit, .btn-delete {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-edit {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #138496;
+    transform: translateY(-2px);
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
 
 <script>
 // Saat halaman dibuka, ambil data dari API
@@ -29,54 +116,71 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadAsisten() {
-    fetch('/api/asisten') // Memanggil method index() di Controller
+    fetch(API_URL + '/asisten')
     .then(response => response.json())
     .then(res => {
         const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = ''; // Bersihkan loading
+        tbody.innerHTML = '';
 
-        if(res.status === 'success' && res.data.length > 0) {
+        if((res.status === 'success' || res.code === 200) && res.data && res.data.length > 0) {
             res.data.forEach((item, index) => {
-                // Tentukan label status
                 const statusBadge = item.statusAktif == 1 
-                    ? '<span style="color:green; font-weight:bold;">Aktif</span>' 
-                    : '<span style="color:red;">Non-Aktif</span>';
+                    ? '<span class="status-badge status-aktif">✓ Aktif</span>' 
+                    : '<span class="status-badge status-nonaktif">✗ Non-Aktif</span>';
+                
+                const koordinatorBadge = item.isKoordinator == 1
+                    ? '<span style="background: #27ae60; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;">Ya</span>'
+                    : '<span style="background: #95a5a6; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px;">Tidak</span>';
 
-                // Render Baris Tabel
                 const row = `
                     <tr>
-                        <td>${index + 1}</td>
-                        <td><img src="${item.foto || 'https://placehold.co/50x50'}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;"></td>
-                        <td>${item.nama}</td>
-                        <td>${item.jurusan || '-'}</td>
+                        <td style="font-weight: 600; color: #667eea;">${index + 1}</td>
+                        <td>
+                            <img src="${item.foto ? (item.foto.includes('http') ? item.foto : '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + item.foto) : 'https://placehold.co/50x50'}" 
+                                 style="width:50px; height:50px; border-radius:50%; object-fit:cover; border: 2px solid #667eea;">
+                        </td>
+                        <td><strong>${item.nama}</strong></td>
+                        <td><span style="color: #666; font-size: 13px;">${item.jurusan || '—'}</span></td>
+                        <td>${koordinatorBadge}</td>
                         <td>${statusBadge}</td>
                         <td>
-                            <a href="#" class="btn btn-edit">Edit</a>
-                            <button onclick="hapusAsisten(${item.idAsisten})" class="btn btn-delete">Hapus</button>
+                            <div class="action-buttons">
+                                <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php?id=${item.idAsisten}" 
+                                   class="btn-edit">✏️ Edit</a>
+                                <button onclick="hapusAsisten(${item.idAsisten})" 
+                                        class="btn-delete" 
+                                        style="cursor: pointer;">🗑️ Hapus</button>
+                            </div>
                         </td>
                     </tr>
                 `;
                 tbody.innerHTML += row;
             });
         } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Belum ada data asisten.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #999;">Belum ada data asisten.</td></tr>';
         }
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+        console.error('Error:', err);
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: red;">⚠️ Error: Gagal memuat data</td></tr>';
+    });
 }
 
-// Fungsi Hapus (Menghubungkan ke method delete() di Controller)
 function hapusAsisten(id) {
-    if(confirm('Yakin ingin menghapus data ini?')) {
-        fetch('/api/asisten/' + id, { method: 'DELETE' })
+    if(confirm('Apakah Anda yakin ingin menghapus data asisten ini?')) {
+        fetch(API_URL + '/asisten/' + id, { method: 'DELETE' })
         .then(response => response.json())
         .then(res => {
-            if(res.status === 'success') {
-                alert('Data berhasil dihapus');
-                loadAsisten(); // Reload tabel
+            if(res.status === 'success' || res.code === 200) {
+                alert('✓ Data berhasil dihapus');
+                loadAsisten();
             } else {
-                alert('Gagal menghapus');
+                alert('✗ Gagal menghapus: ' + (res.message || 'Error'));
             }
+        })
+        .catch(err => {
+            alert('✗ Error: ' + err.message);
+            console.error(err);
         });
     }
 }

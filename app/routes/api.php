@@ -1,3 +1,16 @@
+/**
+ * Peraturan Lab Routes
+ * GET    /api/peraturan-lab              - Get all peraturan lab
+ * GET    /api/peraturan-lab/{id}         - Get peraturan lab by ID
+ * POST   /api/peraturan-lab              - Create peraturan lab
+ * PUT    /api/peraturan-lab/{id}         - Update peraturan lab
+ * DELETE /api/peraturan-lab/{id}         - Delete peraturan lab
+ */
+$router->get('/peraturan-lab', 'PeraturanLabController', 'index');
+$router->get('/peraturan-lab/{id}', 'PeraturanLabController', 'show');
+$router->post('/peraturan-lab', 'PeraturanLabController', 'store');
+$router->put('/peraturan-lab/{id}', 'PeraturanLabController', 'update');
+$router->delete('/peraturan-lab/{id}', 'PeraturanLabController', 'delete');
 <?php
 /**
  * API Routes

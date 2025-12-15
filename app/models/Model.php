@@ -14,6 +14,13 @@ class Model {
     }
 
     /**
+     * Get database connection
+     */
+    public function getDb() {
+        return $this->db;
+    }
+
+    /**
      * Get semua data
      */
     public function getAll() {
