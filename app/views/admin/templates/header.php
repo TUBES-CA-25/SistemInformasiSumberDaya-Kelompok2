@@ -76,6 +76,10 @@
             <li>
                 <a href="<?php echo BASE_URL; ?>/public/admin-peraturan.php" class="<?= strpos($uri, 'admin-peraturan') !== false ? 'active' : '' ?>">Peraturan Lab</a>
             </li>
+
+            <li>
+                <a href="<?php echo BASE_URL; ?>/public/admin-sanksi.php" class="<?= strpos($uri, 'admin-sanksi') !== false ? 'active' : '' ?>">Sanksi Lab</a>
+            </li>
             
             <li>
                 <a href="<?php echo BASE_URL; ?>/public/index.php" style="margin-top: 50px; color: #e74c3c;">Logout / Ke Web Utama</a>

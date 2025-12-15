@@ -85,7 +85,9 @@ $routes = [
     ],
     'POST' => [
             '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'store'],
+            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'], // For file upload
             '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'store'],
+            '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'update'], // For file upload
             '/alumni' => ['controller' => 'AlumniController', 'method' => 'store'],
         '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'store'],
         '/asisten' => ['controller' => 'AsistenController', 'method' => 'store'],
