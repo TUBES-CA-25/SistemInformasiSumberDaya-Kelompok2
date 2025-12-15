@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Jadwal Praktikum</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-jadwal.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-jadwal.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', loadDependencies);
 
 function loadDependencies() {
     // 1. Ambil data Mata Kuliah
-    fetch('/SistemManagementSumberDaya/public/api.php/matakuliah').then(res => res.json()).then(data => {
+    fetch(API_URL + '/matakuliah').then(res => res.json()).then(data => {
         if(data.status === 'success' || data.code === 200) {
             const select = document.getElementById('idMatakuliah');
             if (data.data && data.data.length > 0) {
@@ -84,7 +84,7 @@ function loadDependencies() {
     }).catch(err => console.error('Error loading matakuliah:', err));
 
     // 2. Ambil data Laboratorium
-    fetch('/SistemManagementSumberDaya/public/api.php/laboratorium').then(res => res.json()).then(data => {
+    fetch(API_URL + '/laboratorium').then(res => res.json()).then(data => {
         if(data.status === 'success' || data.code === 200) {
             const select = document.getElementById('idLaboratorium');
             if (data.data && data.data.length > 0) {
@@ -118,7 +118,7 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     btn.disabled = true;
     btn.innerText = 'Menyimpan...';
 
-    fetch('/SistemManagementSumberDaya/public/api.php/jadwalpraktikum', { 
+    fetch(API_URL + '/jadwalpraktikum', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -127,7 +127,7 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     .then(data => {
         if (data.status === 'success' || data.code === 201) { 
             msg.innerHTML = '<span style="color:green">✓ Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/SistemManagementSumberDaya/public/admin-jadwal.php'; }, 1500);
+            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-jadwal.php'; }, 1500);
         } else {
             msg.innerHTML = '<span style="color:red">✗ Gagal: ' + (data.message || 'Error server') + '</span>';
             btn.disabled = false;

@@ -37,6 +37,6 @@
         </div>
     </footer>
 
-    <script src="/js/script.js"></script>
+    <script src="<?php echo ASSETS_URL; ?>/js/script.js"></script>
 </body>
 </html>

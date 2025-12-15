@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>👨‍🎓 Data Alumni Asisten</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-alumni-form.php" class="btn btn-add">+ Tambah Alumni</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-alumni-form.php" class="btn btn-add">+ Tambah Alumni</a>
 </div>
 
 <div class="card" style="padding: 0;">
@@ -112,7 +112,7 @@
 document.addEventListener('DOMContentLoaded', loadAlumni);
 
 function loadAlumni() {
-    fetch('/SistemManagementSumberDaya/public/api.php/alumni') 
+    fetch(API_URL + '/alumni') 
     .then(res => res.json())
     .then(response => {
         const tbody = document.getElementById('tableBody');
@@ -137,7 +137,7 @@ function loadAlumni() {
                         <td><span style="color: #666; font-size: 13px;">${item.pekerjaan || '—'}</span></td>
                         <td>
                             <div class="action-buttons">
-                                <a href="/SistemManagementSumberDaya/public/admin-alumni-form.php?id=${item.id}" 
+                                <a href="<?php echo BASE_URL; ?>/public/admin-alumni-form.php?id=${item.id}" 
                                    class="btn-edit">✏️ Edit</a>
                                 <button onclick="hapusAlumni(${item.id})" 
                                         class="btn-delete" 
@@ -160,7 +160,7 @@ function loadAlumni() {
 
 function hapusAlumni(id) {
     if(confirm('Apakah Anda yakin ingin menghapus data alumni ini?')) {
-        fetch('/SistemManagementSumberDaya/public/api.php/alumni/' + id, { method: 'DELETE' })
+        fetch(API_URL + '/alumni/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {

@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Laboratorium</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-laboratorium.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 600px;">
@@ -49,7 +49,7 @@
 document.addEventListener('DOMContentLoaded', loadAsisten);
 
 function loadAsisten() {
-    fetch('/SistemManagementSumberDaya/public/api.php/asisten').then(res => res.json()).then(data => {
+    fetch(API_URL + '/asisten').then(res => res.json()).then(data => {
         if(data.status === 'success') {
             const select = document.getElementById('idKordinatorAsisten');
             data.data.forEach(ast => {
@@ -77,7 +77,7 @@ document.getElementById('labForm').addEventListener('submit', function(e) {
     formData.append('jumlahPc', document.getElementById('jumlahPc').value);
     formData.append('jumlahKursi', document.getElementById('jumlahKursi').value);
 
-    fetch('/SistemManagementSumberDaya/public/api.php/laboratorium', {
+    fetch(API_URL + '/laboratorium', {
         method: 'POST',
         body: formData
     })
@@ -85,7 +85,7 @@ document.getElementById('labForm').addEventListener('submit', function(e) {
     .then(data => {
         if (data.status === 'success' || data.code === 201) {
             msg.innerHTML = '<span style="color:green">✓ Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/SistemManagementSumberDaya/public/admin-laboratorium.php'; }, 1500);
+            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-laboratorium.php'; }, 1500);
         } else {
             msg.innerHTML = '<span style="color:red">✗ Gagal: ' + (data.message || 'Error tidak diketahui') + '</span>';
             btn.disabled = false;

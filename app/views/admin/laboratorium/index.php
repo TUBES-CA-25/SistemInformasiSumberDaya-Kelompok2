@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>🏢 Data Laboratorium / Fasilitas</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-laboratorium-form.php" class="btn btn-add">+ Tambah Laboratorium</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium-form.php" class="btn btn-add">+ Tambah Laboratorium</a>
 </div>
 
 <div class="card" style="padding: 0;">
@@ -128,7 +128,7 @@
 document.addEventListener('DOMContentLoaded', loadLaboratorium);
 
 function loadLaboratorium() {
-    fetch('/SistemManagementSumberDaya/public/api.php/laboratorium')
+    fetch(API_URL + '/laboratorium')
     .then(res => res.json())
     .then(response => {
         const tbody = document.getElementById('tableBody');
@@ -166,7 +166,7 @@ function loadLaboratorium() {
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="/SistemManagementSumberDaya/public/admin-laboratorium-form.php?id=${item.idLaboratorium}" 
+                                <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium-form.php?id=${item.idLaboratorium}" 
                                    class="btn-edit">✏️ Edit</a>
                                 <button onclick="hapusLaboratorium(${item.idLaboratorium})" 
                                         class="btn-delete" 
@@ -189,7 +189,7 @@ function loadLaboratorium() {
 
 function hapusLaboratorium(id) {
     if(confirm('Apakah Anda yakin ingin menghapus laboratorium ini?')) {
-        fetch('/SistemManagementSumberDaya/public/api.php/laboratorium/' + id, { method: 'DELETE' })
+        fetch(API_URL + '/laboratorium/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {

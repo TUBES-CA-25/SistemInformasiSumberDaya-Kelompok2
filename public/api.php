@@ -31,7 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Parse request
 $method = $_SERVER['REQUEST_METHOD'];
 $request_uri = $_SERVER['REQUEST_URI'];
-$script_name = '/SistemManagementSumberDaya/public/api.php';
+
+// Get the correct script name dynamically
+$script_name = $_SERVER['SCRIPT_NAME'];
 
 // Remove base path from URI
 if (strpos($request_uri, $script_name) === 0) {
@@ -83,15 +85,21 @@ $routes = [
     ],
     'POST' => [
             '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'store'],
+            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'], // For file upload
             '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'store'],
+            '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'update'], // For file upload
+            '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
+            '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'], // For file upload
             '/alumni' => ['controller' => 'AlumniController', 'method' => 'store'],
         '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'store'],
         '/asisten' => ['controller' => 'AsistenController', 'method' => 'store'],
+        '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'], // For file upload
         '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'store'],
         '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'store'],
         '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'store'],
         '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'store'],
         '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'store'],
+        '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'update'], // For file upload
         '/kontak' => ['controller' => 'KontakController', 'method' => 'store'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'store'],
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],

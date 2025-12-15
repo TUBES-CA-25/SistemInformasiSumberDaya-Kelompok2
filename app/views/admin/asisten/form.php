@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Asisten</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-asisten.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
@@ -25,6 +25,7 @@
         <div class="form-group">
             <label>Upload Foto</label>
             <input type="file" id="foto" name="foto" accept="image/*">
+            <small id="fotoInfo" style="color: #666; display: none;">Foto saat ini: <span id="fotoCurrent"></span></small>
         </div>
 
         <div class="form-group">
@@ -42,13 +43,55 @@
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Cek apakah ada ID di URL (mode edit)
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    
+    if (id) {
+        // Mode edit - load data
+        loadAsistenData(id);
+    }
+});
+
+function loadAsistenData(id) {
+    fetch(API_URL + '/asisten/' + id)
+    .then(response => response.json())
+    .then(data => {
+        if ((data.status === 'success' || data.code === 200) && data.data) {
+            const asisten = data.data;
+            document.getElementById('idAsisten').value = asisten.idAsisten;
+            document.getElementById('nama').value = asisten.nama || '';
+            document.getElementById('email').value = asisten.email || '';
+            document.getElementById('jurusan').value = asisten.jurusan || '';
+            document.getElementById('statusAktif').value = asisten.statusAktif || '1';
+            document.getElementById('isKoordinator').checked = asisten.isKoordinator == 1;
+            
+            if (asisten.foto) {
+                document.getElementById('fotoInfo').style.display = 'block';
+                document.getElementById('fotoCurrent').innerText = asisten.foto;
+            }
+            
+            document.querySelector('.admin-header h1').innerText = 'Edit Asisten: ' + asisten.nama;
+            document.getElementById('btnSave').innerText = 'Update Data';
+        }
+    })
+    .catch(error => {
+        console.error('Error loading asisten:', error);
+    });
+}
+
 document.getElementById('asistenForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const btn = document.getElementById('btnSave');
     const msg = document.getElementById('message');
     btn.disabled = true;
-    btn.innerText = 'Menyimpan...';
+    
+    const idAsisten = document.getElementById('idAsisten').value;
+    const isEdit = idAsisten ? true : false;
+    
+    btn.innerText = isEdit ? 'Mengupdate...' : 'Menyimpan...';
 
     // Pakai FormData agar bisa upload file
     const form = document.getElementById('asistenForm');
@@ -59,26 +102,37 @@ document.getElementById('asistenForm').addEventListener('submit', function(e) {
     formData.append('statusAktif', document.getElementById('statusAktif').value);
     // file foto otomatis sudah masuk jika dipilih
 
-    fetch('/SistemManagementSumberDaya/public/api.php/asisten', {
-        method: 'POST',
+    const url = isEdit ? (API_URL + '/asisten/' + idAsisten) : (API_URL + '/asisten');
+    const method = 'POST'; // Always POST untuk FormData dengan file
+
+    fetch(url, {
+        method: method,
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success' || data.code === 201) {
-            msg.innerHTML = '<span style="color:green">Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/SistemManagementSumberDaya/public/admin-asisten.php'; }, 1000);
-        } else {
-            msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Error validasi') + '</span>';
+    .then(response => response.text())
+    .then(text => {
+        try {
+            const data = JSON.parse(text);
+            if (data.status === 'success' || data.code === 201 || data.code === 200) {
+                msg.innerHTML = '<span style="color:green">' + (isEdit ? 'Data berhasil diupdate! ' : 'Berhasil disimpan! ') + 'Mengalihkan...</span>';
+                setTimeout(() => { window.location.href = BASE_URL + '/public/admin-asisten.php'; }, 1000);
+            } else {
+                msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Error validasi') + '</span>';
+                btn.disabled = false;
+                btn.innerText = isEdit ? 'Update Data' : 'Simpan Data';
+            }
+        } catch (e) {
+            console.error('Parse error:', text);
+            msg.innerHTML = '<span style="color:red">Terjadi kesalahan: ' + text + '</span>';
             btn.disabled = false;
-            btn.innerText = 'Simpan Data';
+            btn.innerText = isEdit ? 'Update Data' : 'Simpan Data';
         }
     })
     .catch(error => {
         console.error('Error:', error);
         msg.innerHTML = '<span style="color:red">Terjadi kesalahan koneksi.</span>';
         btn.disabled = false;
-        btn.innerText = 'Simpan Data';
+        btn.innerText = isEdit ? 'Update Data' : 'Simpan Data';
     });
 });
 </script>

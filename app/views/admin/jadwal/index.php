@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Manajemen Jadwal Praktikum</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-jadwal-form.php" class="btn btn-add">+ Tambah Jadwal Baru</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-jadwal-form.php" class="btn btn-add">+ Tambah Jadwal Baru</a>
 </div>
 
 <div class="card">
@@ -26,7 +26,7 @@
 document.addEventListener('DOMContentLoaded', loadJadwal);
 
 function loadJadwal() {
-    fetch('/SistemManagementSumberDaya/public/api.php/jadwalpraktikum') // Sesuai Controller index()
+    fetch(API_URL + '/jadwalpraktikum') // Sesuai Controller index()
     .then(res => res.json())
     .then(response => {
         const tbody = document.getElementById('tableBody');
@@ -52,7 +52,7 @@ function loadJadwal() {
                         <td>${item.kelas || '-'}</td>
                         <td>${statusBadge}</td>
                         <td>
-                            <a href="/SistemManagementSumberDaya/public/admin-jadwal-form.php?id=${item.idJadwal}" class="btn btn-edit">Edit</a>
+                            <a href="<?php echo BASE_URL; ?>/public/admin-jadwal-form.php?id=${item.idJadwal}" class="btn btn-edit">Edit</a>
                             <button onclick="hapusJadwal(${item.idJadwal})" class="btn btn-delete">Hapus</button>
                         </td>
                     </tr>
@@ -68,7 +68,7 @@ function loadJadwal() {
 
 function hapusJadwal(id) {
     if(confirm('Yakin hapus jadwal ini?')) {
-        fetch('/SistemManagementSumberDaya/public/api.php/jadwalpraktikum/' + id, { method: 'DELETE' })
+        fetch(API_URL + '/jadwalpraktikum/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {

@@ -1,6 +1,9 @@
 <div class="admin-header">
     <h1>📚 Data Asisten Laboratorium</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+    <div style="display: flex; gap: 10px;">
+        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-pilih-koordinator.php" class="btn" style="background: #2980b9; color: white;">👤 Pilih Koordinator</a>
+        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+    </div>
 </div>
 
 <div class="card" style="padding: 0;">
@@ -12,6 +15,7 @@
                     <th style="width: 100px; padding: 15px;">Foto</th>
                     <th style="padding: 15px;">Nama Lengkap</th>
                     <th style="padding: 15px;">Jurusan</th>
+                    <th style="width: 80px; padding: 15px;">Koordinator</th>
                     <th style="width: 100px; padding: 15px;">Status</th>
                     <th style="width: 150px; padding: 15px;">Aksi</th>
                 </tr>
@@ -112,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadAsisten() {
-    fetch('/SistemManagementSumberDaya/public/api.php/asisten')
+    fetch(API_URL + '/asisten')
     .then(response => response.json())
     .then(res => {
         const tbody = document.getElementById('tableBody');
@@ -123,20 +127,25 @@ function loadAsisten() {
                 const statusBadge = item.statusAktif == 1 
                     ? '<span class="status-badge status-aktif">✓ Aktif</span>' 
                     : '<span class="status-badge status-nonaktif">✗ Non-Aktif</span>';
+                
+                const koordinatorBadge = item.isKoordinator == 1
+                    ? '<span style="background: #27ae60; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;">Ya</span>'
+                    : '<span style="background: #95a5a6; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px;">Tidak</span>';
 
                 const row = `
                     <tr>
                         <td style="font-weight: 600; color: #667eea;">${index + 1}</td>
                         <td>
-                            <img src="${item.foto || 'https://placehold.co/50x50'}" 
+                            <img src="${item.foto ? (item.foto.includes('http') ? item.foto : '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + item.foto) : 'https://placehold.co/50x50'}" 
                                  style="width:50px; height:50px; border-radius:50%; object-fit:cover; border: 2px solid #667eea;">
                         </td>
                         <td><strong>${item.nama}</strong></td>
                         <td><span style="color: #666; font-size: 13px;">${item.jurusan || '—'}</span></td>
+                        <td>${koordinatorBadge}</td>
                         <td>${statusBadge}</td>
                         <td>
                             <div class="action-buttons">
-                                <a href="/SistemManagementSumberDaya/public/admin-asisten-form.php?id=${item.idAsisten}" 
+                                <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php?id=${item.idAsisten}" 
                                    class="btn-edit">✏️ Edit</a>
                                 <button onclick="hapusAsisten(${item.idAsisten})" 
                                         class="btn-delete" 
@@ -159,7 +168,7 @@ function loadAsisten() {
 
 function hapusAsisten(id) {
     if(confirm('Apakah Anda yakin ingin menghapus data asisten ini?')) {
-        fetch('/SistemManagementSumberDaya/public/api.php/asisten/' + id, { method: 'DELETE' })
+        fetch(API_URL + '/asisten/' + id, { method: 'DELETE' })
         .then(response => response.json())
         .then(res => {
             if(res.status === 'success' || res.code === 200) {

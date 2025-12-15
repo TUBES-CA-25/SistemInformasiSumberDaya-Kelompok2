@@ -1,4 +1,12 @@
 -- ========================================
+-- Database: sistem_manajemen_sumber_daya
+-- Created: 2025-12-08
+-- ========================================
+
+CREATE DATABASE IF NOT EXISTS sistem_manajemen_sumber_daya;
+USE sistem_manajemen_sumber_daya;
+
+-- ========================================
 -- Table: peraturan_lab
 -- ========================================
 CREATE TABLE IF NOT EXISTS peraturan_lab (
@@ -9,23 +17,6 @@ CREATE TABLE IF NOT EXISTS peraturan_lab (
     urutan INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
--- Database: sistem_manajemen_sumber_daya
--- Created: 2025-12-08
-
-CREATE DATABASE IF NOT EXISTS sistem_manajemen_sumber_daya;
-USE sistem_manajemen_sumber_daya;
-
--- Table: Laboratorium
-CREATE TABLE IF NOT EXISTS Laboratorium (
-    idLaboratorium INT PRIMARY KEY AUTO_INCREMENT,
-    nama VARCHAR(100) NOT NULL,
-    idKordinatorAsisten INT,
-    deskripsi TEXT,
-    gambar VARCHAR(255),
-    jumlahPc INT,
-    jumlahKursi INT,
-    FOREIGN KEY (idKordinatorAsisten) REFERENCES Asisten(idAsisten) ON DELETE SET NULL
 );
 
 -- ========================================
@@ -38,6 +29,18 @@ CREATE TABLE IF NOT EXISTS Asisten (
     email VARCHAR(100) UNIQUE,
     foto VARCHAR(255),
     statusAktif BOOLEAN DEFAULT TRUE
+);
+
+-- Table: Laboratorium
+CREATE TABLE IF NOT EXISTS Laboratorium (
+    idLaboratorium INT PRIMARY KEY AUTO_INCREMENT,
+    nama VARCHAR(100) NOT NULL,
+    idKordinatorAsisten INT,
+    deskripsi TEXT,
+    gambar VARCHAR(255),
+    jumlahPc INT,
+    jumlahKursi INT,
+    FOREIGN KEY (idKordinatorAsisten) REFERENCES Asisten(idAsisten) ON DELETE SET NULL
 );
 
 -- ========================================
@@ -180,6 +183,24 @@ CREATE TABLE IF NOT EXISTS alumni (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+
+-- ========================================
+-- Data Peraturan Lab (Tata Tertib)
+-- ========================================
+INSERT INTO tataTerib (namaFile, uraFile) VALUES
+('Disiplin Waktu Kehadiran', 'Praktikan wajib hadir 15 menit sebelum kegiatan praktikum dimulai untuk persiapan. Toleransi keterlambatan maksimal adalah 10 menit. Jika melebihi batas tersebut, praktikan tidak diperkenankan masuk dan dianggap tidak hadir (Alpa).'),
+('Aturan Berpakaian & Identitas', 'Wajib mengenakan seragam kemeja putih (atau sesuai ketentuan fakultas), celana/rok kain hitam, dan bersepatu tertutup. Praktikan juga wajib membawa dan mengenakan Kartu Tanda Mahasiswa (KTM) atau Kartu Asisten selama berada di lingkungan laboratorium.'),
+('Menjaga Kebersihan & Ketertiban', 'Dilarang keras membawa makanan, minuman, atau benda tajam ke dalam ruang laboratorium. Sampah wajib dibuang pada tempat yang disediakan. Praktikan dilarang membuat kegaduhan yang dapat mengganggu konsentrasi praktikan lain.'),
+('Penggunaan Fasilitas Komputer', 'Dilarang mengubah pengaturan (setting) komputer, menginstal software tanpa izin, atau memindahkan perangkat keras (mouse, keyboard) antar meja. Segala kerusakan yang disebabkan oleh kelalaian praktikan akan dikenakan sanksi penggantian.');
+
+-- ========================================
+-- Data Sanksi Lab
+-- ========================================
+INSERT INTO sanksi_lab (judul, deskripsi) VALUES
+('Keterlambatan Hadir', 'Praktikan yang terlambat lebih dari 10 menit tidak diperkenankan mengikuti praktikum pada sesi tersebut. Status kehadiran akan dicatat sebagai Alpa (Tidak Hadir), yang dapat mempengaruhi kelulusan mata kuliah praktikum.'),
+('Merusak Fasilitas', 'Jika terjadi kerusakan pada hardware (monitor, keyboard, mouse, dll) akibat kelalaian atau kesengajaan, praktikan wajib melakukan Penggantian Barang dengan spesifikasi yang sama atau setara dalam kurun waktu 1x24 jam.'),
+('Pelanggaran Seragam & Atribut', 'Praktikan yang tidak mengenakan seragam sesuai ketentuan atau tidak membawa Kartu Tanda Mahasiswa (KTM) akan mendapatkan Teguran Keras dan pengurangan poin nilai kedisiplinan pada sesi tersebut.'),
+('Kecurangan (Plagiasi/Mencontek)', 'Segala bentuk kecurangan seperti mencontek saat ujian atau menyalin tugas teman (plagiasi) akan dikenakan sanksi Nilai E (Tidak Lulus) secara otomatis pada mata kuliah praktikum yang bersangkutan.');
 
 -- ========================================
 -- Indexes untuk performa query

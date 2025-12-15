@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>📖 Data Mata Kuliah</h1>
-    <a href="/SistemManagementSumberDaya/public/admin-matakuliah-form.php" class="btn btn-add">+ Tambah Matakuliah</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah-form.php" class="btn btn-add">+ Tambah Matakuliah</a>
 </div>
 
 <div class="card" style="padding: 0;">
@@ -122,7 +122,7 @@
 document.addEventListener('DOMContentLoaded', loadMatakuliah);
 
 function loadMatakuliah() {
-    fetch('/SistemManagementSumberDaya/public/api.php/matakuliah')
+    fetch(API_URL + '/matakuliah')
     .then(res => res.json())
     .then(response => {
         const tbody = document.getElementById('tableBody');
@@ -147,7 +147,7 @@ function loadMatakuliah() {
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="/SistemManagementSumberDaya/public/admin-matakuliah-form.php?id=${item.idMatakuliah}" 
+                                <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah-form.php?id=${item.idMatakuliah}" 
                                    class="btn-edit">✏️ Edit</a>
                                 <button onclick="hapusMatakuliah(${item.idMatakuliah})" 
                                         class="btn-delete" 
@@ -170,7 +170,7 @@ function loadMatakuliah() {
 
 function hapusMatakuliah(id) {
     if(confirm('Apakah Anda yakin ingin menghapus mata kuliah ini?')) {
-        fetch('/SistemManagementSumberDaya/public/api.php/matakuliah/' + id, { method: 'DELETE' })
+        fetch(API_URL + '/matakuliah/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {

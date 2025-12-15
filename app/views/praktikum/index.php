@@ -5,48 +5,111 @@
             <p>Mahasiswa wajib mematuhi seluruh tata tertib berikut demi kenyamanan dan keselamatan bersama.</p>
         </div>
 
-        <div class="rules-list">
-            
-            <div class="rules-item">
-                <div class="rules-image">
-                    <img src="https://placehold.co/400x300/7f8c8d/white?text=Waktu" alt="Waktu">
-                </div>
-                <div class="rules-content">
-                    <h3>Disiplin Waktu Kehadiran</h3>
-                    <p>Praktikan wajib hadir 15 menit sebelum kegiatan praktikum dimulai untuk persiapan. Toleransi keterlambatan maksimal adalah 10 menit. Jika melebihi batas tersebut, praktikan tidak diperkenankan masuk dan dianggap tidak hadir (Alpa).</p>
-                </div>
+        <div class="rules-list" id="rulesList">
+            <!-- Data akan dimuat dari API -->
+            <div style="text-align: center; padding: 40px;">
+                <p>Memuat data peraturan...</p>
             </div>
-
-            <div class="rules-item">
-                <div class="rules-image">
-                    <img src="https://placehold.co/400x300/7f8c8d/white?text=Seragam" alt="Seragam">
-                </div>
-                <div class="rules-content">
-                    <h3>Aturan Berpakaian & Identitas</h3>
-                    <p>Wajib mengenakan seragam kemeja putih (atau sesuai ketentuan fakultas), celana/rok kain hitam, dan bersepatu tertutup. Praktikan juga wajib membawa dan mengenakan Kartu Tanda Mahasiswa (KTM) atau Kartu Asisten selama berada di lingkungan laboratorium.</p>
-                </div>
-            </div>
-
-            <div class="rules-item">
-                <div class="rules-image">
-                    <img src="https://placehold.co/400x300/7f8c8d/white?text=Kebersihan" alt="Kebersihan">
-                </div>
-                <div class="rules-content">
-                    <h3>Menjaga Kebersihan & Ketertiban</h3>
-                    <p>Dilarang keras membawa makanan, minuman, atau benda tajam ke dalam ruang laboratorium. Sampah wajib dibuang pada tempat yang disediakan. Praktikan dilarang membuat kegaduhan yang dapat mengganggu konsentrasi praktikan lain.</p>
-                </div>
-            </div>
-
-            <div class="rules-item">
-                <div class="rules-image">
-                    <img src="https://placehold.co/400x300/7f8c8d/white?text=Fasilitas" alt="Fasilitas">
-                </div>
-                <div class="rules-content">
-                    <h3>Penggunaan Fasilitas Komputer</h3>
-                    <p>Dilarang mengubah pengaturan (setting) komputer, menginstal software tanpa izin, atau memindahkan perangkat keras (mouse, keyboard) antar meja. Segala kerusakan yang disebabkan oleh kelalaian praktikan akan dikenakan sanksi penggantian.</p>
-                </div>
-            </div>
-
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadPeraturanLab();
+    });
+
+    function loadPeraturanLab() {
+        const rulesList = document.getElementById('rulesList');
+        
+        // Fetch data dari API - gunakan path absolut
+        const apiUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
+            ? '/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib'
+            : '/api/tata-tertib';
+        
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success' && data.data.length > 0) {
+                    // Clear loading message
+                    rulesList.innerHTML = '';
+                    
+                    // Loop setiap peraturan dari database
+                    data.data.forEach(rule => {
+                        const ruleItem = document.createElement('div');
+                        ruleItem.className = 'rules-item';
+                        
+                        // Gunakan image dari database atau placeholder
+                        // Path gambar: /SistemInformasiSumberDaya-Kelompok2/storage/uploads/{filename}
+                        let imageUrl;
+                        if (rule.gambar) {
+                            const baseUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2')
+                                ? '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/'
+                                : '/storage/uploads/';
+                            imageUrl = baseUrl + rule.gambar;
+                        } else {
+                            imageUrl = 'https://placehold.co/400x300/7f8c8d/white?text=Peraturan';
+                        }
+                        
+                        ruleItem.innerHTML = `
+                            <div class="rules-image">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23ddd' width='400' height='300'/%3E%3C/svg%3E" 
+                                     data-src="${imageUrl}" 
+                                     alt="${rule.namaFile}" 
+                                     loading="lazy"
+                                     onerror="this.src='https://placehold.co/400x300/7f8c8d/white?text=Peraturan'">
+                            </div>
+                            <div class="rules-content">
+                                <h3>${escapeHtml(rule.namaFile)}</h3>
+                                <p>${escapeHtml(rule.uraFile || 'Lihat peraturan lengkap untuk informasi detail.')}</p>
+                            </div>
+                        `;
+                        
+                        rulesList.appendChild(ruleItem);
+                    });
+                    
+                    // Lazy load gambar menggunakan Intersection Observer
+                    const images = document.querySelectorAll('img[data-src]');
+                    const imageObserver = new IntersectionObserver((entries, observer) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const img = entry.target;
+                                img.src = img.dataset.src;
+                                img.removeAttribute('data-src');
+                                observer.unobserve(img);
+                            }
+                        });
+                    });
+                    images.forEach(img => imageObserver.observe(img));
+                } else {
+                    // Jika tidak ada data
+                    rulesList.innerHTML = `
+                        <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
+                            <p>Belum ada peraturan yang ditambahkan. Silahkan hubungi administrator.</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading peraturan:', error);
+                rulesList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
+                        <p>Gagal memuat data peraturan. Silahkan coba lagi nanti.</p>
+                    </div>
+                `;
+            });
+    }
+
+    // Helper function untuk escape HTML
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
