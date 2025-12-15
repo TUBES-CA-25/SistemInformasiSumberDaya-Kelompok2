@@ -45,11 +45,24 @@
                         ruleItem.className = 'rules-item';
                         
                         // Gunakan image dari database atau placeholder
-                        const imageUrl = rule.gambar ? `/uploads/tata-tertib/${rule.gambar}` : 'https://placehold.co/400x300/7f8c8d/white?text=Peraturan';
+                        // Path gambar: /SistemInformasiSumberDaya-Kelompok2/storage/uploads/{filename}
+                        let imageUrl;
+                        if (rule.gambar) {
+                            const baseUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2')
+                                ? '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/'
+                                : '/storage/uploads/';
+                            imageUrl = baseUrl + rule.gambar;
+                        } else {
+                            imageUrl = 'https://placehold.co/400x300/7f8c8d/white?text=Peraturan';
+                        }
                         
                         ruleItem.innerHTML = `
                             <div class="rules-image">
-                                <img src="${imageUrl}" alt="${rule.namaFile}" onerror="this.src='https://placehold.co/400x300/7f8c8d/white?text=Peraturan'">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23ddd' width='400' height='300'/%3E%3C/svg%3E" 
+                                     data-src="${imageUrl}" 
+                                     alt="${rule.namaFile}" 
+                                     loading="lazy"
+                                     onerror="this.src='https://placehold.co/400x300/7f8c8d/white?text=Peraturan'">
                             </div>
                             <div class="rules-content">
                                 <h3>${escapeHtml(rule.namaFile)}</h3>
@@ -59,6 +72,20 @@
                         
                         rulesList.appendChild(ruleItem);
                     });
+                    
+                    // Lazy load gambar menggunakan Intersection Observer
+                    const images = document.querySelectorAll('img[data-src]');
+                    const imageObserver = new IntersectionObserver((entries, observer) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const img = entry.target;
+                                img.src = img.dataset.src;
+                                img.removeAttribute('data-src');
+                                observer.unobserve(img);
+                            }
+                        });
+                    });
+                    images.forEach(img => imageObserver.observe(img));
                 } else {
                     // Jika tidak ada data
                     rulesList.innerHTML = `

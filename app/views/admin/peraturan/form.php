@@ -17,6 +17,12 @@
             <small class="form-text">Penjelasan lengkap tentang peraturan ini</small>
         </div>
 
+        <div class="form-group">
+            <label>Upload Gambar (Opsional)</label>
+            <input type="file" name="gambar" id="gambar" accept="image/*" class="form-control">
+            <small class="form-text">Format: JPG, PNG (Max 2MB)</small>
+        </div>
+
         <div class="form-group" style="margin-top: 20px;">
             <button type="submit" class="btn btn-primary">Simpan Peraturan</button>
             <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan.php" class="btn btn-secondary" style="margin-left: 10px;">Batal</a>
@@ -108,17 +114,20 @@
                     document.getElementById('namaFile').value = data.namaFile || '';
                     document.getElementById('uraFile').value = data.uraFile || '';
                     
-                    // Simpan ID di form untuk digunakan saat submit
+                    // Simpan ID dan gambar lama di form
                     document.getElementById('peraturanForm').dataset.editId = id;
+                    if (data.gambar) {
+                        document.getElementById('peraturanForm').dataset.oldGambar = data.gambar;
+                    }
                 } else {
                     alert('Gagal memuat data: ' + response.message);
-                    window.location.href = '/admin-peraturan.php';
+                    window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan.php';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('Gagal memuat data peraturan');
-                window.location.href = '/admin-peraturan.php';
+                window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan.php';
             });
     }
 
@@ -127,6 +136,8 @@
 
         const namaFile = document.getElementById('namaFile').value.trim();
         const uraFile = document.getElementById('uraFile').value.trim();
+        const gambarInput = document.getElementById('gambar');
+        const gambar = gambarInput.files[0];
         const editId = this.dataset.editId;
 
         // Validasi
@@ -135,24 +146,38 @@
             return;
         }
 
-        const data = {
-            namaFile: namaFile,
-            uraFile: uraFile || null
-        };
+        // SELALU gunakan FormData agar bisa handle file upload + text fields
+        let data = new FormData();
+        data.append('namaFile', namaFile);
+        data.append('uraFile', uraFile || '');
+        if (gambar) {
+            data.append('gambar', gambar);
+        }
 
-        const method = editId ? 'PUT' : 'POST';
+        // Untuk edit dengan file upload, HARUS gunakan POST
+        // Karena PHP tidak bisa auto-parse $_FILES untuk PUT request
+        const method = 'POST'; // Selalu POST untuk FormData dengan file
         const apiUrl = editId 
             ? `/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib/${editId}`
             : '/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib';
 
         fetch(apiUrl, {
             method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+            body: data
+            // Jangan set Content-Type - browser akan set otomatis dengan FormData
         })
-            .then(res => res.json())
+            .then(res => {
+                console.log('Response status:', res.status);
+                return res.text().then(text => {
+                    console.log('Response text:', text);
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.error('Failed to parse JSON:', e);
+                        throw new Error('Invalid JSON response: ' + text.substring(0, 500));
+                    }
+                });
+            })
             .then(response => {
                 if (response.status === 'success') {
                     alert(editId ? 'Peraturan berhasil diperbarui!' : 'Peraturan berhasil ditambahkan!');
@@ -163,7 +188,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Gagal menyimpan peraturan');
+                alert('Gagal menyimpan peraturan: ' + error.message);
             });
     });
 </script>
