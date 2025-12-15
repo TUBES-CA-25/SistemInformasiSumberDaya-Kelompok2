@@ -185,6 +185,15 @@ CREATE TABLE IF NOT EXISTS alumni (
 
 
 -- ========================================
+-- Data Peraturan Lab (Tata Tertib)
+-- ========================================
+INSERT INTO tataTerib (namaFile, uraFile) VALUES
+('Disiplin Waktu Kehadiran', 'Praktikan wajib hadir 15 menit sebelum kegiatan praktikum dimulai untuk persiapan. Toleransi keterlambatan maksimal adalah 10 menit. Jika melebihi batas tersebut, praktikan tidak diperkenankan masuk dan dianggap tidak hadir (Alpa).'),
+('Aturan Berpakaian & Identitas', 'Wajib mengenakan seragam kemeja putih (atau sesuai ketentuan fakultas), celana/rok kain hitam, dan bersepatu tertutup. Praktikan juga wajib membawa dan mengenakan Kartu Tanda Mahasiswa (KTM) atau Kartu Asisten selama berada di lingkungan laboratorium.'),
+('Menjaga Kebersihan & Ketertiban', 'Dilarang keras membawa makanan, minuman, atau benda tajam ke dalam ruang laboratorium. Sampah wajib dibuang pada tempat yang disediakan. Praktikan dilarang membuat kegaduhan yang dapat mengganggu konsentrasi praktikan lain.'),
+('Penggunaan Fasilitas Komputer', 'Dilarang mengubah pengaturan (setting) komputer, menginstal software tanpa izin, atau memindahkan perangkat keras (mouse, keyboard) antar meja. Segala kerusakan yang disebabkan oleh kelalaian praktikan akan dikenakan sanksi penggantian.');
+
+-- ========================================
 -- Indexes untuk performa query
 -- ========================================
 CREATE INDEX idx_asisten_email ON Asisten(email);

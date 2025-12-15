@@ -31,7 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // Parse request
 $method = $_SERVER['REQUEST_METHOD'];
 $request_uri = $_SERVER['REQUEST_URI'];
-$script_name = '/SistemManagementSumberDaya/public/api.php';
+
+// Get the correct script name dynamically
+$script_name = $_SERVER['SCRIPT_NAME'];
 
 // Remove base path from URI
 if (strpos($request_uri, $script_name) === 0) {

@@ -72,6 +72,10 @@
             <li>
                 <li><a href="<?php echo BASE_URL; ?>/public/admin-jadwal.php" class="<?= strpos($uri, 'admin-jadwal') !== false ? 'active' : '' ?>">Jadwal Praktikum</a></li>
             </li>
+
+            <li>
+                <a href="<?php echo BASE_URL; ?>/public/admin-peraturan.php" class="<?= strpos($uri, 'admin-peraturan') !== false ? 'active' : '' ?>">Peraturan Lab</a>
+            </li>
             
             <li>
                 <a href="<?php echo BASE_URL; ?>/public/index.php" style="margin-top: 50px; color: #e74c3c;">Logout / Ke Web Utama</a>

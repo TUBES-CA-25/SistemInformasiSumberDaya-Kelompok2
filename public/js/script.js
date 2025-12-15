@@ -42,4 +42,5 @@ if (track && slides.length > 0) {
             nextSlide = 0; // Kembali ke awal
         }
         goToSlide(nextSlide);
-}, 5000);
+    }, 5000);
+}
