@@ -93,11 +93,13 @@ $routes = [
             '/alumni' => ['controller' => 'AlumniController', 'method' => 'store'],
         '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'store'],
         '/asisten' => ['controller' => 'AsistenController', 'method' => 'store'],
+        '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'], // For file upload
         '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'store'],
         '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'store'],
         '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'store'],
         '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'store'],
         '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'store'],
+        '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'update'], // For file upload
         '/kontak' => ['controller' => 'KontakController', 'method' => 'store'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'store'],
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],

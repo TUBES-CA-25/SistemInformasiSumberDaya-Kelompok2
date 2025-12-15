@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers;
 
+use Exception;
+
 require_once __DIR__ . '/../models/TataTerbibModel.php';
 
 class TataTerbibController extends Controller {
@@ -73,7 +75,7 @@ class TataTerbibController extends Controller {
                 $this->success(['id' => $this->model->getLastInsertId()], 'Tata Tertib created successfully', 201);
             }
             $this->error('Failed to create tata tertib', null, 500);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log('ERROR in TataTerbibController::store - ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage(), null, 500);
         }
@@ -142,7 +144,7 @@ class TataTerbibController extends Controller {
                 $this->success([], 'Tata Tertib updated successfully');
             }
             $this->error('Failed to update tata tertib', null, 500);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             error_log('ERROR in TataTerbibController::update - ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage(), null, 500);
         }
