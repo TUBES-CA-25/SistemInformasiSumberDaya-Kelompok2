@@ -35,6 +35,9 @@ $request_uri = $_SERVER['REQUEST_URI'];
 // Get the correct script name dynamically
 $script_name = $_SERVER['SCRIPT_NAME'];
 
+// Debug logging (remove in production)
+error_log("API Debug - Method: $method, URI: $request_uri, Script: $script_name");
+
 // Remove base path from URI
 if (strpos($request_uri, $script_name) === 0) {
     $path = substr($request_uri, strlen($script_name));
@@ -46,6 +49,9 @@ if (strpos($request_uri, $script_name) === 0) {
 // Clean path - decode URL and remove whitespace
 $path = urldecode($path);
 $path = '/' . trim($path, '/ ');
+
+// Debug logging
+error_log("API Debug - Parsed path: $path");
 
 // Route mapping dengan HTTP METHOD
 $routes = [
@@ -67,6 +73,8 @@ $routes = [
         '/matakuliah/{id}/asisten' => ['controller' => 'MatakuliahController', 'method' => 'asisten'],
         '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'index'],
         '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'show'],
+        '/jadwal-praktikum/template' => ['controller' => 'JadwalPraktikumController', 'method' => 'downloadTemplate'],
+        '/jadwal-praktikum/csv-template' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'downloadCSVTemplate'],
         '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'index'],
         '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'show'],
         '/informasi/tipe/{type}' => ['controller' => 'InformasiLabController', 'method' => 'byType'],
@@ -81,8 +89,7 @@ $routes = [
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'index'],
         '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'show'],
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'index'],
-        '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],
-    ],
+        '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],            '/dashboard/stats' => ['controller' => 'DashboardController', 'method' => 'stats'],    ],
     'POST' => [
             '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'store'],
             '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'], // For file upload
@@ -96,6 +103,8 @@ $routes = [
         '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'], // For file upload
         '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'store'],
         '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'store'],
+        '/jadwal-praktikum/upload' => ['controller' => 'JadwalPraktikumController', 'method' => 'uploadExcel'],
+        '/jadwal-praktikum/upload-csv' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'uploadCSV'],
         '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'store'],
         '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'store'],
         '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'store'],
@@ -170,8 +179,15 @@ if (isset($routes[$method])) {
 }
 
 if (!$matched) {
+    error_log("API Debug - Route not found. Method: $method, Path: $path");
+    error_log("API Debug - Available routes for $method: " . print_r($routes[$method] ?? [], true));
     http_response_code(404);
-    echo json_encode(['error' => 'Route not found', 'method' => $method, 'path' => $path]);
+    echo json_encode([
+        'error' => 'Route not found', 
+        'method' => $method, 
+        'path' => $path,
+        'available_routes' => array_keys($routes[$method] ?? [])
+    ]);
     exit;
 }
 
@@ -179,25 +195,32 @@ if (!$matched) {
 if (!class_exists($controller_class)) {
     require_once APP_PATH . '/controllers/Controller.php';
     $controller_file = APP_PATH . '/controllers/' . basename(str_replace('App\\Controllers\\', '', $controller_class)) . '.php';
+    error_log("API Debug - Loading controller file: $controller_file");
     if (file_exists($controller_file)) {
         require_once $controller_file;
+    } else {
+        error_log("API Debug - Controller file not found: $controller_file");
     }
 }
 
 if (!class_exists($controller_class)) {
+    error_log("API Debug - Controller class not found: $controller_class");
     http_response_code(500);
     echo json_encode(['error' => 'Controller not found: ' . $controller_class]);
     exit;
 }
 
+error_log("API Debug - Creating controller instance: $controller_class");
 $controller = new $controller_class();
 
 if (!method_exists($controller, $action_method)) {
+    error_log("API Debug - Method not found: $action_method in $controller_class");
     http_response_code(500);
     echo json_encode(['error' => 'Method not found: ' . $action_method]);
     exit;
 }
 
+error_log("API Debug - Executing method: $action_method with params: " . print_r($params, true));
 // Execute action
 $controller->$action_method($params);
 ?>

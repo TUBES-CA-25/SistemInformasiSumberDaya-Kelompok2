@@ -3,6 +3,9 @@
  * Configuration File
  */
 
+// Autoload Composer dependencies
+require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+
 // Database Configuration
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');

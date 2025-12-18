@@ -1,6 +1,11 @@
 <div class="admin-header">
     <h1>Manajemen Jadwal Praktikum</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-jadwal-form.php" class="btn btn-add">+ Tambah Jadwal Baru</a>
+    <div class="btn-group">
+        <a href="<?php echo BASE_URL; ?>/public/admin-jadwal-upload.php" class="btn btn-upload" style="background: #17a2b8; color: white; margin-right: 10px;">
+            <i class="bi bi-upload"></i> Upload Excel
+        </a>
+        <a href="<?php echo BASE_URL; ?>/public/admin-jadwal-form.php" class="btn btn-add">+ Tambah Jadwal Baru</a>
+    </div>
 </div>
 
 <div class="card">
@@ -26,7 +31,7 @@
 document.addEventListener('DOMContentLoaded', loadJadwal);
 
 function loadJadwal() {
-    fetch(API_URL + '/jadwalpraktikum') // Sesuai Controller index()
+    fetch(API_URL + '/jadwal') // Perbaiki routing yang benar
     .then(res => res.json())
     .then(response => {
         const tbody = document.getElementById('tableBody');
@@ -68,7 +73,7 @@ function loadJadwal() {
 
 function hapusJadwal(id) {
     if(confirm('Yakin hapus jadwal ini?')) {
-        fetch(API_URL + '/jadwalpraktikum/' + id, { method: 'DELETE' })
+        fetch(API_URL + '/jadwal/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {

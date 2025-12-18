@@ -1,8 +1,12 @@
 <div class="admin-header">
-    <h1>📚 Data Asisten Laboratorium</h1>
+    <h1><i class="fas fa-users"></i> Data Asisten Laboratorium</h1>
     <div style="display: flex; gap: 10px;">
-        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-pilih-koordinator.php" class="btn" style="background: #2980b9; color: white;">👤 Pilih Koordinator</a>
-        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-pilih-koordinator.php" class="btn btn-primary">
+            <i class="fas fa-user-check"></i> Pilih Koordinator
+        </a>
+        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php" class="btn btn-success">
+            <i class="fas fa-plus"></i> Tambah Asisten Baru
+        </a>
     </div>
 </div>
 
@@ -10,14 +14,14 @@
     <div style="overflow-x: auto;">
         <table class="crud-table" style="margin: 0;">
             <thead>
-                <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                    <th style="width: 50px; padding: 15px;">No</th>
-                    <th style="width: 100px; padding: 15px;">Foto</th>
+                <tr style="background: #34495e; color: white;">
+                    <th style="width: 50px; padding: 15px; text-align: center;">No</th>
+                    <th style="width: 80px; padding: 15px; text-align: center;">Foto</th>
                     <th style="padding: 15px;">Nama Lengkap</th>
                     <th style="padding: 15px;">Jurusan</th>
-                    <th style="width: 80px; padding: 15px;">Koordinator</th>
-                    <th style="width: 100px; padding: 15px;">Status</th>
-                    <th style="width: 150px; padding: 15px;">Aksi</th>
+                    <th style="width: 100px; padding: 15px; text-align: center;">Koordinator</th>
+                    <th style="width: 100px; padding: 15px; text-align: center;">Status</th>
+                    <th style="width: 150px; padding: 15px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -32,76 +36,144 @@
 </div>
 
 <style>
+/* Custom Button Styles for Consistency */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white !important;
+}
+
+.btn-primary {
+    background-color: #3498db;
+}
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background-color: #27ae60;
+}
+.btn-success:hover {
+    background-color: #219150;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+}
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+/* Table Styles */
 .crud-table tbody tr {
     border-bottom: 1px solid #f0f0f0;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .crud-table tbody tr:hover {
-    background-color: #f8f9ff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    background-color: #f8f9fa;
 }
 
 .crud-table tbody td {
     padding: 12px 15px;
     vertical-align: middle;
+    color: #555;
 }
 
-.crud-table tbody td img {
+.crud-table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
     display: block;
+    margin: 0 auto;
 }
 
 .status-badge {
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 20px;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12px;
     display: inline-block;
 }
 
 .status-aktif {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: #e8f5e9;
+    color: #27ae60;
+    border: 1px solid #c8e6c9;
 }
 
 .status-nonaktif {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: #ffebee;
+    color: #c0392b;
+    border: 1px solid #ffcdd2;
+}
+
+.coord-badge {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid #bbdefb;
 }
 
 .action-buttons {
     display: flex;
-    gap: 8px;
+    gap: 5px;
+    justify-content: center;
 }
 
-.btn-edit, .btn-delete {
-    padding: 6px 12px;
+.btn-action {
+    width: 32px;
+    height: 32px;
     border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s;
+    color: white;
+    text-decoration: none;
 }
 
 .btn-edit {
-    background-color: #17a2b8;
-    color: white;
+    background-color: #f39c12;
 }
 
 .btn-edit:hover {
-    background-color: #138496;
-    transform: translateY(-2px);
+    background-color: #e67e22;
 }
 
 .btn-delete {
-    background-color: #dc3545;
-    color: white;
+    background-color: #e74c3c;
 }
 
 .btn-delete:hover {
-    background-color: #c82333;
-    transform: translateY(-2px);
+    background-color: #c0392b;
 }
 
 @keyframes spin {
@@ -125,31 +197,41 @@ function loadAsisten() {
         if((res.status === 'success' || res.code === 200) && res.data && res.data.length > 0) {
             res.data.forEach((item, index) => {
                 const statusBadge = item.statusAktif == 1 
-                    ? '<span class="status-badge status-aktif">✓ Aktif</span>' 
-                    : '<span class="status-badge status-nonaktif">✗ Non-Aktif</span>';
+                    ? '<span class="status-badge status-aktif"><i class="fas fa-check-circle"></i> Aktif</span>' 
+                    : '<span class="status-badge status-nonaktif"><i class="fas fa-times-circle"></i> Non-Aktif</span>';
                 
                 const koordinatorBadge = item.isKoordinator == 1
-                    ? '<span style="background: #27ae60; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px; font-weight: bold;">Ya</span>'
-                    : '<span style="background: #95a5a6; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px;">Tidak</span>';
+                    ? '<span class="coord-badge"><i class="fas fa-crown"></i> Koordinator</span>'
+                    : '<span style="color: #95a5a6; font-size: 12px;">—</span>';
+
+                const fotoUrl = item.foto 
+                    ? (item.foto.includes('http') ? item.foto : BASE_URL + '/storage/uploads/' + item.foto) 
+                    : 'https://placehold.co/50x50?text=Foto';
 
                 const row = `
                     <tr>
-                        <td style="font-weight: 600; color: #667eea;">${index + 1}</td>
+                        <td style="text-align: center; font-weight: 600; color: #7f8c8d;">${index + 1}</td>
                         <td>
-                            <img src="${item.foto ? (item.foto.includes('http') ? item.foto : '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + item.foto) : 'https://placehold.co/50x50'}" 
-                                 style="width:50px; height:50px; border-radius:50%; object-fit:cover; border: 2px solid #667eea;">
+                            <img src="${fotoUrl}" class="avatar-img" alt="Foto">
                         </td>
-                        <td><strong>${item.nama}</strong></td>
-                        <td><span style="color: #666; font-size: 13px;">${item.jurusan || '—'}</span></td>
-                        <td>${koordinatorBadge}</td>
-                        <td>${statusBadge}</td>
+                        <td>
+                            <div style="font-weight: 600; color: #2c3e50;">${item.nama}</div>
+                            <div style="font-size: 12px; color: #7f8c8d;">${item.email || ''}</div>
+                        </td>
+                        <td><span style="color: #555; font-size: 13px;">${item.jurusan || '—'}</span></td>
+                        <td style="text-align: center;">${koordinatorBadge}</td>
+                        <td style="text-align: center;">${statusBadge}</td>
                         <td>
                             <div class="action-buttons">
                                 <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php?id=${item.idAsisten}" 
-                                   class="btn-edit">✏️ Edit</a>
+                                   class="btn-action btn-edit" title="Edit">
+                                   <i class="fas fa-edit"></i>
+                                </a>
                                 <button onclick="hapusAsisten(${item.idAsisten})" 
-                                        class="btn-delete" 
-                                        style="cursor: pointer;">🗑️ Hapus</button>
+                                        class="btn-action btn-delete" 
+                                        title="Hapus">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -157,12 +239,12 @@ function loadAsisten() {
                 tbody.innerHTML += row;
             });
         } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #999;">Belum ada data asisten.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color: #999;"><i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>Belum ada data asisten.</td></tr>';
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: red;">⚠️ Error: Gagal memuat data</td></tr>';
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 30px; color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td></tr>';
     });
 }
 

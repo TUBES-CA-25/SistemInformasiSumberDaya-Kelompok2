@@ -30,6 +30,16 @@ class Model {
     }
 
     /**
+     * Count semua data
+     */
+    public function countAll() {
+        $query = "SELECT COUNT(*) as total FROM " . $this->table;
+        $result = $this->db->query($query);
+        $row = $result->fetch_assoc();
+        return $row['total'];
+    }
+
+    /**
      * Get data by ID
      */
     public function getById($id, $idColumn = 'id') {

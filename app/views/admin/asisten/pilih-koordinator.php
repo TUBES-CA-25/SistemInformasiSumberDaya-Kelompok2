@@ -10,25 +10,31 @@
     padding: 20px;
     margin-bottom: 30px;
     border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .koordinator-current h3 {
     margin-top: 0;
     color: #667eea;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .koordinator-info {
     display: flex;
     gap: 15px;
     align-items: center;
+    margin-top: 15px;
 }
 
 .koordinator-foto {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #667eea;
+    border: 3px solid #667eea;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .koordinator-details {
@@ -42,6 +48,7 @@
 
 .koordinator-details strong {
     color: #333;
+    font-size: 16px;
 }
 
 .asisten-list {
@@ -70,10 +77,12 @@
     cursor: pointer;
     width: 18px;
     height: 18px;
+    accent-color: #667eea;
 }
 
 .asisten-item.selected {
-    background-color: #f0f4ff;
+    background-color: #eef2ff;
+    border-left: 3px solid #667eea;
 }
 
 .asisten-foto {
@@ -106,39 +115,44 @@
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 12px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
 }
 
-.btn-save {
+.btn-success {
     background: #27ae60;
     color: white;
     flex: 1;
 }
 
-.btn-save:hover {
+.btn-success:hover {
     background: #229954;
     transform: translateY(-2px);
 }
 
-.btn-save:disabled {
+.btn-success:disabled {
     background: #95a5a6;
     cursor: not-allowed;
     transform: none;
 }
 
-.btn-cancel {
+.btn-secondary {
     background: #95a5a6;
     color: white;
     flex: 1;
 }
 
-.btn-cancel:hover {
+.btn-secondary:hover {
     background: #7f8c8d;
 }
 
@@ -166,44 +180,57 @@
 .info-text {
     background: #e3f2fd;
     color: #1565c0;
-    padding: 10px 15px;
+    padding: 15px;
     border-radius: 5px;
-    font-size: 13px;
+    font-size: 14px;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #bbdefb;
 }
 </style>
 
 <div class="admin-header">
-    <h1>Pilih Koordinator Lab</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <h1><i class="fas fa-user-check"></i> Pilih Koordinator Lab</h1>
+    <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn btn-secondary" style="flex: initial;">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 </div>
 
 <div class="card koordinator-container">
     <div class="info-text">
-        ℹ️ Pilih satu asisten untuk menjadi koordinator lab. Koordinator sebelumnya akan otomatis dihapus statusnya.
+        <i class="fas fa-info-circle" style="font-size: 20px;"></i>
+        <div>Pilih satu asisten untuk menjadi koordinator lab. Koordinator sebelumnya akan otomatis dihapus statusnya.</div>
     </div>
 
     <div class="koordinator-current" id="currentKoordinator">
-        <h3>Koordinator Saat Ini</h3>
+        <h3><i class="fas fa-crown"></i> Koordinator Saat Ini</h3>
         <div class="koordinator-info">
             <img src="https://placehold.co/60x60" class="koordinator-foto" id="currentFoto">
             <div class="koordinator-details">
                 <p><strong id="currentName">-</strong></p>
-                <p><span style="color: #999;">Jurusan:</span> <span id="currentJurusan">-</span></p>
-                <p><span style="color: #999;">Email:</span> <span id="currentEmail">-</span></p>
+                <p><span style="color: #7f8c8d;"><i class="fas fa-graduation-cap"></i> Jurusan:</span> <span id="currentJurusan">-</span></p>
+                <p><span style="color: #7f8c8d;"><i class="fas fa-envelope"></i> Email:</span> <span id="currentEmail">-</span></p>
             </div>
         </div>
     </div>
 
-    <h3 style="margin-top: 0; color: #333;">Pilih Koordinator Baru</h3>
+    <h3 style="margin-top: 0; color: #333;"><i class="fas fa-list"></i> Pilih Koordinator Baru</h3>
     <form id="koordinatorForm">
         <div class="asisten-list" id="asistenList">
-            <p style="padding: 20px; text-align: center; color: #999;">Memuat data asisten...</p>
+            <p style="padding: 20px; text-align: center; color: #999;">
+                <i class="fas fa-spinner fa-spin"></i> Memuat data asisten...
+            </p>
         </div>
 
         <div class="action-buttons">
-            <button type="submit" class="btn btn-save" id="btnSave">✓ Simpan Pilihan</button>
-            <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn btn-cancel">✗ Batal</a>
+            <button type="submit" class="btn btn-success" id="btnSave">
+                <i class="fas fa-check"></i> Simpan Pilihan
+            </button>
+            <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Batal
+            </a>
         </div>
     </form>
 
@@ -230,13 +257,13 @@ function loadKoordinatorInfo() {
                 if (current.foto) {
                     const fotoUrl = current.foto.includes('http') 
                         ? current.foto 
-                        : '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + current.foto;
+                        : BASE_URL + '/storage/uploads/' + current.foto;
                     document.getElementById('currentFoto').src = fotoUrl;
                 } else {
-                    document.getElementById('currentFoto').src = 'https://placehold.co/60x60';
+                    document.getElementById('currentFoto').src = 'https://placehold.co/60x60?text=Foto';
                 }
             } else {
-                document.getElementById('currentKoordinator').innerHTML = '<p style="color: #999;">Belum ada koordinator yang ditentukan</p>';
+                document.getElementById('currentKoordinator').innerHTML = '<p style="color: #999; padding: 10px;"><i class="fas fa-info-circle"></i> Belum ada koordinator yang ditentukan</p>';
             }
         }
     })
@@ -260,13 +287,15 @@ function loadAsistenList() {
 
             aktif.forEach(item => {
                 const isSelected = item.isKoordinator == 1;
-                const fotoUrl = item.foto ? (item.foto.includes('http') ? item.foto : '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + item.foto) : 'https://placehold.co/50x50';
+                const fotoUrl = item.foto 
+                    ? (item.foto.includes('http') ? item.foto : BASE_URL + '/storage/uploads/' + item.foto) 
+                    : 'https://placehold.co/50x50?text=Foto';
                 
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'asisten-item' + (isSelected ? ' selected' : '');
                 itemDiv.innerHTML = `
                     <input type="radio" name="idKoordinator" value="${item.idAsisten}" ${isSelected ? 'checked' : ''}>
-                    <img src="${fotoUrl}" class="asisten-foto" onerror="this.src='https://placehold.co/50x50'">
+                    <img src="${fotoUrl}" class="asisten-foto" onerror="this.src='https://placehold.co/50x50?text=Foto'">
                     <div class="asisten-details">
                         <strong>${item.nama}</strong>
                         <p>${item.jurusan || '—'}</p>
@@ -286,7 +315,7 @@ function loadAsistenList() {
     })
     .catch(error => {
         console.error('Error loading asisten:', error);
-        document.getElementById('asistenList').innerHTML = '<p style="padding: 20px; color: red;">Gagal memuat data asisten</p>';
+        document.getElementById('asistenList').innerHTML = '<p style="padding: 20px; color: red; text-align: center;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data asisten</p>';
     });
 }
 
@@ -295,14 +324,14 @@ document.getElementById('koordinatorForm').addEventListener('submit', function(e
 
     const selected = document.querySelector('input[name="idKoordinator"]:checked');
     if (!selected) {
-        showMessage('Pilih satu asisten terlebih dahulu', 'error');
+        showMessage('<i class="fas fa-exclamation-circle"></i> Pilih satu asisten terlebih dahulu', 'error');
         return;
     }
 
     const idAsisten = selected.value;
     const btn = document.getElementById('btnSave');
     btn.disabled = true;
-    btn.innerText = 'Menyimpan...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
     // Update: set isKoordinator untuk asisten yang dipilih
     const formData = new FormData();
@@ -317,33 +346,33 @@ document.getElementById('koordinatorForm').addEventListener('submit', function(e
         try {
             const data = JSON.parse(text);
             if (data.status === 'success' || data.code === 200 || data.code === 201) {
-                showMessage('✓ Koordinator berhasil diperbarui! Mengalihkan...', 'success');
+                showMessage('<i class="fas fa-check-circle"></i> Koordinator berhasil diperbarui! Mengalihkan...', 'success');
                 setTimeout(() => {
                     window.location.href = BASE_URL + '/public/admin-asisten.php';
                 }, 1500);
             } else {
-                showMessage('Gagal: ' + (data.message || 'Error'), 'error');
+                showMessage('<i class="fas fa-times-circle"></i> Gagal: ' + (data.message || 'Error'), 'error');
                 btn.disabled = false;
-                btn.innerText = '✓ Simpan Pilihan';
+                btn.innerHTML = '<i class="fas fa-check"></i> Simpan Pilihan';
             }
         } catch (e) {
             console.error('Parse error:', text);
             showMessage('Terjadi kesalahan: ' + text, 'error');
             btn.disabled = false;
-            btn.innerText = '✓ Simpan Pilihan';
+            btn.innerHTML = '<i class="fas fa-check"></i> Simpan Pilihan';
         }
     })
     .catch(error => {
         console.error('Error:', error);
         showMessage('Gagal menyimpan. Cek koneksi internet.', 'error');
         btn.disabled = false;
-        btn.innerText = '✓ Simpan Pilihan';
+        btn.innerHTML = '<i class="fas fa-check"></i> Simpan Pilihan';
     });
 });
 
 function showMessage(text, type) {
     const msgDiv = document.getElementById('message');
     msgDiv.className = 'message ' + type;
-    msgDiv.innerText = text;
+    msgDiv.innerHTML = text;
 }
 </script>

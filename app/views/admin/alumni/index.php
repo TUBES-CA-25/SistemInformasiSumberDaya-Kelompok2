@@ -1,19 +1,21 @@
 <div class="admin-header">
-    <h1>👨‍🎓 Data Alumni Asisten</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-alumni-form.php" class="btn btn-add">+ Tambah Alumni</a>
+    <h1><i class="fas fa-user-graduate"></i> Data Alumni Asisten</h1>
+    <a href="<?php echo BASE_URL; ?>/public/admin-alumni-form.php" class="btn btn-success">
+        <i class="fas fa-plus"></i> Tambah Alumni
+    </a>
 </div>
 
 <div class="card" style="padding: 0;">
     <div style="overflow-x: auto;">
         <table class="crud-table" style="margin: 0;">
             <thead>
-                <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                    <th style="width: 50px; padding: 15px;">No</th>
-                    <th style="width: 80px; padding: 15px;">Foto</th>
+                <tr style="background: #34495e; color: white;">
+                    <th style="width: 50px; padding: 15px; text-align: center;">No</th>
+                    <th style="width: 80px; padding: 15px; text-align: center;">Foto</th>
                     <th style="padding: 15px;">Nama Alumni</th>
-                    <th style="width: 100px; padding: 15px;">Angkatan</th>
+                    <th style="width: 100px; padding: 15px; text-align: center;">Angkatan</th>
                     <th style="padding: 15px;">Pekerjaan Sekarang</th>
-                    <th style="width: 150px; padding: 15px;">Aksi</th>
+                    <th style="width: 150px; padding: 15px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -28,19 +30,51 @@
 </div>
 
 <style>
+/* Custom Button Styles */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white !important;
+}
+
+.btn-success {
+    background-color: #27ae60;
+}
+.btn-success:hover {
+    background-color: #219150;
+    transform: translateY(-2px);
+}
+
 .crud-table tbody tr {
     border-bottom: 1px solid #f0f0f0;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .crud-table tbody tr:hover {
-    background-color: #f8f9ff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    background-color: #f8f9fa;
 }
 
 .crud-table tbody td {
     padding: 12px 15px;
     vertical-align: middle;
+    color: #555;
+}
+
+.crud-table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
 }
 
 .alumni-info {
@@ -49,53 +83,62 @@
     align-items: center;
 }
 
-.alumni-info img {
+.avatar-img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #667eea;
+    border: 2px solid #e0e0e0;
+    display: block;
+    margin: 0 auto;
 }
 
 .alumni-details strong {
     display: block;
     font-size: 14px;
     margin-bottom: 4px;
+    color: #2c3e50;
 }
 
 .alumni-details small {
-    color: #999;
+    color: #7f8c8d;
     font-size: 12px;
 }
 
 .action-buttons {
     display: flex;
-    gap: 8px;
+    gap: 5px;
+    justify-content: center;
 }
 
-.btn-edit, .btn-delete {
-    padding: 6px 12px;
+.btn-action {
+    width: 32px;
+    height: 32px;
     border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s;
+    color: white;
+    text-decoration: none;
 }
 
 .btn-edit {
-    background-color: #17a2b8;
-    color: white;
+    background-color: #f39c12;
 }
 
 .btn-edit:hover {
-    background-color: #138496;
-    transform: translateY(-2px);
+    background-color: #e67e22;
 }
 
 .btn-delete {
-    background-color: #dc3545;
-    color: white;
+    background-color: #e74c3c;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
 }
 
 .btn-delete:hover {
@@ -120,12 +163,15 @@ function loadAlumni() {
 
         if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
             response.data.forEach((item, index) => {
+                const fotoUrl = item.foto 
+                    ? (item.foto.includes('http') ? item.foto : BASE_URL + '/storage/uploads/' + item.foto) 
+                    : 'https://placehold.co/50x50?text=Foto';
+
                 const row = `
                     <tr>
-                        <td style="font-weight: 600; color: #667eea;">${index + 1}</td>
+                        <td style="text-align: center; font-weight: 600; color: #7f8c8d;">${index + 1}</td>
                         <td>
-                            <img src="${item.foto || 'https://placehold.co/50x50'}" 
-                                 style="width:50px; height:50px; border-radius:50%; object-fit:cover; border: 2px solid #667eea;">
+                            <img src="${fotoUrl}" class="avatar-img" alt="Foto">
                         </td>
                         <td>
                             <div class="alumni-details">
@@ -133,15 +179,19 @@ function loadAlumni() {
                                 <small>${item.divisi || 'Asisten'}</small>
                             </div>
                         </td>
-                        <td style="text-align: center; font-weight: 600; color: #667eea;">${item.angkatan || '—'}</td>
-                        <td><span style="color: #666; font-size: 13px;">${item.pekerjaan || '—'}</span></td>
+                        <td style="text-align: center; font-weight: 600; color: #555;">${item.angkatan || '—'}</td>
+                        <td><span style="color: #555; font-size: 13px;">${item.pekerjaan || '—'}</span></td>
                         <td>
                             <div class="action-buttons">
                                 <a href="<?php echo BASE_URL; ?>/public/admin-alumni-form.php?id=${item.id}" 
-                                   class="btn-edit">✏️ Edit</a>
+                                   class="btn-action btn-edit" title="Edit">
+                                   <i class="fas fa-edit"></i>
+                                </a>
                                 <button onclick="hapusAlumni(${item.id})" 
-                                        class="btn-delete" 
-                                        style="cursor: pointer;">🗑️ Hapus</button>
+                                        class="btn-action btn-delete" 
+                                        title="Hapus">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -149,12 +199,12 @@ function loadAlumni() {
                 tbody.innerHTML += row;
             });
         } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #999;">Belum ada data alumni.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px; color: #999;"><i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>Belum ada data alumni.</td></tr>';
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: red;">⚠️ Error: Gagal memuat data</td></tr>';
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td></tr>';
     });
 }
 

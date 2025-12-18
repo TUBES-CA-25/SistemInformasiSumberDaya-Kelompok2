@@ -28,6 +28,7 @@
     }
     ?>
     <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         // Global variable untuk semua JavaScript
         const API_URL = '<?php echo API_URL; ?>';
@@ -50,43 +51,63 @@
         <h2>Admin Panel</h2>
         <ul>
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/admin-dashboard.php" class="<?= strpos($uri, 'admin-dashboard') !== false ? 'active' : '' ?>">Dashboard</a>
+                <a href="<?php echo BASE_URL; ?>/public/admin-dashboard.php" class="<?= strpos($uri, 'admin-dashboard') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
             </li>
             
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="<?= strpos($uri, 'admin-asisten') !== false ? 'active' : '' ?>">Data Asisten</a>
+                <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="<?= strpos($uri, 'admin-asisten') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-users"></i> Data Asisten
+                </a>
             </li>
             
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/admin-alumni.php" class="<?= strpos($uri, 'admin-alumni') !== false ? 'active' : '' ?>">Data Alumni</a>
+                <a href="<?php echo BASE_URL; ?>/public/admin-alumni.php" class="<?= strpos($uri, 'admin-alumni') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-user-graduate"></i> Data Alumni
+                </a>
             </li>
             
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium.php" class="<?= strpos($uri, 'admin-laboratorium') !== false ? 'active' : '' ?>">Data Fasilitas</a>
+                <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium.php" class="<?= strpos($uri, 'admin-laboratorium') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-desktop"></i> Data Fasilitas
+                </a>
             </li>
             
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah.php" class="<?= strpos($uri, 'admin-matakuliah') !== false ? 'active' : '' ?>">Data Mata Kuliah</a>
+                <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah.php" class="<?= strpos($uri, 'admin-matakuliah') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-book"></i> Data Mata Kuliah
+                </a>
             </li>
             
             <li>
-                <li><a href="<?php echo BASE_URL; ?>/public/admin-jadwal.php" class="<?= strpos($uri, 'admin-jadwal') !== false ? 'active' : '' ?>">Jadwal Praktikum</a></li>
+                <a href="<?php echo BASE_URL; ?>/public/admin-jadwal.php" class="<?= strpos($uri, 'admin-jadwal') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-calendar-alt"></i> Jadwal Praktikum
+                </a>
             </li>
 
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/admin-peraturan.php" class="<?= strpos($uri, 'admin-peraturan') !== false ? 'active' : '' ?>">Peraturan Lab</a>
+                <a href="<?php echo BASE_URL; ?>/public/admin-peraturan.php" class="<?= strpos($uri, 'admin-peraturan') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-gavel"></i> Peraturan Lab
+                </a>
             </li>
 
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/admin-sanksi.php" class="<?= strpos($uri, 'admin-sanksi') !== false ? 'active' : '' ?>">Sanksi Lab</a>
+                <a href="<?php echo BASE_URL; ?>/public/admin-sanksi.php" class="<?= strpos($uri, 'admin-sanksi') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-exclamation-triangle"></i> Sanksi Lab
+                </a>
             </li>
 
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/admin-manajemen.php" class="<?= strpos($uri, 'admin-manajemen') !== false ? 'active' : '' ?>">Kepala Laboratorium</a>
+                <a href="<?php echo BASE_URL; ?>/public/admin-manajemen.php" class="<?= strpos($uri, 'admin-manajemen') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-user-tie"></i> Kepala Laboratorium
+                </a>
             </li>
             
             <li>
-                <a href="<?php echo BASE_URL; ?>/public/index.php" style="margin-top: 50px; color: #e74c3c;">Logout / Ke Web Utama</a>
+                <a href="<?php echo BASE_URL; ?>/public/index.php" style="margin-top: 50px; color: #e74c3c;">
+                    <i class="fas fa-sign-out-alt"></i> Logout / Ke Web Utama
+                </a>
             </li>
         </ul>
     </div>
