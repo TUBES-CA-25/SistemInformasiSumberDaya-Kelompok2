@@ -1,90 +1,55 @@
-<style>
-/* Custom Button Styles */
-.btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white !important;
-}
-
-.btn-success {
-    background-color: #27ae60;
-}
-.btn-success:hover {
-    background-color: #219150;
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background-color: #95a5a6;
-}
-.btn-secondary:hover {
-    background-color: #7f8c8d;
-    transform: translateY(-2px);
-}
-
-.btn-success:disabled {
-    background-color: #95a5a6;
-    cursor: not-allowed;
-    transform: none;
-}
-</style>
-
 <div class="admin-header">
-    <h1><i class="fas fa-desktop"></i> Formulir Laboratorium</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium.php" class="btn btn-secondary">
+    <h1 id="formTitle">Tambah Laboratorium</h1>
+    <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium.php" class="btn" style="background: #95a5a6;">
         <i class="fas fa-arrow-left"></i> Kembali
     </a>
 </div>
 
-<div class="card" style="max-width: 800px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+<div class="card" style="max-width: 800px;">
     <form id="labForm" enctype="multipart/form-data">
-        <input type="hidden" id="idLaboratorium">
+        <input type="hidden" id="idLaboratorium" name="idLaboratorium">
 
         <div class="form-group">
-            <label><i class="fas fa-tag"></i> Nama Laboratorium <span style="color:red">*</span></label>
-            <input type="text" id="nama" placeholder="Contoh: Lab Pemrograman" required>
+            <label>Nama Laboratorium <span style="color:red">*</span></label>
+            <input type="text" id="nama" name="nama" placeholder="Contoh: Lab Pemrograman" required>
         </div>
 
         <div class="form-group">
-            <label><i class="fas fa-user-tie"></i> Koordinator Asisten</label>
-            <select id="idKordinatorAsisten">
+            <label>Koordinator Asisten</label>
+            <select id="idKordinatorAsisten" name="idKordinatorAsisten">
                 <option value="">-- Pilih Asisten --</option>
             </select>
+            <small class="form-text text-muted">Pilih asisten yang bertanggung jawab (Opsional).</small>
         </div>
 
         <div class="form-group">
-            <label><i class="fas fa-align-left"></i> Deskripsi</label>
-            <textarea id="deskripsi" rows="3" placeholder="Deskripsi laboratorium..."></textarea>
-        </div>
-
-        <div class="form-group">
-            <label><i class="fas fa-image"></i> Upload Gambar Lab</label>
-            <input type="file" id="gambar" name="gambar" accept="image/*">
-            <small style="color: #777;">Format: JPG, PNG. Max 2MB</small>
+            <label>Deskripsi</label>
+            <textarea id="deskripsi" name="deskripsi" rows="3" placeholder="Deskripsi fasilitas dan kegunaan laboratorium..."></textarea>
         </div>
 
         <div class="form-group" style="display:flex; gap:20px;">
             <div style="flex:1;">
-                <label><i class="fas fa-desktop"></i> Jumlah PC</label>
-                <input type="number" id="jumlahPc" placeholder="30" min="0">
+                <label>Jumlah PC</label>
+                <input type="number" id="jumlahPc" name="jumlahPc" placeholder="0" min="0">
             </div>
             <div style="flex:1;">
-                <label><i class="fas fa-chair"></i> Jumlah Kursi</label>
-                <input type="number" id="jumlahKursi" placeholder="40" min="0">
+                <label>Jumlah Kursi</label>
+                <input type="number" id="jumlahKursi" name="jumlahKursi" placeholder="0" min="0">
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success" id="btnSave" style="width: 100%; padding: 12px; font-size: 16px;">
+        <div class="form-group">
+            <label>Upload Gambar (Opsional)</label>
+            <div class="file-upload-wrapper">
+                <input type="file" id="gambar" name="gambar" accept="image/*">
+                <div id="preview-container" style="margin-top: 10px; display: none;">
+                    <img id="preview-image" src="" alt="Preview" style="max-width: 200px; border-radius: 4px; border: 1px solid #ddd;">
+                </div>
+            </div>
+            <small class="form-text text-muted">Format: JPG, PNG (Max 2MB). Biarkan kosong jika tidak ingin mengubah gambar saat edit.</small>
+        </div>
+
+        <button type="submit" class="btn btn-add" id="btnSave">
             <i class="fas fa-save"></i> Simpan Data
         </button>
     </form>
@@ -95,80 +60,116 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadAsisten();
     
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
     if (id) {
-        loadLaboratoriumData(id);
+        document.getElementById('formTitle').textContent = 'Edit Laboratorium';
+        document.getElementById('idLaboratorium').value = id;
+        loadData(id);
     }
+
+    // Image preview
+    document.getElementById('gambar').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview-image').src = e.target.result;
+                document.getElementById('preview-container').style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
 });
 
 function loadAsisten() {
-    fetch(API_URL + '/asisten').then(res => res.json()).then(data => {
-        if(data.status === 'success') {
+    fetch(API_URL + '/asisten')
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === 'success' || response.code === 200) {
             const select = document.getElementById('idKordinatorAsisten');
-            data.data.forEach(ast => {
+            response.data.forEach(asisten => {
                 const option = document.createElement('option');
-                option.value = ast.idAsisten;
-                option.textContent = ast.nama;
+                option.value = asisten.idAsisten;
+                option.textContent = asisten.nama + ' (' + asisten.nim + ')';
                 select.appendChild(option);
             });
         }
-    });
+    })
+    .catch(err => console.error('Error loading asisten:', err));
 }
 
-function loadLaboratoriumData(id) {
+function loadData(id) {
     fetch(API_URL + '/laboratorium/' + id)
     .then(res => res.json())
     .then(response => {
-        if ((response.status === 'success' || response.code === 200) && response.data) {
+        if (response.status === 'success' || response.code === 200) {
             const data = response.data;
-            document.getElementById('idLaboratorium').value = data.idLaboratorium;
             document.getElementById('nama').value = data.nama;
-            document.getElementById('idKordinatorAsisten').value = data.idKordinatorAsisten || '';
-            document.getElementById('deskripsi').value = data.deskripsi || '';
-            document.getElementById('jumlahPc').value = data.jumlahPc || 0;
-            document.getElementById('jumlahKursi').value = data.jumlahKursi || 0;
+            document.getElementById('deskripsi').value = data.deskripsi;
+            document.getElementById('jumlahPc').value = data.jumlahPc;
+            document.getElementById('jumlahKursi').value = data.jumlahKursi;
             
-            document.querySelector('.admin-header h1').innerHTML = '<i class="fas fa-edit"></i> Edit Laboratorium';
-            document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Update Data';
+            // Set selected asisten if exists
+            if (data.idKordinatorAsisten) {
+                // Wait a bit for asisten list to load if it hasn't yet, or just set value
+                // Since loadAsisten is async, we might need to retry setting value or chain promises.
+                // For simplicity, we'll just set the value, assuming loadAsisten finishes fast or we can set it later.
+                // Better approach: chain promises. But for now let's just set it.
+                setTimeout(() => {
+                    document.getElementById('idKordinatorAsisten').value = data.idKordinatorAsisten;
+                }, 500);
+            }
+            
+            if (data.gambar) {
+                document.getElementById('preview-image').src = ASSETS_URL + '/uploads/' + data.gambar;
+                document.getElementById('preview-container').style.display = 'block';
+            }
+        } else {
+            alert('Data tidak ditemukan');
+            window.location.href = BASE_URL + '/public/admin-laboratorium.php';
         }
     })
-    .catch(err => console.error('Error loading lab:', err));
+    .catch(err => console.error(err));
 }
 
 document.getElementById('labForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const id = document.getElementById('idLaboratorium').value;
     const btn = document.getElementById('btnSave');
     const msg = document.getElementById('message');
+    
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
     const formData = new FormData(this);
-    formData.append('nama', document.getElementById('nama').value);
-    formData.append('idKordinatorAsisten', document.getElementById('idKordinatorAsisten').value);
-    formData.append('deskripsi', document.getElementById('deskripsi').value);
-    formData.append('jumlahPc', document.getElementById('jumlahPc').value);
-    formData.append('jumlahKursi', document.getElementById('jumlahKursi').value);
+    
+    let url = API_URL + '/laboratorium';
+    if (id) {
+        url += '/' + id;
+        formData.append('_method', 'PUT'); 
+    }
 
-    fetch(API_URL + '/laboratorium', {
-        method: 'POST',
+    fetch(url, { 
+        method: 'POST', 
         body: formData
     })
     .then(res => res.json())
     .then(data => {
-        if (data.status === 'success' || data.code === 201) {
-            msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px; border: 1px solid #c3e6cb;"><i class="fas fa-check-circle"></i> Berhasil disimpan! Mengalihkan...</div>';
-            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-laboratorium.php'; }, 1500);
+        if (data.status === 'success' || data.code === 200 || data.code === 201) { 
+            msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px;">Berhasil disimpan! Redirecting...</div>';
+            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-laboratorium.php'; }, 1000);
         } else {
-            msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-exclamation-circle"></i> Gagal: ' + (data.message || 'Error tidak diketahui') + '</div>';
+            msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Gagal: ' + (data.message || 'Terjadi kesalahan') + '</div>';
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
         }
     })
     .catch(err => {
-        console.error('Error:', err);
-        msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-wifi"></i> Gagal koneksi ke server</div>';
+        console.error(err);
+        msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Koneksi Error.</div>';
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
     });

@@ -1,194 +1,134 @@
 <div class="admin-header">
-    <h1 id="pageTitle">Tambah Peraturan Baru</h1>
-    <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan.php" class="btn btn-secondary">← Kembali</a>
+    <h1 id="formTitle">Tambah Peraturan Baru</h1>
+    <a href="<?php echo BASE_URL; ?>/public/admin-peraturan.php" class="btn" style="background: #95a5a6;">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 </div>
 
-<div class="card">
-    <form id="peraturanForm" style="max-width: 600px;">
+<div class="card" style="max-width: 800px;">
+    <form id="peraturanForm" enctype="multipart/form-data">
+        <input type="hidden" id="idTataTerib" name="idTataTerib">
+
         <div class="form-group">
-            <label>Nama Peraturan *</label>
-            <input type="text" name="namaFile" id="namaFile" required placeholder="Contoh: Disiplin Waktu Kehadiran" class="form-control">
-            <small class="form-text">Judul singkat peraturan</small>
+            <label>Nama Peraturan <span style="color:red">*</span></label>
+            <input type="text" id="namaFile" name="namaFile" placeholder="Contoh: Disiplin Waktu Kehadiran" required>
+            <small class="form-text text-muted">Judul singkat peraturan yang akan ditampilkan.</small>
         </div>
 
         <div class="form-group">
             <label>Deskripsi / Uraian Peraturan</label>
-            <textarea name="uraFile" id="uraFile" rows="6" placeholder="Jelaskan aturan dan konsekuensi yang berlaku..." class="form-control"></textarea>
-            <small class="form-text">Penjelasan lengkap tentang peraturan ini</small>
+            <textarea id="uraFile" name="uraFile" rows="6" placeholder="Jelaskan aturan dan konsekuensi yang berlaku..."></textarea>
+            <small class="form-text text-muted">Penjelasan lengkap tentang peraturan ini.</small>
         </div>
 
         <div class="form-group">
             <label>Upload Gambar (Opsional)</label>
-            <input type="file" name="gambar" id="gambar" accept="image/*" class="form-control">
-            <small class="form-text">Format: JPG, PNG (Max 2MB)</small>
+            <div class="file-upload-wrapper">
+                <input type="file" id="gambar" name="gambar" accept="image/*">
+                <div id="preview-container" style="margin-top: 10px; display: none;">
+                    <img id="preview-image" src="" alt="Preview" style="max-width: 200px; border-radius: 4px; border: 1px solid #ddd;">
+                </div>
+            </div>
+            <small class="form-text text-muted">Format: JPG, PNG (Max 2MB). Biarkan kosong jika tidak ingin mengubah gambar saat edit.</small>
         </div>
 
-        <div class="form-group" style="margin-top: 20px;">
-            <button type="submit" class="btn btn-primary">Simpan Peraturan</button>
-            <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan.php" class="btn btn-secondary" style="margin-left: 10px;">Batal</a>
-        </div>
+        <button type="submit" class="btn btn-add" id="btnSave">
+            <i class="fas fa-save"></i> Simpan Peraturan
+        </button>
     </form>
+    <div id="message" style="margin-top: 15px;"></div>
 </div>
 
-<style>
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: #3498db;
-        box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-    }
-
-    .form-text {
-        display: block;
-        color: #7f8c8d;
-        font-size: 12px;
-        margin-top: 4px;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .btn-primary {
-        background-color: #3498db;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background-color: #2980b9;
-    }
-
-    .btn-secondary {
-        background-color: #95a5a6;
-        color: white;
-    }
-
-    .btn-secondary:hover {
-        background-color: #7f8c8d;
-    }
-</style>
-
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
-    const editId = urlParams.get('id');
+    const id = urlParams.get('id');
 
-    document.addEventListener('DOMContentLoaded', function() {
-        if (editId) {
-            loadPeraturanEdit(editId);
-        }
-    });
-
-    function loadPeraturanEdit(id) {
-        const apiUrl = `/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib/${id}`;
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(response => {
-                if (response.status === 'success') {
-                    const data = response.data;
-                    document.getElementById('pageTitle').innerText = 'Edit Peraturan';
-                    document.getElementById('namaFile').value = data.namaFile || '';
-                    document.getElementById('uraFile').value = data.uraFile || '';
-                    
-                    // Simpan ID dan gambar lama di form
-                    document.getElementById('peraturanForm').dataset.editId = id;
-                    if (data.gambar) {
-                        document.getElementById('peraturanForm').dataset.oldGambar = data.gambar;
-                    }
-                } else {
-                    alert('Gagal memuat data: ' + response.message);
-                    window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan.php';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Gagal memuat data peraturan');
-                window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan.php';
-            });
+    if (id) {
+        document.getElementById('formTitle').textContent = 'Edit Peraturan';
+        document.getElementById('idTataTerib').value = id;
+        loadData(id);
     }
 
-    document.getElementById('peraturanForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const namaFile = document.getElementById('namaFile').value.trim();
-        const uraFile = document.getElementById('uraFile').value.trim();
-        const gambarInput = document.getElementById('gambar');
-        const gambar = gambarInput.files[0];
-        const editId = this.dataset.editId;
-
-        // Validasi
-        if (!namaFile) {
-            alert('Nama peraturan harus diisi!');
-            return;
+    // Image preview
+    document.getElementById('gambar').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview-image').src = e.target.result;
+                document.getElementById('preview-container').style.display = 'block';
+            }
+            reader.readAsDataURL(file);
         }
-
-        // SELALU gunakan FormData agar bisa handle file upload + text fields
-        let data = new FormData();
-        data.append('namaFile', namaFile);
-        data.append('uraFile', uraFile || '');
-        if (gambar) {
-            data.append('gambar', gambar);
-        }
-
-        // Untuk edit dengan file upload, HARUS gunakan POST
-        // Karena PHP tidak bisa auto-parse $_FILES untuk PUT request
-        const method = 'POST'; // Selalu POST untuk FormData dengan file
-        const apiUrl = editId 
-            ? `/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib/${editId}`
-            : '/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib';
-
-        fetch(apiUrl, {
-            method: method,
-            body: data
-            // Jangan set Content-Type - browser akan set otomatis dengan FormData
-        })
-            .then(res => {
-                console.log('Response status:', res.status);
-                return res.text().then(text => {
-                    console.log('Response text:', text);
-                    try {
-                        return JSON.parse(text);
-                    } catch (e) {
-                        console.error('Failed to parse JSON:', e);
-                        throw new Error('Invalid JSON response: ' + text.substring(0, 500));
-                    }
-                });
-            })
-            .then(response => {
-                if (response.status === 'success') {
-                    alert(editId ? 'Peraturan berhasil diperbarui!' : 'Peraturan berhasil ditambahkan!');
-                    window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan.php';
-                } else {
-                    alert('Gagal menyimpan: ' + response.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Gagal menyimpan peraturan: ' + error.message);
-            });
     });
+});
+
+function loadData(id) {
+    fetch(API_URL + '/tata-tertib/' + id)
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === 'success' || response.code === 200) {
+            const data = response.data;
+            document.getElementById('namaFile').value = data.namaFile;
+            document.getElementById('uraFile').value = data.uraFile;
+            
+            // If there is an existing image, maybe show it? 
+            // The API response structure for image path is unknown, skipping for now to avoid broken images.
+        } else {
+            alert('Data tidak ditemukan');
+            window.location.href = BASE_URL + '/public/admin-peraturan.php';
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+document.getElementById('peraturanForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('idTataTerib').value;
+    const btn = document.getElementById('btnSave');
+    const msg = document.getElementById('message');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+
+    const formData = new FormData(this);
+    
+    // If editing, we might need to handle method spoofing if the API expects PUT for updates
+    // But FormData usually requires POST. Let's check if we need _method=PUT
+    let url = API_URL + '/tata-tertib';
+    if (id) {
+        url += '/' + id;
+        // Many PHP frameworks need this for PUT with FormData
+        formData.append('_method', 'PUT'); 
+    }
+
+    // Note: If the backend strictly requires PUT method for updates, 
+    // standard fetch with FormData (which sets multipart/form-data) might fail if the server doesn't parse multipart on PUT.
+    // A common workaround in PHP is using POST with _method=PUT.
+    // I'll use POST for both, adding _method if it's an update.
+    
+    fetch(url, { 
+        method: 'POST', 
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success' || data.code === 200 || data.code === 201) { 
+            msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px;">Berhasil disimpan! Redirecting...</div>';
+            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-peraturan.php'; }, 1000);
+        } else {
+            msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Gagal: ' + (data.message || 'Terjadi kesalahan') + '</div>';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Peraturan';
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Koneksi Error.</div>';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Simpan Peraturan';
+    });
+});
 </script>

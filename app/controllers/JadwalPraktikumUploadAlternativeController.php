@@ -5,6 +5,8 @@ require_once __DIR__ . '/../models/JadwalPraktikumModel.php';
 require_once __DIR__ . '/../models/MatakuliahModel.php';
 require_once __DIR__ . '/../models/LaboratoriumModel.php';
 
+use Exception;
+
 /**
  * Controller alternatif untuk upload tanpa PhpSpreadsheet (untuk mengatasi masalah ZIP)
  */

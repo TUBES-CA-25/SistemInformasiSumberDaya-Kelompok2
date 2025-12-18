@@ -1,171 +1,193 @@
 <div class="admin-header">
-    <h1>📖 Data Mata Kuliah</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah-form.php" class="btn btn-add">+ Tambah Matakuliah</a>
+    <h1>Manajemen Mata Kuliah</h1>
+    <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah-form.php" class="btn btn-add">
+        <i class="fas fa-plus"></i> Tambah Mata Kuliah
+    </a>
 </div>
 
-<div class="card" style="padding: 0;">
+<div class="card">
+    <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="searchInput" placeholder="Cari kode atau nama mata kuliah..." 
+                   style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 300px;">
+            <button onclick="loadMatakuliah()" class="btn btn-primary" style="background: #3498db; padding: 8px 15px;">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+        <div id="totalData" style="color: #666; font-size: 0.9rem;">Total: 0 mata kuliah</div>
+    </div>
+
     <div style="overflow-x: auto;">
-        <table class="crud-table" style="margin: 0;">
+        <table class="crud-table">
             <thead>
-                <tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                    <th style="width: 50px; padding: 15px;">No</th>
-                    <th style="width: 120px; padding: 15px;">Kode MK</th>
-                    <th style="padding: 15px;">Nama Mata Kuliah</th>
-                    <th style="width: 100px; padding: 15px; text-align: center;">Semester</th>
-                    <th style="width: 80px; padding: 15px; text-align: center;">SKS</th>
-                    <th style="width: 150px; padding: 15px;">Aksi</th>
+                <tr>
+                    <th style="width: 50px; text-align: center;">No</th>
+                    <th style="width: 120px;">Kode MK</th>
+                    <th>Nama Mata Kuliah</th>
+                    <th style="width: 100px; text-align: center;">Semester</th>
+                    <th style="width: 80px; text-align: center;">SKS</th>
+                    <th style="width: 150px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr>
-                    <td colspan="6" style="text-align:center; padding: 30px; color: #999;">
-                        <div style="animation: spin 1s linear infinite; display: inline-block;">⟳</div> Sedang memuat data...
-                    </td>
-                </tr>
+                <tr><td colspan="6" style="text-align:center; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i>
+                    <p style="color: #999; margin-top: 10px;">Memuat data...</p>
+                </td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <style>
-.crud-table tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-    transition: all 0.3s ease;
-}
-
-.crud-table tbody tr:hover {
-    background-color: #f8f9ff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.crud-table tbody td {
-    padding: 12px 15px;
-    vertical-align: middle;
-}
-
-.kode-badge {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 13px;
-    display: inline-block;
-    letter-spacing: 0.5px;
-}
-
-.semester-badge {
-    background-color: #ffeaa7;
-    color: #d63031;
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 13px;
-    display: inline-block;
-    min-width: 40px;
-    text-align: center;
-}
-
-.sks-badge {
-    background-color: #dfe6e9;
-    color: #2d3436;
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 13px;
-    display: inline-block;
-    min-width: 40px;
-    text-align: center;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-edit, .btn-delete {
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-edit {
-    background-color: #17a2b8;
-    color: white;
-}
-
-.btn-edit:hover {
-    background-color: #138496;
-    transform: translateY(-2px);
-}
-
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-delete:hover {
-    background-color: #c82333;
-    transform: translateY(-2px);
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+    .kode-badge {
+        background: #e8f0fe;
+        color: #1967d2;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-block;
+        font-family: monospace;
+    }
+    .semester-badge {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+    .sks-badge {
+        background-color: #e2e6ea;
+        color: #343a40;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+    .mk-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+    }
+    .crud-table tbody tr:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.2s;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+    }
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', loadMatakuliah);
+let allMatakuliahData = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadMatakuliah();
+    
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        filterTable(searchTerm);
+    });
+});
 
 function loadMatakuliah() {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i><p style="color: #999; margin-top: 10px;">Memuat data...</p></td></tr>';
+    
     fetch(API_URL + '/matakuliah')
     .then(res => res.json())
     .then(response => {
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
-
         if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
-            response.data.forEach((item, index) => {
-                const row = `
-                    <tr>
-                        <td style="font-weight: 600; color: #667eea;">${index + 1}</td>
-                        <td>
-                            <span class="kode-badge">${item.kodeMatakuliah}</span>
-                        </td>
-                        <td>
-                            <strong style="color: #333; font-size: 14px;">${item.namaMatakuliah}</strong>
-                        </td>
-                        <td style="text-align: center;">
-                            <span class="semester-badge">${item.semester || '—'}</span>
-                        </td>
-                        <td style="text-align: center;">
-                            <span class="sks-badge">${item.sksKuliah || '—'}</span>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah-form.php?id=${item.idMatakuliah}" 
-                                   class="btn-edit">✏️ Edit</a>
-                                <button onclick="hapusMatakuliah(${item.idMatakuliah})" 
-                                        class="btn-delete" 
-                                        style="cursor: pointer;">🗑️ Hapus</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
+            allMatakuliahData = response.data;
+            renderTable(allMatakuliahData);
         } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #999;">Belum ada data mata kuliah.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-book-open" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Belum ada data mata kuliah.</p></td></tr>';
+            document.getElementById('totalData').textContent = 'Total: 0 mata kuliah';
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: red;">⚠️ Error: Gagal memuat data</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #e74c3c;"></i><p style="color: #e74c3c; margin-top: 10px;">Gagal memuat data. Silakan coba lagi.</p></td></tr>';
     });
+}
+
+function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-search" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Tidak ada data yang cocok dengan pencarian.</p></td></tr>';
+        return;
+    }
+    
+    data.forEach((item, index) => {
+        const row = `
+            <tr>
+                <td style="text-align: center;">${index + 1}</td>
+                <td>
+                    <span class="kode-badge">${item.kodeMatakuliah}</span>
+                </td>
+                <td>
+                    <span class="mk-name">${item.namaMatakuliah}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span class="semester-badge">Sem ${item.semester || '-'}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span class="sks-badge">${item.sksKuliah || '-'} SKS</span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah-form.php?id=${item.idMatakuliah}" 
+                           class="btn btn-edit btn-icon" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button onclick="hapusMatakuliah(${item.idMatakuliah})" 
+                                class="btn btn-delete btn-icon" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+    
+    document.getElementById('totalData').textContent = `Total: ${data.length} mata kuliah`;
+}
+
+function filterTable(searchTerm) {
+    if (!searchTerm) {
+        renderTable(allMatakuliahData);
+        return;
+    }
+    
+    const filteredData = allMatakuliahData.filter(item => {
+        return (
+            (item.namaMatakuliah && item.namaMatakuliah.toLowerCase().includes(searchTerm)) ||
+            (item.kodeMatakuliah && item.kodeMatakuliah.toLowerCase().includes(searchTerm)) ||
+            (item.semester && item.semester.toString().includes(searchTerm))
+        );
+    });
+    
+    renderTable(filteredData);
 }
 
 function hapusMatakuliah(id) {
@@ -174,14 +196,14 @@ function hapusMatakuliah(id) {
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {
-                alert('✓ Data berhasil dihapus');
+                alert('Data berhasil dihapus!');
                 loadMatakuliah();
             } else {
-                alert('✗ Gagal: ' + (data.message || 'Error'));
+                alert('Gagal menghapus: ' + (data.message || 'Error tidak diketahui'));
             }
         })
         .catch(err => {
-            alert('✗ Error: ' + err.message);
+            alert('Error: ' + err.message);
             console.error(err);
         });
     }

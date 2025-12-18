@@ -1,213 +1,126 @@
 <div class="admin-header">
-    <h1 id="pageTitle">Tambah Sanksi Baru</h1>
-    <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-sanksi.php" class="btn btn-secondary">← Kembali</a>
+    <h1 id="formTitle">Tambah Sanksi Baru</h1>
+    <a href="<?php echo BASE_URL; ?>/public/admin-sanksi.php" class="btn" style="background: #95a5a6;">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 </div>
 
-<div class="card">
-    <form id="sanksiForm" style="max-width: 600px;">
+<div class="card" style="max-width: 800px;">
+    <form id="sanksiForm" enctype="multipart/form-data">
+        <input type="hidden" id="id" name="id">
+
         <div class="form-group">
-            <label>Judul Sanksi *</label>
-            <input type="text" name="judul" id="judul" required placeholder="Contoh: Keterlambatan Hadir" class="form-control">
-            <small class="form-text">Nama singkat sanksi</small>
+            <label>Judul Sanksi <span style="color:red">*</span></label>
+            <input type="text" id="judul" name="judul" placeholder="Contoh: Keterlambatan Hadir" required>
+            <small class="form-text text-muted">Nama singkat sanksi yang akan ditampilkan.</small>
         </div>
 
         <div class="form-group">
             <label>Deskripsi Sanksi</label>
-            <textarea name="deskripsi" id="deskripsi" rows="6" placeholder="Jelaskan konsekuensi dan hukuman yang berlaku..." class="form-control"></textarea>
-            <small class="form-text">Penjelasan lengkap tentang sanksi</small>
+            <textarea id="deskripsi" name="deskripsi" rows="6" placeholder="Jelaskan konsekuensi dan hukuman yang berlaku..."></textarea>
+            <small class="form-text text-muted">Penjelasan lengkap tentang sanksi ini.</small>
         </div>
 
         <div class="form-group">
             <label>Upload Gambar (Opsional)</label>
-            <input type="file" name="gambar" id="gambar" accept="image/*" class="form-control">
-            <small class="form-text">Format: JPG, PNG (Max 2MB)</small>
+            <div class="file-upload-wrapper">
+                <input type="file" id="gambar" name="gambar" accept="image/*">
+                <div id="preview-container" style="margin-top: 10px; display: none;">
+                    <img id="preview-image" src="" alt="Preview" style="max-width: 200px; border-radius: 4px; border: 1px solid #ddd;">
+                </div>
+            </div>
+            <small class="form-text text-muted">Format: JPG, PNG (Max 2MB). Biarkan kosong jika tidak ingin mengubah gambar saat edit.</small>
         </div>
 
-        <div class="form-group" style="margin-top: 20px;">
-            <button type="submit" class="btn btn-primary">Simpan Sanksi</button>
-            <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-sanksi.php" class="btn btn-secondary" style="margin-left: 10px;">Batal</a>
-        </div>
+        <button type="submit" class="btn btn-add" id="btnSave">
+            <i class="fas fa-save"></i> Simpan Sanksi
+        </button>
     </form>
+    <div id="message" style="margin-top: 15px;"></div>
 </div>
 
-<style>
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        box-sizing: border-box;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: #3498db;
-        box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-    }
-
-    .form-text {
-        display: block;
-        color: #7f8c8d;
-        font-size: 12px;
-        margin-top: 4px;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .btn-primary {
-        background-color: #3498db;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background-color: #2980b9;
-    }
-
-    .btn-secondary {
-        background-color: #95a5a6;
-        color: white;
-    }
-
-    .btn-secondary:hover {
-        background-color: #7f8c8d;
-    }
-</style>
-
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
-    const editId = urlParams.get('id');
+    const id = urlParams.get('id');
 
-    document.addEventListener('DOMContentLoaded', function() {
-        if (editId) {
-            loadSanksiEdit(editId);
-        }
-    });
-
-    function loadSanksiEdit(id) {
-        const apiUrl = `/SistemInformasiSumberDaya-Kelompok2/public/api.php/sanksi-lab/${id}`;
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(response => {
-                if (response.status === 'success') {
-                    const data = response.data;
-                    document.getElementById('pageTitle').innerText = 'Edit Sanksi';
-                    document.getElementById('judul').value = data.judul || '';
-                    document.getElementById('deskripsi').value = data.deskripsi || '';
-                    
-                    // Simpan ID di form untuk digunakan saat submit
-                    document.getElementById('sanksiForm').dataset.editId = id;
-                } else {
-                    alert('Gagal memuat data: ' + response.message);
-                    window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-sanksi.php';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Gagal memuat data sanksi');
-                window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-sanksi.php';
-            });
+    if (id) {
+        document.getElementById('formTitle').textContent = 'Edit Sanksi';
+        document.getElementById('id').value = id;
+        loadData(id);
     }
 
-    document.getElementById('sanksiForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const judul = document.getElementById('judul').value.trim();
-        const deskripsi = document.getElementById('deskripsi').value.trim();
-        const gambarInput = document.getElementById('gambar');
-        const gambar = gambarInput.files[0];
-        const editId = this.dataset.editId;
-
-        console.log('=== FORM SUBMIT DEBUG ===');
-        console.log('Judul:', judul);
-        console.log('Deskripsi:', deskripsi);
-        console.log('Gambar input element:', gambarInput);
-        console.log('Gambar files length:', gambarInput.files.length);
-        console.log('Gambar file:', gambar);
-        console.log('Edit ID:', editId);
-
-        // Validasi
-        if (!judul) {
-            alert('Judul sanksi harus diisi!');
-            return;
+    // Image preview
+    document.getElementById('gambar').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview-image').src = e.target.result;
+                document.getElementById('preview-container').style.display = 'block';
+            }
+            reader.readAsDataURL(file);
         }
-
-        // SELALU gunakan FormData agar bisa handle file upload + text fields
-        let data = new FormData();
-        data.append('judul', judul);
-        data.append('deskripsi', deskripsi || '');
-        if (gambar) {
-            console.log('Adding file to FormData:', gambar.name, gambar.size);
-            data.append('gambar', gambar);
-        } else {
-            console.log('No file selected');
-        }
-
-        // Untuk edit dengan file upload, HARUS gunakan POST dengan method override
-        // Karena PHP tidak bisa auto-parse $_FILES untuk PUT request
-        const method = 'POST'; // Selalu POST untuk FormData dengan file
-        const apiUrl = editId 
-            ? `/SistemInformasiSumberDaya-Kelompok2/public/api.php/sanksi-lab/${editId}`
-            : '/SistemInformasiSumberDaya-Kelompok2/public/api.php/sanksi-lab';
-
-        console.log('Method:', method);
-        console.log('API URL:', apiUrl);
-
-        const options = {
-            method: method,
-            body: data
-            // Jangan set Content-Type - browser akan set otomatis dengan FormData
-        };
-
-        console.log('Sending request...');
-        fetch(apiUrl, options)
-            .then(res => {
-                // Log untuk debugging
-                console.log('✓ Response received');
-                console.log('Response status:', res.status);
-                console.log('Response headers:', res.headers);
-                return res.text().then(text => {
-                    console.log('Response text:', text);
-                    try {
-                        return JSON.parse(text);
-                    } catch (e) {
-                        console.error('Failed to parse JSON:', e);
-                        throw new Error('Invalid JSON response: ' + text.substring(0, 200));
-                    }
-                });
-            })
-            .then(response => {
-                console.log('Response object:', response);
-                if (response.status === 'success') {
-                    alert(editId ? 'Sanksi berhasil diperbarui!' : 'Sanksi berhasil ditambahkan!');
-                    window.location.href = '/SistemInformasiSumberDaya-Kelompok2/public/admin-sanksi.php';
-                } else {
-                    alert('Gagal menyimpan: ' + response.message);
-                }
-            })
-            .catch(error => {
-                console.error('✗ Error:', error);
-                alert('Gagal menyimpan sanksi: ' + error.message);
-            });
     });
+});
+
+function loadData(id) {
+    fetch(API_URL + '/sanksi-lab/' + id)
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === 'success' || response.code === 200) {
+            const data = response.data;
+            document.getElementById('judul').value = data.judul;
+            document.getElementById('deskripsi').value = data.deskripsi;
+            
+            // If there is an existing image, maybe show it? 
+            // The API response structure for image path is unknown, skipping for now to avoid broken images.
+        } else {
+            alert('Data tidak ditemukan');
+            window.location.href = BASE_URL + '/public/admin-sanksi.php';
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+document.getElementById('sanksiForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const id = document.getElementById('id').value;
+    const btn = document.getElementById('btnSave');
+    const msg = document.getElementById('message');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+
+    const formData = new FormData(this);
+    
+    let url = API_URL + '/sanksi-lab';
+    if (id) {
+        url += '/' + id;
+        formData.append('_method', 'PUT'); 
+    }
+
+    fetch(url, { 
+        method: 'POST', 
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success' || data.code === 200 || data.code === 201) { 
+            msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px;">Berhasil disimpan! Redirecting...</div>';
+            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-sanksi.php'; }, 1000);
+        } else {
+            msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Gagal: ' + (data.message || 'Terjadi kesalahan') + '</div>';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Sanksi';
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Koneksi Error.</div>';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Simpan Sanksi';
+    });
+});
 </script>

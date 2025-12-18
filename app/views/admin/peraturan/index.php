@@ -1,86 +1,199 @@
 <div class="admin-header">
     <h1>Manajemen Peraturan Lab</h1>
-    <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan-form.php" class="btn btn-add">+ Tambah Peraturan Baru</a>
+    <a href="<?php echo BASE_URL; ?>/public/admin-peraturan-form.php" class="btn btn-add">
+        <i class="fas fa-plus"></i> Tambah Peraturan
+    </a>
 </div>
 
 <div class="card">
-    <table class="crud-table">
-        <thead>
-            <tr>
-                <th style="width: 50px;">No</th>
-                <th>Nama Peraturan</th>
-                <th>Deskripsi</th>
-                <th>Tanggal Upload</th>
-                <th style="width: 150px;">Aksi</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            <tr><td colspan="5" style="text-align:center;">Memuat data...</td></tr>
-        </tbody>
-    </table>
+    <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="searchInput" placeholder="Cari nama peraturan..." 
+                   style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 300px;">
+            <button onclick="loadPeraturan()" class="btn btn-primary" style="background: #3498db; padding: 8px 15px;">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+        <div id="totalData" style="color: #666; font-size: 0.9rem;">Total: 0 peraturan</div>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="crud-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px; text-align: center;">No</th>
+                    <th>Nama Peraturan</th>
+                    <th>Deskripsi</th>
+                    <th style="width: 150px; text-align: center;">Tanggal Upload</th>
+                    <th style="width: 150px; text-align: center;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td colspan="5" style="text-align:center; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i>
+                    <p style="color: #999; margin-top: 10px;">Memuat data...</p>
+                </td></tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<style>
+    .date-badge {
+        background: #e8f0fe;
+        color: #1967d2;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+    .peraturan-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+    }
+    .crud-table tbody tr:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.2s;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+    }
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
+</style>
+
 <script>
-    document.addEventListener('DOMContentLoaded', loadPeraturan);
+let allPeraturanData = [];
 
-    function loadPeraturan() {
-        const apiUrl = '/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib';
-        fetch(apiUrl)
-            .then(res => res.json())
-            .then(response => {
-                const tableBody = document.getElementById('tableBody');
-                tableBody.innerHTML = '';
+document.addEventListener('DOMContentLoaded', function() {
+    loadPeraturan();
+    
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        filterTable(searchTerm);
+    });
+});
 
-                if (response.status === 'success' && response.data.length > 0) {
-                    response.data.forEach((item, index) => {
-                        const row = document.createElement('tr');
-                        const deskripsi = item.uraFile ? item.uraFile.substring(0, 60) + '...' : '-';
-                        const tanggal = new Date(item.tanggalUpload).toLocaleDateString('id-ID');
+function loadPeraturan() {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i><p style="color: #999; margin-top: 10px;">Memuat data...</p></td></tr>';
+    
+    fetch(API_URL + '/tata-tertib')
+    .then(res => res.json())
+    .then(response => {
+        if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
+            allPeraturanData = response.data;
+            renderTable(allPeraturanData);
+        } else {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px;"><i class="fas fa-gavel" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Belum ada data peraturan.</p></td></tr>';
+            document.getElementById('totalData').textContent = 'Total: 0 peraturan';
+        }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px;"><i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #e74c3c;"></i><p style="color: #e74c3c; margin-top: 10px;">Gagal memuat data. Silakan coba lagi.</p></td></tr>';
+    });
+}
 
-                        row.innerHTML = `
-                            <td>${index + 1}</td>
-                            <td>${escapeHtml(item.namaFile)}</td>
-                            <td>${escapeHtml(deskripsi)}</td>
-                            <td>${tanggal}</td>
-                            <td>
-                                <a href="/SistemInformasiSumberDaya-Kelompok2/public/admin-peraturan-form.php?id=${item.idTataTerib}" class="btn-sm btn-edit">Edit</a>
-                                <button class="btn-sm btn-delete" onclick="deletePeraturan(${item.idTataTerib})">Hapus</button>
-                            </td>
-                        `;
-                        tableBody.appendChild(row);
-                    });
-                } else {
-                    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada data peraturan</td></tr>';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;">Gagal memuat data</td></tr>';
-            });
+function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px;"><i class="fas fa-search" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Tidak ada data yang cocok dengan pencarian.</p></td></tr>';
+        return;
     }
+    
+    data.forEach((item, index) => {
+        const deskripsi = item.uraFile ? (item.uraFile.length > 60 ? item.uraFile.substring(0, 60) + '...' : item.uraFile) : '-';
+        const tanggal = item.tanggalUpload ? new Date(item.tanggalUpload).toLocaleDateString('id-ID', {
+            day: 'numeric', month: 'short', year: 'numeric'
+        }) : '-';
 
-    function deletePeraturan(id) {
-        if (!confirm('Apakah Anda yakin ingin menghapus peraturan ini?')) return;
+        const row = `
+            <tr>
+                <td style="text-align: center;">${index + 1}</td>
+                <td>
+                    <span class="peraturan-name">${escapeHtml(item.namaFile)}</span>
+                </td>
+                <td>${escapeHtml(deskripsi)}</td>
+                <td style="text-align: center;">
+                    <span class="date-badge">${tanggal}</span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="<?php echo BASE_URL; ?>/public/admin-peraturan-form.php?id=${item.idTataTerib}" 
+                           class="btn btn-edit btn-icon" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button onclick="hapusPeraturan(${item.idTataTerib})" 
+                                class="btn btn-delete btn-icon" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+    
+    document.getElementById('totalData').textContent = `Total: ${data.length} peraturan`;
+}
 
-        const apiUrl = `/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib/${id}`;
-        fetch(apiUrl, {
-            method: 'DELETE'
+function filterTable(searchTerm) {
+    if (!searchTerm) {
+        renderTable(allPeraturanData);
+        return;
+    }
+    
+    const filteredData = allPeraturanData.filter(item => {
+        return (
+            (item.namaFile && item.namaFile.toLowerCase().includes(searchTerm)) ||
+            (item.uraFile && item.uraFile.toLowerCase().includes(searchTerm))
+        );
+    });
+    
+    renderTable(filteredData);
+}
+
+function hapusPeraturan(id) {
+    if(confirm('Apakah Anda yakin ingin menghapus peraturan ini?')) {
+        fetch(API_URL + '/tata-tertib/' + id, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'success' || data.code === 200) {
+                alert('Data berhasil dihapus!');
+                loadPeraturan();
+            } else {
+                alert('Gagal menghapus: ' + (data.message || 'Error tidak diketahui'));
+            }
         })
-            .then(res => res.json())
-            .then(response => {
-                if (response.status === 'success') {
-                    alert('Peraturan berhasil dihapus!');
-                    loadPeraturan();
-                } else {
-                    alert('Gagal menghapus peraturan: ' + response.message);
-                }
-            })
-            .catch(error => alert('Error: ' + error));
+        .catch(err => {
+            alert('Error: ' + err.message);
+            console.error(err);
+        });
     }
+}
 
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+function escapeHtml(text) {
+    if (!text) return '';
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 </script>

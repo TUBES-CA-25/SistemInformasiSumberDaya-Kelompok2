@@ -1,251 +1,184 @@
 <div class="admin-header">
-    <h1><i class="fas fa-desktop"></i> Data Laboratorium / Fasilitas</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium-form.php" class="btn btn-success">
+    <h1>Manajemen Laboratorium</h1>
+    <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium-form.php" class="btn btn-add">
         <i class="fas fa-plus"></i> Tambah Laboratorium
     </a>
 </div>
 
-<div class="card" style="padding: 0;">
+<div class="card">
+    <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" id="searchInput" placeholder="Cari nama laboratorium..." 
+                   style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; width: 300px;">
+            <button onclick="loadLaboratorium()" class="btn btn-primary" style="background: #3498db; padding: 8px 15px;">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+        <div id="totalData" style="color: #666; font-size: 0.9rem;">Total: 0 laboratorium</div>
+    </div>
+
     <div style="overflow-x: auto;">
-        <table class="crud-table" style="margin: 0;">
+        <table class="crud-table">
             <thead>
-                <tr style="background: #34495e; color: white;">
-                    <th style="width: 50px; padding: 15px; text-align: center;">No</th>
-                    <th style="width: 100px; padding: 15px; text-align: center;">Gambar</th>
-                    <th style="padding: 15px;">Nama Laboratorium</th>
-                    <th style="padding: 15px;">Deskripsi</th>
-                    <th style="width: 130px; padding: 15px; text-align: center;">Kapasitas</th>
-                    <th style="width: 150px; padding: 15px; text-align: center;">Aksi</th>
+                <tr>
+                    <th style="width: 50px; text-align: center;">No</th>
+                    <th style="width: 100px; text-align: center;">Gambar</th>
+                    <th>Nama Laboratorium</th>
+                    <th>Deskripsi</th>
+                    <th style="width: 150px; text-align: center;">Kapasitas</th>
+                    <th style="width: 150px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr>
-                    <td colspan="6" style="text-align:center; padding: 30px; color: #999;">
-                        <div style="animation: spin 1s linear infinite; display: inline-block;">⟳</div> Sedang memuat data...
-                    </td>
-                </tr>
+                <tr><td colspan="6" style="text-align:center; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i>
+                    <p style="color: #999; margin-top: 10px;">Memuat data...</p>
+                </td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <style>
-/* Custom Button Styles */
-.btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white !important;
-}
-
-.btn-success {
-    background-color: #27ae60;
-}
-.btn-success:hover {
-    background-color: #219150;
-    transform: translateY(-2px);
-}
-
-.crud-table tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-    transition: all 0.2s ease;
-}
-
-.crud-table tbody tr:hover {
-    background-color: #f8f9fa;
-}
-
-.crud-table tbody td {
-    padding: 12px 15px;
-    vertical-align: middle;
-    color: #555;
-}
-
-.crud-table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-}
-
-.lab-image {
-    width: 80px;
-    height: 60px;
-    border-radius: 4px;
-    object-fit: cover;
-    border: 1px solid #ddd;
-    display: block;
-    margin: 0 auto;
-}
-
-.lab-info strong {
-    display: block;
-    font-size: 15px;
-    margin-bottom: 4px;
-    color: #2c3e50;
-}
-
-.lab-capacity {
-    display: flex;
-    gap: 10px;
-    font-size: 13px;
-    justify-content: center;
-}
-
-.capacity-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #666;
-    background: #f8f9fa;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid #eee;
-}
-
-.capacity-item strong {
-    color: #2980b9;
-    font-size: 14px;
-    margin: 0;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-}
-
-.btn-action {
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: white;
-    text-decoration: none;
-}
-
-.btn-edit {
-    background-color: #f39c12;
-}
-
-.btn-edit:hover {
-    background-color: #e67e22;
-}
-
-.btn-delete {
-    background-color: #e74c3c;
-}
-
-.btn-delete:hover {
-    background-color: #c0392b;
-}
-
-.btn-edit {
-    background-color: #17a2b8;
-    color: white;
-}
-
-.btn-edit:hover {
-    background-color: #138496;
-    transform: translateY(-2px);
-}
-
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-delete:hover {
-    background-color: #c82333;
-    transform: translateY(-2px);
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+    .capacity-badge {
+        background: #e8f0fe;
+        color: #1967d2;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        display: inline-block;
+        margin: 2px;
+    }
+    .lab-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1rem;
+    }
+    .lab-image {
+        width: 80px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid #eee;
+    }
+    .crud-table tbody tr:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.2s;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+    }
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', loadLaboratorium);
+let allLabData = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadLaboratorium();
+    
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        filterTable(searchTerm);
+    });
+});
 
 function loadLaboratorium() {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i><p style="color: #999; margin-top: 10px;">Memuat data...</p></td></tr>';
+    
     fetch(API_URL + '/laboratorium')
     .then(res => res.json())
     .then(response => {
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
-
         if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
-            response.data.forEach((item, index) => {
-                const fotoUrl = item.gambar 
-                    ? (item.gambar.includes('http') ? item.gambar : BASE_URL + '/storage/uploads/' + item.gambar) 
-                    : 'https://placehold.co/80x60?text=No+Image';
-
-                const row = `
-                    <tr>
-                        <td style="text-align: center; font-weight: 600; color: #7f8c8d;">${index + 1}</td>
-                        <td>
-                            <img src="${fotoUrl}" class="lab-image" alt="Lab">
-                        </td>
-                        <td>
-                            <div class="lab-info">
-                                <strong>${item.nama}</strong>
-                            </div>
-                        </td>
-                        <td>
-                            <small style="color: #666; line-height: 1.6;">
-                                ${item.deskripsi ? (item.deskripsi.length > 100 ? item.deskripsi.substring(0, 100) + '...' : item.deskripsi) : '—'}
-                            </small>
-                        </td>
-                        <td>
-                            <div class="lab-capacity">
-                                <div class="capacity-item" title="Jumlah PC">
-                                    <i class="fas fa-desktop"></i> <strong>${item.jumlahPc || 0}</strong>
-                                </div>
-                                <div class="capacity-item" title="Jumlah Kursi">
-                                    <i class="fas fa-chair"></i> <strong>${item.jumlahKursi || 0}</strong>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium-form.php?id=${item.idLaboratorium}" 
-                                   class="btn-action btn-edit" title="Edit">
-                                   <i class="fas fa-edit"></i>
-                                </a>
-                                <button onclick="hapusLaboratorium(${item.idLaboratorium})" 
-                                        class="btn-action btn-delete" 
-                                        title="Hapus">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
+            allLabData = response.data;
+            renderTable(allLabData);
         } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px; color: #999;"><i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>Belum ada data laboratorium.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-desktop" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Belum ada data laboratorium.</p></td></tr>';
+            document.getElementById('totalData').textContent = 'Total: 0 laboratorium';
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #e74c3c;"></i><p style="color: #e74c3c; margin-top: 10px;">Gagal memuat data. Silakan coba lagi.</p></td></tr>';
     });
+}
+
+function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-search" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Tidak ada data yang cocok dengan pencarian.</p></td></tr>';
+        return;
+    }
+    
+    data.forEach((item, index) => {
+        const deskripsi = item.deskripsi ? (item.deskripsi.length > 60 ? item.deskripsi.substring(0, 60) + '...' : item.deskripsi) : '-';
+        const imageSrc = item.gambar ? (ASSETS_URL + '/uploads/' + item.gambar) : (ASSETS_URL + '/img/no-image.jpg');
+        
+        // Handle image error with fallback (prevent infinite loop with this.onerror=null)
+        const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23eee'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='10' fill='%23999' dominant-baseline='middle' text-anchor='middle'%3ENo Img%3C/text%3E%3C/svg%3E";
+        const imgHtml = `<img src="${imageSrc}" class="lab-image" onerror="this.onerror=null;this.src='${fallbackImage}'">`;
+
+        const row = `
+            <tr>
+                <td style="text-align: center;">${index + 1}</td>
+                <td style="text-align: center;">${imgHtml}</td>
+                <td>
+                    <span class="lab-name">${escapeHtml(item.nama)}</span>
+                </td>
+                <td>${escapeHtml(deskripsi)}</td>
+                <td style="text-align: center;">
+                    <div class="capacity-badge"><i class="fas fa-desktop"></i> ${item.jumlahPc || 0} PC</div>
+                    <div class="capacity-badge"><i class="fas fa-chair"></i> ${item.jumlahKursi || 0} Kursi</div>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="<?php echo BASE_URL; ?>/public/admin-laboratorium-form.php?id=${item.idLaboratorium}" 
+                           class="btn btn-edit btn-icon" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button onclick="hapusLaboratorium(${item.idLaboratorium})" 
+                                class="btn btn-delete btn-icon" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+    
+    document.getElementById('totalData').textContent = `Total: ${data.length} laboratorium`;
+}
+
+function filterTable(searchTerm) {
+    if (!searchTerm) {
+        renderTable(allLabData);
+        return;
+    }
+    
+    const filteredData = allLabData.filter(item => {
+        return (
+            (item.nama && item.nama.toLowerCase().includes(searchTerm)) ||
+            (item.deskripsi && item.deskripsi.toLowerCase().includes(searchTerm))
+        );
+    });
+    
+    renderTable(filteredData);
 }
 
 function hapusLaboratorium(id) {
@@ -254,16 +187,26 @@ function hapusLaboratorium(id) {
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {
-                alert('✓ Data berhasil dihapus');
+                alert('Data berhasil dihapus!');
                 loadLaboratorium();
             } else {
-                alert('✗ Gagal: ' + (data.message || 'Error'));
+                alert('Gagal menghapus: ' + (data.message || 'Error tidak diketahui'));
             }
         })
         .catch(err => {
-            alert('✗ Error: ' + err.message);
+            alert('Error: ' + err.message);
             console.error(err);
         });
     }
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 </script>
