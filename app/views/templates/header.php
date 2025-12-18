@@ -17,6 +17,13 @@
                     ★ LOGO
                 </a>
             </div>
+
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
             <ul class="nav-links">
                 <li><a href="/index.php">Home</a></li>
                 
@@ -46,5 +53,18 @@
             </ul>
         </div>
     </nav>
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            // Toggle menu navigasi
+            navLinks.classList.toggle('active');
+            
+            // Toggle animasi ikon burger
+            menuToggle.classList.toggle('active'); 
+        });
+    </script>
     
     <main>

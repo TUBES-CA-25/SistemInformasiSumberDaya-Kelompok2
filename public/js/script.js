@@ -29,3 +29,4 @@ setInterval(() => {
     }
     goToSlide(nextSlide);
 }, 5000);
+
