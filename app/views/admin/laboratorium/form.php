@@ -60,10 +60,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadAsisten();
     
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-
-    if (id) {
+    // Parse ID from route parameter (admin/laboratorium/{id}/edit)
+    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const matches = route.match(/admin\/laboratorium\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
+        const id = matches[1];
         document.getElementById('formTitle').textContent = 'Edit Laboratorium';
         document.getElementById('idLaboratorium').value = id;
         loadData(id);

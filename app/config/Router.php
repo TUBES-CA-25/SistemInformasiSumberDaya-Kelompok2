@@ -86,19 +86,27 @@ class Router {
         $this->get('/admin/jadwal/csv-upload', 'JadwalPraktikumController', 'csvUploadForm');
         $this->post('/admin/jadwal/csv-upload', 'JadwalPraktikumController', 'csvUploadProcess');
 
-        // Admin Laboratorium
-        $this->get('/admin/laboratorium', 'InformasiLabController', 'adminIndex');
-        $this->get('/admin/laboratorium/create', 'InformasiLabController', 'create');
-        $this->post('/admin/laboratorium', 'InformasiLabController', 'store');
-        $this->get('/admin/laboratorium/{id}/edit', 'InformasiLabController', 'edit');
-        $this->put('/admin/laboratorium/{id}', 'InformasiLabController', 'update');
-        $this->delete('/admin/laboratorium/{id}', 'InformasiLabController', 'delete');
-        $this->get('/admin/laboratorium/{id}/detail', 'InformasiLabController', 'adminDetail');
-        $this->get('/admin/laboratorium/{id}/detail/create', 'InformasiLabController', 'createDetail');
-        $this->post('/admin/laboratorium/{id}/detail', 'InformasiLabController', 'storeDetail');
-        $this->get('/admin/laboratorium/detail/{detail_id}/edit', 'InformasiLabController', 'editDetail');
-        $this->put('/admin/laboratorium/detail/{detail_id}', 'InformasiLabController', 'updateDetail');
-        $this->delete('/admin/laboratorium/detail/{detail_id}', 'InformasiLabController', 'deleteDetail');
+        // Admin Laboratorium (Fasilitas)
+        $this->get('/admin/laboratorium', 'LaboratoriumController', 'adminIndex');
+        $this->get('/admin/laboratorium/create', 'LaboratoriumController', 'create');
+        $this->post('/admin/laboratorium', 'LaboratoriumController', 'store');
+        $this->get('/admin/laboratorium/{id}/edit', 'LaboratoriumController', 'edit');
+        $this->put('/admin/laboratorium/{id}', 'LaboratoriumController', 'update');
+        $this->delete('/admin/laboratorium/{id}', 'LaboratoriumController', 'delete');
+
+        // Admin Informasi Lab (detail/konten)
+        $this->get('/admin/informasi-lab', 'InformasiLabController', 'adminIndex');
+        $this->get('/admin/informasi-lab/create', 'InformasiLabController', 'create');
+        $this->post('/admin/informasi-lab', 'InformasiLabController', 'store');
+        $this->get('/admin/informasi-lab/{id}/edit', 'InformasiLabController', 'edit');
+        $this->put('/admin/informasi-lab/{id}', 'InformasiLabController', 'update');
+        $this->delete('/admin/informasi-lab/{id}', 'InformasiLabController', 'delete');
+        $this->get('/admin/informasi-lab/{id}/detail', 'InformasiLabController', 'adminDetail');
+        $this->get('/admin/informasi-lab/{id}/detail/create', 'InformasiLabController', 'createDetail');
+        $this->post('/admin/informasi-lab/{id}/detail', 'InformasiLabController', 'storeDetail');
+        $this->get('/admin/informasi-lab/detail/{detail_id}/edit', 'InformasiLabController', 'editDetail');
+        $this->put('/admin/informasi-lab/detail/{detail_id}', 'InformasiLabController', 'updateDetail');
+        $this->delete('/admin/informasi-lab/detail/{detail_id}', 'InformasiLabController', 'deleteDetail');
 
         // Admin Matakuliah
         $this->get('/admin/matakuliah', 'MatakuliahController', 'adminIndex');

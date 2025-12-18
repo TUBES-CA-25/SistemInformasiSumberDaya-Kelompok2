@@ -58,10 +58,12 @@
 .crud-table tbody tr {
     border-bottom: 1px solid #f0f0f0;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 .crud-table tbody tr:hover {
     background-color: #f8f9fa;
+    transform: translateX(2px);
 }
 
 .crud-table tbody td {
@@ -164,11 +166,11 @@ function loadAlumni() {
         if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
             response.data.forEach((item, index) => {
                 const fotoUrl = item.foto 
-                    ? (item.foto.includes('http') ? item.foto : BASE_URL + '/storage/uploads/' + item.foto) 
+                    ? (item.foto.includes('http') ? item.foto : BASE_URL + '/assets/uploads/' + item.foto) 
                     : 'https://placehold.co/50x50?text=Foto';
 
                 const row = `
-                    <tr>
+                    <tr onclick="editAlumni(${item.id}, event)">
                         <td style="text-align: center; font-weight: 600; color: #7f8c8d;">${index + 1}</td>
                         <td>
                             <img src="${fotoUrl}" class="avatar-img" alt="Foto">
@@ -183,11 +185,7 @@ function loadAlumni() {
                         <td><span style="color: #555; font-size: 13px;">${item.pekerjaan || '—'}</span></td>
                         <td>
                             <div class="action-buttons">
-                                <a href="javascript:void(0)" onclick="navigate('admin/alumni/' + item.id + '/edit')" 
-                                   class="btn-action btn-edit" title="Edit">
-                                   <i class="fas fa-edit"></i>
-                                </a>
-                                <button onclick="hapusAlumni(${item.id})" 
+                                <button onclick="hapusAlumni(${item.id}, event)" 
                                         class="btn-action btn-delete" 
                                         title="Hapus">
                                     <i class="fas fa-trash-alt"></i>
@@ -208,7 +206,20 @@ function loadAlumni() {
     });
 }
 
-function hapusAlumni(id) {
+function editAlumni(id, event) {
+    // Jangan navigate jika klik tombol delete
+    if (event && event.target.closest('.btn-delete')) {
+        return;
+    }
+    navigate('admin/alumni/' + id + '/edit');
+}
+
+function hapusAlumni(id, event) {
+    // Mencegah event bubbling ke row
+    if (event) {
+        event.stopPropagation();
+    }
+    
     if(confirm('Apakah Anda yakin ingin menghapus data alumni ini?')) {
         fetch(API_URL + '/alumni/' + id, { method: 'DELETE' })
         .then(res => res.json())

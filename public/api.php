@@ -104,9 +104,12 @@ $routes = [
             '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
             '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'], // For file upload
             '/alumni' => ['controller' => 'AlumniController', 'method' => 'store'],
+            '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'update'], // For file upload
         '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'store'],
+        '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'update'], // For file upload
         '/asisten' => ['controller' => 'AsistenController', 'method' => 'store'],
         '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'], // For file upload
+        '/asisten/{id}/koordinator' => ['controller' => 'AsistenController', 'method' => 'setKoordinator'], // Set koordinator
         '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'store'],
         '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'store'],
         '/jadwal-praktikum/upload' => ['controller' => 'JadwalPraktikumController', 'method' => 'uploadExcel'],

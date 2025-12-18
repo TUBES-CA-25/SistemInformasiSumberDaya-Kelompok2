@@ -94,10 +94,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Cek apakah ada ID di URL (mode edit)
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    const route = params.get('route') || '';
     
-    if (id) {
+    // Extract ID dari route: admin/asisten/{id}/edit
+    const matches = route.match(/admin\/asisten\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
         // Mode edit - load data
+        const id = matches[1];
         loadAsistenData(id);
     }
 });

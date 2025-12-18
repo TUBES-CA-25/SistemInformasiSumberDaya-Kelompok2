@@ -53,8 +53,8 @@
                         let imageUrl;
                         if (koordinator.foto) {
                             const baseUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2')
-                                ? '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/'
-                                : '/storage/uploads/';
+                                ? '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/'
+                                : '/assets/uploads/';
                             imageUrl = baseUrl + koordinator.foto;
                         } else {
                             imageUrl = 'https://placehold.co/400x400/7f8c8d/white?text=Koordinator';
@@ -107,12 +107,12 @@
                         asistenCard.href = '/profil.php?id=' + asisten.idAsisten;
                         
                         // Gunakan image dari database atau placeholder
-                        // Path gambar: /SistemInformasiSumberDaya-Kelompok2/storage/uploads/{filename}
+                        // Path gambar: /assets/uploads/{filename}
                         let imageUrl;
                         if (asisten.foto) {
                             const baseUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2')
-                                ? '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/'
-                                : '/storage/uploads/';
+                                ? '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/'
+                                : '/assets/uploads/';
                             imageUrl = baseUrl + asisten.foto;
                         } else {
                             imageUrl = 'https://placehold.co/300x300/bdc3c7/white?text=Asisten';

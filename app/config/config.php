@@ -24,8 +24,10 @@ $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 // Detect environment dan set base paths accordingly
 if (strpos($_SERVER['SERVER_NAME'] ?? '', 'localhost') !== false && ($_SERVER['SERVER_PORT'] ?? 80) == 8000) {
     // PHP Built-in server (localhost:8000)
+    // Document root is already in public/, so paths are relative to root
     $baseScriptPath = '';
     $publicPath = '';
+    $assetsPath = '';
 } else {
     // XAMPP/Apache server (localhost/project/public/)
     $requestUri = $_SERVER['REQUEST_URI'] ?? '';
@@ -35,9 +37,11 @@ if (strpos($_SERVER['SERVER_NAME'] ?? '', 'localhost') !== false && ($_SERVER['S
     if (strpos($scriptName, '/SistemInformasiSumberDaya-Kelompok2/') !== false) {
         $baseScriptPath = '/SistemInformasiSumberDaya-Kelompok2';
         $publicPath = '/SistemInformasiSumberDaya-Kelompok2/public';
+        $assetsPath = '/SistemInformasiSumberDaya-Kelompok2/public';
     } else {
         $baseScriptPath = '';
         $publicPath = '';
+        $assetsPath = '';
     }
 }
 
@@ -52,7 +56,7 @@ if (!defined('API_URL')) {
     define('API_URL', $publicPath . '/api.php');
 }
 if (!defined('ASSETS_URL')) {
-    define('ASSETS_URL', $publicPath);
+    define('ASSETS_URL', $assetsPath);
 }
 
 // Display errors (disable in production)

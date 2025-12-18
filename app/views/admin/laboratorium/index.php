@@ -61,9 +61,13 @@
         border-radius: 4px;
         border: 1px solid #eee;
     }
+    .crud-table tbody tr {
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+    }
     .crud-table tbody tr:hover {
         background-color: #f8f9fa;
-        transition: background-color 0.2s;
+        transform: translateX(2px);
     }
     .action-buttons {
         display: flex;
@@ -134,7 +138,7 @@ function renderTable(data) {
         const imgHtml = `<img src="${imageSrc}" class="lab-image" onerror="this.onerror=null;this.src='${fallbackImage}'">`;
 
         const row = `
-            <tr>
+            <tr onclick="editLaboratorium(${item.idLaboratorium}, event)">
                 <td style="text-align: center;">${index + 1}</td>
                 <td style="text-align: center;">${imgHtml}</td>
                 <td>
@@ -147,11 +151,7 @@ function renderTable(data) {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="javascript:void(0)" onclick="navigate('admin/laboratorium/' + item.idLaboratorium + '/edit')" 
-                           class="btn btn-edit btn-icon" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button onclick="hapusLaboratorium(${item.idLaboratorium})" 
+                        <button onclick="hapusLaboratorium(${item.idLaboratorium}, event)" 
                                 class="btn btn-delete btn-icon" title="Hapus">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -181,7 +181,20 @@ function filterTable(searchTerm) {
     renderTable(filteredData);
 }
 
-function hapusLaboratorium(id) {
+function editLaboratorium(id, event) {
+    // Jangan navigate jika klik tombol delete
+    if (event && event.target.closest('.btn-delete')) {
+        return;
+    }
+    navigate('admin/laboratorium/' + id + '/edit');
+}
+
+function hapusLaboratorium(id, event) {
+    // Mencegah event bubbling ke row
+    if (event) {
+        event.stopPropagation();
+    }
+    
     if(confirm('Apakah Anda yakin ingin menghapus laboratorium ini?')) {
         fetch(API_URL + '/laboratorium/' + id, { method: 'DELETE' })
         .then(res => res.json())

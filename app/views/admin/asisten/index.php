@@ -21,7 +21,7 @@
                     <th style="padding: 15px;">Jurusan</th>
                     <th style="width: 100px; padding: 15px; text-align: center;">Koordinator</th>
                     <th style="width: 100px; padding: 15px; text-align: center;">Status</th>
-                    <th style="width: 150px; padding: 15px; text-align: center;">Aksi</th>
+                    <th style="width: 80px; padding: 15px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -81,10 +81,12 @@
 .crud-table tbody tr {
     border-bottom: 1px solid #f0f0f0;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 .crud-table tbody tr:hover {
-    background-color: #f8f9fa;
+    background-color: #f0f7ff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .crud-table tbody td {
@@ -176,6 +178,19 @@
     background-color: #c0392b;
 }
 
+.row-clickable {
+    position: relative;
+}
+
+.row-clickable td:not(:last-child) {
+    cursor: pointer;
+}
+
+.btn-action {
+    position: relative;
+    z-index: 10;
+}
+
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
@@ -205,11 +220,11 @@ function loadAsisten() {
                     : '<span style="color: #95a5a6; font-size: 12px;">—</span>';
 
                 const fotoUrl = item.foto 
-                    ? (item.foto.includes('http') ? item.foto : BASE_URL + '/storage/uploads/' + item.foto) 
+                    ? (item.foto.includes('http') ? item.foto : '/assets/uploads/' + item.foto) 
                     : 'https://placehold.co/50x50?text=Foto';
 
                 const row = `
-                    <tr>
+                    <tr class="row-clickable" onclick="editAsisten(${item.idAsisten}, event)">
                         <td style="text-align: center; font-weight: 600; color: #7f8c8d;">${index + 1}</td>
                         <td>
                             <img src="${fotoUrl}" class="avatar-img" alt="Foto">
@@ -221,18 +236,12 @@ function loadAsisten() {
                         <td><span style="color: #555; font-size: 13px;">${item.jurusan || '—'}</span></td>
                         <td style="text-align: center;">${koordinatorBadge}</td>
                         <td style="text-align: center;">${statusBadge}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="javascript:void(0)" onclick="navigate('admin/asisten/' + item.idAsisten + '/edit')" 
-                                   class="btn-action btn-edit" title="Edit">
-                                   <i class="fas fa-edit"></i>
-                                </a>
-                                <button onclick="hapusAsisten(${item.idAsisten})" 
-                                        class="btn-action btn-delete" 
-                                        title="Hapus">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
+                        <td style="text-align: center;">
+                            <button onclick="hapusAsisten(${item.idAsisten}, event)" 
+                                    class="btn-action btn-delete" 
+                                    title="Hapus">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -248,7 +257,18 @@ function loadAsisten() {
     });
 }
 
-function hapusAsisten(id) {
+function editAsisten(id, event) {
+    // Jangan navigate jika yang diklik adalah tombol delete
+    if (event.target.closest('.btn-delete')) {
+        return;
+    }
+    navigate('admin/asisten/' + id + '/edit');
+}
+
+function hapusAsisten(id, event) {
+    // Stop propagation agar tidak trigger row click
+    event.stopPropagation();
+    
     if(confirm('Apakah Anda yakin ingin menghapus data asisten ini?')) {
         fetch(API_URL + '/asisten/' + id, { method: 'DELETE' })
         .then(response => response.json())

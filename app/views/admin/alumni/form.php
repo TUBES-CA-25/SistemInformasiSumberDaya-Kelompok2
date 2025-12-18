@@ -121,9 +121,12 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    if (id) {
+    // Parse ID from route parameter (admin/alumni/{id}/edit)
+    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const matches = route.match(/admin\/alumni\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
+        const id = matches[1];
         loadAlumniData(id);
     }
 });
@@ -163,28 +166,50 @@ document.getElementById('alumniForm').addEventListener('submit', function(e) {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
     const formData = new FormData(this);
+    const id = document.getElementById('id').value;
 
-    fetch(API_URL + '/alumni', {
+    // Log untuk debug
+    console.log('ID:', id);
+    console.log('FormData entries:');
+    for (let [key, value] of formData.entries()) {
+        console.log(key + ':', value);
+    }
+
+    // Tentukan URL berdasarkan mode (create/edit)
+    const url = id ? API_URL + '/alumni/' + id : API_URL + '/alumni';
+    console.log('URL:', url);
+    
+    fetch(url, {
         method: 'POST',
         body: formData
     })
-    .then(res => res.json())
-    .then(data => {
-        console.log('Response:', data);
-        if (data.status === 'success' || data.code === 201) {
-            msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px; border: 1px solid #c3e6cb;"><i class="fas fa-check-circle"></i> Berhasil disimpan! Mengalihkan...</div>';
-            setTimeout(() => { navigate('admin/alumni'); }, 1500);
-        } else {
-            msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-exclamation-circle"></i> Gagal: ' + (data.message || 'Error tidak diketahui') + '</div>';
+    .then(res => res.text()) // Ambil sebagai text dulu
+    .then(text => {
+        console.log('Raw response:', text);
+        try {
+            const data = JSON.parse(text);
+            console.log('Parsed response:', data);
+            
+            if (data.status === 'success' || data.code === 201 || data.code === 200) {
+                msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px; border: 1px solid #c3e6cb;"><i class="fas fa-check-circle"></i> Berhasil disimpan! Mengalihkan...</div>';
+                setTimeout(() => { navigate('admin/alumni'); }, 1500);
+            } else {
+                msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-exclamation-circle"></i> Gagal: ' + (data.message || 'Error tidak diketahui') + '</div>';
+                btn.disabled = false;
+                btn.innerHTML = id ? '<i class="fas fa-save"></i> Update Data' : '<i class="fas fa-save"></i> Simpan Data';
+            }
+        } catch (e) {
+            console.error('Parse error:', e);
+            msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-exclamation-circle"></i> Error: ' + text.substring(0, 200) + '</div>';
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+            btn.innerHTML = id ? '<i class="fas fa-save"></i> Update Data' : '<i class="fas fa-save"></i> Simpan Data';
         }
     })
     .catch(err => {
-        console.error('Error:', err);
+        console.error('Fetch error:', err);
         msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-wifi"></i> Gagal koneksi ke server</div>';
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+        btn.innerHTML = id ? '<i class="fas fa-save"></i> Update Data' : '<i class="fas fa-save"></i> Simpan Data';
     });
 });
 

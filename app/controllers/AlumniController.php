@@ -27,7 +27,7 @@ class AlumniController extends Controller {
             return;
         }
         
-        $alumni = $this->model->getById($id);
+        $alumni = $this->model->getById($id, 'id');
         if (!$alumni) {
             $this->redirect('/alumni');
             return;
@@ -61,7 +61,7 @@ class AlumniController extends Controller {
             return;
         }
         
-        $alumni = $this->model->getById($id);
+        $alumni = $this->model->getById($id, 'id');
         if (!$alumni) {
             $this->setFlash('error', 'Data alumni tidak ditemukan');
             $this->redirect('/admin/alumni');
@@ -82,14 +82,14 @@ class AlumniController extends Controller {
     public function apiShow($params) {
         $id = $params['id'] ?? null;
         if (!$id) $this->error('ID tidak ditemukan', null, 400);
-        $data = $this->model->getById($id);
+        $data = $this->model->getById($id, 'id');
         if (!$data) $this->error('Data tidak ditemukan', null, 404);
         $this->success($data, 'Alumni retrieved successfully');
     }
 
     public function store() {
-        // Cek apakah request multipart/form-data (upload file)
-        if (isset($_FILES['foto'])) {
+        try {
+            // Ambil data dari POST (multipart/form-data atau regular)
             $input = [
                 'nama' => $_POST['nama'] ?? '',
                 'angkatan' => $_POST['angkatan'] ?? '',
@@ -103,43 +103,65 @@ class AlumniController extends Controller {
                 'portfolio' => $_POST['portfolio'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
-        } else {
-            // Coba ambil dari $_POST dulu, jika kosong ambil dari JSON
-            $input = $_POST;
-            if (empty($input)) {
-                $input = $this->getJson() ?? [];
+            
+            // Validasi field wajib
+            if (empty($input['nama']) || empty($input['angkatan'])) {
+                $this->error('Field nama dan angkatan wajib diisi', null, 400);
+                return;
             }
-        }
-        
-        // Validasi field wajib
-        if (empty($input['nama']) || empty($input['angkatan'])) {
-            $this->error('Field nama dan angkatan wajib diisi', null, 400);
-        }
-        
-        // Optional: handle file upload for foto
-        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = dirname(__DIR__, 2) . '/storage/uploads/';
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-            $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-            $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
-            $target = $uploadDir . $filename;
-            if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
-                // Get base path from request - for dynamic folder naming
-                $scriptPath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
-                $input['foto'] = $scriptPath . '/storage/uploads/' . $filename;
+            
+            // Handle file upload jika ada
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+                
+                $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+                $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
+                
+                if (!in_array($ext, $allowedExts)) {
+                    $this->error('Format file tidak didukung. Gunakan: jpg, jpeg, png, gif', null, 400);
+                    return;
+                }
+                
+                $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                $target = $uploadDir . $filename;
+                
+                if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
+                    $input['foto'] = $filename;
+                } else {
+                    $this->error('Gagal mengupload file', null, 500);
+                    return;
+                }
             }
+            
+            $result = $this->model->insert($input);
+            if ($result) {
+                $this->success(['id' => $this->model->getLastInsertId()], 'Alumni berhasil ditambahkan', 201);
+            } else {
+                $this->error('Gagal menambahkan alumni', null, 500);
+            }
+        } catch (Exception $e) {
+            error_log('Alumni store error: ' . $e->getMessage());
+            $this->error('Error: ' . $e->getMessage(), null, 500);
         }
-        $result = $this->model->insert($input);
-        if ($result) $this->success([], 'Alumni created', 201);
-        $this->error('Failed to create alumni', null, 500);
     }
 
     public function update($params) {
-        $id = $params['id'] ?? null;
-        if (!$id) $this->error('ID tidak ditemukan', null, 400);
-        
-        // Cek apakah request multipart/form-data (upload file)
-        if (isset($_FILES['foto'])) {
+        try {
+            $id = $params['id'] ?? null;
+            if (!$id) {
+                $this->error('ID tidak ditemukan', null, 400);
+                return;
+            }
+            
+            // Get existing data for old file deletion
+            $alumni = $this->model->getById($id, 'id');
+            if (!$alumni) {
+                $this->error('Alumni tidak ditemukan', null, 404);
+                return;
+            }
+            
+            // Ambil data dari POST (multipart/form-data atau regular)
             $input = [
                 'nama' => $_POST['nama'] ?? '',
                 'angkatan' => $_POST['angkatan'] ?? '',
@@ -153,41 +175,61 @@ class AlumniController extends Controller {
                 'portfolio' => $_POST['portfolio'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
-        } else {
-            // Coba ambil dari $_POST dulu, jika kosong ambil dari JSON
-            $input = $_POST;
-            if (empty($input)) {
-                $input = $this->getJson() ?? [];
+            
+            // Validasi field wajib
+            if (empty($input['nama']) || empty($input['angkatan'])) {
+                $this->error('Field nama dan angkatan wajib diisi', null, 400);
+                return;
             }
-        }
-        
-        // Validasi field wajib
-        if (empty($input['nama']) || empty($input['angkatan'])) {
-            $this->error('Field nama dan angkatan wajib diisi', null, 400);
-        }
-        
-        // Optional: handle file upload for foto
-        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = dirname(__DIR__, 2) . '/storage/uploads/';
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-            $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-            $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
-            $target = $uploadDir . $filename;
-            if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
-                // Get base path from request - for dynamic folder naming
-                $scriptPath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
-                $input['foto'] = $scriptPath . '/storage/uploads/' . $filename;
+            
+            // Handle file upload jika ada file baru
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+                
+                $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+                $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
+                
+                if (!in_array($ext, $allowedExts)) {
+                    $this->error('Format file tidak didukung. Gunakan: jpg, jpeg, png, gif', null, 400);
+                    return;
+                }
+                
+                // Delete old file if exists
+                if (!empty($alumni['foto'])) {
+                    $oldFile = $uploadDir . $alumni['foto'];
+                    if (file_exists($oldFile)) {
+                        unlink($oldFile);
+                    }
+                }
+                
+                $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                $target = $uploadDir . $filename;
+                
+                if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
+                    $input['foto'] = $filename;
+                } else {
+                    $this->error('Gagal mengupload file', null, 500);
+                    return;
+                }
             }
+            
+            $result = $this->model->update($id, $input, 'id');
+            if ($result) {
+                $this->success([], 'Alumni berhasil diupdate', 200);
+            } else {
+                $this->error('Gagal mengupdate data alumni', null, 500);
+            }
+        } catch (Exception $e) {
+            error_log('Alumni update error: ' . $e->getMessage());
+            $this->error('Error: ' . $e->getMessage(), null, 500);
         }
-        $result = $this->model->update($id, $input);
-        if ($result) $this->success([], 'Alumni updated');
-        $this->error('Failed to update alumni', null, 500);
     }
 
     public function delete($params) {
         $id = $params['id'] ?? null;
         if (!$id) $this->error('ID tidak ditemukan', null, 400);
-        $result = $this->model->delete($id);
+        $result = $this->model->delete($id, 'id');
         if ($result) $this->success([], 'Alumni deleted');
         $this->error('Failed to delete alumni', null, 500);
     }
