@@ -193,7 +193,7 @@
 
 <div class="admin-header">
     <h1><i class="fas fa-user-check"></i> Pilih Koordinator Lab</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn btn-secondary" style="flex: initial;">
+    <a href="javascript:void(0)" onclick="navigate('admin/asisten')" class="btn btn-secondary" style="flex: initial;">
         <i class="fas fa-arrow-left"></i> Kembali
     </a>
 </div>
@@ -228,7 +228,7 @@
             <button type="submit" class="btn btn-success" id="btnSave">
                 <i class="fas fa-check"></i> Simpan Pilihan
             </button>
-            <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn btn-secondary">
+            <a href="javascript:void(0)" onclick="navigate('admin/asisten')" class="btn btn-secondary">
                 <i class="fas fa-times"></i> Batal
             </a>
         </div>
@@ -348,7 +348,7 @@ document.getElementById('koordinatorForm').addEventListener('submit', function(e
             if (data.status === 'success' || data.code === 200 || data.code === 201) {
                 showMessage('<i class="fas fa-check-circle"></i> Koordinator berhasil diperbarui! Mengalihkan...', 'success');
                 setTimeout(() => {
-                    window.location.href = BASE_URL + '/public/admin-asisten.php';
+                    navigate('admin/asisten');
                 }, 1500);
             } else {
                 showMessage('<i class="fas fa-times-circle"></i> Gagal: ' + (data.message || 'Error'), 'error');
@@ -374,5 +374,13 @@ function showMessage(text, type) {
     const msgDiv = document.getElementById('message');
     msgDiv.className = 'message ' + type;
     msgDiv.innerHTML = text;
+}
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
 }
 </script>

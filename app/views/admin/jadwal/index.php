@@ -1,10 +1,10 @@
 <div class="admin-header">
     <h1>Manajemen Jadwal Praktikum</h1>
     <div class="btn-group">
-        <a href="<?php echo BASE_URL; ?>/public/admin-jadwal-upload.php" class="btn btn-upload" style="background: #17a2b8; color: white; margin-right: 10px;">
+        <a href="javascript:void(0)" onclick="navigate('admin/jadwal/upload')" class="btn btn-upload" style="background: #17a2b8; color: white; margin-right: 10px;">
             <i class="fas fa-upload"></i> Upload Excel
         </a>
-        <a href="<?php echo BASE_URL; ?>/public/admin-jadwal-form.php" class="btn btn-add">
+        <a href="javascript:void(0)" onclick="navigate('admin/jadwal/create')" class="btn btn-add">
             <i class="fas fa-plus"></i> Tambah Jadwal
         </a>
     </div>
@@ -176,7 +176,7 @@ function renderTable(data) {
                 <td style="text-align: center;">${statusBadge}</td>
                 <td>
                     <div class="action-buttons">
-                        <a href="<?php echo BASE_URL; ?>/public/admin-jadwal-form.php?id=${item.idJadwal}" 
+                        <a href="javascript:void(0)" onclick="navigate('admin/jadwal/' + item.idJadwal + '/edit')" 
                            class="btn btn-edit btn-icon" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
@@ -229,6 +229,16 @@ function hapusJadwal(id) {
             console.error(err);
             alert('Error: ' + err.message);
         });
+    }
+}
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        // PHP built-in server
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        // XAMPP/Apache
+        window.location.href = '/' + route;
     }
 }
 </script>

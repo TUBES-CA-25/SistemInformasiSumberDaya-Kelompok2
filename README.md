@@ -1,8 +1,48 @@
 # Sistem Informasi Sumber Daya - Laboratorium
 
-Aplikasi web PHP Native untuk manajemen informasi dan sumber daya laboratorium
+Aplikasi web PHP Native untuk manajemen informasi dan sumber daya laboratorium dengan **MVC Pattern**
 
-## 📋 Struktur Folder
+## ⚡ **PERUBAHAN PENTING - MVC REFACTOR**
+
+**Aplikasi telah direfactor ke MVC pattern dengan clean URLs!**
+
+### 🔄 **URL Baru vs Lama:**
+
+| **Fungsi** | **URL LAMA** | **URL BARU (MVC)** |
+|------------|--------------|-------------------|
+| Beranda | `/index.php` | `/` atau `/home` |
+| Alumni | `/alumni.php` | `/alumni` |
+| Detail Alumni | `/detail-alumni.php?id=123` | `/alumni/123` |
+| Contact | `/contact.php` | `/contact` |
+| Asisten | `/asisten.php` | `/asisten` |
+| Jadwal | `/jadwal.php` | `/jadwal` |
+| Laboratorium | `/laboratorium.php` | `/laboratorium` |
+| Detail Lab | `/detail-fasilitas.php?id=123` | `/laboratorium/123` |
+| Praktikum | `/praktikum.php` | `/praktikum` |
+| Riset | `/riset.php` | `/riset` |
+| Profil | `/profil.php` | `/profil` |
+| Kepala Lab | `/kepala-lab.php` | `/kepala-lab` |
+| Sanksi | `/sanksi.php` | `/sanksi` |
+| **ADMIN** | | |
+| Admin Dashboard | `/admin-dashboard.php` | `/admin` atau `/admin/dashboard` |
+| Admin Alumni | `/admin-alumni.php` | `/admin/alumni` |
+| Form Alumni | `/admin-alumni-form.php` | `/admin/alumni/create` |
+| Edit Alumni | `/admin-alumni-form.php?id=123` | `/admin/alumni/123/edit` |
+| Admin Asisten | `/admin-asisten.php` | `/admin/asisten` |
+| Admin Jadwal | `/admin-jadwal.php` | `/admin/jadwal` |
+| Upload Jadwal | `/admin-jadwal-upload.php` | `/admin/jadwal/upload` |
+| Admin Lab | `/admin-laboratorium.php` | `/admin/laboratorium` |
+| **API** | | |
+| API Alumni | `/api.php?route=alumni` | `/api/alumni` |
+| API Detail | `/api.php?route=alumni&id=123` | `/api/alumni/123` |
+| Health Check | `/api.php?route=health` | `/api/health` |
+
+### ⚠️ **Breaking Changes:**
+- **Semua URL lama tidak bisa diakses lagi**
+- **File `.php` entry points sudah dihapus**
+- **Harus menggunakan URL baru**
+
+## 📋 Struktur Folder (Setelah MVC Refactor)
 
 ```
 SistemInformasiSumberDaya-Kelompok2/
@@ -10,38 +50,37 @@ SistemInformasiSumberDaya-Kelompok2/
 │   ├── config/              # Konfigurasi aplikasi
 │   │   ├── config.php       # Database & URL config
 │   │   ├── Database.php     # Database connection class
-│   │   └── Router.php       # Router configuration
-│   ├── controllers/         # Logic controller
+│   │   └── Router.php       # Enhanced MVC router with 60+ routes
+│   ├── controllers/         # MVC Controllers
+│   │   ├── Controller.php   # Base controller with view rendering
+│   │   ├── HomeController.php
+│   │   ├── AlumniController.php
+│   │   ├── ContactController.php
+│   │   ├── DashboardController.php
+│   │   └── ...              # All other controllers
 │   ├── models/              # Database models
-│   ├── views/               # Template HTML
+│   ├── views/               # Template HTML/PHP views
 │   │   ├── admin/           # Admin dashboard views
 │   │   ├── alumni/          # Alumni pages
-│   │   ├── home/            # Public pages
+│   │   ├── home/            # Public homepage
 │   │   ├── contact/         # Contact pages
-│   │   ├── fasilitas/       # Facility pages
+│   │   ├── errors/          # Error pages (404, 500, etc)
 │   │   └── templates/       # Header & footer templates
 │   ├── helpers/             # Helper functions
-│   ├── middleware/          # Middleware classes
-│   └── routes/              # Route definitions
-├── public/                  # Entry point (akses via browser)
-│   ├── index.php            # Homepage
-│   ├── api.php              # API endpoint
-│   ├── admin-*.php          # Admin pages
-│   ├── alumni.php           # Alumni page
-│   ├── contact.php          # Contact page
-│   ├── css/                 # Stylesheet
-│   ├── js/                  # JavaScript
-│   └── images/              # Images
+│   └── middleware/          # Middleware classes
+├── public/                  # Public web root
+│   ├── index.php            # 🎯 Single Entry Point (MVC)
+│   ├── api.php              # API Entry Point (legacy support)
+│   ├── .htaccess            # 🚀 URL Rewriting for clean URLs
+│   ├── css/                 # Stylesheets
+│   ├── js/                  # JavaScript files
+│   └── assets/              # Static assets
 ├── storage/
 │   ├── logs/                # Application logs
 │   └── uploads/             # User uploads
-├── database/                # Database migration files
-├── database.sql             # Database schema
-├── insert_alumni_dummy.sql  # Sample data
-├── SETUP_GUIDE.md           # Detailed setup guide
-├── API_DOCUMENTATION.md     # API documentation
-├── DATABASE_SCHEMA.md       # Database schema documentation
-└── README.md                # This file
+├── database/                # Database files
+├── MVC_REFACTOR_GUIDE.md    # 📖 MVC Usage guide
+└── README.md                # This file (updated)
 ```
 
 ## 📦 Persyaratan Sistem
@@ -178,37 +217,117 @@ mysql -u root -p sistem_manajemen_sumber_daya < insert_alumni_dummy.sql
 Atau via phpMyAdmin:
 - Import tab → Choose `insert_alumni_dummy.sql` → Go
 
-## 📱 Akses Aplikasi
+## 📱 Akses Aplikasi (MVC URLs)
 
-### 🏠 Homepage (Publik)
+⚠️ **PENTING: Gunakan URL MVC yang baru, bukan URL lama `.php`**
+
+### 🏠 **Homepage & Halaman Publik**
+
+**Base URL:**
 ```
 http://localhost/SistemInformasiSumberDaya-Kelompok2/public/
 ```
-Fitur publik:
-- Informasi Laboratorium
-- Data Alumni
-- Kontak Laboratorium
-- Jadwal Praktikum
 
-### 🔐 Admin Dashboard
-```
-http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin-dashboard.php
-```
-Menu Admin:
-- 📊 Dashboard (Statistik)
-- 👨‍💼 Data Asisten
-- 🎓 Data Alumni
-- 🏢 Data Fasilitas (Laboratorium)
-- 📚 Data Mata Kuliah
-- 📅 Jadwal Praktikum
-
-### 🔌 API Endpoints
-```
-http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api.php/[endpoint]
-```
-
-**Contoh Endpoints:**
+**Halaman Publik (Clean URLs):**
 ```bash
+# Homepage
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/
+
+# Alumni
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/alumni
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/alumni/123  # Detail alumni ID 123
+
+# Informasi Lab
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/laboratorium
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/laboratorium/456  # Detail lab ID 456
+
+# Halaman lainnya
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/contact
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/asisten
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/jadwal
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/praktikum
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/riset
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/profil
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/kepala-lab
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/sanksi
+```
+
+### 🔐 **Admin Dashboard (MVC)**
+
+**Admin Base:**
+```
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin
+```
+
+**Admin URLs (Clean):**
+```bash
+# Dashboard
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/dashboard
+
+# Alumni Management
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/alumni
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/alumni/create
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/alumni/123/edit
+
+# Asisten Management
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/asisten
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/asisten/create
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/asisten/koordinator
+
+# Jadwal Management
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/jadwal
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/jadwal/upload
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/jadwal/csv-upload
+
+# Lab Management
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/laboratorium
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/laboratorium/create
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/laboratorium/123/detail
+
+# Management Lainnya
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/matakuliah
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/manajemen
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/peraturan
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/admin/sanksi
+```
+
+### 🔌 **API Endpoints (Clean URLs)**
+
+**API Base:**
+```
+http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api/
+```
+
+**API URLs (RESTful):**
+```bash
+# Health Check
+GET http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api/health
+
+# Alumni API
+GET http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api/alumni
+GET http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api/alumni/123
+
+# Asisten API
+GET http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api/asisten
+
+# Lab API
+GET http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api/laboratorium
+GET http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api/laboratorium/456
+
+# Jadwal API
+GET http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api/jadwal
+```
+
+### ❌ **URL LAMA (TIDAK BERFUNGSI LAGI)**
+```bash
+# Jangan gunakan URL ini - sudah dihapus!
+❌ /alumni.php
+❌ /admin-alumni.php  
+❌ /contact.php
+❌ /api.php?route=alumni
+❌ /detail-alumni.php?id=123
+```
 # Health check
 curl http://localhost/SistemInformasiSumberDaya-Kelompok2/public/api.php/health
 

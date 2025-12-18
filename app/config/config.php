@@ -20,15 +20,40 @@ define('APP_ENV', 'development'); // development or production
 // Auto-detect URLs untuk fleksibilitas deployment
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$baseScriptPath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
-if (empty($baseScriptPath) || $baseScriptPath === '.') {
+
+// Detect environment dan set base paths accordingly
+if (strpos($_SERVER['SERVER_NAME'] ?? '', 'localhost') !== false && ($_SERVER['SERVER_PORT'] ?? 80) == 8000) {
+    // PHP Built-in server (localhost:8000)
     $baseScriptPath = '';
+    $publicPath = '';
+} else {
+    // XAMPP/Apache server (localhost/project/public/)
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '';
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    
+    // Extract project path from script name
+    if (strpos($scriptName, '/SistemInformasiSumberDaya-Kelompok2/') !== false) {
+        $baseScriptPath = '/SistemInformasiSumberDaya-Kelompok2';
+        $publicPath = '/SistemInformasiSumberDaya-Kelompok2/public';
+    } else {
+        $baseScriptPath = '';
+        $publicPath = '';
+    }
 }
 
 // Define URL constants
-define('BASE_URL', $protocol . $host . $baseScriptPath);
-define('API_URL', $baseScriptPath . '/public/api.php');
-define('ASSETS_URL', $baseScriptPath . '/public');
+if (!defined('BASE_URL')) {
+    define('BASE_URL', $protocol . $host . $baseScriptPath);
+}
+if (!defined('PUBLIC_URL')) {
+    define('PUBLIC_URL', $protocol . $host . $publicPath);
+}
+if (!defined('API_URL')) {
+    define('API_URL', $publicPath . '/api.php');
+}
+if (!defined('ASSETS_URL')) {
+    define('ASSETS_URL', $publicPath);
+}
 
 // Display errors (disable in production)
 if (APP_ENV === 'development') {

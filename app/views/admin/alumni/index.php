@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1><i class="fas fa-user-graduate"></i> Data Alumni Asisten</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-alumni-form.php" class="btn btn-success">
+    <a href="javascript:void(0)" onclick="navigate('admin/alumni/create')" class="btn btn-success">
         <i class="fas fa-plus"></i> Tambah Alumni
     </a>
 </div>
@@ -183,7 +183,7 @@ function loadAlumni() {
                         <td><span style="color: #555; font-size: 13px;">${item.pekerjaan || '—'}</span></td>
                         <td>
                             <div class="action-buttons">
-                                <a href="<?php echo BASE_URL; ?>/public/admin-alumni-form.php?id=${item.id}" 
+                                <a href="javascript:void(0)" onclick="navigate('admin/alumni/' + item.id + '/edit')" 
                                    class="btn-action btn-edit" title="Edit">
                                    <i class="fas fa-edit"></i>
                                 </a>
@@ -224,6 +224,14 @@ function hapusAlumni(id) {
             alert('✗ Error: ' + err.message);
             console.error(err);
         });
+    }
+}
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
     }
 }
 </script>

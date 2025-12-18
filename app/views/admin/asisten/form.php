@@ -41,7 +41,7 @@
 
 <div class="admin-header">
     <h1><i class="fas fa-user-edit"></i> Formulir Asisten</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-asisten.php" class="btn btn-secondary">
+    <a href="javascript:void(0)" onclick="navigate('admin/asisten')" class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Kembali
     </a>
 </div>
@@ -158,7 +158,7 @@ document.getElementById('asistenForm').addEventListener('submit', function(e) {
             const data = JSON.parse(text);
             if (data.status === 'success' || data.code === 201 || data.code === 200) {
                 msg.innerHTML = '<span style="color:green"><i class="fas fa-check-circle"></i> ' + (isEdit ? 'Data berhasil diupdate! ' : 'Berhasil disimpan! ') + 'Mengalihkan...</span>';
-                setTimeout(() => { window.location.href = BASE_URL + '/public/admin-asisten.php'; }, 1000);
+                setTimeout(() => { navigate('admin/asisten'); }, 1000);
             } else {
                 msg.innerHTML = '<span style="color:red"><i class="fas fa-exclamation-circle"></i> Gagal: ' + (data.message || 'Error validasi') + '</span>';
                 btn.disabled = false;
@@ -178,4 +178,12 @@ document.getElementById('asistenForm').addEventListener('submit', function(e) {
         btn.innerText = isEdit ? 'Update Data' : 'Simpan Data';
     });
 });
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
+}
 </script>

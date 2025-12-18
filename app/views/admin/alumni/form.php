@@ -41,7 +41,7 @@
 
 <div class="admin-header">
     <h1><i class="fas fa-user-graduate"></i> Formulir Alumni</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-alumni.php" class="btn btn-secondary">
+    <a href="javascript:void(0)" onclick="navigate('admin/alumni')" class="btn btn-secondary">
         <i class="fas fa-arrow-left"></i> Kembali
     </a>
 </div>
@@ -173,7 +173,7 @@ document.getElementById('alumniForm').addEventListener('submit', function(e) {
         console.log('Response:', data);
         if (data.status === 'success' || data.code === 201) {
             msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px; border: 1px solid #c3e6cb;"><i class="fas fa-check-circle"></i> Berhasil disimpan! Mengalihkan...</div>';
-            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-alumni.php'; }, 1500);
+            setTimeout(() => { navigate('admin/alumni'); }, 1500);
         } else {
             msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-exclamation-circle"></i> Gagal: ' + (data.message || 'Error tidak diketahui') + '</div>';
             btn.disabled = false;
@@ -187,4 +187,12 @@ document.getElementById('alumniForm').addEventListener('submit', function(e) {
         btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
     });
 });
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
+}
 </script>

@@ -1,10 +1,10 @@
 <div class="admin-header">
     <h1><i class="fas fa-users"></i> Data Asisten Laboratorium</h1>
     <div style="display: flex; gap: 10px;">
-        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-pilih-koordinator.php" class="btn btn-primary">
+        <a href="javascript:void(0)" onclick="navigate('admin/asisten/koordinator')" class="btn btn-primary">
             <i class="fas fa-user-check"></i> Pilih Koordinator
         </a>
-        <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php" class="btn btn-success">
+        <a href="javascript:void(0)" onclick="navigate('admin/asisten/create')" class="btn btn-success">
             <i class="fas fa-plus"></i> Tambah Asisten Baru
         </a>
     </div>
@@ -223,7 +223,7 @@ function loadAsisten() {
                         <td style="text-align: center;">${statusBadge}</td>
                         <td>
                             <div class="action-buttons">
-                                <a href="<?php echo BASE_URL; ?>/public/admin-asisten-form.php?id=${item.idAsisten}" 
+                                <a href="javascript:void(0)" onclick="navigate('admin/asisten/' + item.idAsisten + '/edit')" 
                                    class="btn-action btn-edit" title="Edit">
                                    <i class="fas fa-edit"></i>
                                 </a>
@@ -264,6 +264,14 @@ function hapusAsisten(id) {
             alert('✗ Error: ' + err.message);
             console.error(err);
         });
+    }
+}
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
     }
 }
 </script>

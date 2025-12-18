@@ -1,20 +1,85 @@
 <?php
-namespace App\Controllers;
-
-require_once __DIR__ . '/../models/AlumniModel.php';
+require_once CONTROLLER_PATH . '/Controller.php';
+require_once ROOT_PROJECT . '/app/models/AlumniModel.php';
 
 class AlumniController extends Controller {
     private $model;
+    
     public function __construct() {
-        $this->model = new \AlumniModel();
+        $this->model = new AlumniModel();
     }
 
-    public function index() {
+    /**
+     * Halaman publik alumni
+     */
+    public function index($params = []) {
+        $data = $this->model->getAll();
+        $this->view('alumni/index', ['alumni' => $data]);
+    }
+
+    /**
+     * Detail alumni publik
+     */
+    public function detail($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/alumni');
+            return;
+        }
+        
+        $alumni = $this->model->getById($id);
+        if (!$alumni) {
+            $this->redirect('/alumni');
+            return;
+        }
+        
+        $this->view('alumni/detail', ['alumni' => $alumni]);
+    }
+
+    /**
+     * Halaman admin alumni
+     */
+    public function adminIndex($params = []) {
+        $data = $this->model->getAll();
+        $this->view('admin/alumni/index', ['alumni' => $data]);
+    }
+
+    /**
+     * Form create admin
+     */
+    public function create($params = []) {
+        $this->view('admin/alumni/form', ['alumni' => null, 'action' => 'create']);
+    }
+
+    /**
+     * Form edit admin
+     */
+    public function edit($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/admin/alumni');
+            return;
+        }
+        
+        $alumni = $this->model->getById($id);
+        if (!$alumni) {
+            $this->setFlash('error', 'Data alumni tidak ditemukan');
+            $this->redirect('/admin/alumni');
+            return;
+        }
+        
+        $this->view('admin/alumni/form', ['alumni' => $alumni, 'action' => 'edit']);
+    }
+
+    /**
+     * API endpoints
+     */
+    public function apiIndex() {
         $data = $this->model->getAll();
         $this->success($data, 'Data alumni retrieved successfully');
     }
 
-    public function show($params) {
+    public function apiShow($params) {
         $id = $params['id'] ?? null;
         if (!$id) $this->error('ID tidak ditemukan', null, 400);
         $data = $this->model->getById($id);

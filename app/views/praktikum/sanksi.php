@@ -22,10 +22,11 @@
     function loadSanksiLab() {
         const sanksiList = document.getElementById('sanksiList');
         
-        // Fetch data dari API - gunakan path absolut
-        const apiUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
-            ? '/SistemInformasiSumberDaya-Kelompok2/public/api.php/sanksi-lab'
-            : '/api/sanksi-lab';
+        // Use consistent API URL format
+        const basePath = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
+            ? '/SistemInformasiSumberDaya-Kelompok2/public/'
+            : '/';
+        const apiUrl = basePath + '?route=api/sanksi-lab';
         
         fetch(apiUrl)
             .then(response => {

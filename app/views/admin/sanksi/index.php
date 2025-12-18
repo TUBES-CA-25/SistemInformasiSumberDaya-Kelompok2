@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Manajemen Sanksi Lab</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-sanksi-form.php" class="btn btn-add">
+    <a href="javascript:void(0)" onclick="navigate('admin/sanksi/create')" class="btn btn-add">
         <i class="fas fa-plus"></i> Tambah Sanksi
     </a>
 </div>
@@ -134,7 +134,7 @@ function renderTable(data) {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="<?php echo BASE_URL; ?>/public/admin-sanksi-form.php?id=${item.id}" 
+                        <a href="javascript:void(0)" onclick="navigate('admin/sanksi/' + item.id + '/edit')" 
                            class="btn btn-edit btn-icon" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
@@ -195,5 +195,13 @@ function escapeHtml(text) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
 }
 </script>

@@ -38,10 +38,8 @@
     function loadKoordinator() {
         const koordinatorCard = document.getElementById('koordinatorCard');
         
-        // Fetch data dari API - gunakan path absolut
-        const apiUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
-            ? '/SistemInformasiSumberDaya-Kelompok2/public/api.php/asisten'
-            : '/api/asisten';
+        // Fetch data dari API
+        const apiUrl = API_URL + '/asisten';
         
         fetch(apiUrl)
             .then(response => response.json())
@@ -84,10 +82,8 @@
     function loadAsisten() {
         const asistenList = document.getElementById('asistenList');
         
-        // Fetch data dari API - gunakan path absolut
-        const apiUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
-            ? '/SistemInformasiSumberDaya-Kelompok2/public/api.php/asisten'
-            : '/api/asisten';
+        // Fetch data dari API
+        const apiUrl = API_URL + '/asisten';
         
         fetch(apiUrl)
             .then(response => {

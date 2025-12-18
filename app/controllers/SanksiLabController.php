@@ -1,7 +1,6 @@
 <?php
-namespace App\Controllers;
-
-require_once __DIR__ . '/../models/SanksiLabModel.php';
+require_once CONTROLLER_PATH . '/Controller.php';
+require_once ROOT_PROJECT . '/app/models/SanksiLabModel.php';
 
 class SanksiLabController extends Controller {
     private $model;
@@ -9,17 +8,32 @@ class SanksiLabController extends Controller {
         $this->model = new \SanksiLabModel();
     }
 
-    public function index() {
+    public function apiIndex() {
         $data = $this->model->getAll();
         $this->success($data, 'Data sanksi lab retrieved successfully');
     }
 
-    public function show($params) {
+    public function apiShow($params) {
         $id = $params['id'] ?? null;
-        if (!$id) $this->error('ID tidak ditemukan', null, 400);
+        if (!$id) {
+            $this->error('ID tidak ditemukan', null, 400);
+            return;
+        }
         $data = $this->model->getById($id);
-        if (!$data) $this->error('Data tidak ditemukan', null, 404);
+        if (!$data) {
+            $this->error('Data tidak ditemukan', null, 404);
+            return;
+        }
         $this->success($data, 'Sanksi lab retrieved successfully');
+    }
+
+    // Legacy methods
+    public function index() {
+        return $this->apiIndex();
+    }
+
+    public function show($params) {
+        return $this->apiShow($params);
     }
 
     public function store() {

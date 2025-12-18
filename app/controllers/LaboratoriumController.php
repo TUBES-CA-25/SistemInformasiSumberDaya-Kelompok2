@@ -1,6 +1,5 @@
 <?php
-namespace App\Controllers;
-
+require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../models/LaboratoriumModel.php';
 
 class LaboratoriumController extends Controller {
@@ -10,6 +9,29 @@ class LaboratoriumController extends Controller {
         $this->model = new \LaboratoriumModel();
     }
 
+    // API methods
+    public function apiIndex() {
+        $data = $this->model->getAll();
+        $this->success($data, 'Data Laboratorium retrieved successfully');
+    }
+
+    public function apiShow($params) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->error('ID laboratorium tidak ditemukan', null, 400);
+            return;
+        }
+
+        $data = $this->model->getById($id, 'idLaboratorium');
+        if (!$data) {
+            $this->error('Laboratorium tidak ditemukan', null, 404);
+            return;
+        }
+
+        $this->success($data, 'Laboratorium retrieved successfully');
+    }
+
+    // Web view methods
     public function index() {
         $data = $this->model->getAll();
         $this->success($data, 'Data Laboratorium retrieved successfully');

@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Jadwal Praktikum</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-jadwal.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="javascript:void(0)" onclick="navigate('admin/jadwal')" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
@@ -127,7 +127,7 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     .then(data => {
         if (data.status === 'success' || data.code === 201) { 
             msg.innerHTML = '<span style="color:green">✓ Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-jadwal.php'; }, 1500);
+            setTimeout(() => { navigate('admin/jadwal'); }, 1500);
         } else {
             msg.innerHTML = '<span style="color:red">✗ Gagal: ' + (data.message || 'Error server') + '</span>';
             btn.disabled = false;
@@ -141,4 +141,12 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
         btn.innerText = 'Simpan Jadwal';
     });
 });
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
+}
 </script>

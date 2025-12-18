@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1 id="formTitle">Formulir Mata Kuliah</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-matakuliah.php" class="btn" style="background: #95a5a6;">
+    <a href="javascript:void(0)" onclick="navigate('admin/matakuliah')" class="btn" style="background: #95a5a6;">
         <i class="fas fa-arrow-left"></i> Kembali
     </a>
 </div>
@@ -70,7 +70,7 @@ function loadData(id) {
             document.getElementById('sksKuliah').value = data.sksKuliah;
         } else {
             alert('Data tidak ditemukan');
-            window.location.href = BASE_URL + '/public/admin-matakuliah.php';
+            navigate('admin/matakuliah');
         }
     })
     .catch(err => console.error(err));
@@ -104,7 +104,7 @@ document.getElementById('mkForm').addEventListener('submit', function(e) {
     .then(data => {
         if (data.status === 'success' || data.code === 200 || data.code === 201) { 
             msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px;">Berhasil disimpan! Redirecting...</div>';
-            setTimeout(() => { window.location.href = BASE_URL + '/public/admin-matakuliah.php'; }, 1000);
+            setTimeout(() => { navigate('admin/matakuliah'); }, 1000);
         } else {
             msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Gagal: ' + (data.message || 'Terjadi kesalahan') + '</div>';
             btn.disabled = false;
@@ -118,4 +118,12 @@ document.getElementById('mkForm').addEventListener('submit', function(e) {
         btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
     });
 });
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
+}
 </script>

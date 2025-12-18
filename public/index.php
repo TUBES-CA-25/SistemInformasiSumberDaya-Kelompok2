@@ -1,22 +1,28 @@
 <?php
-// 1. Tampilkan Error (Agar kalau ada salah ketik ketahuan)
+/**
+ * Single Entry Point untuk MVC Application
+ * Semua request akan masuk melalui file ini
+ */
+
+// Error reporting untuk development
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// 2. Definisi Folder Utama (Root)
-// Mengambil folder induk dari folder public
-define('ROOT_PROJECT', dirname(__DIR__)); 
+// Define constants
+define('ROOT_PROJECT', dirname(__DIR__));
+define('APP_PATH', ROOT_PROJECT . '/app');
+define('VIEW_PATH', APP_PATH . '/views');
+define('CONTROLLER_PATH', APP_PATH . '/controllers');
 
-// 3. Panggil Halaman Home (Sementara langsung panggil View dulu)
-// Karena Backend Controller belum siap, kita "bypass" langsung ke tampilan.
+// Autoload classes
+require_once ROOT_PROJECT . '/vendor/autoload.php';
+require_once APP_PATH . '/config/config.php';
+require_once APP_PATH . '/config/Database.php';
+require_once APP_PATH . '/config/Router.php';
+require_once CONTROLLER_PATH . '/Controller.php';
 
-// Panggil Header
-require_once ROOT_PROJECT . '/app/views/templates/header.php';
-
-// Panggil Isi Halaman Home
-require_once ROOT_PROJECT . '/app/views/home/index.php';
-
-// Panggil Footer
-require_once ROOT_PROJECT . '/app/views/templates/footer.php';
+// Initialize and dispatch router
+$router = new Router();
+$router->dispatch();
 ?>

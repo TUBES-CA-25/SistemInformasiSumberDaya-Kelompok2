@@ -1,7 +1,6 @@
 <?php
-namespace App\Controllers;
-
-require_once __DIR__ . '/../models/JadwalPraktikumModel.php';
+require_once CONTROLLER_PATH . '/Controller.php';
+require_once ROOT_PROJECT . '/app/models/JadwalPraktikumModel.php';
 require_once __DIR__ . '/../models/MatakuliahModel.php';
 require_once __DIR__ . '/../models/LaboratoriumModel.php';
 
@@ -9,7 +8,6 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
-use Exception;
 
 class JadwalPraktikumController extends Controller {
     private $model;
@@ -22,12 +20,86 @@ class JadwalPraktikumController extends Controller {
         $this->laboratoriumModel = new \LaboratoriumModel();
     }
 
-    public function index() {
+    /**
+     * Halaman publik jadwal
+     */
+    public function index($params = []) {
+        $data = $this->model->getAll();
+        $this->view('praktikum/jadwal', ['jadwal' => $data]);
+    }
+
+    /**
+     * Halaman admin jadwal
+     */
+    public function adminIndex($params = []) {
+        $data = $this->model->getAll();
+        $this->view('admin/jadwal/index', ['jadwal' => $data]);
+    }
+
+    /**
+     * Form create admin
+     */
+    public function create($params = []) {
+        $matakuliah = $this->matakuliahModel->getAll();
+        $laboratorium = $this->laboratoriumModel->getAll();
+        $this->view('admin/jadwal/form', [
+            'jadwal' => null, 
+            'action' => 'create',
+            'matakuliah' => $matakuliah,
+            'laboratorium' => $laboratorium
+        ]);
+    }
+
+    /**
+     * Form edit admin
+     */
+    public function edit($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/admin/jadwal');
+            return;
+        }
+        
+        $jadwal = $this->model->getById($id);
+        if (!$jadwal) {
+            $this->setFlash('error', 'Data jadwal tidak ditemukan');
+            $this->redirect('/admin/jadwal');
+            return;
+        }
+        
+        $matakuliah = $this->matakuliahModel->getAll();
+        $laboratorium = $this->laboratoriumModel->getAll();
+        $this->view('admin/jadwal/form', [
+            'jadwal' => $jadwal, 
+            'action' => 'edit',
+            'matakuliah' => $matakuliah,
+            'laboratorium' => $laboratorium
+        ]);
+    }
+
+    /**
+     * Upload form
+     */
+    public function uploadForm($params = []) {
+        $this->view('admin/jadwal/upload');
+    }
+
+    /**
+     * CSV Upload form
+     */
+    public function csvUploadForm($params = []) {
+        $this->view('admin/jadwal/csv-upload');
+    }
+
+    /**
+     * API endpoints
+     */
+    public function apiIndex() {
         $data = $this->model->getAll();
         $this->success($data, 'Data Jadwal Praktikum retrieved successfully');
     }
 
-    public function show($params) {
+    public function apiShow($params) {
         $id = $params['id'] ?? null;
         if (!$id) {
             $this->error('ID jadwal tidak ditemukan', null, 400);
@@ -333,17 +405,17 @@ class JadwalPraktikumController extends Controller {
                 $sheet->setCellValue($cell, $header);
             }
 
-            // Add sample data
-            $sheet->setCellValue('A2', 'Pemrograman Web');
-            $sheet->setCellValue('B2', 'Lab Komputer 1');
+            // Add sample data with REAL database values
+            $sheet->setCellValue('A2', 'Microcontroller');
+            $sheet->setCellValue('B2', 'Microcontroller');
             $sheet->setCellValue('C2', 'Senin');
             $sheet->setCellValue('D2', '08:00');
             $sheet->setCellValue('E2', '10:00');
             $sheet->setCellValue('F2', 'A');
             $sheet->setCellValue('G2', 'Aktif');
 
-            $sheet->setCellValue('A3', 'Basis Data');
-            $sheet->setCellValue('B3', 'Lab Komputer 2');
+            $sheet->setCellValue('A3', 'Struktur Data');
+            $sheet->setCellValue('B3', 'Data Science');
             $sheet->setCellValue('C3', 'Selasa');
             $sheet->setCellValue('D3', '10:00');
             $sheet->setCellValue('E3', '12:00');
@@ -362,7 +434,7 @@ class JadwalPraktikumController extends Controller {
                 $sheet->getColumnDimension($col)->setAutoSize(true);
             }
 
-            // Add instructions in separate sheet
+            // Add instructions in separate sheet with DATABASE VALUES
             $instructionSheet = $spreadsheet->createSheet();
             $instructionSheet->setTitle('Petunjuk');
             
@@ -375,19 +447,46 @@ class JadwalPraktikumController extends Controller {
                 'A7' => '5. Waktu Selesai: Format HH:MM (contoh: 10:00)',
                 'A8' => '6. Kelas: Kelas praktikum (contoh: A, B, C)',
                 'A9' => '7. Status: Aktif atau Nonaktif',
-                'A11' => 'CATATAN:',
-                'A12' => '- Pastikan mata kuliah dan laboratorium sudah terdaftar di sistem',
-                'A13' => '- Jangan mengubah nama kolom di baris pertama',
-                'A14' => '- Hapus baris contoh sebelum mengupload',
-                'A15' => '- File harus berformat .xlsx atau .xls'
+                'A11' => 'DAFTAR MATA KULIAH YANG TERDAFTAR:',
+                'A13' => 'DAFTAR LABORATORIUM YANG TERDAFTAR:',
             ];
 
             foreach ($instructions as $cell => $instruction) {
                 $instructionSheet->setCellValue($cell, $instruction);
             }
 
+            // Add list of available mata kuliah
+            $matakuliahs = $this->matakuliahModel->getAll();
+            $row = 12;
+            foreach ($matakuliahs as $mk) {
+                $instructionSheet->setCellValue('A' . $row, '- ' . $mk['namaMatakuliah']);
+                $row++;
+            }
+
+            // Add list of available laboratorium
+            $row = 14;
+            $laboratoriums = $this->laboratoriumModel->getAll();
+            foreach ($laboratoriums as $lab) {
+                $instructionSheet->setCellValue('A' . $row, '- ' . $lab['nama']);
+                $row++;
+            }
+
+            $row += 2;
+            $instructionSheet->setCellValue('A' . $row, 'CATATAN:');
+            $row++;
+            $instructionSheet->setCellValue('A' . $row, '- Pastikan nama mata kuliah dan laboratorium PERSIS seperti daftar di atas');
+            $row++;
+            $instructionSheet->setCellValue('A' . $row, '- Jangan mengubah nama kolom di baris pertama');
+            $row++;
+            $instructionSheet->setCellValue('A' . $row, '- Hapus baris contoh (baris 2 dan 3) sebelum mengupload');
+            $row++;
+            $instructionSheet->setCellValue('A' . $row, '- File harus berformat .xlsx atau .xls');
+
             $instructionSheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
             $instructionSheet->getStyle('A11')->getFont()->setBold(true);
+            $instructionSheet->getStyle('A13')->getFont()->setBold(true);
+            $instructionSheet->getStyle('A' . ($row - 4))->getFont()->setBold(true);
+            
             foreach (range('A', 'A') as $col) {
                 $instructionSheet->getColumnDimension($col)->setAutoSize(true);
             }

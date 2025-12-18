@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Manajemen Kepala Laboratorium</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-manajemen-form.php" class="btn btn-primary">+ Tambah Kepala Lab</a>
+    <a href="javascript:void(0)" onclick="navigate('admin/manajemen/create')" class="btn btn-primary">+ Tambah Kepala Lab</a>
 </div>
 
 <div class="table-container">
@@ -187,7 +187,7 @@ function loadManajemen() {
                         <td><span style="color: #666; font-size: 13px;">${item.jabatan || '—'}</span></td>
                         <td>
                             <div class="action-buttons">
-                                <a href="<?php echo BASE_URL; ?>/public/admin-manajemen-form.php?id=${item.idManajemen}" 
+                                <a href="javascript:void(0)" onclick="navigate('admin/manajemen/' + item.idManajemen + '/edit')" 
                                    class="btn-edit">✏️ Edit</a>
                                 <button onclick="hapusManajemen(${item.idManajemen})" 
                                         class="btn-delete" 
@@ -226,6 +226,14 @@ function hapusManajemen(id) {
             console.error('Error:', error);
             alert('Terjadi kesalahan');
         });
+    }
+}
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
     }
 }
 </script>

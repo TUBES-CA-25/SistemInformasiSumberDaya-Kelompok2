@@ -10,6 +10,10 @@ ini_set('display_errors', 1);
 // Define paths
 define('BASE_PATH', dirname(dirname(__FILE__)));
 define('APP_PATH', BASE_PATH . '/app');
+define('ROOT_PROJECT', BASE_PATH);
+define('CONTROLLER_PATH', APP_PATH . '/controllers');
+define('MODEL_PATH', APP_PATH . '/models');
+define('VIEW_PATH', APP_PATH . '/views');
 
 // Include configuration
 require_once APP_PATH . '/config/config.php';
@@ -56,32 +60,34 @@ error_log("API Debug - Parsed path: $path");
 // Route mapping dengan HTTP METHOD
 $routes = [
     'GET' => [
-            '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'index'],
-            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'show'],
-            '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'index'],
-            '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'show'],
-            '/alumni' => ['controller' => 'AlumniController', 'method' => 'index'],
-            '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'show'],
+            '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'apiIndex'],
+            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'apiShow'],
+            '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'apiIndex'],
+            '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'apiShow'],
+            '/alumni' => ['controller' => 'AlumniController', 'method' => 'apiIndex'],
+            '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'apiShow'],
         '/health' => ['controller' => 'HealthController', 'method' => 'check'],
-        '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'index'],
-        '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'show'],
-        '/asisten' => ['controller' => 'AsistenController', 'method' => 'index'],
-        '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'show'],
+        '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'apiIndex'],
+        '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'apiShow'],
+        '/asisten' => ['controller' => 'AsistenController', 'method' => 'apiIndex'],
+        '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'apiShow'],
         '/asisten/{id}/matakuliah' => ['controller' => 'AsistenController', 'method' => 'matakuliah'],
-        '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'index'],
-        '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'show'],
+        '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'apiIndex'],
+        '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'apiShow'],
         '/matakuliah/{id}/asisten' => ['controller' => 'MatakuliahController', 'method' => 'asisten'],
-        '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'index'],
-        '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'show'],
+        '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiIndex'],
+        '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiShow'],
+        '/jadwal-praktikum' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiIndex'],
+        '/jadwal-praktikum/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiShow'],
         '/jadwal-praktikum/template' => ['controller' => 'JadwalPraktikumController', 'method' => 'downloadTemplate'],
         '/jadwal-praktikum/csv-template' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'downloadCSVTemplate'],
-        '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'index'],
-        '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'show'],
+        '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'apiIndex'],
+        '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'apiShow'],
         '/informasi/tipe/{type}' => ['controller' => 'InformasiLabController', 'method' => 'byType'],
         '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'getLatest'],
         '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'show'],
-        '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'index'],
-        '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'show'],
+        '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'apiIndex'],
+        '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'apiShow'],
         '/kontak' => ['controller' => 'KontakController', 'method' => 'getLatest'],
         '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'show'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'index'],
@@ -163,7 +169,7 @@ if (isset($routes[$method])) {
         
         if (preg_match('/^' . $pattern . '$/', $path, $matches)) {
             $matched = true;
-            $controller_class = 'App\\Controllers\\' . $handler['controller'];
+            $controller_class = $handler['controller']; // Remove namespace
             $action_method = $handler['method'];
             
             // Extract parameters

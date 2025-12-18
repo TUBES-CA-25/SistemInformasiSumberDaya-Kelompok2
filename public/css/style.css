@@ -903,3 +903,274 @@ footer { background: #f9f9f9; padding: 60px 0; margin-top: 50px; font-size: 0.9r
 @media (max-width: 800px) {
     .contact-grid { grid-template-columns: 1fr; } /* Jadi satu kolom di HP */
 }
+
+/* Kepala Laboratorium Styles */
+.kepala-lab-grid {
+    margin-top: 40px;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 30px;
+    margin-bottom: 50px;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.kepala-lab-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex: 1 1 calc(33.333% - 20px);
+    min-width: 250px;
+    max-width: 350px;
+}
+
+.kepala-lab-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+.kepala-lab-card .profile-image {
+    width: 160px;
+    margin: 0 auto 20px auto;
+}
+
+.kepala-lab-card .profile-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.kepala-lab-card .profile-info h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.kepala-lab-card .profile-info .title {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+
+.kepala-lab-profile {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    padding: 40px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.profile-image {
+    flex-shrink: 0;
+    width: 300px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 10px;
+}
+
+.profile-info .title {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.contact-info {
+    margin-bottom: 40px;
+}
+
+.contact-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.contact-item strong {
+    min-width: 80px;
+    color: #111;
+    font-weight: 600;
+}
+
+.responsibilities h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 15px;
+}
+
+.responsibilities ul {
+    list-style: none;
+    padding: 0;
+}
+
+.responsibilities li {
+    padding: 8px 0;
+    padding-left: 20px;
+    position: relative;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.responsibilities li::before {
+    content: '•';
+    color: #111;
+    font-size: 1.2rem;
+    position: absolute;
+    left: 0;
+    top: 5px;
+}
+
+.vision-message {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+}
+
+.vision-message h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 20px;
+}
+
+.vision-message blockquote {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    font-style: italic;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    padding: 0 30px;
+}
+
+.vision-message blockquote::before,
+.vision-message blockquote::after {
+    content: '"';
+    font-size: 3rem;
+    color: #ccc;
+    position: absolute;
+    font-family: serif;
+}
+
+.vision-message blockquote::before {
+    top: -10px;
+    left: 0;
+}
+
+.vision-message blockquote::after {
+    bottom: -30px;
+    right: 0;
+}
+
+/* Responsive untuk Kepala Lab */
+@media (max-width: 480px) {
+    .kepala-lab-grid {
+        flex-direction: column !important;
+        gap: 20px;
+    }
+    
+    .kepala-lab-card {
+        max-width: 100%;
+        min-width: auto;
+        padding: 25px 20px;
+    }
+    
+    .kepala-lab-card .profile-image {
+        width: 150px;
+    }
+    
+    .kepala-lab-card .profile-image img {
+        height: 190px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .kepala-lab-card {
+        min-width: 200px;
+        padding: 20px 15px;
+    }
+    
+    .kepala-lab-card .profile-image {
+        width: 140px;
+    }
+    
+    .kepala-lab-card .profile-image img {
+        height: 180px;
+    }
+    
+    .kepala-lab-card .profile-info h3 {
+        font-size: 1.1rem;
+    }
+    
+    .kepala-lab-card .profile-info .title {
+        font-size: 0.85rem;
+    }
+}
+    
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+    
+    .profile-image {
+        width: 250px;
+        margin: 0 auto;
+    }
+    
+    .profile-image img {
+        height: 300px;
+    }
+    
+    .contact-item {
+        flex-direction: column;
+        text-align: left;
+        gap: 5px;
+    }
+    
+    .vision-message {
+        padding: 30px 20px;
+    }
+    
+    .vision-message blockquote {
+        font-size: 1rem;
+        padding: 0 20px;
+    }
+}

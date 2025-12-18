@@ -1,34 +1,80 @@
 <?php
-namespace App\Controllers;
-
-use \Exception;
-
-require_once __DIR__ . '/../models/ManajemenModel.php';
+require_once CONTROLLER_PATH . '/Controller.php';
+require_once ROOT_PROJECT . '/app/models/ManajemenModel.php';
 
 class ManajemenController extends Controller {
     private $model;
 
     public function __construct() {
-        $this->model = new \ManajemenModel();
+        $this->model = new ManajemenModel();
     }
 
-    public function index() {
+    /**
+     * Halaman admin manajemen
+     */
+    public function adminIndex($params = []) {
+        $data = $this->model->getAll();
+        $this->view('admin/manajemen/index', ['manajemen' => $data]);
+    }
+
+    /**
+     * Form create admin
+     */
+    public function create($params = []) {
+        $this->view('admin/manajemen/form', ['manajemen' => null, 'action' => 'create']);
+    }
+
+    /**
+     * Form edit admin
+     */
+    public function edit($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/admin/manajemen');
+            return;
+        }
+        
+        $manajemen = $this->model->getById($id, 'idManajemen');
+        if (!$manajemen) {
+            $this->setFlash('error', 'Data manajemen tidak ditemukan');
+            $this->redirect('/admin/manajemen');
+            return;
+        }
+        
+        $this->view('admin/manajemen/form', ['manajemen' => $manajemen, 'action' => 'edit']);
+    }
+
+    /**
+     * API endpoints
+     */
+    public function apiIndex() {
         $data = $this->model->getAll();
         $this->success($data, 'Data Manajemen retrieved successfully');
     }
 
-    public function show($params) {
+    public function apiShow($params) {
         $id = $params['id'] ?? null;
         if (!$id) {
             $this->error('ID manajemen tidak ditemukan', null, 400);
+            return;
         }
 
         $data = $this->model->getById($id, 'idManajemen');
         if (!$data) {
             $this->error('Manajemen tidak ditemukan', null, 404);
+            return;
         }
 
         $this->success($data, 'Manajemen retrieved successfully');
+    }
+
+    // Legacy index/show for backwards compatibility
+    public function index() {
+        return $this->apiIndex();
+    }
+
+    public function show($params) {
+        return $this->apiShow($params);
     }
 
     public function store() {

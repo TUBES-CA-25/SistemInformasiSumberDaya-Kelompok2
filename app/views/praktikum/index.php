@@ -22,12 +22,8 @@
     function loadPeraturanLab() {
         const rulesList = document.getElementById('rulesList');
         
-        // Fetch data dari API - gunakan path absolut
-        const apiUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
-            ? '/SistemInformasiSumberDaya-Kelompok2/public/api.php/tata-tertib'
-            : '/api/tata-tertib';
-        
-        fetch(apiUrl)
+        // Use API_URL constant
+        fetch(API_URL + '/peraturan-lab')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -45,7 +41,6 @@
                         ruleItem.className = 'rules-item';
                         
                         // Gunakan image dari database atau placeholder
-                        // Path gambar: /SistemInformasiSumberDaya-Kelompok2/storage/uploads/{filename}
                         let imageUrl;
                         if (rule.gambar) {
                             const baseUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2')
@@ -60,13 +55,13 @@
                             <div class="rules-image">
                                 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23ddd' width='400' height='300'/%3E%3C/svg%3E" 
                                      data-src="${imageUrl}" 
-                                     alt="${rule.namaFile}" 
+                                     alt="${rule.judul}" 
                                      loading="lazy"
                                      onerror="this.src='https://placehold.co/400x300/7f8c8d/white?text=Peraturan'">
                             </div>
                             <div class="rules-content">
-                                <h3>${escapeHtml(rule.namaFile)}</h3>
-                                <p>${escapeHtml(rule.uraFile || 'Lihat peraturan lengkap untuk informasi detail.')}</p>
+                                <h3>${escapeHtml(rule.judul)}</h3>
+                                <p>${escapeHtml(rule.deskripsi || 'Lihat peraturan lengkap untuk informasi detail.')}</p>
                             </div>
                         `;
                         

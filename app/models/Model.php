@@ -4,6 +4,8 @@
  * Parent class untuk semua model
  */
 
+require_once __DIR__ . '/../config/Database.php';
+
 class Model {
     public $db;
     protected $table;

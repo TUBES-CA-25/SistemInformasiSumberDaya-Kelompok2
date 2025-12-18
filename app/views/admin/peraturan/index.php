@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Manajemen Peraturan Lab</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-peraturan-form.php" class="btn btn-add">
+    <a href="javascript:void(0)" onclick="navigate('admin/peraturan/create')" class="btn btn-add">
         <i class="fas fa-plus"></i> Tambah Peraturan
     </a>
 </div>
@@ -90,7 +90,7 @@ function loadPeraturan() {
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i><p style="color: #999; margin-top: 10px;">Memuat data...</p></td></tr>';
     
-    fetch(API_URL + '/tata-tertib')
+    fetch(API_URL + '/peraturan-lab')
     .then(res => res.json())
     .then(response => {
         if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
@@ -117,8 +117,8 @@ function renderTable(data) {
     }
     
     data.forEach((item, index) => {
-        const deskripsi = item.uraFile ? (item.uraFile.length > 60 ? item.uraFile.substring(0, 60) + '...' : item.uraFile) : '-';
-        const tanggal = item.tanggalUpload ? new Date(item.tanggalUpload).toLocaleDateString('id-ID', {
+        const deskripsi = item.deskripsi ? (item.deskripsi.length > 60 ? item.deskripsi.substring(0, 60) + '...' : item.deskripsi) : '-';
+        const tanggal = item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', {
             day: 'numeric', month: 'short', year: 'numeric'
         }) : '-';
 
@@ -126,7 +126,7 @@ function renderTable(data) {
             <tr>
                 <td style="text-align: center;">${index + 1}</td>
                 <td>
-                    <span class="peraturan-name">${escapeHtml(item.namaFile)}</span>
+                    <span class="peraturan-name">${escapeHtml(item.judul)}</span>
                 </td>
                 <td>${escapeHtml(deskripsi)}</td>
                 <td style="text-align: center;">
@@ -134,11 +134,11 @@ function renderTable(data) {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="<?php echo BASE_URL; ?>/public/admin-peraturan-form.php?id=${item.idTataTerib}" 
+                        <a href="javascript:void(0)" onclick="navigate('admin/peraturan/' + item.id + '/edit')" 
                            class="btn btn-edit btn-icon" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <button onclick="hapusPeraturan(${item.idTataTerib})" 
+                        <button onclick="hapusPeraturan(${item.id})" 
                                 class="btn btn-delete btn-icon" title="Hapus">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -160,8 +160,8 @@ function filterTable(searchTerm) {
     
     const filteredData = allPeraturanData.filter(item => {
         return (
-            (item.namaFile && item.namaFile.toLowerCase().includes(searchTerm)) ||
-            (item.uraFile && item.uraFile.toLowerCase().includes(searchTerm))
+            (item.judul && item.judul.toLowerCase().includes(searchTerm)) ||
+            (item.deskripsi && item.deskripsi.toLowerCase().includes(searchTerm))
         );
     });
     
@@ -170,7 +170,7 @@ function filterTable(searchTerm) {
 
 function hapusPeraturan(id) {
     if(confirm('Apakah Anda yakin ingin menghapus peraturan ini?')) {
-        fetch(API_URL + '/tata-tertib/' + id, { method: 'DELETE' })
+        fetch(API_URL + '/peraturan-lab/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {
@@ -195,5 +195,13 @@ function escapeHtml(text) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
 }
 </script>

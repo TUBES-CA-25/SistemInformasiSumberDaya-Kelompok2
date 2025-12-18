@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Manajemen Kepala Lab</h1>
-    <a href="<?php echo BASE_URL; ?>/public/admin-manajemen.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="javascript:void(0)" onclick="navigate('admin/manajemen')" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
@@ -188,7 +188,7 @@ document.getElementById('manajemenForm').addEventListener('submit', function(e) 
             const data = JSON.parse(text);
             if (data.status === 'success' || data.code === 201 || data.code === 200) {
                 msg.innerHTML = '<span style="color:green">' + (isEdit ? 'Data berhasil diupdate! ' : 'Berhasil disimpan! ') + 'Mengalihkan...</span>';
-                setTimeout(() => { window.location.href = BASE_URL + '/public/admin-manajemen.php'; }, 1000);
+                setTimeout(() => { navigate('admin/manajemen'); }, 1000);
             } else {
                 console.error('API Error:', data);
                 msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Error validasi') + '</span>';
@@ -209,4 +209,12 @@ document.getElementById('manajemenForm').addEventListener('submit', function(e) 
         btn.innerText = isEdit ? 'Update Data' : 'Simpan Data';
     });
 });
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
+}
 </script>
