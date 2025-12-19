@@ -10,8 +10,10 @@
     // Config sudah dimuat di index.php, tidak perlu dimuat lagi
     ?>
     
-    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/css/style.css?v=<?php echo time(); ?>">
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="/SistemInformasiSumberDaya-Kelompok2/public/css/style.css?v=<?php echo time(); ?>">
     
     <script>
         // Global variable untuk semua JavaScript
@@ -101,7 +103,5 @@
             window.location.href = basePath;
         }
     </script>
-        </div>
-    </nav>
     
     <main>

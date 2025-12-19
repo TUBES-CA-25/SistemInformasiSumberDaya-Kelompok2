@@ -249,13 +249,4 @@ function hapusJadwal(id, event) {
     }
 }
 
-function navigate(route) {
-    if (window.location.port === '8000') {
-        // PHP built-in server
-        window.location.href = '/index.php?route=' + route;
-    } else {
-        // XAMPP/Apache
-        window.location.href = '/' + route;
-    }
-}
 </script>

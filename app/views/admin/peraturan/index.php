@@ -210,11 +210,4 @@ function escapeHtml(text) {
         .replace(/'/g, "&#039;");
 }
 
-function navigate(route) {
-    if (window.location.port === '8000') {
-        window.location.href = '/index.php?route=' + route;
-    } else {
-        window.location.href = '/' + route;
-    }
-}
 </script>
