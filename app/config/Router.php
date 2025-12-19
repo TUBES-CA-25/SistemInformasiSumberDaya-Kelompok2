@@ -1,6 +1,6 @@
 <?php
 /**
- * Router Class
+ * Router Class untuk MVC Application
  * Menangani routing dan dispatch request ke controller
  */
 
@@ -8,97 +8,212 @@ class Router {
     private $routes = [];
     private $method;
     private $path;
-    private $controller;
-    private $action;
     private $params = [];
 
     public function __construct() {
         $this->method = $_SERVER['REQUEST_METHOD'];
+        $this->path = $this->getPath();
+        $this->defineRoutes();
+    }
+
+    /**
+     * Get clean path from request
+     */
+    private function getPath() {
+        $path = $_GET['route'] ?? '/';
         
-        // Get route dari query parameter atau REQUEST_URI
-        if (isset($_GET['route'])) {
-            $this->path = $_GET['route'];
-        } else {
-            $this->path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-            $this->path = str_replace('/SistemManagementSumberDaya/public/api.php', '', $this->path);
+        // Clean path
+        $path = '/' . trim($path, '/');
+        if ($path === '/') {
+            return '/';
         }
         
-        if (empty($this->path) || $this->path === '/api.php') {
-            $this->path = '/';
-        }
+        return $path;
+    }
+
+    /**
+     * Define all application routes
+     */
+    private function defineRoutes() {
+        // Public routes
+        $this->get('/', 'HomeController', 'index');
+        $this->get('/home', 'HomeController', 'index');
+        $this->get('/contact', 'ContactController', 'index');
+        $this->get('/alumni', 'AlumniController', 'index');
+        $this->get('/alumni/{id}', 'AlumniController', 'detail');
+        $this->get('/asisten', 'AsistenController', 'index');
+        $this->get('/jadwal', 'JadwalPraktikumController', 'index');
+        $this->get('/laboratorium', 'InformasiLabController', 'index');
+        $this->get('/laboratorium/{id}', 'InformasiLabController', 'detail');
+        $this->get('/praktikum', 'PraktikumController', 'index');
+        $this->get('/praktikum/sanksi', 'SanksiController', 'index');
+        $this->get('/peraturan', 'PeraturanController', 'index');
+        $this->get('/riset', 'RisetController', 'index');
+        $this->get('/profil', 'ProfilController', 'index');
+        $this->get('/kepala-lab', 'KepalaLabController', 'index');
+
+        // Admin routes
+        $this->get('/admin', 'DashboardController', 'index');
+        $this->get('/admin/dashboard', 'DashboardController', 'index');
+        
+        // Admin Alumni
+        $this->get('/admin/alumni', 'AlumniController', 'adminIndex');
+        $this->get('/admin/alumni/create', 'AlumniController', 'create');
+        $this->post('/admin/alumni', 'AlumniController', 'store');
+        $this->get('/admin/alumni/{id}/edit', 'AlumniController', 'edit');
+        $this->put('/admin/alumni/{id}', 'AlumniController', 'update');
+        $this->delete('/admin/alumni/{id}', 'AlumniController', 'delete');
+
+        // Admin Asisten
+        $this->get('/admin/asisten', 'AsistenController', 'adminIndex');
+        $this->get('/admin/asisten/create', 'AsistenController', 'create');
+        $this->post('/admin/asisten', 'AsistenController', 'store');
+        $this->get('/admin/asisten/{id}/edit', 'AsistenController', 'edit');
+        $this->put('/admin/asisten/{id}', 'AsistenController', 'update');
+        $this->delete('/admin/asisten/{id}', 'AsistenController', 'delete');
+        $this->get('/admin/asisten/koordinator', 'AsistenController', 'pilihKoordinator');
+        $this->post('/admin/asisten/koordinator', 'AsistenController', 'setKoordinator');
+
+        // Admin Jadwal
+        $this->get('/admin/jadwal', 'JadwalPraktikumController', 'adminIndex');
+        $this->get('/admin/jadwal/create', 'JadwalPraktikumController', 'create');
+        $this->post('/admin/jadwal', 'JadwalPraktikumController', 'store');
+        $this->get('/admin/jadwal/{id}/edit', 'JadwalPraktikumController', 'edit');
+        $this->put('/admin/jadwal/{id}', 'JadwalPraktikumController', 'update');
+        $this->delete('/admin/jadwal/{id}', 'JadwalPraktikumController', 'delete');
+        $this->get('/admin/jadwal/upload', 'JadwalPraktikumController', 'uploadForm');
+        $this->post('/admin/jadwal/upload', 'JadwalPraktikumController', 'uploadProcess');
+        $this->get('/admin/jadwal/csv-upload', 'JadwalPraktikumController', 'csvUploadForm');
+        $this->post('/admin/jadwal/csv-upload', 'JadwalPraktikumController', 'csvUploadProcess');
+
+        // Admin Laboratorium (Fasilitas)
+        $this->get('/admin/laboratorium', 'LaboratoriumController', 'adminIndex');
+        $this->get('/admin/laboratorium/create', 'LaboratoriumController', 'create');
+        $this->post('/admin/laboratorium', 'LaboratoriumController', 'store');
+        $this->get('/admin/laboratorium/{id}', 'LaboratoriumController', 'detail');
+        $this->get('/admin/laboratorium/{id}/edit', 'LaboratoriumController', 'edit');
+        $this->put('/admin/laboratorium/{id}', 'LaboratoriumController', 'update');
+        $this->delete('/admin/laboratorium/{id}', 'LaboratoriumController', 'delete');
+
+        // Admin Informasi Lab (detail/konten)
+        $this->get('/admin/informasi-lab', 'InformasiLabController', 'adminIndex');
+        $this->get('/admin/informasi-lab/create', 'InformasiLabController', 'create');
+        $this->post('/admin/informasi-lab', 'InformasiLabController', 'store');
+        $this->get('/admin/informasi-lab/{id}/edit', 'InformasiLabController', 'edit');
+        $this->put('/admin/informasi-lab/{id}', 'InformasiLabController', 'update');
+        $this->delete('/admin/informasi-lab/{id}', 'InformasiLabController', 'delete');
+        $this->get('/admin/informasi-lab/{id}/detail', 'InformasiLabController', 'adminDetail');
+        $this->get('/admin/informasi-lab/{id}/detail/create', 'InformasiLabController', 'createDetail');
+        $this->post('/admin/informasi-lab/{id}/detail', 'InformasiLabController', 'storeDetail');
+        $this->get('/admin/informasi-lab/detail/{detail_id}/edit', 'InformasiLabController', 'editDetail');
+        $this->put('/admin/informasi-lab/detail/{detail_id}', 'InformasiLabController', 'updateDetail');
+        $this->delete('/admin/informasi-lab/detail/{detail_id}', 'InformasiLabController', 'deleteDetail');
+
+        // Admin Matakuliah
+        $this->get('/admin/matakuliah', 'MatakuliahController', 'adminIndex');
+        $this->get('/admin/matakuliah/create', 'MatakuliahController', 'create');
+        $this->post('/admin/matakuliah', 'MatakuliahController', 'store');
+        $this->get('/admin/matakuliah/{id}/edit', 'MatakuliahController', 'edit');
+        $this->put('/admin/matakuliah/{id}', 'MatakuliahController', 'update');
+        $this->delete('/admin/matakuliah/{id}', 'MatakuliahController', 'delete');
+
+        // Admin Manajemen
+        $this->get('/admin/manajemen', 'ManajemenController', 'adminIndex');
+        $this->get('/admin/manajemen/create', 'ManajemenController', 'create');
+        $this->post('/admin/manajemen', 'ManajemenController', 'store');
+        $this->get('/admin/manajemen/{id}/edit', 'ManajemenController', 'edit');
+        $this->put('/admin/manajemen/{id}', 'ManajemenController', 'update');
+        $this->delete('/admin/manajemen/{id}', 'ManajemenController', 'delete');
+
+        // Admin Peraturan
+        $this->get('/admin/peraturan', 'PeraturanController', 'adminIndex');
+        $this->get('/admin/peraturan/create', 'PeraturanController', 'create');
+        $this->post('/admin/peraturan', 'PeraturanController', 'store');
+        $this->get('/admin/peraturan/{id}/edit', 'PeraturanController', 'edit');
+        $this->put('/admin/peraturan/{id}', 'PeraturanController', 'update');
+        $this->delete('/admin/peraturan/{id}', 'PeraturanController', 'delete');
+
+        // Admin Sanksi
+        $this->get('/admin/sanksi', 'SanksiController', 'adminIndex');
+        $this->get('/admin/sanksi/create', 'SanksiController', 'create');
+        $this->post('/admin/sanksi', 'SanksiController', 'store');
+        $this->get('/admin/sanksi/{id}/edit', 'SanksiController', 'edit');
+        $this->put('/admin/sanksi/{id}', 'SanksiController', 'update');
+        $this->delete('/admin/sanksi/{id}', 'SanksiController', 'delete');
+
+        // API routes
+        $this->get('/api/health', 'HealthController', 'check');
+        $this->get('/api/alumni', 'AlumniController', 'apiIndex');
+        $this->get('/api/alumni/{id}', 'AlumniController', 'apiShow');
+        $this->get('/api/asisten', 'AsistenController', 'apiIndex');
+        $this->get('/api/jadwal', 'JadwalPraktikumController', 'apiIndex');
+        $this->get('/api/laboratorium', 'InformasiLabController', 'apiIndex');
+        $this->get('/api/laboratorium/{id}', 'InformasiLabController', 'apiShow');
+        $this->get('/api/sanksi-lab', 'SanksiController', 'apiIndex');
+        $this->get('/api/tata-tertib', 'PeraturanController', 'apiIndex');
+        $this->get('/api/manajemen', 'KepalaLabController', 'apiIndex');
     }
 
     /**
      * Define GET route
      */
-    public function get($route, $controller, $action) {
+    private function get($route, $controller, $action) {
         $this->routes['GET'][$route] = ['controller' => $controller, 'action' => $action];
     }
 
     /**
      * Define POST route
      */
-    public function post($route, $controller, $action) {
+    private function post($route, $controller, $action) {
         $this->routes['POST'][$route] = ['controller' => $controller, 'action' => $action];
     }
 
     /**
      * Define PUT route
      */
-    public function put($route, $controller, $action) {
+    private function put($route, $controller, $action) {
         $this->routes['PUT'][$route] = ['controller' => $controller, 'action' => $action];
     }
 
     /**
      * Define DELETE route
      */
-    public function delete($route, $controller, $action) {
+    private function delete($route, $controller, $action) {
         $this->routes['DELETE'][$route] = ['controller' => $controller, 'action' => $action];
     }
 
     /**
-     * Match route dan dispatch
+     * Dispatch request to appropriate controller
      */
     public function dispatch() {
         $route_found = false;
 
-        // Check exact match atau pattern match
         if (isset($this->routes[$this->method])) {
             foreach ($this->routes[$this->method] as $route => $handler) {
                 $params = [];
                 if ($this->match($route, $this->path, $params)) {
                     $route_found = true;
-                    $this->controller = $handler['controller'];
-                    $this->action = $handler['action'];
                     $this->params = $params;
-                    break;
+                    $this->execute($handler['controller'], $handler['action']);
+                    return;
                 }
             }
         }
 
         if (!$route_found) {
             $this->notFound();
-            return;
         }
-
-        $this->execute();
     }
 
     /**
-     * Match URL pattern dengan extract params
+     * Match URL pattern dan extract parameters
      */
     private function match($pattern, $path, &$params) {
-        // Escape special regex characters except {param}
-        $regex = preg_quote($pattern, '#');
+        // Convert route pattern to regex
+        $regex = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<$1>[a-zA-Z0-9_-]+)', $pattern);
+        $regex = '#^' . $regex . '$#';
         
-        // Replace {param} with regex pattern
-        $regex = preg_replace_callback('#\\\{([a-zA-Z_][a-zA-Z0-9_]*)\\\}#', function($matches) {
-            return '(?P<' . $matches[1] . '>[a-zA-Z0-9_-]+)';
-        }, $regex);
-        
-        // Match exact path
-        if (preg_match('#^' . $regex . '$#', $path, $matches)) {
-            // Extract named parameters
+        if (preg_match($regex, $path, $matches)) {
             foreach ($matches as $key => $value) {
                 if (!is_numeric($key)) {
                     $params[$key] = $value;
@@ -113,23 +228,30 @@ class Router {
     /**
      * Execute controller action
      */
-    private function execute() {
-        $controller_class = 'App\\Controllers\\' . $this->controller;
-        $action_method = $this->action;
-
-        if (!class_exists($controller_class)) {
+    private function execute($controller, $action) {
+        $controller_file = CONTROLLER_PATH . '/' . $controller . '.php';
+        
+        if (!file_exists($controller_file)) {
             $this->notFound();
             return;
         }
 
-        $controller_instance = new $controller_class();
-
-        if (!method_exists($controller_instance, $action_method)) {
+        require_once $controller_file;
+        
+        if (!class_exists($controller)) {
             $this->notFound();
             return;
         }
 
-        call_user_func_array([$controller_instance, $action_method], [$this->params]);
+        $controller_instance = new $controller();
+
+        if (!method_exists($controller_instance, $action)) {
+            $this->notFound();
+            return;
+        }
+
+        // Pass parameters to controller method
+        call_user_func([$controller_instance, $action], $this->params);
     }
 
     /**
@@ -137,8 +259,15 @@ class Router {
      */
     private function notFound() {
         http_response_code(404);
-        header('Content-Type: application/json');
-        echo json_encode(['error' => 'Route not found']);
+        
+        // Check if API request
+        if (strpos($this->path, '/api/') === 0) {
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'API endpoint not found']);
+        } else {
+            // Show 404 page
+            require_once VIEW_PATH . '/errors/404.php';
+        }
     }
 }
 ?>

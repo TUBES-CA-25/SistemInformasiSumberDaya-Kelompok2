@@ -1,6 +1,6 @@
 <div class="admin-header">
     <h1>Formulir Jadwal Praktikum</h1>
-    <a href="/admin-jadwal.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <a href="javascript:void(0)" onclick="navigate('admin/jadwal')" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
 <div class="card" style="max-width: 800px;">
@@ -65,33 +65,79 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', loadDependencies);
+let jadwalId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse ID from route parameter (admin/jadwal/{id}/edit)
+    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const matches = route.match(/admin\/jadwal\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
+        jadwalId = matches[1];
+        document.querySelector('.admin-header h1').textContent = 'Edit Jadwal Praktikum';
+        document.getElementById('idJadwal').value = jadwalId;
+    }
+    
+    loadDependencies();
+});
 
 function loadDependencies() {
     // 1. Ambil data Mata Kuliah
-    fetch('/api/matakuliah').then(res => res.json()).then(data => {
-        if(data.status === 'success') {
+    fetch(API_URL + '/matakuliah').then(res => res.json()).then(data => {
+        if(data.status === 'success' || data.code === 200) {
             const select = document.getElementById('idMatakuliah');
-            data.data.forEach(mk => {
-                const option = document.createElement('option');
-                option.value = mk.idMatakuliah;
-                option.textContent = `${mk.namaMatakuliah} (${mk.kodeMatakuliah})`;
-                select.appendChild(option);
-            });
+            if (data.data && data.data.length > 0) {
+                data.data.forEach(mk => {
+                    const option = document.createElement('option');
+                    option.value = mk.idMatakuliah;
+                    option.textContent = `${mk.namaMatakuliah} (${mk.kodeMatakuliah})`;
+                    select.appendChild(option);
+                });
+            }
+            // Load jadwal data after matakuliah loaded
+            if (jadwalId) {
+                loadJadwalAfterLabs();
+            }
         }
-    });
+    }).catch(err => console.error('Error loading matakuliah:', err));
 
     // 2. Ambil data Laboratorium
-    fetch('/api/laboratorium').then(res => res.json()).then(data => {
-        if(data.status === 'success') {
+    fetch(API_URL + '/laboratorium').then(res => res.json()).then(data => {
+        if(data.status === 'success' || data.code === 200) {
             const select = document.getElementById('idLaboratorium');
-            data.data.forEach(lab => {
-                const option = document.createElement('option');
-                option.value = lab.idLaboratorium;
-                option.textContent = lab.nama;
-                select.appendChild(option);
-            });
+            if (data.data && data.data.length > 0) {
+                data.data.forEach(lab => {
+                    const option = document.createElement('option');
+                    option.value = lab.idLaboratorium;
+                    option.textContent = lab.nama;
+                    select.appendChild(option);
+                });
+            }
         }
+    }).catch(err => console.error('Error loading laboratorium:', err));
+}
+
+function loadJadwalAfterLabs() {
+    fetch(API_URL + '/jadwal/' + jadwalId)
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === 'success' || response.code === 200) {
+            const data = response.data;
+            document.getElementById('idMatakuliah').value = data.idMatakuliah || '';
+            document.getElementById('idLaboratorium').value = data.idLaboratorium || '';
+            document.getElementById('hari').value = data.hari || 'Senin';
+            document.getElementById('kelas').value = data.kelas || '';
+            document.getElementById('waktuMulai').value = data.waktuMulai ? data.waktuMulai.substring(0, 5) : '08:00';
+            document.getElementById('waktuSelesai').value = data.waktuSelesai ? data.waktuSelesai.substring(0, 5) : '10:00';
+            document.getElementById('status').value = data.status || 'Aktif';
+        } else {
+            alert('Data tidak ditemukan');
+            navigate('admin/jadwal');
+        }
+    })
+    .catch(err => {
+        console.error('Error loading jadwal:', err);
+        alert('Gagal memuat data jadwal');
     });
 }
 
@@ -99,6 +145,7 @@ function loadDependencies() {
 document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const id = document.getElementById('idJadwal').value;
     const formData = {
         idMatakuliah: document.getElementById('idMatakuliah').value,
         idLaboratorium: document.getElementById('idLaboratorium').value,
@@ -114,27 +161,38 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     btn.disabled = true;
     btn.innerText = 'Menyimpan...';
 
-    fetch('/api/jadwalpraktikum', { 
-        method: 'POST',
+    const url = id ? (API_URL + '/jadwal/' + id) : (API_URL + '/jadwal');
+    const method = id ? 'PUT' : 'POST';
+
+    fetch(url, { 
+        method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     })
     .then(res => res.json())
     .then(data => {
-        if (data.status === 'success' || data.code === 201) { 
-            msg.innerHTML = '<span style="color:green">Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/admin-jadwal.php'; }, 1000);
+        if (data.status === 'success' || data.code === 201 || data.code === 200) { 
+            msg.innerHTML = '<span style="color:green">✓ Berhasil disimpan! Mengalihkan...</span>';
+            setTimeout(() => { navigate('admin/jadwal'); }, 1500);
         } else {
-            msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Error server') + '</span>';
+            msg.innerHTML = '<span style="color:red">✗ Gagal: ' + (data.message || 'Error server') + '</span>';
             btn.disabled = false;
             btn.innerText = 'Simpan Jadwal';
         }
     })
     .catch(err => {
         console.error(err);
-        msg.innerHTML = '<span style="color:red">Koneksi Error.</span>';
+        msg.innerHTML = '<span style="color:red">✗ Koneksi Error.</span>';
         btn.disabled = false;
         btn.innerText = 'Simpan Jadwal';
     });
 });
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
+}
 </script>

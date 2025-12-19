@@ -1,6 +1,8 @@
 <div class="admin-header">
-    <h1>Formulir Mata Kuliah</h1>
-    <a href="/admin-matakuliah.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <h1 id="formTitle">Formulir Mata Kuliah</h1>
+    <a href="javascript:void(0)" onclick="navigate('admin/matakuliah')" class="btn" style="background: #95a5a6;">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 </div>
 
 <div class="card" style="max-width: 600px;">
@@ -33,20 +35,53 @@
             </div>
             <div style="flex:1;">
                 <label>Jumlah SKS</label>
-                <input type="number" id="sksKuliah" placeholder="2" min="1" max="6">
+                <input type="number" id="sksKuliah" placeholder="2" min="1" max="6" required>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-add" id="btnSave">Simpan Data</button>
+        <button type="submit" class="btn btn-add" id="btnSave">
+            <i class="fas fa-save"></i> Simpan Data
+        </button>
     </form>
     <div id="message" style="margin-top: 15px;"></div>
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse ID from route parameter (admin/matakuliah/{id}/edit)
+    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const matches = route.match(/admin\/matakuliah\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
+        const id = matches[1];
+        document.getElementById('formTitle').textContent = 'Edit Mata Kuliah';
+        document.getElementById('idMatakuliah').value = id;
+        loadData(id);
+    }
+});
+
+function loadData(id) {
+    fetch(API_URL + '/matakuliah/' + id)
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === 'success' || response.code === 200) {
+            const data = response.data;
+            document.getElementById('kodeMatakuliah').value = data.kodeMatakuliah;
+            document.getElementById('namaMatakuliah').value = data.namaMatakuliah;
+            document.getElementById('semester').value = data.semester;
+            document.getElementById('sksKuliah').value = data.sksKuliah;
+        } else {
+            alert('Data tidak ditemukan');
+            navigate('admin/matakuliah');
+        }
+    })
+    .catch(err => console.error(err));
+}
+
 document.getElementById('mkForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // Data JSON sesuai nama kolom di Database & Controller Store
+    const id = document.getElementById('idMatakuliah').value;
     const formData = {
         kodeMatakuliah: document.getElementById('kodeMatakuliah').value,
         namaMatakuliah: document.getElementById('namaMatakuliah').value,
@@ -57,30 +92,40 @@ document.getElementById('mkForm').addEventListener('submit', function(e) {
     const btn = document.getElementById('btnSave');
     const msg = document.getElementById('message');
     btn.disabled = true;
-    btn.innerText = 'Menyimpan...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
-    // Kirim ke Controller store()
-    fetch('/api/matakuliah', { 
-        method: 'POST',
+    const url = id ? (API_URL + '/matakuliah/' + id) : (API_URL + '/matakuliah');
+    const method = id ? 'PUT' : 'POST';
+
+    fetch(url, { 
+        method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     })
     .then(res => res.json())
     .then(data => {
-        if (data.status === 'success' || data.code === 201) { 
-            msg.innerHTML = '<span style="color:green">Berhasil disimpan! Redirecting...</span>';
-            setTimeout(() => { window.location.href = '/admin-matakuliah.php'; }, 1000);
+        if (data.status === 'success' || data.code === 200 || data.code === 201) { 
+            msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px;">Berhasil disimpan! Redirecting...</div>';
+            setTimeout(() => { navigate('admin/matakuliah'); }, 1000);
         } else {
-            msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Kode MK mungkin sudah ada') + '</span>';
+            msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Gagal: ' + (data.message || 'Terjadi kesalahan') + '</div>';
             btn.disabled = false;
-            btn.innerText = 'Simpan Data';
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
         }
     })
     .catch(err => {
         console.error(err);
-        msg.innerHTML = '<span style="color:red">Koneksi Error.</span>';
+        msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px;">Koneksi Error.</div>';
         btn.disabled = false;
-        btn.innerText = 'Simpan Data';
+        btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
     });
 });
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
+}
 </script>

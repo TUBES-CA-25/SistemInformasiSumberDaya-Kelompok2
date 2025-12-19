@@ -1,88 +1,193 @@
+<style>
+/* Custom Button Styles */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white !important;
+}
+
+.btn-success {
+    background-color: #27ae60;
+}
+.btn-success:hover {
+    background-color: #219150;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+}
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+.btn-success:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+    transform: none;
+}
+</style>
+
 <div class="admin-header">
-    <h1>Formulir Asisten</h1>
-    <a href="/admin-asisten.php" class="btn" style="background: #95a5a6;">← Kembali</a>
+    <h1><i class="fas fa-user-edit"></i> Formulir Asisten</h1>
+    <a href="javascript:void(0)" onclick="navigate('admin/asisten')" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
 </div>
 
-<div class="card" style="max-width: 800px;">
-    <form id="asistenForm">
+<div class="card" style="max-width: 800px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+    <form id="asistenForm" enctype="multipart/form-data">
         
-        <input type="hidden" id="idAsisten">
+        <input type="hidden" id="idAsisten" name="idAsisten">
 
         <div class="form-group">
-            <label>Nama Lengkap <span style="color:red">*</span></label>
-            <input type="text" id="nama" placeholder="Masukkan nama lengkap..." required>
+            <label><i class="fas fa-user"></i> Nama Lengkap <span style="color:red">*</span></label>
+            <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap..." required>
         </div>
 
         <div class="form-group">
-            <label>Email <span style="color:red">*</span></label>
-            <input type="email" id="email" placeholder="email@umi.ac.id" required>
+            <label><i class="fas fa-envelope"></i> Email <span style="color:red">*</span></label>
+            <input type="email" id="email" name="email" placeholder="email@umi.ac.id" required>
         </div>
 
         <div class="form-group">
-            <label>Jurusan</label> <input type="text" id="jurusan" placeholder="Contoh: Teknik Informatika">
+            <label><i class="fas fa-graduation-cap"></i> Jurusan</label> 
+            <input type="text" id="jurusan" name="jurusan" placeholder="Contoh: Teknik Informatika">
         </div>
 
         <div class="form-group">
-            <label>Link Foto (URL)</label> <input type="text" id="foto" placeholder="https://...">
+            <label><i class="fas fa-camera"></i> Upload Foto</label>
+            <input type="file" id="foto" name="foto" accept="image/*">
+            <small id="fotoInfo" style="color: #666; display: none; margin-top: 5px;">
+                <i class="fas fa-info-circle"></i> Foto saat ini: <span id="fotoCurrent" style="font-weight: bold;"></span>
+            </small>
         </div>
 
         <div class="form-group">
-            <label>Status Aktif</label>
-            <select id="statusAktif">
+            <label><i class="fas fa-toggle-on"></i> Status Aktif</label>
+            <select id="statusAktif" name="statusAktif">
                 <option value="1">Aktif</option>
                 <option value="0">Tidak Aktif</option>
             </select>
         </div>
 
-        <button type="submit" class="btn btn-add" id="btnSave">Simpan Data</button>
+        <button type="submit" class="btn btn-success" id="btnSave" style="width: 100%; padding: 12px; font-size: 16px;">
+            <i class="fas fa-save"></i> Simpan Data
+        </button>
     </form>
     
     <div id="message" style="margin-top: 15px;"></div>
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Cek apakah ada ID di URL (mode edit)
+    const params = new URLSearchParams(window.location.search);
+    const route = params.get('route') || '';
+    
+    // Extract ID dari route: admin/asisten/{id}/edit
+    const matches = route.match(/admin\/asisten\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
+        // Mode edit - load data
+        const id = matches[1];
+        loadAsistenData(id);
+    }
+});
+
+function loadAsistenData(id) {
+    fetch(API_URL + '/asisten/' + id)
+    .then(response => response.json())
+    .then(data => {
+        if ((data.status === 'success' || data.code === 200) && data.data) {
+            const asisten = data.data;
+            document.getElementById('idAsisten').value = asisten.idAsisten;
+            document.getElementById('nama').value = asisten.nama || '';
+            document.getElementById('email').value = asisten.email || '';
+            document.getElementById('jurusan').value = asisten.jurusan || '';
+            document.getElementById('statusAktif').value = asisten.statusAktif || '1';
+            
+            if (asisten.foto) {
+                document.getElementById('fotoInfo').style.display = 'block';
+                document.getElementById('fotoCurrent').innerText = asisten.foto;
+            }
+            
+            document.querySelector('.admin-header h1').innerHTML = '<i class="fas fa-user-edit"></i> Edit Asisten: ' + asisten.nama;
+            document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Update Data';
+        }
+    })
+    .catch(error => {
+        console.error('Error loading asisten:', error);
+    });
+}
+
 document.getElementById('asistenForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // 1. Ambil data sesuai kolom DATABASE
-    const formData = {
-        nama: document.getElementById('nama').value,
-        email: document.getElementById('email').value,
-        jurusan: document.getElementById('jurusan').value,
-        foto: document.getElementById('foto').value,
-        statusAktif: document.getElementById('statusAktif').value
-    };
-
     const btn = document.getElementById('btnSave');
     const msg = document.getElementById('message');
-    
     btn.disabled = true;
-    btn.innerText = 'Menyimpan...';
+    
+    const idAsisten = document.getElementById('idAsisten').value;
+    const isEdit = idAsisten ? true : false;
+    
+    btn.innerHTML = isEdit ? '<i class="fas fa-spinner fa-spin"></i> Mengupdate...' : '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
 
-    // 2. Kirim ke API (Sesuai Controller teman Anda)
-    fetch('/api/asisten', { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+    // Pakai FormData agar bisa upload file
+    const form = document.getElementById('asistenForm');
+    const formData = new FormData(form);
+    // Field sudah otomatis masuk karena ada attribute name di HTML
+
+    const url = isEdit ? (API_URL + '/asisten/' + idAsisten) : (API_URL + '/asisten');
+    const method = 'POST'; // Always POST untuk FormData dengan file
+
+    fetch(url, {
+        method: method,
+        body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        // Cek response sesuai format Controller: $this->success(...)
-        if (data.status === 'success' || data.code === 201) { 
-            msg.innerHTML = '<span style="color:green">Berhasil disimpan! Mengalihkan...</span>';
-            setTimeout(() => { window.location.href = '/admin-asisten.php'; }, 1000);
-        } else {
-            // Menangkap pesan error dari Controller (misal: "Email sudah terdaftar")
-            msg.innerHTML = '<span style="color:red">Gagal: ' + (data.message || 'Error validasi') + '</span>';
+    .then(response => response.text())
+    .then(text => {
+        try {
+            const data = JSON.parse(text);
+            if (data.status === 'success' || data.code === 201 || data.code === 200) {
+                msg.innerHTML = '<span style="color:green"><i class="fas fa-check-circle"></i> ' + (isEdit ? 'Data berhasil diupdate! ' : 'Berhasil disimpan! ') + 'Mengalihkan...</span>';
+                setTimeout(() => { navigate('admin/asisten'); }, 1000);
+            } else {
+                msg.innerHTML = '<span style="color:red"><i class="fas fa-exclamation-circle"></i> Gagal: ' + (data.message || 'Error validasi') + '</span>';
+                btn.disabled = false;
+                btn.innerHTML = isEdit ? '<i class="fas fa-save"></i> Update Data' : '<i class="fas fa-save"></i> Simpan Data';
+            }
+        } catch (e) {
+            console.error('Parse error:', text);
+            msg.innerHTML = '<span style="color:red">Terjadi kesalahan: ' + text + '</span>';
             btn.disabled = false;
-            btn.innerText = 'Simpan Data';
+            btn.innerHTML = isEdit ? '<i class="fas fa-save"></i> Update Data' : '<i class="fas fa-save"></i> Simpan Data';
         }
     })
     .catch(error => {
         console.error('Error:', error);
         msg.innerHTML = '<span style="color:red">Terjadi kesalahan koneksi.</span>';
         btn.disabled = false;
-        btn.innerText = 'Simpan Data';
+        btn.innerText = isEdit ? 'Update Data' : 'Simpan Data';
     });
 });
+
+function navigate(route) {
+    if (window.location.port === '8000') {
+        window.location.href = '/index.php?route=' + route;
+    } else {
+        window.location.href = '/' + route;
+    }
+}
 </script>
