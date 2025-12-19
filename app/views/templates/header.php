@@ -41,6 +41,13 @@
                     ★ LOGO
                 </a>
             </div>
+
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
             <ul class="nav-links">
                 <li><a href="javascript:void(0)" onclick="navigate('')">Home</a></li>
                 

@@ -11,19 +11,25 @@ img { max-width: 100%; display: block; }
 .navbar .container { display: flex; justify-content: space-between; align-items: center; }
 
 /* Logo Style seperti Wireframe (Abu-abu Lonjong) */
-.logo a { 
-    background-color: #e0e0e0; 
-    padding: 10px 25px; 
-    border-radius: 50px; /* Membuat lonjong */
-    text-decoration: none; 
-    color: #000; 
-    font-weight: bold; 
-    font-size: 0.9rem;
-    display: inline-flex;
+.logo {
+    background: transparent !important; /* Hapus background box pada div logo */
+    padding: 0 !important;
+    margin: 0;
+    display: flex;
     align-items: center;
-    gap: 8px;
 }
-.logo a::before { content: '★'; font-size: 1rem; } /* Ikon bintang dummy */
+
+.logo a {
+    background: transparent !important; /* Hapus background pada link */
+    color: #333 !important; /* Pastikan teks logo berwarna Putih */
+@media (min-width: 481px) and (max-width: 768px) {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important; /* Hilangkan bayangan jika ada */
+}
 
 .nav-links { list-style: none; display: flex; gap: 30px; }
 .nav-links a { text-decoration: none; color: #666; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; }
