@@ -1,78 +1,69 @@
+<link rel="stylesheet" href="/css/praktikum.css">
+
 <section class="praktikum-section">
     <div class="container">
-        <div class="page-header">
-            <h1>Jadwal Praktikum Lab</h1>
-            <p>Informasi jadwal praktikum terbaru semester Ganjil 2025/2026.</p>
-        </div>
+        
+        <header class="page-header">
+            <span class="badge-pill">Semester Ganjil 2025/2026</span>
+            <h1>Jadwal Praktikum</h1>
+            <p>Informasi jadwal sesi praktikum yang sedang berjalan. Silakan cek ruangan dan waktu sesuai kelas Anda.</p>
+        </header>
 
-        <div class="schedule-toolbar">
-            <div class="search-box">
-                <input type="text" placeholder="Cari Mata Kuliah atau Kelas...">
+        <div class="schedule-wrapper">
+            <div class="table-responsive">
+                <table class="table-schedule">
+                    <thead>
+                        <tr>
+                            <th>Kode</th>
+                            <th>Mata Kuliah</th>
+                            <th>Kelas</th>
+                            <th>Hari</th>
+                            <th>Waktu</th>
+                            <th>Ruangan</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TIF-301</strong></td>
+                            <td>Pemrograman Web</td>
+                            <td>A1</td>
+                            <td>Senin</td>
+                            <td>08:00 - 10:00</td>
+                            <td>Lab RPL 1</td>
+                            <td><span class="status-label status-active">Aktif</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>TIF-301</strong></td>
+                            <td>Pemrograman Web</td>
+                            <td>A2</td>
+                            <td>Senin</td>
+                            <td>10:00 - 12:00</td>
+                            <td>Lab RPL 1</td>
+                            <td><span class="status-label status-active">Aktif</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>SI-204</strong></td>
+                            <td>Basis Data</td>
+                            <td>B1</td>
+                            <td>Selasa</td>
+                            <td>13:00 - 15:00</td>
+                            <td>Lab Data</td>
+                            <td><span class="status-label status-closed">Penuh</span></td>
+                        </tr>
+                         <tr>
+                            <td><strong>TIF-405</strong></td>
+                            <td>Jaringan Komputer</td>
+                            <td>C1</td>
+                            <td>Rabu</td>
+                            <td>08:00 - 11:00</td>
+                            <td>Lab Jaringan</td>
+                            <td><span class="status-label status-active">Aktif</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <button class="btn-download">
-                Download Jadwal (PDF)
-            </button>
         </div>
 
-        <div class="table-responsive">
-            <table class="schedule-table">
-                <thead>
-                    <tr>
-                        <th>Hari</th>
-                        <th>Jam</th>
-                        <th>Mata Kuliah</th>
-                        <th>Kelas</th>
-                        <th>Ruangan</th>
-                        <th>Asisten / Koordinator</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Senin</td>
-                        <td>08:00 - 10:00</td>
-                        <td>Algoritma & Pemrograman</td>
-                        <td>TI-A1</td>
-                        <td>Lab Software 1</td>
-                        <td>Kak Budi</td>
-                    </tr>
-                    <tr>
-                        <td>Senin</td>
-                        <td>10:15 - 12:15</td>
-                        <td>Basis Data Lanjut</td>
-                        <td>TI-A3</td>
-                        <td>Lab Data Science</td>
-                        <td>Kak Siti</td>
-                    </tr>
-                    <tr>
-                        <td>Selasa</td>
-                        <td>13:00 - 15:00</td>
-                        <td>Jaringan Komputer</td>
-                        <td>TI-B2</td>
-                        <td>Lab Jaringan</td>
-                        <td>Kak Ahmad</td>
-                    </tr>
-                    <tr>
-                        <td>Rabu</td>
-                        <td>08:00 - 10:00</td>
-                        <td>Pemrograman Web</td>
-                        <td>TI-C1</td>
-                        <td>Lab Software 2</td>
-                        <td>Kak Nahwa</td>
-                    </tr>
-                    <tr>
-                        <td>Kamis</td>
-                        <td>15:30 - 17:30</td>
-                        <td>Internet of Things (IoT)</td>
-                        <td>TI-A2</td>
-                        <td>Lab IoT</td>
-                        <td>Kak Sarah</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="schedule-note">
-            <p>* Jadwal dapat berubah sewaktu-waktu. Harap cek secara berkala.</p>
-        </div>
     </div>
 </section>

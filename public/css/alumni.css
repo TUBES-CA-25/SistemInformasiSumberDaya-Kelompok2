@@ -1,0 +1,334 @@
+/* =======================================================
+   STYLE: ALUMNI (ULTRA MODERN & PROFESSIONAL)
+   ======================================================= */
+
+/* --- Layout Dasar --- */
+.alumni-section {
+    padding: 80px 0;
+    background-color: #fcfdfe;
+    min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* =======================================================
+   HEADER STYLE (UNIFIED - SAMA DENGAN JADWAL, PERSONEL, DLL)
+   ======================================================= */
+
+.page-header {
+    text-align: center;         /* Rata tengah */
+    max-width: 800px;           /* Lebar teks dibatasi */
+    margin: 0 auto 60px auto;   /* Jarak bawah 60px */
+    padding-top: 10px;
+    border-bottom: none;        /* Tanpa garis bawah */
+}
+
+/* Badge Kapsul (Opsional - Pastikan HTML menggunakan class ini) */
+.header-badge {
+    display: inline-block;
+    background-color: #e0e7ff;  /* Biru muda lembut */
+    color: #3730a3;            /* Biru tua tegas */
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+/* Judul Utama (H1) */
+.page-header h1 {
+    font-size: 3.5rem;          /* Ukuran besar */
+    font-weight: 900;
+    color: #0f172a;             /* Hitam pekat */
+    letter-spacing: -2px;       /* Gaya modern rapat */
+    line-height: 1.1;
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+/* Deskripsi (P) */
+.page-header p {
+    color: #475569;             /* Abu medium */
+    font-size: 1.25rem;         /* Ukuran font deskripsi */
+    line-height: 1.6;
+    margin: 0 auto;
+    font-weight: 500;
+    max-width: 600px;
+}
+
+/* Responsif Header HP */
+@media (max-width: 768px) {
+    .page-header h1 { font-size: 2.5rem; }
+    .page-header p { font-size: 1rem; padding: 0 15px; }
+}
+
+
+/* --- Pengelompokan Tahun (Timeline Style) --- */
+.alumni-group {
+    margin-bottom: 80px;
+}
+
+.year-divider {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.year-divider h2 {
+    font-size: 1.8rem;
+    color: #1e293b;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.year-line {
+    height: 1px;
+    background: linear-gradient(90deg, #e2e8f0 0%, rgba(226, 232, 240, 0) 100%);
+    flex-grow: 1;
+}
+
+/* --- Grid & Card Style (Daftar Utama) --- */
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.staff-card {
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.staff-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+    border-color: #3b82f6;
+}
+
+.staff-photo-box {
+    height: 240px;
+    background: #f8fafc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.staff-placeholder {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #e2e8f0;
+    letter-spacing: -2px;
+    user-select: none;
+}
+
+.staff-content {
+    padding: 24px;
+    flex-grow: 1;
+}
+
+.staff-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.staff-role {
+    font-size: 0.9rem;
+    color: #3b82f6;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.staff-footer {
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.meta-item i {
+    font-size: 1rem;
+    color: #94a3b8;
+}
+
+/* --- DETAIL PAGE MAXIMAL STYLE --- */
+.detail-layout {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 60px;
+    margin-top: 20px;
+}
+
+.left-sidebar .facility-hero-img {
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 24px;
+    padding: 50px 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.left-sidebar .coord-avatar {
+    width: 130px;
+    height: 130px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    color: #2563eb;
+    margin: 0 auto;
+    border-radius: 40px; /* Squircle style */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    font-weight: 900;
+}
+
+.left-sidebar .coord-card {
+    background: #0f172a;
+    border-radius: 24px;
+    padding: 30px;
+    margin-top: 30px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.left-sidebar .coord-card::after {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 50%;
+}
+
+.left-sidebar .btn-wa {
+    background: #3b82f6;
+    border-radius: 14px;
+    padding: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.left-sidebar .btn-wa:hover {
+    background: #2563eb;
+    transform: translateY(-3px);
+}
+
+/* Kanan - Career Timeline */
+.right-content h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 20px;
+    letter-spacing: -0.03em;
+}
+
+.description {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #475569;
+    margin-bottom: 50px;
+}
+
+.spec-list {
+    border: none;
+    background: transparent;
+}
+
+.spec-item {
+    background: #fff;
+    margin-bottom: 16px;
+    padding: 24px 30px;
+    border-radius: 20px;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.spec-item:hover {
+    border-color: #cbd5e1;
+    background: #fcfdfe;
+}
+
+.spec-label {
+    width: 180px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+.spec-value div:first-child {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.testimoni-box {
+    background: #f8fafc;
+    padding: 40px;
+    border-radius: 24px;
+    position: relative;
+    font-size: 1.25rem;
+    color: #334155;
+    line-height: 1.7;
+    border: none;
+}
+
+.testimoni-box::before {
+    content: '"';
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 5rem;
+    color: #e2e8f0;
+    font-family: serif;
+    line-height: 1;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .detail-layout { grid-template-columns: 1fr; }
+}

@@ -1,65 +1,155 @@
-<section class="resource-section">
+<section class="sumberdaya-section">
     <div class="container">
-        <div class="page-header">
-            <h1>Asisten Laboratorium</h1>
-            <p>Mahasiswa berprestasi yang berdedikasi membantu kegiatan praktikum.</p>
-        </div>
+        
+        <header class="page-header">
+            <span class="header-badge">Struktur Organisasi 2025</span>
+            <h1>Personel Laboratorium</h1>
+            <p>Fakultas Ilmu Komputer Universitas Muslim Indonesia</p>
+        </header>
 
-        <div class="coordinator-section">
-            <div class="coord-card">
-                <div class="coord-img">
-                    <img src="https://placehold.co/400x400/7f8c8d/white?text=Koordinator" alt="Koordinator">
+        <span class="section-label">Struktural Utama</span>
+        
+        <a href="index.php?page=detail&id=1" class="card-link">
+            <div class="exec-card">
+                <div class="exec-photo">
+                    <div class="exec-placeholder">NK</div>
                 </div>
-                <div class="coord-info">
-                    <span class="badge">Koordinator Lab</span>
-                    <h2>Nahwa Kaka</h2>
-                    <p>Bertanggung jawab atas seluruh operasional harian asisten dan jadwal praktikum. Mahasiswa angkatan 2022 dengan spesialisasi Full Stack Development.</p>
-                    <a href="/profil.php?id=coord" class="btn-sm">Lihat Profil Lengkap →</a>
+                
+                <div class="exec-info">
+                    <span class="exec-badge">Koordinator Laboratorium</span>
+                    <h3>Nahwa Kaka S.</h3>
+                    <span class="exec-role">Fullstack Web Developer</span>
+                    
+                    <div class="exec-footer">
+                        <div class="meta-item">
+                            <i class="ri-mail-line"></i> nahwa@umi.ac.id
+                        </div>
+                        <div class="meta-item">
+                            <i class="ri-graduation-cap-line"></i> Teknik Informatika
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
 
-        <h3 class="section-divider">Anggota Asisten</h3>
 
-        <div class="profile-grid">
-            <a href="/profil.php?id=a1" class="profile-card">
-                <div class="profile-img">
-                    <img src="https://placehold.co/300x300/bdc3c7/white?text=Asisten" alt="Foto">
-                </div>
-                <div class="profile-info">
-                    <h3>Nama Asisten 1</h3>
-                    <p>Divisi Software</p>
+        <span class="section-label">Tim Asisten</span>
+        
+        <div class="staff-grid">
+            
+            <a href="index.php?page=detail&id=2" class="card-link">
+                <div class="staff-card">
+                    <div class="staff-photo-box">
+                        <div class="staff-placeholder">AS</div>
+                    </div>
+                    <div class="staff-content">
+                        <div class="staff-name">Andi Saputra</div>
+                        <span class="staff-role">Network Engineer</span>
+                        
+                        <div class="staff-footer">
+                            <div class="meta-item">
+                                <i class="ri-mail-line"></i> andi@umi.ac.id
+                            </div>
+                            <div class="meta-item">
+                                <i class="ri-graduation-cap-line"></i> Teknik Informatika
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </a>
 
-            <a href="/profil.php?id=a2" class="profile-card">
-                <div class="profile-img">
-                    <img src="https://placehold.co/300x300/bdc3c7/white?text=Asisten" alt="Foto">
-                </div>
-                <div class="profile-info">
-                    <h3>Nama Asisten 2</h3>
-                    <p>Divisi Jaringan</p>
+            <a href="index.php?page=detail&id=3" class="card-link">
+                <div class="staff-card">
+                    <div class="staff-photo-box">
+                        <div class="staff-placeholder">SA</div>
+                    </div>
+                    <div class="staff-content">
+                        <div class="staff-name">Siti Aminah</div>
+                        <span class="staff-role">Data Scientist</span>
+                        
+                        <div class="staff-footer">
+                            <div class="meta-item">
+                                <i class="ri-mail-line"></i> siti@umi.ac.id
+                            </div>
+                            <div class="meta-item">
+                                <i class="ri-graduation-cap-line"></i> Sistem Informasi
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </a>
             
-            <a href="/profil.php?id=a3" class="profile-card">
-                <div class="profile-img">
-                    <img src="https://placehold.co/300x300/bdc3c7/white?text=Asisten" alt="Foto">
-                </div>
-                <div class="profile-info">
-                    <h3>Nama Asisten 3</h3>
-                    <p>Divisi Multimedia</p>
+            <a href="index.php?page=detail&id=4" class="card-link">
+                <div class="staff-card">
+                    <div class="staff-photo-box">
+                        <div class="staff-placeholder">BS</div>
+                    </div>
+                    <div class="staff-content">
+                        <div class="staff-name">Budi Santoso</div>
+                        <span class="staff-role">UI/UX Designer</span>
+                        
+                        <div class="staff-footer">
+                            <div class="meta-item">
+                                <i class="ri-mail-line"></i> budi@umi.ac.id
+                            </div>
+                            <div class="meta-item">
+                                <i class="ri-graduation-cap-line"></i> Teknik Informatika
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </a>
-             <a href="/profil.php?id=a4" class="profile-card">
-                <div class="profile-img">
-                    <img src="https://placehold.co/300x300/bdc3c7/white?text=Asisten" alt="Foto">
-                </div>
-                <div class="profile-info">
-                    <h3>Nama Asisten 4</h3>
-                    <p>Divisi Multimedia</p>
-                </div>
-            </a>
+
         </div>
+
+
+        <span class="section-label">Calon Asisten</span>
+
+        <div class="staff-grid">
+            
+            <a href="index.php?page=detail&id=5" class="card-link">
+                <div class="staff-card">
+                    <div class="staff-photo-box">
+                        <div class="staff-placeholder">DL</div>
+                    </div>
+                    <div class="staff-content">
+                        <div class="staff-name">Dewi Lestari</div>
+                        <span class="staff-role">Mobile Developer</span>
+                        
+                        <div class="staff-footer">
+                            <div class="meta-item">
+                                <i class="ri-mail-line"></i> dewi@umi.ac.id
+                            </div>
+                            <div class="meta-item">
+                                <i class="ri-graduation-cap-line"></i> Sistem Informasi
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="index.php?page=detail&id=6" class="card-link">
+                <div class="staff-card">
+                    <div class="staff-photo-box">
+                        <div class="staff-placeholder">RF</div>
+                    </div>
+                    <div class="staff-content">
+                        <div class="staff-name">Rahmat Fauzi</div>
+                        <span class="staff-role">Backend Developer</span>
+                        
+                        <div class="staff-footer">
+                            <div class="meta-item">
+                                <i class="ri-mail-line"></i> rahmat@umi.ac.id
+                            </div>
+                            <div class="meta-item">
+                                <i class="ri-graduation-cap-line"></i> Teknik Informatika
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
     </div>
 </section>
