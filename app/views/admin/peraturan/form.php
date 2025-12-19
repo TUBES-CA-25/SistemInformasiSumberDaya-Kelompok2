@@ -7,17 +7,17 @@
 
 <div class="card" style="max-width: 800px;">
     <form id="peraturanForm" enctype="multipart/form-data">
-        <input type="hidden" id="idTataTerib" name="idTataTerib">
+        <input type="hidden" id="id" name="id">
 
         <div class="form-group">
             <label>Nama Peraturan <span style="color:red">*</span></label>
-            <input type="text" id="namaFile" name="namaFile" placeholder="Contoh: Disiplin Waktu Kehadiran" required>
+            <input type="text" id="judul" name="judul" placeholder="Contoh: Disiplin Waktu Kehadiran" required>
             <small class="form-text text-muted">Judul singkat peraturan yang akan ditampilkan.</small>
         </div>
 
         <div class="form-group">
             <label>Deskripsi / Uraian Peraturan</label>
-            <textarea id="uraFile" name="uraFile" rows="6" placeholder="Jelaskan aturan dan konsekuensi yang berlaku..."></textarea>
+            <textarea id="deskripsi" name="deskripsi" rows="6" placeholder="Jelaskan aturan dan konsekuensi yang berlaku..."></textarea></textarea>
             <small class="form-text text-muted">Penjelasan lengkap tentang peraturan ini.</small>
         </div>
 
@@ -41,12 +41,14 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-
-    if (id) {
+    // Parse ID from route parameter (admin/peraturan/{id}/edit)
+    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const matches = route.match(/admin\/peraturan\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
+        const id = matches[1];
         document.getElementById('formTitle').textContent = 'Edit Peraturan';
-        document.getElementById('idTataTerib').value = id;
+        document.getElementById('id').value = id;
         loadData(id);
     }
 
@@ -65,13 +67,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadData(id) {
-    fetch(API_URL + '/tata-tertib/' + id)
+    fetch(API_URL + '/peraturan-lab/' + id)
     .then(res => res.json())
     .then(response => {
         if (response.status === 'success' || response.code === 200) {
             const data = response.data;
-            document.getElementById('namaFile').value = data.namaFile;
-            document.getElementById('uraFile').value = data.uraFile;
+            document.getElementById('judul').value = data.judul || '';
+            document.getElementById('deskripsi').value = data.deskripsi || '';
             
             // If there is an existing image, maybe show it? 
             // The API response structure for image path is unknown, skipping for now to avoid broken images.
@@ -86,7 +88,7 @@ function loadData(id) {
 document.getElementById('peraturanForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const id = document.getElementById('idTataTerib').value;
+    const id = document.getElementById('id').value;
     const btn = document.getElementById('btnSave');
     const msg = document.getElementById('message');
     
@@ -97,7 +99,7 @@ document.getElementById('peraturanForm').addEventListener('submit', function(e) 
     
     // If editing, we might need to handle method spoofing if the API expects PUT for updates
     // But FormData usually requires POST. Let's check if we need _method=PUT
-    let url = API_URL + '/tata-tertib';
+    let url = API_URL + '/peraturan-lab';
     if (id) {
         url += '/' + id;
         // Many PHP frameworks need this for PUT with FormData

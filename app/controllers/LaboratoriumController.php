@@ -37,6 +37,23 @@ class LaboratoriumController extends Controller {
         $this->view('admin/laboratorium/index', ['laboratorium' => $data]);
     }
 
+    public function detail($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/admin/laboratorium');
+            return;
+        }
+        
+        $lab = $this->model->getById($id, 'idLaboratorium');
+        if (!$lab) {
+            $this->setFlash('error', 'Data laboratorium tidak ditemukan');
+            $this->redirect('/admin/laboratorium');
+            return;
+        }
+        
+        $this->view('admin/laboratorium/detail', ['laboratorium' => $lab]);
+    }
+
     public function create($params = []) {
         $this->view('admin/laboratorium/form', ['laboratorium' => null, 'action' => 'create']);
     }

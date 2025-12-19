@@ -60,7 +60,7 @@ class JadwalPraktikumController extends Controller {
             return;
         }
         
-        $jadwal = $this->model->getById($id);
+        $jadwal = $this->model->getById($id, 'idJadwal');
         if (!$jadwal) {
             $this->setFlash('error', 'Data jadwal tidak ditemukan');
             $this->redirect('/admin/jadwal');

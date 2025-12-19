@@ -186,7 +186,7 @@ function editLaboratorium(id, event) {
     if (event && event.target.closest('.btn-delete')) {
         return;
     }
-    navigate('admin/laboratorium/' + id + '/edit');
+    navigate('admin/laboratorium/' + id);
 }
 
 function hapusLaboratorium(id, event) {

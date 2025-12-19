@@ -52,9 +52,13 @@
         color: #2c3e50;
         font-size: 1rem;
     }
+    .crud-table tbody tr {
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+    }
     .crud-table tbody tr:hover {
         background-color: #f8f9fa;
-        transition: background-color 0.2s;
+        transform: translateX(2px);
     }
     .action-buttons {
         display: flex;
@@ -123,7 +127,7 @@ function renderTable(data) {
         }) : '-';
 
         const row = `
-            <tr>
+            <tr onclick="editSanksi(${item.id}, event)">
                 <td style="text-align: center;">${index + 1}</td>
                 <td>
                     <span class="sanksi-title">${escapeHtml(item.judul)}</span>
@@ -134,11 +138,7 @@ function renderTable(data) {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="javascript:void(0)" onclick="navigate('admin/sanksi/' + item.id + '/edit')" 
-                           class="btn btn-edit btn-icon" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button onclick="hapusSanksi(${item.id})" 
+                        <button onclick="hapusSanksi(${item.id}, event)" 
                                 class="btn btn-delete btn-icon" title="Hapus">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -168,7 +168,20 @@ function filterTable(searchTerm) {
     renderTable(filteredData);
 }
 
-function hapusSanksi(id) {
+function editSanksi(id, event) {
+    // Jangan navigate jika klik tombol delete
+    if (event && event.target.closest('.btn-delete')) {
+        return;
+    }
+    navigate('admin/sanksi/' + id + '/edit');
+}
+
+function hapusSanksi(id, event) {
+    // Mencegah event bubbling ke row
+    if (event) {
+        event.stopPropagation();
+    }
+    
     if(confirm('Apakah Anda yakin ingin menghapus sanksi ini?')) {
         fetch(API_URL + '/sanksi-lab/' + id, { method: 'DELETE' })
         .then(res => res.json())

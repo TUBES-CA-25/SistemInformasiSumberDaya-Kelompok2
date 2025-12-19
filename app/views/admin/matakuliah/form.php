@@ -48,10 +48,12 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-
-    if (id) {
+    // Parse ID from route parameter (admin/matakuliah/{id}/edit)
+    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const matches = route.match(/admin\/matakuliah\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
+        const id = matches[1];
         document.getElementById('formTitle').textContent = 'Edit Mata Kuliah';
         document.getElementById('idMatakuliah').value = id;
         loadData(id);

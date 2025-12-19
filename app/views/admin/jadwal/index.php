@@ -88,9 +88,13 @@
         color: #95a5a6;
         font-size: 0.85rem;
     }
+    .crud-table tbody tr {
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+    }
     .crud-table tbody tr:hover {
         background-color: #f8f9fa;
-        transition: background-color 0.2s;
+        transform: translateX(2px);
     }
     .action-buttons {
         display: flex;
@@ -156,8 +160,12 @@ function renderTable(data) {
         const statusClass = item.status === 'Aktif' ? 'status-aktif' : 'status-nonaktif';
         const statusBadge = `<span class="status-badge ${statusClass}">${item.status || 'Nonaktif'}</span>`;
         
+        // Format waktu untuk menghapus detik (HH:MM:SS -> HH:MM)
+        const waktuMulai = item.waktuMulai ? item.waktuMulai.substring(0, 5) : '-';
+        const waktuSelesai = item.waktuSelesai ? item.waktuSelesai.substring(0, 5) : '-';
+        
         const row = `
-            <tr>
+            <tr onclick="editJadwal(${item.idJadwal}, event)">
                 <td style="text-align: center;">${index + 1}</td>
                 <td>
                     <div class="mk-info">
@@ -169,18 +177,14 @@ function renderTable(data) {
                 <td>
                     <div class="time-info">
                         <span class="day-label">${item.hari}</span>
-                        <span class="time-label">${item.waktuMulai} - ${item.waktuSelesai}</span>
+                        <span class="time-label">${waktuMulai} - ${waktuSelesai}</span>
                     </div>
                 </td>
                 <td style="text-align: center; font-weight: 600;">${item.kelas || '-'}</td>
                 <td style="text-align: center;">${statusBadge}</td>
                 <td>
                     <div class="action-buttons">
-                        <a href="javascript:void(0)" onclick="navigate('admin/jadwal/' + item.idJadwal + '/edit')" 
-                           class="btn btn-edit btn-icon" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button onclick="hapusJadwal(${item.idJadwal})" 
+                        <button onclick="hapusJadwal(${item.idJadwal}, event)" 
                                 class="btn btn-delete btn-icon" title="Hapus">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -213,7 +217,20 @@ function filterTable(searchTerm) {
     renderTable(filteredData);
 }
 
-function hapusJadwal(id) {
+function editJadwal(id, event) {
+    // Jangan navigate jika klik tombol delete
+    if (event && event.target.closest('.btn-delete')) {
+        return;
+    }
+    navigate('admin/jadwal/' + id + '/edit');
+}
+
+function hapusJadwal(id, event) {
+    // Mencegah event bubbling ke row
+    if (event) {
+        event.stopPropagation();
+    }
+    
     if(confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
         fetch(API_URL + '/jadwal/' + id, { method: 'DELETE' })
         .then(res => res.json())

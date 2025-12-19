@@ -65,7 +65,21 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', loadDependencies);
+let jadwalId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse ID from route parameter (admin/jadwal/{id}/edit)
+    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const matches = route.match(/admin\/jadwal\/(\d+)\/edit/);
+    
+    if (matches && matches[1]) {
+        jadwalId = matches[1];
+        document.querySelector('.admin-header h1').textContent = 'Edit Jadwal Praktikum';
+        document.getElementById('idJadwal').value = jadwalId;
+    }
+    
+    loadDependencies();
+});
 
 function loadDependencies() {
     // 1. Ambil data Mata Kuliah
@@ -79,6 +93,10 @@ function loadDependencies() {
                     option.textContent = `${mk.namaMatakuliah} (${mk.kodeMatakuliah})`;
                     select.appendChild(option);
                 });
+            }
+            // Load jadwal data after matakuliah loaded
+            if (jadwalId) {
+                loadJadwalAfterLabs();
             }
         }
     }).catch(err => console.error('Error loading matakuliah:', err));
@@ -99,10 +117,35 @@ function loadDependencies() {
     }).catch(err => console.error('Error loading laboratorium:', err));
 }
 
+function loadJadwalAfterLabs() {
+    fetch(API_URL + '/jadwal/' + jadwalId)
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === 'success' || response.code === 200) {
+            const data = response.data;
+            document.getElementById('idMatakuliah').value = data.idMatakuliah || '';
+            document.getElementById('idLaboratorium').value = data.idLaboratorium || '';
+            document.getElementById('hari').value = data.hari || 'Senin';
+            document.getElementById('kelas').value = data.kelas || '';
+            document.getElementById('waktuMulai').value = data.waktuMulai ? data.waktuMulai.substring(0, 5) : '08:00';
+            document.getElementById('waktuSelesai').value = data.waktuSelesai ? data.waktuSelesai.substring(0, 5) : '10:00';
+            document.getElementById('status').value = data.status || 'Aktif';
+        } else {
+            alert('Data tidak ditemukan');
+            navigate('admin/jadwal');
+        }
+    })
+    .catch(err => {
+        console.error('Error loading jadwal:', err);
+        alert('Gagal memuat data jadwal');
+    });
+}
+
 // 3. Handle Simpan Data
 document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const id = document.getElementById('idJadwal').value;
     const formData = {
         idMatakuliah: document.getElementById('idMatakuliah').value,
         idLaboratorium: document.getElementById('idLaboratorium').value,
@@ -118,14 +161,17 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     btn.disabled = true;
     btn.innerText = 'Menyimpan...';
 
-    fetch(API_URL + '/jadwalpraktikum', { 
-        method: 'POST',
+    const url = id ? (API_URL + '/jadwal/' + id) : (API_URL + '/jadwal');
+    const method = id ? 'PUT' : 'POST';
+
+    fetch(url, { 
+        method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     })
     .then(res => res.json())
     .then(data => {
-        if (data.status === 'success' || data.code === 201) { 
+        if (data.status === 'success' || data.code === 201 || data.code === 200) { 
             msg.innerHTML = '<span style="color:green">✓ Berhasil disimpan! Mengalihkan...</span>';
             setTimeout(() => { navigate('admin/jadwal'); }, 1500);
         } else {

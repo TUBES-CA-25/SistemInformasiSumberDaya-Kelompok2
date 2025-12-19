@@ -73,9 +73,13 @@
         color: #2c3e50;
         font-size: 1rem;
     }
+    .crud-table tbody tr {
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.2s;
+    }
     .crud-table tbody tr:hover {
         background-color: #f8f9fa;
-        transition: background-color 0.2s;
+        transform: translateX(2px);
     }
     .action-buttons {
         display: flex;
@@ -139,7 +143,7 @@ function renderTable(data) {
     
     data.forEach((item, index) => {
         const row = `
-            <tr>
+            <tr onclick="editMatakuliah(${item.idMatakuliah}, event)">
                 <td style="text-align: center;">${index + 1}</td>
                 <td>
                     <span class="kode-badge">${item.kodeMatakuliah}</span>
@@ -155,11 +159,7 @@ function renderTable(data) {
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="javascript:void(0)" onclick="navigate('admin/matakuliah/' + item.idMatakuliah + '/edit')" 
-                           class="btn btn-edit btn-icon" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button onclick="hapusMatakuliah(${item.idMatakuliah})" 
+                        <button onclick="hapusMatakuliah(${item.idMatakuliah}, event)" 
                                 class="btn btn-delete btn-icon" title="Hapus">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -190,7 +190,20 @@ function filterTable(searchTerm) {
     renderTable(filteredData);
 }
 
-function hapusMatakuliah(id) {
+function editMatakuliah(id, event) {
+    // Jangan navigate jika klik tombol delete
+    if (event && event.target.closest('.btn-delete')) {
+        return;
+    }
+    navigate('admin/matakuliah/' + id + '/edit');
+}
+
+function hapusMatakuliah(id, event) {
+    // Mencegah event bubbling ke row
+    if (event) {
+        event.stopPropagation();
+    }
+    
     if(confirm('Apakah Anda yakin ingin menghapus mata kuliah ini?')) {
         fetch(API_URL + '/matakuliah/' + id, { method: 'DELETE' })
         .then(res => res.json())

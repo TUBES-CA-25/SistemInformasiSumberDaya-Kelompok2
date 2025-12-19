@@ -120,10 +120,12 @@ small {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    // Parse ID from route parameter (admin/manajemen/{id}/edit)
+    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const matches = route.match(/admin\/manajemen\/(\d+)\/edit/);
     
-    if (id) {
+    if (matches && matches[1]) {
+        const id = matches[1];
         loadManajemenData(id);
     }
 });

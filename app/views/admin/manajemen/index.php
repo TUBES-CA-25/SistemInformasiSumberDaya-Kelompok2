@@ -121,8 +121,14 @@
     border-bottom: 1px solid #ecf0f1;
 }
 
+.admin-table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
 .admin-table tbody tr:hover {
     background: #f8f9fa;
+    transform: translateX(2px);
 }
 
 .status-badge {
@@ -177,7 +183,7 @@ function loadManajemen() {
         if((res.status === 'success' || res.code === 200) && res.data && res.data.length > 0) {
             res.data.forEach((item, index) => {
                 const row = `
-                    <tr>
+                    <tr onclick="editManajemen(${item.idManajemen}, event)">
                         <td style="font-weight: 600; color: #667eea;">${index + 1}</td>
                         <td>
                             <img src="${item.foto ? (item.foto.includes('http') ? item.foto : '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + item.foto) : 'https://placehold.co/50x50'}" 
@@ -187,9 +193,7 @@ function loadManajemen() {
                         <td><span style="color: #666; font-size: 13px;">${item.jabatan || '—'}</span></td>
                         <td>
                             <div class="action-buttons">
-                                <a href="javascript:void(0)" onclick="navigate('admin/manajemen/' + item.idManajemen + '/edit')" 
-                                   class="btn-edit">✏️ Edit</a>
-                                <button onclick="hapusManajemen(${item.idManajemen})" 
+                                <button onclick="hapusManajemen(${item.idManajemen}, event)" 
                                         class="btn-delete" 
                                         style="cursor: pointer;">🗑️ Hapus</button>
                             </div>
@@ -208,7 +212,20 @@ function loadManajemen() {
     });
 }
 
-function hapusManajemen(id) {
+function editManajemen(id, event) {
+    // Jangan navigate jika klik tombol delete
+    if (event && event.target.closest('.btn-delete')) {
+        return;
+    }
+    navigate('admin/manajemen/' + id + '/edit');
+}
+
+function hapusManajemen(id, event) {
+    // Mencegah event bubbling ke row
+    if (event) {
+        event.stopPropagation();
+    }
+    
     if (confirm('Yakin hapus data ini?')) {
         fetch(API_URL + '/manajemen/' + id, {
             method: 'DELETE'

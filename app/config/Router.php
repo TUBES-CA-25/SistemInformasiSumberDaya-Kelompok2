@@ -90,6 +90,7 @@ class Router {
         $this->get('/admin/laboratorium', 'LaboratoriumController', 'adminIndex');
         $this->get('/admin/laboratorium/create', 'LaboratoriumController', 'create');
         $this->post('/admin/laboratorium', 'LaboratoriumController', 'store');
+        $this->get('/admin/laboratorium/{id}', 'LaboratoriumController', 'detail');
         $this->get('/admin/laboratorium/{id}/edit', 'LaboratoriumController', 'edit');
         $this->put('/admin/laboratorium/{id}', 'LaboratoriumController', 'update');
         $this->delete('/admin/laboratorium/{id}', 'LaboratoriumController', 'delete');
