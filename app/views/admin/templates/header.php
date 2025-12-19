@@ -115,12 +115,14 @@
     <script>
         // Navigation function untuk admin panel
         function navigate(route) {
-            if (window.location.port === '8000') {
-                // PHP built-in server
-                window.location.href = '/index.php?route=' + route;
+            const basePath = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
+                ? '/SistemInformasiSumberDaya-Kelompok2/public/'
+                : '/';
+            
+            if (route === '') {
+                window.location.href = basePath;
             } else {
-                // XAMPP/Apache
-                window.location.href = '/' + route;
+                window.location.href = basePath + '?route=' + route;
             }
         }
     </script>

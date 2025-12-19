@@ -21,11 +21,11 @@
         </div>
 
         <div class="form-group">
-            <label>Koordinator Asisten</label>
+            <label>Koordinator Lab</label>
             <select id="idKordinatorAsisten" name="idKordinatorAsisten">
                 <option value="">-- Pilih Asisten --</option>
             </select>
-            <small class="form-text text-muted">Pilih asisten yang bertanggung jawab (Opsional).</small>
+            <small class="form-text text-muted">Pilih asisten yang bertanggung jawab sebagai koordinator lab ini (Opsional).</small>
         </div>
 
         <div class="form-group">
@@ -304,11 +304,4 @@ document.getElementById('labForm').addEventListener('submit', function(e) {
     });
 });
 
-function navigate(route) {
-    if (window.location.port === '8000') {
-        window.location.href = '/index.php?route=' + route;
-    } else {
-        window.location.href = '/' + route;
-    }
-}
 </script>

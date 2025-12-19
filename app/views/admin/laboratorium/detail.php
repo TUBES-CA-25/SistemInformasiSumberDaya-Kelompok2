@@ -1,11 +1,11 @@
 <div class="admin-header">
     <h1 id="labName">Detail Laboratorium</h1>
-    <div style="display: flex; gap: 10px;">
-        <a href="javascript:void(0)" onclick="navigate('admin/laboratorium')" class="btn" style="background: #95a5a6;">
-            <i class="fas fa-arrow-left"></i> Kembali
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="javascript:void(0)" onclick="navigate('admin/laboratorium')" class="btn" style="background: #95a5a6; height: 45px; min-width: 120px; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0 20px; box-sizing: border-box; border: none; font-size: 14px; text-decoration: none; color: white; border-radius: 5px;">
+            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Kembali
         </a>
-        <a href="javascript:void(0)" id="btnEdit" class="btn btn-add">
-            <i class="fas fa-edit"></i> Edit Data
+        <a href="javascript:void(0)" id="btnEdit" class="btn btn-add" style="height: 45px; min-width: 120px; display: flex; align-items: center; justify-content: center; margin: 0; padding: 0 20px; box-sizing: border-box; border: none; font-size: 14px; text-decoration: none; color: white; border-radius: 5px;">
+            <i class="fas fa-edit" style="margin-right: 8px;"></i> Edit Data
         </a>
     </div>
 </div>
@@ -84,10 +84,10 @@
     <!-- Koordinator Section -->
     <div class="detail-section coordinator-section">
         <h3><i class="fas fa-user-tie"></i> Koordinator Lab</h3>
-        <div class="coordinator-card">
+        <div class="coordinator-card" id="coordinatorCard">
             <img id="coordinatorImage" src="https://placehold.co/150x150" alt="Koordinator">
             <div>
-                <h4 id="coordinatorName">Bpk. Nama Dosen, M.T.</h4>
+                <h4 id="coordinatorName">Belum ada koordinator</h4>
                 <p class="coordinator-role">Koordinator Laboratorium</p>
             </div>
         </div>
@@ -316,13 +316,12 @@ function loadLabDetail(id) {
                 document.getElementById('jumlahPC').textContent = data.jumlahPc + ' PC';
             }
             
-            // Set koordinator (jika ada)
-            if (data.koordinatorNama) {
-                document.getElementById('coordinatorName').textContent = data.koordinatorNama;
-            }
-            if (data.koordinatorFoto) {
-                const fotoPath = data.koordinatorFoto.includes('http') ? data.koordinatorFoto : '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + data.koordinatorFoto;
-                document.getElementById('coordinatorImage').src = fotoPath;
+            // Load koordinator asisten jika ada
+            if (data.idKordinatorAsisten) {
+                loadKoordinatorAsisten(data.idKordinatorAsisten);
+            } else {
+                // Hide coordinator section if no coordinator
+                document.getElementById('coordinatorCard').style.opacity = '0.6';
             }
             
         } else {
@@ -336,11 +335,25 @@ function loadLabDetail(id) {
     });
 }
 
-function navigate(route) {
-    if (window.location.port === '8000') {
-        window.location.href = '/index.php?route=' + route;
-    } else {
-        window.location.href = '/' + route;
-    }
+function loadKoordinatorAsisten(idAsisten) {
+    fetch(API_URL + '/asisten/' + idAsisten)
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === 'success' || response.code === 200) {
+            const asisten = response.data;
+            document.getElementById('coordinatorName').textContent = asisten.nama || 'Nama tidak tersedia';
+            
+            if (asisten.foto) {
+                const fotoPath = asisten.foto.includes('http') ? asisten.foto : '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/' + asisten.foto;
+                document.getElementById('coordinatorImage').src = fotoPath;
+            }
+            
+            document.getElementById('coordinatorCard').style.opacity = '1';
+        }
+    })
+    .catch(err => {
+        console.error('Error loading koordinator:', err);
+    });
 }
+
 </script>

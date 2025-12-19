@@ -1,5 +1,5 @@
-<section class="page-content">
-    <div class="container">
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4 max-w-7xl">
         <div class="page-header">
             <h1>Kepala Laboratorium</h1>
             <p>Tim kepemimpinan yang bertanggung jawab atas operasional dan pengembangan laboratorium.</p>

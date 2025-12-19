@@ -1,12 +1,15 @@
 <?php
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../models/LaboratoriumModel.php';
+require_once __DIR__ . '/../models/AsistenModel.php';
 
 class LaboratoriumController extends Controller {
     private $model;
+    private $asistenModel;
 
     public function __construct() {
         $this->model = new \LaboratoriumModel();
+        $this->asistenModel = new \AsistenModel();
     }
 
     // API methods
