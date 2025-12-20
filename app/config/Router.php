@@ -53,6 +53,11 @@ class Router {
         $this->get('/profil', 'ProfilController', 'index');
         $this->get('/kepala-lab', 'KepalaLabController', 'index');
 
+        // Auth Routes
+        $this->get('/login', 'AuthController', 'login');
+        $this->post('/login', 'AuthController', 'authenticate');
+        $this->get('/logout', 'AuthController', 'logout');
+
         // Admin routes
         $this->get('/admin', 'DashboardController', 'index');
         $this->get('/admin/dashboard', 'DashboardController', 'index');
@@ -249,6 +254,12 @@ class Router {
         if (!method_exists($controller_instance, $action)) {
             $this->notFound();
             return;
+        }
+
+        // Middleware check for admin routes
+        if (strpos($this->path, '/admin') === 0) {
+            require_once APP_PATH . '/middleware/AuthMiddleware.php';
+            AuthMiddleware::check();
         }
 
         // Pass parameters to controller method
