@@ -8,7 +8,7 @@ Aplikasi web modern berbasis PHP Native dengan arsitektur **MVC (Model-View-Cont
 ![Composer](https://img.shields.io/badge/Composer-885630?style=for-the-badge&logo=composer&logoColor=white)
 
 ## ✨ Fitur Utama
-
+        
 ### 🏢 Manajemen Laboratorium
 - **Profil Fasilitas**: Informasi lengkap mengenai alat dan ruang laboratorium.
 - **Jadwal Praktikum**: Sistem penjadwalan terintegrasi.

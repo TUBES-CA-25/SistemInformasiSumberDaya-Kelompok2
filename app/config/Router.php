@@ -13,7 +13,7 @@ class Router {
     public function __construct() {
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->path = $this->getPath();
-        $this->defineRoutes();
+        // Lazy load routes - only define when needed
     }
 
     /**
@@ -192,6 +192,11 @@ class Router {
      * Dispatch request to appropriate controller
      */
     public function dispatch() {
+        // Define routes only when dispatching
+        if (empty($this->routes)) {
+            $this->defineRoutes();
+        }
+        
         $route_found = false;
 
         if (isset($this->routes[$this->method])) {

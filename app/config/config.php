@@ -75,8 +75,10 @@ if (APP_ENV === 'development') {
 }
 
 // Session configuration
-ini_set('session.gc_maxlifetime', 1440);
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.gc_maxlifetime', 1440);
+    session_start();
+}
 
 // Timezone
 date_default_timezone_set('Asia/Jakarta');
