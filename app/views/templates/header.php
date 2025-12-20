@@ -46,8 +46,8 @@
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Sumber Daya ▾</a>
                     <div class="dropdown-content">
-                        <a href="index.php?page=asisten">Asisten</a>
                         <a href="index.php?page=kepala">Kepala Lab</a>
+                        <a href="index.php?page=asisten">Asisten</a>
                     </div>
                 </li>
                 
