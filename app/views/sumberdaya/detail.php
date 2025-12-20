@@ -1,6 +1,7 @@
 <?php
 /**
- * VIEW: DETAIL PROFIL (CLEAN CODE)
+ * VIEW: DETAIL PROFIL (CLEAN CODE & SMART IMAGE)
+ * Menangani detail Asisten & Kepala Lab dengan fallback gambar avatar.
  */
 
 global $pdo;
@@ -14,6 +15,7 @@ $backLink = 'index.php?page=asisten';
 if ($id > 0) {
     try {
         if ($type === 'manajemen') {
+            // --- LOGIKA MANAJEMEN ---
             $stmt = $pdo->prepare("SELECT * FROM manajemen WHERE idManajemen = :id");
             $stmt->execute(['id' => $id]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -34,6 +36,7 @@ if ($id > 0) {
                 ];
             }
         } else {
+            // --- LOGIKA ASISTEN ---
             $stmt = $pdo->prepare("SELECT * FROM asisten WHERE idAsisten = :id");
             $stmt->execute(['id' => $id]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -71,16 +74,25 @@ if ($id > 0) {
             <div class="profile-wrapper">
                 <div class="profile-image">
                     <?php 
+                        // --- LOGIKA GAMBAR PINTAR (UI AVATARS) ---
                         $folder = $data['folder_foto']; 
                         $fotoName = $data['foto'];
-                        $imgUrl = ASSETS_URL . '/images/default-avatar.png';
+                        $namaEnc = urlencode($data['nama']);
+
+                        // 1. Default ke UI Avatars (Resolusi Tinggi 512px)
+                        $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=64748b&size=512&font-size=0.35";
 
                         if (!empty($fotoName)) {
+                            // 2. Cek URL Eksternal
                             if (strpos($fotoName, 'http') !== false) {
                                 $imgUrl = $fotoName;
-                            } elseif (file_exists(ROOT_PROJECT . "/public/images/$folder/" . $fotoName)) {
+                            } 
+                            // 3. Cek File di Folder Utama (manajemen/asisten)
+                            elseif (file_exists(ROOT_PROJECT . "/public/images/$folder/" . $fotoName)) {
                                 $imgUrl = ASSETS_URL . "/images/$folder/" . $fotoName;
-                            } elseif (file_exists(ROOT_PROJECT . "/public/images/asisten/" . $fotoName)) {
+                            } 
+                            // 4. Fallback: Cek di folder asisten (jika file nyasar)
+                            elseif (file_exists(ROOT_PROJECT . "/public/images/asisten/" . $fotoName)) {
                                 $imgUrl = ASSETS_URL . "/images/asisten/" . $fotoName;
                             }
                         }

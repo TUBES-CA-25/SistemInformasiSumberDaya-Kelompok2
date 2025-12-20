@@ -11,6 +11,7 @@ try {
 
     foreach ($all_data as $row) {
         $jabatan = $row['jabatan'] ?? '';
+        // Deteksi Kepala Lab / Pimpinan
         if (stripos($jabatan, 'Kepala') !== false) {
             $pimpinan_list[] = $row;
         } else {
@@ -71,30 +72,32 @@ try {
 
 <?php
 /**
- * Fungsi Helper Render Kartu
+ * Fungsi Helper Render Kartu (UPDATED: UI Avatars Fallback)
  */
 function renderStaffCard($row) {
     $fotoName = $row['foto'] ?? '';
-    $imgUrl = ASSETS_URL . '/images/default-avatar.png'; 
+    $namaEnc = urlencode($row['nama']);
+    
+    // 1. Default ke UI Avatars (Inisial Nama) agar tidak pecah/tanda tanya
+    $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=eff6ff&color=2563eb&size=256";
 
+    // 2. Cek apakah ada file foto fisik
     if (!empty($fotoName)) {
         if (strpos($fotoName, 'http') !== false) {
             $imgUrl = $fotoName; 
         } elseif (file_exists(ROOT_PROJECT . '/public/images/manajemen/' . $fotoName)) {
             $imgUrl = ASSETS_URL . '/images/manajemen/' . $fotoName;
         } elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
+            // Fallback cek di folder asisten jika di folder manajemen tidak ada
             $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
         }
     }
-    
-    $inisial = strtoupper(substr($row['nama'], 0, 2));
     ?>
 
     <a href="index.php?page=detail&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
         <div class="staff-card">
             <div class="staff-photo-box">
-                <div class="staff-placeholder"><?= $inisial ?></div>
-                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy" onerror="this.style.display='none'"> 
+                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>"> 
             </div>
 
             <div class="staff-content">

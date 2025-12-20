@@ -1,9 +1,25 @@
+/* =======================================================
+   STYLE: ALUMNI (FINAL BALANCED VERSION)
+   ======================================================= */
 
-
+/* --- 1. GLOBAL SETTINGS --- */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --text-dark: #0f172a;
+    --text-gray: #64748b;
+    --bg-light: #f8fafc;
+    --border: #e2e8f0;
+    --card-bg: #ffffff;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
 
 .alumni-section {
-    padding: 80px 0;
-    background-color: #fcfdfe;
+    /* [DIUBAH] Jarak ideal: Cukup untuk hindari navbar, tapi tidak terlalu jauh */
+    padding-top: 120px; 
+    padding-bottom: 80px;
+    background-color: var(--bg-light);
     min-height: 100vh;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
@@ -14,16 +30,15 @@
     padding: 0 24px;
 }
 
-
+/* =======================================================
+   2. HEADER & SEARCH BAR
+   ======================================================= */
 
 .page-header {
     text-align: center;        
     max-width: 800px;          
-    margin: 0 auto 60px auto;  
-    padding-top: 10px;
-    border-bottom: none;       
+    margin: 0 auto 50px auto; /* Margin bawah dikurangi sedikit */
 }
-
 
 .header-badge {
     display: inline-block;
@@ -35,23 +50,21 @@
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* [DIUBAH] Jarak ke Judul lebih rapat */
 }
-
 
 .page-header h1 {
     font-size: 3.5rem;         
     font-weight: 900;
-    color: #0f172a;            
+    color: var(--text-dark);            
     letter-spacing: -2px;      
     line-height: 1.1;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     margin-top: 0;
 }
 
-
 .page-header p {
-    color: #475569;            
+    color: var(--text-gray);            
     font-size: 1.25rem;        
     line-height: 1.6;
     margin: 0 auto;
@@ -59,108 +72,193 @@
     max-width: 600px;
 }
 
+/* --- Search Bar --- */
+.search-container {
+    margin-top: 35px; /* [DIUBAH] Lebih rapat ke teks */
+    position: relative;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 16px 24px;
+    padding-right: 50px;
+    border-radius: 50px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    outline: none;
+    font-size: 1rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.search-icon-box {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1.3rem;
+    pointer-events: none;
+}
 
 @media (max-width: 768px) {
     .page-header h1 { font-size: 2.5rem; }
     .page-header p { font-size: 1rem; padding: 0 15px; }
+    /* Mobile adjust: Navbar HP biasanya lebih kecil */
+    .alumni-section { padding-top: 100px; } 
 }
 
-
+/* =======================================================
+   3. LIST VIEW (YEAR DIVIDER & GRID)
+   ======================================================= */
 
 .alumni-group {
-    margin-bottom: 80px;
+    margin-bottom: 60px;
 }
 
+/* Divider Tahun */
 .year-divider {
     display: flex;
     align-items: center;
     gap: 24px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .year-divider h2 {
     font-size: 1.8rem;
-    color: #1e293b;
     font-weight: 800;
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap;
 }
 
 .year-line {
-    height: 1px;
+    height: 2px;
     background: linear-gradient(90deg, #e2e8f0 0%, rgba(226, 232, 240, 0) 100%);
     flex-grow: 1;
+    border-radius: 2px;
 }
 
-
+/* --- Grid System --- */
 .staff-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 30px;
 }
 
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+    width: 280px; 
+    max-width: 100%;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+/* --- Card Styling --- */
 .staff-card {
-    background: #ffffff;
-    border: 1px solid #f1f5f9;
+    background: var(--card-bg);
+    border: 2px solid var(--border);
     border-radius: 20px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     height: 100%;
     display: flex;
     flex-direction: column;
-}
-
-.staff-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-    border-color: #3b82f6;
-}
-
-.staff-photo-box {
-    height: 240px;
-    background: #f8fafc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
     position: relative;
 }
 
+.staff-card:hover {
+    border-color: #94a3b8;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-8px);
+}
+
+.staff-photo-box {
+    height: 260px;
+    width: 100%;
+    background: #f1f5f9;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.staff-photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.staff-card:hover .staff-photo-box img {
+    transform: scale(1.05);
+}
+
 .staff-placeholder {
-    font-size: 3.5rem;
-    font-weight: 900;
-    color: #e2e8f0;
-    letter-spacing: -2px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #cbd5e1;
+    background: #f8fafc;
     user-select: none;
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 0;
 }
 
 .staff-content {
     padding: 24px;
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    z-index: 1;
 }
 
 .staff-name {
     font-size: 1.25rem;
     font-weight: 800;
-    color: #0f172a;
-    margin-bottom: 6px;
+    color: var(--text-dark);
+    margin-bottom: 5px;
     line-height: 1.3;
 }
 
 .staff-role {
     font-size: 0.9rem;
-    color: #3b82f6;
+    color: var(--primary);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.5px;
     margin-bottom: 16px;
     display: block;
 }
 
 .staff-footer {
-    padding-top: 16px;
-    border-top: 1px solid #f1f5f9;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 2px solid #f1f5f9;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -171,160 +269,164 @@
     align-items: center;
     gap: 10px;
     font-size: 0.85rem;
-    color: #64748b;
+    color: var(--text-gray);
     font-weight: 500;
 }
 
 .meta-item i {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #94a3b8;
 }
 
+.hidden-by-search {
+    display: none !important;
+}
 
-.detail-layout {
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    gap: 60px;
+/* =======================================================
+   4. DETAIL PAGE
+   ======================================================= */
+
+.detail-nav { margin-bottom: 30px; }
+
+.btn-back {
+    text-decoration: none;
+    color: var(--text-gray);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+}
+.btn-back:hover { color: var(--primary); }
+
+.profile-wrapper {
+    display: flex;
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
     margin-top: 20px;
 }
 
-.left-sidebar .facility-hero-img {
-    background: #ffffff;
-    border: 1px solid #f1f5f9;
-    border-radius: 24px;
-    padding: 50px 30px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-}
-
-.left-sidebar .coord-avatar {
-    width: 130px;
-    height: 130px;
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-    color: #2563eb;
-    margin: 0 auto;
-    border-radius: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    font-weight: 900;
-}
-
-.left-sidebar .coord-card {
-    background: #0f172a;
-    border-radius: 24px;
-    padding: 30px;
-    margin-top: 30px;
-    color: #fff;
+.profile-image {
+    flex: 0 0 400px;
+    background: #f1f5f9;
+    aspect-ratio: 3/4;
     position: relative;
+    border-right: 2px solid var(--border);
     overflow: hidden;
 }
 
-.left-sidebar .coord-card::after {
-    content: '';
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
     position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 150px;
-    height: 150px;
-    background: rgba(59, 130, 246, 0.1);
-    border-radius: 50%;
+    top: 0; left: 0;
 }
 
-.left-sidebar .btn-wa {
-    background: #3b82f6;
-    border-radius: 14px;
-    padding: 14px;
-    font-weight: 700;
+.profile-content {
+    padding: 50px;
+    flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    color: #fff;
-    text-decoration: none;
-    transition: 0.3s;
+    flex-direction: column;
 }
 
-.left-sidebar .btn-wa:hover {
-    background: #2563eb;
-    transform: translateY(-3px);
-}
+.alumni-badges { margin-bottom: 15px; }
 
-
-.right-content h1 {
-    font-size: 3rem;
-    font-weight: 900;
-    color: #0f172a;
-    margin-bottom: 20px;
-    letter-spacing: -0.03em;
-}
-
-.description {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    color: #475569;
-    margin-bottom: 50px;
-}
-
-.spec-list {
-    border: none;
-    background: transparent;
-}
-
-.spec-item {
-    background: #fff;
-    margin-bottom: 16px;
-    padding: 24px 30px;
-    border-radius: 20px;
-    border: 1px solid #f1f5f9;
-    display: flex;
-    align-items: center;
-    transition: 0.3s;
-}
-
-.spec-item:hover {
-    border-color: #cbd5e1;
-    background: #fcfdfe;
-}
-
-.spec-label {
-    width: 180px;
+.category-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 8px 16px;
+    border-radius: 8px;
     font-size: 0.9rem;
-    font-weight: 700;
-    color: #94a3b8;
-    text-transform: uppercase;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 10px;
 }
 
-.spec-value div:first-child {
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #0f172a;
+.divisi-badge {
+    background: #f1f5f9;
+    color: var(--text-gray);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
 }
 
-.testimoni-box {
-    background: #f8fafc;
-    padding: 40px;
-    border-radius: 24px;
-    position: relative;
-    font-size: 1.25rem;
-    color: #334155;
-    line-height: 1.7;
-    border: none;
+.profile-name {
+    margin-bottom: 5px;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: var(--text-dark);
+    font-weight: 900;
 }
 
-.testimoni-box::before {
-    content: '"';
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    font-size: 5rem;
-    color: #e2e8f0;
-    font-family: serif;
-    line-height: 1;
+.specialization-box { margin: 20px 0; }
+.member-specialization {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--text-dark); font-weight: 600; font-size: 1.2rem;
+}
+.member-specialization i { color: var(--primary); font-size: 1.3rem; }
+.company-name { color: var(--text-gray); font-weight: 400; margin-left: 5px; }
+
+.section-title {
+    color: var(--text-dark); margin-bottom: 10px;
+    border-bottom: 1px solid var(--border); padding-bottom: 10px;
+    font-size: 1.1rem; font-weight: 700;
+}
+.section-title.mt-30 { margin-top: 35px; }
+
+.profile-bio { color: #475569; line-height: 1.7; font-size: 1.05rem; }
+.alumni-quote {
+    font-style: italic; background: #f8fafc; padding: 20px;
+    border-radius: 12px; border-left: 4px solid #cbd5e1;
 }
 
+.skills-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+.skill-tag {
+    background: white; border: 1px solid #cbd5e1; color: #334155;
+    padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+}
 
-@media (max-width: 1024px) {
-    .detail-layout { grid-template-columns: 1fr; }
+.contact-wrapper {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: auto; padding-top: 30px;
+}
+
+.btn-contact {
+    padding: 12px 24px; border-radius: 12px; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-weight: 700; transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 0.95rem; cursor: pointer; border: none;
+    background: var(--text-dark); color: white;
+}
+.btn-contact:hover {
+    transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.btn-linkedin { background-color: #0077b5 !important; color: white !important; }
+.btn-portfolio { background-color: #ea4c89 !important; color: white !important; }
+
+/* Empty State */
+.empty-state-wrapper { text-align: center; padding: 100px 0; }
+.empty-icon { font-size: 4rem; color: #cbd5e1; margin-bottom: 20px; }
+.empty-title { color: var(--text-dark); margin-bottom: 10px; font-weight: 800; }
+.empty-desc { color: var(--text-gray); margin-bottom: 30px; }
+.btn-primary-pill {
+    background: var(--primary); color: white; padding: 12px 30px;
+    border-radius: 50px; font-weight: 600; display: inline-block; text-decoration: none;
+}
+
+@media (max-width: 900px) {
+    .profile-wrapper { flex-direction: column; }
+    .profile-image {
+        flex: auto; width: 100%; aspect-ratio: 1 / 1; 
+        border-right: none; border-bottom: 2px solid var(--border);
+    }
+    .profile-content { padding: 30px; }
+    .page-header h1 { font-size: 2.5rem; }
+    .staff-grid .card-link { width: 100%; }
 }

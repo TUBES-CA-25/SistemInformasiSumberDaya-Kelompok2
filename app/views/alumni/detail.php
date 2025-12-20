@@ -1,164 +1,159 @@
 <?php
-// === DATA DUMMY ALUMNI ===
-$alumniData = [
-    'RD' => [
-        'nama' => 'Reza Danuarta, S.Kom.',
-        'prodi' => 'Teknik Informatika',
-        'angkatan' => '2018',
-        'inisial' => 'RD',
-        'email' => 'reza.danuarta@alumni.umi.ac.id',
-        'bio' => 'Berfokus pada pengembangan sistem backend yang scalable. Selama menjadi asisten di laboratorium, aktif dalam divisi programming yang membantu riset sistem terdistribusi.',
-        'pengalaman' => [
-            ['tahun' => '2022 - Sekarang', 'posisi' => 'Senior Software Engineer', 'instansi' => 'Gojek'],
-            ['tahun' => '2020 - 2022', 'posisi' => 'Backend Developer', 'instansi' => 'DANA Indonesia'],
-            ['tahun' => '2019 - 2020', 'posisi' => 'Junior Developer', 'instansi' => 'Startup Lokal']
-        ],
-        'testimoni' => 'Pengalaman menjadi asisten di laboratorium memberikan pondasi teknis yang sangat kuat sebelum terjun ke dunia industri.'
-    ],
-    'AS' => [
-        'nama' => 'Annisa Suci, S.Kom.',
-        'prodi' => 'Sistem Informasi',
-        'angkatan' => '2019',
-        'inisial' => 'AS',
-        'email' => 'annisa.suci@alumni.umi.ac.id',
-        'bio' => 'Ahli dalam pengolahan data besar dan visualisasi data untuk pengambilan keputusan bisnis strategis.',
-        'pengalaman' => [
-            ['tahun' => '2021 - Sekarang', 'posisi' => 'Data Analyst', 'instansi' => 'BCA'],
-            ['tahun' => '2020 - 2021', 'posisi' => 'Intern Data Scientist', 'instansi' => 'Telkom Indonesia']
-        ],
-        'testimoni' => 'Laboratorium adalah tempat terbaik untuk bereksperimen dengan data asli dan melatih logika analisis.'
-    ]
-];
+/**
+ * VIEW: DETAIL ALUMNI (FULL FIX V2 - SMART IMAGE)
+ * Mengambil data real dari database dengan logika gambar UI Avatars yang seragam.
+ */
 
-$id = isset($_GET['id']) ? $_GET['id'] : null;
-$data = isset($alumniData[$id]) ? $alumniData[$id] : null;
+global $pdo;
+
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$data = null;
+
+if ($id > 0) {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM alumni WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            // Parsing Keahlian
+            $skills = !empty($row['keahlian']) ? array_map('trim', explode(',', $row['keahlian'])) : [];
+
+            $data = [
+                'nama' => $row['nama'],
+                'angkatan' => $row['angkatan'],
+                'divisi' => $row['divisi'] ?? 'Asisten Lab',
+                'pekerjaan' => $row['pekerjaan'] ?? 'Belum terisi',
+                'perusahaan' => $row['perusahaan'] ?? '-',
+                'foto' => $row['foto'],
+                'email' => $row['email'],
+                'linkedin' => $row['linkedin'],
+                'portfolio' => $row['portfolio'],
+                'tahun_lulus' => $row['tahun_lulus'],
+                'testimoni' => $row['kesan_pesan'] ?? 'Tidak ada kesan pesan.',
+                'skills' => $skills
+            ];
+        }
+    } catch (PDOException $e) {
+        // Silent error handling
+    }
+}
 ?>
 
 <section class="alumni-section">
     <div class="container">
+        
         <?php if ($data) : ?>
-            <div style="margin-bottom: 40px;">
+            <div class="detail-nav">
                 <a href="index.php?page=alumni" class="btn-back">
                     <i class="ri-arrow-left-line"></i> Kembali ke Daftar Alumni
                 </a>
             </div>
 
-            <div class="detail-layout">
-                <div class="left-sidebar">
-                    <div class="facility-hero-img">
-                        <div class="coord-avatar"><?= $data['inisial']; ?></div>
-                        <h2 style="margin-top: 20px; font-size: 1.2rem; text-align: center;"><?= $data['nama']; ?></h2>
-                        <span style="color: #64748b; font-weight: 600;"><?= $data['prodi']; ?></span>
-                        <div class="badge-info" style="margin-top: 15px;">Angkatan <?= $data['angkatan']; ?></div>
-                    </div>
+            <div class="profile-wrapper">
+                
+                <div class="profile-image">
+                    <?php 
+                        // --- LOGIKA GAMBAR PINTAR (SAMA DENGAN ALUMNI.PHP) ---
+                        $fotoName = $data['foto'];
+                        $namaEnc = urlencode($data['nama']);
 
-                    <div class="coord-card">
-                        <span class="coord-title">Kontak Profesional</span>
-                        <p style="font-size: 0.85rem; margin-bottom: 15px; word-break: break-all; opacity: 0.8;"><?= $data['email']; ?></p>
-                        <a href="mailto:<?= $data['email']; ?>" class="btn-wa">
-                            <i class="ri-mail-line"></i> Kirim Pesan
-                        </a>
-                    </div>
+                        // 1. Default: Avatar Inisial (Abu-abu, Bold, Ukuran Besar 512px)
+                        $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
+
+                        if (!empty($fotoName)) {
+                            // 2. Cek apakah link database adalah ui-avatars lama (misal warna biru)
+                            // Jika YA, kita abaikan agar tetap pakai style abu-abu kita ($imgUrl default di atas)
+                            if (strpos($fotoName, 'ui-avatars.com') !== false) {
+                                // Do nothing (biarkan default)
+                            }
+                            // 3. Jika link eksternal lain (LinkedIn/Google), gunakan
+                            elseif (strpos($fotoName, 'http') !== false) {
+                                $imgUrl = $fotoName;
+                            } 
+                            // 4. Jika file lokal ada, gunakan
+                            elseif (file_exists(ROOT_PROJECT . "/public/images/alumni/" . $fotoName)) {
+                                $imgUrl = ASSETS_URL . "/images/alumni/" . $fotoName;
+                            }
+                        }
+                    ?>
+                    <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($data['nama']) ?>">
                 </div>
+                
+                <div class="profile-content">
+                    
+                    <div class="alumni-badges">
+                        <span class="category-badge">Angkatan <?= htmlspecialchars($data['angkatan']); ?></span>
+                        <span class="divisi-badge">
+                            Ex-Divisi <?= htmlspecialchars($data['divisi']); ?>
+                        </span>
+                    </div>
+                    
+                    <h1 class="profile-name">
+                        <?= htmlspecialchars($data['nama']); ?>
+                    </h1>
+                    
+                    <div class="specialization-box">
+                        <span class="member-specialization">
+                            <i class="ri-briefcase-line"></i> 
+                            <?= htmlspecialchars($data['pekerjaan']); ?> 
+                            <?php if($data['perusahaan'] !== '-'): ?>
+                                <span class="company-name">at <?= htmlspecialchars($data['perusahaan']); ?></span>
+                            <?php endif; ?>
+                        </span>
+                    </div>
 
-                <div class="right-content">
-                    <span class="badge-info">Profil Alumni</span>
-                    <h1>Karier & Pengalaman</h1>
-                    <p class="description"><?= $data['bio']; ?></p>
+                    <h4 class="section-title">Kesan & Pesan</h4>
+                    <div class="profile-bio alumni-quote">
+                        "<?= htmlspecialchars($data['testimoni']); ?>"
+                    </div>
 
-                    <div class="spec-group">
-                        <h3><i class="ri-briefcase-line"></i> Riwayat Pekerjaan</h3>
-                        <div class="spec-list">
-                            <?php foreach($data['pengalaman'] as $exp): ?>
-                            <div class="spec-item">
-                                <span class="spec-label"><?= $exp['tahun']; ?></span>
-                                <div class="spec-value">
-                                    <div style="color: #0f172a; font-weight: 700;"><?= $exp['posisi']; ?></div>
-                                    <div style="color: #2563eb; font-size: 0.9rem;"><?= $exp['instansi']; ?></div>
-                                </div>
-                            </div>
+                    <?php if (!empty($data['skills'])): ?>
+                        <h4 class="section-title mt-30">Keahlian & Kompetensi</h4>
+                        <div class="skills-container">
+                            <?php foreach($data['skills'] as $skill): ?>
+                                <span class="skill-tag"><?= htmlspecialchars($skill); ?></span>
                             <?php endforeach; ?>
                         </div>
+                    <?php endif; ?>
+
+                    <div class="contact-wrapper">
+                        <?php if(!empty($data['email'])): ?>
+                            <a href="mailto:<?= htmlspecialchars($data['email']); ?>" class="btn-contact">
+                                <i class="ri-mail-send-line"></i> Email
+                            </a>
+                        <?php endif; ?>
+
+                        <?php if(!empty($data['linkedin'])): ?>
+                            <a href="<?= htmlspecialchars($data['linkedin']); ?>" target="_blank" class="btn-contact btn-linkedin">
+                                <i class="ri-linkedin-box-fill"></i> LinkedIn
+                            </a>
+                        <?php endif; ?>
+
+                        <?php if(!empty($data['portfolio'])): ?>
+                            <a href="<?= htmlspecialchars($data['portfolio']); ?>" target="_blank" class="btn-contact btn-portfolio">
+                                <i class="ri-dribbble-line"></i> Portfolio
+                            </a>
+                        <?php endif; ?>
                     </div>
 
-                    <div class="spec-group">
-                        <h3><i class="ri-chat-quote-line"></i> Testimoni</h3>
-                        <div class="testimoni-box">
-                            "<?= $data['testimoni']; ?>"
-                        </div>
-                    </div>
                 </div>
             </div>
+
+        <?php else : ?>
+            
+            <div class="empty-state-wrapper">
+                <div class="empty-icon">
+                    <i class="ri-user-unfollow-line"></i>
+                </div>
+                <h2 class="empty-title">Data Tidak Ditemukan</h2>
+                <p class="empty-desc">Maaf, data alumni dengan ID tersebut tidak tersedia.</p>
+                <a href="index.php?page=alumni" class="btn-primary-pill">
+                    Kembali ke Daftar
+                </a>
+            </div>
+
         <?php endif; ?>
+
     </div>
 </section>
-
-<script>
-document.addEventListener('DOMContentLoaded', loadAlumniDetail);
-
-function loadAlumniDetail() {
-    const params = new URLSearchParams(window.location.search);
-    const alumniId = params.get('id');
-
-    if (!alumniId) {
-        document.getElementById('detailContainer').innerHTML = '<p style="color: red;">Error: ID Alumni tidak ditemukan</p>';
-        return;
-    }
-
-    fetch(`${API_URL}/alumni/${alumniId}`)
-    .then(res => res.json())
-    .then(response => {
-        if ((response.status === 'success' || response.code === 200) && response.data) {
-            const alumni = response.data;
-            
-            const html = `
-                <div class="detail-card">
-                    <div class="detail-left">
-                        <img src="${alumni.foto || 'https://placehold.co/400x500'}" alt="${alumni.nama}">
-                    </div>
-
-                    <div class="detail-right">
-                        <span class="badge-role">Alumni Angkatan ${alumni.angkatan || '—'}</span>
-                        <h1 style="margin-top: 10px;">${alumni.nama}</h1>
-                        <p class="current-job">Saat ini bekerja sebagai <strong>${alumni.pekerjaan || 'Belum bekerja'}</strong>${alumni.perusahaan ? ` di <strong>${alumni.perusahaan}</strong>` : ''}</p>
-
-                        <div class="testimony-box">
-                            <h3>💬 Kesan & Pesan</h3>
-                            <p>"${alumni.kesan_pesan || 'Tidak ada kesan/pesan'}"</p>
-                        </div>
-                        
-                        <div class="detail-meta">
-                            <div class="meta-item">
-                                <strong>Divisi Dahulu</strong>
-                                <p>${alumni.divisi || '—'}</p>
-                            </div>
-                            <div class="meta-item">
-                                <strong>Tahun Lulus</strong>
-                                <p>${alumni.tahun_lulus || '—'}</p>
-                            </div>
-                            <div class="meta-item">
-                                <strong>Keahlian</strong>
-                                <p>${alumni.keahlian || '—'}</p>
-                            </div>
-                        </div>
-
-                        <div class="social-links">
-                            ${alumni.linkedin ? `<a href="${alumni.linkedin}" target="_blank">LinkedIn</a>` : ''}
-                            ${alumni.portfolio ? `<a href="${alumni.portfolio}" target="_blank">Portfolio</a>` : ''}
-                            ${alumni.email ? `<a href="mailto:${alumni.email}">Email</a>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('detailContainer').innerHTML = html;
-        } else {
-            document.getElementById('detailContainer').innerHTML = '<p style="color: #999;">Data alumni tidak ditemukan</p>';
-        }
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        document.getElementById('detailContainer').innerHTML = '<p style="color: red;">Error: Gagal memuat data alumni</p>';
-    });
-}
-</script>
