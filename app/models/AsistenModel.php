@@ -22,5 +22,14 @@ class AsistenModel extends Model {
         $stmt->execute();
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+
+    /**
+     * Reset semua koordinator ke 0
+     */
+    public function resetAllKoordinator() {
+        $query = "UPDATE Asisten SET isKoordinator = 0";
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute();
+    }
 }
 ?>

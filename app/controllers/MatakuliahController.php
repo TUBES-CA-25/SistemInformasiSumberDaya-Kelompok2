@@ -1,32 +1,80 @@
 <?php
-namespace App\Controllers;
-
-require_once __DIR__ . '/../models/MatakuliahModel.php';
+require_once CONTROLLER_PATH . '/Controller.php';
+require_once ROOT_PROJECT . '/app/models/MatakuliahModel.php';
 
 class MatakuliahController extends Controller {
     private $model;
 
     public function __construct() {
-        $this->model = new \MatakuliahModel();
+        $this->model = new MatakuliahModel();
     }
 
-    public function index() {
+    /**
+     * Halaman admin matakuliah
+     */
+    public function adminIndex($params = []) {
+        $data = $this->model->getAll();
+        $this->view('admin/matakuliah/index', ['matakuliah' => $data]);
+    }
+
+    /**
+     * Form create admin
+     */
+    public function create($params = []) {
+        $this->view('admin/matakuliah/form', ['matakuliah' => null, 'action' => 'create']);
+    }
+
+    /**
+     * Form edit admin
+     */
+    public function edit($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/admin/matakuliah');
+            return;
+        }
+        
+        $matakuliah = $this->model->getById($id, 'idMatakuliah');
+        if (!$matakuliah) {
+            $this->setFlash('error', 'Data matakuliah tidak ditemukan');
+            $this->redirect('/admin/matakuliah');
+            return;
+        }
+        
+        $this->view('admin/matakuliah/form', ['matakuliah' => $matakuliah, 'action' => 'edit']);
+    }
+
+    /**
+     * API endpoints
+     */
+    public function apiIndex() {
         $data = $this->model->getAll();
         $this->success($data, 'Data Matakuliah retrieved successfully');
     }
 
-    public function show($params) {
+    public function apiShow($params) {
         $id = $params['id'] ?? null;
         if (!$id) {
             $this->error('ID matakuliah tidak ditemukan', null, 400);
+            return;
         }
 
         $data = $this->model->getById($id, 'idMatakuliah');
         if (!$data) {
             $this->error('Matakuliah tidak ditemukan', null, 404);
+            return;
         }
 
         $this->success($data, 'Matakuliah retrieved successfully');
+    }
+
+    // Legacy index/show for backwards compatibility
+    public function index() {
+        return $this->apiIndex();
+    }
+
+    public function show($params) {
+        return $this->apiShow($params);
     }
 
     public function store() {

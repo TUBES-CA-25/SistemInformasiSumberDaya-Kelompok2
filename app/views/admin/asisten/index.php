@@ -1,26 +1,200 @@
 <div class="admin-header">
-    <h1>Data Asisten Laboratorium</h1>
-    <a href="/admin-asisten-form.php" class="btn btn-add">+ Tambah Asisten Baru</a>
+    <h1><i class="fas fa-users"></i> Data Asisten Laboratorium</h1>
+    <div style="display: flex; gap: 10px;">
+        <a href="javascript:void(0)" onclick="navigate('admin/asisten/koordinator')" class="btn btn-primary">
+            <i class="fas fa-user-check"></i> Pilih Koordinator
+        </a>
+        <a href="javascript:void(0)" onclick="navigate('admin/asisten/create')" class="btn btn-success">
+            <i class="fas fa-plus"></i> Tambah Asisten Baru
+        </a>
+    </div>
 </div>
 
-<div class="card">
-    <table class="crud-table">
-        <thead>
-            <tr>
-                <th style="width: 50px;">No</th>
-                <th style="width: 100px;">Foto</th>
-                <th>Nama Lengkap</th>
-                <th>Jurusan</th> <th>Status</th>
-                <th style="width: 150px;">Aksi</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            <tr>
-                <td colspan="6" style="text-align:center;">Sedang memuat data...</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card" style="padding: 0;">
+    <div style="overflow-x: auto;">
+        <table class="crud-table" style="margin: 0;">
+            <thead>
+                <tr style="background: #34495e; color: white;">
+                    <th style="width: 50px; padding: 15px; text-align: center;">No</th>
+                    <th style="width: 80px; padding: 15px; text-align: center;">Foto</th>
+                    <th style="padding: 15px;">Nama Lengkap</th>
+                    <th style="padding: 15px;">Jurusan</th>
+                    <th style="width: 100px; padding: 15px; text-align: center;">Koordinator</th>
+                    <th style="width: 100px; padding: 15px; text-align: center;">Status</th>
+                    <th style="width: 80px; padding: 15px; text-align: center;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td colspan="6" style="text-align:center; padding: 30px; color: #999;">
+                        <div style="animation: spin 1s linear infinite; display: inline-block;">⟳</div> Sedang memuat data...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<style>
+/* Custom Button Styles for Consistency */
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white !important;
+}
+
+.btn-primary {
+    background-color: #3498db;
+}
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background-color: #27ae60;
+}
+.btn-success:hover {
+    background-color: #219150;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+}
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+/* Table Styles */
+.crud-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.crud-table tbody tr:hover {
+    background-color: #f0f7ff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.crud-table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    color: #555;
+}
+
+.crud-table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
+    display: block;
+    margin: 0 auto;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.status-aktif {
+    background-color: #e8f5e9;
+    color: #27ae60;
+    border: 1px solid #c8e6c9;
+}
+
+.status-nonaktif {
+    background-color: #ffebee;
+    color: #c0392b;
+    border: 1px solid #ffcdd2;
+}
+
+.coord-badge {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid #bbdefb;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+.btn-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-edit {
+    background-color: #f39c12;
+}
+
+.btn-edit:hover {
+    background-color: #e67e22;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+.row-clickable {
+    position: relative;
+}
+
+.row-clickable td:not(:last-child) {
+    cursor: pointer;
+}
+
+.btn-action {
+    position: relative;
+    z-index: 10;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
 
 <script>
 // Saat halaman dibuka, ambil data dari API
@@ -29,55 +203,88 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadAsisten() {
-    fetch('/api/asisten') // Memanggil method index() di Controller
+    fetch(API_URL + '/asisten')
     .then(response => response.json())
     .then(res => {
         const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = ''; // Bersihkan loading
+        tbody.innerHTML = '';
 
-        if(res.status === 'success' && res.data.length > 0) {
+        if((res.status === 'success' || res.code === 200) && res.data && res.data.length > 0) {
             res.data.forEach((item, index) => {
-                // Tentukan label status
                 const statusBadge = item.statusAktif == 1 
-                    ? '<span style="color:green; font-weight:bold;">Aktif</span>' 
-                    : '<span style="color:red;">Non-Aktif</span>';
+                    ? '<span class="status-badge status-aktif"><i class="fas fa-check-circle"></i> Aktif</span>' 
+                    : '<span class="status-badge status-nonaktif"><i class="fas fa-times-circle"></i> Non-Aktif</span>';
+                
+                const koordinatorBadge = item.isKoordinator == 1
+                    ? '<span class="coord-badge"><i class="fas fa-crown"></i> Koordinator</span>'
+                    : '<span style="color: #95a5a6; font-size: 12px;">—</span>';
 
-                // Render Baris Tabel
+                const fotoUrl = item.foto 
+                    ? (item.foto.includes('http') ? item.foto : '/assets/uploads/' + item.foto) 
+                    : 'https://placehold.co/50x50?text=Foto';
+
                 const row = `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td><img src="${item.foto || 'https://placehold.co/50x50'}" style="width:50px; height:50px; border-radius:50%; object-fit:cover;"></td>
-                        <td>${item.nama}</td>
-                        <td>${item.jurusan || '-'}</td>
-                        <td>${statusBadge}</td>
+                    <tr class="row-clickable" onclick="editAsisten(${item.idAsisten}, event)">
+                        <td style="text-align: center; font-weight: 600; color: #7f8c8d;">${index + 1}</td>
                         <td>
-                            <a href="#" class="btn btn-edit">Edit</a>
-                            <button onclick="hapusAsisten(${item.idAsisten})" class="btn btn-delete">Hapus</button>
+                            <img src="${fotoUrl}" class="avatar-img" alt="Foto">
+                        </td>
+                        <td>
+                            <div style="font-weight: 600; color: #2c3e50;">${item.nama}</div>
+                            <div style="font-size: 12px; color: #7f8c8d;">${item.email || ''}</div>
+                        </td>
+                        <td><span style="color: #555; font-size: 13px;">${item.jurusan || '—'}</span></td>
+                        <td style="text-align: center;">${koordinatorBadge}</td>
+                        <td style="text-align: center;">${statusBadge}</td>
+                        <td style="text-align: center;">
+                            <button onclick="hapusAsisten(${item.idAsisten}, event)" 
+                                    class="btn-action btn-delete" 
+                                    title="Hapus">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
                 tbody.innerHTML += row;
             });
         } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Belum ada data asisten.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color: #999;"><i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>Belum ada data asisten.</td></tr>';
         }
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+        console.error('Error:', err);
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 30px; color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td></tr>';
+    });
 }
 
-// Fungsi Hapus (Menghubungkan ke method delete() di Controller)
-function hapusAsisten(id) {
-    if(confirm('Yakin ingin menghapus data ini?')) {
-        fetch('/api/asisten/' + id, { method: 'DELETE' })
+function editAsisten(id, event) {
+    // Jangan navigate jika yang diklik adalah tombol delete
+    if (event.target.closest('.btn-delete')) {
+        return;
+    }
+    navigate('admin/asisten/' + id + '/edit');
+}
+
+function hapusAsisten(id, event) {
+    // Stop propagation agar tidak trigger row click
+    event.stopPropagation();
+    
+    if(confirm('Apakah Anda yakin ingin menghapus data asisten ini?')) {
+        fetch(API_URL + '/asisten/' + id, { method: 'DELETE' })
         .then(response => response.json())
         .then(res => {
-            if(res.status === 'success') {
-                alert('Data berhasil dihapus');
-                loadAsisten(); // Reload tabel
+            if(res.status === 'success' || res.code === 200) {
+                alert('✓ Data berhasil dihapus');
+                loadAsisten();
             } else {
-                alert('Gagal menghapus');
+                alert('✗ Gagal menghapus: ' + (res.message || 'Error'));
             }
+        })
+        .catch(err => {
+            alert('✗ Error: ' + err.message);
+            console.error(err);
         });
     }
 }
+
 </script>

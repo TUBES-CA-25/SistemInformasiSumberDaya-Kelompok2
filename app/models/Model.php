@@ -4,6 +4,8 @@
  * Parent class untuk semua model
  */
 
+require_once __DIR__ . '/../config/Database.php';
+
 class Model {
     public $db;
     protected $table;
@@ -14,12 +16,29 @@ class Model {
     }
 
     /**
+     * Get database connection
+     */
+    public function getDb() {
+        return $this->db;
+    }
+
+    /**
      * Get semua data
      */
     public function getAll() {
         $query = "SELECT * FROM " . $this->table;
         $result = $this->db->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
+     * Count semua data
+     */
+    public function countAll() {
+        $query = "SELECT COUNT(*) as total FROM " . $this->table;
+        $result = $this->db->query($query);
+        $row = $result->fetch_assoc();
+        return $row['total'];
     }
 
     /**

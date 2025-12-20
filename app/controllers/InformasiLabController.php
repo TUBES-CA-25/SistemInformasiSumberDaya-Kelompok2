@@ -1,7 +1,6 @@
 <?php
-namespace App\Controllers;
-
-require_once __DIR__ . '/../models/InformasiLabModel.php';
+require_once CONTROLLER_PATH . '/Controller.php';
+require_once ROOT_PROJECT . '/app/models/InformasiLabModel.php';
 
 class InformasiLabController extends Controller {
     private $model;
@@ -10,12 +9,97 @@ class InformasiLabController extends Controller {
         $this->model = new \InformasiLabModel();
     }
 
-    public function index() {
+    /**
+     * Halaman publik laboratorium
+     */
+    public function index($params = []) {
+        $data = $this->model->getAktif();
+        $this->view('fasilitas/laboratorium', ['laboratorium' => $data]);
+    }
+
+    /**
+     * Detail laboratorium publik
+     */
+    public function detail($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/laboratorium');
+            return;
+        }
+        
+        $lab = $this->model->getById($id, 'id_informasi');
+        if (!$lab) {
+            $this->redirect('/laboratorium');
+            return;
+        }
+        
+        $this->view('fasilitas/detail', ['laboratorium' => $lab]);
+    }
+
+    /**
+     * Halaman admin laboratorium
+     */
+    public function adminIndex($params = []) {
+        $data = $this->model->getAll();
+        $this->view('admin/laboratorium/index', ['laboratorium' => $data]);
+    }
+
+    /**
+     * Form create admin
+     */
+    public function create($params = []) {
+        $this->view('admin/laboratorium/form', ['laboratorium' => null, 'action' => 'create']);
+    }
+
+    /**
+     * Form edit admin
+     */
+    public function edit($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/admin/laboratorium');
+            return;
+        }
+        
+        $lab = $this->model->getById($id, 'id_informasi');
+        if (!$lab) {
+            $this->setFlash('error', 'Data laboratorium tidak ditemukan');
+            $this->redirect('/admin/laboratorium');
+            return;
+        }
+        
+        $this->view('admin/laboratorium/form', ['laboratorium' => $lab, 'action' => 'edit']);
+    }
+
+    /**
+     * Admin detail laboratorium
+     */
+    public function adminDetail($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/admin/laboratorium');
+            return;
+        }
+        
+        $lab = $this->model->getById($id, 'id_informasi');
+        if (!$lab) {
+            $this->setFlash('error', 'Data laboratorium tidak ditemukan');
+            $this->redirect('/admin/laboratorium');
+            return;
+        }
+        
+        $this->view('admin/laboratorium/detail', ['laboratorium' => $lab]);
+    }
+
+    /**
+     * API endpoints
+     */
+    public function apiIndex() {
         $data = $this->model->getAktif();
         $this->success($data, 'Data Informasi Lab retrieved successfully');
     }
 
-    public function show($params) {
+    public function apiShow($params) {
         $id = $params['id'] ?? null;
         if (!$id) {
             $this->error('ID informasi tidak ditemukan', null, 400);
