@@ -18,6 +18,26 @@ class AsistenController extends Controller {
     }
 
     /**
+     * Halaman detail asisten
+     */
+    public function detail($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/asisten');
+            return;
+        }
+
+        $asisten = $this->model->getById($id, 'idAsisten');
+        if (!$asisten) {
+            // Optional: Show 404 or redirect with message
+            $this->redirect('/asisten');
+            return;
+        }
+
+        $this->view('sumberdaya/detail-asisten', ['asisten' => $asisten]);
+    }
+
+    /**
      * Halaman admin asisten
      */
     public function adminIndex($params = []) {
@@ -90,9 +110,23 @@ class AsistenController extends Controller {
                     'nama' => $_POST['nama'] ?? '',
                     'email' => $_POST['email'] ?? '',
                     'jurusan' => $_POST['jurusan'] ?? '',
+                    'jabatan' => $_POST['jabatan'] ?? '',
+                    'kategori' => $_POST['kategori'] ?? '',
+                    'lab' => $_POST['lab'] ?? '',
+                    'spesialisasi' => $_POST['spesialisasi'] ?? '',
+                    'bio' => $_POST['bio'] ?? '',
+                    'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]', // Expecting JSON string or will process later
                     'statusAktif' => $_POST['statusAktif'] ?? '1',
                     'isKoordinator' => $_POST['isKoordinator'] ?? '0'
                 ];
+
+                // Jika skills dikirim sebagai string dipisah koma, ubah ke JSON array
+                if (!empty($input['skills']) && !is_array($input['skills']) && $input['skills'][0] !== '[') {
+                    $skillsArray = array_map('trim', explode(',', $input['skills']));
+                    $input['skills'] = json_encode($skillsArray);
+                } elseif (is_array($input['skills'])) {
+                    $input['skills'] = json_encode($input['skills']);
+                }
 
                 $required = ['nama', 'email'];
                 $missing = $this->validateRequired($input, $required);
@@ -170,9 +204,23 @@ class AsistenController extends Controller {
                     'nama' => $_POST['nama'] ?? '',
                     'email' => $_POST['email'] ?? '',
                     'jurusan' => $_POST['jurusan'] ?? '',
+                    'jabatan' => $_POST['jabatan'] ?? '',
+                    'kategori' => $_POST['kategori'] ?? '',
+                    'lab' => $_POST['lab'] ?? '',
+                    'spesialisasi' => $_POST['spesialisasi'] ?? '',
+                    'bio' => $_POST['bio'] ?? '',
+                    'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
                     'statusAktif' => $_POST['statusAktif'] ?? '1',
                     'isKoordinator' => $_POST['isKoordinator'] ?? '0'
                 ];
+
+                // Jika skills dikirim sebagai string dipisah koma, ubah ke JSON array
+                if (!empty($input['skills']) && !is_array($input['skills']) && $input['skills'][0] !== '[') {
+                    $skillsArray = array_map('trim', explode(',', $input['skills']));
+                    $input['skills'] = json_encode($skillsArray);
+                } elseif (is_array($input['skills'])) {
+                    $input['skills'] = json_encode($input['skills']);
+                }
 
                 // Process file upload if new file provided
                 $file = $_FILES['foto'];

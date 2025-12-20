@@ -42,6 +42,7 @@ class Router {
         $this->get('/alumni', 'AlumniController', 'index');
         $this->get('/alumni/{id}', 'AlumniController', 'detail');
         $this->get('/asisten', 'AsistenController', 'index');
+        $this->get('/asisten/{id}', 'AsistenController', 'detail');
         $this->get('/jadwal', 'JadwalPraktikumController', 'index');
         $this->get('/laboratorium', 'InformasiLabController', 'index');
         $this->get('/laboratorium/{id}', 'InformasiLabController', 'detail');

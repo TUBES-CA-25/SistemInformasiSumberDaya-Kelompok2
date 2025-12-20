@@ -67,6 +67,37 @@
         </div>
 
         <div class="form-group">
+            <label><i class="fas fa-id-badge"></i> Jabatan</label> 
+            <input type="text" id="jabatan" name="jabatan" placeholder="Contoh: Asisten Laboratorium">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fas fa-tag"></i> Kategori</label> 
+            <input type="text" id="kategori" name="kategori" placeholder="Contoh: Umum, Junior, Senior">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fas fa-flask"></i> Laboratorium</label> 
+            <input type="text" id="lab" name="lab" placeholder="Contoh: Laboratorium Komputer Dasar">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fas fa-star"></i> Spesialisasi</label> 
+            <input type="text" id="spesialisasi" name="spesialisasi" placeholder="Contoh: Jaringan Komputer, Pemrograman Web">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fas fa-tools"></i> Keahlian (Skills)</label> 
+            <input type="text" id="skills" name="skills" placeholder="Pisahkan dengan koma. Contoh: PHP, MySQL, Networking">
+            <small style="color: grey;">Masukkan beberapa keahlian dipisahkan dengan koma.</small>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fas fa-info-circle"></i> Bio / Tentang Saya</label> 
+            <textarea id="bio" name="bio" rows="4" placeholder="Deskripsi singkat tentang asisten..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
+        </div>
+
+        <div class="form-group">
             <label><i class="fas fa-camera"></i> Upload Foto</label>
             <input type="file" id="foto" name="foto" accept="image/*">
             <small id="fotoInfo" style="color: #666; display: none; margin-top: 5px;">
@@ -116,6 +147,28 @@ function loadAsistenData(id) {
             document.getElementById('nama').value = asisten.nama || '';
             document.getElementById('email').value = asisten.email || '';
             document.getElementById('jurusan').value = asisten.jurusan || '';
+            document.getElementById('jabatan').value = asisten.jabatan || '';
+            document.getElementById('kategori').value = asisten.kategori || '';
+            document.getElementById('lab').value = asisten.lab || '';
+            document.getElementById('spesialisasi').value = asisten.spesialisasi || '';
+            document.getElementById('bio').value = asisten.bio || '';
+            
+            // Handle skills (expecting JSON string or array)
+            let skillsStr = '';
+            if (asisten.skills) {
+                try {
+                    let skills = typeof asisten.skills === 'string' ? JSON.parse(asisten.skills) : asisten.skills;
+                    if (Array.isArray(skills)) {
+                        skillsStr = skills.join(', ');
+                    } else if (typeof skills === 'string') {
+                         skillsStr = skills;
+                    }
+                } catch (e) {
+                    skillsStr = asisten.skills; // Fallback plain text
+                }
+            }
+            document.getElementById('skills').value = skillsStr;
+
             document.getElementById('statusAktif').value = asisten.statusAktif || '1';
             
             if (asisten.foto) {

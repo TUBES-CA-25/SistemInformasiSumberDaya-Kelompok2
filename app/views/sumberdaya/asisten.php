@@ -68,7 +68,7 @@
                                 <span class="badge">Koordinator Lab</span>
                                 <h2>${escapeHtml(koordinator.nama)}</h2>
                                 <p>Bertanggung jawab atas seluruh operasional harian asisten dan jadwal praktikum. ${escapeHtml(koordinator.jurusan ? 'Mahasiswa dari ' + koordinator.jurusan : '')}</p>
-                                <a href="/profil.php?id=${koordinator.idAsisten}" class="btn-sm">Lihat Profil Lengkap →</a>
+                                <a href="${window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') ? '/SistemInformasiSumberDaya-Kelompok2' : ''}/asisten/${koordinator.idAsisten}" class="btn-sm">Lihat Profil Lengkap →</a>
                             </div>
                         `;
                     }
@@ -104,7 +104,10 @@
                         
                         const asistenCard = document.createElement('a');
                         asistenCard.className = 'profile-card';
-                        asistenCard.href = '/profil.php?id=' + asisten.idAsisten;
+                        const baseUrl = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2')
+                            ? '/SistemInformasiSumberDaya-Kelompok2'
+                            : '';
+                        asistenCard.href = baseUrl + '/asisten/' + asisten.idAsisten;
                         
                         // Gunakan image dari database atau placeholder
                         // Path gambar: /assets/uploads/{filename}
