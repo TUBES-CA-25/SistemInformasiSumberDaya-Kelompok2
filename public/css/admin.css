@@ -1,8 +1,8 @@
-/* === ADMIN DASHBOARD STYLE === */
+
 * { box-sizing: border-box; }
 body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f6f9; display: flex; }
 
-/* Sidebar Kiri */
+
 .sidebar {
     width: 250px;
     background: #2c3e50;
@@ -29,14 +29,14 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f6f9; disp
     border-left-color: #3498db;
 }
 
-/* Konten Utama Kanan */
+
 .main-content {
     margin-left: 250px;
     width: calc(100% - 250px);
     padding: 30px;
 }
 
-/* Header Atas */
+
 .admin-header {
     display: flex;
     justify-content: space-between;
@@ -46,7 +46,7 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f6f9; disp
     border-bottom: 1px solid #ddd;
 }
 
-/* Kartu Statistik (Dashboard) */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -87,7 +87,7 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f6f9; disp
     font-size: 14px;
 }
 
-/* Tabel CRUD */
+
 .crud-table {
     width: 100%;
     border-collapse: collapse;
@@ -100,14 +100,14 @@ body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f6f9; disp
 .crud-table th { background: #34495e; color: #fff; }
 .crud-table tr:hover { background: #f9f9f9; }
 
-/* Tombol Aksi */
+
 .btn { padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 0.9rem; display: inline-block; color: white; border: none; cursor: pointer; }
 .btn-add { background: #27ae60; margin-bottom: 15px; }
 .btn-edit { background: #f39c12; }
 .btn-delete { background: #c0392b; }
 .btn:hover { opacity: 0.9; }
 
-/* === TAMBAHAN FORM ADMIN === */
+
 .card {
     background: #fff;
     padding: 25px;

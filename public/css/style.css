@@ -1,9 +1,17 @@
-/* =========================================
-   MAIN GLOBAL STYLE (Navbar, Footer, Reset)
-   ========================================= */
+/* =======================================================
+   SYSTEM MANAGEMENT RESOURCES - MAIN STYLESHEET
+   Group 2 - Refactored Structure
+   ======================================================= */
 
-/* 1. Global Reset & Font */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+/* -------------------------------------------------------
+   1. GLOBAL RESET & TYPOGRAPHY
+   ------------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
 
 body { 
     background-color: #f8fbff; /* Background Biru Sangat Muda */
@@ -11,25 +19,46 @@ body {
     line-height: 1.6; 
 }
 
-.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;}
-h1, h2, h3, h4 { color: #1e3a8a; font-weight: 800; } /* Biru Navy */
-a { text-decoration: none; transition: 0.3s ease; }
-img { max-width: 100%; display: block; }
+.container { 
+    width: 100%; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 24px;
+}
 
-/* 2. Navbar Styling */
+h1, h2, h3, h4 { 
+    color: #1e3a8a; /* Biru Navy */
+    font-weight: 800; 
+}
+
+a { 
+    text-decoration: none; 
+    transition: 0.3s ease; 
+}
+
+img { 
+    max-width: 100%; 
+    display: block; 
+}
+
+/* -------------------------------------------------------
+   2. NAVBAR STYLING
+   ------------------------------------------------------- */
 .navbar { 
     background: #fff; 
-    padding: 20px 0; 
+    padding: 10px 0; /* Padding sedikit dikecilkan agar proporsional dengan logo besar */
     border-bottom: 1px solid #e2e8f0; 
     position: relative; 
     z-index: 1000; 
 }
-.navbar .container { display: flex; justify-content: space-between; align-items: center; }
 
-/* =======================================================
-   STYLE: LOGO BESAR (BIGGER VERSION)
-   ======================================================= */
+.navbar .container { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
 
+/* --- LOGO UTAMA (BIGGER VERSION) --- */
 .logo {
     display: flex;
     align-items: center;
@@ -43,31 +72,37 @@ img { max-width: 100%; display: block; }
 }
 
 .logo-img {
-    height: 80px;      /* <-- UKURAN LOGO DIPERBESAR (Ubah angka ini jika kurang besar) */
-    width: auto;       /* Lebar otomatis agar gambar tidak gepeng */
+    height: 80px;      /* Ukuran Logo Diperbesar Sesuai Permintaan */
+    width: auto;       
     object-fit: contain;
     display: block;
-    transition: transform 0.3s ease; /* Efek halus saat disentuh kursor */
+    transition: transform 0.3s ease; 
 }
 
-/* Opsional: Efek saat mouse diarahkan ke logo */
 .brand-logo:hover .logo-img {
-    transform: scale(1.05); /* Sedikit membesar saat di-hover */
+    transform: scale(1.05); /* Efek Zoom Halus saat Hover */
 }
 
-/* --- Responsif untuk HP (Mobile) --- */
-@media (max-width: 768px) {
-    .logo-img {
-        height: 60px;  /* Ukuran tetap besar tapi aman untuk layar HP */
-    }
+/* --- NAVIGATION LINKS (DESKTOP) --- */
+.nav-links { 
+    list-style: none; 
+    display: flex; 
+    gap: 30px; 
 }
 
-.nav-links { list-style: none; display: flex; gap: 30px; }
-.nav-links a { color: #4a5568; font-weight: 600; font-size: 0.95rem; }
-.nav-links a:hover { color: #2563eb; } /* Biru Terang */
+.nav-links a { 
+    color: #4a5568; 
+    font-weight: 600; 
+    font-size: 0.95rem; 
+}
 
-/* 3. Dropdown Menu (Desktop) */
+.nav-links a:hover { 
+    color: #2563eb; /* Biru Terang */
+}
+
+/* --- DROPDOWN MENU --- */
 .dropdown { position: relative; }
+
 .dropdown-content {
     display: none; 
     position: absolute; 
@@ -79,46 +114,96 @@ img { max-width: 100%; display: block; }
     left: 0; 
     padding: 10px 0; 
     border: 1px solid #eff6ff;
+    z-index: 1100;
 }
 
-.dropdown:hover .dropdown-content { display: block; animation: fadeIn 0.3s ease; }
-.dropdown-content a { color: #4a5568 !important; padding: 12px 20px; display: block; }
-.dropdown-content a:hover { background: #eff6ff; color: #2563eb !important; }
+.dropdown:hover .dropdown-content { 
+    display: block; 
+    animation: fadeIn 0.3s ease; 
+}
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.dropdown-content a { 
+    color: #4a5568 !important; 
+    padding: 12px 20px; 
+    display: block; 
+}
 
-/* 4. Footer */
-footer { background: #1e3a8a; color: #fff; padding: 60px 0 20px; margin-top: 50px; }
-footer h3 { color: #fff !important; margin-bottom: 20px; }
-footer a { color: #dbeafe; margin-bottom: 10px; display: block; }
-footer a:hover { color: #fff; }
-.copyright { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-top: 20px; color: #94a3b8; }
+.dropdown-content a:hover { 
+    background: #eff6ff; 
+    color: #2563eb !important; 
+}
 
-/* 5. Mobile Responsive (Hamburger) */
-.menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-.menu-toggle span { display: block; width: 25px; height: 3px; background-color: #1e3a8a; border-radius: 2px; transition: 0.4s; }
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(-10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
 
-/* Animasi X Hamburger */
+/* -------------------------------------------------------
+   3. MOBILE MENU (HAMBURGER)
+   ------------------------------------------------------- */
+.menu-toggle { 
+    display: none; 
+    flex-direction: column; 
+    gap: 5px; 
+    cursor: pointer; 
+}
+
+.menu-toggle span { 
+    display: block; 
+    width: 25px; 
+    height: 3px; 
+    background-color: #1e3a8a; 
+    border-radius: 2px; 
+    transition: 0.4s; 
+}
+
+/* Animasi Hamburger ke X */
 .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
 .menu-toggle.active span:nth-child(2) { opacity: 0; }
 .menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
 @media screen and (max-width: 768px) {
     .menu-toggle { display: flex; }
+    
     .nav-links { 
-        display: none; position: absolute; top: 100%; left: 0; width: 100%; 
-        flex-direction: column; background: #fff; padding: 20px; border-top: 1px solid #eff6ff; 
+        display: none; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        width: 100%; 
+        flex-direction: column; 
+        background: #fff; 
+        padding: 20px; 
+        border-top: 1px solid #eff6ff; 
         box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     }
-    .nav-links.active { display: flex; animation: fadeIn 0.3s forwards; }
-    .dropdown-content { position: static !important; display: none; width: 100%; background: #f8fbff; box-shadow: none; border: none; }
+    
+    .nav-links.active { 
+        display: flex; 
+        animation: fadeIn 0.3s forwards; 
+    }
+    
+    .dropdown-content { 
+        position: static !important; 
+        display: none; 
+        width: 100%; 
+        background: #f8fbff; 
+        box-shadow: none; 
+        border: none; 
+        padding-left: 20px; /* Indentasi submenu di mobile */
+    }
+    
     .dropdown:hover .dropdown-content { display: block; }
+    
+    /* Logo adjustment for Mobile */
+    .logo-img {
+        height: 60px; /* Ukuran aman untuk layar HP */
+    }
 }
 
-/* =======================================================
-   STYLE: FOOTER (DARK THEME)
-   ======================================================= */
-
+/* -------------------------------------------------------
+   4. FOOTER STYLING (DARK THEME)
+   ------------------------------------------------------- */
 .main-footer {
     background-color: #0f172a; /* Hitam Kebiruan (Dark Slate) */
     color: #e2e8f0;            /* Teks Putih Abu-abu */
@@ -126,6 +211,7 @@ footer a:hover { color: #fff; }
     font-size: 0.95rem;
     position: relative;
     z-index: 10;
+    margin-top: 60px; /* Jarak dari konten atasnya */
 }
 
 .footer-grid {
@@ -135,12 +221,24 @@ footer a:hover { color: #fff; }
     margin-bottom: 50px;
 }
 
-/* --- Kolom 1: Info --- */
+/* --- Kolom 1: Info Logo & Kontak --- */
 .footer-logo {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 20px;
+}
+
+.footer-logo img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.footer-logo span {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #fff;
+    margin-left: 10px;
 }
 
 .footer-desc {
@@ -164,11 +262,11 @@ footer a:hover { color: #fff; }
 }
 
 .contact-list .address {
-    align-items: flex-start; /* Alamat rata atas */
+    align-items: flex-start;
     line-height: 1.5;
 }
 
-/* --- Kolom 2: Menu --- */
+/* --- Kolom 2: Menu Link --- */
 .footer-section h3 {
     color: #ffffff;
     font-size: 1.25rem;
@@ -235,16 +333,57 @@ footer a:hover { color: #fff; }
 
 /* --- Copyright --- */
 .copyright {
-    border-top: 1px solid #1e293b; /* Garis pemisah halus */
+    border-top: 1px solid #1e293b;
     padding: 25px 0;
     text-align: center;
     color: #64748b;
     font-size: 0.9rem;
 }
 
-/* Responsif HP */
+/* Responsif HP untuk Footer */
 @media (max-width: 768px) {
     .main-footer { padding-top: 50px; }
     .footer-grid { gap: 40px; }
     .footer-section h3::after { width: 30px; }
+}
+
+/* -------------------------------------------------------
+   5. BACK TO TOP BUTTON
+   ------------------------------------------------------- */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: #2563eb; /* Biru Utama */
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    z-index: 9999;
+    cursor: pointer;
+    
+    /* Animasi Default */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+/* Class Active (Muncul saat scroll) */
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background-color: #1e40af;
+    transform: translateY(-5px);
+    color: #fff;
 }

@@ -6,7 +6,7 @@
     <title>Sistem Informasi Sumber Daya Lab</title>
     
     <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/style.css">
 
     <?php 
         if (isset($pageCss) && !empty($pageCss)) {
@@ -64,16 +64,5 @@
             </ul>
         </div>
     </nav>
-    
-    <script>
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navLinks = document.querySelector('.nav-links');
-        if(menuToggle){
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                menuToggle.classList.toggle('active'); 
-            });
-        }
-    </script>
     
     <main>

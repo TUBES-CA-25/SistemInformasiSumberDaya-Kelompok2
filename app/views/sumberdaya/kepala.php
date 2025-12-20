@@ -1,177 +1,117 @@
-<section class="sumberdaya-section">
+<?php
+
+global $pdo; 
+
+$pimpinan_list = [];
+$laboran_list = [];
+
+try {
+    $stmt = $pdo->query("SELECT * FROM manajemen ORDER BY idManajemen ASC");
+    $all_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($all_data as $row) {
+        $jabatan = $row['jabatan'] ?? '';
+        if (stripos($jabatan, 'Kepala') !== false) {
+            $pimpinan_list[] = $row;
+        } else {
+            $laboran_list[] = $row;
+        }
+    }
+} catch (PDOException $e) {
+    echo "<div class='alert-error'>Error Database: " . $e->getMessage() . "</div>";
+}
+?>
+
+<section class="sumberdaya-section fade-up">
     <div class="container">
         
         <header class="page-header">
-            <span class="header-badge">Manajemen & Struktural 2025</span>
+            <span class="header-badge">Manajemen & Struktural <?= date('Y') ?></span>
             <h1>Struktur Pimpinan</h1>
             <p>Pimpinan Laboratorium dan Staff Administrasi Fakultas Ilmu Komputer</p>
+
+            <div class="search-container">
+                <input type="text" id="searchStaff" placeholder="Cari nama atau jabatan..." class="search-input">
+                <div class="search-icon-box">
+                    <i class="ri-search-line"></i>
+                </div>
+            </div>
         </header>
 
-        <span class="section-label">Kepala Laboratorium</span>
+        <?php if (!empty($pimpinan_list)) : ?>
+            <span class="section-label">Kepala Laboratorium</span>
 
-        <div class="staff-grid">
+            <div class="staff-grid">
+                <?php foreach ($pimpinan_list as $row) : ?>
+                    <?php renderStaffCard($row); ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($laboran_list)) : ?>
+            <span class="section-label">Pranata Laboratorium & Staff</span>
             
-            <a href="index.php?page=detail&id=AF" class="card-link">
-                <div class="staff-card">
-                    <div class="staff-photo-box">
-                        <div class="staff-placeholder">AF</div>
-                    </div>
-                    <div class="staff-content">
-                        <div class="staff-name">Dr. Ir. Ahmad Fauzi, M.Kom.</div>
-                        <span class="staff-role">Kepala Lab. Terpadu</span>
-                        
-                        <div class="staff-footer">
-                            <div class="meta-item">
-                                <i class="ri-mail-line"></i> ahmad.fauzi@umi.ac.id
-                            </div>
-                            <div class="meta-item">
-                                <i class="ri-graduation-cap-line"></i> Teknik Informatika
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+            <div class="staff-grid">
+                <?php foreach ($laboran_list as $row) : ?>
+                    <?php renderStaffCard($row); ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
-            <a href="index.php?page=detail&id=BD" class="card-link">
-                <div class="staff-card">
-                    <div class="staff-photo-box">
-                        <div class="staff-placeholder">BD</div>
-                    </div>
-                    <div class="staff-content">
-                        <div class="staff-name">Dr. Budi Darmawan, M.T.</div>
-                        <span class="staff-role">Kepala Lab. Jaringan</span>
-                        
-                        <div class="staff-footer">
-                            <div class="meta-item">
-                                <i class="ri-mail-line"></i> budi.d@umi.ac.id
-                            </div>
-                            <div class="meta-item">
-                                <i class="ri-graduation-cap-line"></i> Teknik Informatika
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-            <a href="index.php?page=detail&id=CL" class="card-link">
-                <div class="staff-card">
-                    <div class="staff-photo-box">
-                        <div class="staff-placeholder">CL</div>
-                    </div>
-                    <div class="staff-content">
-                        <div class="staff-name">Dr. Citra Lestari, M.Cs.</div>
-                        <span class="staff-role">Kepala Lab. Multimedia</span>
-                        
-                        <div class="staff-footer">
-                            <div class="meta-item">
-                                <i class="ri-mail-line"></i> citra.l@umi.ac.id
-                            </div>
-                            <div class="meta-item">
-                                <i class="ri-graduation-cap-line"></i> Sistem Informasi
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-        </div>
-
-
-        <span class="section-label">Pranata Laboratorium Pendidikan (PLP)</span>
-        
-        <div class="staff-grid">
-            
-            <a href="index.php?page=detail&id=DK" class="card-link">
-                <div class="staff-card">
-                    <div class="staff-photo-box">
-                        <div class="staff-placeholder">DK</div>
-                    </div>
-                    <div class="staff-content">
-                        <div class="staff-name">Dedi Kurniawan, S.Kom.</div>
-                        <span class="staff-role">Laboran Teknis</span>
-                        
-                        <div class="staff-footer">
-                            <div class="meta-item">
-                                <i class="ri-mail-line"></i> dedi.k@umi.ac.id
-                            </div>
-                            <div class="meta-item">
-                                <i class="ri-graduation-cap-line"></i> Teknik Informatika
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-        </div>
+        <?php if (empty($pimpinan_list) && empty($laboran_list)) : ?>
+            <div class="empty-state-wrapper">
+                <p>Data manajemen belum tersedia.</p>
+            </div>
+        <?php endif; ?>
 
     </div>
 </section>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    loadKepalaLab();
-});
+<script src="<?= ASSETS_URL ?>/js/kepala.js"></script>
 
-function loadKepalaLab() {
-    fetch(API_URL + '/manajemen')
-    .then(response => response.json())
-    .then(res => {
-        const grid = document.getElementById('profileGrid');
-        grid.innerHTML = '';
+<?php
+/**
+ * Fungsi Helper Render Kartu
+ */
+function renderStaffCard($row) {
+    $fotoName = $row['foto'] ?? '';
+    $imgUrl = ASSETS_URL . '/images/default-avatar.png'; 
 
-        if ((res.status === 'success' || res.code === 200) && res.data && res.data.length > 0) {
-            res.data.forEach(item => {
-                // Construct image URL - check if it's already full URL or just filename
-                let imgSrc = item.foto;
-                if (item.foto && !item.foto.includes('http')) {
-                    imgSrc = '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + item.foto;
-                } else if (!item.foto) {
-                    imgSrc = 'https://placehold.co/300x300/bdc3c7/white?text=' + encodeURIComponent(item.nama || 'Foto');
-                }
-
-                const card = document.createElement('a');
-                card.href = '#';
-                card.className = 'profile-card';
-                card.innerHTML = `
-                    <div class="profile-img">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect fill='%23f0f0f0' width='300' height='300'/%3E%3C/svg%3E" 
-                             data-src="${imgSrc}" 
-                             alt="${item.nama}"
-                             loading="lazy"
-                             style="width:100%; height:100%; object-fit:cover;">
-                    </div>
-                    <div class="profile-info">
-                        <h3>${item.nama || '—'}</h3>
-                        <p>${item.jabatan || 'Kepala Laboratorium'}</p>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-
-            // Lazy load images with Intersection Observer
-            lazyLoadImages();
-        } else {
-            grid.innerHTML = '<p style="text-align: center; color: #999;">Tidak ada data.</p>';
+    if (!empty($fotoName)) {
+        if (strpos($fotoName, 'http') !== false) {
+            $imgUrl = $fotoName; 
+        } elseif (file_exists(ROOT_PROJECT . '/public/images/manajemen/' . $fotoName)) {
+            $imgUrl = ASSETS_URL . '/images/manajemen/' . $fotoName;
+        } elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
+            $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
         }
-    })
-    .catch(error => {
-        console.error('Error loading kepala lab:', error);
-        document.getElementById('profileGrid').innerHTML = '<p style="text-align: center; color: red;">Gagal memuat data.</p>';
-    });
-}
+    }
+    
+    $inisial = strtoupper(substr($row['nama'], 0, 2));
+    ?>
 
-function lazyLoadImages() {
-    const images = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                observer.unobserve(img);
-            }
-        });
-    });
-    images.forEach(img => imageObserver.observe(img));
+    <a href="index.php?page=detail&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
+        <div class="staff-card">
+            <div class="staff-photo-box">
+                <div class="staff-placeholder"><?= $inisial ?></div>
+                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy" onerror="this.style.display='none'"> 
+            </div>
+
+            <div class="staff-content">
+                <div class="staff-name"><?= htmlspecialchars($row['nama']) ?></div>
+                <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
+                
+                <div class="staff-footer">
+                    <div class="meta-item">
+                        <i class="ri-mail-line"></i> Hubungi Staff
+                    </div>
+                    <div class="meta-item">
+                        <i class="ri-building-4-line"></i> Fikom UMI
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+    <?php
 }
-</script>
+?>

@@ -1,29 +1,29 @@
 :root {
-    /* === PALET WARNA (BLUE THEME) === */
+   
     
-    /* 1. Warna Utama (Biru Navy - untuk Header, Footer, Teks Penting) */
+   
     --primary-navy: #1e3a8a;
 
-    /* 2. Warna Aksen (Biru Terang - untuk Tombol, Link Hover) */
+   
     --primary-blue: #2563eb;
-    --hover-blue: #1e40af; /* Warna saat tombol disentuh */
+    --hover-blue: #1e40af;
 
-    /* 3. Warna Background */
-    --bg-light: #f8fbff; /* Biru sangat muda (Hampir putih) */
+   
+    --bg-light: #f8fbff;
     --bg-white: #ffffff;
-    --bg-soft: #eff6ff;  /* Biru muda untuk variasi background */
+    --bg-soft: #eff6ff; 
 
-    /* 4. Warna Teks */
-    --text-dark: #1a202c; /* Hitam kebiruan (Lebih enak dibaca daripada hitam pekat) */
-    --text-grey: #4a5568; /* Abu-abu untuk teks paragraf */
-    --text-light: #dbeafe; /* Teks terang untuk di atas background gelap */
+   
+    --text-dark: #1a202c;
+    --text-grey: #4a5568;
+    --text-light: #dbeafe;
 
-    /* 5. Dekorasi (Border & Shadow) */
+   
     --border-color: #e2e8f0;
     --border-blue: #eff6ff;
-    --shadow-soft: 0 4px 12px rgba(30, 58, 138, 0.05); /* Bayangan halus bernuansa biru */
+    --shadow-soft: 0 4px 12px rgba(30, 58, 138, 0.05);
     
-    /* === PENGATURAN LAIN === */
+   
     --container-width: 1280px;
     --font-main: 'Inter', 'Segoe UI', sans-serif;
     --radius-card: 15px;

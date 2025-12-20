@@ -1,8 +1,6 @@
-/* =======================================================
-   STYLE: ALUMNI (ULTRA MODERN & PROFESSIONAL)
-   ======================================================= */
 
-/* --- Layout Dasar --- */
+
+
 .alumni-section {
     padding: 80px 0;
     background-color: #fcfdfe;
@@ -16,23 +14,21 @@
     padding: 0 24px;
 }
 
-/* =======================================================
-   HEADER STYLE (UNIFIED - SAMA DENGAN JADWAL, PERSONEL, DLL)
-   ======================================================= */
+
 
 .page-header {
-    text-align: center;         /* Rata tengah */
-    max-width: 800px;           /* Lebar teks dibatasi */
-    margin: 0 auto 60px auto;   /* Jarak bawah 60px */
+    text-align: center;        
+    max-width: 800px;          
+    margin: 0 auto 60px auto;  
     padding-top: 10px;
-    border-bottom: none;        /* Tanpa garis bawah */
+    border-bottom: none;       
 }
 
-/* Badge Kapsul (Opsional - Pastikan HTML menggunakan class ini) */
+
 .header-badge {
     display: inline-block;
-    background-color: #e0e7ff;  /* Biru muda lembut */
-    color: #3730a3;            /* Biru tua tegas */
+    background-color: #e0e7ff; 
+    color: #3730a3;           
     padding: 10px 24px;
     border-radius: 50px;
     font-weight: 800;
@@ -42,35 +38,35 @@
     margin-bottom: 20px;
 }
 
-/* Judul Utama (H1) */
+
 .page-header h1 {
-    font-size: 3.5rem;          /* Ukuran besar */
+    font-size: 3.5rem;         
     font-weight: 900;
-    color: #0f172a;             /* Hitam pekat */
-    letter-spacing: -2px;       /* Gaya modern rapat */
+    color: #0f172a;            
+    letter-spacing: -2px;      
     line-height: 1.1;
     margin-bottom: 20px;
     margin-top: 0;
 }
 
-/* Deskripsi (P) */
+
 .page-header p {
-    color: #475569;             /* Abu medium */
-    font-size: 1.25rem;         /* Ukuran font deskripsi */
+    color: #475569;            
+    font-size: 1.25rem;        
     line-height: 1.6;
     margin: 0 auto;
     font-weight: 500;
     max-width: 600px;
 }
 
-/* Responsif Header HP */
+
 @media (max-width: 768px) {
     .page-header h1 { font-size: 2.5rem; }
     .page-header p { font-size: 1rem; padding: 0 15px; }
 }
 
 
-/* --- Pengelompokan Tahun (Timeline Style) --- */
+
 .alumni-group {
     margin-bottom: 80px;
 }
@@ -97,7 +93,7 @@
     flex-grow: 1;
 }
 
-/* --- Grid & Card Style (Daftar Utama) --- */
+
 .staff-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -184,7 +180,7 @@
     color: #94a3b8;
 }
 
-/* --- DETAIL PAGE MAXIMAL STYLE --- */
+
 .detail-layout {
     display: grid;
     grid-template-columns: 360px 1fr;
@@ -207,7 +203,7 @@
     background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
     color: #2563eb;
     margin: 0 auto;
-    border-radius: 40px; /* Squircle style */
+    border-radius: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -255,7 +251,7 @@
     transform: translateY(-3px);
 }
 
-/* Kanan - Career Timeline */
+
 .right-content h1 {
     font-size: 3rem;
     font-weight: 900;
@@ -328,7 +324,7 @@
     line-height: 1;
 }
 
-/* Responsive */
+
 @media (max-width: 1024px) {
     .detail-layout { grid-template-columns: 1fr; }
 }

@@ -1,8 +1,6 @@
-/* =======================================================
-   STYLE: FASILITAS (LAB & RISET) - FULL & PROFESSIONAL
-   ======================================================= */
 
-/* --- 1. LAYOUT UMUM --- */
+
+
 .fasilitas-section {
     padding: 80px 0;
     background-color: #f8fafc;
@@ -16,23 +14,21 @@
     padding: 0 24px;
 }
 
-/* =======================================================
-   HEADER STYLE (UNIFIED - SAMA DENGAN JADWAL & PERSONEL)
-   ======================================================= */
+
 
 .page-header {
-    text-align: center;         /* Rata tengah */
-    max-width: 800px;           /* Lebar teks dibatasi */
-    margin: 0 auto 60px auto;   /* Jarak bawah 60px */
+    text-align: center;        
+    max-width: 800px;          
+    margin: 0 auto 60px auto;  
     padding-top: 10px;
-    border-bottom: none;        /* Menghilangkan garis bawah lama */
+    border-bottom: none;       
 }
 
-/* Badge Kapsul (Opsional, pastikan HTML menggunakan class ini jika ingin badge) */
+
 .header-badge {
     display: inline-block;
-    background-color: #e0e7ff;  /* Biru muda lembut */
-    color: #3730a3;            /* Biru tua tegas */
+    background-color: #e0e7ff; 
+    color: #3730a3;           
     padding: 10px 24px;
     border-radius: 50px;
     font-weight: 800;
@@ -42,33 +38,33 @@
     margin-bottom: 20px;
 }
 
-/* Judul Utama (H1) */
+
 .page-header h1 { 
-    font-size: 3.5rem;          /* Ukuran besar */
-    color: #0f172a;             /* Hitam pekat */
+    font-size: 3.5rem;         
+    color: #0f172a;            
     margin: 0 0 20px 0; 
     font-weight: 900; 
-    letter-spacing: -2px;       /* Gaya modern rapat */
+    letter-spacing: -2px;      
     line-height: 1.1;
 }
 
-/* Deskripsi (P) */
+
 .page-header p { 
-    color: #475569;             /* Abu medium */
+    color: #475569;            
     margin: 0 auto; 
-    font-size: 1.25rem;         /* Ukuran font deskripsi */
+    font-size: 1.25rem;        
     line-height: 1.6;
     font-weight: 500;
 }
 
-/* Responsif Header HP */
+
 @media (max-width: 768px) {
     .page-header h1 { font-size: 2.5rem; }
     .page-header p { font-size: 1rem; padding: 0 15px; }
 }
 
 
-/* --- 2. FASILITAS LIST (HORIZONTAL ROW STYLE) --- */
+
 .facility-grid {
     display: flex;
     flex-direction: column;
@@ -159,7 +155,7 @@
 
 .mini-spec-item i { color: #2563eb; font-size: 1.1rem; }
 
-/* --- 3. DETAIL PAGE LAYOUT (SPLIT SCREEN) --- */
+
 .detail-layout {
     display: grid;
     grid-template-columns: 380px 1fr;
@@ -185,7 +181,7 @@
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
 }
 
-/* Kartu Koordinator (Dark Theme) */
+
 .coord-card {
     background: #0f172a;
     color: #fff;
@@ -236,11 +232,11 @@
 }
 .btn-wa:hover { background: #16a34a; transform: translateY(-3px); }
 
-/* Konten Kanan */
+
 .right-content h1 { font-size: 2.6rem; color: #0f172a; font-weight: 800; line-height: 1.2; }
 .description { font-size: 1.1rem; color: #475569; line-height: 1.8; margin: 25px 0 45px 0; }
 
-/* Spesifikasi Table */
+
 .spec-group { margin-bottom: 40px; }
 .spec-group h3 { 
     font-size: 1.15rem; 
@@ -269,7 +265,7 @@
 .spec-label { width: 160px; color: #64748b; font-weight: 600; font-size: 0.9rem; }
 .spec-value { flex: 1; color: #1e293b; font-weight: 700; font-size: 0.95rem; }
 
-/* Software Tags */
+
 .software-tags { display: flex; flex-wrap: wrap; gap: 10px; }
 .sw-tag { 
     background: #f1f5f9; 
@@ -281,7 +277,7 @@
     border: 1px solid #e2e8f0;
 }
 
-/* Facility Checklist */
+
 .facility-list { list-style: none; padding: 0; }
 .facility-list li {
     position: relative;
@@ -298,7 +294,7 @@
     font-weight: 900;
 }
 
-/* --- 4. RESPONSIVE --- */
+
 @media (max-width: 950px) {
     .detail-layout { grid-template-columns: 1fr; }
     .facility-row { flex-direction: column; }

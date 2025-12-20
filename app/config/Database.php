@@ -1,60 +1,33 @@
 <?php
+/**
+ * DATABASE CONNECTION (PDO VERSION)
+ * Menggantikan MySQLi agar kompatibel dengan fitur modern.
+ */
+
 require_once __DIR__ . '/config.php';
 
-class Database {
-    private $host = DB_HOST;
-    private $db_name = DB_NAME;
-    private $user = DB_USER;
-    private $password = DB_PASS;
-    public $conn;
+try {
+    // 1. Siapkan DSN (Data Source Name)
+    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
 
-    public function connect() {
-        $this->conn = null;
+    // 2. Opsi Konfigurasi PDO
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Error akan mematikan script (bagus untuk debugging)
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,     // Data otomatis jadi array asosiatif
+        PDO::ATTR_EMULATE_PREPARES   => false,                // Keamanan (mencegah SQL Injection)
+    ];
 
-        try {
-            $this->conn = new mysqli($this->host, $this->user, $this->password, $this->db_name);
-            
-            if ($this->conn->connect_error) {
-                throw new Exception("Connection Error: " . $this->conn->connect_error);
-            }
-            
-            $this->conn->set_charset("utf8");
-        } catch(Exception $e) {
-            // Tampilkan error hanya di mode development
-            if (defined('APP_ENV') && APP_ENV === 'development') {
-                die($e->getMessage());
-            } else {
-                die("Database connection problem.");
-            }
-        }
+    // 3. Buat Object PDO (Variabel Global $pdo)
+    // Variabel inilah yang akan dipanggil di asisten.php, home.php, dll.
+    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
 
-        return $this->conn;
+} catch (PDOException $e) {
+    // 4. Tangani Error Koneksi
+    if (defined('APP_ENV') && APP_ENV === 'development') {
+        die("Koneksi Database Gagal: " . $e->getMessage());
+    } else {
+        // Pesan ramah user untuk mode production
+        die("Maaf, sistem sedang mengalami gangguan koneksi database.");
     }
-}
-
-$db = new Database();
-$conn = $db->connect();
-
-function query($query) {
-    global $conn;
-    
-    $result = mysqli_query($conn, $query);
-
-    if (!$result) {
-        if (defined('APP_ENV') && APP_ENV === 'development') {
-            die("Query Error: " . mysqli_error($conn));
-        }
-        return [];
-    }
-
-    if (is_object($result)) {
-        $rows = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $rows[] = $row;
-        }
-        return $rows;
-    }
-    
-    return mysqli_affected_rows($conn);
 }
 ?>

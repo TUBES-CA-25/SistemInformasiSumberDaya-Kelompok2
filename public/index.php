@@ -1,20 +1,25 @@
 <?php
 // FILE: public/index.php
 
-// 1. Tampilkan Error (Penting untuk debugging)
+// 1. Tampilkan Error (Debugging)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // 2. Definisi Folder Utama (ROOT)
-// __DIR__ = .../SistemInformasiSumberDaya/public
-// dirname(__DIR__) = .../SistemInformasiSumberDaya (Naik satu level)
 define('ROOT_PROJECT', dirname(__DIR__)); 
+
+// [2.1] LOAD CONFIGURATION (Wajib untuk Konstanta ASSETS_URL, DB_HOST, dll)
+require_once ROOT_PROJECT . '/app/config/config.php';
+
+// [2.2] LOAD DATABASE CONNECTION (Wajib agar $pdo tersedia)
+// Pastikan file ini ada di folder app/config/
+require_once ROOT_PROJECT . '/app/config/database.php';
 
 // 3. Tangkap Request Halaman (Default 'home')
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
-// 4. Konfigurasi Halaman (Path File View & Nama CSS)
+// 4. Konfigurasi Halaman
 $contentView = '';
 $pageCss = ''; 
 
@@ -84,7 +89,6 @@ switch ($page) {
 }
 
 // 5. RAKIT HALAMAN
-// Gunakan require_once dengan Path Absolut (ROOT_PROJECT)
 
 // a. Header
 require_once ROOT_PROJECT . '/app/views/templates/header.php';
@@ -93,10 +97,9 @@ require_once ROOT_PROJECT . '/app/views/templates/header.php';
 if (file_exists(ROOT_PROJECT . $contentView)) {
     require_once ROOT_PROJECT . $contentView;
 } else {
-    echo "<div style='text-align:center; padding:50px; font-family:sans-serif;'>";
+    echo "<div style='text-align:center; padding:50px;'>";
     echo "<h2 style='color:red;'>Error: File View Tidak Ditemukan</h2>";
     echo "<p>Sistem mencoba membuka: <strong>" . $contentView . "</strong></p>";
-    echo "<p>Pastikan file tersebut ada di dalam folder <code>app/views/...</code></p>";
     echo "</div>";
 }
 

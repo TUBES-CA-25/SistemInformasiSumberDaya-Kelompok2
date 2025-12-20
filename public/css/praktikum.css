@@ -1,12 +1,10 @@
-/* =======================================================
-   STYLE: PRAKTIKUM GLOBAL (TATA TERTIB & JADWAL)
-   ======================================================= */
 
-/* --- Layout Dasar --- */
+
+
 .rules-section,
 .praktikum-section {
     padding: 80px 0;
-    background-color: #f8fafc; /* Latar abu-abu terang */
+    background-color: #f8fafc;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
 }
@@ -17,34 +15,32 @@
     padding: 0 24px;
 }
 
-/* =======================================================
-   UNIFIED PAGE HEADER (STYLE HEADER SERAGAM)
-   ======================================================= */
+
 
 .rules-header,
 .page-header {
     text-align: center;
-    max-width: 800px; /* Membatasi lebar agar teks fokus di tengah */
+    max-width: 800px;
     margin: 0 auto 60px auto;
     padding-top: 10px;
 }
 
-/* Style Badge/Kapsul (Dipakai di Tata Tertib & Jadwal) */
+
 .badge-pill,
 .header-badge {
     display: inline-block;
-    background-color: #e0e7ff; /* Biru muda lembut */
-    color: #3730a3;           /* Biru tua tegas */
+    background-color: #e0e7ff;
+    color: #3730a3;          
     padding: 10px 24px;
     border-radius: 50px;
     font-weight: 800;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 20px; /* Jarak antara badge dan judul */
+    margin-bottom: 20px;
 }
 
-/* Style Judul Utama */
+
 .rules-header h1,
 .page-header h1 {
     font-size: 3.5rem;
@@ -56,7 +52,7 @@
     margin-top: 0;
 }
 
-/* Style Deskripsi */
+
 .rules-header p,
 .page-header p {
     color: #475569;
@@ -67,11 +63,9 @@
 }
 
 
-/* =======================================================
-   BAGIAN 1: STYLE TATA TERTIB
-   ======================================================= */
 
-/* --- Grid System --- */
+
+
 .rules-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -79,7 +73,7 @@
     margin-bottom: 60px;
 }
 
-/* --- Kartu Aturan --- */
+
 .rule-card {
     background: #ffffff;
     border: 2px solid #e2e8f0;
@@ -97,7 +91,7 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Ikon Tata Tertib --- */
+
 .rule-icon {
     width: 70px;
     height: 70px;
@@ -114,7 +108,7 @@
 .icon-pink { background: #db2777; box-shadow: 0 10px 20px rgba(219, 39, 119, 0.3); }
 .icon-red  { background: #dc2626; box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3); }
 
-/* --- List Aturan --- */
+
 .rule-card h3 {
     font-size: 1.6rem;
     font-weight: 800;
@@ -143,7 +137,7 @@
     color: #0f172a;
 }
 
-/* --- Section Sanksi --- */
+
 .sanksi-container {
     background: #0f172a;
     color: #ffffff;
@@ -197,11 +191,9 @@
 .sanksi-item p { color: #e2e8f0; font-size: 1.1rem; line-height: 1.7; margin: 0; }
 
 
-/* =======================================================
-   BAGIAN 2: STYLE JADWAL PRAKTIKUM
-   ======================================================= */
 
-/* --- Table Wrapper --- */
+
+
 .schedule-wrapper {
     margin-top: 40px;
 }
@@ -214,17 +206,17 @@
     background: #ffffff;
 }
 
-/* --- Table Style --- */
+
 .table-schedule {
     width: 100%;
     border-collapse: collapse;
     background: #ffffff;
-    min-width: 800px; /* Mencegah tabel hancur di HP */
+    min-width: 800px;
 }
 
-/* Table Header */
+
 .table-schedule thead {
-    background: #0f172a; /* Warna Hitam Pekat (Sama dengan Sanksi) */
+    background: #0f172a;
     color: #ffffff;
 }
 
@@ -238,7 +230,7 @@
     color: #ffffff;
 }
 
-/* Table Body */
+
 .table-schedule tbody tr {
     border-bottom: 1px solid #f1f5f9;
     transition: background 0.2s ease;
@@ -249,7 +241,7 @@
 }
 
 .table-schedule tbody tr:hover {
-    background-color: #f8fafc; /* Efek hover baris */
+    background-color: #f8fafc;
 }
 
 .table-schedule td {
@@ -260,13 +252,13 @@
     vertical-align: middle;
 }
 
-/* Kolom Kode Mata Kuliah (Highlight) */
+
 .table-schedule td:first-child {
     color: #2563eb;
     font-weight: 800;
 }
 
-/* --- Status Labels --- */
+
 .status-label {
     display: inline-block;
     padding: 8px 14px;
@@ -279,15 +271,15 @@
 
 .status-active {
     background-color: #dcfce7;
-    color: #166534; /* Hijau Tua */
+    color: #166534;
 }
 
 .status-closed {
     background-color: #fee2e2;
-    color: #991b1b; /* Merah Tua */
+    color: #991b1b;
 }
 
-/* --- Responsive Styling --- */
+
 @media (max-width: 768px) {
     .rules-header h1, .page-header h1 { font-size: 2.5rem; }
     .rules-section, .praktikum-section { padding: 50px 0; }

@@ -1,8 +1,3 @@
-w/* =======================================================
-   STYLE: PERSONEL LAB (FULL COMPLETE V2)
-   ======================================================= */
-
-/* --- 1. GLOBAL SETTINGS --- */
 .sumberdaya-section {
     padding: 80px 0;
     background-color: #f8fafc;
@@ -16,10 +11,6 @@ w/* =======================================================
     padding: 0 24px;
 }
 
-/* =======================================================
-   HEADER STYLE (UNIFIED - SAMA DENGAN JADWAL)
-   ======================================================= */
-
 .page-header {
     text-align: center;
     max-width: 800px;
@@ -28,7 +19,6 @@ w/* =======================================================
     border-bottom: none;
 }
 
-/* Badge Kapsul */
 .header-badge {
     display: inline-block;
     background-color: #e0e7ff;
@@ -42,7 +32,6 @@ w/* =======================================================
     margin-bottom: 20px;
 }
 
-/* Judul Utama */
 .page-header h1 {
     font-size: 3.5rem;
     font-weight: 900;
@@ -53,7 +42,6 @@ w/* =======================================================
     margin-top: 0;
 }
 
-/* Deskripsi */
 .page-header p {
     color: #475569;
     font-size: 1.25rem;
@@ -67,12 +55,6 @@ w/* =======================================================
     .page-header p { font-size: 1rem; padding: 0 15px; }
 }
 
-
-/* =======================================================
-   STYLE KARTU PERSONEL
-   ======================================================= */
-
-/* --- Label Kategori --- */
 .section-label {
     font-size: 0.9rem;
     font-weight: 800;
@@ -94,7 +76,6 @@ w/* =======================================================
     border-radius: 2px;
 }
 
-/* Link Wrapper Global */
 .card-link {
     text-decoration: none;
     color: inherit;
@@ -102,8 +83,6 @@ w/* =======================================================
     height: 100%;
 }
 
-
-/* --- 2. KOORDINATOR (EXECUTIVE CARD) --- */
 .exec-card {
     background: #ffffff;
     border: 2px solid #e2e8f0;
@@ -131,7 +110,6 @@ w/* =======================================================
     overflow: hidden; 
 }
 
-/* Anti Gepeng */
 .exec-photo img, 
 .exec-photo .exec-placeholder {
     width: 100%;
@@ -199,8 +177,6 @@ w/* =======================================================
     border-top: 2px solid #f1f5f9;
 }
 
-
-/* --- 3. STAFF / ASISTEN (STANDARD CARD) --- */
 .staff-grid {
     display: flex;
     flex-wrap: wrap;
@@ -312,15 +288,10 @@ w/* =======================================================
     .staff-photo-box { height: auto; aspect-ratio: 16 / 9; }
 }
 
-
-/* =======================================================
-   5. DETAIL PAGE STYLES (RESTORED & UPGRADED)
-   ======================================================= */
-
 .profile-wrapper {
     display: flex;
     background: #ffffff;
-    border: 2px solid #e2e8f0; /* Border senada dengan card */
+    border: 2px solid #e2e8f0;
     border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
@@ -328,14 +299,13 @@ w/* =======================================================
 }
 
 .profile-image {
-    flex: 0 0 400px; /* Lebar area foto */
+    flex: 0 0 400px;
     background: #f1f5f9;
     min-height: 450px;
     position: relative;
     border-right: 2px solid #e2e8f0;
 }
 
-/* Anti Gepeng Halaman Detail */
 .profile-image img {
     width: 100%;
     height: 100%;
@@ -365,34 +335,6 @@ w/* =======================================================
     color: #2563eb;
 }
 
-.profile-content h2 {
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: #0f172a;
-    margin-bottom: 10px;
-    line-height: 1.1;
-}
-
-.profile-role-badge {
-    display: inline-block;
-    background: #eff6ff;
-    color: #2563eb;
-    padding: 8px 16px;
-    border-radius: 50px;
-    font-weight: 800;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    margin-bottom: 30px;
-}
-
-.profile-bio {
-    font-size: 1.1rem;
-    color: #475569;
-    line-height: 1.7;
-    margin-bottom: 30px;
-}
-
-/* Skill Tags */
 .skills-container {
     display: flex;
     flex-wrap: wrap;
@@ -410,9 +352,8 @@ w/* =======================================================
     font-weight: 600;
 }
 
-/* Tombol Kontak */
 .btn-contact {
-    background: #0f172a; /* Hitam pekat */
+    background: #0f172a;
     color: #ffffff;
     padding: 14px 28px;
     border-radius: 12px;
@@ -429,26 +370,130 @@ w/* =======================================================
     box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
 }
 
-/* Responsif Halaman Detail */
 @media (max-width: 900px) {
-    .profile-wrapper {
-        flex-direction: column;
-    }
-    
+    .profile-wrapper { flex-direction: column; }
     .profile-image {
-        flex: auto;
-        width: 100%;
-        aspect-ratio: 1 / 1; /* Kotak di HP/Tablet */
-        height: auto;
-        border-right: none;
-        border-bottom: 2px solid #e2e8f0;
+        flex: auto; width: 100%; aspect-ratio: 1 / 1; height: auto;
+        border-right: none; border-bottom: 2px solid #e2e8f0;
     }
-    
-    .profile-content {
-        padding: 30px;
-    }
-    
-    .profile-content h2 {
-        font-size: 2rem;
-    }
+    .profile-content { padding: 30px; }
 }
+
+.search-container {
+    margin-top: 30px;
+    position: relative;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 24px;
+    padding-right: 50px;
+    border-radius: 50px;
+    border: 1px solid #cbd5e1;
+    outline: none;
+    font-size: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.search-icon-box {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1.2rem;
+    pointer-events: none;
+}
+
+.detail-nav { margin-bottom: 30px; }
+
+.category-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: none;
+    margin-bottom: 15px;
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.profile-name {
+    margin-bottom: 5px;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #0f172a;
+    font-weight: 900;
+}
+
+.profile-role {
+    font-size: 1.2rem;
+    color: #64748b;
+    font-weight: 500;
+    display: block;
+}
+
+.specialization-box { margin: 20px 0; }
+
+.member-specialization {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.member-specialization i {
+    color: #2563eb;
+    font-size: 1.2rem;
+}
+
+.section-title {
+    color: #0f172a;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.section-title.mt-30 { margin-top: 30px; }
+
+.profile-bio { color: #475569; line-height: 1.6; }
+
+.contact-wrapper { margin-top: 40px; }
+
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #94a3b8 !important;
+}
+
+.empty-state-wrapper { text-align: center; padding: 100px 0; }
+
+.empty-icon { font-size: 4rem; color: #cbd5e1; margin-bottom: 20px; }
+
+.empty-title { color: #1e293b; margin-bottom: 10px; font-weight: 800; }
+
+.empty-desc { color: #64748b; margin-bottom: 30px; }
+
+.btn-primary-pill {
+    background: #2563eb;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.btn-primary-pill:hover { background: #1d4ed8; color: white; }
