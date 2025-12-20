@@ -3,6 +3,7 @@
     "description": "Sistem Informasi Manajemen Sumber Daya Laboratorium",
     "type": "project",
     "require": {
-        "phpoffice/phpspreadsheet": "^5.3"
+        "phpoffice/phpspreadsheet": "^5.3",
+        "vlucas/phpdotenv": "^5.6"
     }
 }

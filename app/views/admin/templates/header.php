@@ -105,8 +105,8 @@
             </li>
             
             <li>
-                <a href="javascript:void(0)" onclick="navigate('')" style="margin-top: 50px; color: #e74c3c;">
-                    <i class="fas fa-sign-out-alt"></i> Logout / Ke Web Utama
+                <a href="<?= PUBLIC_URL ?>/logout" style="margin-top: 50px; color: #e74c3c;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </li>
         </ul>
@@ -131,7 +131,10 @@
         <div class="admin-header">
             <h1>Selamat Datang, Admin!</h1>
             <div>
-                <span style="margin-right: 15px;">Halo, Administrator</span>
+                <span style="margin-right: 15px;">Halo, <?= $_SESSION['username'] ?? 'Admin' ?></span>
+                <a href="<?= PUBLIC_URL ?>/logout" style="color: #e74c3c; margin-right: 15px; text-decoration: none; font-weight: bold;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
                 <img src="https://placehold.co/40x40" style="border-radius: 50%; vertical-align: middle;">
             </div>
         </div>
