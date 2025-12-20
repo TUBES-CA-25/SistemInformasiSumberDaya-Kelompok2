@@ -4,18 +4,23 @@
  */
 
 // Autoload Composer dependencies
+// Autoload Composer dependencies
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
+// Load Environment Variables
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+$dotenv->safeLoad();
+
 // Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'sistem_manajemen_sumber_daya');
+define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
+define('DB_USER', $_ENV['DB_USERNAME'] ?? 'root');
+define('DB_PASS', $_ENV['DB_PASSWORD'] ?? '');
+define('DB_NAME', $_ENV['DB_DATABASE'] ?? 'sistem_manajemen_sumber_daya');
 
 // Application Settings
-define('APP_NAME', 'Sistem Management Sumber Daya');
-define('APP_URL', 'http://localhost/SistemInformasiSumberDaya-Kelompok2');
-define('APP_ENV', 'development'); // development or production
+define('APP_NAME', $_ENV['APP_NAME'] ?? 'Sistem Management Sumber Daya');
+define('APP_URL', $_ENV['APP_URL'] ?? 'http://localhost/SistemInformasiSumberDaya-Kelompok2');
+define('APP_ENV', $_ENV['APP_ENV'] ?? 'development'); // development or production
 
 // Auto-detect URLs untuk fleksibilitas deployment
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
