@@ -213,7 +213,8 @@ $fasilitasData = [
 ];
 
 // Logika Ambil Data
-$id = isset($_GET['id']) ? $_GET['id'] : null;
+// Prioritize $id from controller, fallback to $_GET['id']
+$id = isset($id) ? $id : (isset($_GET['id']) ? $_GET['id'] : null);
 $data = isset($fasilitasData[$id]) ? $fasilitasData[$id] : null;
 ?>
 

@@ -70,6 +70,15 @@ class Controller {
      * Redirect ke URL lain
      */
     protected function redirect($url) {
+        // Jika URL tidak dimulai dengan http (bukan external link)
+        if (strpos($url, 'http') !== 0) {
+            // Pastikan BASE_URL didefinisikan
+            if (defined('BASE_URL')) {
+                // Hapus slash di awal url jika ada, untuk menghindari double slash
+                $url = ltrim($url, '/');
+                $url = BASE_URL . '/' . $url;
+            }
+        }
         header('Location: ' . $url);
         exit;
     }

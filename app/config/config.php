@@ -38,15 +38,18 @@ if (strpos($_SERVER['SERVER_NAME'] ?? '', 'localhost') !== false && ($_SERVER['S
     $requestUri = $_SERVER['REQUEST_URI'] ?? '';
     $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
     
-    // Extract project path from script name
-    if (strpos($scriptName, '/SistemInformasiSumberDaya-Kelompok2/') !== false) {
+    // Extract project path from script name or request uri
+    // Check multiple ways since SCRIPT_NAME might vary
+    if (strpos($scriptName, '/SistemInformasiSumberDaya-Kelompok2/') !== false ||
+        strpos($requestUri, '/SistemInformasiSumberDaya-Kelompok2/') !== false) {
         $baseScriptPath = '/SistemInformasiSumberDaya-Kelompok2';
         $publicPath = '/SistemInformasiSumberDaya-Kelompok2/public';
         $assetsPath = '/SistemInformasiSumberDaya-Kelompok2/public';
     } else {
-        $baseScriptPath = '';
-        $publicPath = '';
-        $assetsPath = '';
+        // Fallback: check if we can infer from current file location
+        $baseScriptPath = '/SistemInformasiSumberDaya-Kelompok2';
+        $publicPath = '/SistemInformasiSumberDaya-Kelompok2/public';
+        $assetsPath = '/SistemInformasiSumberDaya-Kelompok2/public';
     }
 }
 

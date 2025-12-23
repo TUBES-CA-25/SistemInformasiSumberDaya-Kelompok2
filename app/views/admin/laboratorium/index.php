@@ -147,7 +147,6 @@ function renderTable(data) {
                 <td>${escapeHtml(deskripsi)}</td>
                 <td style="text-align: center;">
                     <div class="capacity-badge"><i class="fas fa-desktop"></i> ${item.jumlahPc || 0} PC</div>
-                    <div class="capacity-badge"><i class="fas fa-chair"></i> ${item.jumlahKursi || 0} Kursi</div>
                 </td>
                 <td>
                     <div class="action-buttons">

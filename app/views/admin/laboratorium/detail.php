@@ -270,7 +270,9 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const params = new URLSearchParams(window.location.search);
+    let route = params.get('route') || window.location.pathname;
+    
     const matches = route.match(/admin\/laboratorium\/(\d+)/);
     
     if (matches && matches[1]) {

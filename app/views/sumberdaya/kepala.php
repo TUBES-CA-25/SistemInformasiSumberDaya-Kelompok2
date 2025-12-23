@@ -11,7 +11,7 @@
 
         <div class="staff-grid">
             
-            <a href="index.php?page=detail&id=AF" class="card-link">
+            <a href="<?= PUBLIC_URL ?>/kepala-lab/detail/AF" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">AF</div>
@@ -32,7 +32,7 @@
                 </div>
             </a>
 
-            <a href="index.php?page=detail&id=BD" class="card-link">
+            <a href="<?= PUBLIC_URL ?>/kepala-lab/detail/BD" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">BD</div>
@@ -53,7 +53,7 @@
                 </div>
             </a>
 
-            <a href="index.php?page=detail&id=CL" class="card-link">
+            <a href="<?= PUBLIC_URL ?>/kepala-lab/detail/CL" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">CL</div>
@@ -81,7 +81,7 @@
         
         <div class="staff-grid">
             
-            <a href="index.php?page=detail&id=DK" class="card-link">
+            <a href="<?= PUBLIC_URL ?>/kepala-lab/detail/DK" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">DK</div>

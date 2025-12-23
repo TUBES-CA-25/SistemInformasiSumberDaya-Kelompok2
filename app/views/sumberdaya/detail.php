@@ -119,9 +119,9 @@ $data = isset($asistenData[$id]) ? $asistenData[$id] : null;
         <?php if ($data) : ?>
             <div style="margin-bottom: 30px;">
                 <?php 
-                    $backLink = 'index.php?page=asisten'; // Default
+                    $backLink = PUBLIC_URL . '/asisten'; // Default
                     if ($data['kategori'] == 'Pimpinan' || $data['kategori'] == 'Laboran') {
-                        $backLink = 'index.php?page=kepala';
+                        $backLink = PUBLIC_URL . '/kepala-lab';
                     }
                 ?>
                 <a href="<?= $backLink; ?>" class="btn-back">
@@ -177,7 +177,7 @@ $data = isset($asistenData[$id]) ? $asistenData[$id] : null;
             <div style="text-align: center; padding: 100px 0;">
                 <h2>Data Tidak Ditemukan</h2>
                 <p>Maaf, data personel dengan ID tersebut tidak tersedia.</p>
-                <a href="index.php?page=asisten" class="btn-back">Kembali ke Home</a>
+                <a href="<?= PUBLIC_URL ?>/asisten" class="btn-back">Kembali ke Home</a>
             </div>
         <?php endif; ?>
 

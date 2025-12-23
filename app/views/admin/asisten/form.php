@@ -63,31 +63,16 @@
 
         <div class="form-group">
             <label><i class="fas fa-graduation-cap"></i> Jurusan</label> 
-            <input type="text" id="jurusan" name="jurusan" placeholder="Contoh: Teknik Informatika">
+            <select id="jurusan" name="jurusan" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <option value="Teknik Informatika">Teknik Informatika</option>
+                <option value="Sistem Informasi">Sistem Informasi</option>
+            </select>
         </div>
 
-        <div class="form-group">
-            <label><i class="fas fa-id-badge"></i> Jabatan</label> 
-            <input type="text" id="jabatan" name="jabatan" placeholder="Contoh: Asisten Laboratorium">
-        </div>
+        <!-- Jabatan, Kategori, Laboratorium, Spesialisasi removed as per request -->
 
         <div class="form-group">
-            <label><i class="fas fa-tag"></i> Kategori</label> 
-            <input type="text" id="kategori" name="kategori" placeholder="Contoh: Umum, Junior, Senior">
-        </div>
-
-        <div class="form-group">
-            <label><i class="fas fa-flask"></i> Laboratorium</label> 
-            <input type="text" id="lab" name="lab" placeholder="Contoh: Laboratorium Komputer Dasar">
-        </div>
-
-        <div class="form-group">
-            <label><i class="fas fa-star"></i> Spesialisasi</label> 
-            <input type="text" id="spesialisasi" name="spesialisasi" placeholder="Contoh: Jaringan Komputer, Pemrograman Web">
-        </div>
-
-        <div class="form-group">
-            <label><i class="fas fa-tools"></i> Keahlian (Skills)</label> 
+            <label><i class="fas fa-tools"></i> Keahlian / Spesialisasi</label> 
             <input type="text" id="skills" name="skills" placeholder="Pisahkan dengan koma. Contoh: PHP, MySQL, Networking">
             <small style="color: grey;">Masukkan beberapa keahlian dipisahkan dengan koma.</small>
         </div>
@@ -106,10 +91,12 @@
         </div>
 
         <div class="form-group">
-            <label><i class="fas fa-toggle-on"></i> Status Aktif</label>
-            <select id="statusAktif" name="statusAktif">
-                <option value="1">Aktif</option>
-                <option value="0">Tidak Aktif</option>
+            <label><i class="fas fa-id-badge"></i> Status Asisten</label>
+            <select id="statusAktif" name="statusAktif" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <option value="Asisten">Asisten</option>
+                <option value="CA">CA</option>
+                <option value="CCA">CCA</option>
+                <option value="Tidak Aktif">Tidak Aktif</option>
             </select>
         </div>
 
@@ -125,7 +112,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Cek apakah ada ID di URL (mode edit)
     const params = new URLSearchParams(window.location.search);
-    const route = params.get('route') || '';
+    let route = params.get('route') || window.location.pathname;
     
     // Extract ID dari route: admin/asisten/{id}/edit
     const matches = route.match(/admin\/asisten\/(\d+)\/edit/);
@@ -146,11 +133,8 @@ function loadAsistenData(id) {
             document.getElementById('idAsisten').value = asisten.idAsisten;
             document.getElementById('nama').value = asisten.nama || '';
             document.getElementById('email').value = asisten.email || '';
-            document.getElementById('jurusan').value = asisten.jurusan || '';
-            document.getElementById('jabatan').value = asisten.jabatan || '';
-            document.getElementById('kategori').value = asisten.kategori || '';
-            document.getElementById('lab').value = asisten.lab || '';
-            document.getElementById('spesialisasi').value = asisten.spesialisasi || '';
+            document.getElementById('jurusan').value = asisten.jurusan || 'Teknik Informatika';
+            // Removed: jabatan, kategori, lab, spesialisasi
             document.getElementById('bio').value = asisten.bio || '';
             
             // Handle skills (expecting JSON string or array)
@@ -169,7 +153,11 @@ function loadAsistenData(id) {
             }
             document.getElementById('skills').value = skillsStr;
 
-            document.getElementById('statusAktif').value = asisten.statusAktif || '1';
+            let status = asisten.statusAktif;
+            // Map legacy boolean values to new string values
+            if (status == '1') status = 'Asisten';
+            if (status == '0') status = 'Tidak Aktif';
+            document.getElementById('statusAktif').value = status || 'Asisten';
             
             if (asisten.foto) {
                 document.getElementById('fotoInfo').style.display = 'block';

@@ -15,12 +15,6 @@
         </div>
 
         <div class="form-group">
-            <label>Lokasi Lab</label>
-            <input type="text" id="lokasi" name="lokasi" placeholder="Contoh: Gedung Fikom Lt. 2 (Ruang 204)">
-            <small class="form-text text-muted">Lokasi fisik laboratorium di kampus.</small>
-        </div>
-
-        <div class="form-group">
             <label>Koordinator Lab</label>
             <select id="idKordinatorAsisten" name="idKordinatorAsisten">
                 <option value="">-- Pilih Asisten --</option>
@@ -89,11 +83,6 @@
                 <label>Fasilitas Pendukung</label>
                 <textarea id="fasilitas" name="fasilitas" rows="3" placeholder="Contoh: AC Central, Proyektor HD, WiFi 6, Whiteboard"></textarea>
                 <small class="form-text text-muted">Pisahkan dengan koma atau baris baru.</small>
-            </div>
-
-            <div class="form-group">
-                <label>Jumlah Kursi</label>
-                <input type="number" id="jumlahKursi" name="jumlahKursi" placeholder="0" min="0">
             </div>
         </div>
 
@@ -179,7 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAsisten();
     
     // Parse ID from route parameter (admin/laboratorium/{id}/edit)
-    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const params = new URLSearchParams(window.location.search);
+    let route = params.get('route') || window.location.pathname;
+    
     const matches = route.match(/admin\/laboratorium\/(\d+)\/edit/);
     
     if (matches && matches[1]) {
@@ -227,10 +218,8 @@ function loadData(id) {
         if (response.status === 'success' || response.code === 200) {
             const data = response.data;
             document.getElementById('nama').value = data.nama || '';
-            document.getElementById('lokasi').value = data.lokasi || '';
             document.getElementById('deskripsi').value = data.deskripsi || '';
             document.getElementById('jumlahPc').value = data.jumlahPc || '';
-            document.getElementById('jumlahKursi').value = data.jumlahKursi || '';
             
             // Hardware specs
             document.getElementById('processor').value = data.processor || '';

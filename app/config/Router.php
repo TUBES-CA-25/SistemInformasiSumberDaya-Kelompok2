@@ -55,6 +55,7 @@ class Router {
         $this->get('/riset', 'RisetController', 'index');
         $this->get('/profil', 'ProfilController', 'index');
         $this->get('/kepala-lab', 'KepalaLabController', 'index');
+        $this->get('/kepala-lab/detail/{id}', 'KepalaLabController', 'detail');
         // Legacy alias
         $this->get('/kepala', 'KepalaLabController', 'index');
 

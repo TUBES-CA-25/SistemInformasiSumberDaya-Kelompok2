@@ -19,6 +19,17 @@ class KepalaLabController extends Controller {
     }
     
     /**
+     * Detail profil pimpinan/laboran (legacy view, MVC route)
+     */
+    public function detail($params = []) {
+        // Terima parameter {id} dari rute dan teruskan ke view legacy
+        if (!empty($params['id'])) {
+            $_GET['id'] = $params['id']; // menjaga kompatibilitas view legacy
+        }
+        $this->view('sumberdaya/detail');
+    }
+    
+    /**
      * API endpoint untuk mendapatkan semua manajemen lab
      */
     public function apiIndex($params = []) {

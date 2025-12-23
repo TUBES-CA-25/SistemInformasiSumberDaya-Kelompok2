@@ -17,52 +17,53 @@ define('CONFIG_PATH', APP_PATH . '/config');
 // 3. Load configuration (minimal)
 require_once CONFIG_PATH . '/config.php';
 
-// 4. Optional: Redirect legacy `?page=` ke rute MVC (kompatibilitas sementara)
+// 4. Legacy `?page=` deprecated: tangani dengan 410 Gone
 $page = $_GET['page'] ?? '';
 if (!empty($page)) {
-    $legacyMap = [
-        'home' => '/home',
-        'tatatertib' => '/tata-tertib',
-        'jadwal' => '/jadwal',
-        'asisten' => '/asisten',
-        'kepala' => '/kepala-lab',
-        'laboratorium' => '/laboratorium',
-        'riset' => '/riset',
-        'alumni' => '/alumni',
-        'contact' => '/contact',
-        'login' => '/login',
-        'admin' => '/admin',
-        'dashboard' => '/admin/dashboard',
-    ];
-    if (isset($legacyMap[$page])) {
-        header('Location: ' . PUBLIC_URL . $legacyMap[$page]);
-        exit;
-    }
+    http_response_code(410);
+    echo "<h1>Halaman Legacy Tidak Tersedia</h1>";
+    echo "<p>Parameter <code>?page=</code> telah dihentikan. Silakan gunakan rute MVC yang baru.</p>";
+    echo "<ul>";
+    echo "<li>Home: <a href='" . PUBLIC_URL . "/home'>/home</a></li>";
+    echo "<li>Tata Tertib: <a href='" . PUBLIC_URL . "/tata-tertib'>/tata-tertib</a></li>";
+    echo "<li>Jadwal: <a href='" . PUBLIC_URL . "/jadwal'>/jadwal</a></li>";
+    echo "<li>Asisten: <a href='" . PUBLIC_URL . "/asisten'>/asisten</a></li>";
+    echo "<li>Kepala Lab: <a href='" . PUBLIC_URL . "/kepala-lab'>/kepala-lab</a></li>";
+    echo "<li>Laboratorium: <a href='" . PUBLIC_URL . "/laboratorium'>/laboratorium</a></li>";
+    echo "<li>Alumni: <a href='" . PUBLIC_URL . "/alumni'>/alumni</a></li>";
+    echo "<li>Contact: <a href='" . PUBLIC_URL . "/contact'>/contact</a></li>";
+    echo "<li>Login: <a href='" . PUBLIC_URL . "/login'>/login</a></li>";
+    echo "<li>Admin: <a href='" . PUBLIC_URL . "/admin'>/admin</a></li>";
+    echo "</ul>";
+    exit;
 }
 
-// 5. Normalisasi path rute dari REQUEST_URI (mendukung Apache & php -S)
-$request_uri = $_SERVER['REQUEST_URI'] ?? '';
-$script_name = $_SERVER['SCRIPT_NAME'] ?? '';
+// 5. Ambil route dari ?route= parameter atau REQUEST_URI
+$route = $_GET['route'] ?? null;
 
-if (!empty($request_uri) && strpos($request_uri, $script_name) === 0) {
-    $path = substr($request_uri, strlen($script_name));
+// Jika tidak ada route param, coba parse dari REQUEST_URI
+if (empty($route)) {
+    $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
+    // Remove /SistemInformasiSumberDaya-Kelompok2/public/ prefix if exists
+    $route = preg_replace('#^/SistemInformasiSumberDaya-Kelompok2/public/?#', '', $request_uri);
+    // Remove query string
+    $route = explode('?', $route)[0];
+}
+
+$path = '/' . trim($route, '/ ');
+if ($path === '/') { 
+    $path = '/'; 
 } else {
-    $path = parse_url($request_uri, PHP_URL_PATH);
-    // Hilangkan prefix ke index.php jika ada
-    $path = preg_replace('#.*/public/index\.php#', '', $path);
+    $path = '/' . ltrim($path, '/');
 }
-
-$path = urldecode($path);
-$path = '/' . trim($path, '/ ');
-if ($path === '') { $path = '/'; }
 
 // 6. Load MVC dependencies & dispatch Router
 require_once CONFIG_PATH . '/Database.php';
 require_once APP_PATH . '/helpers/Helper.php';
 require_once CONFIG_PATH . '/Router.php';
 
-// Pastikan Router membaca path yang sudah dinormalisasi
-$_GET['route'] = $_GET['route'] ?? $path;
+// Set route untuk Router
+$_GET['route'] = $path;
 
 try {
     $router = new Router();
