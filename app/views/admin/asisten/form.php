@@ -61,6 +61,12 @@
             <input type="email" id="email" name="email" placeholder="email@umi.ac.id" required>
         </div>
 
+            <div class="form-group">
+                <label><i class="fab fa-linkedin"></i> LinkedIn</label>
+                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/username">
+                <small style="color: grey;">Opsional. Masukkan URL profil LinkedIn.</small>
+            </div>
+
         <div class="form-group">
             <label><i class="fas fa-graduation-cap"></i> Jurusan</label> 
             <select id="jurusan" name="jurusan" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">

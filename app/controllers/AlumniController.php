@@ -28,13 +28,8 @@ class AlumniController extends Controller {
             return;
         }
         
-        $alumni = $this->model->getById($id, 'id');
-        if (!$alumni) {
-            $this->redirect('/alumni');
-            return;
-        }
-        
-        $this->view('alumni/detail', ['alumni' => $alumni]);
+        // Kirim params ke view untuk digunakan dengan data statis
+        $this->view('alumni/detail', ['params' => $params]);
     }
 
     /**

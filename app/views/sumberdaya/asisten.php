@@ -9,8 +9,7 @@
 
         <span class="section-label">Struktural Utama</span>
         
-        <!-- DEBUG: PUBLIC_URL is <?php echo PUBLIC_URL; ?> -->
-        <a href="/SistemInformasiSumberDaya-Kelompok2/public/index.php?route=asisten/6" class="card-link">
+        <a href="<?= BASE_URL ?>/asisten/6" class="card-link">
             <div class="exec-card">
                 <div class="exec-photo">
                     <div class="exec-placeholder">MR</div>
@@ -38,7 +37,7 @@
         
         <div class="staff-grid">
             
-            <a href="/SistemInformasiSumberDaya-Kelompok2/public/index.php?route=asisten/2" class="card-link">
+            <a href="<?= BASE_URL ?>/asisten/2" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">BS</div>
@@ -59,7 +58,7 @@
                 </div>
             </a>
 
-            <a href="/SistemInformasiSumberDaya-Kelompok2/public/index.php?route=asisten/3" class="card-link">
+            <a href="<?= BASE_URL ?>/asisten/3" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">SN</div>
@@ -80,7 +79,7 @@
                 </div>
             </a>
             
-            <a href="/SistemInformasiSumberDaya-Kelompok2/public/index.php?route=asisten/4" class="card-link">
+            <a href="<?= BASE_URL ?>/asisten/4" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">AW</div>
@@ -101,7 +100,7 @@
                 </div>
             </a>
 
-            <a href="/SistemInformasiSumberDaya-Kelompok2/public/index.php?route=asisten/5" class="card-link">
+            <a href="<?= BASE_URL ?>/asisten/5" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">RP</div>
@@ -129,7 +128,7 @@
 
         <div class="staff-grid">
             
-            <a href="/SistemInformasiSumberDaya-Kelompok2/public/index.php?route=asisten/5" class="card-link">
+            <a href="<?= BASE_URL ?>/asisten/7" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">DL</div>
@@ -150,7 +149,7 @@
                 </div>
             </a>
 
-            <a href="/SistemInformasiSumberDaya-Kelompok2/public/index.php?route=asisten/6" class="card-link">
+            <a href="<?= BASE_URL ?>/asisten/8" class="card-link">
                 <div class="staff-card">
                     <div class="staff-photo-box">
                         <div class="staff-placeholder">RF</div>
