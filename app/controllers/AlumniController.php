@@ -14,7 +14,8 @@ class AlumniController extends Controller {
      */
     public function index($params = []) {
         $data = $this->model->getAll();
-        $this->view('alumni/index', ['alumni' => $data]);
+        // Sesuaikan dengan view legacy yang ada (alumni/alumni.php)
+        $this->view('alumni/alumni', ['alumni' => $data]);
     }
 
     /**

@@ -13,8 +13,9 @@ class KepalaLabController extends Controller {
     }
     
     public function index($params = []) {
-        $manajemenList = $this->model->getAll();
-        $this->view('sumberdaya/kepala-lab', ['manajemenList' => $manajemenList]);
+        // Kembalikan tampilan ke versi awal (legacy view)
+        // View ini menggunakan sumberdaya.css dan struktur lama yang diharapkan pengguna
+        $this->view('sumberdaya/kepala');
     }
     
     /**

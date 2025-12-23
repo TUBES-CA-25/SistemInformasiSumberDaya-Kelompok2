@@ -50,18 +50,23 @@ if (strpos($_SERVER['SERVER_NAME'] ?? '', 'localhost') !== false && ($_SERVER['S
     }
 }
 
-// Define URL constants
+// Define URL constants (robust fallbacks)
 if (!defined('BASE_URL')) {
     define('BASE_URL', $protocol . $host . $baseScriptPath);
 }
 if (!defined('PUBLIC_URL')) {
-    define('PUBLIC_URL', $protocol . $host . $publicPath);
+    $computedPublic = $publicPath ?: (rtrim(APP_URL, '/') . '/public');
+    // Ensure absolute with protocol
+    if (strpos($computedPublic, 'http') !== 0) {
+        $computedPublic = $protocol . $host . $computedPublic;
+    }
+    define('PUBLIC_URL', $computedPublic);
 }
 if (!defined('API_URL')) {
-    define('API_URL', $publicPath . '/api.php');
+    define('API_URL', PUBLIC_URL . '/api.php');
 }
 if (!defined('ASSETS_URL')) {
-    define('ASSETS_URL', $assetsPath);
+    define('ASSETS_URL', PUBLIC_URL);
 }
 
 // Display errors (disable in production)

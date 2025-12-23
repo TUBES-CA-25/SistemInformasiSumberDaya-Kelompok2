@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Informasi Sumber Daya Lab</title>
     
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/css/variables.css">
+    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/css/style.css">
 
     <?php 
         if (isset($pageCss) && !empty($pageCss)) {
-            echo '<link rel="stylesheet" href="css/' . $pageCss . '">';
+            echo '<link rel="stylesheet" href="' . ASSETS_URL . '/css/' . $pageCss . '">';
         }
     ?>
     
@@ -21,8 +21,8 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="index.php?page=home" class="brand-logo">
-                    <img src="images/logo-iclabs.png" alt="Logo IC-Labs" class="logo-img">
+                <a href="<?php echo PUBLIC_URL; ?>/home" class="brand-logo">
+                    <img src="<?php echo ASSETS_URL; ?>/images/logo-iclabs.png" alt="Logo IC-Labs" class="logo-img">
                 </a>
             </div>
 
@@ -33,34 +33,34 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="index.php?page=home">Home</a></li>
+                <li><a href="<?php echo PUBLIC_URL; ?>/home">Home</a></li>
                 
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Praktikum ▾</a>
                     <div class="dropdown-content">
-                        <a href="index.php?page=tatatertib">Tata Tertib</a>
-                        <a href="index.php?page=jadwal">Jadwal</a>
+                        <a href="<?php echo PUBLIC_URL; ?>/tata-tertib">Tata Tertib</a>
+                        <a href="<?php echo PUBLIC_URL; ?>/jadwal">Jadwal</a>
                     </div>
                 </li>
                 
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Sumber Daya ▾</a>
                     <div class="dropdown-content">
-                        <a href="index.php?page=kepala">Kepala Lab</a>
-                        <a href="index.php?page=asisten">Asisten</a>
+                        <a href="<?php echo PUBLIC_URL; ?>/kepala-lab">Kepala Lab</a>
+                        <a href="<?php echo PUBLIC_URL; ?>/asisten">Asisten</a>
                     </div>
                 </li>
                 
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Fasilitas ▾</a>
                     <div class="dropdown-content">
-                        <a href="index.php?page=laboratorium">Ruang Lab</a>
-                        <a href="index.php?page=riset">Ruang Riset</a>
+                        <a href="<?php echo PUBLIC_URL; ?>/laboratorium">Ruang Lab</a>
+                        <a href="<?php echo PUBLIC_URL; ?>/riset">Ruang Riset</a>
                     </div>
                 </li>
                 
-                <li><a href="index.php?page=alumni">Alumni</a></li>
-                <li><a href="index.php?page=contact">Contact</a></li>
+                <li><a href="<?php echo PUBLIC_URL; ?>/alumni">Alumni</a></li>
+                <li><a href="<?php echo PUBLIC_URL; ?>/contact">Contact</a></li>
             </ul>
         </div>
     </nav>

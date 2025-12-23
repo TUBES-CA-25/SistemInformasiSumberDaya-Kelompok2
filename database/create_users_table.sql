@@ -15,3 +15,6 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`username`, `password`, `role`) VALUES
 ('admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin');
 
+UPDATE users
+SET password = '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey'
+WHERE username = 'admin';

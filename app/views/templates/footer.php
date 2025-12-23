@@ -4,7 +4,7 @@
                 
                 <div class="footer-section">
                     <div class="footer-logo">
-                        <img src="images/logo-iclabs.png" alt="Logo" style="height: 40px; object-fit: contain;">
+                        <img src="<?php echo ASSETS_URL; ?>/images/logo-iclabs.png" alt="Logo" style="height: 40px; object-fit: contain;">
                         <span style="font-weight: 800; font-size: 1.2rem; color: #fff;">IC-Labs</span>
                     </div>
                     <p class="footer-desc">
@@ -19,10 +19,10 @@
                 <div class="footer-section">
                     <h3>Menu Pintas</h3>
                     <ul class="footer-links">
-                        <li><a href="index.php?page=home">Beranda</a></li>
-                        <li><a href="index.php?page=jadwal">Jadwal Praktikum</a></li>
-                        <li><a href="index.php?page=laboratorium">Fasilitas Lab</a></li>
-                        <li><a href="index.php?page=alumni">Alumni</a></li>
+                        <li><a href="<?php echo PUBLIC_URL; ?>/home">Beranda</a></li>
+                        <li><a href="<?php echo PUBLIC_URL; ?>/jadwal">Jadwal Praktikum</a></li>
+                        <li><a href="<?php echo PUBLIC_URL; ?>/laboratorium">Fasilitas Lab</a></li>
+                        <li><a href="<?php echo PUBLIC_URL; ?>/alumni">Alumni</a></li>
                     </ul>
                 </div>
 
