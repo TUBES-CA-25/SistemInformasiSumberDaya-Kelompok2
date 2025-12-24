@@ -1,7 +1,7 @@
 <?php
 /**
  * VIEW: DAFTAR ASISTEN (UPDATED STRUCTURE)
- * Menggunakan layout baru dengan logika gambar anti-pecah.
+ * Fix: Logika Avatar seragam (Bold & Abaikan link lama di DB)
  */
 
 global $pdo; 
@@ -51,16 +51,29 @@ try {
 
             <?php foreach ($koordinator_list as $coord) : ?>
                 <?php 
-                    // Logika Gambar (UI Avatars + File Check)
+                    // LOGIKA GAMBAR KOORDINATOR (Tetap Biru agar Spesial)
                     $fotoName = $coord['foto'] ?? '';
                     $namaEnc = urlencode($coord['nama']);
-                    $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=eff6ff&color=2563eb&size=256";
+                    
+                    // Default: Biru Muda + Bold
+                    $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=eff6ff&color=2563eb&size=256&bold=true";
 
-                    if (!empty($fotoName) && file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
-                        $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
+                    if (!empty($fotoName)) {
+                        // 1. Abaikan jika link di DB adalah ui-avatars (biar style kita yang menang)
+                        if (strpos($fotoName, 'ui-avatars.com') !== false) {
+                            // Do nothing
+                        }
+                        // 2. Cek External
+                        elseif (strpos($fotoName, 'http') !== false) {
+                            $imgUrl = $fotoName;
+                        }
+                        // 3. Cek File Lokal
+                        elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
+                            $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
+                        }
                     }
                 ?>
-                <div style="margin-bottom: 40px;"> 
+                <div class="card-link" style="margin-bottom: 40px;"> 
                     <div class="exec-card">
                         <div class="exec-photo">
                             <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($coord['nama']) ?>">
@@ -106,13 +119,26 @@ try {
                 
                 <?php foreach ($asisten_list as $row) : ?>
                     <?php 
-                        // Logika Gambar (UI Avatars + File Check)
+                        // LOGIKA GAMBAR ASISTEN (Abu-abu Seragam)
                         $fotoName = $row['foto'] ?? '';
                         $namaEnc = urlencode($row['nama']);
-                        $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=e2e8f0&color=475569&size=256"; 
+                        
+                        // Default: Abu-abu + Bold (Sama seperti Alumni)
+                        $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=256&bold=true"; 
 
-                        if (!empty($fotoName) && file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
-                            $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
+                        if (!empty($fotoName)) {
+                            // 1. Abaikan link ui-avatars dari database
+                            if (strpos($fotoName, 'ui-avatars.com') !== false) {
+                                // Do nothing
+                            }
+                            // 2. Cek External
+                            elseif (strpos($fotoName, 'http') !== false) {
+                                $imgUrl = $fotoName;
+                            }
+                            // 3. Cek File Lokal
+                            elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
+                                $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
+                            }
                         }
                         
                         $jurusan = $row['jurusan'] ?? 'Teknik Informatika';

@@ -88,6 +88,7 @@ img {
     list-style: none; 
     display: flex; 
     gap: 30px; 
+    align-items: center; /* Memastikan semua item vertical center */
 }
 
 .nav-links a { 
@@ -98,6 +99,33 @@ img {
 
 .nav-links a:hover { 
     color: #2563eb; /* Biru Terang */
+}
+
+/* --- [BARU] STYLE KHUSUS TOMBOL APPS --- */
+.btn-nav-apps {
+    background-color: #2563eb; /* Biru Utama */
+    color: #fff !important;    /* Paksa teks putih */
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+    margin-left: 10px; /* Sedikit jarak ekstra dari menu sebelumnya */
+}
+
+.btn-nav-apps:hover {
+    background-color: #1d4ed8; /* Biru lebih gelap saat hover */
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.btn-nav-apps i {
+    font-size: 1.1rem;
+    font-weight: normal;
 }
 
 /* --- DROPDOWN MENU --- */
@@ -199,6 +227,14 @@ img {
     .logo-img {
         height: 60px; /* Ukuran aman untuk layar HP */
     }
+
+    /* Penyesuaian Tombol Apps di Mobile */
+    .btn-nav-apps {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-top: 10px;
+    }
 }
 
 /* -------------------------------------------------------
@@ -216,11 +252,17 @@ img {
 
 .footer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 50px;
+    /* [UBAH] minmax jadi 220px agar muat 4 kolom di desktop */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+    gap: 40px;
     margin-bottom: 50px;
+    align-items: start; /* Pastikan rata atas */
 }
 
+/* Tambahan Style untuk Divider Halus di Footer */
+.footer-links li {
+    margin-bottom: 8px; /* Sedikit dirapatkan */
+}
 /* --- Kolom 1: Info Logo & Kontak --- */
 .footer-logo {
     display: flex;

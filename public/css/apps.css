@@ -1,0 +1,127 @@
+/* =========================================
+   1. STYLE TOMBOL NAVBAR (POJOK KANAN)
+   ========================================= */
+.btn-nav-apps {
+    background-color: #2563eb; /* Biru Utama */
+    color: #fff !important;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+
+.btn-nav-apps:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.btn-nav-apps i {
+    font-size: 1.1rem;
+    font-weight: normal;
+}
+
+/* =========================================
+   2. STYLE HALAMAN APPS (GRID LAYOUT)
+   ========================================= */
+.apps-section {
+    padding: 120px 0 80px 0;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Container Grid */
+.apps-grid {
+    display: grid;
+    /* Grid Responsif: Otomatis menyesuaikan jumlah kolom */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* Kartu Aplikasi */
+.app-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 30px;
+    text-decoration: none;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.app-card:hover {
+    border-color: #bfdbfe;
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Icon Box (Kotak Ikon) */
+.app-icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+/* Warna-warni Ikon */
+.color-blue   { background: #eff6ff; color: #2563eb; }
+.color-green  { background: #f0fdf4; color: #16a34a; }
+.color-purple { background: #faf5ff; color: #9333ea; }
+.color-orange { background: #fff7ed; color: #ea580c; }
+.color-red    { background: #fef2f2; color: #dc2626; }
+.color-cyan   { background: #ecfeff; color: #0891b2; }
+.color-yellow { background: #fefce8; color: #ca8a04; }
+
+/* Konten Teks */
+.app-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.app-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+/* Panah Hover */
+.app-arrow {
+    margin-left: auto;
+    color: #cbd5e1;
+    transition: 0.3s;
+}
+
+.app-card:hover .app-arrow {
+    color: #2563eb;
+    transform: translateX(5px);
+}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+    .btn-nav-apps {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .apps-grid {
+        grid-template-columns: 1fr; /* 1 kolom di HP */
+    }
+}

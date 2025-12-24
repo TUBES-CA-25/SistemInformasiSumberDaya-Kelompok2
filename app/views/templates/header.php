@@ -61,6 +61,12 @@
                 
                 <li><a href="index.php?page=alumni">Alumni</a></li>
                 <li><a href="index.php?page=contact">Contact</a></li>
+
+                <li>
+                    <a href="index.php?page=apps" class="btn-nav-apps">
+                        <i class="ri-apps-2-line"></i> Apps
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>

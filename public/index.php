@@ -29,6 +29,13 @@ switch ($page) {
         $pageCss = 'home.css';
         break;
 
+    // --- FITUR APPS (BARU) ---
+    case 'apps':
+        // Pastikan Anda menyimpan file apps.php di folder app/views/home/
+        $contentView = '/app/views/home/apps.php'; 
+        $pageCss = 'apps.css';
+        break;
+
     // --- PRAKTIKUM ---
     case 'tatatertib':
         $contentView = '/app/views/praktikum/tatatertib.php';
