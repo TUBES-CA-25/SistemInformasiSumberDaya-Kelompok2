@@ -10,8 +10,8 @@
                 <?php foreach ($manajemenList as $index => $manajemen): ?>
                     <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-8 text-center flex-1 min-w-0">
                         <div class="w-40 h-48 mx-auto mb-6">
-                            <img class="w-full h-full object-cover rounded-xl shadow-md" 
-                                 src="<?php echo BASE_URL; ?>/storage/uploads/<?php echo htmlspecialchars($manajemen['foto']); ?>" 
+                               <img class="w-full h-full object-cover rounded-xl shadow-md" 
+                                   src="<?php echo ASSETS_URL; ?>/assets/uploads/<?php echo htmlspecialchars($manajemen['foto']); ?>" 
                                  alt="<?php echo htmlspecialchars($manajemen['nama']); ?>" 
                                  onerror="this.src='https://placehold.co/300x400/<?php echo $index == 0 ? '34495e' : ($index == 1 ? '2c3e50' : '27ae60'); ?>/white?text=<?php echo urlencode($manajemen['nama']); ?>'">
                         </div>

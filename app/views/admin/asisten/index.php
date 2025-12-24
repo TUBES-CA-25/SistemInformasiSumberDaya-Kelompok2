@@ -196,6 +196,8 @@
 </style>
 
 <script>
+window.BASE_URL = '<?= BASE_URL ?>';
+
 // Saat halaman dibuka, ambil data dari API
 document.addEventListener('DOMContentLoaded', function() {
     loadAsisten();
@@ -239,7 +241,7 @@ function loadAsisten() {
                 }
 
                 const fotoUrl = item.foto 
-                    ? (item.foto.includes('http') ? item.foto : '/assets/uploads/' + item.foto) 
+                    ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) 
                     : 'https://placehold.co/50x50?text=Foto';
 
                 const row = `

@@ -206,6 +206,16 @@ function loadAsisten() {
                 option.textContent = asisten.nama + ' (' + asisten.nim + ')';
                 select.appendChild(option);
             });
+            // Jika ada pending nilai kordinator (dari loadData sebelum opsi siap), set sekarang
+            if (window.pendingKordinatorAsisten) {
+                try {
+                    select.value = window.pendingKordinatorAsisten;
+                } catch (e) {
+                    console.warn('Failed setting pending kordinator value', e);
+                }
+                // clear pending to avoid reuse
+                window.pendingKordinatorAsisten = null;
+            }
         }
     })
     .catch(err => console.error('Error loading asisten:', err));
@@ -232,15 +242,20 @@ function loadData(id) {
             document.getElementById('software').value = data.software || '';
             document.getElementById('fasilitas').value = data.fasilitas || '';
             
-            // Set selected asisten if exists
+            // Set selected asisten if exists. If options not loaded yet, store pending value to be applied
             if (data.idKordinatorAsisten) {
-                setTimeout(() => {
-                    document.getElementById('idKordinatorAsisten').value = data.idKordinatorAsisten;
-                }, 500);
+                const select = document.getElementById('idKordinatorAsisten');
+                // try immediate set
+                if (select.options && select.options.length > 1) {
+                    select.value = data.idKordinatorAsisten;
+                } else {
+                    // mark pending value; loadAsisten will apply it when options are ready
+                    window.pendingKordinatorAsisten = data.idKordinatorAsisten;
+                }
             }
             
             if (data.gambar) {
-                const imagePath = data.gambar.includes('http') ? data.gambar : '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/' + data.gambar;
+                const imagePath = data.gambar.includes('http') ? data.gambar : ASSETS_URL + '/assets/uploads/' + data.gambar;
                 document.getElementById('preview-image').src = imagePath;
                 document.getElementById('preview-container').style.display = 'block';
             }

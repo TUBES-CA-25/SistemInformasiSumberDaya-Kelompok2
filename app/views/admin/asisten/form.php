@@ -116,18 +116,25 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Cek apakah ada ID di URL (mode edit)
-    const params = new URLSearchParams(window.location.search);
-    let route = params.get('route') || window.location.pathname;
-    
-    // Extract ID dari route: admin/asisten/{id}/edit
-    const matches = route.match(/admin\/asisten\/(\d+)\/edit/);
-    
-    if (matches && matches[1]) {
-        // Mode edit - load data
-        const id = matches[1];
-        loadAsistenData(id);
+    // Robust ID detection: check `route` query, pathname, or explicit `id` query
+    const routeParam = new URLSearchParams(window.location.search).get('route');
+    const qs = new URLSearchParams(window.location.search);
+    const explicitId = qs.get('id');
+    let id = null;
+
+    if (routeParam) {
+        const m = routeParam.match(/admin\/asisten\/(\d+)\/edit/);
+        if (m && m[1]) id = m[1];
     }
+
+    if (!id) {
+        const m2 = window.location.pathname.match(/admin\/asisten\/(\d+)\/edit/);
+        if (m2 && m2[1]) id = m2[1];
+    }
+
+    if (!id && explicitId) id = explicitId;
+
+    if (id) loadAsistenData(id);
 });
 
 function loadAsistenData(id) {
