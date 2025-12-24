@@ -27,6 +27,13 @@ class InformasiLabController extends Controller {
             return;
         }
         
+        // Check if it's a static ID (LAB-XX or RST-XX)
+        if (strpos($id, 'LAB-') === 0 || strpos($id, 'RST-') === 0) {
+            // Pass ID directly to view for static data handling
+            $this->view('fasilitas/detail', ['id' => $id]);
+            return;
+        }
+
         $lab = $this->model->getById($id, 'id_informasi');
         if (!$lab) {
             $this->redirect('/laboratorium');

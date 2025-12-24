@@ -120,14 +120,25 @@ small {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Parse ID from route parameter (admin/manajemen/{id}/edit)
-    const route = new URLSearchParams(window.location.search).get('route') || '';
-    const matches = route.match(/admin\/manajemen\/(\d+)\/edit/);
-    
-    if (matches && matches[1]) {
-        const id = matches[1];
-        loadManajemenData(id);
+    // Flexible ID detection: check `route` query, pathname, and explicit `id` query
+    const routeParam = new URLSearchParams(window.location.search).get('route');
+    const qs = new URLSearchParams(window.location.search);
+    const explicitId = qs.get('id');
+    let id = null;
+
+    if (routeParam) {
+        const m = routeParam.match(/admin\/manajemen\/(\d+)\/edit/);
+        if (m && m[1]) id = m[1];
     }
+
+    if (!id) {
+        const m2 = window.location.pathname.match(/admin\/manajemen\/(\d+)\/edit/);
+        if (m2 && m2[1]) id = m2[1];
+    }
+
+    if (!id && explicitId) id = explicitId;
+
+    if (id) loadManajemenData(id);
 });
 
 function loadManajemenData(id) {

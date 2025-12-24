@@ -13,7 +13,8 @@ class PeraturanController extends Controller {
     }
 
     public function index($params = []) {
-        $this->view('praktikum/peraturan');
+        // Sesuaikan dengan view legacy yang ada
+        $this->view('praktikum/tatatertib');
     }
 
     public function adminIndex($params = []) {

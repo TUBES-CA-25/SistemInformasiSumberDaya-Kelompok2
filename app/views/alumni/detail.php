@@ -30,7 +30,8 @@ $alumniData = [
     ]
 ];
 
-$id = isset($_GET['id']) ? $_GET['id'] : null;
+// Ambil ID dari parameter yang dikirim controller (via $params['id'])
+$id = isset($params['id']) ? $params['id'] : (isset($alumni['id']) ? $alumni['id'] : null);
 $data = isset($alumniData[$id]) ? $alumniData[$id] : null;
 ?>
 
@@ -38,7 +39,7 @@ $data = isset($alumniData[$id]) ? $alumniData[$id] : null;
     <div class="container">
         <?php if ($data) : ?>
             <div style="margin-bottom: 40px;">
-                <a href="index.php?page=alumni" class="btn-back">
+                <a href="<?= BASE_URL ?>/alumni" class="btn-back">
                     <i class="ri-arrow-left-line"></i> Kembali ke Daftar Alumni
                 </a>
             </div>
@@ -89,76 +90,17 @@ $data = isset($alumniData[$id]) ? $alumniData[$id] : null;
                     </div>
                 </div>
             </div>
+        <?php else: ?>
+            <div style="padding: 60px 20px; text-align: center;">
+                <i class="ri-user-unfollow-line" style="font-size: 4rem; color: #cbd5e1;"></i>
+                <h2 style="margin-top: 20px; color: #64748b;">Data Alumni Tidak Ditemukan</h2>
+                <p style="color: #94a3b8; margin-bottom: 30px;">Alumni dengan ID "<?= htmlspecialchars($id ?? '') ?>" tidak ada dalam database.</p>
+                <a href="<?= BASE_URL ?>/alumni" class="btn-back" style="display: inline-flex;">
+                    <i class="ri-arrow-left-line"></i> Kembali ke Daftar Alumni
+                </a>
+            </div>
         <?php endif; ?>
     </div>
 </section>
 
-<script>
-document.addEventListener('DOMContentLoaded', loadAlumniDetail);
-
-function loadAlumniDetail() {
-    const params = new URLSearchParams(window.location.search);
-    const alumniId = params.get('id');
-
-    if (!alumniId) {
-        document.getElementById('detailContainer').innerHTML = '<p style="color: red;">Error: ID Alumni tidak ditemukan</p>';
-        return;
-    }
-
-    fetch(`${API_URL}/alumni/${alumniId}`)
-    .then(res => res.json())
-    .then(response => {
-        if ((response.status === 'success' || response.code === 200) && response.data) {
-            const alumni = response.data;
-            
-            const html = `
-                <div class="detail-card">
-                    <div class="detail-left">
-                        <img src="${alumni.foto || 'https://placehold.co/400x500'}" alt="${alumni.nama}">
-                    </div>
-
-                    <div class="detail-right">
-                        <span class="badge-role">Alumni Angkatan ${alumni.angkatan || '—'}</span>
-                        <h1 style="margin-top: 10px;">${alumni.nama}</h1>
-                        <p class="current-job">Saat ini bekerja sebagai <strong>${alumni.pekerjaan || 'Belum bekerja'}</strong>${alumni.perusahaan ? ` di <strong>${alumni.perusahaan}</strong>` : ''}</p>
-
-                        <div class="testimony-box">
-                            <h3>💬 Kesan & Pesan</h3>
-                            <p>"${alumni.kesan_pesan || 'Tidak ada kesan/pesan'}"</p>
-                        </div>
-                        
-                        <div class="detail-meta">
-                            <div class="meta-item">
-                                <strong>Divisi Dahulu</strong>
-                                <p>${alumni.divisi || '—'}</p>
-                            </div>
-                            <div class="meta-item">
-                                <strong>Tahun Lulus</strong>
-                                <p>${alumni.tahun_lulus || '—'}</p>
-                            </div>
-                            <div class="meta-item">
-                                <strong>Keahlian</strong>
-                                <p>${alumni.keahlian || '—'}</p>
-                            </div>
-                        </div>
-
-                        <div class="social-links">
-                            ${alumni.linkedin ? `<a href="${alumni.linkedin}" target="_blank">LinkedIn</a>` : ''}
-                            ${alumni.portfolio ? `<a href="${alumni.portfolio}" target="_blank">Portfolio</a>` : ''}
-                            ${alumni.email ? `<a href="mailto:${alumni.email}">Email</a>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('detailContainer').innerHTML = html;
-        } else {
-            document.getElementById('detailContainer').innerHTML = '<p style="color: #999;">Data alumni tidak ditemukan</p>';
-        }
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        document.getElementById('detailContainer').innerHTML = '<p style="color: red;">Error: Gagal memuat data alumni</p>';
-    });
-}
-</script>
+<!-- Data alumni ditampilkan secara statis dari PHP -->

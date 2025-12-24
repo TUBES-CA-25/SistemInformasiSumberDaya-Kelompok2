@@ -9,7 +9,7 @@
 
         <div class="facility-grid">
             
-            <a href="index.php?page=detail_fasilitas&id=RST-AI" class="facility-row">
+            <a href="index.php?route=laboratorium/RST-AI" class="facility-row">
                 <div class="facility-img-side" style="background: #eff6ff;">
                     <div class="img-overlay-placeholder" style="background: transparent;">
                         <i class="ri-brain-line" style="color: #2563eb;"></i>
@@ -29,7 +29,7 @@
                 </div>
             </a>
 
-            <a href="index.php?page=detail_fasilitas&id=RST-IOT" class="facility-row">
+            <a href="index.php?route=laboratorium/RST-IOT" class="facility-row">
                 <div class="facility-img-side" style="background: #f0fdf4;">
                     <div class="img-overlay-placeholder" style="background: transparent;">
                         <i class="ri-wifi-line" style="color: #16a34a;"></i>
@@ -49,7 +49,7 @@
                 </div>
             </a>
 
-            <a href="index.php?page=detail_fasilitas&id=RST-MOB" class="facility-row">
+            <a href="index.php?route=laboratorium/RST-MOB" class="facility-row">
                 <div class="facility-img-side" style="background: #fff7ed;">
                     <div class="img-overlay-placeholder" style="background: transparent;">
                         <i class="ri-smartphone-line" style="color: #ea580c;"></i>

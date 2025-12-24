@@ -1,7 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /SistemInformasiSumberDaya-Kelompok2/
     
-    # Redirect to public folder
-    RewriteCond %{REQUEST_URI} !^/SistemInformasiSumberDaya-Kelompok2/public/
-    RewriteRule ^(.*)$ public/$1 [L]
+    # If it's a real file or directory, don't rewrite
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Rewrite everything else to public/index.php with route parameter
+    RewriteRule ^(.*)$ public/index.php?route=$1 [QSA,L]
 </IfModule>

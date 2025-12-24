@@ -49,9 +49,15 @@ class Router {
         $this->get('/praktikum', 'PraktikumController', 'index');
         $this->get('/praktikum/sanksi', 'SanksiController', 'index');
         $this->get('/peraturan', 'PeraturanController', 'index');
+        // Aliases for Indonesian naming used in legacy
+        $this->get('/tata-tertib', 'PeraturanController', 'index');
+        $this->get('/tatatertib', 'PeraturanController', 'index');
         $this->get('/riset', 'RisetController', 'index');
         $this->get('/profil', 'ProfilController', 'index');
         $this->get('/kepala-lab', 'KepalaLabController', 'index');
+        $this->get('/kepala-lab/detail/{id}', 'KepalaLabController', 'detail');
+        // Legacy alias
+        $this->get('/kepala', 'KepalaLabController', 'index');
 
         // Auth Routes
         $this->get('/login', 'AuthController', 'login');

@@ -257,7 +257,7 @@ function loadKoordinatorInfo() {
                 if (current.foto) {
                     const fotoUrl = current.foto.includes('http') 
                         ? current.foto 
-                        : BASE_URL + '/assets/uploads/' + current.foto;
+                        : ASSETS_URL + '/assets/uploads/' + current.foto;
                     document.getElementById('currentFoto').src = fotoUrl;
                 } else {
                     document.getElementById('currentFoto').src = 'https://placehold.co/60x60?text=Foto';
@@ -288,7 +288,7 @@ function loadAsistenList() {
             aktif.forEach(item => {
                 const isSelected = item.isKoordinator == 1;
                 const fotoUrl = item.foto 
-                    ? (item.foto.includes('http') ? item.foto : BASE_URL + '/assets/uploads/' + item.foto) 
+                    ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) 
                     : 'https://placehold.co/50x50?text=Foto';
                 
                 const itemDiv = document.createElement('div');

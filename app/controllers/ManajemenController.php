@@ -92,8 +92,8 @@ class ManajemenController extends Controller {
                     $this->error('Field required: ' . implode(', ', $missing), null, 400);
                 }
 
-                // Process file upload
-                $uploadDir = dirname(__DIR__, 2) . '/storage/uploads/';
+                // Process file upload (store in public assets so images are web-accessible)
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -166,7 +166,7 @@ class ManajemenController extends Controller {
 
             // Handle file upload
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = dirname(__DIR__, 2) . '/storage/uploads/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 // Delete old foto if exists

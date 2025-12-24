@@ -166,7 +166,7 @@ function loadAlumni() {
         if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
             response.data.forEach((item, index) => {
                 const fotoUrl = item.foto 
-                    ? (item.foto.includes('http') ? item.foto : BASE_URL + '/assets/uploads/' + item.foto) 
+                    ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) 
                     : 'https://placehold.co/50x50?text=Foto';
 
                 const row = `

@@ -65,14 +65,18 @@ INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `foto`, `pekerjaan`, `
 -- Struktur dari tabel `asisten`
 --
 
+
 CREATE TABLE `asisten` (
   `idAsisten` int(11) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `jurusan` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
-  `statusAktif` tinyint(1) DEFAULT 1,
-  `isKoordinator` tinyint(1) DEFAULT 0
+  `statusAktif` varchar(20) DEFAULT 'Asisten',
+  `isKoordinator` tinyint(1) DEFAULT 0,
+  `bio` TEXT NULL,
+  `skills` TEXT NULL,
+  `linkedin` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -558,10 +562,32 @@ ALTER TABLE `jadwalpraktikum`
   ADD CONSTRAINT `jadwalpraktikum_ibfk_2` FOREIGN KEY (`idLaboratorium`) REFERENCES `laboratorium` (`idLaboratorium`) ON DELETE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `laboratorium`
---
 ALTER TABLE `laboratorium`
   ADD CONSTRAINT `laboratorium_ibfk_1` FOREIGN KEY (`idKordinatorAsisten`) REFERENCES `asisten` (`idAsisten`) ON DELETE SET NULL;
+
+
+-- --------------------------------------------------------
+
+-- Struktur dari tabel `users`
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(20) DEFAULT 'admin',
+  `last_login` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Default Admin User (Password: admin123)
+-- Password hashed with PHP password_hash('admin123', PASSWORD_BCRYPT)
+INSERT INTO `users` (`username`, `password`, `role`) VALUES
+('admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin');
+
+UPDATE users
+SET password = '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey'
+WHERE username = 'admin';
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

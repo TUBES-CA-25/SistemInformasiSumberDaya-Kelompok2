@@ -19,8 +19,7 @@
                     <th style="width: 80px; padding: 15px; text-align: center;">Foto</th>
                     <th style="padding: 15px;">Nama Lengkap</th>
                     <th style="padding: 15px;">Jurusan</th>
-                    <th style="width: 100px; padding: 15px; text-align: center;">Koordinator</th>
-                    <th style="width: 100px; padding: 15px; text-align: center;">Status</th>
+                    <th style="width: 150px; padding: 15px; text-align: center;">Status</th>
                     <th style="width: 80px; padding: 15px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
@@ -197,6 +196,8 @@
 </style>
 
 <script>
+window.BASE_URL = '<?= BASE_URL ?>';
+
 // Saat halaman dibuka, ambil data dari API
 document.addEventListener('DOMContentLoaded', function() {
     loadAsisten();
@@ -211,16 +212,36 @@ function loadAsisten() {
 
         if((res.status === 'success' || res.code === 200) && res.data && res.data.length > 0) {
             res.data.forEach((item, index) => {
-                const statusBadge = item.statusAktif == 1 
-                    ? '<span class="status-badge status-aktif"><i class="fas fa-check-circle"></i> Aktif</span>' 
-                    : '<span class="status-badge status-nonaktif"><i class="fas fa-times-circle"></i> Non-Aktif</span>';
-                
-                const koordinatorBadge = item.isKoordinator == 1
-                    ? '<span class="coord-badge"><i class="fas fa-crown"></i> Koordinator</span>'
-                    : '<span style="color: #95a5a6; font-size: 12px;">—</span>';
+                let statusBadge = '';
+
+                // Jika Koordinator, tampilkan hanya badge Koordinator
+                if (item.isKoordinator == 1) {
+                    statusBadge = '<span class="coord-badge"><i class="fas fa-crown"></i> Koordinator</span>';
+                } else {
+                    // Normalisasi status
+                    let statusText = item.statusAktif;
+                    if (statusText == '1') statusText = 'Asisten';
+                    if (statusText == '0') statusText = 'Tidak Aktif';
+                    
+                    let badgeClass = 'status-aktif';
+                    let icon = 'check-circle';
+                    
+                    if (statusText === 'Tidak Aktif') {
+                        badgeClass = 'status-nonaktif';
+                        icon = 'times-circle';
+                    } else if (statusText === 'CA') {
+                        badgeClass = 'status-ca'; 
+                        icon = 'user-graduate';
+                    } else if (statusText === 'CCA') {
+                        badgeClass = 'status-cca';
+                        icon = 'user-tie';
+                    }
+
+                    statusBadge = `<span class="status-badge ${badgeClass}"><i class="fas fa-${icon}"></i> ${statusText}</span>`;
+                }
 
                 const fotoUrl = item.foto 
-                    ? (item.foto.includes('http') ? item.foto : '/assets/uploads/' + item.foto) 
+                    ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) 
                     : 'https://placehold.co/50x50?text=Foto';
 
                 const row = `
@@ -234,7 +255,6 @@ function loadAsisten() {
                             <div style="font-size: 12px; color: #7f8c8d;">${item.email || ''}</div>
                         </td>
                         <td><span style="color: #555; font-size: 13px;">${item.jurusan || '—'}</span></td>
-                        <td style="text-align: center;">${koordinatorBadge}</td>
                         <td style="text-align: center;">${statusBadge}</td>
                         <td style="text-align: center;">
                             <button onclick="hapusAsisten(${item.idAsisten}, event)" 
@@ -248,12 +268,12 @@ function loadAsisten() {
                 tbody.innerHTML += row;
             });
         } else {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color: #999;"><i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>Belum ada data asisten.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px; color: #999;"><i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>Belum ada data asisten.</td></tr>';
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 30px; color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td></tr>';
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td></tr>';
     });
 }
 

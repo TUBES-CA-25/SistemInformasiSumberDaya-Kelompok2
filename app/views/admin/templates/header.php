@@ -27,7 +27,7 @@
         }
     }
     ?>
-    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/css/admin.css">
+    <link rel="stylesheet" href="<?php echo PUBLIC_URL; ?>/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         // Global variable untuk semua JavaScript
@@ -113,16 +113,16 @@
     </div>
 
     <script>
-        // Navigation function untuk admin panel
+        // Navigation function untuk admin panel (gunakan clean path)
         function navigate(route) {
             const basePath = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
-                ? '/SistemInformasiSumberDaya-Kelompok2/public/'
-                : '/';
-            
-            if (route === '') {
-                window.location.href = basePath;
+                ? '/SistemInformasiSumberDaya-Kelompok2/public'
+                : '';
+
+            if (!route) {
+                window.location.href = basePath + '/admin';
             } else {
-                window.location.href = basePath + '?route=' + route;
+                window.location.href = basePath + '/' + route;
             }
         }
     </script>
