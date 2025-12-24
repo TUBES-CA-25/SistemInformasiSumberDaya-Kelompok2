@@ -1,5 +1,5 @@
 <?php
-// FILE: public/index.php
+// FILE: public/index.php - Full MVC Router Entry
 
 // 1. Tampilkan Error (Debugging)
 ini_set('display_errors', 1);
@@ -8,6 +8,11 @@ error_reporting(E_ALL);
 
 // 2. Definisi Folder Utama (ROOT)
 define('ROOT_PROJECT', dirname(__DIR__)); 
+define('APP_PATH', ROOT_PROJECT . '/app');
+define('CONTROLLER_PATH', APP_PATH . '/controllers');
+define('MODEL_PATH', APP_PATH . '/models');
+define('VIEW_PATH', APP_PATH . '/views');
+define('CONFIG_PATH', APP_PATH . '/config');
 
 // [2.1] LOAD CONFIGURATION (Wajib untuk Konstanta ASSETS_URL, DB_HOST, dll)
 require_once ROOT_PROJECT . '/app/config/config.php';
@@ -97,12 +102,18 @@ switch ($page) {
 
 // 5. RAKIT HALAMAN
 
-// a. Header
-require_once ROOT_PROJECT . '/app/views/templates/header.php';
+// Jika tidak ada route param, coba parse dari REQUEST_URI
+if (empty($route)) {
+    $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
+    // Remove /SistemInformasiSumberDaya-Kelompok2/public/ prefix if exists
+    $route = preg_replace('#^/SistemInformasiSumberDaya-Kelompok2/public/?#', '', $request_uri);
+    // Remove query string
+    $route = explode('?', $route)[0];
+}
 
-// b. Konten Tengah
-if (file_exists(ROOT_PROJECT . $contentView)) {
-    require_once ROOT_PROJECT . $contentView;
+$path = '/' . trim($route, '/ ');
+if ($path === '/') { 
+    $path = '/'; 
 } else {
     echo "<div style='text-align:center; padding:50px;'>";
     echo "<h2 style='color:red;'>Error: File View Tidak Ditemukan</h2>";
@@ -110,6 +121,23 @@ if (file_exists(ROOT_PROJECT . $contentView)) {
     echo "</div>";
 }
 
-// c. Footer
-require_once ROOT_PROJECT . '/app/views/templates/footer.php';
+// 6. Load MVC dependencies & dispatch Router
+require_once CONFIG_PATH . '/Database.php';
+require_once APP_PATH . '/helpers/Helper.php';
+require_once CONFIG_PATH . '/Router.php';
+
+// Set route untuk Router
+$_GET['route'] = $path;
+
+try {
+    $router = new Router();
+    $router->dispatch();
+    exit; // Penting: keluar setelah router menangani request
+} catch (Exception $e) {
+    http_response_code(500);
+    echo "<h1>Routing Error</h1>";
+    echo "<p>Error: " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<a href='" . (defined('PUBLIC_URL') ? PUBLIC_URL : '/') . "'>← Kembali ke Home</a>";
+    exit;
+}
 ?>

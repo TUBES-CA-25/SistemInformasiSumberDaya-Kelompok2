@@ -12,11 +12,32 @@ class Controller {
     protected function view($view, $data = []) {
         // Extract data untuk digunakan sebagai variabel di view
         extract($data);
+
+        // Tentukan CSS halaman berdasarkan lokasi view (fallback jika $pageCss belum ditentukan)
+        if (!isset($pageCss) || empty($pageCss)) {
+            if (strpos($view, 'home/') === 0) {
+                $pageCss = 'home.css';
+            } elseif (strpos($view, 'contact/') === 0) {
+                $pageCss = 'contact.css';
+            } elseif (strpos($view, 'praktikum/') === 0) {
+                $pageCss = 'praktikum.css';
+            } elseif (strpos($view, 'sumberdaya/') === 0) {
+                $pageCss = 'sumberdaya.css';
+            } elseif (strpos($view, 'fasilitas/') === 0) {
+                $pageCss = 'fasilitas.css';
+            } elseif (strpos($view, 'alumni/') === 0) {
+                $pageCss = 'alumni.css';
+            } else {
+                $pageCss = '';
+            }
+        }
         
         // Tentukan layout berdasarkan route
         $route = $_GET['route'] ?? '';
-        $isAdmin = (strpos($route, 'admin/') === 0) || ($route === 'admin');
-        $isApi = strpos($route, 'api/') === 0;
+        $routePath = ltrim($route, '/');
+        // Robust admin detection: by route or by view path prefix
+        $isAdmin = (strpos($routePath, 'admin/') === 0) || ($routePath === 'admin') || (strpos($view, 'admin/') === 0);
+        $isApi = strpos($routePath, 'api/') === 0;
         
         if ($isApi) {
             // Untuk API, langsung return JSON
@@ -49,6 +70,15 @@ class Controller {
      * Redirect ke URL lain
      */
     protected function redirect($url) {
+        // Jika URL tidak dimulai dengan http (bukan external link)
+        if (strpos($url, 'http') !== 0) {
+            // Pastikan BASE_URL didefinisikan
+            if (defined('BASE_URL')) {
+                // Hapus slash di awal url jika ada, untuk menghindari double slash
+                $url = ltrim($url, '/');
+                $url = BASE_URL . '/' . $url;
+            }
+        }
         header('Location: ' . $url);
         exit;
     }

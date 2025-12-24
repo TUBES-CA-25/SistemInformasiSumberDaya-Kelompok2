@@ -14,7 +14,8 @@ class AlumniController extends Controller {
      */
     public function index($params = []) {
         $data = $this->model->getAll();
-        $this->view('alumni/index', ['alumni' => $data]);
+        // Sesuaikan dengan view legacy yang ada (alumni/alumni.php)
+        $this->view('alumni/alumni', ['alumni' => $data]);
     }
 
     /**
@@ -27,13 +28,8 @@ class AlumniController extends Controller {
             return;
         }
         
-        $alumni = $this->model->getById($id, 'id');
-        if (!$alumni) {
-            $this->redirect('/alumni');
-            return;
-        }
-        
-        $this->view('alumni/detail', ['alumni' => $alumni]);
+        // Kirim params ke view untuk digunakan dengan data statis
+        $this->view('alumni/detail', ['params' => $params]);
     }
 
     /**

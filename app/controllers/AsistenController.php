@@ -29,7 +29,6 @@ class AsistenController extends Controller {
 
         $asisten = $this->model->getById($id, 'idAsisten');
         if (!$asisten) {
-            // Optional: Show 404 or redirect with message
             $this->redirect('/asisten');
             return;
         }
@@ -110,13 +109,9 @@ class AsistenController extends Controller {
                     'nama' => $_POST['nama'] ?? '',
                     'email' => $_POST['email'] ?? '',
                     'jurusan' => $_POST['jurusan'] ?? '',
-                    'jabatan' => $_POST['jabatan'] ?? '',
-                    'kategori' => $_POST['kategori'] ?? '',
-                    'lab' => $_POST['lab'] ?? '',
-                    'spesialisasi' => $_POST['spesialisasi'] ?? '',
                     'bio' => $_POST['bio'] ?? '',
                     'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]', // Expecting JSON string or will process later
-                    'statusAktif' => $_POST['statusAktif'] ?? '1',
+                    'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
                     'isKoordinator' => $_POST['isKoordinator'] ?? '0'
                 ];
 
@@ -204,13 +199,9 @@ class AsistenController extends Controller {
                     'nama' => $_POST['nama'] ?? '',
                     'email' => $_POST['email'] ?? '',
                     'jurusan' => $_POST['jurusan'] ?? '',
-                    'jabatan' => $_POST['jabatan'] ?? '',
-                    'kategori' => $_POST['kategori'] ?? '',
-                    'lab' => $_POST['lab'] ?? '',
-                    'spesialisasi' => $_POST['spesialisasi'] ?? '',
                     'bio' => $_POST['bio'] ?? '',
                     'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
-                    'statusAktif' => $_POST['statusAktif'] ?? '1',
+                    'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
                     'isKoordinator' => $_POST['isKoordinator'] ?? '0'
                 ];
 
@@ -272,7 +263,7 @@ class AsistenController extends Controller {
         }
     }
 
-    public function destroy($params) {
+    public function delete($params) {
         $id = $params['id'] ?? null;
         if (!$id) {
             $this->error('ID asisten tidak ditemukan', null, 400);

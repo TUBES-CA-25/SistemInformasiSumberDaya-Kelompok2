@@ -186,7 +186,7 @@ function loadManajemen() {
                     <tr onclick="editManajemen(${item.idManajemen}, event)">
                         <td style="font-weight: 600; color: #667eea;">${index + 1}</td>
                         <td>
-                            <img src="${item.foto ? (item.foto.includes('http') ? item.foto : '/SistemInformasiSumberDaya-Kelompok2/storage/uploads/' + item.foto) : 'https://placehold.co/50x50'}" 
+                               <img src="${item.foto ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) : 'https://placehold.co/50x50'}" 
                                  style="width:50px; height:50px; border-radius:50%; object-fit:cover; border: 2px solid #667eea;">
                         </td>
                         <td><strong>${item.nama}</strong></td>

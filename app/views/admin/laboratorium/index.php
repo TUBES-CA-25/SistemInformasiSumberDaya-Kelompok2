@@ -131,7 +131,7 @@ function renderTable(data) {
     
     data.forEach((item, index) => {
         const deskripsi = item.deskripsi ? (item.deskripsi.length > 60 ? item.deskripsi.substring(0, 60) + '...' : item.deskripsi) : '-';
-        const imageSrc = item.gambar ? (ASSETS_URL + '/uploads/' + item.gambar) : (ASSETS_URL + '/img/no-image.jpg');
+        const imageSrc = item.gambar ? (ASSETS_URL + '/assets/uploads/' + item.gambar) : (ASSETS_URL + '/img/no-image.jpg');
         
         // Handle image error with fallback (prevent infinite loop with this.onerror=null)
         const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Crect width='80' height='60' fill='%23eee'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='10' fill='%23999' dominant-baseline='middle' text-anchor='middle'%3ENo Img%3C/text%3E%3C/svg%3E";
@@ -147,7 +147,6 @@ function renderTable(data) {
                 <td>${escapeHtml(deskripsi)}</td>
                 <td style="text-align: center;">
                     <div class="capacity-badge"><i class="fas fa-desktop"></i> ${item.jumlahPc || 0} PC</div>
-                    <div class="capacity-badge"><i class="fas fa-chair"></i> ${item.jumlahKursi || 0} Kursi</div>
                 </td>
                 <td>
                     <div class="action-buttons">

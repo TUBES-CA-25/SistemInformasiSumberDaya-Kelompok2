@@ -105,7 +105,6 @@ class LaboratoriumController extends Controller {
                 'nama' => $_POST['nama'] ?? '',
                 'deskripsi' => $_POST['deskripsi'] ?? '',
                 'jumlahPc' => $_POST['jumlahPc'] ?? 0,
-                'jumlahKursi' => $_POST['jumlahKursi'] ?? 0,
                 'idKordinatorAsisten' => $_POST['idKordinatorAsisten'] ?? null
             ];
             
@@ -174,7 +173,6 @@ class LaboratoriumController extends Controller {
                 'nama' => $_POST['nama'] ?? '',
                 'deskripsi' => $_POST['deskripsi'] ?? '',
                 'jumlahPc' => $_POST['jumlahPc'] ?? 0,
-                'jumlahKursi' => $_POST['jumlahKursi'] ?? 0,
                 'idKordinatorAsisten' => $_POST['idKordinatorAsisten'] ?? null
             ];
             

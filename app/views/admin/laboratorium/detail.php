@@ -270,7 +270,9 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const params = new URLSearchParams(window.location.search);
+    let route = params.get('route') || window.location.pathname;
+    
     const matches = route.match(/admin\/laboratorium\/(\d+)/);
     
     if (matches && matches[1]) {
@@ -302,7 +304,7 @@ function loadLabDetail(id) {
             
             // Set gambar
             if (data.gambar) {
-                const imagePath = data.gambar.includes('http') ? data.gambar : '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/' + data.gambar;
+                const imagePath = data.gambar.includes('http') ? data.gambar : ASSETS_URL + '/assets/uploads/' + data.gambar;
                 document.getElementById('labImage').src = imagePath;
             }
             
@@ -344,7 +346,7 @@ function loadKoordinatorAsisten(idAsisten) {
             document.getElementById('coordinatorName').textContent = asisten.nama || 'Nama tidak tersedia';
             
             if (asisten.foto) {
-                const fotoPath = asisten.foto.includes('http') ? asisten.foto : '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/' + asisten.foto;
+                const fotoPath = asisten.foto.includes('http') ? asisten.foto : ASSETS_URL + '/assets/uploads/' + asisten.foto;
                 document.getElementById('coordinatorImage').src = fotoPath;
             }
             

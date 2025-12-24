@@ -66,18 +66,34 @@
 
 <script>
 let jadwalId = null;
+let mkLoaded = false;
+let labLoaded = false;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Parse ID from route parameter (admin/jadwal/{id}/edit)
-    const route = new URLSearchParams(window.location.search).get('route') || '';
-    const matches = route.match(/admin\/jadwal\/(\d+)\/edit/);
-    
-    if (matches && matches[1]) {
-        jadwalId = matches[1];
+    // Flexible ID detection
+    const routeParam = new URLSearchParams(window.location.search).get('route');
+    const qs = new URLSearchParams(window.location.search);
+    const explicitId = qs.get('id');
+    let id = null;
+
+    if (routeParam) {
+        const m = routeParam.match(/admin\/jadwal\/(\d+)\/edit/);
+        if (m && m[1]) id = m[1];
+    }
+
+    if (!id) {
+        const m2 = window.location.pathname.match(/admin\/jadwal\/(\d+)\/edit/);
+        if (m2 && m2[1]) id = m2[1];
+    }
+
+    if (!id && explicitId) id = explicitId;
+
+    if (id) {
+        jadwalId = id;
         document.querySelector('.admin-header h1').textContent = 'Edit Jadwal Praktikum';
         document.getElementById('idJadwal').value = jadwalId;
     }
-    
+
     loadDependencies();
 });
 
@@ -94,10 +110,8 @@ function loadDependencies() {
                     select.appendChild(option);
                 });
             }
-            // Load jadwal data after matakuliah loaded
-            if (jadwalId) {
-                loadJadwalAfterLabs();
-            }
+            mkLoaded = true;
+            if (jadwalId && mkLoaded && labLoaded) loadJadwalAfterLabs();
         }
     }).catch(err => console.error('Error loading matakuliah:', err));
 
@@ -113,6 +127,8 @@ function loadDependencies() {
                     select.appendChild(option);
                 });
             }
+            labLoaded = true;
+            if (jadwalId && mkLoaded && labLoaded) loadJadwalAfterLabs();
         }
     }).catch(err => console.error('Error loading laboratorium:', err));
 }

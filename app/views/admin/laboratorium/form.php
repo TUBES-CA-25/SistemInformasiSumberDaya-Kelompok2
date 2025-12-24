@@ -15,12 +15,6 @@
         </div>
 
         <div class="form-group">
-            <label>Lokasi Lab</label>
-            <input type="text" id="lokasi" name="lokasi" placeholder="Contoh: Gedung Fikom Lt. 2 (Ruang 204)">
-            <small class="form-text text-muted">Lokasi fisik laboratorium di kampus.</small>
-        </div>
-
-        <div class="form-group">
             <label>Koordinator Lab</label>
             <select id="idKordinatorAsisten" name="idKordinatorAsisten">
                 <option value="">-- Pilih Asisten --</option>
@@ -89,11 +83,6 @@
                 <label>Fasilitas Pendukung</label>
                 <textarea id="fasilitas" name="fasilitas" rows="3" placeholder="Contoh: AC Central, Proyektor HD, WiFi 6, Whiteboard"></textarea>
                 <small class="form-text text-muted">Pisahkan dengan koma atau baris baru.</small>
-            </div>
-
-            <div class="form-group">
-                <label>Jumlah Kursi</label>
-                <input type="number" id="jumlahKursi" name="jumlahKursi" placeholder="0" min="0">
             </div>
         </div>
 
@@ -179,7 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAsisten();
     
     // Parse ID from route parameter (admin/laboratorium/{id}/edit)
-    const route = new URLSearchParams(window.location.search).get('route') || '';
+    const params = new URLSearchParams(window.location.search);
+    let route = params.get('route') || window.location.pathname;
+    
     const matches = route.match(/admin\/laboratorium\/(\d+)\/edit/);
     
     if (matches && matches[1]) {
@@ -215,6 +206,16 @@ function loadAsisten() {
                 option.textContent = asisten.nama + ' (' + asisten.nim + ')';
                 select.appendChild(option);
             });
+            // Jika ada pending nilai kordinator (dari loadData sebelum opsi siap), set sekarang
+            if (window.pendingKordinatorAsisten) {
+                try {
+                    select.value = window.pendingKordinatorAsisten;
+                } catch (e) {
+                    console.warn('Failed setting pending kordinator value', e);
+                }
+                // clear pending to avoid reuse
+                window.pendingKordinatorAsisten = null;
+            }
         }
     })
     .catch(err => console.error('Error loading asisten:', err));
@@ -227,10 +228,8 @@ function loadData(id) {
         if (response.status === 'success' || response.code === 200) {
             const data = response.data;
             document.getElementById('nama').value = data.nama || '';
-            document.getElementById('lokasi').value = data.lokasi || '';
             document.getElementById('deskripsi').value = data.deskripsi || '';
             document.getElementById('jumlahPc').value = data.jumlahPc || '';
-            document.getElementById('jumlahKursi').value = data.jumlahKursi || '';
             
             // Hardware specs
             document.getElementById('processor').value = data.processor || '';
@@ -243,15 +242,20 @@ function loadData(id) {
             document.getElementById('software').value = data.software || '';
             document.getElementById('fasilitas').value = data.fasilitas || '';
             
-            // Set selected asisten if exists
+            // Set selected asisten if exists. If options not loaded yet, store pending value to be applied
             if (data.idKordinatorAsisten) {
-                setTimeout(() => {
-                    document.getElementById('idKordinatorAsisten').value = data.idKordinatorAsisten;
-                }, 500);
+                const select = document.getElementById('idKordinatorAsisten');
+                // try immediate set
+                if (select.options && select.options.length > 1) {
+                    select.value = data.idKordinatorAsisten;
+                } else {
+                    // mark pending value; loadAsisten will apply it when options are ready
+                    window.pendingKordinatorAsisten = data.idKordinatorAsisten;
+                }
             }
             
             if (data.gambar) {
-                const imagePath = data.gambar.includes('http') ? data.gambar : '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/' + data.gambar;
+                const imagePath = data.gambar.includes('http') ? data.gambar : ASSETS_URL + '/assets/uploads/' + data.gambar;
                 document.getElementById('preview-image').src = imagePath;
                 document.getElementById('preview-container').style.display = 'block';
             }
