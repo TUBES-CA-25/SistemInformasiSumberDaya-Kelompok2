@@ -54,6 +54,11 @@
     ?>
     
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <?php
+        // Pastikan semua URL relatif di-resolve terhadap PUBLIC_URL agar CSS/JS tetap ditemukan
+        if (!defined('PUBLIC_URL')) define('PUBLIC_URL', '/');
+    ?>
+    <base href="<?php echo rtrim(PUBLIC_URL, '/'); ?>/" />
 </head>
 <body>
 

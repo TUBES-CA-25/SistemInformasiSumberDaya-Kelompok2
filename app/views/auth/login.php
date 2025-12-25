@@ -134,7 +134,7 @@
     </div>
     
     <div style="text-align:center; margin-top:20px; font-size:12px;">
-        <a href="<?= PUBLIC_URL ?>" style="color:black;">&larr; Kembali ke Home</a>
+        <a href="<?= rtrim(PUBLIC_URL, '/') . '/home' ?>" style="color:black;">&larr; Kembali ke Home</a>
     </div>
 </div>
 

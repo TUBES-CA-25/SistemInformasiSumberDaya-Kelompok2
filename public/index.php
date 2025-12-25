@@ -249,7 +249,7 @@ if (array_key_exists($page, $mvc_routes)) {
             echo "<div style='padding:50px; text-align:center;'>";
             echo "<h3>Halaman Sedang Dalam Perbaikan</h3>";
             echo "<p>Controller <b>$controllerName</b> belum tersedia.</p>";
-            echo "<a href='".PUBLIC_URL."'>Kembali ke Home</a>";
+            echo "<a href='".PUBLIC_URL."/index.php'>Kembali ke Home</a>";
             echo "</div>";
         }
     }
