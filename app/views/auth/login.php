@@ -110,7 +110,7 @@
         </div>
     <?php endif; ?>
 
-    <form action="<?= PUBLIC_URL ?>/login" method="POST">
+    <form action="<?= PUBLIC_URL ?>/auth" method="POST">
         <div class="form-group">
             <label>USERNAME</label>
             <input type="text" name="username" required autofocus autocomplete="off" 

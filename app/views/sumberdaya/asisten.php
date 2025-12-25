@@ -1,46 +1,42 @@
 <?php
-/**
- * VIEW: DAFTAR ASISTEN (UPDATED STRUCTURE)
- * Fix: Logika Avatar seragam (Bold & Abaikan link lama di DB)
- */
-
-global $pdo; 
+$all_data = isset($data['asisten']) ? $data['asisten'] : [];
 
 $koordinator_list = [];
 $asisten_list = [];
+$ca_list = [];
 
-try {
-    // Query data asisten aktif
-    $stmt = $pdo->query("SELECT * FROM asisten WHERE statusAktif = 1 ORDER BY nama ASC");
-    $all_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Pisahkan Koordinator dan Anggota
+if (!empty($all_data)) {
     foreach ($all_data as $row) {
-        if ($row['isKoordinator'] == 1) {
+        $status = $row['statusAktif'] ?? 0;
+
+        if (isset($row['isKoordinator']) && $row['isKoordinator'] == 1) {
             $koordinator_list[] = $row;
-        } else {
+            continue;
+        }
+
+        if ($status === 'CA' || $status === 'Calon Asisten') {
+            $ca_list[] = $row;
+        } 
+        elseif ($status == 1 || $status === 'Asisten' || $status === 'Aktif') {
             $asisten_list[] = $row;
         }
     }
-
-} catch (PDOException $e) {
-    echo "<div class='alert-error'>Error Database: " . $e->getMessage() . "</div>";
 }
 ?>
 
 <section class="sumberdaya-section fade-up">
-    <div class="container">
+    <div class="container"> 
         
         <div class="page-header">
             <span class="header-badge">Sumber Daya Manusia</span>
             <h1>Asisten Laboratorium</h1>
-            <p>Mahasiswa terpilih yang berdedikasi membantu kelancaran praktikum dan riset di Laboratorium FIKOM UMI.</p>
+            <p>Mahasiswa terpilih yang berdedikasi membantu kelancaran praktikum.</p>
 
             <div class="search-container" style="margin-top: 30px; position: relative; max-width: 450px; margin-left: auto; margin-right: auto;">
                 <input type="text" id="searchAsisten" placeholder="Cari asisten..." 
                        class="search-input" 
-                       style="width: 100%; padding: 14px 24px; padding-right: 50px; border-radius: 50px; border: 1px solid #cbd5e1; outline: none; font-size: 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-                <i class="ri-search-line" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.2rem;"></i>
+                       style="width: 100%; padding: 14px 24px; padding-right: 50px; border-radius: 50px; border: 1px solid #cbd5e1; outline: none;">
+                <i class="ri-search-line" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
             </div>
         </div>
 
@@ -51,24 +47,16 @@ try {
 
             <?php foreach ($koordinator_list as $coord) : ?>
                 <?php 
-                    // LOGIKA GAMBAR KOORDINATOR (Tetap Biru agar Spesial)
                     $fotoName = $coord['foto'] ?? '';
                     $namaEnc = urlencode($coord['nama']);
-                    
-                    // Default: Biru Muda + Bold
                     $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=eff6ff&color=2563eb&size=256&bold=true";
 
-                    if (!empty($fotoName)) {
-                        // 1. Abaikan jika link di DB adalah ui-avatars (biar style kita yang menang)
-                        if (strpos($fotoName, 'ui-avatars.com') !== false) {
-                            // Do nothing
-                        }
-                        // 2. Cek External
-                        elseif (strpos($fotoName, 'http') !== false) {
+                    if (!empty($fotoName) && strpos($fotoName, 'ui-avatars') === false) {
+                        if (strpos($fotoName, 'http') !== false) {
                             $imgUrl = $fotoName;
-                        }
-                        // 3. Cek File Lokal
-                        elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
+                        } elseif (file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $fotoName)) {
+                            $imgUrl = ASSETS_URL . '/assets/uploads/' . $fotoName;
+                        } elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
                             $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
                         }
                     }
@@ -80,7 +68,7 @@ try {
                         </div>
                         <div class="exec-info">
                             <span class="exec-badge">Koordinator</span>
-                            <h3 class="staff-name" style="font-size: 2rem; margin-bottom: 5px;"><?= htmlspecialchars($coord['nama']) ?></h3>
+                            <h3 class="staff-name"><?= htmlspecialchars($coord['nama']) ?></h3>
                             <p class="staff-role exec-role">
                                 <?= htmlspecialchars($coord['jurusan'] ?? 'Teknik Informatika') ?>
                             </p>
@@ -95,9 +83,12 @@ try {
                             </div>
                             
                             <div style="margin-top: 20px;">
-                                <a href="index.php?page=detail&id=<?= $coord['idAsisten'] ?>&type=asisten" class="btn-contact" style="font-size: 0.9rem; padding: 10px 20px;">
-                                    Lihat Profil <i class="ri-arrow-right-line"></i>
+
+                                <!-- FIX LINK DETAIL -->
+                                <a href="index.php?page=detail-asisten&id=<?= $coord['idAsisten'] ?>&type=asisten" class="btn-contact">
+                                    Lihat Profil
                                 </a>
+
                             </div>
                         </div>
                     </div>
@@ -106,69 +97,116 @@ try {
         <?php endif; ?>
 
         <div class="section-label">
-            <span>Daftar Asisten Praktikum</span>
+            <span>Asisten Praktikum</span>
         </div>
 
         <div class="staff-grid">
-            
             <?php if (empty($asisten_list)) : ?>
-                <div style="width: 100%; text-align: center; padding: 60px; color: #64748b; background: #fff; border-radius: 20px; border: 2px solid #e2e8f0;">
-                    <p>Belum ada data asisten aktif.</p>
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8; border: 1 dashed #cbd5e1; border-radius: 12px;">
+                    <p>Belum ada data asisten praktikum.</p>
                 </div>
             <?php else : ?>
-                
                 <?php foreach ($asisten_list as $row) : ?>
                     <?php 
-                        // LOGIKA GAMBAR ASISTEN (Abu-abu Seragam)
                         $fotoName = $row['foto'] ?? '';
                         $namaEnc = urlencode($row['nama']);
-                        
-                        // Default: Abu-abu + Bold (Sama seperti Alumni)
                         $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=256&bold=true"; 
 
-                        if (!empty($fotoName)) {
-                            // 1. Abaikan link ui-avatars dari database
-                            if (strpos($fotoName, 'ui-avatars.com') !== false) {
-                                // Do nothing
-                            }
-                            // 2. Cek External
-                            elseif (strpos($fotoName, 'http') !== false) {
+                        if (!empty($fotoName) && strpos($fotoName, 'ui-avatars') === false) {
+                            if (strpos($fotoName, 'http') !== false) {
                                 $imgUrl = $fotoName;
-                            }
-                            // 3. Cek File Lokal
-                            elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
+                            } elseif (file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $fotoName)) {
+                                $imgUrl = ASSETS_URL . '/assets/uploads/' . $fotoName;
+                            } elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
                                 $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
                             }
                         }
-                        
-                        $jurusan = $row['jurusan'] ?? 'Teknik Informatika';
-                        $email = $row['email'] ?? '';
-                        $id = $row['idAsisten']; 
                     ?>
                     
-                    <a href="index.php?page=detail&id=<?= $id ?>&type=asisten" class="card-link">
+                    <!-- FIX LINK DETAIL -->
+                    <a href="index.php?page=detail-asisten&id=<?= $row['idAsisten'] ?>&type=asisten" class="card-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
                                 <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
                             </div>
-
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
                                 <span class="staff-role">Asisten Praktikum</span>
-
+                                
                                 <div class="staff-footer">
                                     <div class="meta-item">
                                         <i class="ri-graduation-cap-line"></i> 
-                                        <span><?= htmlspecialchars($jurusan) ?></span>
+                                        <span><?= htmlspecialchars($row['jurusan'] ?? 'Teknik Informatika') ?></span>
                                     </div>
+                                    
+                                    <?php if (!empty($row['email'])) : ?>
+                                    <div class="meta-item">
+                                        <i class="ri-mail-line"></i> 
+                                        <span style="font-size: 0.8rem; word-break: break-all;"><?= htmlspecialchars($row['email']) ?></span>
+                                    </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </a>
                 <?php endforeach; ?>
-
             <?php endif; ?>
         </div>
+
+        <?php if (!empty($ca_list)) : ?>
+            <div class="section-label" style="margin-top: 40px;">
+                <span>Calon Asisten (CA)</span>
+            </div>
+
+            <div class="staff-grid">
+                <?php foreach ($ca_list as $row) : ?>
+                    <?php 
+                        $fotoName = $row['foto'] ?? '';
+                        $namaEnc = urlencode($row['nama']);
+                        $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=fffbeb&color=d97706&size=256&bold=true"; 
+
+                        if (!empty($fotoName) && strpos($fotoName, 'ui-avatars') === false) {
+                            if (strpos($fotoName, 'http') !== false) {
+                                $imgUrl = $fotoName;
+                            } elseif (file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $fotoName)) {
+                                $imgUrl = ASSETS_URL . '/assets/uploads/' . $fotoName;
+                            } elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
+                                $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
+                            }
+                        }
+                    ?>
+                    
+                    <!-- FIX LINK DETAIL -->
+                    <a href="index.php?page=detail-asisten&id=<?= $row['idAsisten'] ?>&type=asisten" class="card-link">
+                        <div class="staff-card">
+                            <div class="staff-photo-box">
+                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                                <span style="position: absolute; top: 10px; right: 10px; background: #f59e0b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">CA</span>
+                            </div>
+                            <div class="staff-content">
+                                <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
+                                <span class="staff-role" style="color: #d97706;">Calon Asisten</span>
+                                
+                                <div class="staff-footer">
+                                    <div class="meta-item">
+                                        <i class="ri-graduation-cap-line"></i> 
+                                        <span><?= htmlspecialchars($row['jurusan'] ?? 'Teknik Informatika') ?></span>
+                                    </div>
+
+                                    <?php if (!empty($row['email'])) : ?>
+                                    <div class="meta-item">
+                                        <i class="ri-mail-line"></i> 
+                                        <span style="font-size: 0.8rem; word-break: break-all;"><?= htmlspecialchars($row['email']) ?></span>
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
     </div>
 </section>
 

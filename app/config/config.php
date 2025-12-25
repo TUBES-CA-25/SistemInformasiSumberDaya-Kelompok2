@@ -1,15 +1,16 @@
 <?php
 /**
- * Configuration File
+ * Configuration File (FINAL & ROBUST)
  */
 
-// Autoload Composer dependencies
-// Autoload Composer dependencies
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
-// Load Environment Variables
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
-$dotenv->safeLoad();
+try {
+    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+    $dotenv->safeLoad();
+} catch (Exception $e) {
+    // Silent fail
+}
 
 // Database Configuration
 define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
@@ -19,61 +20,51 @@ define('DB_NAME', $_ENV['DB_DATABASE'] ?? 'sistem_manajemen_sumber_daya');
 
 // Application Settings
 define('APP_NAME', $_ENV['APP_NAME'] ?? 'Sistem Management Sumber Daya');
-define('APP_URL', $_ENV['APP_URL'] ?? 'http://localhost/SistemInformasiSumberDaya-Kelompok2');
-define('APP_ENV', $_ENV['APP_ENV'] ?? 'development'); // development or production
+define('APP_ENV', $_ENV['APP_ENV'] ?? 'development'); 
 
-// Auto-detect URLs untuk fleksibilitas deployment
+// --- DETEKSI URL OTOMATIS (CORE LOGIC) ---
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$publicPath = '';
 
-// Detect environment dan set base paths accordingly
-if (strpos($_SERVER['SERVER_NAME'] ?? '', 'localhost') !== false && ($_SERVER['SERVER_PORT'] ?? 80) == 8000) {
-    // PHP Built-in server (localhost:8000)
-    // Document root is already in public/, so paths are relative to root
-    $baseScriptPath = '';
-    $publicPath = '';
-    $assetsPath = '';
-} else {
-    // XAMPP/Apache server (localhost/project/public/)
-    $requestUri = $_SERVER['REQUEST_URI'] ?? '';
-    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+// Cek 1: Apakah pakai PHP Built-in (localhost:8000)?
+if (strpos($host, ':8000') !== false) {
+    // Asumsi: dijalankan dengan "php -S localhost:8000 -t public"
+    $publicPath = $protocol . $host;
+} 
+// Cek 2: Apakah pakai XAMPP / Apache biasa?
+else {
+    $scriptDir = dirname($_SERVER['SCRIPT_NAME']); 
+    $scriptDir = str_replace('\\', '/', $scriptDir);
+    $scriptDir = rtrim($scriptDir, '/'); 
     
-    // Extract project path from script name or request uri
-    // Check multiple ways since SCRIPT_NAME might vary
-    if (strpos($scriptName, '/SistemInformasiSumberDaya-Kelompok2/') !== false ||
-        strpos($requestUri, '/SistemInformasiSumberDaya-Kelompok2/') !== false) {
-        $baseScriptPath = '/SistemInformasiSumberDaya-Kelompok2';
-        $publicPath = '/SistemInformasiSumberDaya-Kelompok2/public';
-        $assetsPath = '/SistemInformasiSumberDaya-Kelompok2/public';
-    } else {
-        // Fallback: check if we can infer from current file location
-        $baseScriptPath = '/SistemInformasiSumberDaya-Kelompok2';
-        $publicPath = '/SistemInformasiSumberDaya-Kelompok2/public';
-        $assetsPath = '/SistemInformasiSumberDaya-Kelompok2/public';
-    }
+    // Hasil: http://localhost/NamaFolder/public
+    $publicPath = $protocol . $host . $scriptDir;
 }
 
-// Define URL constants (robust fallbacks)
-if (!defined('BASE_URL')) {
-    define('BASE_URL', $protocol . $host . $baseScriptPath);
-}
+// --- DEFINISI KONSTANTA ---
+
 if (!defined('PUBLIC_URL')) {
-    $computedPublic = $publicPath ?: (rtrim(APP_URL, '/') . '/public');
-    // Ensure absolute with protocol
-    if (strpos($computedPublic, 'http') !== 0) {
-        $computedPublic = $protocol . $host . $computedPublic;
-    }
-    define('PUBLIC_URL', $computedPublic);
+    define('PUBLIC_URL', $publicPath);
 }
-if (!defined('API_URL')) {
-    define('API_URL', PUBLIC_URL . '/api.php');
+
+if (!defined('BASE_URL')) {
+    // Base URL naik satu tingkat dari Public URL
+    define('BASE_URL', dirname(PUBLIC_URL));
 }
+
 if (!defined('ASSETS_URL')) {
+    // Arahkan assets ke root folder public
     define('ASSETS_URL', PUBLIC_URL);
 }
 
-// Display errors (disable in production)
-if (APP_ENV === 'development') {
+if (!defined('API_URL')) {
+    define('API_URL', PUBLIC_URL . '/api.php');
+}
+
+// Error Reporting
+$whitelist = ['127.0.0.1', '::1', 'localhost'];
+if (APP_ENV === 'development' || in_array($_SERVER['REMOTE_ADDR'] ?? '', $whitelist)) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
@@ -82,12 +73,10 @@ if (APP_ENV === 'development') {
     error_reporting(E_ALL);
 }
 
-// Session configuration
+// Session & Timezone
 if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.gc_maxlifetime', 1440);
     session_start();
 }
-
-// Timezone
 date_default_timezone_set('Asia/Jakarta');
 ?>

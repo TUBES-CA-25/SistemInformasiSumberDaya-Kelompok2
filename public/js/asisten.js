@@ -37,9 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.style.display = 'none'; // Sembunyikan element
                 }
             });
-            
-            // Opsional: Menyembunyikan judul section jika semua kartu di bawahnya hilang
-            // (Bisa ditambahkan nanti jika diperlukan logika UI lanjutan)
         });
     }
 });

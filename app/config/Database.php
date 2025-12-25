@@ -1,11 +1,16 @@
 <?php
 /**
- * DATABASE CONNECTION (PDO VERSION)
- * Menggantikan MySQLi agar kompatibel dengan fitur modern.
+ * DATABASE CONNECTION (HYBRID VERSION)
+ * 1. Bagian Atas: PDO (Kode asli Anda, tidak ada yang dikurangi).
+ * 2. Bagian Bawah: Class Database (Tambahan agar Model.php teman Anda tidak error).
  */
 
 require_once __DIR__ . '/config.php';
 
+// =================================================================
+// BAGIAN 1: KODE ASLI ANDA (PDO)
+// Variabel global $pdo ini tetap bisa Anda pakai di file lain.
+// =================================================================
 try {
     // 1. Siapkan DSN (Data Source Name)
     $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
@@ -30,4 +35,52 @@ try {
         die("Maaf, sistem sedang mengalami gangguan koneksi database.");
     }
 }
+
+
+// =================================================================
+// BAGIAN 2: TAMBAHAN UNTUK TEMAN ANDA (CLASS DATABASE WRAPPER)
+// Wajib ditambahkan karena Model.php memanggil "new Database()"
+// =================================================================
+class Database {
+
+    private $host = DB_HOST;
+    private $user = DB_USER;
+    private $pass = DB_PASS;
+    private $dbname = DB_NAME;
+
+    private $mysqli;
+    private $pdo;
+
+    public function __construct()
+    {
+        // gunakan PDO global agar view tetap jalan
+        global $pdo;
+        $this->pdo = $pdo;
+    }
+
+    public function connect()
+    {
+        if ($this->mysqli) return $this->mysqli;
+
+        $this->mysqli = new mysqli(
+            $this->host,
+            $this->user,
+            $this->pass,
+            $this->dbname
+        );
+
+        if ($this->mysqli->connect_error) {
+            throw new Exception("Connection failed: " . $this->mysqli->connect_error);
+        }
+
+        return $this->mysqli;
+    }
+
+    // >>>> tambahan ini <<<<
+    public function getPdo()
+    {
+        return $this->pdo;
+    }
+}
+
 ?>

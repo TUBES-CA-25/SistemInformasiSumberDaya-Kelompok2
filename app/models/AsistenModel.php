@@ -2,7 +2,7 @@
 require_once __DIR__ . '/Model.php';
 
 class AsistenModel extends Model {
-    protected $table = 'Asisten';
+    protected $table = 'asisten';
 
     public function getAsistenByEmail($email) {
         $query = "SELECT * FROM Asisten WHERE email = ?";

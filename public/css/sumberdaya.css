@@ -1,5 +1,10 @@
+/* FILE: public/css/sumberdaya.css - VERSI PAKSA: GAMBAR FULL WIDTH */
+
+/* =========================================
+   1. GLOBAL & RESET
+   ========================================= */
 .sumberdaya-section {
-    padding: 80px 0;
+    padding: 60px 0;
     background-color: #f8fafc;
     min-height: 100vh;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -11,48 +16,45 @@
     padding: 0 24px;
 }
 
+/* =========================================
+   2. HEADER & LABEL
+   ========================================= */
 .page-header {
     text-align: center;
     max-width: 800px;
-    margin: 0 auto 60px auto;
+    margin: 0 auto 50px auto;
     padding-top: 10px;
-    border-bottom: none;
 }
 
 .header-badge {
     display: inline-block;
     background-color: #e0e7ff;
     color: #3730a3;
-    padding: 10px 24px;
+    padding: 8px 20px;
     border-radius: 50px;
     font-weight: 800;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .page-header h1 {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 900;
     color: #0f172a;
     letter-spacing: -2px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     line-height: 1.1;
     margin-top: 0;
 }
 
 .page-header p {
     color: #475569;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     line-height: 1.6;
     margin: 0 auto;
     font-weight: 500;
-}
-
-@media (max-width: 768px) {
-    .page-header h1 { font-size: 2.5rem; }
-    .page-header p { font-size: 1rem; padding: 0 15px; }
 }
 
 .section-label {
@@ -61,8 +63,8 @@
     color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    margin-bottom: 30px;
-    margin-top: 60px;
+    margin-bottom: 25px;
+    margin-top: 50px;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -76,6 +78,9 @@
     border-radius: 2px;
 }
 
+/* =========================================
+   3. KARTU KOORDINATOR & STAFF (GRID)
+   ========================================= */
 .card-link {
     text-decoration: none;
     color: inherit;
@@ -83,57 +88,46 @@
     height: 100%;
 }
 
+/* --- KOORDINATOR (Desktop Default: Besar) --- */
 .exec-card {
     background: #ffffff;
     border: 2px solid #e2e8f0;
-    border-left: 6px solid #2563eb;
+    border-left: 8px solid #2563eb;
     border-radius: 24px;
-    display: flex;
+    display: flex; /* Flexrow di desktop */
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 240px;
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    max-width: 1100px; 
+    min-height: 280px;
+    margin: 0 auto;
+    box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.08);
 }
 
 .exec-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
     border-color: #cbd5e1;
     border-left-color: #1d4ed8;
 }
 
 .exec-photo {
-    flex: 0 0 240px;
+    flex: 0 0 300px;
     background: #f1f5f9;
     border-right: 1px solid #e2e8f0;
     position: relative;
     overflow: hidden; 
 }
 
-.exec-photo img, 
-.exec-photo .exec-placeholder {
+.exec-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover; 
     object-position: top center; 
 }
 
-.exec-placeholder,
-.staff-placeholder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 800;
-    color: #94a3b8;
-    background: #f8fafc;
-}
-
-.exec-placeholder { font-size: 3.5rem; }
-.staff-placeholder { font-size: 2.5rem; }
-
 .exec-info {
     flex: 1;
-    padding: 35px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -143,9 +137,9 @@
     display: inline-block;
     background: #eff6ff;
     color: #2563eb;
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 8px;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -154,97 +148,100 @@
 }
 
 .exec-info h3 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #0f172a;
-    margin: 0 0 5px 0;
+    margin: 0 0 8px 0;
     font-weight: 900;
-    letter-spacing: -0.5px;
+    letter-spacing: -1px;
 }
 
 .exec-role {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #475569;
     margin-bottom: 25px;
     font-weight: 500;
 }
 
 .exec-footer {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 15px 40px;
+    display: flex;
+    gap: 25px;
     margin-top: auto;
     padding-top: 25px;
     border-top: 2px solid #f1f5f9;
 }
 
+/* --- STAFF GRID (4 KOLOM) --- */
 .staff-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px;
     margin-top: 20px;
 }
 
 .staff-grid .card-link {
-    width: 280px;
-    max-width: 100%;
-    flex-grow: 0;
-    flex-shrink: 0;
+    width: auto;
+    max-width: none;
 }
 
 .staff-card {
     background: #ffffff;
-    border: 2px solid #e2e8f0;
-    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
     transition: all 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.02);
 }
 
 .staff-card:hover {
     border-color: #94a3b8;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.1);
     transform: translateY(-5px);
 }
 
 .staff-photo-box {
-    height: 220px; 
+    width: 100%;
+    aspect-ratio: 1 / 1;
     background: #f1f5f9;
     border-bottom: 1px solid #e2e8f0;
     position: relative;
     overflow: hidden;
 }
 
-.staff-photo-box img, 
-.staff-photo-box .staff-placeholder {
+.staff-photo-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top center;
+    object-position: center top;
+    transition: transform 0.4s ease;
+}
+
+.staff-card:hover .staff-photo-box img {
+    transform: scale(1.05);
 }
 
 .staff-content {
-    padding: 25px;
+    padding: 18px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
 .staff-name {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: #0f172a;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
+    line-height: 1.3;
 }
 
 .staff-role {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #2563eb;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     display: block;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -252,17 +249,17 @@
 
 .staff-footer {
     margin-top: auto;
-    padding-top: 15px;
-    border-top: 2px solid #f1f5f9;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
 }
 
 .meta-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-size: 0.85rem;
     color: #64748b;
     font-weight: 500;
@@ -270,24 +267,12 @@
 
 .meta-item i {
     color: #94a3b8;
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
-
-/* --- 4. RESPONSIVE MOBILE FIX --- */
-@media (max-width: 768px) {
-    .exec-card { flex-direction: column; }
-    .exec-photo { 
-        flex: auto; width: 100%; aspect-ratio: 4 / 3; height: auto; 
-        border-right: none; border-bottom: 2px solid #e2e8f0; 
-    }
-    .exec-info { padding: 25px; }
-    .exec-footer { grid-template-columns: 1fr; gap: 12px; }
-    
-    .staff-grid .card-link { width: 100%; }
-    .staff-photo-box { height: auto; aspect-ratio: 16 / 9; }
-}
-
+/* =========================================
+   4. DETAIL PROFILE (DESKTOP DEFAULT)
+   ========================================= */
 .profile-wrapper {
     display: flex;
     background: #ffffff;
@@ -296,204 +281,151 @@
     overflow: hidden;
     box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
     margin-top: 40px;
+    /* Desktop: Kiri kanan sejajar */
+    align-items: stretch; 
 }
 
 .profile-image {
-    flex: 0 0 400px;
+    /* Desktop: Lebar fix 40% */
+    flex: 0 0 40%; 
+    max-width: 450px;
     background: #f1f5f9;
-    min-height: 450px;
     position: relative;
     border-right: 2px solid #e2e8f0;
+    /* Desktop: Min height agar tidak gepeng */
+    min-height: 500px;
 }
 
 .profile-image img {
+    /* Desktop: Absolute full */
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: top center;
+    object-fit: cover; 
+    object-position: center top; 
     position: absolute;
     top: 0; left: 0;
 }
 
-.profile-content {
-    padding: 50px;
-    flex: 1;
+.profile-content { 
+    padding: 50px; 
+    flex: 1; 
 }
 
-.btn-back {
-    text-decoration: none;
-    color: #64748b;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 30px;
-    transition: color 0.2s;
-}
+/* =========================================
+   5. RESPONSIVE / MOBILE (SANGAT PENTING)
+   ========================================= */
 
-.btn-back:hover {
-    color: #2563eb;
-}
-
-.skills-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 40px;
-}
-
-.skill-tag {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    color: #334155;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.btn-contact {
-    background: #0f172a;
-    color: #ffffff;
-    padding: 14px 28px;
-    border-radius: 12px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    transition: background 0.2s;
-}
-
-.btn-contact:hover {
-    background: #1e293b;
-    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
-}
-
+/* --- TABLET & MOBILE (Max 900px) --- */
 @media (max-width: 900px) {
-    .profile-wrapper { flex-direction: column; }
-    .profile-image {
-        flex: auto; width: 100%; aspect-ratio: 1 / 1; height: auto;
-        border-right: none; border-bottom: 2px solid #e2e8f0;
+    
+    /* A. Grid System */
+    .staff-grid { grid-template-columns: repeat(2, 1fr); }
+    
+    /* B. Koordinator Jadi Compact (Mirip Staff) */
+    .exec-card { 
+        flex-direction: column; 
+        max-width: 320px !important; /* Paksa kecil */
+        margin: 0 auto;
     }
-    .profile-content { padding: 30px; }
+    .exec-photo { 
+        width: 100%; 
+        flex: none; 
+        height: 320px; /* Tinggi Fix agar kotak */
+        border-right: none; 
+        border-bottom: 2px solid #e2e8f0; 
+    }
+    .exec-info { padding: 20px; text-align: center; }
+    .exec-badge { align-self: center; }
+    .exec-footer { justify-content: center; }
+    .exec-info h3 { font-size: 1.5rem; }
+
+    /* C. DETAIL PROFILE - SOLUSI PAKSA (FORCE FULL WIDTH) */
+    
+    .profile-wrapper {
+        /* Ubah jadi vertikal murni */
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        width: 100% !important;
+    }
+
+    .profile-image {
+        /* Matikan flex basis desktop */
+        flex: none !important; 
+        max-width: 100% !important;
+        width: 100% !important;
+        
+        /* Tinggi FIX 400px agar gambar pasti muncul & besar */
+        height: 400px !important; 
+        min-height: 400px !important;
+        
+        border-right: none !important;
+        border-bottom: 4px solid #e2e8f0; /* Pembatas visual */
+        position: relative !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .profile-image img {
+        /* Paksa penuhi container 400px tadi */
+        position: absolute !important;
+        top: 0; left: 0;
+        width: 100% !important;
+        height: 100% !important;
+        
+        /* CROP agar penuh ke samping (Full Width) */
+        object-fit: cover !important; 
+        object-position: top center !important; 
+    }
+
+    .profile-content {
+        padding: 30px 20px !important;
+        width: 100% !important;
+    }
 }
 
-.search-container {
-    margin-top: 30px;
-    position: relative;
-    max-width: 450px;
-    margin-left: auto;
-    margin-right: auto;
+/* --- HP KECIL (Max 480px) --- */
+@media (max-width: 480px) {
+    .staff-grid { grid-template-columns: 1fr; }
+    .staff-card { max-width: 350px; margin: 0 auto; }
+    
+    /* Koordinator HP Kecil */
+    .exec-card { max-width: 350px !important; }
+    
+    /* Detail Foto HP Kecil (Sedikit lebih pendek biar ga scroll jauh) */
+    .profile-image { 
+        height: 350px !important; 
+        min-height: 350px !important;
+    }
 }
 
-.search-input {
-    width: 100%;
-    padding: 14px 24px;
-    padding-right: 50px;
-    border-radius: 50px;
-    border: 1px solid #cbd5e1;
-    outline: none;
-    font-size: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-}
-
-.search-input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-}
-
-.search-icon-box {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-    font-size: 1.2rem;
-    pointer-events: none;
-}
-
-.detail-nav { margin-bottom: 30px; }
-
-.category-badge {
-    background: #e0f2fe;
-    color: #0369a1;
-    border: none;
-    margin-bottom: 15px;
-    display: inline-block;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.profile-name {
-    margin-bottom: 5px;
-    font-size: 2.5rem;
-    line-height: 1.2;
-    color: #0f172a;
-    font-weight: 900;
-}
-
-.profile-role {
-    font-size: 1.2rem;
-    color: #64748b;
-    font-weight: 500;
-    display: block;
-}
-
-.specialization-box { margin: 20px 0; }
-
-.member-specialization {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #0f172a;
-    font-weight: 600;
-}
-
-.member-specialization i {
-    color: #2563eb;
-    font-size: 1.2rem;
-}
-
-.section-title {
-    color: #0f172a;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 10px;
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-
+/* =========================================
+   6. ELEMENT LAIN (BUTTONS, TEXT)
+   ========================================= */
+.btn-back { text-decoration: none; color: #64748b; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: color 0.2s; }
+.btn-back:hover { color: #2563eb; }
+.skills-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+.skill-tag { background: #ffffff; border: 1px solid #cbd5e1; color: #334155; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; }
+.btn-contact { background: #0f172a; color: #ffffff; padding: 10px 24px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.9rem; transition: background 0.2s; }
+.btn-contact:hover { background: #1e293b; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15); }
+.search-container { margin-top: 30px; position: relative; max-width: 450px; margin-left: auto; margin-right: auto; }
+.search-input { width: 100%; padding: 12px 20px; padding-right: 40px; border-radius: 50px; border: 1px solid #cbd5e1; outline: none; font-size: 0.95rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: all 0.3s ease; }
+.search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+.detail-nav { margin-bottom: 20px; }
+.category-badge { background: #e0f2fe; color: #0369a1; border: none; margin-bottom: 10px; display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
+.profile-name { margin-bottom: 5px; font-size: 2.2rem; line-height: 1.2; color: #0f172a; font-weight: 900; }
+.profile-role { font-size: 1.1rem; color: #64748b; font-weight: 500; display: block; }
+.specialization-box { margin: 15px 0; }
+.member-specialization { display: flex; align-items: center; gap: 8px; color: #0f172a; font-weight: 600; }
+.member-specialization i { color: #2563eb; font-size: 1.1rem; }
+.section-title { color: #0f172a; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; font-size: 1rem; font-weight: 700; }
 .section-title.mt-30 { margin-top: 30px; }
-
-.profile-bio { color: #475569; line-height: 1.6; }
-
-.contact-wrapper { margin-top: 40px; }
-
-.btn-disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background: #94a3b8 !important;
-}
-
-.empty-state-wrapper { text-align: center; padding: 100px 0; }
-
-.empty-icon { font-size: 4rem; color: #cbd5e1; margin-bottom: 20px; }
-
-.empty-title { color: #1e293b; margin-bottom: 10px; font-weight: 800; }
-
-.empty-desc { color: #64748b; margin-bottom: 30px; }
-
-.btn-primary-pill {
-    background: #2563eb;
-    color: white;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-weight: 600;
-    display: inline-block;
-}
-
+.profile-bio { color: #475569; line-height: 1.6; font-size: 0.95rem; }
+.contact-wrapper { margin-top: 30px; }
+.btn-disabled { opacity: 0.6; cursor: not-allowed; background: #94a3b8 !important; }
+.empty-state-wrapper { text-align: center; padding: 80px 0; }
+.empty-icon { font-size: 3.5rem; color: #cbd5e1; margin-bottom: 15px; }
+.empty-title { color: #1e293b; margin-bottom: 5px; font-weight: 800; }
+.empty-desc { color: #64748b; margin-bottom: 20px; }
+.btn-primary-pill { background: #2563eb; color: white; padding: 10px 24px; border-radius: 50px; font-weight: 600; display: inline-block; text-decoration: none; }
 .btn-primary-pill:hover { background: #1d4ed8; color: white; }

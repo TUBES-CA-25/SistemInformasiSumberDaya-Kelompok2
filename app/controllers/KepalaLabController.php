@@ -13,10 +13,18 @@ class KepalaLabController extends Controller {
     }
     
     public function index($params = []) {
-        // Kembalikan tampilan ke versi awal (legacy view)
-        // View ini menggunakan sumberdaya.css dan struktur lama yang diharapkan pengguna
-        $this->view('sumberdaya/kepala');
-    }
+
+    // Ambil semua data manajemen via Model
+    $all = $this->model->getAll();
+
+    // Kirimkan ke view dalam $data
+    $data = [
+        'manajemen' => $all
+    ];
+
+    $this->view('sumberdaya/kepala', $data);
+}
+
     
     /**
      * Detail profil pimpinan/laboran (legacy view, MVC route)
@@ -26,7 +34,7 @@ class KepalaLabController extends Controller {
         if (!empty($params['id'])) {
             $_GET['id'] = $params['id']; // menjaga kompatibilitas view legacy
         }
-        $this->view('sumberdaya/detail');
+        $this->view('sumberdaya/detail-asisten');
     }
     
     /**

@@ -10,10 +10,19 @@ class AuthController extends Controller {
     }
 
     public function login() {
-        // Jika sudah login, redirect ke admin
-        if (isset($_SESSION['user_id'])) {
-            $this->redirect(PUBLIC_URL . '/admin/dashboard');
+        // [UPDATE] Cek status juga, jangan cuma user_id.
+        // Ini agar sinkron dengan aturan satpam di index.php
+        if (isset($_SESSION['status']) && $_SESSION['status'] == 'login') {
+            $this->redirect(PUBLIC_URL . '/admin');
             return;
+        }
+        
+        // [PENTING] Bersihkan sesi "setengah matang" (punya ID tapi tidak status)
+        // Ini yang sering bikin browser bingung dan loading terus
+        if (isset($_SESSION['user_id'])) {
+            session_unset();
+            session_destroy();
+            session_start();
         }
         
         $this->partial('auth/login');
@@ -64,13 +73,14 @@ class AuthController extends Controller {
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
         
+        $_SESSION['status'] = "login";
         // Update last login
         $this->userModel->updateLastLogin($user['id']);
         
         // Success message
         $this->setFlash('success', '✅ Login berhasil! Selamat datang, <strong>' . $user['username'] . '</strong>!');
 
-        $this->redirect(PUBLIC_URL . '/admin/dashboard');
+        $this->redirect(PUBLIC_URL . '/admin');
     }
 
     public function logout() {

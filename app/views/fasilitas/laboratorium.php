@@ -9,7 +9,7 @@
 
         <div class="facility-grid">
             
-            <a href="index.php?route=laboratorium/LAB-SE" class="facility-row">
+            <a href="index.php?page=detail_fasilitas&id=LAB-SE" class="facility-row">
                 <div class="facility-img-side">
                     <div class="img-overlay-placeholder">
                         <i class="ri-code-s-slash-line"></i>
@@ -30,7 +30,7 @@
                 </div>
             </a>
 
-            <a href="index.php?route=laboratorium/LAB-JK" class="facility-row">
+            <a href="index.php?page=detail_fasilitas&id=LAB-JK" class="facility-row">
                 <div class="facility-img-side">
                     <div class="img-overlay-placeholder">
                         <i class="ri-server-line"></i>
@@ -51,7 +51,7 @@
                 </div>
             </a>
 
-            <a href="index.php?route=laboratorium/LAB-MM" class="facility-row">
+            <a href="index.php?page=detail_fasilitas&id=LAB-MM" class="facility-row">
                 <div class="facility-img-side">
                     <div class="img-overlay-placeholder">
                         <i class="ri-movie-2-line"></i>

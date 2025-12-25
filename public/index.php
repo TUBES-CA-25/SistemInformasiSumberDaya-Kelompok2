@@ -1,143 +1,263 @@
 <?php
-// FILE: public/index.php - Full MVC Router Entry
+session_start();
 
-// 1. Tampilkan Error (Debugging)
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// 2. Definisi Folder Utama (ROOT)
-define('ROOT_PROJECT', dirname(__DIR__)); 
-define('APP_PATH', ROOT_PROJECT . '/app');
+define('ROOT_PROJECT', dirname(__DIR__));
+define('APP_PATH',        ROOT_PROJECT . '/app');
 define('CONTROLLER_PATH', APP_PATH . '/controllers');
-define('MODEL_PATH', APP_PATH . '/models');
-define('VIEW_PATH', APP_PATH . '/views');
-define('CONFIG_PATH', APP_PATH . '/config');
+define('VIEW_PATH',       APP_PATH . '/views');
+define('CORE_PATH',       APP_PATH . '/core');
+define('CONFIG_PATH',     APP_PATH . '/config');
 
-// [2.1] LOAD CONFIGURATION (Wajib untuk Konstanta ASSETS_URL, DB_HOST, dll)
-require_once ROOT_PROJECT . '/app/config/config.php';
+require_once APP_PATH . '/config/config.php';
 
-// [2.2] LOAD DATABASE CONNECTION (Wajib agar $pdo tersedia)
-// Pastikan file ini ada di folder app/config/
-require_once ROOT_PROJECT . '/app/config/database.php';
+$db = null;
+if (file_exists(CORE_PATH . '/Database.php')) {
+    require_once CORE_PATH . '/Database.php';
+    global $pdo;
+    $db = new Database();
+    $pdo = $db->getPdo();
+}
 
-// 3. Tangkap Request Halaman (Default 'home')
-$page = isset($_GET['page']) ? $_GET['page'] : 'home';
+if (file_exists(CORE_PATH . '/Controller.php')) {
+    require_once CORE_PATH . '/Controller.php';
+} elseif (file_exists(CONTROLLER_PATH . '/Controller.php')) {
+    require_once CONTROLLER_PATH . '/Controller.php';
+}
 
-// 4. Konfigurasi Halaman
-$contentView = '';
-$pageCss = ''; 
+$request_uri = $_SERVER['REQUEST_URI'];
+$uri_clean   = explode('?', $request_uri)[0];
 
-switch ($page) {
-    case 'home':
-        $contentView = '/app/views/home/index.php';
-        $pageCss = 'home.css';
-        break;
+$isAdminArea = (strpos($uri_clean, '/admin') !== false) || (strpos($uri_clean, '/dashboard') !== false);
 
-    // --- FITUR APPS (BARU) ---
-    case 'apps':
-        // Pastikan Anda menyimpan file apps.php di folder app/views/home/
-        $contentView = '/app/views/home/apps.php'; 
-        $pageCss = 'apps.css';
-        break;
+if ($isAdminArea) {
 
-    // --- PRAKTIKUM ---
-    case 'tatatertib':
-        $contentView = '/app/views/praktikum/tatatertib.php';
-        $pageCss = 'praktikum.css';
-        break;
-    case 'jadwal':
-        $contentView = '/app/views/praktikum/jadwal.php';
-        $pageCss = 'praktikum.css';
-        break;
-
-    // --- SUMBER DAYA ---
-    case 'asisten':
-        $contentView = '/app/views/sumberdaya/asisten.php';
-        $pageCss = 'sumberdaya.css'; 
-        break;
-    case 'detail': 
-        $contentView = '/app/views/sumberdaya/detail.php';
-        $pageCss = 'sumberdaya.css'; 
-        break;
-    case 'kepala':
-        $contentView = '/app/views/sumberdaya/kepala.php';
-        $pageCss = 'sumberdaya.css';
-        break;
-    
-    // --- FASILITAS ---
-    case 'laboratorium':
-        $contentView = '/app/views/fasilitas/laboratorium.php';
-        $pageCss = 'fasilitas.css';
-        break;
-    case 'riset':
-        $contentView = '/app/views/fasilitas/riset.php';
-        $pageCss = 'fasilitas.css';
-        break;
-    case 'detail_fasilitas':
-        $contentView = '/app/views/fasilitas/detail.php'; 
-        $pageCss = 'fasilitas.css';
-        break;
-
-    // --- LAINNYA ---
-    case 'alumni':
-        $contentView = '/app/views/alumni/alumni.php'; 
-        $pageCss = 'alumni.css'; 
-        break;
-
-    case 'detail_alumni':
-        $contentView = '/app/views/alumni/detail.php'; 
-        $pageCss = 'alumni.css';
-        break;
-
-    case 'contact':
-        $contentView = '/app/views/contact/index.php';
-        $pageCss = 'contact.css';
-        break;
-
-    default:
-        echo "<h1>404 - Halaman Tidak Ditemukan</h1>";
+    if (!isset($_SESSION['status']) || $_SESSION['status'] != "login") {
+        header("Location: " . PUBLIC_URL . "/login");
         exit;
-}
+    }
 
-// 5. RAKIT HALAMAN
+    $parts   = explode('/admin/', $uri_clean);
+    $subPath = isset($parts[1]) ? trim($parts[1], '/') : '';
 
-// Jika tidak ada route param, coba parse dari REQUEST_URI
-if (empty($route)) {
-    $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
-    // Remove /SistemInformasiSumberDaya-Kelompok2/public/ prefix if exists
-    $route = preg_replace('#^/SistemInformasiSumberDaya-Kelompok2/public/?#', '', $request_uri);
-    // Remove query string
-    $route = explode('?', $route)[0];
-}
+    if (empty($subPath)) {
+        $module = 'dashboard';
+        $action = 'index';
+    } else {
+        $subParts = explode('/', $subPath);
+        $module   = $subParts[0];
+        $action   = isset($subParts[1]) ? $subParts[1] : 'index';
+    }
 
-$path = '/' . trim($route, '/ ');
-if ($path === '/') { 
-    $path = '/'; 
-} else {
-    echo "<div style='text-align:center; padding:50px;'>";
-    echo "<h2 style='color:red;'>Error: File View Tidak Ditemukan</h2>";
-    echo "<p>Sistem mencoba membuka: <strong>" . $contentView . "</strong></p>";
-    echo "</div>";
-}
+    $adminHeader = VIEW_PATH . '/admin/templates/header.php';
+    $adminFooter = VIEW_PATH . '/admin/templates/footer.php';
 
-// 6. Load MVC dependencies & dispatch Router
-require_once CONFIG_PATH . '/Database.php';
-require_once APP_PATH . '/helpers/Helper.php';
-require_once CONFIG_PATH . '/Router.php';
+    if ($module === 'dashboard') {
+        $targetFile = VIEW_PATH . '/admin/index.php';
+    } else {
+        $specificFile = VIEW_PATH . '/admin/' . $module . '/' . $action . '.php';
+        $indexFile    = VIEW_PATH . '/admin/' . $module . '/index.php';
 
-// Set route untuk Router
-$_GET['route'] = $path;
+        if (file_exists($specificFile) && !empty($subParts[1])) {
+            $targetFile = $specificFile;
+        } else {
+            // Jika specific file tidak ada, beberapa module menggunakan pola 'form.php'
+            // untuk aksi create/edit — dukung fallback tersebut.
+            if (!empty($subParts[1]) && in_array($action, ['create', 'edit'])) {
+                $formFile = VIEW_PATH . '/admin/' . $module . '/form.php';
+                if (file_exists($formFile)) {
+                    $targetFile = $formFile;
+                } else {
+                    $targetFile = $indexFile;
+                }
+            } else {
+                $targetFile = $indexFile;
+            }
+        }
+    }
 
-try {
-    $router = new Router();
-    $router->dispatch();
-    exit; // Penting: keluar setelah router menangani request
-} catch (Exception $e) {
-    http_response_code(500);
-    echo "<h1>Routing Error</h1>";
-    echo "<p>Error: " . htmlspecialchars($e->getMessage()) . "</p>";
-    echo "<a href='" . (defined('PUBLIC_URL') ? PUBLIC_URL : '/') . "'>← Kembali ke Home</a>";
+    if (file_exists($adminHeader)) require_once $adminHeader;
+
+    if (file_exists($targetFile)) {
+        chdir(dirname($targetFile));
+        require_once $targetFile;
+    } else {
+        echo "<div style='margin-left:260px; padding:30px; color:red;'><h3>404 - Admin Page Not Found</h3><p>Target: $targetFile</p></div>";
+    }
+
+    chdir(ROOT_PROJECT . '/public');
+    if (file_exists($adminFooter)) require_once $adminFooter;
     exit;
+}
+
+
+/* ===============================
+   NORMALISASI URL (DIPERBAIKI UNTUK .htaccess)
+   - Mendukung query param lama `page=...&id=...`
+   - Tetap mendukung `route=` dan path-based routing
+=============================== */
+
+// Preferensi: gunakan `page` query (compatibilitas dengan view lama),
+// lalu `route`, lalu path dari REQUEST_URI.
+$pageParam = $_GET['page'] ?? null;
+$routeParam = $_GET['route'] ?? null;
+$uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$path = trim($pageParam ?? $routeParam ?? $uriPath, '/');
+
+$segments = array_values(array_filter(
+    explode('/', $path),
+    fn($s) => $s !== ''
+));
+
+$page = $segments[0] ?? 'home';
+if ($page === 'index.php') $page = 'home';
+
+// ID bisa dikirim lewat query ?id=... atau sebagai segmen URL
+$id = $_GET['id'] ?? ($segments[2] ?? null);
+
+
+/* ===============================
+   ALIASES
+=============================== */
+
+$aliases = [
+    'tata-tertib'    => 'tatatertib',
+    'peraturan'      => 'tatatertib',
+    'kepala-lab'     => 'kepala',
+    'struktur'       => 'kepala',
+    'profil'         => 'kepala',
+    'fasilitas'      => 'riset',
+    'kontak'         => 'contact',
+    'hubungi'        => 'contact',
+    'daftar-asisten' => 'asisten'
+];
+
+if (array_key_exists($page, $aliases)) {
+    $page = $aliases[$page];
+}
+
+
+/* ===============================
+   CSS
+=============================== */
+
+$pageCss = '';
+if ($page == 'home')                              $pageCss = 'home.css';
+if ($page == 'tatatertib' || $page == 'jadwal')   $pageCss = 'praktikum.css';
+if ($page == 'kepala' || $page == 'asisten')      $pageCss = 'sumberdaya.css';
+if ($page == 'laboratorium' || $page == 'riset')  $pageCss = 'fasilitas.css';
+if ($page == 'apps')                              $pageCss = 'apps.css';
+if ($page == 'contact')                           $pageCss = 'contact.css';
+if ($page == 'alumni')                            $pageCss = 'alumni.css';
+
+
+/* ===============================
+   ROUTE DETAIL
+=============================== */
+
+if (($segments[1] ?? '') === 'detail') {
+
+    $id = $segments[2] ?? null;
+
+    if ($page === 'asisten') {
+        $page = 'detail';
+    }
+    elseif ($page === 'alumni') {
+        $page = 'detail_alumni';
+    }
+    elseif ($page === 'laboratorium') {
+        $page = 'detail_fasilitas';
+    }
+}
+
+
+/* ===============================
+   DIRECT VIEW
+=============================== */
+
+$direct_views = [
+    'home'         => 'home/index.php',
+    'apps'         => 'home/apps.php',
+    'jadwal'       => 'praktikum/jadwal.php',
+    'tatatertib'   => 'praktikum/tatatertib.php',
+    'riset'        => 'fasilitas/riset.php',
+    'laboratorium' => 'fasilitas/laboratorium.php',
+    'detail_fasilitas' => 'fasilitas/detail.php',
+    'kepala'       => 'sumberdaya/kepala.php'
+];
+
+if (array_key_exists($page, $direct_views)) {
+    require_once VIEW_PATH . '/templates/header.php';
+    require_once VIEW_PATH . '/' . $direct_views[$page];
+    require_once VIEW_PATH . '/templates/footer.php';
+    exit;
+}
+
+
+/* ===============================
+   MVC ROUTES
+=============================== */
+
+$mvc_routes = [
+    'contact'          => ['ContactController', 'index', []],
+    'login'            => ['AuthController', 'login', []],
+    'auth'             => ['AuthController', 'authenticate', []],
+    'logout'           => ['AuthController', 'logout', []],
+
+    'asisten'          => ['AsistenController', 'index', []],
+    'detail'           => ['AsistenController', 'detail', ['id' => $id]],
+    'detail-asisten'   => ['AsistenController', 'detail', ['id' => $id]],
+
+    'alumni'           => ['AlumniController', 'index', []],
+    'detail_alumni'    => ['AlumniController', 'detail', ['id' => $id]],
+
+    'detail_fasilitas' => ['LaboratoriumController', 'detail', ['id' => $id]],
+    'detail_manajemen' => ['KepalaLabController', 'detail', ['id' => $id]],
+];
+
+
+if (array_key_exists($page, $mvc_routes)) {
+
+    $route = $mvc_routes[$page];
+    $controllerName = $route[0];
+    $methodName     = $route[1];
+    $params         = $route[2];
+
+    $controllerFile = CONTROLLER_PATH . '/' . $controllerName . '.php';
+
+    if (file_exists($controllerFile)) {
+
+        require_once $controllerFile;
+        $controller = new $controllerName();
+
+        call_user_func_array([$controller, $methodName], [$params]);
+
+    } else {
+
+        $fallback = null;
+        if ($page == 'contact') $fallback = 'contact/index.php';
+        if ($page == 'alumni')  $fallback = 'alumni/index.php';
+
+        if ($fallback && file_exists(VIEW_PATH . '/' . $fallback)) {
+            require_once VIEW_PATH . '/templates/header.php';
+            require_once VIEW_PATH . '/' . $fallback;
+            require_once VIEW_PATH . '/templates/footer.php';
+        } else {
+            echo "<div style='padding:50px; text-align:center;'>";
+            echo "<h3>Halaman Sedang Dalam Perbaikan</h3>";
+            echo "<p>Controller <b>$controllerName</b> belum tersedia.</p>";
+            echo "<a href='".PUBLIC_URL."'>Kembali ke Home</a>";
+            echo "</div>";
+        }
+    }
+
+} else {
+
+    require_once VIEW_PATH . '/templates/header.php';
+    require_once VIEW_PATH . '/home/index.php';
+    require_once VIEW_PATH . '/templates/footer.php';
 }
 ?>
