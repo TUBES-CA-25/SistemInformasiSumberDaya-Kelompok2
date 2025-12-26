@@ -2,14 +2,17 @@
 require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../models/LaboratoriumModel.php';
 require_once __DIR__ . '/../models/AsistenModel.php';
+require_once __DIR__ . '/../models/LaboratoriumGambarModel.php';
 
 class LaboratoriumController extends Controller {
     private $model;
     private $asistenModel;
+    private $gambarModel;
 
     public function __construct() {
         $this->model = new \LaboratoriumModel();
         $this->asistenModel = new \AsistenModel();
+        $this->gambarModel = new \LaboratoriumGambarModel();
     }
 
     // API methods
@@ -30,6 +33,9 @@ class LaboratoriumController extends Controller {
             $this->error('Laboratorium tidak ditemukan', null, 404);
             return;
         }
+
+        // Add images array
+        $data['images'] = $this->gambarModel->getByLaboratorium($id);
 
         $this->success($data, 'Laboratorium retrieved successfully');
     }
@@ -103,9 +109,17 @@ class LaboratoriumController extends Controller {
             // Ambil data dari POST (multipart/form-data)
             $input = [
                 'nama' => $_POST['nama'] ?? '',
+                'jenis' => $_POST['jenis'] ?? 'Laboratorium',
                 'deskripsi' => $_POST['deskripsi'] ?? '',
                 'jumlahPc' => $_POST['jumlahPc'] ?? 0,
-                'idKordinatorAsisten' => $_POST['idKordinatorAsisten'] ?? null
+                'processor' => $_POST['processor'] ?? '',
+                'ram' => $_POST['ram'] ?? '',
+                'storage' => $_POST['storage'] ?? '',
+                'gpu' => $_POST['gpu'] ?? '',
+                'monitor' => $_POST['monitor'] ?? '',
+                'software' => $_POST['software'] ?? '',
+                'fasilitas_pendukung' => $_POST['fasilitas'] ?? '',
+                'idKordinatorAsisten' => !empty($_POST['idKordinatorAsisten']) ? $_POST['idKordinatorAsisten'] : null
             ];
             
             // Validasi field wajib
@@ -114,33 +128,65 @@ class LaboratoriumController extends Controller {
                 return;
             }
             
-            // Handle file upload jika ada
-            if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+            // Handle multiple file uploads
+            $uploadedImages = [];
+            if (isset($_FILES['gambar']) && is_array($_FILES['gambar']['name'])) {
                 $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
-                $ext = strtolower(pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION));
-                $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
-                
-                if (!in_array($ext, $allowedExts)) {
-                    $this->error('Format file tidak didukung. Gunakan: jpg, jpeg, png, gif', null, 400);
-                    return;
+                $fileCount = count($_FILES['gambar']['name']);
+                for ($i = 0; $i < $fileCount; $i++) {
+                    if ($_FILES['gambar']['error'][$i] === UPLOAD_ERR_OK) {
+                        $ext = strtolower(pathinfo($_FILES['gambar']['name'][$i], PATHINFO_EXTENSION));
+                        $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
+                        
+                        if (!in_array($ext, $allowedExts)) {
+                            $this->error('Format file tidak didukung pada file ' . $_FILES['gambar']['name'][$i] . '. Gunakan: jpg, jpeg, png, gif', null, 400);
+                            return;
+                        }
+                        
+                        $filename = 'lab_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                        $target = $uploadDir . $filename;
+                        
+                        if (move_uploaded_file($_FILES['gambar']['tmp_name'][$i], $target)) {
+                            $uploadedImages[] = [
+                                'filename' => $filename,
+                                'description' => $_POST['gambar_desc'][$i] ?? null
+                            ];
+                        } else {
+                            $this->error('Gagal mengupload file: ' . $_FILES['gambar']['name'][$i], null, 500);
+                            return;
+                        }
+                    }
                 }
                 
-                $filename = 'lab_' . time() . '_' . rand(1000,9999) . '.' . $ext;
-                $target = $uploadDir . $filename;
-                
-                if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                    $input['gambar'] = $filename;
-                } else {
-                    $this->error('Gagal mengupload file', null, 500);
-                    return;
+                // Set gambar pertama sebagai utama jika ada
+                if (!empty($uploadedImages)) {
+                    $input['gambar'] = $uploadedImages[0]['filename'];
                 }
             }
             
+            // Simpan ke Database
             $result = $this->model->insert($input);
+            
             if ($result) {
-                $this->success(['id' => $this->model->getLastInsertId()], 'Laboratorium berhasil ditambahkan', 201);
+                $lastId = $this->model->getLastInsertId();
+                
+                // Simpan uploaded images ke tabel laboratorium_gambar
+                if (!empty($uploadedImages)) {
+                    foreach ($uploadedImages as $index => $image) {
+                        $isUtama = ($index === 0) ? 1 : 0;
+                        $this->gambarModel->insertImage(
+                            $lastId,
+                            $image['filename'],
+                            $image['description'],
+                            $isUtama,
+                            $index
+                        );
+                    }
+                }
+                
+                $this->success(['id' => $lastId], 'Laboratorium berhasil ditambahkan', 201);
             } else {
                 $error_msg = 'Gagal menambahkan laboratorium';
                 if ($this->model->db) {
@@ -170,10 +216,18 @@ class LaboratoriumController extends Controller {
 
             // Ambil data dari POST (multipart/form-data)
             $input = [
-                'nama' => $_POST['nama'] ?? '',
+                'nama' => $_POST['nama'] ?? $existing['nama'],
+                'jenis' => $_POST['jenis'] ?? ($existing['jenis'] ?? 'Laboratorium'),
                 'deskripsi' => $_POST['deskripsi'] ?? '',
                 'jumlahPc' => $_POST['jumlahPc'] ?? 0,
-                'idKordinatorAsisten' => $_POST['idKordinatorAsisten'] ?? null
+                'processor' => $_POST['processor'] ?? '',
+                'ram' => $_POST['ram'] ?? '',
+                'storage' => $_POST['storage'] ?? '',
+                'gpu' => $_POST['gpu'] ?? '',
+                'monitor' => $_POST['monitor'] ?? '',
+                'software' => $_POST['software'] ?? '',
+                'fasilitas_pendukung' => $_POST['fasilitas'] ?? '',
+                'idKordinatorAsisten' => !empty($_POST['idKordinatorAsisten']) ? $_POST['idKordinatorAsisten'] : null
             ];
             
             // Validasi field wajib
@@ -182,41 +236,62 @@ class LaboratoriumController extends Controller {
                 return;
             }
             
-            // Handle file upload jika ada file baru
-            if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+            // Handle multiple file uploads
+            $uploadedImages = [];
+            if (isset($_FILES['gambar']) && is_array($_FILES['gambar']['name'])) {
                 $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
-                $ext = strtolower(pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION));
-                $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
-                
-                if (!in_array($ext, $allowedExts)) {
-                    $this->error('Format file tidak didukung. Gunakan: jpg, jpeg, png, gif', null, 400);
-                    return;
-                }
-                
-                // Delete old file if exists
-                if (!empty($existing['gambar'])) {
-                    $oldFile = $uploadDir . $existing['gambar'];
-                    if (file_exists($oldFile)) {
-                        unlink($oldFile);
+                $fileCount = count($_FILES['gambar']['name']);
+                for ($i = 0; $i < $fileCount; $i++) {
+                    if ($_FILES['gambar']['error'][$i] === UPLOAD_ERR_OK) {
+                        $ext = strtolower(pathinfo($_FILES['gambar']['name'][$i], PATHINFO_EXTENSION));
+                        $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
+                        
+                        if (!in_array($ext, $allowedExts)) {
+                            $this->error('Format file tidak didukung pada file ' . $_FILES['gambar']['name'][$i] . '. Gunakan: jpg, jpeg, png, gif', null, 400);
+                            return;
+                        }
+                        
+                        $filename = 'lab_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                        $target = $uploadDir . $filename;
+                        
+                        if (move_uploaded_file($_FILES['gambar']['tmp_name'][$i], $target)) {
+                            $uploadedImages[] = [
+                                'filename' => $filename,
+                                'description' => $_POST['gambar_desc'][$i] ?? null
+                            ];
+                        } else {
+                            $this->error('Gagal mengupload file: ' . $_FILES['gambar']['name'][$i], null, 500);
+                            return;
+                        }
                     }
                 }
                 
-                $filename = 'lab_' . time() . '_' . rand(1000,9999) . '.' . $ext;
-                $target = $uploadDir . $filename;
-                
-                if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                    $input['gambar'] = $filename;
-                } else {
-                    $this->error('Gagal mengupload file', null, 500);
-                    return;
+                // Set gambar pertama sebagai utama jika ada
+                if (!empty($uploadedImages)) {
+                    $input['gambar'] = $uploadedImages[0]['filename'];
                 }
             }
             
+            // Update Database
             $result = $this->model->update($id, $input, 'idLaboratorium');
             
             if ($result) {
+                // Jika ada file baru, tambahkan ke tabel laboratorium_gambar
+                if (!empty($uploadedImages)) {
+                    foreach ($uploadedImages as $index => $image) {
+                        $isUtama = ($index === 0) ? 1 : 0;
+                        $this->gambarModel->insertImage(
+                            $id,
+                            $image['filename'],
+                            $image['description'],
+                            $isUtama,
+                            $index
+                        );
+                    }
+                }
+                
                 $this->success([], 'Laboratorium berhasil diupdate', 200);
             } else {
                 $this->error('Gagal mengupdate laboratorium', null, 500);

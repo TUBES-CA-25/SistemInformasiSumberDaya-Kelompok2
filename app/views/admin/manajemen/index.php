@@ -1,6 +1,6 @@
 <div class="admin-header">
-    <h1>Manajemen Kepala Laboratorium</h1>
-    <a href="javascript:void(0)" onclick="navigate('admin/manajemen/create')" class="btn btn-primary">+ Tambah Kepala Lab</a>
+    <h1>Manajemen Lab</h1>
+    <a href="javascript:void(0)" onclick="navigate('admin/manajemen/create')" class="btn btn-primary">+ Tambah Anggota</a>
 </div>
 
 <div class="table-container">

@@ -14,15 +14,22 @@
     <!-- Header Section -->
     <div class="detail-header">
         <div class="lab-image">
-            <img id="labImage" src="https://placehold.co/800x400" alt="Lab Image">
+            <img id="labImage" src="https://placehold.co/800x400" alt="Lab Image" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         </div>
         <div class="lab-title">
-            <h2 id="labTitle">Laboratorium Rekayasa Perangkat Lunak</h2>
-            <p class="location"><i class="fas fa-map-marker-alt"></i> <span id="labLocation">Gedung Fikom Lt. 2 (Ruang 204)</span></p>
+            <h2 id="labTitle">Laboratorium</h2>
+            <p class="location"><i class="fas fa-map-marker-alt"></i> <span id="labLocation">-</span></p>
         </div>
     </div>
 
-    <!-- Spesifikasi Section -->
+    <!-- Image Gallery Section -->
+    <div class="detail-section" id="gallerySection" style="display: none;">
+        <h3><i class="fas fa-images"></i> Galeri Gambar</h3>
+        <div id="imageGallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+            <!-- Semua gambar akan ditampilkan di sini dalam grid -->
+        </div>
+    </div>
+
     <div class="detail-section">
         <h3><i class="fas fa-info-circle"></i> Spesifikasi & Fasilitas</h3>
         <p id="labDescription">Laboratorium ini dirancang untuk menunjang mata kuliah pemrograman tingkat lanjut dengan kapasitas 40 mahasiswa.</p>
@@ -302,10 +309,62 @@ function loadLabDetail(id) {
             document.getElementById('labLocation').textContent = data.lokasi || 'Lokasi tidak tersedia';
             document.getElementById('labDescription').textContent = data.deskripsi || 'Deskripsi tidak tersedia';
             
-            // Set gambar
-            if (data.gambar) {
+            // Set gambar - support multiple images
+            const gallery = document.getElementById('imageGallery');
+            const gallerySection = document.getElementById('gallerySection');
+            gallery.innerHTML = ''; // Clear gallery
+            
+            if (data.images && data.images.length > 0) {
+                // Display main image (first image)
+                const mainImage = data.images[0];
+                const mainImagePath = mainImage.namaGambar.includes('http') ? mainImage.namaGambar : ASSETS_URL + '/assets/uploads/' + mainImage.namaGambar;
+                document.getElementById('labImage').src = mainImagePath;
+                
+                // Create image grid - tampilkan semua gambar
+                data.images.forEach((image, index) => {
+                    const imgPath = image.namaGambar.includes('http') ? image.namaGambar : ASSETS_URL + '/assets/uploads/' + image.namaGambar;
+                    
+                    const imgContainer = document.createElement('div');
+                    imgContainer.style.cssText = 'position: relative; overflow: hidden; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s;';
+                    imgContainer.addEventListener('mouseenter', function() {
+                        this.style.transform = 'scale(1.05)';
+                    });
+                    imgContainer.addEventListener('mouseleave', function() {
+                        this.style.transform = 'scale(1)';
+                    });
+                    
+                    const img = document.createElement('img');
+                    img.src = imgPath;
+                    img.style.cssText = 'width: 100%; height: 200px; object-fit: cover; display: block; cursor: pointer;';
+                    img.title = image.deskripsiGambar || 'Gambar laboratorium';
+                    img.addEventListener('click', function() {
+                        document.getElementById('labImage').src = imgPath;
+                        // Scroll ke main image
+                        document.getElementById('labImage').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    });
+                    
+                    imgContainer.appendChild(img);
+                    
+                    // Add badge jika gambar utama
+                    if (image.isUtama === 1 || image.isUtama === '1') {
+                        const badge = document.createElement('div');
+                        badge.innerHTML = '<i class="fas fa-star"></i> Utama';
+                        badge.style.cssText = 'position: absolute; top: 8px; right: 8px; background: #f39c12; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;';
+                        imgContainer.appendChild(badge);
+                    }
+                    
+                    gallery.appendChild(imgContainer);
+                });
+                
+                // Show gallery section if there are images
+                gallerySection.style.display = 'block';
+            } else if (data.gambar) {
+                // Fallback: single image
                 const imagePath = data.gambar.includes('http') ? data.gambar : ASSETS_URL + '/assets/uploads/' + data.gambar;
                 document.getElementById('labImage').src = imagePath;
+                gallerySection.style.display = 'none';
+            } else {
+                gallerySection.style.display = 'none';
             }
             
             // Set spesifikasi (jika ada di database)

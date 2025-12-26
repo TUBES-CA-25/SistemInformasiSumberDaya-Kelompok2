@@ -100,7 +100,7 @@
 
             <li>
                 <a href="javascript:void(0)" onclick="navigate('admin/manajemen')" class="<?= strpos($uri, 'admin/manajemen') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-user-tie"></i> Kepala Laboratorium
+                    <i class="fas fa-user-tie"></i> Manajemen Lab
                 </a>
             </li>
             
