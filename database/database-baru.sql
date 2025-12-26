@@ -7,6 +7,7 @@
 -- Versi server: 10.4.32-MariaDB-log
 -- Versi PHP: 8.2.12
 
+SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -235,8 +236,7 @@ CREATE TABLE `laboratorium_gambar` (
   `urutan` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`idGambar`),
-  KEY `idLaboratorium` (`idLaboratorium`),
-  CONSTRAINT `fk_lab_gambar_lab` FOREIGN KEY (`idLaboratorium`) REFERENCES `laboratorium` (`idLaboratorium`) ON DELETE CASCADE
+  KEY `idLaboratorium` (`idLaboratorium`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -635,6 +635,14 @@ ALTER TABLE `jadwalpraktikum`
 --
 ALTER TABLE `laboratorium`
   ADD CONSTRAINT `laboratorium_ibfk_1` FOREIGN KEY (`idKordinatorAsisten`) REFERENCES `asisten` (`idAsisten`) ON DELETE SET NULL;
+
+--
+-- Ketidakleluasaan untuk tabel `laboratorium_gambar`
+--
+ALTER TABLE `laboratorium_gambar`
+  ADD CONSTRAINT `fk_lab_gambar_lab` FOREIGN KEY (`idLaboratorium`) REFERENCES `laboratorium` (`idLaboratorium`) ON DELETE CASCADE;
+
+SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
