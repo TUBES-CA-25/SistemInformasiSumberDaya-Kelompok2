@@ -5,6 +5,10 @@ $koordinator_list = [];
 $asisten_list = [];
 $ca_list = [];
 
+// Tambahan: ambil data alumni jika disediakan
+$alumni_data = isset($data['alumni']) ? $data['alumni'] : [];
+$alumni_list = [];
+
 if (!empty($all_data)) {
     foreach ($all_data as $row) {
         $status = $row['statusAktif'] ?? 0;
@@ -22,6 +26,14 @@ if (!empty($all_data)) {
         }
     }
 }
+
+// Buat daftar alumni dari $alumni_data atau filter dari $all_data bila perlu
+if (!empty($alumni_data)) {
+    foreach ($alumni_data as $row) {
+        // opsional: cek status atau atribut lain di $row
+        $alumni_list[] = $row;
+    }
+}
 ?>
 
 <section class="sumberdaya-section fade-up">
@@ -32,11 +44,9 @@ if (!empty($all_data)) {
             <h1>Asisten Laboratorium</h1>
             <p>Mahasiswa terpilih yang berdedikasi membantu kelancaran praktikum.</p>
 
-            <div class="search-container" style="margin-top: 30px; position: relative; max-width: 450px; margin-left: auto; margin-right: auto;">
-                <input type="text" id="searchAsisten" placeholder="Cari asisten..." 
-                       class="search-input" 
-                       style="width: 100%; padding: 14px 24px; padding-right: 50px; border-radius: 50px; border: 1px solid #cbd5e1; outline: none;">
-                <i class="ri-search-line" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+            <div class="search-container">
+                <input type="text" id="searchAsisten" placeholder="Cari asisten..." class="search-input search-input--compact">
+                <i class="ri-search-line search-icon--compact"></i>
             </div>
         </div>
 
@@ -61,7 +71,7 @@ if (!empty($all_data)) {
                         }
                     }
                 ?>
-                <div class="card-link" style="margin-bottom: 40px;"> 
+                <div class="card-link exec-margin"> 
                     <div class="exec-card">
                         <div class="exec-photo">
                             <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($coord['nama']) ?>">
@@ -77,12 +87,12 @@ if (!empty($all_data)) {
                                 <?php if (!empty($coord['email'])) : ?>
                                 <div class="meta-item">
                                     <i class="ri-mail-line"></i> 
-                                    <span><?= htmlspecialchars($coord['email']) ?></span>
+                                    <span class="email"><?= htmlspecialchars($coord['email']) ?></span>
                                 </div>
                                 <?php endif; ?>
                             </div>
                             
-                            <div style="margin-top: 20px;">
+                            <div class="exec-action" style="margin-top: 10px; padding-top: 10px;">
 
                                 <!-- FIX LINK DETAIL -->
                                 <a href="index.php?page=detail-asisten&id=<?= $coord['idAsisten'] ?>&type=asisten" class="btn-contact">
@@ -102,7 +112,7 @@ if (!empty($all_data)) {
 
         <div class="staff-grid">
             <?php if (empty($asisten_list)) : ?>
-                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8; border: 1 dashed #cbd5e1; border-radius: 12px;">
+                <div class="no-data-message">
                     <p>Belum ada data asisten praktikum.</p>
                 </div>
             <?php else : ?>
@@ -142,7 +152,7 @@ if (!empty($all_data)) {
                                     <?php if (!empty($row['email'])) : ?>
                                     <div class="meta-item">
                                         <i class="ri-mail-line"></i> 
-                                        <span style="font-size: 0.8rem; word-break: break-all;"><?= htmlspecialchars($row['email']) ?></span>
+                                        <span class="email"><?= htmlspecialchars($row['email']) ?></span>
                                     </div>
                                     <?php endif; ?>
                                 </div>
@@ -154,7 +164,7 @@ if (!empty($all_data)) {
         </div>
 
         <?php if (!empty($ca_list)) : ?>
-            <div class="section-label" style="margin-top: 40px;">
+            <div class="section-label mt-40">
                 <span>Calon Asisten (CA)</span>
             </div>
 
@@ -179,13 +189,13 @@ if (!empty($all_data)) {
                     <!-- FIX LINK DETAIL -->
                     <a href="index.php?page=detail-asisten&id=<?= $row['idAsisten'] ?>&type=asisten" class="card-link">
                         <div class="staff-card">
-                            <div class="staff-photo-box">
+                                <div class="staff-photo-box">
                                 <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
-                                <span style="position: absolute; top: 10px; right: 10px; background: #f59e0b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">CA</span>
+                                <span class="badge-ca">CA</span>
                             </div>
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
-                                <span class="staff-role" style="color: #d97706;">Calon Asisten</span>
+                                <span class="staff-role ca-role">Calon Asisten</span>
                                 
                                 <div class="staff-footer">
                                     <div class="meta-item">
@@ -196,7 +206,68 @@ if (!empty($all_data)) {
                                     <?php if (!empty($row['email'])) : ?>
                                     <div class="meta-item">
                                         <i class="ri-mail-line"></i> 
-                                        <span style="font-size: 0.8rem; word-break: break-all;"><?= htmlspecialchars($row['email']) ?></span>
+                                        <span class="email"><?= htmlspecialchars($row['email']) ?></span>
+                                    </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- NEW: Alumni Section -->
+        <?php if (!empty($alumni_list)) : ?>
+            <div class="section-label mt-40">
+                <span>Alumni Asisten</span>
+            </div>
+
+            <div class="staff-grid">
+                <?php foreach ($alumni_list as $row) : ?>
+                    <?php 
+                        $fotoName = $row['foto'] ?? '';
+                        $namaEnc = urlencode($row['nama'] ?? '');
+                        $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=eef2ff&color=1e293b&size=256&bold=true"; 
+
+                        if (!empty($fotoName) && strpos($fotoName, 'ui-avatars') === false) {
+                            if (strpos($fotoName, 'http') !== false) {
+                                $imgUrl = $fotoName;
+                            } elseif (file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $fotoName)) {
+                                $imgUrl = ASSETS_URL . '/assets/uploads/' . $fotoName;
+                            } elseif (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
+                                $imgUrl = ASSETS_URL . '/images/asisten/' . $fotoName;
+                            }
+                        }
+                    ?>
+                    
+                    <a href="index.php?page=detail-asisten&id=<?= $row['idAsisten'] ?>&type=alumni" class="card-link">
+                        <div class="staff-card">
+                            <div class="staff-photo-box">
+                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama'] ?? '') ?>" loading="lazy">
+                                <span class="badge-alumni">Alumni</span>
+                            </div>
+                            <div class="staff-content">
+                                <h3 class="staff-name"><?= htmlspecialchars($row['nama'] ?? '') ?></h3>
+                                <span class="staff-role">Alumni Asisten</span>
+                                
+                                <div class="staff-footer">
+                                    <div class="meta-item">
+                                        <i class="ri-graduation-cap-line"></i> 
+                                        <span><?= htmlspecialchars($row['jurusan'] ?? 'Teknik Informatika') ?></span>
+                                    </div>
+
+                                    <?php if (!empty($row['angkatan'])) : ?>
+                                    <div class="meta-item">
+                                        <i class="ri-calendar-line"></i>
+                                        <span><?= htmlspecialchars($row['angkatan']) ?></span>
+                                    </div>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($row['email'])) : ?>
+                                    <div class="meta-item">
+                                        <i class="ri-mail-line"></i> 
+                                        <span class="email"><?= htmlspecialchars($row['email']) ?></span>
                                     </div>
                                     <?php endif; ?>
                                 </div>

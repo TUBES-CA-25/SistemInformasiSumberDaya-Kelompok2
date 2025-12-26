@@ -27,9 +27,32 @@ class AlumniController extends Controller {
             $this->redirect('/alumni');
             return;
         }
-        
-        // Kirim params ke view untuk digunakan dengan data statis
-        $this->view('alumni/detail', ['params' => $params]);
+        // Ambil data alumni via model dan kirim ke view
+        $alumniRow = $this->model->getById((int)$id, 'id');
+        if (!$alumniRow) {
+            $this->redirect('/alumni');
+            return;
+        }
+
+        // Parsing keahlian menjadi array
+        $skills = !empty($alumniRow['keahlian']) ? array_map('trim', explode(',', $alumniRow['keahlian'])) : [];
+
+        $alumni = [
+            'nama' => $alumniRow['nama'],
+            'angkatan' => $alumniRow['angkatan'],
+            'divisi' => $alumniRow['divisi'] ?? 'Asisten Lab',
+            'pekerjaan' => $alumniRow['pekerjaan'] ?? 'Belum terisi',
+            'perusahaan' => $alumniRow['perusahaan'] ?? '-',
+            'foto' => $alumniRow['foto'],
+            'email' => $alumniRow['email'],
+            'linkedin' => $alumniRow['linkedin'],
+            'portfolio' => $alumniRow['portfolio'],
+            'tahun_lulus' => $alumniRow['tahun_lulus'],
+            'testimoni' => $alumniRow['kesan_pesan'] ?? 'Tidak ada kesan pesan.',
+            'skills' => $skills
+        ];
+
+        $this->view('alumni/detail', ['alumni' => $alumni]);
     }
 
     /**

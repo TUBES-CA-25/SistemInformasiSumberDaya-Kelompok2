@@ -37,7 +37,7 @@ try {
                 'email'     => $row['email'] ?? '-', 
                 'bio'       => !empty($row['bio']) ? $row['bio'] : "Staff/Pimpinan aktif di Laboratorium Fakultas Ilmu Komputer UMI.",
                 'skills'    => ['Management', 'Administration', 'Laboratory'],
-                'badge_style' => (stripos(($row['jabatan'] ?? ''), 'Kepala') !== false) ? 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;' : 'background: #f1f5f9; color: #475569;'
+                'badge_class' => (stripos(($row['jabatan'] ?? ''), 'Kepala') !== false) ? 'badge-pimpinan' : 'badge-staff'
             ];
         }
 
@@ -121,7 +121,7 @@ function getDetailPhoto($name, $fotoName, $type) {
 }
 ?>
 
-<section class="sumberdaya-section">
+<section class="sumberdaya-section" style="padding-top: 100px !important; padding-bottom: 80px;">
     <div class="container">
         
         <?php if ($dataDetail) : ?>
@@ -138,7 +138,7 @@ function getDetailPhoto($name, $fotoName, $type) {
                 </div>
                 
                 <div class="profile-content">
-                    <span class="category-badge" style="<?= $dataDetail['badge_style'] ?>">
+                    <span class="category-badge">
                         <?= htmlspecialchars($dataDetail['kategori']); ?>
                     </span>
                     

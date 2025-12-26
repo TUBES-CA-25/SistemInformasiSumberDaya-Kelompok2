@@ -23,8 +23,8 @@
                 // detail_alumni atau detail-alumni -> gunakan 'alumni'
                 $curPage = 'alumni';
             } elseif (strpos($curPage, 'asisten') !== false) {
-                // detail-asisten -> gunakan 'detail' yang dipetakan ke sumberdaya.css
-                $curPage = 'detail';
+                // detail-asisten -> gunakan 'alumni' agar styling detail mirip alumni
+                $curPage = 'alumni';
             } else {
                 // fallback ke 'detail'
                 $curPage = 'detail';
@@ -55,10 +55,14 @@
     
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <?php
-        // Pastikan semua URL relatif di-resolve terhadap PUBLIC_URL agar CSS/JS tetap ditemukan
-        if (!defined('PUBLIC_URL')) define('PUBLIC_URL', '/');
+        // Pastikan PUBLIC_URL tersedia; jika belum, buat fallback dari host saat ini (termasuk port).
+        if (!defined('PUBLIC_URL')) {
+            $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            $host = $_SERVER['HTTP_HOST'] ?? '127.0.0.1';
+            define('PUBLIC_URL', rtrim($scheme . '://' . $host, '/'));
+        }
     ?>
-    <base href="<?php echo rtrim(PUBLIC_URL, '/'); ?>/" />
+    <base href="<?php echo rtrim(PUBLIC_URL, '/'); ?>/">
 </head>
 <body>
 

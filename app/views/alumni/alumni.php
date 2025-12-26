@@ -1,24 +1,19 @@
 <?php
 /**
  * VIEW: ALUMNI ASISTEN LABORATORIUM
- * Fix: Memaksa keseragaman warna avatar (Abu-abu) meskipun di database ada link avatar lama.
+ * Menggunakan data yang dipassing dari controller melalui variabel `$alumni`.
  */
-
-global $pdo;
 
 $alumni_by_year = [];
 
-try {
-    $stmt = $pdo->query("SELECT * FROM alumni ORDER BY angkatan DESC, nama ASC");
-    $all_alumni = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Data alumni diharapkan dipassing oleh controller sebagai array associative
+$all_alumni = $alumni ?? [];
 
+if (!empty($all_alumni) && is_array($all_alumni)) {
     foreach ($all_alumni as $row) {
-        $year = $row['angkatan'];
+        $year = $row['angkatan'] ?? 'Unknown';
         $alumni_by_year[$year][] = $row;
     }
-
-} catch (PDOException $e) {
-    echo "<div class='alert-error'>Error Database: " . $e->getMessage() . "</div>";
 }
 ?>
 
@@ -43,11 +38,8 @@ try {
             <?php foreach ($alumni_by_year as $year => $alumni_list) : ?>
                 <div class="alumni-group">
                     
-                    <div class="year-divider" style="margin: 50px 0 30px 0; display: flex; align-items: center; gap: 20px;">
-                        <h2 style="font-size: 1.8rem; color: #0f172a; font-weight: 800; white-space: nowrap;">
-                            Angkatan <?= htmlspecialchars($year) ?>
-                        </h2>
-                        <div style="height: 2px; background: #e2e8f0; width: 100%; border-radius: 2px;"></div>
+                    <div class="section-label" style="margin-top:50px; margin-bottom:18px;">
+                        <span>Angkatan <?= htmlspecialchars($year) ?></span>
                     </div>
                     
                     <div class="staff-grid">
@@ -62,17 +54,22 @@ try {
 
                                 // 2. Cek File Fisik / URL di Database
                                 if (!empty($fotoName)) {
-                                    // [FIX] Jika link di database adalah 'ui-avatars', ABAIKAN agar tetap pakai style abu-abu kita
+                                    // Abaikan jika link adalah ui-avatars agar tetap pakai style abu-abu kita
                                     if (strpos($fotoName, 'ui-avatars.com') !== false) {
-                                        // Do nothing (biarkan tetap pakai $imgUrl default di atas)
-                                    } 
-                                    // Jika URL gambar lain (misal dari Google/LinkedIn), baru dipakai
-                                    elseif (strpos($fotoName, 'http') !== false) {
+                                        // keep default
+                                    } elseif (strpos($fotoName, 'http') !== false) {
+                                        // external URL seperti LinkedIn/Google
                                         $imgUrl = $fotoName;
-                                    } 
-                                    // Jika file lokal ada
-                                    elseif (file_exists(ROOT_PROJECT . '/public/images/alumni/' . $fotoName)) {
-                                        $imgUrl = ASSETS_URL . '/images/alumni/' . $fotoName;
+                                    } else {
+                                        // Cek dua lokasi potensial: images/alumni dan assets/uploads
+                                        $path1 = ROOT_PROJECT . '/public/images/alumni/' . $fotoName;
+                                        $path2 = ROOT_PROJECT . '/public/assets/uploads/' . $fotoName;
+
+                                        if (file_exists($path2)) {
+                                            $imgUrl = ASSETS_URL . '/assets/uploads/' . $fotoName;
+                                        } elseif (file_exists($path1)) {
+                                            $imgUrl = ASSETS_URL . '/images/alumni/' . $fotoName;
+                                        }
                                     }
                                 }
 
@@ -123,36 +120,6 @@ try {
             </div>
 
         <?php endif; ?>
-
-        <!-- Angkatan 2018 -->
-        <div class="alumni-group">
-            <div class="year-divider">
-                <h2>Angkatan 2018</h2>
-                <div class="year-line"></div>
-            </div>
-            
-            <div class="staff-grid">
-                <a href="<?= BASE_URL ?>/alumni/RD" class="card-link">
-                    <div class="staff-card">
-                        <div class="staff-photo-box">
-                            <div class="staff-placeholder">RD</div>
-                        </div>
-                        <div class="staff-content">
-                            <div class="staff-name">Reza Danuarta, S.Kom.</div>
-                            <span class="staff-role">Senior Software Engineer</span>
-                            <div class="staff-footer">
-                                <div class="meta-item">
-                                    <i class="ri-building-line"></i> Gojek
-                                </div>
-                                <div class="meta-item">
-                                    <i class="ri-graduation-cap-line"></i> Teknik Informatika
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
 
     </div>
 </section>
