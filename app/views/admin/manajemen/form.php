@@ -1,5 +1,5 @@
 <div class="admin-header">
-    <h1>Formulir Manajemen Kepala Lab</h1>
+    <h1>Formulir Manajemen Lab</h1>
     <a href="javascript:void(0)" onclick="navigate('admin/manajemen')" class="btn" style="background: #95a5a6;">← Kembali</a>
 </div>
 
@@ -15,7 +15,11 @@
 
         <div class="form-group">
             <label>Jabatan <span style="color:red">*</span></label>
-            <input type="text" id="jabatan" name="jabatan" placeholder="Contoh: Kepala Lab Rekayasa Perangkat Lunak" required>
+            <select id="jabatan" name="jabatan" required>
+                <option value="">-- Pilih Jabatan --</option>
+                <option value="Kepala Lab">Kepala Lab</option>
+                <option value="Laboran">Laboran</option>
+            </select>
         </div>
 
         <div class="form-group">
