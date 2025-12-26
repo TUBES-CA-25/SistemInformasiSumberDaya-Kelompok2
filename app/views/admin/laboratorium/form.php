@@ -87,14 +87,14 @@
         </div>
 
         <div class="form-group">
-            <label>Upload Gambar (Opsional)</label>
+            <label>Upload Gambar (Opsional - Bisa Multiple)</label>
             <div class="file-upload-wrapper">
-                <input type="file" id="gambar" name="gambar" accept="image/*">
-                <div id="preview-container" style="margin-top: 10px; display: none;">
-                    <img id="preview-image" src="" alt="Preview" style="max-width: 200px; border-radius: 4px; border: 1px solid #ddd;">
+                <input type="file" id="gambar" name="gambar[]" accept="image/*" multiple>
+                <div id="preview-container" style="margin-top: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;">
+                    <!-- Preview gambar akan ditampilkan di sini -->
                 </div>
             </div>
-            <small class="form-text text-muted">Format: JPG, PNG (Max 2MB). Biarkan kosong jika tidak ingin mengubah gambar saat edit.</small>
+            <small class="form-text text-muted">Format: JPG, PNG (Max 2MB per file). Pilih satu atau lebih gambar. Biarkan kosong jika tidak ingin mengubah gambar saat edit.</small>
         </div>
 
         <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px;">
@@ -180,16 +180,24 @@ document.addEventListener('DOMContentLoaded', function() {
         loadData(id);
     }
 
-    // Image preview
+    // Image preview untuk multiple files
     document.getElementById('gambar').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('preview-image').src = e.target.result;
-                document.getElementById('preview-container').style.display = 'block';
-            }
-            reader.readAsDataURL(file);
+        const files = e.target.files;
+        const container = document.getElementById('preview-container');
+        container.innerHTML = ''; // Clear previous previews
+        
+        if (files.length > 0) {
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.style.cssText = 'width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer;';
+                    img.title = file.name;
+                    container.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            });
         }
     });
 });
@@ -254,10 +262,28 @@ function loadData(id) {
                 }
             }
             
-            if (data.gambar) {
+            // Display existing images in preview (read-only gallery)
+            if (data.images && data.images.length > 0) {
+                const container = document.getElementById('preview-container');
+                container.innerHTML = '';
+                data.images.forEach(image => {
+                    const imagePath = image.namaGambar.includes('http') ? image.namaGambar : ASSETS_URL + '/assets/uploads/' + image.namaGambar;
+                    const img = document.createElement('img');
+                    img.src = imagePath;
+                    img.style.cssText = 'width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 2px solid #3498db; cursor: pointer; opacity: 0.6;';
+                    img.title = 'Existing image - ' + image.namaGambar;
+                    container.appendChild(img);
+                });
+            } else if (data.gambar) {
+                // Fallback: single image
                 const imagePath = data.gambar.includes('http') ? data.gambar : ASSETS_URL + '/assets/uploads/' + data.gambar;
-                document.getElementById('preview-image').src = imagePath;
-                document.getElementById('preview-container').style.display = 'block';
+                const container = document.getElementById('preview-container');
+                container.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = imagePath;
+                img.style.cssText = 'width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 2px solid #3498db; cursor: pointer; opacity: 0.6;';
+                img.title = 'Existing image - ' + data.gambar;
+                container.appendChild(img);
             }
         } else {
             alert('Data tidak ditemukan');
