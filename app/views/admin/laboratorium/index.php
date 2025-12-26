@@ -24,6 +24,7 @@
                     <th style="width: 50px; text-align: center;">No</th>
                     <th style="width: 100px; text-align: center;">Gambar</th>
                     <th>Nama Laboratorium</th>
+                    <th style="width: 120px; text-align: center;">Jenis</th>
                     <th>Deskripsi</th>
                     <th style="width: 150px; text-align: center;">Kapasitas</th>
                     <th style="width: 150px; text-align: center;">Aksi</th>
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function loadLaboratorium() {
     const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i><p style="color: #999; margin-top: 10px;">Memuat data...</p></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ccc;"></i><p style="color: #999; margin-top: 10px;">Memuat data...</p></td></tr>';
     
     fetch(API_URL + '/laboratorium')
     .then(res => res.json())
@@ -110,13 +111,13 @@ function loadLaboratorium() {
             allLabData = response.data;
             renderTable(allLabData);
         } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-desktop" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Belum ada data laboratorium.</p></td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px;"><i class="fas fa-desktop" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Belum ada data laboratorium.</p></td></tr>';
             document.getElementById('totalData').textContent = 'Total: 0 laboratorium';
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #e74c3c;"></i><p style="color: #e74c3c; margin-top: 10px;">Gagal memuat data. Silakan coba lagi.</p></td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px;"><i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #e74c3c;"></i><p style="color: #e74c3c; margin-top: 10px;">Gagal memuat data. Silakan coba lagi.</p></td></tr>';
     });
 }
 
@@ -125,7 +126,7 @@ function renderTable(data) {
     tbody.innerHTML = '';
     
     if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px;"><i class="fas fa-search" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Tidak ada data yang cocok dengan pencarian.</p></td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px;"><i class="fas fa-search" style="font-size: 2rem; color: #ddd;"></i><p style="color: #999; margin-top: 10px;">Tidak ada data yang cocok dengan pencarian.</p></td></tr>';
         return;
     }
     
@@ -143,6 +144,11 @@ function renderTable(data) {
                 <td style="text-align: center;">${imgHtml}</td>
                 <td>
                     <span class="lab-name">${escapeHtml(item.nama)}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span class="jenis-badge" style="background: ${item.jenis === 'Riset' ? '#ffe6e6' : '#e3f2fd'}; color: ${item.jenis === 'Riset' ? '#d32f2f' : '#1976d2'}; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem; font-weight: 500;">
+                        ${escapeHtml(item.jenis || 'Laboratorium')}
+                    </span>
                 </td>
                 <td>${escapeHtml(deskripsi)}</td>
                 <td style="text-align: center;">

@@ -15,6 +15,16 @@
         </div>
 
         <div class="form-group">
+            <label>Jenis Ruangan <span style="color:red">*</span></label>
+            <select id="jenis" name="jenis" required style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+                <option value="">-- Pilih Jenis Ruangan --</option>
+                <option value="Laboratorium">Ruangan Laboratorium</option>
+                <option value="Riset">Ruangan Riset</option>
+            </select>
+            <small class="form-text text-muted">Pilih apakah ruangan ini untuk laboratorium atau riset.</small>
+        </div>
+
+        <div class="form-group">
             <label>Koordinator Lab</label>
             <select id="idKordinatorAsisten" name="idKordinatorAsisten">
                 <option value="">-- Pilih Asisten --</option>
@@ -123,6 +133,27 @@
 .form-section {
     margin-top: 10px;
     padding-top: 10px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.form-group select:hover {
+    border-color: #999;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .btn {
@@ -236,6 +267,7 @@ function loadData(id) {
         if (response.status === 'success' || response.code === 200) {
             const data = response.data;
             document.getElementById('nama').value = data.nama || '';
+            document.getElementById('jenis').value = data.jenis || 'Laboratorium';
             document.getElementById('deskripsi').value = data.deskripsi || '';
             document.getElementById('jumlahPc').value = data.jumlahPc || '';
             
@@ -248,7 +280,7 @@ function loadData(id) {
             
             // Software & Facilities
             document.getElementById('software').value = data.software || '';
-            document.getElementById('fasilitas').value = data.fasilitas || '';
+            document.getElementById('fasilitas').value = data.fasilitas_pendukung || data.fasilitas || '';
             
             // Set selected asisten if exists. If options not loaded yet, store pending value to be applied
             if (data.idKordinatorAsisten) {
