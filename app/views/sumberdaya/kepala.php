@@ -82,8 +82,8 @@ function getFotoUrl($row)
     if (strpos($fotoName, 'http') !== false)
         return $fotoName;
 
-    if (file_exists(ROOT_PROJECT . '/public/images/manajemen/' . $fotoName))
-        return ASSETS_URL . '/images/manajemen/' . $fotoName;
+    if (file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $fotoName))
+        return ASSETS_URL . '/assets/uploads/' . $fotoName;
 
     if (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName))
         return ASSETS_URL . '/images/asisten/' . $fotoName;
