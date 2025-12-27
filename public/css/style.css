@@ -131,54 +131,76 @@ img {
   font-weight: normal;
 }
 
-/* --- DROPDOWN MENU --- */
+/* -------------------------------------------------------
+   3. DROPDOWN MENU (SMOOTH ANIMATION FIX)
+   ------------------------------------------------------- */
 .dropdown {
   position: relative;
 }
 
 .dropdown-content {
-  display: none;
+  /* Layout Dasar (Desktop) */
   position: absolute;
   background: #fff;
   min-width: 220px;
-  box-shadow: 0 8px 16px rgba(30, 58, 138, 0.1);
-  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(30, 58, 138, 0.15);
+  border-radius: 12px;
   top: 100%;
   left: 0;
   padding: 10px 0;
   border: 1px solid #eff6ff;
   z-index: 1100;
-}
 
-.dropdown:hover .dropdown-content {
+  /* --- KUNCI ANIMASI SMOOTH (Desktop) --- */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: block;
-  animation: fadeIn 0.3s ease;
 }
 
+/* --- SAAT DI-HOVER (MUNCUL) --- */
+.dropdown:hover .dropdown-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  top: 100%;
+}
+
+/* Styling Item di Dalam Dropdown */
 .dropdown-content a {
   color: #4a5568 !important;
-  padding: 12px 20px;
+  padding: 12px 24px;
   display: block;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-align: left; /* Desktop tetap rata kiri agar rapi */
 }
 
+/* Efek Hover pada Item Link (Desktop) */
 .dropdown-content a:hover {
   background: #eff6ff;
   color: #2563eb !important;
+  padding-left: 28px;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Panah kecil di atas dropdown (Desktop) */
+.dropdown-content::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  transform: rotate(45deg);
+  border-top: 1px solid #eff6ff;
+  border-left: 1px solid #eff6ff;
+  z-index: -1;
 }
 
 /* -------------------------------------------------------
-   3. MOBILE MENU (HAMBURGER)
+   4. MOBILE MENU & DROPDOWN FIX
    ------------------------------------------------------- */
 .menu-toggle {
   display: none;
@@ -221,23 +243,72 @@ img {
     padding: 20px;
     border-top: 1px solid #eff6ff;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    /* [PENTING] Pastikan text align center di container menu */
+    text-align: center;
   }
   .nav-links.active {
     display: flex;
     animation: fadeIn 0.3s forwards;
   }
+
+  /* --- FIX DROPDOWN MOBILE (RATA TENGAH) --- */
   .dropdown-content {
-    position: static !important;
-    display: none;
-    width: 100%;
-    background: #f8fbff;
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
     box-shadow: none;
     border: none;
-    padding-left: 20px;
+    background: transparent;
+
+    /* [UBAH] Hapus padding kiri agar tidak menjorok */
+    padding-left: 0;
+
+    /* [UBAH] Paksa rata tengah */
+    text-align: center;
+
+    display: none;
+    transition: none;
   }
+
+  .dropdown-content::before {
+    display: none;
+  }
+
+  /* Item Link di Mobile */
+  .dropdown-content a {
+    /* [UBAH] Reset padding agar simetris */
+    padding: 10px 0;
+
+    /* [UBAH] Paksa text align center untuk itemnya juga */
+    text-align: center;
+    color: #64748b !important; /* Warna agak beda dikit biar tau ini submenu */
+  }
+
+  /* Hover di Mobile tidak perlu geser */
+  .dropdown-content a:hover {
+    padding-left: 0;
+    background: transparent;
+    color: #2563eb !important;
+  }
+
   .dropdown:hover .dropdown-content {
     display: block;
+    animation: fadeInMobile 0.3s ease forwards;
   }
+
+  @keyframes fadeInMobile {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Lainnya */
   .logo-img {
     height: 60px;
   }
@@ -249,8 +320,19 @@ img {
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* -------------------------------------------------------
-   4. FOOTER STYLING (DARK THEME - 4 COLUMNS)
+   5. FOOTER STYLING (DARK THEME - 4 COLUMNS)
    ------------------------------------------------------- */
 .main-footer {
   background-color: #0f172a;
@@ -427,7 +509,7 @@ img {
 }
 
 /* -------------------------------------------------------
-   5. BACK TO TOP BUTTON (FIXED ANIMATION)
+   6. BACK TO TOP BUTTON (FIXED ANIMATION)
    ------------------------------------------------------- */
 .back-to-top {
   position: fixed;
