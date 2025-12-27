@@ -9,38 +9,48 @@
     <link rel="stylesheet" href="<?= PUBLIC_URL ?>/css/style.css">
 
     <?php 
-        // 1. Ambil dari variabel $page (jika dikirim dari controller)
-        // 2. Jika tidak ada, deteksi otomatis dari URL
-        if (!isset($page)) {
-            $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-            $scriptName = dirname($_SERVER['SCRIPT_NAME']);
-            $path = str_replace($scriptName, '', $uri);
-            $segments = array_values(array_filter(explode('/', trim($path, '/'))));
-            $page = $segments[0] ?? 'home';
+        // 1. Ambil identitas halaman
+        $pageQuery = $_GET['page'] ?? null;
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $scriptName = dirname($_SERVER['SCRIPT_NAME']);
+        $path = str_replace($scriptName, '', $uri);
+        $segments = array_values(array_filter(explode('/', trim($path, '/'))));
+        
+        // Tentukan curPage awal
+        $curPage = $page ?? $pageQuery ?? ($segments[0] ?? 'home');
+        if ($curPage === 'index.php' || empty($curPage)) $curPage = 'home';
+
+        // 2. LOGIKA SMART MAPPING (Memperbaiki Detail dari Card)
+        // Kita paksa curPage menjadi kategori utama jika mengandung kata kunci tertentu
+        if (strpos($curPage, 'detail') !== false || strpos($curPage, 'asisten') !== false) {
+            if (strpos($curPage, 'alumni') !== false) {
+                $curPage = 'alumni'; 
+            } elseif (strpos($curPage, 'fasilitas') !== false || strpos($curPage, 'laboratorium') !== false) {
+                $curPage = 'fasilitas';
+            } else {
+                // Default untuk detail asisten atau manajemen lab
+                $curPage = 'sumberdaya'; 
+            }
         }
 
-        // Normalisasi: Jika halaman kosong atau index.php, paksa jadi 'home'
-        $curPage = (empty($page) || $page == 'index.php') ? 'home' : $page;
-
-        // Map CSS berdasarkan halaman
+        // 3. Mapping CSS yang Sesuai dengan Nama File di Folder CSS Anda
         $cssMap = [
-            'home'             => 'home.css',
-            'tatatertib'       => 'praktikum.css',
-            'jadwal'           => 'praktikum.css',
-            'kepala'           => 'sumberdaya.css',
-            'asisten'          => 'sumberdaya.css',
-            'detail'           => 'sumberdaya.css',
-            'fasilitas'        => 'fasilitas.css',
-            'riset'            => 'fasilitas.css',
-            'laboratorium'     => 'fasilitas.css',
-            'detail_fasilitas' => 'fasilitas.css',
-            'alumni'           => 'alumni.css',
-            'detail_alumni'    => 'alumni.css',
-            'contact'          => 'contact.css',
-            'apps'             => 'apps.css'
+            'home'         => 'home.css',
+            'tatatertib'   => 'praktikum.css',
+            'jadwal'       => 'praktikum.css',
+            'kepala'       => 'sumberdaya.css',
+            'asisten'      => 'sumberdaya.css',
+            'sumberdaya'   => 'sumberdaya.css', // Detail dari Card Asisten
+            'detail'       => 'sumberdaya.css', 
+            'fasilitas'    => 'fasilitas.css',
+            'riset'        => 'fasilitas.css',
+            'laboratorium' => 'fasilitas.css',
+            'alumni'       => 'alumni.css',
+            'contact'      => 'contact.css',
+            'apps'         => 'apps.css'
         ];
 
-        // Muat CSS khusus jika ada di map
+        // 4. Load CSS
         if (array_key_exists($curPage, $cssMap)) {
             echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssMap[$curPage] . '">';
         }
@@ -48,14 +58,6 @@
     
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     
-    <?php
-        // Pastikan PUBLIC_URL selalu absolut
-        if (!defined('PUBLIC_URL')) {
-            $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-            $host = $_SERVER['HTTP_HOST'] ?? '127.0.0.1';
-            define('PUBLIC_URL', rtrim($scheme . '://' . $host, '/'));
-        }
-    ?>
     <base href="<?= rtrim(PUBLIC_URL, '/') ?>/">
 </head>
 <body>
