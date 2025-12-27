@@ -9,60 +9,54 @@
     <link rel="stylesheet" href="<?= PUBLIC_URL ?>/css/style.css">
 
     <?php 
-        // Ambil halaman saat ini dari query `page` (compat) atau path URL
-        $pageQuery = $_GET['page'] ?? null;
-        $uriSegments = explode('/', trim(str_replace(dirname($_SERVER['SCRIPT_NAME']), '', explode('?', $_SERVER['REQUEST_URI'])[0]), '/'));
-        $curPage = $pageQuery ?? ($uriSegments[0] ?? 'home');
-
-        // Normalisasi: treat detail pages specially so correct CSS loads
-        if (strpos($curPage, 'detail') === 0) {
-            // Jika detail berkaitan dengan fasilitas (underscore or dash), map ke 'fasilitas'
-            if (strpos($curPage, 'fasilitas') !== false) {
-                $curPage = 'fasilitas';
-            } elseif (strpos($curPage, 'alumni') !== false) {
-                // detail_alumni atau detail-alumni -> gunakan 'alumni'
-                $curPage = 'alumni';
-            } elseif (strpos($curPage, 'asisten') !== false) {
-                // detail-asisten -> gunakan 'alumni' agar styling detail mirip alumni
-                $curPage = 'alumni';
-            } else {
-                // fallback ke 'detail'
-                $curPage = 'detail';
-            }
+        // 1. Ambil dari variabel $page (jika dikirim dari controller)
+        // 2. Jika tidak ada, deteksi otomatis dari URL
+        if (!isset($page)) {
+            $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $scriptName = dirname($_SERVER['SCRIPT_NAME']);
+            $path = str_replace($scriptName, '', $uri);
+            $segments = array_values(array_filter(explode('/', trim($path, '/'))));
+            $page = $segments[0] ?? 'home';
         }
 
-        // Daftar CSS khusus berdasarkan folder screenshot Anda
+        // Normalisasi: Jika halaman kosong atau index.php, paksa jadi 'home'
+        $curPage = (empty($page) || $page == 'index.php') ? 'home' : $page;
+
+        // Map CSS berdasarkan halaman
         $cssMap = [
-            'home'         => 'home.css',
-            'tatatertib'   => 'praktikum.css',
-            'jadwal'       => 'praktikum.css',
-            'kepala'       => 'sumberdaya.css',
-            'asisten'      => 'sumberdaya.css',
-            'detail'       => 'sumberdaya.css',
-            'fasilitas'    => 'fasilitas.css',
-            'riset'        => 'fasilitas.css',
-            'laboratorium' => 'fasilitas.css',
-            'alumni'       => 'alumni.css',
-            'contact'      => 'contact.css',
-            'apps'         => 'apps.css'
+            'home'             => 'home.css',
+            'tatatertib'       => 'praktikum.css',
+            'jadwal'           => 'praktikum.css',
+            'kepala'           => 'sumberdaya.css',
+            'asisten'          => 'sumberdaya.css',
+            'detail'           => 'sumberdaya.css',
+            'fasilitas'        => 'fasilitas.css',
+            'riset'            => 'fasilitas.css',
+            'laboratorium'     => 'fasilitas.css',
+            'detail_fasilitas' => 'fasilitas.css',
+            'alumni'           => 'alumni.css',
+            'detail_alumni'    => 'alumni.css',
+            'contact'          => 'contact.css',
+            'apps'             => 'apps.css'
         ];
 
-        // Load CSS khusus jika ada di daftar
+        // Muat CSS khusus jika ada di map
         if (array_key_exists($curPage, $cssMap)) {
             echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssMap[$curPage] . '">';
         }
     ?>
     
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
     <?php
-        // Pastikan PUBLIC_URL tersedia; jika belum, buat fallback dari host saat ini (termasuk port).
+        // Pastikan PUBLIC_URL selalu absolut
         if (!defined('PUBLIC_URL')) {
             $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
             $host = $_SERVER['HTTP_HOST'] ?? '127.0.0.1';
             define('PUBLIC_URL', rtrim($scheme . '://' . $host, '/'));
         }
     ?>
-    <base href="<?php echo rtrim(PUBLIC_URL, '/'); ?>/">
+    <base href="<?= rtrim(PUBLIC_URL, '/') ?>/">
 </head>
 <body>
 

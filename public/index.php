@@ -13,14 +13,20 @@ define('CONFIG_PATH',     APP_PATH . '/config');
 
 require_once APP_PATH . '/config/config.php';
 
-// Tambahan: fallback aman untuk PUBLIC_URL dan ASSETS_URL jika belum didefinisikan
+// --- BAGIAN PERBAIKAN 1: Deteksi URL yang lebih akurat ---
+// --- PERBAIKAN: Deteksi PUBLIC_URL yang fleksibel ---
 if (!defined('PUBLIC_URL')) {
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host = $_SERVER['HTTP_HOST'] ?? '127.0.0.1:8000';
-    define('PUBLIC_URL', rtrim($scheme . '://' . $host, '/'));
-}
-if (!defined('ASSETS_URL')) {
-    define('ASSETS_URL', PUBLIC_URL);
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8000';
+    
+    // Cek apakah kita pakai port 8000 (Built-in server)
+    if (strpos($host, ':8000') !== false) {
+        define('PUBLIC_URL', $scheme . '://' . $host);
+    } else {
+        // Jika pakai Apache (XAMPP), ambil folder projectnya
+        $script_dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+        define('PUBLIC_URL', $scheme . '://' . $host . $script_dir);
+    }
 }
 
 // Pastikan koneksi Database tersedia
@@ -142,7 +148,12 @@ if ($isAdminArea) {
 
 $pageParam = $_GET['page'] ?? null;
 $routeParam = $_GET['route'] ?? null;
-$uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
+
+// Ambil path setelah folder 'public'
+$request_uri = $_SERVER['REQUEST_URI'] ?? '/';
+$uri_clean   = explode('?', $request_uri)[0];
+$script_name = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+$uriPath     = str_replace($script_name, '', $uri_clean);
 
 $path = trim($pageParam ?? $routeParam ?? $uriPath, '/');
 
@@ -151,8 +162,11 @@ $segments = array_values(array_filter(
     fn($s) => $s !== ''
 ));
 
+// JIKA KOSONG, PAKSA JADI HOME AGAR CSS KE-LOAD
 $page = $segments[0] ?? 'home';
-if ($page === 'index.php') $page = 'home';
+if ($page === 'index.php' || empty($page)) {
+    $page = 'home';
+}
 
 $id = $_GET['id'] ?? ($segments[1] ?? null);
 
@@ -206,14 +220,14 @@ if (isset($segments[1]) && $segments[1] !== '') {
    CSS
 =============================== */
 
-$pageCss = '';
-if ($page == 'home')                              $pageCss = 'home.css';
-if ($page == 'tatatertib' || $page == 'jadwal')   $pageCss = 'praktikum.css';
+$pageCss = 'style.css'; // Fallback default
+if ($page == 'home')                               $pageCss = 'home.css';
+if ($page == 'tatatertib' || $page == 'jadwal')    $pageCss = 'praktikum.css';
 if ($page == 'kepala' || $page == 'asisten' || $page == 'detail')      $pageCss = 'sumberdaya.css';
 if ($page == 'laboratorium' || $page == 'riset' || $page == 'detail_fasilitas')  $pageCss = 'fasilitas.css';
-if ($page == 'apps')                              $pageCss = 'apps.css';
-if ($page == 'contact')                           $pageCss = 'contact.css';
-if ($page == 'alumni' || $page == 'detail_alumni')                            $pageCss = 'alumni.css';
+if ($page == 'apps')                               $pageCss = 'apps.css';
+if ($page == 'contact')                            $pageCss = 'contact.css';
+if ($page == 'alumni' || $page == 'detail_alumni')                             $pageCss = 'alumni.css';
 
 
 /* ===============================
