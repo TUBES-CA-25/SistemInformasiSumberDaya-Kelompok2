@@ -259,7 +259,7 @@ img {
 }
 
 /* -------------------------------------------------------
-   4. FOOTER STYLING (DARK THEME)
+   4. FOOTER STYLING (DARK THEME - 4 COLUMNS)
    ------------------------------------------------------- */
 .main-footer {
   background-color: #0f172a; /* Hitam Kebiruan (Dark Slate) */
@@ -268,22 +268,19 @@ img {
   font-size: 0.95rem;
   position: relative;
   z-index: 10;
-  margin-top: 60px; /* Jarak dari konten atasnya */
+  margin-top: auto; /* Agar footer selalu di bawah */
+  border-top: 4px solid #3b82f6; /* Aksen border atas biru */
 }
 
 .footer-grid {
   display: grid;
-  /* [UBAH] minmax jadi 220px agar muat 4 kolom di desktop */
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  /* Menggunakan 4 kolom proporsional untuk Desktop */
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
   gap: 40px;
   margin-bottom: 50px;
-  align-items: start; /* Pastikan rata atas */
+  align-items: start;
 }
 
-/* Tambahan Style untuk Divider Halus di Footer */
-.footer-links li {
-  margin-bottom: 8px; /* Sedikit dirapatkan */
-}
 /* --- Kolom 1: Info Logo & Kontak --- */
 .footer-logo {
   display: flex;
@@ -301,14 +298,13 @@ img {
   font-weight: 800;
   font-size: 1.2rem;
   color: #fff;
-  margin-left: 10px;
 }
 
 .footer-desc {
   color: #94a3b8; /* Abu Sedang */
   line-height: 1.6;
   margin-bottom: 25px;
-  max-width: 320px;
+  padding-right: 20px; /* Jarak aman tulisan */
 }
 
 .contact-list p {
@@ -324,35 +320,33 @@ img {
   font-size: 1.2rem;
 }
 
-.contact-list .address {
-  align-items: flex-start;
-  line-height: 1.5;
-}
-
-/* --- Kolom 2: Menu Link --- */
+/* --- Kolom 2 & 3: Menu Link --- */
 .footer-section h3 {
   color: #ffffff;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 700;
   margin-bottom: 25px;
   position: relative;
   display: inline-block;
+  padding-bottom: 10px;
 }
 
+/* Garis bawah judul */
 .footer-section h3::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -8px;
+  bottom: 0;
   width: 40px;
   height: 3px;
-  background-color: #3b82f6; /* Garis bawah biru */
+  background-color: #3b82f6;
   border-radius: 2px;
 }
 
 .footer-links {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .footer-links li {
@@ -367,31 +361,55 @@ img {
   align-items: center;
 }
 
+/* Menambahkan panah kecil (›) sebelum link */
 .footer-links a::before {
   content: "›";
   margin-right: 8px;
   font-size: 1.2rem;
   color: #475569;
   transition: color 0.2s;
+  line-height: 1;
 }
 
+/* Efek Hover: Biru & Geser Kanan */
 .footer-links a:hover {
-  color: #60a5fa; /* Biru muda saat hover */
-  padding-left: 5px; /* Efek geser kanan */
+  color: #60a5fa;
+  padding-left: 5px;
 }
 
 .footer-links a:hover::before {
   color: #60a5fa;
 }
 
-/* --- Kolom 3: Peta --- */
+/* Style Khusus Link Eksternal (Website UMI/FIKOM) */
+/* Ini akan menimpa style inline HTML jika ada, agar lebih rapi */
+.footer-links a[target="_blank"] {
+  color: #fbbf24; /* Kuning Emas */
+}
+.footer-links a[target="_blank"]:hover {
+  color: #f59e0b;
+}
+.footer-links a[target="_blank"]::before {
+  content: "\ea90"; /* Kode ikon external link (RemixIcon) atau ganti "›" */
+  font-family: "remixicon";
+  font-size: 1rem;
+  color: #fbbf24;
+}
+
+/* Garis Pemisah di menu link */
+.separator-link {
+  border-top: 1px solid #1e293b;
+  margin: 15px 0 !important;
+}
+
+/* --- Kolom 4: Peta --- */
 .map-wrapper {
   width: 100%;
   height: 180px;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  border: 2px solid #1e293b;
+  border: 2px solid #1e293b; /* Border gelap agar menyatu */
 }
 
 /* --- Copyright --- */
@@ -401,18 +419,30 @@ img {
   text-align: center;
   color: #64748b;
   font-size: 0.9rem;
+  margin-top: 20px;
 }
 
-/* Responsif HP untuk Footer */
-@media (max-width: 768px) {
+/* --- Responsif (Tablet & HP) --- */
+@media (max-width: 992px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr); /* Tablet: 2 Kolom */
+    gap: 30px;
+  }
+}
+
+@media (max-width: 576px) {
   .main-footer {
     padding-top: 50px;
   }
   .footer-grid {
+    grid-template-columns: 1fr; /* HP: 1 Kolom memanjang ke bawah */
     gap: 40px;
   }
-  .footer-section h3::after {
-    width: 30px;
+  .footer-logo {
+    justify-content: flex-start;
+  }
+  .footer-desc {
+    padding-right: 0;
   }
 }
 

@@ -1,53 +1,80 @@
 <?php
 /**
- * VIEW: DETAIL ASISTEN & MANAJEMEN (UNIVERSAL FIX)
+ * VIEW: DETAIL ASISTEN & MANAJEMEN (FINAL: URL PARSING + STYLE FIX)
  * File: app/views/sumberdaya/detail-asisten.php
- * Update: Menambahkan '??' pada $row['email'] untuk mencegah error undefined key.
  */
 
 global $pdo;
 
-// 1. Ambil Parameter dari URL
-$id = $_GET['id'] ?? 0;
-$type = $_GET['type'] ?? 'asisten'; // Default ke 'asisten'
+// ==========================================
+// 1. LOGIKA ID YANG KUAT (URL PARSING)
+// ==========================================
+$id = 0;
+
+// A. Cek dari Controller ($data)
+if (isset($data['id'])) {
+    $id = $data['id'];
+}
+// B. Cek dari $_GET biasa (?id=...)
+elseif (isset($_GET['id'])) {
+    $id = $_GET['id'];
+}
+// C. Cek Manual dari URL Path (/detail_asisten/5)
+else {
+    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $segments = explode('/', trim($path, '/'));
+    $lastSegment = end($segments);
+    
+    if (is_numeric($lastSegment)) {
+        $id = $lastSegment;
+    }
+}
+
+// Ambil Tipe (manajemen/asisten)
+$type = $_GET['type'] ?? 'asisten'; 
 
 $dataDetail = null;
-$backLink = 'index.php?page=asisten'; // Default tombol kembali
+$backLink = 'index.php?page=asisten'; 
 
-// 2. Logika Database (Switch Tabel berdasarkan Type)
 try {
     if ($type === 'manajemen') {
-        // --- KASUS: KEPALA LAB / STAFF ---
+        // --- MANAJEMEN ---
         $stmt = $pdo->prepare("SELECT * FROM manajemen WHERE idManajemen = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        $backLink = 'index.php?page=kepala'; // Kembali ke halaman Kepala
+        // Link kembali ke halaman Kepala/Struktur
+        $backLink = PUBLIC_URL . '/kepala'; 
 
         if ($row) {
+            $isKepala = stripos(($row['jabatan'] ?? ''), 'Kepala') !== false;
+            // Style Hardcoded (Aman)
+            $badgeStyle = $isKepala 
+                ? 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;' // Biru Pimpinan
+                : 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;'; // Abu Staff
+
             $dataDetail = [
                 'nama'      => $row['nama'] ?? 'Tanpa Nama',
                 'jabatan'   => $row['jabatan'] ?? '-',
-                'kategori'  => (stripos(($row['jabatan'] ?? ''), 'Kepala') !== false) ? 'Pimpinan' : 'Staff Laboratorium',
-                // FIX: Gunakan ?? untuk NIDN
+                'kategori'  => $isKepala ? 'Pimpinan' : 'Staff Laboratorium',
                 'sub_info'  => !empty($row['nidn']) ? 'NIDN: ' . $row['nidn'] : 'Fakultas Ilmu Komputer',
                 'sub_icon'  => 'ri-id-card-line',
                 'foto'      => $row['foto'] ?? '',
-                // FIX UTAMA: Tambahkan ?? '-' agar tidak error jika kolom email tidak ada
                 'email'     => $row['email'] ?? '-', 
-                'bio'       => !empty($row['bio']) ? $row['bio'] : "Staff/Pimpinan aktif di Laboratorium Fakultas Ilmu Komputer UMI.",
+                'bio'       => !empty($row['bio']) ? $row['bio'] : "Staff/Pimpinan aktif.",
                 'skills'    => ['Management', 'Administration', 'Laboratory'],
-                'badge_class' => (stripos(($row['jabatan'] ?? ''), 'Kepala') !== false) ? 'badge-pimpinan' : 'badge-staff'
+                'badge_style' => $badgeStyle 
             ];
         }
 
     } else {
-        // --- KASUS: ASISTEN (DEFAULT) ---
+        // --- ASISTEN ---
         $stmt = $pdo->prepare("SELECT * FROM asisten WHERE idAsisten = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        $backLink = 'index.php?page=asisten'; // Kembali ke halaman Asisten
+        // Link kembali ke halaman Asisten
+        $backLink = PUBLIC_URL . '/asisten';
 
         if ($row) {
             $statusAktif = $row['statusAktif'] ?? '';
@@ -56,15 +83,18 @@ try {
             
             $jabatan = 'Asisten Praktikum';
             $kategori = 'Asisten Laboratorium';
-            $badgeStyle = '';
+            
+            // Default Style (Biru Muda)
+            $badgeStyle = 'background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;'; 
 
             if ($isCoord) {
                 $jabatan = 'Koordinator Laboratorium';
                 $kategori = 'Koordinator';
+                $badgeStyle = 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;'; 
             } elseif ($isCA) {
                 $jabatan = 'Calon Asisten (CA)';
                 $kategori = 'Calon Asisten';
-                $badgeStyle = 'background: #fffbeb; color: #d97706; border: 1px solid #fcd34d;';
+                $badgeStyle = 'background: #fffbeb; color: #d97706; border: 1px solid #fcd34d;'; 
             }
 
             // Skill Parsing
@@ -83,19 +113,16 @@ try {
                 'sub_info'  => $row['jurusan'] ?? 'Teknik Informatika',
                 'sub_icon'  => 'ri-graduation-cap-line',
                 'foto'      => $row['foto'] ?? '',
-                // FIX UTAMA: Tambahkan ?? '-' di sini juga
                 'email'     => $row['email'] ?? '-',
-                'bio'       => !empty($row['bio']) ? $row['bio'] : "Mahasiswa aktif jurusan " . ($row['jurusan']??'Teknik Informatika') . " yang berdedikasi membantu praktikum.",
+                'bio'       => !empty($row['bio']) ? $row['bio'] : "Mahasiswa aktif.",
                 'skills'    => $skills,
-                'badge_style' => $badgeStyle
+                'badge_style' => $badgeStyle 
             ];
         }
     }
-} catch (PDOException $e) {
-    // Silent fail
-}
+} catch (PDOException $e) {}
 
-// 3. Helper Foto
+// Helper Foto
 function getDetailPhoto($name, $fotoName, $type) {
     $namaEnc = urlencode($name);
     $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=64748b&size=512&font-size=0.35&bold=true";
@@ -104,14 +131,13 @@ function getDetailPhoto($name, $fotoName, $type) {
         if (strpos($fotoName, 'http') === 0) {
             $imgUrl = $fotoName;
         } else {
-            // Cek folder berdasarkan tipe
             $folder = ($type === 'manajemen') ? 'manajemen' : 'asisten';
             $altFolder = ($type === 'manajemen') ? 'asisten' : 'manajemen';
             
-            if (file_exists(ROOT_PROJECT . "/public/images/{$folder}/" . $fotoName)) {
-                $imgUrl = ASSETS_URL . "/images/{$folder}/" . $fotoName;
-            } elseif (file_exists(ROOT_PROJECT . "/public/assets/uploads/" . $fotoName)) {
+            if (file_exists(ROOT_PROJECT . "/public/assets/uploads/" . $fotoName)) {
                 $imgUrl = ASSETS_URL . "/assets/uploads/" . $fotoName;
+            } elseif (file_exists(ROOT_PROJECT . "/public/images/{$folder}/" . $fotoName)) {
+                $imgUrl = ASSETS_URL . "/images/{$folder}/" . $fotoName;
             } elseif (file_exists(ROOT_PROJECT . "/public/images/{$altFolder}/" . $fotoName)) {
                 $imgUrl = ASSETS_URL . "/images/{$altFolder}/" . $fotoName;
             }
@@ -138,7 +164,19 @@ function getDetailPhoto($name, $fotoName, $type) {
                 </div>
                 
                 <div class="profile-content">
-                    <span class="category-badge">
+                    <span style="
+                        display: inline-block !important; 
+                        width: fit-content !important; 
+                        align-self: flex-start !important; 
+                        padding: 8px 20px; 
+                        border-radius: 50px; 
+                        font-size: 0.85rem; 
+                        font-weight: 800; 
+                        text-transform: uppercase; 
+                        letter-spacing: 1px; 
+                        margin-bottom: 20px;
+                        <?= $dataDetail['badge_style'] ?>
+                    ">
                         <?= htmlspecialchars($dataDetail['kategori']); ?>
                     </span>
                     
@@ -184,7 +222,7 @@ function getDetailPhoto($name, $fotoName, $type) {
                                 <i class="ri-mail-send-line"></i> Kirim Email
                             </a>
                         <?php else: ?>
-                            <button class="btn-contact btn-disabled" disabled>
+                            <button class="btn-contact btn-disabled" disabled style="opacity: 0.6; cursor: not-allowed;">
                                 <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
                             </button>
                         <?php endif; ?>
@@ -197,6 +235,7 @@ function getDetailPhoto($name, $fotoName, $type) {
             <div class="empty-state-wrapper">
                 <div class="empty-icon"><i class="ri-user-unfollow-line"></i></div>
                 <h2 class="empty-title">Data Tidak Ditemukan</h2>
+                <p>ID: <?= htmlspecialchars($id) ?> (Type: <?= htmlspecialchars($type) ?>)</p>
                 <a href="<?= $backLink ?>" class="btn-primary-pill">Kembali</a>
             </div>
 

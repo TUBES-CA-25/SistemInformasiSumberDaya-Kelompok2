@@ -1,3 +1,32 @@
+<?php
+/**
+ * VIEW: LABORATORIUM PENGAJARAN
+ * Filter: jenis = 'Laboratorium'
+ */
+
+$lab_list = [];
+
+if (!empty($data['laboratorium'])) {
+    $lab_list = $data['laboratorium'];
+} else {
+    global $pdo;
+    try {
+        if ($pdo instanceof PDO) {
+            // FILTER: Hanya ambil yang jenisnya 'Laboratorium'
+            $stmt = $pdo->query("SELECT * FROM laboratorium WHERE jenis = 'Laboratorium' ORDER BY idLaboratorium ASC");
+            $lab_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+    } catch (Throwable $e) { $lab_list = []; }
+}
+
+function getLabImg($row) {
+    if (!empty($row['gambar']) && file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $row['gambar'])) {
+        return ASSETS_URL . '/assets/uploads/' . $row['gambar'];
+    }
+    return null;
+}
+?>
+
 <section class="fasilitas-section">
     <div class="container">
         
@@ -9,68 +38,58 @@
 
         <div class="facility-grid">
             
-            <a href="index.php?page=detail_fasilitas&id=LAB-SE" class="facility-row">
-                <div class="facility-img-side">
-                    <div class="img-overlay-placeholder">
-                        <i class="ri-code-s-slash-line"></i>
-                    </div>
-                </div>
-                <div class="facility-info-side">
-                    <div class="facility-meta">
-                        <span class="badge-info"><i class="ri-group-line"></i> Kapasitas 40 Mahasiswa</span>
-                    </div>
-                    <h3>Lab. Software Engineering</h3>
-                    <p>Pusat pengembangan perangkat lunak dan pemrograman. Fasilitas ini mendukung pengembangan aplikasi web, mobile, serta pengujian sistem informasi.</p>
-                    
-                    <div class="mini-specs">
-                        <div class="mini-spec-item"><i class="ri-cpu-line"></i> i7 Gen 12</div>
-                        <div class="mini-spec-item"><i class="ri-ram-2-line"></i> 32GB RAM</div>
-                        <div class="mini-spec-item"><i class="ri-window-line"></i> RTX 3060</div>
-                    </div>
-                </div>
-            </a>
+            <?php if (!empty($lab_list)) : ?>
+                <?php foreach ($lab_list as $row) : ?>
+                    <?php 
+                        $imgSrc = getLabImg($row); 
+                        $descRaw = $row['deskripsi'] ?? ''; 
+                        $deskripsi = strlen($descRaw) > 150 ? substr($descRaw, 0, 150) . '...' : $descRaw;
+                    ?>
 
-            <a href="index.php?page=detail_fasilitas&id=LAB-JK" class="facility-row">
-                <div class="facility-img-side">
-                    <div class="img-overlay-placeholder">
-                        <i class="ri-server-line"></i>
-                    </div>
-                </div>
-                <div class="facility-info-side">
-                    <div class="facility-meta">
-                        <span class="badge-info"><i class="ri-group-line"></i> Kapasitas 35 Mahasiswa</span>
-                    </div>
-                    <h3>Lab. Jaringan Komputer</h3>
-                    <p>Fasilitas simulasi infrastruktur jaringan dan keamanan siber. Dilengkapi dengan perangkat keras router dan switch fisik untuk konfigurasi langsung.</p>
-                    
-                    <div class="mini-specs">
-                        <div class="mini-spec-item"><i class="ri-router-line"></i> Mikrotik & Cisco</div>
-                        <div class="mini-spec-item"><i class="ri-shield-user-line"></i> Cyber Security</div>
-                        <div class="mini-spec-item"><i class="ri-hard-drive-line"></i> Rack Server</div>
-                    </div>
-                </div>
-            </a>
+                    <a href="<?= PUBLIC_URL ?>/detail_fasilitas/<?= $row['idLaboratorium'] ?>" class="facility-row">
+                        <div class="facility-img-side">
+                            <?php if ($imgSrc) : ?>
+                                <img src="<?= $imgSrc ?>" alt="<?= htmlspecialchars($row['nama']) ?>" 
+                                     style="width:100%; height:100%; object-fit:cover;">
+                            <?php else : ?>
+                                <div class="img-overlay-placeholder">
+                                    <i class="ri-computer-line"></i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
 
-            <a href="index.php?page=detail_fasilitas&id=LAB-MM" class="facility-row">
-                <div class="facility-img-side">
-                    <div class="img-overlay-placeholder">
-                        <i class="ri-movie-2-line"></i>
-                    </div>
+                        <div class="facility-info-side">
+                            <div class="facility-meta">
+                                <span class="badge-info">
+                                    <i class="ri-group-line"></i> Kapasitas <?= $row['kapasitas'] ?> Mahasiswa
+                                </span>
+                            </div>
+
+                            <h3><?= htmlspecialchars($row['nama']) ?></h3>
+                            <p><?= htmlspecialchars($deskripsi) ?></p>
+                            
+                            <div class="mini-specs">
+                                <?php if (!empty($row['processor'])) : ?>
+                                    <div class="mini-spec-item"><i class="ri-cpu-line"></i> <?= htmlspecialchars($row['processor']) ?></div>
+                                <?php endif; ?>
+                                <?php if (!empty($row['ram'])) : ?>
+                                    <div class="mini-spec-item"><i class="ri-ram-2-line"></i> <?= htmlspecialchars($row['ram']) ?></div>
+                                <?php endif; ?>
+                                <?php if (!empty($row['gpu'])) : ?>
+                                    <div class="mini-spec-item"><i class="ri-window-line"></i> <?= htmlspecialchars($row['gpu']) ?></div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </a>
+
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div style="text-align:center; padding:50px; color:#94a3b8; width:100%;">
+                    <i class="ri-computer-line" style="font-size:3rem;"></i>
+                    <p>Data laboratorium belum tersedia.</p>
                 </div>
-                <div class="facility-info-side">
-                    <div class="facility-meta">
-                        <span class="badge-info"><i class="ri-group-line"></i> Kapasitas 30 Mahasiswa</span>
-                    </div>
-                    <h3>Lab. Multimedia & Game</h3>
-                    <p>Laboratorium spesifikasi tinggi untuk kebutuhan desain grafis, editing video, dan pembuatan game engine. Mendukung rendering berat secara optimal.</p>
-                    
-                    <div class="mini-specs">
-                        <div class="mini-spec-item"><i class="ri-cpu-line"></i> Ryzen 7 5800X</div>
-                        <div class="mini-spec-item"><i class="ri-tv-2-line"></i> Monitor 4K</div>
-                        <div class="mini-spec-item"><i class="ri-palette-line"></i> Wacom Pro</div>
-                    </div>
-                </div>
-            </a>
+            <?php endif; ?>
+
         </div>
     </div>
 </section>

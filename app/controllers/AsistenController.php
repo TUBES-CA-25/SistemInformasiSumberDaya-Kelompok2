@@ -22,18 +22,7 @@ class AsistenController extends Controller {
      */
     public function detail($params = []) {
         $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->redirect('/asisten');
-            return;
-        }
-
-        $asisten = $this->model->getById($id, 'idAsisten');
-        if (!$asisten) {
-            $this->redirect('/asisten');
-            return;
-        }
-
-        $this->view('sumberdaya/detail-asisten', ['asisten' => $asisten]);
+        $this->view('sumberdaya/detail-asisten', ['id' => $id]);
     }
 
     /**

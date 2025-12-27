@@ -1,5 +1,5 @@
 /* =======================================================
-    public/css/sumberdaya.css — Final Polish (Typography & Badges)
+    public/css/sumberdaya.css — Final Polish (Fixed Badges)
    ======================================================= */
 
 /* -------------------------------------------------------
@@ -81,8 +81,7 @@
   margin-right: auto;
 }
 
-.search-input,
-.search-input--compact {
+.search-input {
   width: 100%;
   padding: 16px 24px;
   padding-right: 50px;
@@ -100,7 +99,7 @@
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
-.search-icon--compact {
+.search-icon-compact {
   position: absolute;
   right: 20px;
   top: 50%;
@@ -174,31 +173,30 @@
 
 .exec-info {
   flex: 1;
-  padding: 50px; /* Padding lebih besar agar lega */
+  padding: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-/* BADGE DI KARTU KOORDINATOR */
+/* FIX: Badge Pimpinan agar tidak stretch */
 .exec-badge {
   display: inline-block;
   background: #eff6ff;
   color: var(--primary);
   padding: 8px 16px;
-  border-radius: 50px; /* Pill Shape */
+  border-radius: 50px;
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 20px; /* Jarak ke nama */
-  align-self: flex-start;
+  margin-bottom: 20px;
+  align-self: flex-start; /* KUNCI FIX BADGE MEMANJANG */
   border: 1px solid #bfdbfe;
 }
 
-/* NAMA KOORDINATOR - DIPERBESAR */
 .exec-info h3 {
-  font-size: 2.8rem; /* Font Sangat Besar */
+  font-size: 2.8rem;
   font-weight: 900;
   color: var(--text-dark);
   margin: 0 0 10px 0;
@@ -395,8 +393,13 @@
 }
 
 /* --- DETAIL BADGE (DIPERBAIKI) --- */
+/* FIX: Mencegah badge memanjang ke kanan */
+/* --- DETAIL BADGE (FIX FINAL) --- */
 .category-badge {
   display: inline-block;
+  width: fit-content;        /* <--- TAMBAHKAN INI (Wajib) */
+  align-self: flex-start;    /* <--- Pastikan ini tetap ada */
+  
   padding: 8px 20px;
   border-radius: 50px;
   font-size: 0.85rem;
@@ -420,7 +423,7 @@
 
 .profile-name {
   margin-bottom: 10px;
-  font-size: 2.8rem; /* Nama Detail Besar */
+  font-size: 2.8rem;
   line-height: 1.1;
   color: var(--text-dark);
   font-weight: 900;
@@ -578,9 +581,9 @@
   }
   .exec-info h3 {
     font-size: 2rem;
-  } /* Kecilkan dikit di HP */
+  }
   .exec-badge {
-    align-self: center;
+    align-self: center; /* Center badge on mobile */
   }
 
   /* Detail Profile */

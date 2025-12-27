@@ -45,8 +45,9 @@ if (!empty($alumni_data)) {
             <p>Mahasiswa terpilih yang berdedikasi membantu kelancaran praktikum.</p>
 
             <div class="search-container">
-                <input type="text" id="searchAsisten" placeholder="Cari asisten..." class="search-input search-input--compact">
-                <i class="ri-search-line search-icon--compact"></i>
+                <input type="text" id="searchAsisten" placeholder="Cari asisten..." class="search-input">
+                <i class="ri-search-line"
+                    style="position:absolute; right:20px; top:50%; transform:translateY(-50%); color:#94a3b8"></i>
             </div>
         </div>
 
