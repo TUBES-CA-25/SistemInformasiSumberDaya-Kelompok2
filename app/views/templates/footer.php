@@ -37,12 +37,12 @@
                     <li class="separator-link" style="margin: 10px 0; border-top: 1px solid #334155;"></li>
                     
                     <li>
-                        <a href="https://fikom.umi.ac.id" target="_blank" style="color: #fbbf24;">
+                        <a href="https://fikom.umi.ac.id" target="_blank" style="color: #ffffffff;">
                             <i class="ri-external-link-line"></i> Website FIKOM
                         </a>
                     </li>
                     <li>
-                        <a href="https://umi.ac.id" target="_blank" style="color: #fbbf24;">
+                        <a href="https://umi.ac.id" target="_blank" style="color: #ffffffff;"
                             <i class="ri-external-link-line"></i> Website UMI
                         </a>
                     </li>
@@ -73,19 +73,6 @@
 
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 <script src="<?= ASSETS_URL ?>/js/main.js"></script>
-
-<script>
-    const backBtn = document.getElementById('backToTop');
-    if(backBtn){
-        window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                backBtn.style.display = "flex";
-            } else {
-                backBtn.style.display = "none";
-            }
-        };
-    }
-</script>
 
 </body>
 </html>

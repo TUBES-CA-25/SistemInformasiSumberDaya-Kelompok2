@@ -1,6 +1,6 @@
 /* =======================================================
    SYSTEM MANAGEMENT RESOURCES - MAIN STYLESHEET
-   Group 2 - Refactored Structure
+   Group 2 - Refactored Structure & Final Polish
    ======================================================= */
 
 /* -------------------------------------------------------
@@ -49,7 +49,7 @@ img {
    ------------------------------------------------------- */
 .navbar {
   background: #fff;
-  padding: 10px 0; /* Padding sedikit dikecilkan agar proporsional dengan logo besar */
+  padding: 10px 0;
   border-bottom: 1px solid #e2e8f0;
   position: relative;
   z-index: 1000;
@@ -61,7 +61,7 @@ img {
   align-items: center;
 }
 
-/* --- LOGO UTAMA (BIGGER VERSION) --- */
+/* --- LOGO UTAMA --- */
 .logo {
   display: flex;
   align-items: center;
@@ -75,7 +75,7 @@ img {
 }
 
 .logo-img {
-  height: 80px; /* Ukuran Logo Diperbesar Sesuai Permintaan */
+  height: 80px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -83,7 +83,7 @@ img {
 }
 
 .brand-logo:hover .logo-img {
-  transform: scale(1.05); /* Efek Zoom Halus saat Hover */
+  transform: scale(1.05);
 }
 
 /* --- NAVIGATION LINKS (DESKTOP) --- */
@@ -91,7 +91,7 @@ img {
   list-style: none;
   display: flex;
   gap: 30px;
-  align-items: center; /* Memastikan semua item vertical center */
+  align-items: center;
 }
 
 .nav-links a {
@@ -101,13 +101,13 @@ img {
 }
 
 .nav-links a:hover {
-  color: #2563eb; /* Biru Terang */
+  color: #2563eb;
 }
 
-/* --- [BARU] STYLE KHUSUS TOMBOL APPS --- */
+/* --- TOMBOL APPS --- */
 .btn-nav-apps {
-  background-color: #2563eb; /* Biru Utama */
-  color: #fff !important; /* Paksa teks putih */
+  background-color: #2563eb;
+  color: #fff !important;
   padding: 10px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -116,11 +116,11 @@ img {
   gap: 8px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-  margin-left: 10px; /* Sedikit jarak ekstra dari menu sebelumnya */
+  margin-left: 10px;
 }
 
 .btn-nav-apps:hover {
-  background-color: #1d4ed8; /* Biru lebih gelap saat hover */
+  background-color: #1d4ed8;
   color: #fff !important;
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
@@ -196,7 +196,6 @@ img {
   transition: 0.4s;
 }
 
-/* Animasi Hamburger ke X */
 .menu-toggle.active span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
@@ -211,7 +210,6 @@ img {
   .menu-toggle {
     display: flex;
   }
-
   .nav-links {
     display: none;
     position: absolute;
@@ -224,12 +222,10 @@ img {
     border-top: 1px solid #eff6ff;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   }
-
   .nav-links.active {
     display: flex;
     animation: fadeIn 0.3s forwards;
   }
-
   .dropdown-content {
     position: static !important;
     display: none;
@@ -237,19 +233,14 @@ img {
     background: #f8fbff;
     box-shadow: none;
     border: none;
-    padding-left: 20px; /* Indentasi submenu di mobile */
+    padding-left: 20px;
   }
-
   .dropdown:hover .dropdown-content {
     display: block;
   }
-
-  /* Logo adjustment for Mobile */
   .logo-img {
-    height: 60px; /* Ukuran aman untuk layar HP */
+    height: 60px;
   }
-
-  /* Penyesuaian Tombol Apps di Mobile */
   .btn-nav-apps {
     width: 100%;
     justify-content: center;
@@ -262,51 +253,46 @@ img {
    4. FOOTER STYLING (DARK THEME - 4 COLUMNS)
    ------------------------------------------------------- */
 .main-footer {
-  background-color: #0f172a; /* Hitam Kebiruan (Dark Slate) */
-  color: #e2e8f0; /* Teks Putih Abu-abu */
+  background-color: #0f172a;
+  color: #e2e8f0;
   padding-top: 70px;
   font-size: 0.95rem;
   position: relative;
   z-index: 10;
-  margin-top: auto; /* Agar footer selalu di bawah */
-  border-top: 4px solid #3b82f6; /* Aksen border atas biru */
+  margin-top: auto;
+  border-top: 4px solid #3b82f6;
 }
 
 .footer-grid {
   display: grid;
-  /* Menggunakan 4 kolom proporsional untuk Desktop */
-  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr; /* 4 Kolom Proporsional */
   gap: 40px;
   margin-bottom: 50px;
   align-items: start;
 }
 
-/* --- Kolom 1: Info Logo & Kontak --- */
+/* --- Kolom 1: Logo & Kontak --- */
 .footer-logo {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 20px;
 }
-
 .footer-logo img {
   height: 40px;
   object-fit: contain;
 }
-
 .footer-logo span {
   font-weight: 800;
   font-size: 1.2rem;
   color: #fff;
 }
-
 .footer-desc {
-  color: #94a3b8; /* Abu Sedang */
+  color: #94a3b8;
   line-height: 1.6;
   margin-bottom: 25px;
-  padding-right: 20px; /* Jarak aman tulisan */
+  padding-right: 20px;
 }
-
 .contact-list p {
   display: flex;
   align-items: center;
@@ -314,9 +300,8 @@ img {
   margin-bottom: 12px;
   color: #cbd5e1;
 }
-
 .contact-list i {
-  color: #3b82f6; /* Ikon Biru Terang */
+  color: #3b82f6;
   font-size: 1.2rem;
 }
 
@@ -330,8 +315,6 @@ img {
   display: inline-block;
   padding-bottom: 10px;
 }
-
-/* Garis bawah judul */
 .footer-section h3::after {
   content: "";
   position: absolute;
@@ -348,20 +331,21 @@ img {
   padding: 0;
   margin: 0;
 }
-
 .footer-links li {
   margin-bottom: 12px;
 }
 
+/* [FIX ANIMASI] Link Footer menggunakan Transform */
 .footer-links a {
   color: #94a3b8;
   text-decoration: none;
-  transition: all 0.2s ease;
+  /* Transisi Halus */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
+  padding-left: 0; /* Reset padding agar tidak lompat */
 }
 
-/* Menambahkan panah kecil (›) sebelum link */
 .footer-links a::before {
   content: "›";
   margin-right: 8px;
@@ -371,32 +355,29 @@ img {
   line-height: 1;
 }
 
-/* Efek Hover: Biru & Geser Kanan */
+/* [FIX ANIMASI] Hover Effect */
 .footer-links a:hover {
   color: #60a5fa;
-  padding-left: 5px;
+  transform: translateX(6px); /* Geser menggunakan Transform (Lebih Smooth) */
 }
-
 .footer-links a:hover::before {
   color: #60a5fa;
 }
 
-/* Style Khusus Link Eksternal (Website UMI/FIKOM) */
-/* Ini akan menimpa style inline HTML jika ada, agar lebih rapi */
+/* Style Link Eksternal */
 .footer-links a[target="_blank"] {
-  color: #fbbf24; /* Kuning Emas */
+  color: #ffffff;
 }
 .footer-links a[target="_blank"]:hover {
-  color: #f59e0b;
+  color: #ffffff;
 }
 .footer-links a[target="_blank"]::before {
-  content: "\ea90"; /* Kode ikon external link (RemixIcon) atau ganti "›" */
+  content: "\ea90"; /* Icon External Link */
   font-family: "remixicon";
   font-size: 1rem;
-  color: #fbbf24;
+  color: #ffffff;
 }
 
-/* Garis Pemisah di menu link */
 .separator-link {
   border-top: 1px solid #1e293b;
   margin: 15px 0 !important;
@@ -409,7 +390,7 @@ img {
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  border: 2px solid #1e293b; /* Border gelap agar menyatu */
+  border: 2px solid #1e293b;
 }
 
 /* --- Copyright --- */
@@ -422,20 +403,19 @@ img {
   margin-top: 20px;
 }
 
-/* --- Responsif (Tablet & HP) --- */
+/* Responsif Footer */
 @media (max-width: 992px) {
   .footer-grid {
-    grid-template-columns: repeat(2, 1fr); /* Tablet: 2 Kolom */
+    grid-template-columns: repeat(2, 1fr);
     gap: 30px;
   }
 }
-
 @media (max-width: 576px) {
   .main-footer {
     padding-top: 50px;
   }
   .footer-grid {
-    grid-template-columns: 1fr; /* HP: 1 Kolom memanjang ke bawah */
+    grid-template-columns: 1fr;
     gap: 40px;
   }
   .footer-logo {
@@ -447,7 +427,7 @@ img {
 }
 
 /* -------------------------------------------------------
-   5. BACK TO TOP BUTTON
+   5. BACK TO TOP BUTTON (FIXED ANIMATION)
    ------------------------------------------------------- */
 .back-to-top {
   position: fixed;
@@ -455,7 +435,7 @@ img {
   right: 30px;
   width: 50px;
   height: 50px;
-  background-color: #2563eb; /* Biru Utama */
+  background-color: #2563eb;
   color: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -467,14 +447,15 @@ img {
   z-index: 9999;
   cursor: pointer;
 
-  /* Animasi Default */
+  /* [FIX ANIMASI] State Awal Hidden */
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
-  transition: all 0.3s ease;
+  /* Cubic Bezier untuk efek muncul yang smooth */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Class Active (Muncul saat scroll) */
+/* [FIX ANIMASI] State Muncul */
 .back-to-top.show {
   opacity: 1;
   visibility: visible;
@@ -483,6 +464,7 @@ img {
 
 .back-to-top:hover {
   background-color: #1e40af;
-  transform: translateY(-5px);
+  transform: translateY(-5px); /* Efek melayang saat hover */
   color: #fff;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
 }
