@@ -85,81 +85,82 @@
                 </div>
             </header>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
                 <?php
-                // --- LOGIKA ROUTING PINTAR ---
+                // --- LOGIKA ROUTING PINTAR (UPDATED) ---
                 
-                // 1. Ambil URL & Bersihkan
+                // 1. Ambil URL
                 $request = $_SERVER['REQUEST_URI'];
                 $request = strtok($request, '?');
                 
                 // Default Variables
-                $module = 'dashboard'; // Nama folder (misal: alumni, asisten)
-                $action = 'index';     // File yang diload (index.php atau form.php)
-                $id     = null;        // ID data (untuk edit)
+                $module = 'dashboard'; 
+                $action = 'index';     
+                $id     = null;       
 
-                // 2. Parsing URL: /public/admin/alumni/edit/5
+                // 2. Parsing URL
                 if (strpos($request, '/admin/') !== false) {
                     $parts = explode('/admin/', $request);
                     
                     if (isset($parts[1]) && !empty($parts[1])) {
                         $urlSegments = explode('/', $parts[1]);
                         
-                        // Segment 1: Nama Modul (alumni)
+                        // Segment 1: Nama Modul (asisten, alumni, dll)
                         $module = isset($urlSegments[0]) ? $urlSegments[0] : 'dashboard';
                         
-                        // Segment 2: Aksi (create / edit)
+                        // Segment 2: Aksi (create, edit, koordinator)
                         if (isset($urlSegments[1])) {
                             if ($urlSegments[1] === 'create') {
-                                $action = 'form'; // Load form.php
-                            } elseif ($urlSegments[1] === 'edit') {
-                                $action = 'form'; // Load form.php
-                                // Segment 3: ID Data
-                                if (isset($urlSegments[2])) {
-                                    $id = $urlSegments[2];
-                                }
+                                $action = 'form'; 
+                            } 
+                            elseif ($urlSegments[1] === 'edit') {
+                                $action = 'form'; 
+                                if (isset($urlSegments[2])) $id = $urlSegments[2];
                             }
-                            // Jika butuh logika lain (misal: detail), tambahkan disini
+                            // --- TAMBAHAN BARU: KOORDINATOR ---
+                            elseif ($urlSegments[1] === 'pilih-koordinator') {
+                                $action = 'pilih-koordinator'; // Ini akan mencari file koordinator.php
+                            }
+                            elseif ($urlSegments[1] === 'detail') {
+                                $action = 'detail';
+                                if (isset($urlSegments[2])) $id = $urlSegments[2];
+                            }
                         }
                     }
                 }
 
-                // Sanitasi nama folder agar aman
                 $module = preg_replace('/[^a-zA-Z0-9_]/', '', $module);
 
                 // 3. Tentukan File Target
                 $viewsPath = ROOT_PROJECT . '/app/views/admin/';
                 
-                // Cek apakah ini Dashboard (biasanya file tunggal)
                 if ($module === 'dashboard') {
                     $targetFile = $viewsPath . 'dashboard.php';
                     if (!file_exists($targetFile)) $targetFile = $viewsPath . 'dashboard/index.php';
                 } 
                 else {
-                    // Cek apakah masuk ke mode Form (Create/Edit) atau Index (Tabel)
+                    // Cek Action apa yang diminta
                     if ($action === 'form') {
                         $targetFile = $viewsPath . $module . '/form.php';
-                    } else {
+                    } 
+                    elseif ($action === 'pilih-koordinator') {
+                        // Target file: views/admin/asisten/koordinator.php
+                        $targetFile = $viewsPath . $module . '/pilih-koordinator.php';
+                    }
+                    elseif ($action === 'detail') {
+                        $targetFile = $viewsPath . $module . '/detail.php';
+                    }
+                    else {
                         $targetFile = $viewsPath . $module . '/index.php';
                     }
                 }
 
                 // 4. Eksekusi Include
                 if (file_exists($targetFile)) {
-                    // Kita kirim variabel $id ke dalam file form.php agar bisa dipakai
-                    // $id akan berisi angka ID jika mode edit, atau null jika create
                     include $targetFile;
                 } else {
-                    // Tampilan Error 404 Cantik
-                    echo "
-                    <div class='flex flex-col items-center justify-center pt-20'>
-                        <div class='bg-white p-8 rounded-lg shadow-md text-center max-w-lg'>
-                            <i class='fas fa-search text-6xl text-gray-300 mb-4'></i>
-                            <h2 class='text-xl font-bold text-gray-800'>Halaman Tidak Ditemukan</h2>
-                            <p class='text-gray-500 mt-2'>Sistem mencari file:</p>
-                            <code class='block bg-red-50 text-red-600 p-2 rounded mt-2 text-sm'>$targetFile</code>
-                        </div>
-                    </div>";
+                    // Tampilan Error 404 (Code block sebelumnya)
+                    echo "<div class='p-8 text-center text-red-500'>File tidak ditemukan: $targetFile</div>";
                 }
                 ?>
             </main>
