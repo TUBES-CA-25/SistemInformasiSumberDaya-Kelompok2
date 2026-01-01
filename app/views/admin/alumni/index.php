@@ -1,27 +1,36 @@
-<div class="admin-header">
-    <h1><i class="fas fa-user-graduate"></i> Data Alumni Asisten</h1>
-    <a href="javascript:void(0)" onclick="navigate('admin/alumni/create')" class="btn btn-success">
+<div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+        <i class="fas fa-user-graduate text-blue-600"></i> 
+        Data Alumni Asisten
+    </h1>
+    
+    <a href="javascript:void(0)" onclick="navigate('admin/alumni/create')" 
+       class="mt-4 sm:mt-0 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center gap-2 font-medium transform hover:-translate-y-0.5">
         <i class="fas fa-plus"></i> Tambah Alumni
     </a>
 </div>
 
-<div class="card" style="padding: 0;">
-    <div style="overflow-x: auto;">
-        <table class="crud-table" style="margin: 0;">
+<div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr style="background: #34495e; color: white;">
-                    <th style="width: 50px; padding: 15px; text-align: center;">No</th>
-                    <th style="width: 80px; padding: 15px; text-align: center;">Foto</th>
-                    <th style="padding: 15px;">Nama Alumni</th>
-                    <th style="width: 100px; padding: 15px; text-align: center;">Angkatan</th>
-                    <th style="padding: 15px;">Pekerjaan Sekarang</th>
-                    <th style="width: 150px; padding: 15px; text-align: center;">Aksi</th>
+                <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
+                    <th class="px-6 py-4 font-semibold text-center w-16">No</th>
+                    <th class="px-6 py-4 font-semibold text-center w-24">Foto</th>
+                    <th class="px-6 py-4 font-semibold">Nama Alumni</th>
+                    <th class="px-6 py-4 font-semibold text-center w-32">Angkatan</th>
+                    <th class="px-6 py-4 font-semibold">Pekerjaan Sekarang</th>
+                    <th class="px-6 py-4 font-semibold text-center w-40">Aksi</th>
                 </tr>
             </thead>
-            <tbody id="tableBody">
+            
+            <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
                 <tr>
-                    <td colspan="6" style="text-align:center; padding: 30px; color: #999;">
-                        <div style="animation: spin 1s linear infinite; display: inline-block;">⟳</div> Sedang memuat data...
+                    <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                        <div class="flex justify-center items-center gap-2">
+                            <i class="fas fa-circle-notch fa-spin text-blue-500 text-xl"></i>
+                            <span class="font-medium">Sedang memuat data...</span>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -29,167 +38,73 @@
     </div>
 </div>
 
-<style>
-/* Custom Button Styles */
-.btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white !important;
-}
-
-.btn-success {
-    background-color: #27ae60;
-}
-.btn-success:hover {
-    background-color: #219150;
-    transform: translateY(-2px);
-}
-
-.crud-table tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
-
-.crud-table tbody tr:hover {
-    background-color: #f8f9fa;
-    transform: translateX(2px);
-}
-
-.crud-table tbody td {
-    padding: 12px 15px;
-    vertical-align: middle;
-    color: #555;
-}
-
-.crud-table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-}
-
-.alumni-info {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.avatar-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #e0e0e0;
-    display: block;
-    margin: 0 auto;
-}
-
-.alumni-details strong {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 4px;
-    color: #2c3e50;
-}
-
-.alumni-details small {
-    color: #7f8c8d;
-    font-size: 12px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-}
-
-.btn-action {
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: white;
-    text-decoration: none;
-}
-
-.btn-edit {
-    background-color: #f39c12;
-}
-
-.btn-edit:hover {
-    background-color: #e67e22;
-}
-
-.btn-delete {
-    background-color: #e74c3c;
-}
-
-.btn-delete:hover {
-    background-color: #c0392b;
-}
-
-.btn-delete:hover {
-    background-color: #c82333;
-    transform: translateY(-2px);
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-</style>
-
 <script>
+// Load data saat halaman siap
 document.addEventListener('DOMContentLoaded', loadAlumni);
 
 function loadAlumni() {
+    // Pastikan API_URL sudah didefinisikan di layout utama
     fetch(API_URL + '/alumni') 
     .then(res => res.json())
     .then(response => {
         const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
+        tbody.innerHTML = ''; // Bersihkan loading state
 
         if((response.status === 'success' || response.code === 200) && response.data && response.data.length > 0) {
             response.data.forEach((item, index) => {
+                // Logika Foto (Cek apakah URL lengkap atau path lokal)
                 const fotoUrl = item.foto 
                     ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) 
                     : 'https://placehold.co/50x50?text=Foto';
 
+                // --- RENDER BARIS TABEL (OPSI 1: SOFT BADGE BUTTONS) ---
                 const row = `
-                    <tr onclick="editAlumni(${item.id}, event)">
-                        <td style="text-align: center; font-weight: 600; color: #7f8c8d;">${index + 1}</td>
-                        <td>
-                            <img src="${fotoUrl}" class="avatar-img" alt="Foto">
+                    <tr class="hover:bg-gray-50 transition-colors duration-150 group border-b border-gray-100">
+                        
+                        <td class="px-6 py-4 text-center font-medium text-gray-500">
+                            ${index + 1}
                         </td>
-                        <td>
-                            <div class="alumni-details">
-                                <strong>${item.nama}</strong>
-                                <small>${item.divisi || 'Asisten'}</small>
+                        
+                        <td class="px-6 py-4">
+                            <div class="flex justify-center">
+                                <img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md" alt="Foto">
                             </div>
                         </td>
-                        <td style="text-align: center; font-weight: 600; color: #555;">${item.angkatan || '—'}</td>
-                        <td><span style="color: #555; font-size: 13px;">${item.pekerjaan || '—'}</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <button onclick="hapusAlumni(${item.id}, event)" 
-                                        class="btn-action btn-delete" 
-                                        title="Hapus">
-                                    <i class="fas fa-trash-alt"></i>
+                        
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col">
+                                <span class="font-bold text-gray-800 text-sm">${item.nama}</span>
+                                <span class="text-xs text-gray-500 uppercase tracking-wide mt-0.5">
+                                    ${item.divisi || 'Asisten'}
+                                </span>
+                            </div>
+                        </td>
+                        
+                        <td class="px-6 py-4 text-center">
+                            <span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold border border-blue-100">
+                                ${item.angkatan || '-'}
+                            </span>
+                        </td>
+                        
+                        <td class="px-6 py-4 text-gray-600 text-sm font-medium">
+                            ${item.pekerjaan || '<span class="text-gray-400 italic text-xs">Belum diisi</span>'}
+                        </td>
+                        
+                        <td class="px-6 py-4">
+                            <div class="flex justify-center items-center gap-2">
+                                
+                                <button onclick="btnEditClick(${item.id}, event)" 
+                                        class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all duration-200 shadow-sm flex items-center justify-center border border-transparent hover:shadow-md"
+                                        title="Edit Data">
+                                    <i class="fas fa-pen text-xs"></i>
                                 </button>
+
+                                <button onclick="hapusAlumni(${item.id}, event)" 
+                                        class="w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-200 shadow-sm flex items-center justify-center border border-transparent hover:shadow-md"
+                                        title="Hapus Data">
+                                    <i class="fas fa-trash-alt text-xs"></i>
+                                </button>
+
                             </div>
                         </td>
                     </tr>
@@ -197,36 +112,56 @@ function loadAlumni() {
                 tbody.innerHTML += row;
             });
         } else {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px; color: #999;"><i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>Belum ada data alumni.</td></tr>';
+            // Tampilan Jika Data Kosong
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="bg-gray-100 p-4 rounded-full mb-3">
+                                <i class="fas fa-inbox text-3xl text-gray-400"></i>
+                            </div>
+                            <p class="font-medium">Belum ada data alumni</p>
+                            <p class="text-xs text-gray-400 mt-1">Silakan tambahkan data baru</p>
+                        </div>
+                    </td>
+                </tr>`;
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> Gagal memuat data</td></tr>';
+        // Tampilan Jika Error Fetch
+        document.getElementById('tableBody').innerHTML = `
+            <tr>
+                <td colspan="6" class="px-6 py-8 text-center text-red-500 bg-red-50 border border-red-100 m-4 rounded">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-exclamation-triangle text-2xl mb-2"></i> 
+                        <span class="font-semibold">Gagal memuat data</span>
+                        <span class="text-xs text-red-400 mt-1">Cek koneksi atau hubungi admin</span>
+                    </div>
+                </td>
+            </tr>`;
     });
 }
 
-function editAlumni(id, event) {
-    // Jangan navigate jika klik tombol delete
-    if (event && event.target.closest('.btn-delete')) {
-        return;
-    }
-    navigate('admin/alumni/' + id + '/edit');
+// Fungsi Navigasi ke Halaman Edit
+function btnEditClick(id, event) {
+    if(event) event.stopPropagation();
+    // Sesuaikan path routing 'edit' di sini
+    navigate('admin/alumni/edit/' + id); 
 }
 
+// Fungsi Hapus Data
 function hapusAlumni(id, event) {
-    // Mencegah event bubbling ke row
-    if (event) {
-        event.stopPropagation();
-    }
+    if(event) event.stopPropagation();
     
     if(confirm('Apakah Anda yakin ingin menghapus data alumni ini?')) {
         fetch(API_URL + '/alumni/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success' || data.code === 200) {
+                // Notifikasi sukses (bisa diganti SweetAlert jika ada)
                 alert('✓ Data berhasil dihapus');
-                loadAlumni();
+                loadAlumni(); // Reload tabel otomatis
             } else {
                 alert('✗ Gagal menghapus: ' + (data.message || 'Error'));
             }
@@ -237,5 +172,4 @@ function hapusAlumni(id, event) {
         });
     }
 }
-
 </script>

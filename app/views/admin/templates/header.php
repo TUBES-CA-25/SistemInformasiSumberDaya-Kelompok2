@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Sistem Lab</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <?php
-    // Config sudah di-load dari admin-dashboard.php
-    // Fallback jika tidak di-load, gunakan path absolut
+    // --- 1. KONFIGURASI SYSTEM ---
     if (!defined('DB_HOST')) {
-        // Gunakan __DIR__ untuk akurasi yang lebih baik
         if (!defined('ROOT_PROJECT')) {
-            $currentDir = __DIR__;  // templates folder
-            $adminDir = dirname($currentDir);  // admin
-            $viewsDir = dirname($adminDir);  // views
-            $appDir = dirname($viewsDir);  // app
-            $rootDir = dirname($appDir);  // ROOT
+            $currentDir = __DIR__; 
+            $adminDir = dirname($currentDir); 
+            $viewsDir = dirname($adminDir); 
+            $appDir = dirname($viewsDir); 
+            $rootDir = dirname($appDir); 
             define('ROOT_PROJECT', $rootDir);
         }
-        
         $configPath = ROOT_PROJECT . '/app/config/config.php';
-        
         if (file_exists($configPath)) {
             require_once $configPath;
         } else {
@@ -27,93 +27,146 @@
         }
     }
     ?>
-    <link rel="stylesheet" href="<?php echo PUBLIC_URL; ?>/css/admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script>
-        // Global variable untuk semua JavaScript
         const API_URL = '<?php echo API_URL; ?>';
         const BASE_URL = '<?php echo BASE_URL; ?>';
         const ASSETS_URL = '<?php echo ASSETS_URL; ?>';
-        console.log('BASE_URL:', BASE_URL);
-        console.log('ASSETS_URL:', ASSETS_URL);
-        console.log('API_URL:', API_URL);
     </script>
 </head>
-<body>
+<body class="bg-gray-100 font-sans text-gray-800 antialiased">
 
     <?php
-    // Logika untuk mengecek URL saat ini
-    // Agar menu sidebar bisa "Aktif" otomatis sesuai halaman yang dibuka
+    // --- 2. LOGIKA NAVIGASI PHP ---
     $uri = $_SERVER['REQUEST_URI'];
+    
+    // Fungsi helper ini HARUS tetap disini agar bisa dibaca oleh sidebar.php
+    function getMenuClass($uri, $path) {
+        $base = "flex items-center px-6 py-3 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors duration-200 border-l-4 border-transparent";
+        $active = "bg-gray-800 text-white border-blue-500";
+
+        if ($path === 'admin' && strpos($uri, 'admin') !== false && strpos($uri, 'admin/') === false) {
+            return "$base $active";
+        }
+        if ($path !== 'admin' && strpos($uri, $path) !== false) {
+            return "$base $active";
+        }
+        return $base;
+    }
     ?>
 
-    <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <ul>
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin')" class="<?= strpos($uri, 'admin') !== false && strpos($uri, 'admin/') === false ? 'active' : '' ?>">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
-                </a>
-            </li>
-            
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin/asisten')" class="<?= strpos($uri, 'admin/asisten') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-users"></i> Data Asisten
-                </a>
-            </li>
-            
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin/alumni')" class="<?= strpos($uri, 'admin/alumni') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-user-graduate"></i> Data Alumni
-                </a>
-            </li>
-            
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin/laboratorium')" class="<?= strpos($uri, 'admin/laboratorium') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-desktop"></i> Data Fasilitas
-                </a>
-            </li>
-            
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin/matakuliah')" class="<?= strpos($uri, 'admin/matakuliah') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-book"></i> Data Mata Kuliah
-                </a>
-            </li>
-            
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin/jadwal')" class="<?= strpos($uri, 'admin/jadwal') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-calendar-alt"></i> Jadwal Praktikum
-                </a>
-            </li>
+    <div class="flex h-screen overflow-hidden">
 
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin/peraturan')" class="<?= strpos($uri, 'admin/peraturan') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-gavel"></i> Peraturan Lab
-                </a>
-            </li>
+        <?php 
+        // --- 3. INCLUDE SIDEBAR ---
+        // Pastikan path ini sesuai dengan lokasi file sidebar.php Anda
+        $sidebarPath = ROOT_PROJECT . '/app/views/admin/templates/sidebar.php';
+        
+        if (file_exists($sidebarPath)) {
+            include $sidebarPath;
+        } else {
+            echo "<div class='w-64 bg-red-800 text-white p-4'>Error: Sidebar not found at $sidebarPath</div>";
+        }
+        ?>
 
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin/sanksi')" class="<?= strpos($uri, 'admin/sanksi') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-exclamation-triangle"></i> Sanksi Lab
-                </a>
-            </li>
-
-            <li>
-                <a href="javascript:void(0)" onclick="navigate('admin/manajemen')" class="<?= strpos($uri, 'admin/manajemen') !== false ? 'active' : '' ?>">
-                    <i class="fas fa-user-tie"></i> Manajemen Lab
-                </a>
-            </li>
+        <div class="flex-1 flex flex-col overflow-hidden">
             
-            <li>
-                <a href="<?= PUBLIC_URL ?>/logout" style="margin-top: 50px; color: #e74c3c;">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </li>
-        </ul>
+            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-8 z-10">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-700">Selamat Datang, Admin!</h1>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <div class="text-sm font-semibold text-gray-800"><?= $_SESSION['username'] ?? 'Admin' ?></div>
+                        <div class="text-xs text-gray-500">Administrator</div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=<?= $_SESSION['username'] ?? 'Admin' ?>&background=0D8ABC&color=fff" alt="Profile" class="h-10 w-10 rounded-full border-2 border-gray-100 shadow-sm">
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-8">
+                <?php
+                // --- LOGIKA ROUTING PINTAR ---
+                
+                // 1. Ambil URL & Bersihkan
+                $request = $_SERVER['REQUEST_URI'];
+                $request = strtok($request, '?');
+                
+                // Default Variables
+                $module = 'dashboard'; // Nama folder (misal: alumni, asisten)
+                $action = 'index';     // File yang diload (index.php atau form.php)
+                $id     = null;        // ID data (untuk edit)
+
+                // 2. Parsing URL: /public/admin/alumni/edit/5
+                if (strpos($request, '/admin/') !== false) {
+                    $parts = explode('/admin/', $request);
+                    
+                    if (isset($parts[1]) && !empty($parts[1])) {
+                        $urlSegments = explode('/', $parts[1]);
+                        
+                        // Segment 1: Nama Modul (alumni)
+                        $module = isset($urlSegments[0]) ? $urlSegments[0] : 'dashboard';
+                        
+                        // Segment 2: Aksi (create / edit)
+                        if (isset($urlSegments[1])) {
+                            if ($urlSegments[1] === 'create') {
+                                $action = 'form'; // Load form.php
+                            } elseif ($urlSegments[1] === 'edit') {
+                                $action = 'form'; // Load form.php
+                                // Segment 3: ID Data
+                                if (isset($urlSegments[2])) {
+                                    $id = $urlSegments[2];
+                                }
+                            }
+                            // Jika butuh logika lain (misal: detail), tambahkan disini
+                        }
+                    }
+                }
+
+                // Sanitasi nama folder agar aman
+                $module = preg_replace('/[^a-zA-Z0-9_]/', '', $module);
+
+                // 3. Tentukan File Target
+                $viewsPath = ROOT_PROJECT . '/app/views/admin/';
+                
+                // Cek apakah ini Dashboard (biasanya file tunggal)
+                if ($module === 'dashboard') {
+                    $targetFile = $viewsPath . 'dashboard.php';
+                    if (!file_exists($targetFile)) $targetFile = $viewsPath . 'dashboard/index.php';
+                } 
+                else {
+                    // Cek apakah masuk ke mode Form (Create/Edit) atau Index (Tabel)
+                    if ($action === 'form') {
+                        $targetFile = $viewsPath . $module . '/form.php';
+                    } else {
+                        $targetFile = $viewsPath . $module . '/index.php';
+                    }
+                }
+
+                // 4. Eksekusi Include
+                if (file_exists($targetFile)) {
+                    // Kita kirim variabel $id ke dalam file form.php agar bisa dipakai
+                    // $id akan berisi angka ID jika mode edit, atau null jika create
+                    include $targetFile;
+                } else {
+                    // Tampilan Error 404 Cantik
+                    echo "
+                    <div class='flex flex-col items-center justify-center pt-20'>
+                        <div class='bg-white p-8 rounded-lg shadow-md text-center max-w-lg'>
+                            <i class='fas fa-search text-6xl text-gray-300 mb-4'></i>
+                            <h2 class='text-xl font-bold text-gray-800'>Halaman Tidak Ditemukan</h2>
+                            <p class='text-gray-500 mt-2'>Sistem mencari file:</p>
+                            <code class='block bg-red-50 text-red-600 p-2 rounded mt-2 text-sm'>$targetFile</code>
+                        </div>
+                    </div>";
+                }
+                ?>
+            </main>
+        </div>
     </div>
 
     <script>
-        // Navigation function untuk admin panel (gunakan clean path)
         function navigate(route) {
             const basePath = window.location.pathname.includes('SistemInformasiSumberDaya-Kelompok2') 
                 ? '/SistemInformasiSumberDaya-Kelompok2/public'
@@ -126,15 +179,5 @@
             }
         }
     </script>
-
-    <div class="main-content">
-        <div class="admin-header">
-            <h1>Selamat Datang, Admin!</h1>
-            <div>
-                <span style="margin-right: 15px;">Halo, <?= $_SESSION['username'] ?? 'Admin' ?></span>
-                <a href="<?= PUBLIC_URL ?>/logout" style="color: #e74c3c; margin-right: 15px; text-decoration: none; font-weight: bold;">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-                <img src="https://placehold.co/40x40" style="border-radius: 50%; vertical-align: middle;">
-            </div>
-        </div>
+</body>
+</html>

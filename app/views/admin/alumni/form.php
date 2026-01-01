@@ -1,159 +1,165 @@
-<style>
-/* Custom Button Styles */
-.btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white !important;
-}
-
-.btn-success {
-    background-color: #27ae60;
-}
-.btn-success:hover {
-    background-color: #219150;
-    transform: translateY(-2px);
-}
-
-.btn-secondary {
-    background-color: #95a5a6;
-}
-.btn-secondary:hover {
-    background-color: #7f8c8d;
-    transform: translateY(-2px);
-}
-
-.btn-success:disabled {
-    background-color: #95a5a6;
-    cursor: not-allowed;
-    transform: none;
-}
-</style>
-
-<div class="admin-header">
-    <h1><i class="fas fa-user-graduate"></i> Formulir Alumni</h1>
-    <a href="javascript:void(0)" onclick="navigate('admin/alumni')" class="btn btn-secondary">
+<div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+        <i class="fas fa-user-graduate text-blue-600"></i> 
+        Formulir Alumni
+    </h1>
+    <a href="javascript:void(0)" onclick="navigate('admin/alumni')" 
+       class="mt-4 sm:mt-0 bg-gray-500 hover:bg-gray-600 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center gap-2 font-medium">
         <i class="fas fa-arrow-left"></i> Kembali
     </a>
 </div>
 
-<div class="card" style="max-width: 800px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-    <form id="alumniForm" enctype="multipart/form-data">
-        <input type="hidden" id="id">
+<div class="bg-white rounded-xl shadow-md border border-gray-100 p-6 max-w-4xl mx-auto">
+    
+    <form id="alumniForm" enctype="multipart/form-data" class="space-y-6">
+        <input type="hidden" id="id" name="id">
 
-        <div class="form-group">
-            <label><i class="fas fa-user"></i> Nama Lengkap <span style="color:red">*</span></label>
-            <input type="text" id="nama" name="nama" placeholder="Nama Alumni" required>
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-user mr-1 text-gray-400"></i> Nama Lengkap <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap alumni" required
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
         </div>
 
-        <div class="form-group" style="display:flex; gap:20px;">
-            <div style="flex:1;">
-                <label><i class="fas fa-calendar-alt"></i> Tahun Angkatan <span style="color:red">*</span></label>
-                <input type="number" id="angkatan" name="angkatan" placeholder="2020" min="2000" max="2030" required>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-calendar-alt mr-1 text-gray-400"></i> Tahun Angkatan <span class="text-red-500">*</span>
+                </label>
+                <input type="number" id="angkatan" name="angkatan" placeholder="2020" min="2000" max="2030" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
             </div>
-            <div style="flex:1;">
-                <label><i class="fas fa-sitemap"></i> Divisi / Posisi</label>
-                <input type="text" id="divisi" name="divisi" placeholder="Contoh: Asisten Lab">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-sitemap mr-1 text-gray-400"></i> Divisi / Posisi
+                </label>
+                <input type="text" id="divisi" name="divisi" placeholder="Contoh: Asisten Lab"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
             </div>
         </div>
 
-        <div class="form-group">
-            <label><i class="fas fa-briefcase"></i> Pekerjaan Saat Ini</label>
-            <input type="text" id="pekerjaan" name="pekerjaan" placeholder="Contoh: Software Engineer">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-briefcase mr-1 text-gray-400"></i> Pekerjaan Saat Ini
+                </label>
+                <input type="text" id="pekerjaan" name="pekerjaan" placeholder="Contoh: Software Engineer"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-building mr-1 text-gray-400"></i> Perusahaan
+                </label>
+                <input type="text" id="perusahaan" name="perusahaan" placeholder="Contoh: PT Teknologi Indonesia"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label><i class="fas fa-building"></i> Perusahaan</label>
-            <input type="text" id="perusahaan" name="perusahaan" placeholder="Contoh: PT Teknologi Indonesia">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-graduation-cap mr-1 text-gray-400"></i> Tahun Lulus
+                </label>
+                <input type="text" id="tahun_lulus" name="tahun_lulus" placeholder="2023"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-camera mr-1 text-gray-400"></i> Upload Foto
+                </label>
+                <input type="file" id="foto" name="foto" accept="image/*"
+                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors">
+                <p class="text-xs text-gray-400 mt-1">Format: JPG, PNG. Max 2MB</p>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label><i class="fas fa-graduation-cap"></i> Tahun Lulus</label>
-            <input type="text" id="tahun_lulus" name="tahun_lulus" placeholder="2023">
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-code mr-1 text-gray-400"></i> Keahlian
+            </label>
+            <textarea id="keahlian" name="keahlian" rows="2" placeholder="Contoh: PHP, Laravel, React, MySQL"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"></textarea>
         </div>
 
-        <div class="form-group">
-            <label><i class="fas fa-camera"></i> Upload Foto</label>
-            <input type="file" id="foto" name="foto" accept="image/*">
-            <small style="color: #777;">Format: JPG, PNG. Max 2MB</small>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-envelope mr-1 text-gray-400"></i> Email
+                </label>
+                <input type="email" id="email" name="email" placeholder="email@example.com"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fab fa-linkedin mr-1 text-gray-400"></i> LinkedIn
+                </label>
+                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/..."
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-globe mr-1 text-gray-400"></i> Portfolio
+                </label>
+                <input type="url" id="portfolio" name="portfolio" placeholder="https://portfolio.com"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label><i class="fas fa-code"></i> Keahlian</label>
-            <textarea id="keahlian" name="keahlian" rows="2" placeholder="Contoh: PHP, Laravel, React, MySQL"></textarea>
+        <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <i class="fas fa-comment-alt mr-1 text-gray-400"></i> Kesan & Pesan
+            </label>
+            <textarea id="kesan_pesan" name="kesan_pesan" rows="4" placeholder="Tulis pengalaman selama menjadi asisten..."
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"></textarea>
         </div>
 
-        <div class="form-group">
-            <label><i class="fas fa-envelope"></i> Email</label>
-            <input type="email" id="email" name="email" placeholder="email@example.com">
-        </div>
-
-        <div class="form-group">
-            <label><i class="fab fa-linkedin"></i> LinkedIn</label>
-            <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/...">
-        </div>
-
-        <div class="form-group">
-            <label><i class="fas fa-globe"></i> Portfolio</label>
-            <input type="url" id="portfolio" name="portfolio" placeholder="https://portfolio.com">
-        </div>
-
-        <div class="form-group">
-            <label><i class="fas fa-comment-alt"></i> Kesan & Pesan</label>
-            <textarea id="kesan_pesan" name="kesan_pesan" rows="4" placeholder="Tulis pengalaman selama menjadi asisten..."></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-success" id="btnSave" style="width: 100%; padding: 12px; font-size: 16px;">
-            <i class="fas fa-save"></i> Simpan Data
+        <button type="submit" id="btnSave" 
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg shadow transition-all duration-200 transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+            <i class="fas fa-save"></i> <span>Simpan Data</span>
         </button>
+
+        <div id="message" class="mt-4"></div>
     </form>
-    <div id="message" style="margin-top: 15px;"></div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Parse ID from route parameter (admin/alumni/{id}/edit)
-    // Flexible ID detection: check `route` query, pathname, and explicit `id` query
-    const routeParam = new URLSearchParams(window.location.search).get('route');
-    const qs = new URLSearchParams(window.location.search);
-    const explicitId = qs.get('id');
-    let id = null;
+    // --- PERBAIKAN UTAMA DISINI ---
+    // Kita ambil ID langsung dari variabel PHP yang sudah ditangkap di index.php
+    // Ini jauh lebih stabil daripada parsing URL manual di JS
+    const alumniId = "<?= isset($id) ? $id : '' ?>"; 
+    
+    console.log('Current ID from PHP:', alumniId); // Untuk Debugging
 
-    if (routeParam) {
-        const m = routeParam.match(/admin\/alumni\/(\d+)\/edit/);
-        if (m && m[1]) id = m[1];
+    // Jika ID ada isinya (artinya mode EDIT), panggil data
+    if (alumniId && alumniId !== '') {
+        loadAlumniData(alumniId);
     }
-
-    if (!id) {
-        const m2 = window.location.pathname.match(/admin\/alumni\/(\d+)\/edit/);
-        if (m2 && m2[1]) id = m2[1];
-    }
-
-    if (!id && explicitId) {
-        id = explicitId;
-    }
-
-    if (id) loadAlumniData(id);
 });
 
 function loadAlumniData(id) {
+    // Tampilkan loading indicator di form selagi menunggu
+    const formInputs = document.querySelectorAll('#alumniForm input, #alumniForm textarea');
+    formInputs.forEach(input => input.classList.add('animate-pulse'));
+
     fetch(API_URL + '/alumni/' + id)
     .then(res => res.json())
     .then(response => {
+        // Hapus efek loading
+        formInputs.forEach(input => input.classList.remove('animate-pulse'));
+
         if ((response.status === 'success' || response.code === 200) && response.data) {
             const data = response.data;
-            document.getElementById('id').value = data.id;
-            document.getElementById('nama').value = data.nama;
-            document.getElementById('angkatan').value = data.angkatan;
+            
+            // --- DEBUG DATA ---
+            // Cek di Console browser (F12) apakah data masuk
+            console.log('Data fetched:', data); 
+
+            // ISI FORM (Pastikan nama property 'data.xxx' sesuai dengan database)
+            document.getElementById('id').value = data.id || '';
+            document.getElementById('nama').value = data.nama || '';
+            document.getElementById('angkatan').value = data.angkatan || '';
             document.getElementById('divisi').value = data.divisi || '';
             document.getElementById('pekerjaan').value = data.pekerjaan || '';
             document.getElementById('perusahaan').value = data.perusahaan || '';
@@ -164,67 +170,78 @@ function loadAlumniData(id) {
             document.getElementById('portfolio').value = data.portfolio || '';
             document.getElementById('kesan_pesan').value = data.kesan_pesan || '';
             
-            document.querySelector('.admin-header h1').innerHTML = '<i class="fas fa-user-edit"></i> Edit Alumni';
-            document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Update Data';
+            // Ubah Judul & Tombol jadi Mode Edit
+            document.querySelector('h1').innerHTML = '<i class="fas fa-user-edit text-blue-600 mr-2"></i> Edit Alumni';
+            
+            const btn = document.getElementById('btnSave');
+            btn.innerHTML = '<i class="fas fa-save"></i> <span>Update Data</span>';
+            btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+            btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        } else {
+            console.error('Data tidak ditemukan atau format salah');
         }
     })
-    .catch(err => console.error('Error loading alumni:', err));
+    .catch(err => {
+        console.error('Error loading alumni:', err);
+        alert('Gagal mengambil data untuk diedit. Cek koneksi API.');
+    });
 }
 
+// ... (Sisa kode event listener submit tetap sama) ...
 document.getElementById('alumniForm').addEventListener('submit', function(e) {
+    // ... copy kode submit yang sebelumnya di sini ...
     e.preventDefault();
 
     const btn = document.getElementById('btnSave');
     const msg = document.getElementById('message');
+    const originalContent = btn.innerHTML;
+    
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> <span>Menyimpan...</span>';
+    btn.classList.add('opacity-75', 'cursor-not-allowed');
 
     const formData = new FormData(this);
     const id = document.getElementById('id').value;
-
-    // Log untuk debug
-    console.log('ID:', id);
-    console.log('FormData entries:');
-    for (let [key, value] of formData.entries()) {
-        console.log(key + ':', value);
-    }
-
-    // Tentukan URL berdasarkan mode (create/edit)
     const url = id ? API_URL + '/alumni/' + id : API_URL + '/alumni';
-    console.log('URL:', url);
     
+    // Khusus untuk Edit dengan Upload File di PHP Native/CodeIgniter kadang butuh trick ini
+    // Jika backend tidak support method PUT via FormData, gunakan POST + _method
+    // formData.append('_method', id ? 'PUT' : 'POST'); 
+
     fetch(url, {
-        method: 'POST',
+        method: 'POST', // Gunakan POST untuk menghandle file upload lebih aman
         body: formData
     })
-    .then(res => res.text()) // Ambil sebagai text dulu
+    .then(res => res.text())
     .then(text => {
-        console.log('Raw response:', text);
         try {
             const data = JSON.parse(text);
-            console.log('Parsed response:', data);
-            
             if (data.status === 'success' || data.code === 201 || data.code === 200) {
-                msg.innerHTML = '<div style="padding: 10px; background: #d4edda; color: #155724; border-radius: 4px; border: 1px solid #c3e6cb;"><i class="fas fa-check-circle"></i> Berhasil disimpan! Mengalihkan...</div>';
+                msg.innerHTML = `
+                    <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 border border-green-200">
+                        <i class="fas fa-check-circle mr-2 text-lg"></i>
+                        <span class="font-medium">Berhasil disimpan!</span> Mengalihkan...
+                    </div>`;
                 setTimeout(() => { navigate('admin/alumni'); }, 1500);
             } else {
-                msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-exclamation-circle"></i> Gagal: ' + (data.message || 'Error tidak diketahui') + '</div>';
-                btn.disabled = false;
-                btn.innerHTML = id ? '<i class="fas fa-save"></i> Update Data' : '<i class="fas fa-save"></i> Simpan Data';
+                throw new Error(data.message || 'Gagal menyimpan');
             }
         } catch (e) {
-            console.error('Parse error:', e);
-            msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-exclamation-circle"></i> Error: ' + text.substring(0, 200) + '</div>';
+            console.error(e);
+            msg.innerHTML = `
+                <div class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 border border-red-200">
+                    <i class="fas fa-exclamation-circle mr-2"></i> ${e.message}
+                </div>`;
             btn.disabled = false;
-            btn.innerHTML = id ? '<i class="fas fa-save"></i> Update Data' : '<i class="fas fa-save"></i> Simpan Data';
+            btn.innerHTML = originalContent;
+            btn.classList.remove('opacity-75', 'cursor-not-allowed');
         }
     })
     .catch(err => {
-        console.error('Fetch error:', err);
-        msg.innerHTML = '<div style="padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; border: 1px solid #f5c6cb;"><i class="fas fa-wifi"></i> Gagal koneksi ke server</div>';
+        console.error(err);
         btn.disabled = false;
-        btn.innerHTML = id ? '<i class="fas fa-save"></i> Update Data' : '<i class="fas fa-save"></i> Simpan Data';
+        btn.innerHTML = originalContent;
+        btn.classList.remove('opacity-75', 'cursor-not-allowed');
     });
 });
-
 </script>

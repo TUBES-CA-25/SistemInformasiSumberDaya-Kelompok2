@@ -101,7 +101,6 @@
             <select id="statusAktif" name="statusAktif" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                 <option value="Asisten">Asisten</option>
                 <option value="CA">CA</option>
-                <option value="CCA">CCA</option>
                 <option value="Tidak Aktif">Tidak Aktif</option>
             </select>
         </div>
