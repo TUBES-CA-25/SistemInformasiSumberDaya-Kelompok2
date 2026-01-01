@@ -3,12 +3,13 @@
         <i class="fas fa-users text-blue-600"></i> Data Asisten Laboratorium
     </h1>
     <div class="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
-        <a href="javascript:void(0)" onclick="navigate('admin/asisten/pilih-koordinator')" 
-           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium">
-            <i class="fas fa-user-check"></i> Pilih Koordinator
-        </a>
+        <button onclick="openKoordinatorModal()" 
+           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5">
+            <i class="fas fa-crown"></i> Pilih Koordinator
+        </button>
+        
         <button onclick="openFormModal()" 
-           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium">
+           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5">
             <i class="fas fa-plus"></i> Tambah Asisten
         </button>
     </div>
@@ -28,7 +29,7 @@
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
-                <tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Memuat data...</td></tr>
+                <tr><td colspan="6" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-circle-notch fa-spin"></i> Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -44,73 +45,27 @@
                 </h3>
                 <button onclick="closeModal('formModal')" class="text-gray-400 hover:text-gray-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
             </div>
-            
             <div class="p-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
                 <form id="asistenForm" enctype="multipart/form-data" class="space-y-5">
                     <input type="hidden" id="inputIdAsisten" name="idAsisten">
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
-                            <input type="text" id="inputNama" name="nama" placeholder="Masukkan nama lengkap..." required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none placeholder-gray-400">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
-                            <input type="email" id="inputEmail" name="email" placeholder="email@umi.ac.id" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none placeholder-gray-400">
-                        </div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label><input type="text" id="inputNama" name="nama" placeholder="Contoh: Ahmad Fulan" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Email <span class="text-red-500">*</span></label><input type="email" id="inputEmail" name="email" placeholder="email@umi.ac.id" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Jurusan</label>
-                            <select id="inputJurusan" name="jurusan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
-                                <option value="Teknik Informatika">Teknik Informatika</option>
-                                <option value="Sistem Informasi">Sistem Informasi</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Status Asisten</label>
-                            <select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
-                                <option value="Asisten">Asisten Aktif</option>
-                                <option value="CA">Calon Asisten (CA)</option>
-                                <option value="Tidak Aktif">Tidak Aktif</option>
-                            </select>
-                        </div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Jurusan</label><select id="inputJurusan" name="jurusan" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Teknik Informatika">Teknik Informatika</option><option value="Sistem Informasi">Sistem Informasi</option></select></div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Status Asisten</label><select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Asisten">Asisten Aktif</option><option value="CA">Calon Asisten</option><option value="Tidak Aktif">Tidak Aktif</option></select></div>
                     </div>
-
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">LinkedIn URL</label>
-                            <input type="url" id="inputLinkedin" name="linkedin" placeholder="https://linkedin.com/in/username" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none placeholder-gray-400">
-                            <p class="text-xs text-gray-400 mt-1">Opsional, untuk profil profesional.</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Upload Foto</label>
-                            <input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
-                            <div id="fotoPreviewInfo" class="hidden mt-1 text-xs text-emerald-600 font-medium"><i class="fas fa-check-circle"></i> Foto sudah ada.</div>
-                        </div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">LinkedIn URL</label><input type="url" id="inputLinkedin" name="linkedin" placeholder="https://linkedin.com/in/..." class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Upload Foto</label><input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"><div id="fotoPreviewInfo" class="hidden mt-1 text-xs text-emerald-600"><i class="fas fa-check-circle"></i> Foto sudah ada.</div></div>
                     </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Keahlian / Spesialisasi</label>
-                        <input type="text" id="inputSkills" name="skills" placeholder="Contoh: PHP, MySQL, Networking (Pisahkan dengan koma)" 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none placeholder-gray-400">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Bio / Tentang Saya</label>
-                        <textarea id="inputBio" name="bio" rows="3" placeholder="Deskripsi singkat tentang diri Anda..." 
-                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none placeholder-gray-400"></textarea>
-                    </div>
-
+                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Keahlian (Pisahkan koma)</label><input type="text" id="inputSkills" name="skills" placeholder="PHP, Networking, Design" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Bio / Tentang Saya</label><textarea id="inputBio" name="bio" rows="3" placeholder="Deskripsi singkat..." class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></textarea></div>
                     <div id="formMessage" class="hidden"></div>
-
                     <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
                         <button type="button" onclick="closeModal('formModal')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition-colors">Batal</button>
-                        <button type="submit" id="btnSave" class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors flex items-center gap-2 shadow-sm"><i class="fas fa-save"></i> Simpan Data</button>
+                        <button type="submit" id="btnSave" class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors flex items-center gap-2"><i class="fas fa-save"></i> Simpan Data</button>
                     </div>
                 </form>
             </div>
@@ -148,10 +103,54 @@
     </div>
 </div>
 
+<div id="koordinatorModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" onclick="closeModal('koordinatorModal')"></div>
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl w-full sm:max-w-2xl border border-gray-100">
+            <div class="bg-blue-50 px-6 py-4 border-b border-blue-100 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-blue-800 flex items-center gap-2">
+                    <i class="fas fa-crown text-yellow-500"></i> Pilih Koordinator Lab
+                </h3>
+                <button onclick="closeModal('koordinatorModal')" class="text-blue-400 hover:text-blue-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
+            </div>
+
+            <div class="p-6">
+                <div class="mb-6 p-4 bg-yellow-50 border border-yellow-100 rounded-xl flex items-center gap-4">
+                    <div class="shrink-0 bg-yellow-200 text-yellow-700 w-12 h-12 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-check text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-yellow-800 font-bold uppercase tracking-wide">Koordinator Saat Ini</p>
+                        <p id="currentCoordName" class="text-lg font-bold text-gray-800">Belum ditentukan</p>
+                    </div>
+                </div>
+
+                <h4 class="text-sm font-bold text-gray-500 uppercase mb-3">Pilih Koordinator Baru</h4>
+                
+                <form id="koordinatorForm">
+                    <div id="coordList" class="max-h-60 overflow-y-auto custom-scrollbar space-y-2 border border-gray-100 rounded-lg p-2">
+                        <div class="text-center py-4 text-gray-400">Memuat data...</div>
+                    </div>
+
+                    <div id="coordMessage" class="hidden mt-4"></div>
+
+                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4">
+                        <button type="button" onclick="closeModal('koordinatorModal')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium">Batal</button>
+                        <button type="submit" id="btnSaveCoord" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium flex items-center gap-2 shadow-sm">
+                            <i class="fas fa-save"></i> Simpan Pilihan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 window.BASE_URL = '<?= BASE_URL ?>';
 document.addEventListener('DOMContentLoaded', loadAsisten);
 
+// --- 1. LOAD DATA UTAMA ---
 function loadAsisten() {
     fetch(API_URL + '/asisten').then(res => res.json()).then(res => {
         const tbody = document.getElementById('tableBody'); tbody.innerHTML = ''; 
@@ -185,6 +184,7 @@ function loadAsisten() {
     });
 }
 
+// --- 2. MODAL DETAIL ---
 function openDetailModal(id) {
     document.getElementById('detailModal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
     document.getElementById('mNama').innerText = "Memuat...";
@@ -203,6 +203,7 @@ function openDetailModal(id) {
     });
 }
 
+// --- 3. MODAL FORM ---
 function openFormModal(id = null, event = null) {
     if(event) event.stopPropagation();
     document.getElementById('formModal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
@@ -250,8 +251,96 @@ document.getElementById('asistenForm').addEventListener('submit', function(e) {
     .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data'; });
 });
 
+// --- 4. LOGIKA MODAL PILIH KOORDINATOR (NEW!) ---
+function openKoordinatorModal() {
+    document.getElementById('koordinatorModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    const listDiv = document.getElementById('coordList');
+    listDiv.innerHTML = '<div class="text-center py-4 text-gray-400"><i class="fas fa-circle-notch fa-spin"></i> Memuat daftar...</div>';
+    
+    fetch(API_URL + '/asisten').then(res => res.json()).then(res => {
+        listDiv.innerHTML = '';
+        if ((res.status === 'success' || res.code === 200) && res.data) {
+            // Set Current Coordinator UI
+            const current = res.data.find(a => a.isKoordinator == 1);
+            if (current) {
+                document.getElementById('currentCoordName').innerText = current.nama;
+                document.getElementById('currentCoordName').classList.remove('text-gray-400', 'italic');
+            } else {
+                document.getElementById('currentCoordName').innerText = "Belum ditentukan";
+                document.getElementById('currentCoordName').classList.add('text-gray-400', 'italic');
+            }
+
+            // Generate List
+            // Filter hanya asisten aktif / 'Asisten'
+            const aktif = res.data.filter(a => a.statusAktif == 1 || a.statusAktif === 'Asisten');
+            if (aktif.length === 0) {
+                listDiv.innerHTML = '<div class="text-center py-4 text-gray-400">Tidak ada asisten aktif.</div>';
+                return;
+            }
+
+            aktif.forEach(item => {
+                const isSelected = item.isKoordinator == 1;
+                const fotoUrl = item.foto ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) : 'https://placehold.co/50x50?text=Foto';
+                
+                // Item List Style
+                const div = document.createElement('label');
+                div.className = `flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${isSelected ? 'bg-blue-50 border-blue-500 ring-1 ring-blue-500' : 'bg-white border-gray-200 hover:bg-gray-50'}`;
+                div.innerHTML = `
+                    <input type="radio" name="idKoordinator" value="${item.idAsisten}" class="w-4 h-4 text-blue-600" ${isSelected ? 'checked' : ''}>
+                    <img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border border-gray-300">
+                    <div class="flex-1">
+                        <p class="text-sm font-bold text-gray-800">${item.nama}</p>
+                        <p class="text-xs text-gray-500">${item.jurusan || '-'} ${isSelected ? '<span class="ml-2 text-blue-600 font-bold">(Current)</span>' : ''}</p>
+                    </div>
+                `;
+                // Simple toggle visual effect
+                div.addEventListener('change', () => {
+                    document.querySelectorAll('#coordList label').forEach(el => el.className = 'flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all bg-white border-gray-200 hover:bg-gray-50');
+                    div.className = 'flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all bg-blue-50 border-blue-500 ring-1 ring-blue-500';
+                });
+                listDiv.appendChild(div);
+            });
+        }
+    });
+}
+
+document.getElementById('koordinatorForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const selected = document.querySelector('input[name="idKoordinator"]:checked');
+    const msg = document.getElementById('coordMessage');
+    const btn = document.getElementById('btnSaveCoord');
+
+    if (!selected) {
+        msg.innerHTML = '<div class="text-red-500 text-sm">Pilih salah satu asisten dulu!</div>';
+        msg.classList.remove('hidden');
+        return;
+    }
+
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+    fetch(API_URL + '/asisten/' + selected.value + '/koordinator', { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === 'success' || data.code === 200 || data.code === 201) {
+            closeModal('koordinatorModal');
+            loadAsisten(); // Reload tabel utama
+            alert('Koordinator berhasil diperbarui!');
+        } else {
+            msg.innerHTML = `<div class="text-red-500 text-sm">${data.message || 'Gagal update'}</div>`;
+            msg.classList.remove('hidden');
+        }
+    })
+    .catch(err => console.error(err))
+    .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Pilihan'; });
+});
+
+// --- HELPER FUNCTIONS ---
 function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); document.body.style.overflow = 'auto'; }
-document.onkeydown = function(evt) { if (evt.keyCode == 27) { closeModal('detailModal'); closeModal('formModal'); } };
+document.onkeydown = function(evt) { 
+    if (evt.keyCode == 27) { 
+        closeModal('detailModal'); closeModal('formModal'); closeModal('koordinatorModal'); 
+    } 
+};
 function hapusAsisten(id, event) { 
     if(event) event.stopPropagation();
     if(confirm('Hapus data?')) { fetch(API_URL + '/asisten/' + id, { method: 'DELETE' }).then(() => { loadAsisten(); alert('Terhapus'); }); }

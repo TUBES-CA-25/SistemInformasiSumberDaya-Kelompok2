@@ -87,51 +87,30 @@
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
                 <?php
-                // --- LOGIKA ROUTING PINTAR (UPDATED) ---
+                // --- LOGIKA ROUTING SEDERHANA (SPA MODE) ---
                 
                 // 1. Ambil URL
                 $request = $_SERVER['REQUEST_URI'];
-                $request = strtok($request, '?');
+                $request = strtok($request, '?'); // Hapus query string
                 
                 // Default Variables
                 $module = 'dashboard'; 
-                $action = 'index';     
-                $id     = null;       
 
-                // 2. Parsing URL
+                // 2. Parsing URL untuk menentukan Module saja
                 if (strpos($request, '/admin/') !== false) {
                     $parts = explode('/admin/', $request);
-                    
                     if (isset($parts[1]) && !empty($parts[1])) {
                         $urlSegments = explode('/', $parts[1]);
-                        
-                        // Segment 1: Nama Modul (asisten, alumni, dll)
+                        // Ambil nama folder (misal: alumni, asisten)
                         $module = isset($urlSegments[0]) ? $urlSegments[0] : 'dashboard';
-                        
-                        // Segment 2: Aksi (create, edit, koordinator)
-                        if (isset($urlSegments[1])) {
-                            if ($urlSegments[1] === 'create') {
-                                $action = 'form'; 
-                            } 
-                            elseif ($urlSegments[1] === 'edit') {
-                                $action = 'form'; 
-                                if (isset($urlSegments[2])) $id = $urlSegments[2];
-                            }
-                            // --- TAMBAHAN BARU: KOORDINATOR ---
-                            elseif ($urlSegments[1] === 'pilih-koordinator') {
-                                $action = 'pilih-koordinator'; // Ini akan mencari file koordinator.php
-                            }
-                            elseif ($urlSegments[1] === 'detail') {
-                                $action = 'detail';
-                                if (isset($urlSegments[2])) $id = $urlSegments[2];
-                            }
-                        }
                     }
                 }
 
+                // Sanitasi nama folder
                 $module = preg_replace('/[^a-zA-Z0-9_]/', '', $module);
 
                 // 3. Tentukan File Target
+                // KITA TIDAK LAGI CEK ACTION (create/edit/detail) KARENA SEMUA PAKA MODAL
                 $viewsPath = ROOT_PROJECT . '/app/views/admin/';
                 
                 if ($module === 'dashboard') {
@@ -139,28 +118,21 @@
                     if (!file_exists($targetFile)) $targetFile = $viewsPath . 'dashboard/index.php';
                 } 
                 else {
-                    // Cek Action apa yang diminta
-                    if ($action === 'form') {
-                        $targetFile = $viewsPath . $module . '/form.php';
-                    } 
-                    elseif ($action === 'pilih-koordinator') {
-                        // Target file: views/admin/asisten/koordinator.php
-                        $targetFile = $viewsPath . $module . '/pilih-koordinator.php';
-                    }
-                    elseif ($action === 'detail') {
-                        $targetFile = $viewsPath . $module . '/detail.php';
-                    }
-                    else {
-                        $targetFile = $viewsPath . $module . '/index.php';
-                    }
+                    // Apapun yang terjadi, selalu buka index.php milik module tersebut
+                    // JavaScript di dalam index.php yang akan mengatur Modal
+                    $targetFile = $viewsPath . $module . '/index.php';
                 }
 
                 // 4. Eksekusi Include
                 if (file_exists($targetFile)) {
                     include $targetFile;
                 } else {
-                    // Tampilan Error 404 (Code block sebelumnya)
-                    echo "<div class='p-8 text-center text-red-500'>File tidak ditemukan: $targetFile</div>";
+                    echo "
+                    <div class='flex flex-col items-center justify-center min-h-[50vh] text-gray-500'>
+                        <i class='fas fa-exclamation-triangle text-4xl mb-4 text-yellow-500'></i>
+                        <h2 class='text-xl font-bold'>Halaman Tidak Ditemukan</h2>
+                        <p class='text-sm mt-2'>Modul <b>'$module'</b> belum tersedia.</p>
+                    </div>";
                 }
                 ?>
             </main>
