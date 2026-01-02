@@ -4,7 +4,7 @@ require_once CONTROLLER_PATH . '/Controller.php';
 // Load Model
 require_once __DIR__ . '/../models/AsistenModel.php';
 require_once __DIR__ . '/../models/LaboratoriumModel.php';
-// Load Database Wrapper (Penting agar class Database dikenali)
+// Load Database Wrapper
 require_once __DIR__ . '/../config/Database.php';
 
 class DashboardController extends Controller {
@@ -19,10 +19,16 @@ class DashboardController extends Controller {
             $asistenModel = new AsistenModel();
             $labModel = new LaboratoriumModel();
             
-            // 2. [PERBAIKAN] Buat Instance Database Manual
-            // Karena $this->db tidak ada, kita buat baru:
+            // 2. Ambil Koneksi Database (MySQLi)
             $db = new Database(); 
-            $pdo = $db->getPdo(); // Ambil koneksi PDO
+            
+            // PERHATIAN: Pastikan di Database.php nama fungsinya getConnection() atau getPdo()
+            // Jika error, coba ganti getPdo() menjadi getConnection()
+            if (method_exists($db, 'getConnection')) {
+                $mysqli = $db->getConnection();
+            } else {
+                $mysqli = $db->getPdo(); // Fallback jika Anda menamainya getPdo tapi isinya mysqli
+            }
 
             // 3. Tentukan Hari Ini
             $days = [
@@ -31,11 +37,10 @@ class DashboardController extends Controller {
             ];
             $hariIni = $days[date('l')]; 
             
-            // Uncomment baris bawah ini jika ingin tes data hari Senin
-            // $hariIni = 'Senin'; 
+            // $hariIni = 'Senin'; // Uncomment untuk testing
 
-            // 4. Query Jadwal Hari Ini
-            // Pastikan nama tabel 'jadwalpraktikum' sesuai database Anda
+            // 4. Query Jadwal Hari Ini (GAYA MYSQLI)
+            // Perbedaan 1: Placeholder menggunakan tanda tanya (?) bukan (:nama)
             $sql = "SELECT 
                         j.*, 
                         m.namaMatakuliah, 
@@ -44,13 +49,28 @@ class DashboardController extends Controller {
                     FROM jadwalpraktikum j
                     JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                     JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
-                    WHERE j.hari = :hari 
+                    WHERE j.hari = ? 
                     AND j.status = 'Aktif'
                     ORDER BY j.waktuMulai ASC";
 
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(['hari' => $hariIni]);
-            $jadwalHariIni = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $mysqli->prepare($sql);
+
+            if (!$stmt) {
+                throw new Exception("Query Error: " . $mysqli->error);
+            }
+
+            // Perbedaan 2: Binding Parameter menggunakan bind_param
+            // "s" artinya string
+            $stmt->bind_param("s", $hariIni);
+            
+            // Perbedaan 3: Eksekusi
+            $stmt->execute();
+
+            // Perbedaan 4: Ambil Hasil (Get Result)
+            $result = $stmt->get_result();
+            
+            // Perbedaan 5: Fetch All (MYSQLI_ASSOC)
+            $jadwalHariIni = $result->fetch_all(MYSQLI_ASSOC);
 
             // 5. Hitung Statistik
             $totalAsisten = $asistenModel->countAll();
