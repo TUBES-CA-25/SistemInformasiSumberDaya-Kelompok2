@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 20 Des 2025 pada 01.41
+-- Waktu pembuatan: 02 Jan 2026 pada 17.29
 -- Versi server: 10.4.32-MariaDB-log
 -- Versi PHP: 8.2.12
 
@@ -57,7 +57,9 @@ INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `foto`, `pekerjaan`, `
 (6, 'Eka Sulistyaningrum', '2021', 'Divisi Web', 'https://placehold.co/300x300/667eea/white?text=Eka', 'Frontend Developer', 'Shopee', 'Pengalaman di lab mengajarkan saya tentang deadline management dan code quality yang baik.', '2021', 'JavaScript, React, Vue, HTML/CSS', 'https://linkedin.com/in/eka-sulistya', 'https://eka-frontend.com', 'eka@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
 (7, 'Fajar Wijaya', '2020', 'Divisi Sistem', 'https://placehold.co/300x300/667eea/white?text=Fajar', 'DevOps Engineer', 'Jago.com', 'Infrastruktur yang kami bangun di lab menjadi fondasi pengetahuan saya tentang system administration.', '2020', 'AWS, Docker, Kubernetes, Linux', 'https://linkedin.com/in/fajar-wijaya', 'https://fajar-devops.com', 'fajar@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
 (8, 'Hani Khoirunisa', '2020', 'Divisi Multimedia', 'https://placehold.co/300x300/667eea/white?text=Hani', 'Motion Graphics Designer', 'Trans Media', 'Lab memberikan saya portofolio yang solid untuk masuk ke industri kreatif.', '2020', 'After Effects, Premiere Pro, Animation, UI Design', 'https://linkedin.com/in/hani-khoirunisa', 'https://hani-motion.com', 'hani@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
-(9, 'Rizwan Ardiyan', '2023', 'Koordinator Lab', 'alumni_1766078894_8729.png', 'Software Engineer', 'Tokopedia', 'Pengalaman yang luar biasa menjadi asisten di lab ini. Banyak ilmu yang saya dapatkan terutama dalam teamwork dan kepemimpinan.', '2023', 'PHP, Laravel, React, MySQL, Docker', 'https://linkedin.com/in/rizwan', 'https://rizwan.dev', 'rizwan@email.com', '2025-12-19 01:20:54', '2025-12-19 01:28:14');
+(9, 'Rizwan Ardiyan', '2023', 'Koordinator Lab', 'alumni_1766078894_8729.png', 'Software Engineer', 'Tokopedia', 'Pengalaman yang luar biasa menjadi asisten di lab ini. Banyak ilmu yang saya dapatkan terutama dalam teamwork dan kepemimpinan.', '2023', 'PHP, Laravel, React, MySQL, Docker', 'https://linkedin.com/in/rizwan', 'https://rizwan.dev', 'rizwan@email.com', '2025-12-19 01:20:54', '2025-12-19 01:28:14'),
+(10, 'Rizwan Alfian', '2023', 'Koordinator Lab', 'https://placehold.co/300x300/667eea/white?text=Rizwan', 'Software Engineer', 'Tokopedia', 'Pengalaman yang luar biasa menjadi asisten di lab ini. Banyak ilmu yang saya dapatkan terutama dalam teamwork dan kepemimpinan.', '2023', 'PHP, Laravel, React, MySQL, Docker', 'https://linkedin.com/in/rizwan', 'https://rizwan.dev', 'rizwan@email.com', '2025-12-20 15:43:11', '2025-12-20 15:43:11'),
+(11, 'Siti Nurhaliza', '2023', 'Divisi Jaringan', 'https://placehold.co/300x300/667eea/white?text=Siti', 'Network Engineer', 'Telkom Indonesia', 'Awal yang baik untuk karir di dunia telekomunikasi. Terima kasih atas bimbingan selama menjadi asisten.', '2023', 'Cisco, Networking, Linux', 'https://linkedin.com/in/siti-nurhaliza', 'https://siti-portfolio.com', 'siti@email.com', '2025-12-20 15:43:11', '2025-12-20 15:43:11');
 
 -- --------------------------------------------------------
 
@@ -65,30 +67,36 @@ INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `foto`, `pekerjaan`, `
 -- Struktur dari tabel `asisten`
 --
 
-
 CREATE TABLE `asisten` (
   `idAsisten` int(11) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `jurusan` varchar(100) DEFAULT NULL,
+  `jabatan` varchar(100) DEFAULT NULL,
+  `kategori` varchar(50) DEFAULT NULL,
+  `lab` varchar(100) DEFAULT NULL,
+  `spesialisasi` varchar(255) DEFAULT NULL,
+  `bio` text DEFAULT NULL,
+  `skills` text DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
   `statusAktif` varchar(20) DEFAULT 'Asisten',
-  `isKoordinator` tinyint(1) DEFAULT 0,
-  `bio` TEXT NULL,
-  `skills` TEXT NULL,
-  `linkedin` varchar(255) DEFAULT NULL
+  `isKoordinator` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `asisten`
 --
 
-INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `email`, `foto`, `statusAktif`, `isKoordinator`) VALUES
-(2, 'Budi Santoso', 'Teknik Informatika', 'budi@mail.com', NULL, 1, 0),
-(3, 'Siti Nurhaliza', 'Sistem Informasi', 'siti@mail.com', NULL, 1, 0),
-(4, 'Ahmad Wijaya', 'Teknik Komputer', 'ahmad@mail.com', NULL, 1, 0),
-(5, 'Rina Puspita', 'Informatika', 'rina@mail.com', NULL, 1, 0),
-(6, 'M RIZWAN', 'Informatika', 'rizwan@example.com', 'asisten_1766077436_4546.png', 1, 1);
+INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `lab`, `spesialisasi`, `bio`, `skills`, `email`, `foto`, `statusAktif`, `isKoordinator`) VALUES
+(2, 'Budi Santoso', 'Teknik Informatika', NULL, NULL, '', '', '', '', 'budi@mail.com', NULL, 'CA', 0),
+(3, 'Siti Nurhaliza', 'Sistem Informasi', NULL, NULL, NULL, NULL, '', '', 'siti@mail.com', NULL, 'Asisten', 0),
+(4, 'Ahmad Wijaya', 'Teknik Komputer', NULL, NULL, NULL, NULL, NULL, NULL, 'ahmad@mail.com', NULL, '1', 0),
+(5, 'Rina Puspita', 'Informatika', NULL, NULL, NULL, NULL, NULL, NULL, 'rina@mail.com', NULL, '1', 0),
+(7, 'MUHAMMAD AULIA RAHMAN', 'Teknik Informatika', NULL, NULL, 'Start Up', 'PHP, MYSQL', 'saya adalah asisten ngatta ngatta', '[\"PHP\",\"MYSQL\"]', 'rahman@example.com', 'asisten_1766478525_4682.png', '1', 0),
+(9, 'M RIZWAN', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'halo saya rizwan', '[\"PHP\",\"Laravel\"]', 'rizwan@example.com', 'asisten_1766495391_7606.png', 'Asisten', 1),
+(10, 'Abbas Asis', 'Teknik Informatika', NULL, NULL, NULL, NULL, '', '[\"Jago tidur\"]', 'abbas@contoh.com', NULL, 'CA', 0),
+(11, 'Savier', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Saya adalah calon asisten', '[\"PHP\",\"Laravel\"]', 'Savier@umi.ac.id', 'asisten_1767282345_8755.jpg', 'CA', 0),
+(12, 'Budi Seregar', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Saya adalah budi, ini bapak saya budi', '[\"Jago tidur\"]', 'budi@umi.ac.id', NULL, 'Asisten', 0);
 
 -- --------------------------------------------------------
 
@@ -155,10 +163,8 @@ CREATE TABLE `jadwalpraktikum` (
 --
 
 INSERT INTO `jadwalpraktikum` (`idJadwal`, `idMatakuliah`, `idLaboratorium`, `hari`, `waktuMulai`, `waktuSelesai`, `kelas`, `status`) VALUES
-(1, 8, 7, 'Senin', '08:00:00', '10:00:00', 'A', 'Aktif'),
-(2, 9, 8, 'Selasa', '10:00:00', '12:00:00', 'B', 'Aktif'),
-(3, 10, 10, 'Rabu', '11:20:00', '12:40:00', 'C', 'Aktif'),
-(4, 9, 9, 'Selasa', '10:00:00', '12:00:00', 'B', 'Aktif');
+(7, 8, 7, 'Senin', '08:00:00', '10:00:00', 'A', 'Aktif'),
+(8, 9, 9, 'Selasa', '10:00:00', '12:00:00', 'B', 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -184,6 +190,7 @@ CREATE TABLE `kontakt` (
 CREATE TABLE `laboratorium` (
   `idLaboratorium` int(11) NOT NULL,
   `nama` varchar(100) NOT NULL,
+  `jenis` enum('Laboratorium','Riset') DEFAULT 'Laboratorium',
   `idKordinatorAsisten` int(11) DEFAULT NULL,
   `deskripsi` text DEFAULT NULL,
   `gambar` varchar(255) DEFAULT NULL,
@@ -206,12 +213,52 @@ CREATE TABLE `laboratorium` (
 -- Dumping data untuk tabel `laboratorium`
 --
 
-INSERT INTO `laboratorium` (`idLaboratorium`, `nama`, `idKordinatorAsisten`, `deskripsi`, `gambar`, `jumlahPc`, `jumlahKursi`, `lokasi`, `kapasitas`, `processor`, `ram`, `storage`, `gpu`, `monitor`, `software`, `fasilitas_pendukung`, `koordinator_nama`, `koordinator_foto`) VALUES
-(7, 'Microcontroller', 4, 'Tempat untuk belajar Microcontroller', NULL, 20, 25, 'Gedung Fakultas Ilmu Komputer lantai 2', 25, 'Intel i5', '8GB', '256GB SSD', 'Integrated', '21 inch', 'Visual Studio Code', 'AC, WiFi', 'M. Rizwan', 'koordinator_1766067968_69440f0027653.png'),
-(8, 'Computer Vision', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(9, 'Data Science', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(10, 'Start Up', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(11, 'IoT', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `laboratorium` (`idLaboratorium`, `nama`, `jenis`, `idKordinatorAsisten`, `deskripsi`, `gambar`, `jumlahPc`, `jumlahKursi`, `lokasi`, `kapasitas`, `processor`, `ram`, `storage`, `gpu`, `monitor`, `software`, `fasilitas_pendukung`, `koordinator_nama`, `koordinator_foto`) VALUES
+(7, 'Microcontroller', 'Laboratorium', NULL, 'Tempat untuk belajar Microcontroller', 'lab_1766758039_2354.jpg', 0, 25, 'Gedung Fakultas Ilmu Komputer lantai 2', 25, '', '', '', '', '', '', '', 'M. Rizwan', 'koordinator_1766067968_69440f0027653.png'),
+(8, 'Computer Vision', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(9, 'Data Science', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(10, 'Start Up', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(12, 'IoT', 'Laboratorium', NULL, 'Digunakan untuk praktikum IoT', NULL, 24, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(13, 'Riset tengah', 'Laboratorium', 2, 'Ruangan untuk asisten lab', NULL, 0, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(14, 'Ruangan Riset 1', 'Riset', 2, 'fda', 'lab_1766758916_1873.jpg', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL),
+(15, 'cek', 'Laboratorium', 9, 'cek', 'lab_1766753703_4425.jpg', 20, NULL, NULL, 0, 'Inter core i7', '16GB RAM', 'SSD 1TB', 'NVDIA RTX 5060', '24', '', '', NULL, NULL),
+(17, 'IoT', 'Laboratorium', 9, 'Ruangan untuk melakukan pembelajaran IoT', 'lab_1767285997_4783.jpg', 24, NULL, NULL, 0, 'Inter core i7', '16GB RAM', '256GB SSD', 'NVDIA RTX 5060', '24inch ', 'Visual Studio Code, Xampp, Arduiono IDE', 'AC Central', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `laboratorium_gambar`
+--
+
+CREATE TABLE `laboratorium_gambar` (
+  `idGambar` int(11) NOT NULL,
+  `idLaboratorium` int(11) NOT NULL,
+  `namaGambar` varchar(255) NOT NULL,
+  `deskripsiGambar` text DEFAULT NULL,
+  `isUtama` tinyint(1) DEFAULT 0 COMMENT '1 = gambar utama, 0 = gambar tambahan',
+  `urutan` int(11) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `laboratorium_gambar`
+--
+
+INSERT INTO `laboratorium_gambar` (`idGambar`, `idLaboratorium`, `namaGambar`, `deskripsiGambar`, `isUtama`, `urutan`, `created_at`) VALUES
+(1, 7, 'lab_1766584749_5435.jpg', 'Gambar ruangan utama', 1, 0, '2025-12-26 20:47:37'),
+(2, 15, 'lab_1766753703_4425.jpg', NULL, 1, 0, '2025-12-26 20:55:03'),
+(3, 15, 'lab_1766753703_6752.jpg', NULL, 0, 1, '2025-12-26 20:55:03'),
+(4, 15, 'lab_1766753703_3225.jpg', NULL, 0, 2, '2025-12-26 20:55:03'),
+(5, 7, 'lab_1766758039_2354.jpg', NULL, 1, 0, '2025-12-26 22:07:19'),
+(6, 7, 'lab_1766758039_5470.jpg', NULL, 0, 1, '2025-12-26 22:07:19'),
+(10, 14, 'lab_1766758916_1873.jpg', NULL, 1, 0, '2025-12-26 22:21:56'),
+(11, 14, 'lab_1766758916_7564.jpg', NULL, 0, 1, '2025-12-26 22:21:56'),
+(12, 17, 'lab_1767285321_3208.jpg', NULL, 1, 0, '2026-01-02 00:35:21'),
+(13, 17, 'lab_1767285321_5993.jpg', NULL, 0, 1, '2026-01-02 00:35:21'),
+(14, 17, 'lab_1767285321_7083.jpg', NULL, 0, 2, '2026-01-02 00:35:21'),
+(15, 17, 'lab_1767285997_4783.jpg', NULL, 1, 0, '2026-01-02 00:46:37'),
+(16, 17, 'lab_1767285997_3584.jpg', NULL, 0, 1, '2026-01-02 00:46:37'),
+(17, 17, 'lab_1767285997_5317.jpg', NULL, 0, 2, '2026-01-02 00:46:37');
 
 -- --------------------------------------------------------
 
@@ -231,9 +278,12 @@ CREATE TABLE `manajemen` (
 --
 
 INSERT INTO `manajemen` (`idManajemen`, `nama`, `jabatan`, `foto`) VALUES
-(1, 'Dr. Ahmad Rizki, S.Kom, M.Kom', 'Kepala Lab Rekayasa Perangkat Lunak', 'manajemen_1765770548_9775.png'),
-(2, 'Ir. Budi Santoso, M.T', 'Kepala Lab Jaringan Komputer', 'manajemen_1765770649_8909.png'),
-(3, 'Siti Nurhaliza, S.T, M.Kom', 'Kepala Lab Multimedia', 'manajemen_1765770661_5875.png');
+(1, 'Dr. Ahmad Rizki, S.Kom, M.Kom', 'Kepala Lab', 'manajemen_1767366950_4983.jpg'),
+(2, 'Ir. Budi Santoso, M.T', 'Kepala Lab Jaringan Komputer', 'manajemen_1767367073_6090.jpeg'),
+(3, 'Siti Nurhaliza, S.T, M.Kom', 'Kepala Lab Multimedia', 'manajemen_1766584570_2128.png'),
+(4, 'Muhammad Laode Daipang', 'Kepala Lab', 'manajemen_1766746526_4978.png'),
+(5, 'cek', 'Kepala Lab', 'manajemen_1766759304_5998.jpg'),
+(6, 'Ichwal', 'Kelapa Lab Jaringan', 'manajemen_1767342733_3907.jpeg');
 
 -- --------------------------------------------------------
 
@@ -254,15 +304,15 @@ CREATE TABLE `matakuliah` (
 --
 
 INSERT INTO `matakuliah` (`idMatakuliah`, `kodeMatakuliah`, `namaMatakuliah`, `semester`, `sksKuliah`) VALUES
-(8, 'TI_MICRO', 'Microcontroller', NULL, NULL),
-(9, 'TI_SD', 'Struktur Data', NULL, NULL),
-(10, 'SI_PBO', 'Pemrograman Berorientasi Objek', NULL, NULL),
-(11, 'TI_BD2', 'Basis Data II', NULL, NULL),
-(12, 'TI_ALPRO', 'Algoritma Pemrograman', NULL, NULL),
-(13, 'SI_PTI', 'Pengantar Teknologi Informasi', NULL, NULL),
-(14, 'SI_JARKOM', 'Jaringan Komputer', NULL, NULL),
-(15, 'TI_PP', 'Pengenalan Pemrograman', NULL, NULL),
-(16, 'TI_MOBILE', 'Pemrograman Mobile', NULL, NULL);
+(8, 'TI_MICRO', 'Microcontroller', 5, 3),
+(9, 'TI_SD', 'Struktur Data', 3, 3),
+(10, 'SI_PBO', 'Pemrograman Berorientasi Objek', 4, 3),
+(11, 'TI_BD2', 'Basis Data II', 3, 3),
+(12, 'TI_ALPRO', 'Algoritma Pemrograman', 1, 3),
+(13, 'SI_PTI', 'Pengantar Teknologi Informasi', 1, 3),
+(14, 'SI_JARKOM', 'Jaringan Komputer', 4, 3),
+(15, 'TI_PP', 'Pengenalan Pemrograman', 1, 3),
+(16, 'TI_MOBILE', 'Pemrograman Mobile', 5, 5);
 
 -- --------------------------------------------------------
 
@@ -273,24 +323,24 @@ INSERT INTO `matakuliah` (`idMatakuliah`, `kodeMatakuliah`, `namaMatakuliah`, `s
 CREATE TABLE `peraturan_lab` (
   `id` int(11) NOT NULL,
   `judul` varchar(150) NOT NULL,
-  `kategori` varchar(100) DEFAULT 'Larangan Umum',
   `deskripsi` text NOT NULL,
   `gambar` varchar(255) DEFAULT NULL,
   `urutan` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `kategori` varchar(100) DEFAULT 'umum'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `peraturan_lab`
 --
 
-INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`) VALUES
-(1, 'Tata Tertib Umum Laboratorium', 'Peraturan dasar yang harus dipatuhi oleh semua pengguna laboratorium teknologi informasi', NULL, 1, '2025-12-18 23:53:18', '2025-12-18 23:53:18'),
-(2, 'Penggunaan Peralatan Lab', 'Ketentuan penggunaan komputer, jaringan, dan peralatan elektronik di laboratorium', NULL, 2, '2025-12-18 23:53:18', '2025-12-18 23:53:18'),
-(3, 'Jadwal dan Reservasi Ruangan', 'Prosedur pemesanan dan penggunaan ruang laboratorium untuk kegiatan praktikum', NULL, 3, '2025-12-18 23:53:18', '2025-12-18 23:53:18'),
-(4, 'Keamanan dan Kebersihan', 'Aturan menjaga keamanan data, perangkat, dan kebersihan lingkungan laboratorium', NULL, 4, '2025-12-18 23:53:18', '2025-12-18 23:53:18'),
-(5, 'Sanksi dan Pelanggaran', 'Konsekuensi yang berlaku bagi mahasiswa yang melanggar tata tertib laboratorium', NULL, 5, '2025-12-18 23:53:18', '2025-12-18 23:53:18');
+INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`, `kategori`) VALUES
+(1, 'Tata Tertib Umum Laboratorium', 'Peraturan dasar yang harus dipatuhi oleh semua pengguna laboratorium teknologi informasi', NULL, 1, '2025-12-18 23:53:18', '2026-01-03 00:23:49', 'Larangan Umum'),
+(2, 'Penggunaan Peralatan Lab', 'Ketentuan penggunaan komputer, jaringan, dan peralatan elektronik di laboratorium', NULL, 2, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'larangan-umum'),
+(3, 'Jadwal dan Reservasi Ruangan', 'Prosedur pemesanan dan penggunaan ruang laboratorium untuk kegiatan praktikum', NULL, 3, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'kehadiran-akademik'),
+(4, 'Keamanan dan Kebersihan', 'Aturan menjaga keamanan data, perangkat, dan kebersihan lingkungan laboratorium', NULL, 4, '2025-12-18 23:53:18', '2026-01-03 00:10:41', 'larangan-umum'),
+(5, 'Sanksi dan Pelanggaran', 'Konsekuensi yang berlaku bagi mahasiswa yang melanggar tata tertib laboratorium', NULL, 5, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'larangan-umum');
 
 -- --------------------------------------------------------
 
@@ -317,32 +367,30 @@ INSERT INTO `sanksi_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `creat
 (2, 'Merusak Fasilitas', 'Jika terjadi kerusakan pada hardware (monitor, keyboard, mouse, dll) akibat kelalaian atau kesengajaan, praktikan wajib melakukan Penggantian Barang dengan spesifikasi yang sama atau setara dalam kurun waktu 1x24 jam.', NULL, 0, '2025-12-15 10:11:55', '2025-12-15 10:11:55'),
 (3, 'Pelanggaran Seragam & Atribut', 'Praktikan yang tidak mengenakan seragam sesuai ketentuan atau tidak membawa Kartu Tanda Mahasiswa (KTM) akan mendapatkan Teguran Keras dan pengurangan poin nilai kedisiplinan pada sesi tersebut.', NULL, 0, '2025-12-15 10:11:55', '2025-12-15 10:11:55'),
 (4, 'Kecurangan (Plagiasi/Mencontek)', 'Segala bentuk kecurangan seperti mencontek saat ujian atau menyalin tugas teman (plagiasi) akan dikenakan sanksi Nilai E (Tidak Lulus) secara otomatis pada mata kuliah praktikum yang bersangkutan.', NULL, 0, '2025-12-15 10:11:55', '2025-12-15 10:11:55'),
-(6, 'Test Update', 'Test update desc', 'sanksi_1765767514_3994.png', 0, '2025-12-15 10:16:08', '2025-12-15 10:58:34'),
-(11, 'fafdfafdsa', 'fafdafda', 'sanksi_1765767543_8483.png', 0, '2025-12-15 10:48:12', '2025-12-15 10:59:03');
+(6, 'Test Update', 'Test update desc', 'sanksi_1765767514_3994.png', 0, '2025-12-15 10:16:08', '2025-12-15 10:58:34');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tataterib`
+-- Struktur dari tabel `users`
 --
 
-CREATE TABLE `tataterib` (
-  `idTataTerib` int(11) NOT NULL,
-  `namaFile` varchar(255) DEFAULT NULL,
-  `uraFile` varchar(255) DEFAULT NULL,
-  `gambar` varchar(255) DEFAULT NULL,
-  `tanggalUpload` datetime DEFAULT current_timestamp()
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(20) DEFAULT 'admin',
+  `last_login` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `tataterib`
+-- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `tataterib` (`idTataTerib`, `namaFile`, `uraFile`, `gambar`, `tanggalUpload`) VALUES
-(1, 'Disiplin Waktu Kehadiran', 'Praktikan wajib hadir 15 menit sebelum kegiatan praktikum dimulai untuk persiapan. Toleransi keterlambatan maksimal adalah 10 menit. Jika melebihi batas tersebut, praktikan tidak diperkenankan masuk dan dianggap tidak hadir (Alpa).', 'peraturan_1765768258_4534.png', '2025-12-15 09:51:10'),
-(2, 'Aturan Berpakaian & Identitas', 'Wajib mengenakan seragam kemeja putih (atau sesuai ketentuan fakultas), celana/rok kain hitam, dan bersepatu tertutup. Praktikan juga wajib membawa dan mengenakan Kartu Tanda Mahasiswa (KTM) atau Kartu Asisten selama berada di lingkungan laboratorium.', NULL, '2025-12-15 09:51:10'),
-(3, 'Menjaga Kebersihan & Ketertiban', 'Dilarang keras membawa makanan, minuman, atau benda tajam ke dalam ruang laboratorium. Sampah wajib dibuang pada tempat yang disediakan. Praktikan dilarang membuat kegaduhan yang dapat mengganggu konsentrasi praktikan lain.', NULL, '2025-12-15 09:51:10'),
-(4, 'Penggunaan Fasilitas Komputer', 'Dilarang mengubah pengaturan (setting) komputer, menginstal software tanpa izin, atau memindahkan perangkat keras (mouse, keyboard) antar meja. Segala kerusakan yang disebabkan oleh kelalaian praktikan akan dikenakan sanksi penggantian.', NULL, '2025-12-15 09:51:10');
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `last_login`, `created_at`) VALUES
+(2, '$2y$10$l710L0YPlhSBRxW23TpS..A8o9pbUd1RLcPLFY77Zm3', 'admin', 'admin', NULL, '2025-12-20 17:28:27'),
+(4, 'admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin', '2026-01-02 15:25:50', '2025-12-22 14:47:00');
 
 -- --------------------------------------------------------
 
@@ -419,6 +467,13 @@ ALTER TABLE `laboratorium`
   ADD KEY `idKordinatorAsisten` (`idKordinatorAsisten`);
 
 --
+-- Indeks untuk tabel `laboratorium_gambar`
+--
+ALTER TABLE `laboratorium_gambar`
+  ADD PRIMARY KEY (`idGambar`),
+  ADD KEY `idLaboratorium` (`idLaboratorium`);
+
+--
 -- Indeks untuk tabel `manajemen`
 --
 ALTER TABLE `manajemen`
@@ -445,10 +500,11 @@ ALTER TABLE `sanksi_lab`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `tataterib`
+-- Indeks untuk tabel `users`
 --
-ALTER TABLE `tataterib`
-  ADD PRIMARY KEY (`idTataTerib`);
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Indeks untuk tabel `vismisi`
@@ -464,13 +520,13 @@ ALTER TABLE `vismisi`
 -- AUTO_INCREMENT untuk tabel `alumni`
 --
 ALTER TABLE `alumni`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `asisten`
 --
 ALTER TABLE `asisten`
-  MODIFY `idAsisten` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idAsisten` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `asistenmatakuliah`
@@ -494,7 +550,7 @@ ALTER TABLE `integrsiweb`
 -- AUTO_INCREMENT untuk tabel `jadwalpraktikum`
 --
 ALTER TABLE `jadwalpraktikum`
-  MODIFY `idJadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idJadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `kontakt`
@@ -506,19 +562,25 @@ ALTER TABLE `kontakt`
 -- AUTO_INCREMENT untuk tabel `laboratorium`
 --
 ALTER TABLE `laboratorium`
-  MODIFY `idLaboratorium` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idLaboratorium` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT untuk tabel `laboratorium_gambar`
+--
+ALTER TABLE `laboratorium_gambar`
+  MODIFY `idGambar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `manajemen`
 --
 ALTER TABLE `manajemen`
-  MODIFY `idManajemen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idManajemen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `matakuliah`
 --
 ALTER TABLE `matakuliah`
-  MODIFY `idMatakuliah` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `idMatakuliah` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `peraturan_lab`
@@ -533,10 +595,10 @@ ALTER TABLE `sanksi_lab`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT untuk tabel `tataterib`
+-- AUTO_INCREMENT untuk tabel `users`
 --
-ALTER TABLE `tataterib`
-  MODIFY `idTataTerib` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `vismisi`
@@ -563,32 +625,16 @@ ALTER TABLE `jadwalpraktikum`
   ADD CONSTRAINT `jadwalpraktikum_ibfk_2` FOREIGN KEY (`idLaboratorium`) REFERENCES `laboratorium` (`idLaboratorium`) ON DELETE CASCADE;
 
 --
+-- Ketidakleluasaan untuk tabel `laboratorium`
+--
 ALTER TABLE `laboratorium`
   ADD CONSTRAINT `laboratorium_ibfk_1` FOREIGN KEY (`idKordinatorAsisten`) REFERENCES `asisten` (`idAsisten`) ON DELETE SET NULL;
 
-
--- --------------------------------------------------------
-
--- Struktur dari tabel `users`
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` varchar(20) DEFAULT 'admin',
-  `last_login` datetime DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Default Admin User (Password: admin123)
--- Password hashed with PHP password_hash('admin123', PASSWORD_BCRYPT)
-INSERT INTO `users` (`username`, `password`, `role`) VALUES
-('admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin');
-
-UPDATE users
-SET password = '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey'
-WHERE username = 'admin';
+--
+-- Ketidakleluasaan untuk tabel `laboratorium_gambar`
+--
+ALTER TABLE `laboratorium_gambar`
+  ADD CONSTRAINT `fk_lab_gambar_lab` FOREIGN KEY (`idLaboratorium`) REFERENCES `laboratorium` (`idLaboratorium`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
