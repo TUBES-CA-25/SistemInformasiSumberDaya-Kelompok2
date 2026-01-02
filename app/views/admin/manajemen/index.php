@@ -69,8 +69,8 @@
             </div>
             
             <div class="p-8 flex flex-col items-center">
-                <div class="w-32 h-32 rounded-full border-4 border-blue-100 shadow-lg overflow-hidden mb-5">
-                    <img id="detailFoto" src="" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150?text=No+Img'">
+                <div class="w-32 h-32 rounded-full border-4 border-blue-100 shadow-lg overflow-hidden mb-5 bg-gray-100">
+                    <img id="detailFoto" src="" class="w-full h-full object-cover">
                 </div>
                 
                 <h2 id="detailNama" class="text-2xl font-bold text-gray-800 text-center mb-2">Nama Lengkap</h2>
@@ -150,7 +150,9 @@
 </div>
 
 <script>
-window.BASE_URL = '<?= BASE_URL ?>';
+// Pastikan BASE_URL dan API_URL didefinisikan di layout utama (header)
+// window.BASE_URL = 'http://localhost:8000'; // Contoh jika belum ada
+
 let allManajemenData = [];
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -197,17 +199,21 @@ function renderTable(data) {
     }
     
     data.forEach((item, index) => {
-        let fotoSrc = 'https://placehold.co/100x100?text=No+Img';
-        if (item.foto) {
-            fotoSrc = item.foto.includes('http') ? item.foto : BASE_URL + '/assets/uploads/' + item.foto;
-        }
+        // 1. Buat URL Avatar Default (Inisial Nama) sebagai cadangan
+        const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.nama)}&background=random&color=fff&size=128`;
+        
+        // 2. Tentukan URL Foto Utama
+        // Jika ada foto di DB, pakai path lokal. Jika tidak, pakai default.
+        let photoUrl = item.foto ? `${BASE_URL}/assets/uploads/${item.foto}` : defaultAvatar;
 
-        // PERUBAHAN: onClick membuka detailModal, bukan formModal
         const row = `
             <tr onclick="openDetailModal(${item.idManajemen})" class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
                 <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
                 <td class="px-6 py-4 text-center">
-                    <img src="${fotoSrc}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm inline-block bg-gray-100" onerror="this.src='https://placehold.co/100x100?text=Error'">
+                    <img src="${photoUrl}" 
+                         class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm inline-block bg-gray-100"
+                         alt="${item.nama}"
+                         onerror="this.onerror=null; this.src='${defaultAvatar}';">
                 </td>
                 <td class="px-6 py-4">
                     <span class="font-bold text-gray-800 text-sm block group-hover:text-blue-600 transition-colors">${escapeHtml(item.nama)}</span>
@@ -233,7 +239,7 @@ function renderTable(data) {
     });
 }
 
-// --- 2. MODAL DETAIL (HANYA LIHAT) ---
+// --- 2. MODAL DETAIL ---
 function openDetailModal(id) {
     const data = allManajemenData.find(i => i.idManajemen == id);
     if (!data) return;
@@ -242,30 +248,36 @@ function openDetailModal(id) {
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
-    // Isi Data Detail
     document.getElementById('detailNama').innerText = data.nama;
     document.getElementById('detailJabatan').innerText = data.jabatan;
     
-    let fotoSrc = 'https://placehold.co/150x150?text=No+Img';
-    if (data.foto) {
-        fotoSrc = data.foto.includes('http') ? data.foto : BASE_URL + '/assets/uploads/' + data.foto;
-    }
-    document.getElementById('detailFoto').src = fotoSrc;
+    // Logika Gambar Detail
+    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.nama)}&background=random&color=fff&size=256`;
+    const fotoUrl = data.foto ? `${BASE_URL}/assets/uploads/${data.foto}` : avatarUrl;
+    
+    const imgEl = document.getElementById('detailFoto');
+    imgEl.src = fotoUrl;
+    imgEl.onerror = function() {
+        this.onerror = null;
+        this.src = avatarUrl;
+    };
 }
 
-// --- 3. MODAL FORM (CREATE / EDIT) ---
+// --- 3. MODAL FORM ---
 function openFormModal(id = null, event = null) {
-    if (event) event.stopPropagation(); // Biar gak trigger detail view
+    if (event) event.stopPropagation();
     
     const modal = document.getElementById('formModal');
     const form = document.getElementById('manajemenForm');
     const title = document.getElementById('formModalTitle');
     const btnSave = document.getElementById('btnSave');
     
-    // Reset
-    document.getElementById('previewFoto').classList.add('hidden');
-    document.getElementById('placeholderFoto').classList.remove('hidden');
-    document.getElementById('previewFoto').src = "";
+    // Reset Image Preview
+    const previewEl = document.getElementById('previewFoto');
+    const placeholderEl = document.getElementById('placeholderFoto');
+    previewEl.classList.add('hidden');
+    placeholderEl.classList.remove('hidden');
+    previewEl.src = "";
 
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -283,11 +295,19 @@ function openFormModal(id = null, event = null) {
             document.getElementById('inputNama').value = data.nama;
             document.getElementById('inputJabatan').value = data.jabatan;
             
+            // Logic Preview saat Edit
             if (data.foto) {
-                const src = data.foto.includes('http') ? data.foto : BASE_URL + '/assets/uploads/' + data.foto;
-                document.getElementById('previewFoto').src = src;
-                document.getElementById('previewFoto').classList.remove('hidden');
-                document.getElementById('placeholderFoto').classList.add('hidden');
+                const fotoUrl = `${BASE_URL}/assets/uploads/${data.foto}`;
+                previewEl.src = fotoUrl;
+                previewEl.classList.remove('hidden');
+                placeholderEl.classList.add('hidden');
+                
+                // Fallback jika gambar edit juga 404
+                previewEl.onerror = function() {
+                    // Jika error, kita sembunyikan preview dan tampilkan placeholder saja
+                    previewEl.classList.add('hidden');
+                    placeholderEl.classList.remove('hidden');
+                };
             }
         }
     } else {
@@ -303,8 +323,9 @@ document.getElementById('manajemenForm').addEventListener('submit', function(e) 
     const msg = document.getElementById('formMessage');
     const id = document.getElementById('inputId').value;
     const url = id ? API_URL + '/manajemen/' + id : API_URL + '/manajemen';
+    
     const formData = new FormData(this);
-    if (id) formData.append('_method', 'POST'); 
+    if (id) formData.append('_method', 'POST'); // Trik untuk update file di PHP
 
     btn.disabled = true; 
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
@@ -330,7 +351,7 @@ document.getElementById('manajemenForm').addEventListener('submit', function(e) 
     });
 });
 
-// Preview Image Local
+// Preview Image Local (Saat Upload)
 function previewImage(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -354,8 +375,15 @@ function hapusManajemen(id, event) {
     if(confirm('Yakin ingin menghapus anggota ini?')) {
         fetch(API_URL + '/manajemen/' + id, { method: 'DELETE' })
         .then(res => res.json())
-        .then(() => { loadManajemen(); }) 
-        .catch(err => alert('Gagal menghapus'));
+        .then(res => { 
+            if(res.status === 'success' || res.code === 200) {
+                loadManajemen(); 
+                alert('Data berhasil dihapus');
+            } else {
+                alert('Gagal menghapus: ' + (res.message || 'Unknown error'));
+            }
+        }) 
+        .catch(err => alert('Gagal menghapus (Network Error)'));
     }
 }
 

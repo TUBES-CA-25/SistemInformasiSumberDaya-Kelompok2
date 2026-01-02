@@ -1,6 +1,6 @@
-<aside class="w-72 bg-slate-900 flex-shrink-0 flex flex-col h-screen font-sans border-r border-slate-800">
+<aside class="w-64 bg-slate-900 flex-shrink-0 flex flex-col h-screen font-sans border-r border-slate-800 transition-all duration-300">
     
-    <div class="h-20 flex items-center px-8 border-b border-slate-800/50 bg-slate-900/50 backdrop-blur-sm">
+    <div class="h-20 flex items-center px-6 border-b border-slate-800/50 bg-slate-900/50 backdrop-blur-sm">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <i class="fas fa-flask text-white text-lg"></i>
@@ -12,10 +12,10 @@
         </div>
     </div>
 
-    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6 custom-scrollbar">
+    <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-2 custom-scrollbar">
         
         <div>
-            <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Utama</p>
+            <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Utama</p>
             <ul class="space-y-1">
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin')" 
@@ -27,98 +27,113 @@
             </ul>
         </div>
 
-        <?php 
-            $isMasterActive = in_array($uri, ['admin/asisten', 'admin/alumni', 'admin/manajemen', 'admin/laboratorium', 'admin/matakuliah']); 
-        ?>
-        <div x-data="{ open: <?= $isMasterActive ? 'true' : 'false' ?> }">
-            <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Database</p>
+        <div id="groupMaster" class="mt-4">
+            <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Database</p>
             
-            <button onclick="toggleMenu('menuMaster')" 
-                    class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-400 rounded-xl hover:bg-slate-800/50 hover:text-white transition-all duration-200 group">
+            <button onclick="toggleMenu('menuMaster', 'arrowMaster')" 
+                    class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-400 rounded-xl hover:bg-slate-800/50 hover:text-white transition-all duration-200 group focus:outline-none">
                 <div class="flex items-center">
                     <i class="fas fa-database w-5 text-center text-slate-500 group-hover:text-emerald-400 transition-colors"></i>
                     <span class="ml-3">Master Data</span>
                 </div>
-                <i id="arrowMaster" class="fas fa-chevron-right text-[10px] transition-transform duration-300 <?= $isMasterActive ? 'rotate-90 text-white' : 'text-slate-600' ?>"></i>
+                <i id="arrowMaster" class="fas fa-chevron-right text-[10px] transition-transform duration-300"></i>
             </button>
 
-            <ul id="menuMaster" class="<?= $isMasterActive ? 'block' : 'hidden' ?> mt-1 space-y-1 pl-11 relative">
+            <ul id="menuMaster" class="hidden mt-1 space-y-1 pl-11 relative">
                 <div class="absolute left-6 top-0 bottom-0 w-px bg-slate-800"></div>
 
+                <?php $active = strpos($uri, 'asisten') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/asisten')" 
-                       class="<?= $uri == 'admin/asisten' ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative">
-                       <?php if($uri == 'admin/asisten'): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
+                       class="<?= $active ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>"> <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
                        Data Asisten
                     </a>
                 </li>
+
+                <?php $active = strpos($uri, 'manajemen') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/manajemen')" 
-                       class="<?= $uri == 'admin/manajemen' ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative">
-                       <?php if($uri == 'admin/manajemen'): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
+                       class="<?= $active ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>">
+                       <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
                        Struktur Organisasi
                     </a>
                 </li>
+
+                <?php $active = strpos($uri, 'laboratorium') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/laboratorium')" 
-                       class="<?= $uri == 'admin/laboratorium' ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative">
-                       <?php if($uri == 'admin/laboratorium'): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
+                       class="<?= $active ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>">
+                       <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
                        Fasilitas Lab
                     </a>
                 </li>
+                 
+                <?php $active = strpos($uri, 'matakuliah') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/matakuliah')" 
-                       class="<?= $uri == 'admin/matakuliah' ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative">
-                       <?php if($uri == 'admin/matakuliah'): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
+                       class="<?= $active ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>">
+                       <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
                        Mata Kuliah
                     </a>
                 </li>
-                <li>
+
+                 <?php $active = strpos($uri, 'alumni') !== false; ?>
+                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/alumni')" 
-                       class="<?= $uri == 'admin/alumni' ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative">
-                       <?php if($uri == 'admin/alumni'): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
+                       class="<?= $active ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>">
+                       <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
                        Data Alumni
                     </a>
                 </li>
             </ul>
         </div>
 
-        <?php 
-            $isOpsActive = in_array($uri, ['admin/jadwal', 'admin/peraturan', 'admin/sanksi']); 
-        ?>
-        <div x-data="{ open: <?= $isOpsActive ? 'true' : 'false' ?> }">
-            <p class="px-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Operasional</p>
+        <div id="groupOps" class="mt-4">
+            <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Operasional</p>
             
-            <button onclick="toggleMenu('menuOps')" 
-                    class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-400 rounded-xl hover:bg-slate-800/50 hover:text-white transition-all duration-200 group">
+            <button onclick="toggleMenu('menuOps', 'arrowOps')" 
+                    class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-400 rounded-xl hover:bg-slate-800/50 hover:text-white transition-all duration-200 group focus:outline-none">
                 <div class="flex items-center">
                     <i class="fas fa-layer-group w-5 text-center text-slate-500 group-hover:text-amber-400 transition-colors"></i>
                     <span class="ml-3">Aktivitas Lab</span>
                 </div>
-                <i id="arrowOps" class="fas fa-chevron-right text-[10px] transition-transform duration-300 <?= $isOpsActive ? 'rotate-90 text-white' : 'text-slate-600' ?>"></i>
+                <i id="arrowOps" class="fas fa-chevron-right text-[10px] transition-transform duration-300"></i>
             </button>
 
-            <ul id="menuOps" class="<?= $isOpsActive ? 'block' : 'hidden' ?> mt-1 space-y-1 pl-11 relative">
+            <ul id="menuOps" class="hidden mt-1 space-y-1 pl-11 relative">
                 <div class="absolute left-6 top-0 bottom-0 w-px bg-slate-800"></div>
 
+                <?php $active = strpos($uri, 'jadwal') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/jadwal')" 
-                       class="<?= $uri == 'admin/jadwal' ? 'text-amber-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative">
-                       <?php if($uri == 'admin/jadwal'): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></span><?php endif; ?>
+                       class="<?= $active ? 'text-amber-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>">
+                       <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></span><?php endif; ?>
                        Jadwal Praktikum
                     </a>
                 </li>
+
+                <?php $active = strpos($uri, 'peraturan') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/peraturan')" 
-                       class="<?= $uri == 'admin/peraturan' ? 'text-amber-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative">
-                       <?php if($uri == 'admin/peraturan'): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></span><?php endif; ?>
+                       class="<?= $active ? 'text-amber-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>">
+                       <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></span><?php endif; ?>
                        Peraturan
                     </a>
                 </li>
+                
+                <?php $active = strpos($uri, 'sanksi') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/sanksi')" 
-                       class="<?= $uri == 'admin/sanksi' ? 'text-amber-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative">
-                       <?php if($uri == 'admin/sanksi'): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></span><?php endif; ?>
+                       class="<?= $active ? 'text-amber-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>">
+                       <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></span><?php endif; ?>
                        Data Sanksi
                     </a>
                 </li>
@@ -144,33 +159,68 @@
 
 </aside>
 
-<script>
-function toggleMenu(menuId) {
-    const menu = document.getElementById(menuId);
-    const arrowId = menuId === 'menuMaster' ? 'arrowMaster' : 'arrowOps';
-    const arrow = document.getElementById(arrowId);
-    
-    // Animasi sederhana
-    if (menu.classList.contains('hidden')) {
-        menu.classList.remove('hidden');
-        menu.classList.add('block');
-        arrow.classList.add('rotate-90');
-        arrow.classList.remove('text-slate-600');
-        arrow.classList.add('text-white');
-    } else {
-        menu.classList.add('hidden');
-        menu.classList.remove('block');
-        arrow.classList.remove('rotate-90');
-        arrow.classList.add('text-slate-600');
-        arrow.classList.remove('text-white');
-    }
-}
-</script>
-
 <style>
-/* Scrollbar Kustom agar menyatu dengan tema dark */
-.custom-scrollbar::-webkit-scrollbar { width: 5px; }
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
 </style>
+
+<script>
+// 1. Fungsi Toggle Menu (Buka/Tutup saat diklik)
+function toggleMenu(menuId, arrowId) {
+    const menu = document.getElementById(menuId);
+    const arrow = document.getElementById(arrowId);
+    
+    if (menu.classList.contains('hidden')) {
+        // BUKA
+        menu.classList.remove('hidden');
+        menu.classList.add('block');
+        if(arrow) {
+            arrow.classList.add('rotate-90');
+            arrow.classList.remove('text-slate-600');
+            arrow.classList.add('text-white');
+        }
+    } else {
+        // TUTUP
+        menu.classList.add('hidden');
+        menu.classList.remove('block');
+        if(arrow) {
+            arrow.classList.remove('rotate-90');
+            arrow.classList.add('text-slate-600');
+            arrow.classList.remove('text-white');
+        }
+    }
+}
+
+// 2. [PENTING] AUTO EXPAND SCRIPT
+// Script ini berjalan otomatis saat halaman selesai dimuat.
+// Ia mencari link yang aktif, lalu memaksa menu induknya terbuka.
+document.addEventListener("DOMContentLoaded", function() {
+    // Cari semua link yang punya atribut data-active="true"
+    const activeLinks = document.querySelectorAll('a[data-active="true"]');
+    
+    activeLinks.forEach(link => {
+        // Cari elemen UL pembungkus (Parent Menu)
+        const parentMenu = link.closest('ul');
+        if (parentMenu) {
+            // Paksa Buka Menu
+            parentMenu.classList.remove('hidden');
+            parentMenu.classList.add('block');
+            
+            // Putar Panahnya juga
+            // Kita cari ID panah berdasarkan ID menu
+            let arrowId = '';
+            if (parentMenu.id === 'menuMaster') arrowId = 'arrowMaster';
+            if (parentMenu.id === 'menuOps') arrowId = 'arrowOps';
+            
+            const arrow = document.getElementById(arrowId);
+            if (arrow) {
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-white');
+                arrow.classList.remove('text-slate-600');
+            }
+        }
+    });
+});
+</script>

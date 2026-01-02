@@ -227,35 +227,46 @@
 </div>
 
 <script>
-window.BASE_URL = '<?= BASE_URL ?>';
+// Pastikan BASE_URL dan API_URL sudah didefinisikan di layout utama/header
+// window.BASE_URL = '...'; 
+
 let allJadwalData = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     loadJadwal();
     
     // Live Search
-    document.getElementById('searchInput').addEventListener('keyup', function(e) {
-        const keyword = e.target.value.toLowerCase();
-        const filtered = allJadwalData.filter(item => 
-            (item.namaMatakuliah && item.namaMatakuliah.toLowerCase().includes(keyword)) || 
-            (item.namaLab && item.namaLab.toLowerCase().includes(keyword)) ||
-            (item.hari && item.hari.toLowerCase().includes(keyword)) ||
-            (item.kelas && item.kelas.toLowerCase().includes(keyword))
-        );
-        renderTable(filtered);
-    });
+    const searchInput = document.getElementById('searchInput');
+    if(searchInput) {
+        searchInput.addEventListener('keyup', function(e) {
+            const keyword = e.target.value.toLowerCase();
+            const filtered = allJadwalData.filter(item => 
+                (item.namaMatakuliah && item.namaMatakuliah.toLowerCase().includes(keyword)) || 
+                (item.namaLab && item.namaLab.toLowerCase().includes(keyword)) ||
+                (item.hari && item.hari.toLowerCase().includes(keyword)) ||
+                (item.kelas && item.kelas.toLowerCase().includes(keyword))
+            );
+            renderTable(filtered);
+        });
+    }
 
-    // File Input Handler
+    // File Input Handler (Untuk Preview Nama File)
     const fileInput = document.getElementById('fileExcel');
     if(fileInput) {
         fileInput.addEventListener('change', function(e) {
             const fileName = e.target.files[0] ? e.target.files[0].name : '';
-            const display = document.getElementById('fileNameDisplay');
+            const fileSize = e.target.files[0] ? (e.target.files[0].size / 1024 / 1024).toFixed(2) : 0;
+            
+            const displayDate = document.getElementById('fileNameDisplay');
+            const displaySize = document.getElementById('fileSizeDisplay');
+            const infoBox = document.getElementById('fileInfo');
+
             if(fileName) {
-                display.textContent = fileName;
-                display.classList.remove('hidden');
+                displayDate.textContent = fileName;
+                displaySize.textContent = fileSize + ' MB';
+                infoBox.classList.remove('hidden');
             } else {
-                display.classList.add('hidden');
+                infoBox.classList.add('hidden');
             }
         });
     }
@@ -263,7 +274,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // --- 1. LOAD DATA ---
 function loadJadwal() {
-    fetch(API_URL + '/jadwal').then(res => res.json()).then(res => {
+    fetch(API_URL + '/jadwal')
+    .then(res => res.json())
+    .then(res => {
         if((res.status === 'success' || res.code === 200) && res.data) {
             allJadwalData = res.data;
             renderTable(allJadwalData);
@@ -272,7 +285,7 @@ function loadJadwal() {
         }
     }).catch(err => {
         console.error(err);
-        document.getElementById('tableBody').innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-red-500">Gagal memuat data</td></tr>`;
+        document.getElementById('tableBody').innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-red-500">Gagal memuat data: ${err.message}</td></tr>`;
     });
 }
 
@@ -280,7 +293,8 @@ function renderTable(data) {
     const tbody = document.getElementById('tableBody');
     const totalEl = document.getElementById('totalData');
     tbody.innerHTML = '';
-    totalEl.innerText = `Total: ${data.length}`;
+    
+    if(totalEl) totalEl.innerText = `Total: ${data.length}`;
 
     if (data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
@@ -392,27 +406,19 @@ function openFormModal(id = null, event = null) {
     });
 }
 
-// --- PERBAIKAN SUBMIT FORM (MENGGUNAKAN JSON) ---
+// --- SUBMIT FORM TAMBAH/EDIT ---
 document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const btn = document.getElementById('btnSave');
     const msg = document.getElementById('formMessage');
     
-    // 1. Ambil ID untuk menentukan Edit atau Baru
     const id = document.getElementById('inputId').value;
-    
-    // 2. Tentukan URL API
     const url = id ? API_URL + '/jadwal/' + id : API_URL + '/jadwal';
-    
-    // 3. Tentukan Method (PUT untuk Edit, POST untuk Baru)
-    // Karena Backend Anda membedakan route PUT dan POST, kita gunakan Method yang sesuai
     const method = id ? 'PUT' : 'POST';
 
-    // 4. KONVERSI FORMDATA KE JSON (PENTING!)
     const formData = new FormData(this);
     const dataObj = Object.fromEntries(formData.entries());
 
-    // Validasi manual jika perlu (misal pastikan ID Matkul/Lab terpilih)
     if (!dataObj.idMatakuliah || !dataObj.idLaboratorium) {
         alert("Mohon pilih Mata Kuliah dan Laboratorium");
         return;
@@ -424,18 +430,15 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     fetch(url, { 
         method: method, 
         headers: {
-            'Content-Type': 'application/json', // Memberitahu PHP bahwa ini adalah JSON
-            // 'Authorization': 'Bearer ' + token // Jika pakai token
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify(dataObj) // Mengubah object JS menjadi string JSON
+        body: JSON.stringify(dataObj) 
     })
     .then(res => res.json())
     .then(data => {
-        // Sesuaikan pengecekan sukses dengan format response API Anda
-        // Biasanya controller Anda me-return: $this->success(...) -> { status: true, code: 200, ... }
         if (data.status === true || data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
-            loadJadwal(); // Reload tabel
+            loadJadwal();
             alert(id ? 'Jadwal berhasil diperbarui!' : 'Jadwal berhasil ditambahkan!');
         } else {
             throw new Error(data.message || 'Gagal menyimpan data');
@@ -453,7 +456,6 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
 });
 
 // --- 3. MODAL UPLOAD ---
-// --- LOGIKA MODAL UPLOAD ---
 function openUploadModal() {
     document.getElementById('uploadModal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -467,37 +469,17 @@ function openUploadModal() {
     document.getElementById('btnUpload').innerHTML = '<i class="fas fa-upload"></i> Upload & Proses';
 }
 
-// Handler saat file dipilih (Preview Nama File)
-// Kita gunakan event delegation agar aman meski elemen belum ready
-document.addEventListener('change', function(e) {
-    if (e.target && e.target.id === 'fileExcel') {
-        if (e.target.files.length > 0) {
-            const file = e.target.files[0];
-            const size = (file.size / 1024 / 1024).toFixed(2);
-            
-            document.getElementById('fileNameDisplay').textContent = file.name;
-            document.getElementById('fileSizeDisplay').textContent = size + ' MB';
-            document.getElementById('fileInfo').classList.remove('hidden');
-            document.getElementById('uploadMessage').classList.add('hidden');
-        }
-    }
-});
-
-// Handler Submit Form Upload
+// Handler Submit Form Upload (PERBAIKAN UTAMA: DIJADIKAN SATU)
 document.getElementById('uploadForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // --- PERBAIKAN UTAMA DISINI ---
-    // Kita ambil elemen langsung saat tombol ditekan, bukan mengandalkan variabel global
     const fileInputEl = document.getElementById('fileExcel');
-    
     if (!fileInputEl || fileInputEl.files.length === 0) {
         alert('Pilih file terlebih dahulu!');
         return;
     }
     
     const file = fileInputEl.files[0];
-    // -----------------------------
 
     // UI Elements
     const btn = document.getElementById('btnUpload');
@@ -515,7 +497,7 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     progressBar.style.width = '0%';
     
     const formData = new FormData();
-    formData.append('excel_file', file); // Sesuai controller PHP
+    formData.append('excel_file', file); 
 
     try {
         // Simulasi Progress
@@ -534,12 +516,6 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
             method: 'POST',
             body: formData
         });
-
-        // Cek jika response bukan JSON (misal error PHP Fatal)
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-            throw new Error("Server Error (Bukan JSON). Cek Library Excel.");
-        }
 
         const result = await response.json();
         
@@ -580,98 +556,6 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
         msgDiv.innerHTML = `
             <div class="flex items-center gap-2 mb-2 font-bold text-red-700"><i class="fas fa-exclamation-triangle"></i> Upload Gagal</div>
             <p>${error.message}</p>
-        `;
-        msgDiv.classList.remove('hidden');
-        progressText.innerText = 'Gagal';
-        progressBar.classList.add('bg-red-500');
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-upload"></i> Upload & Proses';
-    }
-});x
-
-document.getElementById('uploadForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const file = fileInput.files[0];
-    if (!file) {
-        alert('Pilih file terlebih dahulu!');
-        return;
-    }
-
-    // UI Elements
-    const btn = document.getElementById('btnUpload');
-    const msgDiv = document.getElementById('uploadMessage');
-    const progressDiv = document.getElementById('uploadProgress');
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
-    const progressPercent = document.getElementById('progressPercent');
-
-    // Reset UI State
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memproses...';
-    msgDiv.classList.add('hidden');
-    progressDiv.classList.remove('hidden');
-    progressBar.style.width = '0%';
-    
-    const formData = new FormData();
-    formData.append('excel_file', file); // Pastikan nama key ini 'excel_file' sesuai Controller PHP
-
-    try {
-        // Simulasi Progress Bar
-        let progress = 0;
-        const interval = setInterval(() => {
-            if(progress < 90) {
-                progress += Math.random() * 10;
-                const p = Math.min(progress, 90).toFixed(0);
-                progressBar.style.width = p + '%';
-                progressPercent.innerText = p + '%';
-            }
-        }, 300);
-
-        // --- PERBAIKAN URL DISINI ---
-        // Pastikan URL ini sama persis dengan yang ada di api.php ['POST']
-        const response = await fetch(API_URL + '/jadwal-praktikum/upload', {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-        
-        // Selesai Loading
-        clearInterval(interval);
-        progressBar.style.width = '100%';
-        progressPercent.innerText = '100%';
-        progressText.innerText = 'Selesai!';
-
-        // Handle Response
-        if (result.status === 'success' || result.code === 200) {
-            msgDiv.className = 'mb-4 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-800';
-            msgDiv.innerHTML = `<div class="flex items-center gap-2 mb-1 font-bold text-emerald-700"><i class="fas fa-check-circle text-lg"></i> Upload Berhasil!</div><p>${result.message}</p>`;
-            msgDiv.classList.remove('hidden');
-
-            setTimeout(() => {
-                closeModal('uploadModal');
-                loadJadwal();
-            }, 2000);
-
-        } else {
-            throw new Error(result.message || 'Gagal upload');
-        }
-
-    } catch (error) {
-        console.error('Upload Error:', error);
-        
-        // Tampilkan Error 404/500 dengan jelas
-        let errorMsg = error.message;
-        if(error.message.includes('Unexpected token')) {
-            errorMsg = "Terjadi kesalahan server (404/500). Cek URL API atau Library Excel.";
-        }
-
-        msgDiv.className = 'mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-800';
-        msgDiv.innerHTML = `
-            <div class="flex items-center gap-2 mb-2 font-bold text-red-700"><i class="fas fa-exclamation-triangle"></i> Upload Gagal</div>
-            <p>${errorMsg}</p>
         `;
         msgDiv.classList.remove('hidden');
         progressText.innerText = 'Gagal';
