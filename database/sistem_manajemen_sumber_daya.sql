@@ -273,6 +273,7 @@ INSERT INTO `matakuliah` (`idMatakuliah`, `kodeMatakuliah`, `namaMatakuliah`, `s
 CREATE TABLE `peraturan_lab` (
   `id` int(11) NOT NULL,
   `judul` varchar(150) NOT NULL,
+  `kategori` varchar(100) DEFAULT 'Larangan Umum',
   `deskripsi` text NOT NULL,
   `gambar` varchar(255) DEFAULT NULL,
   `urutan` int(11) DEFAULT 0,
