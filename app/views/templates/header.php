@@ -18,7 +18,12 @@
         
         // Tentukan curPage awal
         $curPage = $page ?? $pageQuery ?? ($segments[0] ?? 'home');
-        if ($curPage === 'index.php' || empty($curPage)) $curPage = 'home';
+
+        // --- PERBAIKAN DISINI ---
+        // Jika halaman terdeteksi sebagai 'index.php', 'public', atau kosong, set jadi 'home'
+        if ($curPage === 'index.php' || $curPage === 'public' || empty($curPage)) {
+            $curPage = 'home';
+        }
 
         // 2. LOGIKA SMART MAPPING (Memperbaiki Detail dari Card)
         // Kita paksa curPage menjadi kategori utama jika mengandung kata kunci tertentu
@@ -40,7 +45,7 @@
             'jadwal'       => 'praktikum.css',
             'kepala'       => 'sumberdaya.css',
             'asisten'      => 'sumberdaya.css',
-            'sumberdaya'   => 'sumberdaya.css', // Detail dari Card Asisten
+            'sumberdaya'   => 'sumberdaya.css', 
             'detail'       => 'sumberdaya.css', 
             'fasilitas'    => 'fasilitas.css',
             'riset'        => 'fasilitas.css',
