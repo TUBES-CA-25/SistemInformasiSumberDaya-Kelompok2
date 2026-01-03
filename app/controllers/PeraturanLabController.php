@@ -41,6 +41,7 @@ class PeraturanLabController extends Controller {
         if (isset($_FILES['gambar'])) {
             $input = [
                 'judul' => $_POST['judul'] ?? '',
+                'kategori' => $_POST['kategori'] ?? 'Larangan Umum',
                 'deskripsi' => $_POST['deskripsi'] ?? '',
                 'urutan' => $_POST['urutan'] ?? 0
             ];
@@ -82,6 +83,7 @@ class PeraturanLabController extends Controller {
         if (isset($_FILES['gambar'])) {
             $input = [
                 'judul' => $_POST['judul'] ?? '',
+                'kategori' => $_POST['kategori'] ?? 'Larangan Umum',
                 'deskripsi' => $_POST['deskripsi'] ?? '',
                 'urutan' => $_POST['urutan'] ?? 0
             ];
