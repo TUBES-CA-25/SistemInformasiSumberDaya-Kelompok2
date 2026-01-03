@@ -178,6 +178,7 @@ $id = $_GET['id'] ?? ($segments[1] ?? null);
 $aliases = [
     'tata-tertib'    => 'tatatertib',
     'peraturan'      => 'tatatertib',
+    'format-laporan'   => 'format-penulisan',
     'kepala-lab'     => 'kepala',
     'struktur'       => 'kepala',
     'profil'         => 'kepala',
@@ -222,7 +223,9 @@ if (isset($segments[1]) && $segments[1] !== '') {
 
 $pageCss = 'style.css'; // Fallback default
 if ($page == 'home')                               $pageCss = 'home.css';
-if ($page == 'tatatertib' || $page == 'jadwal')    $pageCss = 'praktikum.css';
+if ($page == 'tatatertib' || $page == 'jadwal' || $page == 'format-penulisan') {
+    $pageCss = 'praktikum.css';
+}
 if ($page == 'kepala' || $page == 'asisten' || $page == 'detail')      $pageCss = 'sumberdaya.css';
 if ($page == 'laboratorium' || $page == 'riset' || $page == 'detail_fasilitas')  $pageCss = 'fasilitas.css';
 if ($page == 'apps')                               $pageCss = 'apps.css';
@@ -256,6 +259,7 @@ $direct_views = [
     'apps'         => 'home/apps.php',
     'jadwal'       => 'praktikum/jadwal.php',
     'tatatertib'   => 'praktikum/tatatertib.php',
+   'format-penulisan' => 'praktikum/format_penulisan.php',
     'riset'        => 'fasilitas/riset.php',
     'laboratorium' => 'fasilitas/laboratorium.php',
     'detail_fasilitas' => 'fasilitas/detail.php',
