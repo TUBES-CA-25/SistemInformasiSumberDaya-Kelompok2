@@ -211,23 +211,23 @@
   margin-bottom: 0;
 }
 
-/* --- Staff Grid & Card --- */
+/* --- Staff Grid (MODIFIKASI: FLEXBOX CENTER) --- */
 .staff-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  display: flex; /* Ganti dari grid ke flex */
+  flex-wrap: wrap; /* Agar kartu turun ke bawah jika layar penuh */
+  justify-content: center; /* KUNCI: Membuat semua kartu Rata Tengah */
+  gap: 30px; /* Jarak antar kartu */
   margin-top: 20px;
-  align-items: start;
 }
 
-.card-link {
+/* Pastikan ukuran kartu konsisten */
+.staff-grid .card-link {
+  width: 280px; /* Lebar kartu disamakan dengan Pimpinan */
+  max-width: 100%;
   text-decoration: none;
-  color: inherit;
-  display: block;
-  height: 100%;
-  width: 100%;
 }
 
+/* --- Card Style (Tetap sama) --- */
 .staff-card {
   background: var(--card-bg);
   border: 2px solid var(--border);
@@ -317,6 +317,28 @@
   font-weight: 500;
 }
 
+/* --- Wrapper Khusus Kepala Lab (Agar Kartu Kecil & Rata Tengah) --- */
+.pimpinan-wrapper {
+  display: flex;
+  justify-content: center; /* Posisi Tengah */
+  gap: 30px;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+.pimpinan-wrapper .card-link {
+  /* Paksa ukuran kartu agar sama kecilnya dengan grid staff di bawahnya */
+  max-width: 280px;
+  width: 100%;
+}
+
+/* Responsif untuk HP */
+@media (max-width: 600px) {
+  .pimpinan-wrapper .card-link {
+    max-width: 100%; /* Di HP biarkan full width agar jelas */
+  }
+}
+
 .meta-item i {
   color: #94a3b8;
   font-size: 1.1rem;
@@ -397,9 +419,9 @@
 /* --- DETAIL BADGE (FIX FINAL) --- */
 .category-badge {
   display: inline-block;
-  width: fit-content;        /* <--- TAMBAHKAN INI (Wajib) */
-  align-self: flex-start;    /* <--- Pastikan ini tetap ada */
-  
+  width: fit-content; /* <--- TAMBAHKAN INI (Wajib) */
+  align-self: flex-start; /* <--- Pastikan ini tetap ada */
+
   padding: 8px 20px;
   border-radius: 50px;
   font-size: 0.85rem;
@@ -621,6 +643,10 @@
   .staff-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+  }
+
+  .staff-grid .card-link {
+    width: 46%;
   }
 
   .staff-card {

@@ -79,41 +79,39 @@ function getFotoUrl($row) {
         <?php if (!empty($pimpinan_list)) : ?>
             <div class="section-label">Kepala Laboratorium</div>
             
-            <?php foreach ($pimpinan_list as $row) : ?>
-                <?php $imgUrl = getFotoUrl($row); ?>
+            <div class="pimpinan-wrapper">
+                
+                <?php foreach ($pimpinan_list as $row) : ?>
+                    <?php $imgUrl = getFotoUrl($row); ?>
 
-                <a href="index.php?page=detail-asisten&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link" style="margin-bottom:50px">
+                    <a href="index.php?page=detail-asisten&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
+                        
+                        <div class="staff-card">
+                            <div class="staff-photo-box">
+                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                            </div>
 
-                    <div class="exec-card">
-                        <div class="exec-photo">
-                            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>">
-                        </div>
+                            <div class="staff-content">
+                                <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
+                                <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
 
-                        <div class="exec-info">
-                            <span class="exec-badge">Pimpinan</span>
-                            
-                            <h3 class="staff-name" style="font-size:2rem; margin-bottom:5px">
-                                <?= htmlspecialchars($row['nama']) ?>
-                            </h3>
-                            
-                            <p class="exec-role">
-                                <?= htmlspecialchars($row['jabatan']) ?>
-                            </p>
-                            
-                            <p style="color:#64748b; margin-bottom:20px">
-                                <?= !empty($row['nidn']) ? 'NIDN: ' . htmlspecialchars($row['nidn']) : 'Fakultas Ilmu Komputer UMI' ?>
-                            </p>
-
-                            <div class="exec-footer">
-                                <div class="meta-item">
-                                    <i class="ri-mail-line"></i>
-                                    <span><?= !empty($row['email']) ? htmlspecialchars($row['email']) : 'Hubungi Staff' ?></span>
+                                <div class="staff-footer">
+                                    <div class="meta-item">
+                                        <i class="ri-building-4-line"></i> Fikom UMI
+                                    </div>
+                                    <?php if (!empty($row['email'])) : ?>
+                                        <div class="meta-item">
+                                            <i class="ri-mail-line"></i>
+                                            <?= htmlspecialchars($row['email']) ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            <?php endforeach; ?>
+                    </a>
+                <?php endforeach; ?>
+                
+            </div>
         <?php endif; ?>
 
         <?php if (!empty($laboran_list)) : ?>
