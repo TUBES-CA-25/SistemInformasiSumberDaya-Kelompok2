@@ -37,6 +37,7 @@
                 <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
                     <th class="px-6 py-4 font-semibold text-center w-16">No</th>
                     <th class="px-6 py-4 font-semibold w-1/4">Nama Peraturan</th>
+                    <th class="px-6 py-4 font-semibold w-24">Kategori</th>
                     <th class="px-6 py-4 font-semibold">Deskripsi Singkat</th>
                     <th class="px-6 py-4 font-semibold text-center w-40">Tanggal</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
@@ -81,6 +82,16 @@
                             <input type="text" id="inputJudul" name="judul" required
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                                    placeholder="Contoh: Tata Tertib Penggunaan Lab Komputer">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Kategori <span class="text-red-500">*</span></label>
+                            <select id="inputKategori" name="kategori" 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+                                <option value="Kehadiran & Akademik">Kehadiran & Akademik</option>
+                                <option value="Standar Pakaian">Standar Pakaian</option>
+                                <option value="Larangan Umum">Larangan Umum</option>
+                            </select>
                         </div>
 
                         <div>
@@ -199,6 +210,11 @@ function renderTable(data) {
                 <td class="px-6 py-4">
                     <span class="font-bold text-gray-800 text-sm block group-hover:text-blue-600 transition-colors">${escapeHtml(item.judul)}</span>
                 </td>
+                <td class="px-6 py-4">
+                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold bg-purple-100 text-purple-800">
+                        ${escapeHtml(item.kategori || 'Larangan Umum')}
+                    </span>
+                </td>
                 <td class="px-6 py-4 text-gray-600 text-sm">
                     ${escapeHtml(deskripsi)}
                 </td>
@@ -245,6 +261,7 @@ function openFormModal(id = null, event = null) {
         if (data) {
             document.getElementById('inputId').value = data.id;
             document.getElementById('inputJudul').value = data.judul;
+            document.getElementById('inputKategori').value = data.kategori || 'Larangan Umum';
             document.getElementById('inputDeskripsi').value = data.deskripsi;
         }
     } else {
@@ -326,6 +343,13 @@ function openDetailModal(id) {
             <div>
                 <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Nama Peraturan</h4>
                 <p class="text-xl font-bold text-gray-900">${escapeHtml(data.judul)}</p>
+            </div>
+            
+            <div class="border-t border-gray-100 pt-3">
+                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Kategori</h4>
+                <span class="inline-flex items-center px-3 py-1 rounded-lg bg-purple-50 text-purple-700 text-sm font-semibold">
+                    <i class="fas fa-tag mr-2"></i> ${escapeHtml(data.kategori || 'Larangan Umum')}
+                </span>
             </div>
             
             <div class="border-t border-gray-100 pt-3">
