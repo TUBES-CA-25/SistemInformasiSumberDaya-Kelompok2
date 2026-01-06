@@ -49,8 +49,8 @@ if (!defined('PUBLIC_URL')) {
 }
 
 if (!defined('BASE_URL')) {
-    // Base URL naik satu tingkat dari Public URL
-    define('BASE_URL', (PUBLIC_URL));
+    // Base URL menunjuk ke folder public (untuk akses assets)
+    define('BASE_URL', PUBLIC_URL);
 }
 
 if (!defined('ASSETS_URL')) {
