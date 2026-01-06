@@ -3,6 +3,7 @@
 <section class="praktikum-section">
     <div class="container">
         <header class="page-header">
+            <span class="header-badge">Jadwal Praktikum 2025</span>
             <h1 id="header-day">Jadwal Praktikum</h1>
             <p>Data ditampilkan per ruangan laboratorium dengan informasi asisten lengkap.</p>
             
@@ -17,9 +18,7 @@
 </section>
 
 <script>
-/**
- * JAM DIGITAL (Update setiap detik)
- */
+
 function startClock() {
     const clockElement = document.getElementById('live-clock');
     const dayDisplay = document.getElementById('header-day');
