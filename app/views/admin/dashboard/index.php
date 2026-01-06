@@ -49,7 +49,21 @@
                         <p class="text-xs text-gray-500">Sesi yang berlangsung hari ini</p>
                     </div>
                 </div>
-                <span class="text-xs font-bold bg-white text-gray-600 px-4 py-2 rounded-lg border border-gray-200 shadow-sm" id="currentDate">-</span>
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 text-white px-4 py-2.5 rounded-xl shadow-md flex items-center gap-3 border border-blue-700">
+                        <div class="hidden sm:flex items-center justify-center w-9 h-9 rounded-lg bg-blue-500/30">
+                            <i class="fas fa-clock text-blue-100 animate-pulse text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-[9px] uppercase tracking-[0.2em] font-black text-blue-200 leading-none mb-1.5">Waktu Sekarang</p>
+                            <div id="realtimeClock" class="text-2xl font-black font-mono tabular-nums leading-none tracking-tight">00:00:00</div>
+                        </div>
+                    </div>
+                    <div class="bg-white px-4 py-2.5 rounded-xl border border-gray-200 shadow-sm hidden md:block">
+                        <p class="text-[9px] uppercase tracking-[0.2em] font-black text-gray-400 leading-none mb-1.5 text-center">Tanggal</p>
+                        <span class="text-sm font-bold text-gray-700 block whitespace-nowrap" id="currentDate">-</span>
+                    </div>
+                </div>
             </div>
             
             <div class="p-6 flex-1 bg-gray-50/30">
@@ -118,9 +132,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
     document.getElementById('currentDate').innerText = new Date().toLocaleDateString('id-ID', options);
 
-    // 2. Load Data dari Database
+    // 2. Update Jam Realtime setiap detik
+    updateRealtimeClock();
+    setInterval(updateRealtimeClock, 1000);
+
+    // 3. Load Data dari Database pertama kali
     loadDashboardStats();
+    
+    // 4. Refresh jadwal setiap menit (opsional untuk filter jam)
+    setInterval(loadDashboardStats, 60000); // Refresh setiap 60 detik
 });
+
+function updateRealtimeClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    
+    document.getElementById('realtimeClock').innerText = `${hours}:${minutes}:${seconds}`;
+}
 
 function loadDashboardStats() {
     // Panggil API yang baru kita buat

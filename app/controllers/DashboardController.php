@@ -72,17 +72,27 @@ class DashboardController extends Controller {
             // Perbedaan 5: Fetch All (MYSQLI_ASSOC)
             $jadwalHariIni = $result->fetch_all(MYSQLI_ASSOC);
 
-            // 5. Hitung Statistik
+            // 5. FILTER: Hapus jadwal yang sudah selesai berdasarkan waktuSelesai
+            $jamSekarang = date('H:i');
+            $jadwalAktif = array_filter($jadwalHariIni, function($jadwal) use ($jamSekarang) {
+                // Bandingkan waktuSelesai dengan jam sekarang
+                // Jika waktuSelesai > jamSekarang, maka masih aktif (belum selesai)
+                return $jadwal['waktuSelesai'] > $jamSekarang;
+            });
+            // Re-index array agar tidak ada gap index
+            $jadwalAktif = array_values($jadwalAktif);
+
+            // 6. Hitung Statistik
             $totalAsisten = $asistenModel->countAll();
             $totalLab = $labModel->countAll();
-            $totalJadwalToday = count($jadwalHariIni);
+            $totalJadwalToday = count($jadwalAktif); // Gunakan jadwalAktif, bukan jadwalHariIni
 
-            // 6. Kirim Response
+            // 7. Kirim Response
             $this->success([
                 'total_asisten' => $totalAsisten,
                 'total_lab' => $totalLab,
                 'total_jadwal_hari_ini' => $totalJadwalToday,
-                'jadwal_hari_ini' => $jadwalHariIni
+                'jadwal_hari_ini' => $jadwalAktif  // Kirim jadwalAktif, bukan jadwalHariIni
             ]);
 
         } catch (Exception $e) {

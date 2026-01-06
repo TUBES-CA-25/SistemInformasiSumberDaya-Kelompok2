@@ -11,8 +11,16 @@ class JadwalPraktikumModel extends Model {
                   LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
                   ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'), j.waktuMulai ASC";
+        
         $result = $this->db->query($query);
-        return ($result) ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        
+        // Error checking
+        if (!$result) {
+            throw new Exception('Database error: ' . $this->db->error);
+        }
+        
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        return ($data !== null) ? $data : [];
     }
 
     public function findIdByName($table, $col, $val) {
@@ -35,5 +43,50 @@ class JadwalPraktikumModel extends Model {
             $data['dosen'], $data['asisten1'], $data['asisten2'], 
             $data['frekuensi'], $data['status']);
         return $stmt->execute();
+    }
+
+    /**
+     * Cek apakah jadwal sudah ada (untuk menghindari duplikasi pada import Excel)
+     * Kombinasi unik: idMatakuliah + kelas + hari + waktuMulai + waktuSelesai + idLaboratorium
+     */
+    public function checkDuplicate($idMatakuliah, $kelas, $hari, $waktuMulai, $waktuSelesai, $idLaboratorium) {
+        $query = "SELECT idJadwal FROM jadwalpraktikum 
+                  WHERE idMatakuliah = ? 
+                  AND kelas = ? 
+                  AND hari = ? 
+                  AND waktuMulai = ? 
+                  AND waktuSelesai = ? 
+                  AND idLaboratorium = ? 
+                  LIMIT 1";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("issssi", $idMatakuliah, $kelas, $hari, $waktuMulai, $waktuSelesai, $idLaboratorium);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0; // Return true jika ada duplikat
+    }
+
+    /**
+     * Delete jadwal berdasarkan ID
+     */
+    public function delete($id, $idColumn = 'idJadwal') {
+        $query = "DELETE FROM jadwalpraktikum WHERE {$idColumn} = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
+
+    /**
+     * Get jadwal by ID
+     */
+    public function getById($id, $idColumn = 'idJadwal') {
+        $query = "SELECT j.*, m.namaMatakuliah, l.nama as namaLab 
+                  FROM jadwalpraktikum j
+                  LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
+                  LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
+                  WHERE j.{$idColumn} = ? LIMIT 1";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
     }
 }
