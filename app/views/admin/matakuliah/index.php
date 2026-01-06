@@ -269,6 +269,7 @@ document.getElementById('matkulForm').addEventListener('submit', function(e) {
 
     btn.disabled = true; 
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
+    showLoading('Menyimpan mata kuliah...');
 
     fetch(url, { 
         method: method, 
@@ -277,17 +278,20 @@ document.getElementById('matkulForm').addEventListener('submit', function(e) {
     })
     .then(res => res.json())
     .then(data => {
+        hideLoading();
         if (data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
             loadMatakuliah();
-            alert(id ? 'Data berhasil diupdate!' : 'Data berhasil disimpan!');
+            showSuccess(id ? 'Mata kuliah berhasil diperbarui!' : 'Mata kuliah baru berhasil ditambahkan!');
         } else {
             throw new Error(data.message || 'Gagal menyimpan data');
         }
     })
     .catch(err => {
+        hideLoading();
         msg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm mb-4 border border-red-200 flex items-center gap-2"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
         msg.classList.remove('hidden');
+        showError(err.message);
     })
     .finally(() => { 
         btn.disabled = false; 
@@ -303,11 +307,20 @@ function closeModal(modalId) {
 
 function hapusMatakuliah(id, event) {
     if(event) event.stopPropagation();
-    if(confirm('Yakin ingin menghapus mata kuliah ini?')) {
+    confirmDelete(() => {
+        showLoading('Menghapus data...');
         fetch(API_URL + '/matakuliah/' + id, { method: 'DELETE' })
         .then(res => res.json())
-        .then(() => { loadMatakuliah(); alert('Data terhapus!'); });
-    }
+        .then(() => { 
+            hideLoading();
+            loadMatakuliah(); 
+            showSuccess('Mata kuliah berhasil dihapus!'); 
+        })
+        .catch(err => {
+            hideLoading();
+            showError('Gagal menghapus data');
+        });
+    });
 }
 
 document.onkeydown = function(evt) {

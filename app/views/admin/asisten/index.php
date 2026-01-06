@@ -241,13 +241,24 @@ document.getElementById('asistenForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const btn = document.getElementById('btnSave'); const formMsg = document.getElementById('formMessage');
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
+    showLoading('Menyimpan data asisten...');
     const formData = new FormData(this);
     const id = document.getElementById('inputIdAsisten').value;
     const url = id ? API_URL + '/asisten/' + id : API_URL + '/asisten';
     fetch(url, { method: 'POST', body: formData }).then(res => res.json()).then(data => {
-        if (data.status === 'success' || data.code === 201 || data.code === 200) { closeModal('formModal'); loadAsisten(); alert(id ? 'Data diupdate!' : 'Data disimpan!'); } 
+        hideLoading();
+        if (data.status === 'success' || data.code === 201 || data.code === 200) { 
+            closeModal('formModal'); 
+            loadAsisten(); 
+            showSuccess(id ? 'Data asisten berhasil diperbarui!' : 'Asisten baru berhasil ditambahkan!'); 
+        } 
         else { throw new Error(data.message || 'Gagal menyimpan'); }
-    }).catch(err => { formMsg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`; formMsg.classList.remove('hidden'); })
+    }).catch(err => { 
+        hideLoading();
+        formMsg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`; 
+        formMsg.classList.remove('hidden'); 
+        showError(err.message);
+    })
     .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data'; });
 });
 
@@ -318,19 +329,26 @@ document.getElementById('koordinatorForm').addEventListener('submit', function(e
     }
 
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+    showLoading('Memperbarui koordinator...');
     fetch(API_URL + '/asisten/' + selected.value + '/koordinator', { method: 'POST' })
     .then(res => res.json())
     .then(data => {
+        hideLoading();
         if(data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('koordinatorModal');
             loadAsisten(); // Reload tabel utama
-            alert('Koordinator berhasil diperbarui!');
+            showSuccess('Koordinator berhasil diperbarui!');
         } else {
             msg.innerHTML = `<div class="text-red-500 text-sm">${data.message || 'Gagal update'}</div>`;
             msg.classList.remove('hidden');
+            showError(data.message || 'Gagal memperbarui koordinator');
         }
     })
-    .catch(err => console.error(err))
+    .catch(err => {
+        hideLoading();
+        console.error(err);
+        showError('Kesalahan sistem saat update koordinator');
+    })
     .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Pilihan'; });
 });
 
@@ -343,6 +361,19 @@ document.onkeydown = function(evt) {
 };
 function hapusAsisten(id, event) { 
     if(event) event.stopPropagation();
-    if(confirm('Hapus data?')) { fetch(API_URL + '/asisten/' + id, { method: 'DELETE' }).then(() => { loadAsisten(); alert('Terhapus'); }); }
+    confirmDelete(() => {
+        showLoading('Menghapus data...');
+        fetch(API_URL + '/asisten/' + id, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(() => { 
+            hideLoading();
+            loadAsisten(); 
+            showSuccess('Data asisten berhasil dihapus!'); 
+        })
+        .catch(err => {
+            hideLoading();
+            showError('Gagal menghapus data');
+        });
+    });
 }
 </script>

@@ -292,17 +292,20 @@ document.getElementById('peraturanForm').addEventListener('submit', function(e) 
     })
     .then(res => res.json())
     .then(data => {
+        hideLoading();
         if (data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
             loadPeraturan();
-            alert(id ? 'Data berhasil diupdate!' : 'Data berhasil disimpan!');
+            showSuccess(id ? 'Peraturan berhasil diperbarui!' : 'Peraturan baru berhasil ditambahkan!');
         } else {
             throw new Error(data.message || 'Gagal menyimpan data');
         }
     })
     .catch(err => {
+        hideLoading();
         msg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm mb-4 border border-red-200"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
         msg.classList.remove('hidden');
+        showError(err.message);
     })
     .finally(() => { 
         btn.disabled = false; 
@@ -381,12 +384,20 @@ function closeModal(modalId) {
 function hapusPeraturan(id, event) {
     if (event) event.stopPropagation(); // Mencegah klik tembus
     
-    if(confirm('Yakin ingin menghapus peraturan ini?')) {
+    confirmDelete(() => {
+        showLoading('Menghapus data...');
         fetch(API_URL + '/peraturan-lab/' + id, { method: 'DELETE' })
         .then(res => res.json())
-        .then(() => { loadPeraturan(); }) 
-        .catch(err => alert('Gagal menghapus'));
-    }
+        .then(() => { 
+            hideLoading();
+            loadPeraturan(); 
+            showSuccess('Peraturan berhasil dihapus!');
+        }) 
+        .catch(err => {
+            hideLoading();
+            showError('Gagal menghapus data');
+        });
+    });
 }
 
 function filterTable(searchTerm) {

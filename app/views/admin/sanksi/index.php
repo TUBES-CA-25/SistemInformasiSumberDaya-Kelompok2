@@ -274,17 +274,20 @@ document.getElementById('sanksiForm').addEventListener('submit', function(e) {
     })
     .then(res => res.json())
     .then(data => {
+        hideLoading();
         if (data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
             loadSanksi();
-            alert(id ? 'Data berhasil diupdate!' : 'Data berhasil disimpan!');
+            showSuccess(id ? 'Sanksi berhasil diperbarui!' : 'Sanksi baru berhasil ditambahkan!');
         } else {
             throw new Error(data.message || 'Gagal menyimpan data');
         }
     })
     .catch(err => {
+        hideLoading();
         msg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm mb-4 border border-red-200"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
         msg.classList.remove('hidden');
+        showError(err.message);
     })
     .finally(() => { 
         btn.disabled = false; 
@@ -353,12 +356,21 @@ function closeModal(modalId) {
 
 function hapusSanksi(id, event) {
     if (event) event.stopPropagation();
-    if(confirm('Yakin ingin menghapus sanksi ini?')) {
+    
+    confirmDelete(() => {
+        showLoading('Menghapus data...');
         fetch(API_URL + '/sanksi-lab/' + id, { method: 'DELETE' })
         .then(res => res.json())
-        .then(() => { loadSanksi(); }) 
-        .catch(err => alert('Gagal menghapus'));
-    }
+        .then(() => { 
+            hideLoading();
+            loadSanksi(); 
+            showSuccess('Sanksi berhasil dihapus!');
+        }) 
+        .catch(err => {
+            hideLoading();
+            showError('Gagal menghapus data');
+        });
+    });
 }
 
 function filterTable(searchTerm) {

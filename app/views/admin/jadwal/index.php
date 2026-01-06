@@ -436,18 +436,21 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
     })
     .then(res => res.json())
     .then(data => {
+        hideLoading();
         if (data.status === true || data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
             loadJadwal();
-            alert(id ? 'Jadwal berhasil diperbarui!' : 'Jadwal berhasil ditambahkan!');
+            showSuccess(id ? 'Jadwal berhasil diperbarui!' : 'Jadwal baru berhasil ditambahkan!');
         } else {
             throw new Error(data.message || 'Gagal menyimpan data');
         }
     })
     .catch(err => {
+        hideLoading();
         console.error(err);
         msg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm mb-4 border border-red-200 flex items-center gap-2"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
         msg.classList.remove('hidden');
+        showError(err.message);
     })
     .finally(() => { 
         btn.disabled = false; 
@@ -574,11 +577,20 @@ function closeModal(modalId) {
 
 function hapusJadwal(id, event) {
     if(event) event.stopPropagation();
-    if(confirm('Hapus jadwal ini?')) {
+    confirmDelete(() => {
+        showLoading('Menghapus data...');
         fetch(API_URL + '/jadwal/' + id, { method: 'DELETE' })
         .then(res => res.json())
-        .then(() => { loadJadwal(); alert('Data terhapus!'); });
-    }
+        .then(() => { 
+            hideLoading();
+            loadJadwal(); 
+            showSuccess('Jadwal berhasil dihapus!'); 
+        })
+        .catch(err => {
+            hideLoading();
+            showError('Gagal menghapus data');
+        });
+    });
 }
 
 document.onkeydown = function(evt) {
