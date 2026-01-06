@@ -14,9 +14,22 @@ class JadwalPraktikumController extends Controller {
     }
 
     public function uploadExcel() {
-        // Pastikan respon murni JSON untuk menghindari "Unexpected token <"
+        // Bersihkan semua output buffer
         while (ob_get_level()) { ob_end_clean(); }
-        header('Content-Type: application/json');
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        
+        // Set error handler untuk catch PHP errors
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr
+            ]));
+        });
 
         try {
             if (!isset($_FILES['excel_file'])) throw new Exception("File tidak ditemukan.");
@@ -24,6 +37,7 @@ class JadwalPraktikumController extends Controller {
             $spreadsheet = IOFactory::load($_FILES['excel_file']['tmp_name']);
             $worksheet = $spreadsheet->getActiveSheet();
             $success = 0;
+            $duplicate = 0;
 
             foreach ($worksheet->getRowIterator(2) as $row) {
                 $cellIterator = $row->getCellIterator();
@@ -54,6 +68,13 @@ class JadwalPraktikumController extends Controller {
                 $idLab = $this->findOrCreateMaster('laboratorium', 'nama', $labNama);
 
                 if ($idMK && $idLab) {
+                    // CEK DUPLIKASI sebelum insert
+                    if ($this->model->checkDuplicate($idMK, $kelas, ucfirst(strtolower($hari)), $start, $end, $idLab)) {
+                        // Data sudah ada, skip
+                        $duplicate++;
+                        continue;
+                    }
+
                     $this->model->insert([
                         'idMatakuliah'   => $idMK,
                         'kelas'          => $kelas,
@@ -70,9 +91,17 @@ class JadwalPraktikumController extends Controller {
                     $success++;
                 }
             }
-            echo json_encode(['status' => 'success', 'message' => "Berhasil mengimpor $success data."]);
+            
+            $message = "Berhasil mengimpor $success data.";
+            if ($duplicate > 0) {
+                $message .= " ($duplicate data duplikat dilewati)";
+            }
+            echo json_encode(['status' => 'success', 'code' => 201, 'message' => $message]);
         } catch (Exception $e) {
-            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
+        } finally {
+            restore_error_handler();
         }
         exit;
     }
@@ -93,9 +122,117 @@ class JadwalPraktikumController extends Controller {
     }
 
     public function apiIndex() {
+        // Bersihkan semua output buffer sebelumnya
         while (ob_get_level()) { ob_end_clean(); }
-        header('Content-Type: application/json');
-        echo json_encode(['status' => 'success', 'data' => $this->model->getAll()]);
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        
+        // Set error handler untuk catch PHP errors
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr . ' on line ' . $errline
+            ]));
+        });
+        
+        // Set exception handler
+        set_exception_handler(function($exception) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine()
+            ]));
+        });
+        
+        try {
+            // Check database connection
+            if (!$this->model->db || !$this->model->db->ping()) {
+                throw new Exception('Database connection failed');
+            }
+            
+            $data = $this->model->getAll();
+            if ($data === false) {
+                throw new Exception('Database query failed: ' . $this->model->db->error);
+            }
+            
+            if (!is_array($data)) {
+                throw new Exception('Invalid data format from database');
+            }
+            
+            // Output JSON
+            echo json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'data' => $data
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+            
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => $e->getMessage()
+            ]);
+        } finally {
+            // Restore handlers
+            restore_error_handler();
+            restore_exception_handler();
+        }
+        exit;
+    }
+
+    public function delete($params = []) {
+        // Bersihkan semua output buffer
+        while (ob_get_level()) { ob_end_clean(); }
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        
+        // Set error handler untuk catch PHP errors
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr
+            ]));
+        });
+
+        try {
+            $id = $params['id'] ?? null;
+            if (!$id) {
+                throw new Exception('ID jadwal tidak ditemukan');
+            }
+
+            // Cek apakah jadwal ada
+            $jadwal = $this->model->getById($id);
+            if (!$jadwal) {
+                throw new Exception('Jadwal tidak ditemukan');
+            }
+
+            // Delete jadwal
+            $result = $this->model->delete($id);
+            if ($result) {
+                echo json_encode(['status' => 'success', 'code' => 200, 'message' => 'Jadwal berhasil dihapus']);
+            } else {
+                throw new Exception('Gagal menghapus jadwal dari database');
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
+        } finally {
+            restore_error_handler();
+        }
         exit;
     }
 }

@@ -48,10 +48,10 @@ class Router {
         $this->get('/laboratorium/{id}', 'InformasiLabController', 'detail');
         $this->get('/praktikum', 'PraktikumController', 'index');
         $this->get('/praktikum/sanksi', 'SanksiController', 'index');
-        $this->get('/peraturan', 'PeraturanController', 'index');
+        $this->get('/peraturan', 'PeraturanLabController', 'index');
         // Aliases for Indonesian naming used in legacy
-        $this->get('/tata-tertib', 'PeraturanController', 'index');
-        $this->get('/tatatertib', 'PeraturanController', 'index');
+        $this->get('/tata-tertib', 'PeraturanLabController', 'index');
+        $this->get('/tatatertib', 'PeraturanLabController', 'index');
         $this->get('/riset', 'RisetController', 'index');
         $this->get('/profil', 'ProfilController', 'index');
         $this->get('/kepala-lab', 'KepalaLabController', 'index');
@@ -138,12 +138,12 @@ class Router {
         $this->delete('/admin/manajemen/{id}', 'ManajemenController', 'delete');
 
         // Admin Peraturan
-        $this->get('/admin/peraturan', 'PeraturanController', 'adminIndex');
-        $this->get('/admin/peraturan/create', 'PeraturanController', 'create');
-        $this->post('/admin/peraturan', 'PeraturanController', 'store');
-        $this->get('/admin/peraturan/{id}/edit', 'PeraturanController', 'edit');
-        $this->put('/admin/peraturan/{id}', 'PeraturanController', 'update');
-        $this->delete('/admin/peraturan/{id}', 'PeraturanController', 'delete');
+        $this->get('/admin/peraturan', 'PeraturanLabController', 'adminIndex');
+        $this->get('/admin/peraturan/create', 'PeraturanLabController', 'create');
+        $this->post('/admin/peraturan', 'PeraturanLabController', 'store');
+        $this->get('/admin/peraturan/{id}/edit', 'PeraturanLabController', 'edit');
+        $this->put('/admin/peraturan/{id}', 'PeraturanLabController', 'update');
+        $this->delete('/admin/peraturan/{id}', 'PeraturanLabController', 'delete');
 
         // Admin Sanksi
         $this->get('/admin/sanksi', 'SanksiController', 'adminIndex');
@@ -162,7 +162,9 @@ class Router {
         $this->get('/api/laboratorium', 'InformasiLabController', 'apiIndex');
         $this->get('/api/laboratorium/{id}', 'InformasiLabController', 'apiShow');
         $this->get('/api/sanksi-lab', 'SanksiController', 'apiIndex');
-        $this->get('/api/tata-tertib', 'PeraturanController', 'apiIndex');
+        $this->get('/api/peraturan-lab', 'PeraturanLabController', 'apiIndex');
+        $this->get('/api/peraturan-lab/{id}', 'PeraturanLabController', 'apiShow');
+        $this->get('/api/tata-tertib', 'PeraturanLabController', 'apiIndex');
         $this->get('/api/manajemen', 'KepalaLabController', 'apiIndex');
     }
 

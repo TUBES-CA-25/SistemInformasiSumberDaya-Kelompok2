@@ -36,6 +36,18 @@ class PeraturanLabController extends Controller {
         return $this->apiShow($params);
     }
 
+    public function adminIndex($params = []) {
+        $this->view('admin/peraturan/index');
+    }
+
+    public function create($params = []) {
+        $this->view('admin/peraturan/form', ['action' => 'create']);
+    }
+
+    public function edit($params = []) {
+        $this->view('admin/peraturan/form', ['action' => 'edit', 'id' => $params['id'] ?? null]);
+    }
+
     public function store() {
         // Cek apakah request multipart/form-data (upload file)
         if (isset($_FILES['gambar'])) {
