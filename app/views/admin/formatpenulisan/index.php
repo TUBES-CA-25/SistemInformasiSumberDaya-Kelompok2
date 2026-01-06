@@ -49,91 +49,126 @@
                 <form id="formatForm">
                     <input type="hidden" id="inputId" name="id_format">
                     
-                    <div class="grid grid-cols-1 gap-5">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Judul / Nama <span class="text-red-500">*</span></label>
-                                <input type="text" id="inputJudul" name="judul" required
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                       placeholder="Contoh: Teknik Penulisan">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Kategori <span class="text-red-500">*</span></label>
-                                <select id="inputKategori" name="kategori" required onchange="toggleFormFields(this.value)"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                                    <option value="pedoman">Pedoman (Informasi Card)</option>
-                                    <option value="unduhan">Unduhan (File/Link)</option>
-                                </select>
+                    <div class="space-y-6">
+                        <!-- Informasi Utama -->
+                        <div class="bg-blue-50/30 p-4 rounded-xl border border-blue-100/50 space-y-4">
+                            <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <i class="fas fa-info-circle"></i> Informasi Utama
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                <div class="md:col-span-12">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Judul / Nama <span class="text-red-500">*</span></label>
+                                    <input type="text" id="inputJudul" name="judul" required
+                                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white shadow-sm"
+                                           placeholder="Contoh: Teknik Penulisan Laporan">
+                                </div>
+                                <div class="md:col-span-7">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
+                                    <select id="inputKategori" name="kategori" required onchange="toggleFormFields(this.value)"
+                                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white shadow-sm font-medium">
+                                        <option value="pedoman">Pedoman (Card Informasi)</option>
+                                        <option value="unduhan">Unduhan (File/Link Eksternal)</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-5">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">No Urut Tampil</label>
+                                    <input type="number" id="inputUrutan" name="urutan" value="0"
+                                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white shadow-sm"
+                                           placeholder="0">
+                                </div>
                             </div>
                         </div>
 
-                        <div id="sectionPedoman" class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
+                        <!-- Konfigurasi Pedoman -->
+                        <div id="sectionPedoman" class="p-4 rounded-xl border border-gray-100 bg-gray-50/50 space-y-4">
+                            <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <i class="fas fa-palette"></i> Tampilan Card
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
                                         Icon (Remix Icon) 
-                                        <a href="https://remixicon.com/" target="_blank" class="text-xs text-blue-500 hover:underline font-normal ml-1">
+                                        <a href="https://remixicon.com/" target="_blank" class="text-[10px] text-blue-500 hover:underline font-normal ml-1">
                                             <i class="ri-external-link-line"></i> Cari Icon
                                         </a>
                                     </label>
                                     <div class="relative">
                                         <input type="text" id="inputIcon" name="icon" onkeyup="updateIconPreview(this.value)"
-                                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none pr-10"
-                                               placeholder="ri-edit-2-line">
-                                        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                            <i id="previewIcon" class="ri-question-line"></i>
+                                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none pr-10"
+                                               placeholder="ri-book-line">
+                                        <div class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-gray-100 rounded text-gray-600">
+                                            <i id="previewIcon" class="ri-question-line text-lg"></i>
                                         </div>
                                     </div>
                                     <p class="text-[10px] text-gray-500 mt-1 italic">Contoh: ri-layout-line, ri-pencil-line</p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Warna Icon</label>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Warna Aksen Icon</label>
                                     <select id="inputWarna" name="warna" 
-                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                                        <option value="icon-blue">Blue</option>
-                                        <option value="icon-pink">Pink</option>
-                                        <option value="icon-red">Red</option>
-                                        <option value="icon-orange">Orange</option>
-                                        <option value="icon-emerald">Emerald</option>
+                                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                                        <option value="icon-blue">Biru (Default)</option>
+                                        <option value="icon-pink">Merah Muda</option>
+                                        <option value="icon-red">Merah</option>
+                                        <option value="icon-orange">Oranye</option>
+                                        <option value="icon-emerald">Hijau (Emerald)</option>
                                     </select>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Deskripsi / Konten (Ganti baris = poin bullet)</label>
-                                <textarea id="inputDeskripsi" name="deskripsi" rows="4" 
-                                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                          placeholder="Tulis poin-poin pedoman di sini..."></textarea>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Deskripsi / Konten <span class="text-xs font-normal text-gray-400 font-italic">(Enter = Poin baru)</span></label>
+                                <textarea id="inputDeskripsi" name="deskripsi" rows="5" 
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none"
+                                          placeholder="Tulis setiap poin pedoman di baris baru..."></textarea>
                             </div>
                         </div>
 
-                        <div id="sectionUnduhan" class="space-y-4 hidden">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih File (PDF/Docs)</label>
+                        <!-- Konfigurasi Unduhan -->
+                        <div id="sectionUnduhan" class="p-4 rounded-xl border border-amber-100 bg-amber-50/30 space-y-4 hidden">
+                            <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <i class="fas fa-file-download"></i> Pengaturan File
+                            </h4>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div class="p-3 bg-white border border-amber-200/50 rounded-lg">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Unggah Berkas Baru</label>
                                     <input type="file" id="inputFile" name="file"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                                    <p id="currentFile" class="text-xs text-blue-600 mt-1 hidden"></p>
+                                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 transition-all">
+                                    <div id="currentFile" class="mt-2 flex items-center gap-2 p-2 bg-blue-50 rounded-lg text-xs text-blue-700 hidden">
+                                        <i class="fas fa-paperclip"></i>
+                                        <span id="currentFileName"></span>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500 mt-2 font-italic">* Biarkan kosong jika tidak ingin mengganti file yang sudah ada</p>
+                                </div>
+                                <div class="separator flex items-center gap-3 py-1">
+                                    <div class="h-[1px] bg-amber-200 flex-1"></div>
+                                    <span class="text-[10px] font-bold text-amber-400 italic">ATAU</span>
+                                    <div class="h-[1px] bg-amber-200 flex-1"></div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Atau Link Eksternal (Opsional)</label>
-                                    <input type="url" id="inputLink" name="link_external"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                           placeholder="https://gdrive.com/...">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tautan Eksternal (Google Drive/Lainnya)</label>
+                                    <div class="relative">
+                                        <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <i class="fas fa-link"></i>
+                                        </div>
+                                        <input type="url" id="inputLink" name="link_external"
+                                               class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                               placeholder="https://drive.google.com/...">
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1">Urutan Tampil</label>
-                                <input type="number" id="inputUrutan" name="urutan" value="0"
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
                             </div>
                         </div>
                     </div>
 
                     <div id="formMessage" class="hidden mt-4"></div>
 
-                    <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-100">
-                        <button type="button" onclick="closeModal('formModal')" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg font-medium">Batal</button>
-                        <button type="submit" id="btnSave" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium shadow-sm hover:bg-blue-700 transition-colors">Simpan Data</button>
+                    <div class="flex justify-end gap-3 pt-6 mt-8 border-t border-gray-100">
+                        <button type="button" onclick="closeModal('formModal')" 
+                                class="px-6 py-2.5 bg-gray-100 text-gray-600 rounded-xl font-semibold hover:bg-gray-200 transition-all active:scale-95">
+                            Batal
+                        </button>
+                        <button type="submit" id="btnSave" 
+                                class="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-semibold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all transform active:scale-95 flex items-center gap-2">
+                            <i class="fas fa-save"></i> Simpan Perubahan
+                        </button>
                     </div>
                 </form>
             </div>
@@ -177,14 +212,34 @@ function renderTable(data) {
         return;
     }
     
-    tbody.innerHTML = data.map((item, index) => {
-        const isPedoman = item.kategori === 'pedoman';
-        const linkDisplay = item.link_external ? `<a href="${item.link_external}" target="_blank" class="text-blue-500 underline ml-2">Link</a>` : '';
-        const fileDisplay = item.file ? `<span class="bg-gray-100 px-2 py-0.5 rounded ml-2">📎 ${item.file}</span>` : '';
+    let html = '';
+    let lastCategory = '';
+    let categoryIndex = 0;
 
-        return `
+    data.forEach((item) => {
+        const isPedoman = item.kategori === 'pedoman';
+        
+        // Tambahkan Header Grup jika kategori berganti
+        if (item.kategori !== lastCategory) {
+            lastCategory = item.kategori;
+            categoryIndex = 0; // Reset index per kategori
+            html += `
+                <tr class="bg-gray-100/80">
+                    <td colspan="4" class="px-6 py-2 text-[11px] font-bold text-gray-600 uppercase tracking-widest">
+                        <i class="fas ${isPedoman ? 'fa-book' : 'fa-download'} mr-1"></i> 
+                        Kelompok: ${isPedoman ? 'Pedoman Penulisan' : 'Pusat Unduhan'}
+                    </td>
+                </tr>
+            `;
+        }
+
+        categoryIndex++;
+        const linkDisplay = item.link_external ? `<a href="${item.link_external}" target="_blank" class="text-blue-500 underline ml-2"><i class="fas fa-external-link-alt text-[10px]"></i> Link</a>` : '';
+        const fileDisplay = item.file ? `<span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded ml-2 border border-blue-100 text-[10px]">📎 ${item.file}</span>` : '';
+
+        html += `
             <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
-                <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
+                <td class="px-6 py-4 text-center font-medium text-gray-400 text-xs">${categoryIndex}</td>
                 <td class="px-6 py-4">
                     <div class="font-bold text-gray-800">${escapeHtml(item.judul)}</div>
                     <div class="text-[10px] text-gray-500 italic">
@@ -200,17 +255,19 @@ function renderTable(data) {
                 </td>
                 <td class="px-6 py-4">
                     <div class="flex justify-center gap-2">
-                        <button onclick="openFormModal(${item.id_format})" class="w-8 h-8 rounded bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-colors flex items-center justify-center">
+                        <button onclick="openFormModal(${item.id_format})" class="w-8 h-8 rounded bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-colors flex items-center justify-center shadow-sm">
                             <i class="fas fa-pen text-xs"></i>
                         </button>
-                        <button onclick="deleteData(${item.id_format})" class="w-8 h-8 rounded bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center">
+                        <button onclick="deleteData(${item.id_format})" class="w-8 h-8 rounded bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center shadow-sm">
                             <i class="fas fa-trash-alt text-xs"></i>
                         </button>
                     </div>
                 </td>
             </tr>
         `;
-    }).join('');
+    });
+
+    tbody.innerHTML = html;
 }
 
 function openFormModal(id = null) {
@@ -240,7 +297,12 @@ function openFormModal(id = null) {
             
             if (data.file) {
                 const cf = document.getElementById('currentFile');
-                cf.innerText = 'File saat ini: ' + data.file;
+                const cfn = document.getElementById('currentFileName');
+                if (cfn) {
+                    cfn.innerText = data.file;
+                } else {
+                    cf.innerText = 'File saat ini: ' + data.file;
+                }
                 cf.classList.remove('hidden');
             }
             

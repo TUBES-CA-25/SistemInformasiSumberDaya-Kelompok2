@@ -19,6 +19,23 @@
         // Tentukan curPage awal
         $curPage = $page ?? $pageQuery ?? ($segments[0] ?? 'home');
 
+        // Normalisasi Alias (Agar CSS tetap ke-load meski pakai URL alias)
+        $aliases = [
+            'tata-tertib'      => 'tatatertib',
+            'peraturan'        => 'tatatertib',
+            'kepala-lab'       => 'kepala',
+            'struktur'         => 'kepala',
+            'profil'           => 'kepala',
+            'fasilitas'        => 'riset',
+            'kontak'           => 'contact',
+            'hubungi'          => 'contact',
+            'daftar-asisten'   => 'asisten'
+        ];
+
+        if (array_key_exists($curPage, $aliases)) {
+            $curPage = $aliases[$curPage];
+        }
+
         // --- PERBAIKAN DISINI ---
         // Jika halaman terdeteksi sebagai 'index.php', 'public', atau kosong, set jadi 'home'
         if ($curPage === 'index.php' || $curPage === 'public' || empty($curPage)) {

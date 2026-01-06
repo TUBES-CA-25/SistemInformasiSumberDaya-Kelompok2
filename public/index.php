@@ -183,8 +183,6 @@ $id = $_GET['id'] ?? ($segments[1] ?? null);
 $aliases = [
     'tata-tertib'    => 'tatatertib',
     'peraturan'      => 'tatatertib',
-    'format-laporan'   => 'formatpenulisan',
-    'format-penulisan' => 'formatpenulisan',
     'kepala-lab'     => 'kepala',
     'struktur'       => 'kepala',
     'profil'         => 'kepala',
@@ -353,8 +351,8 @@ if (array_key_exists($page, $mvc_routes)) {
     }
 
 } else {
-    if (file_exists(VIEW_PATH . '/templates/header.php')) require_once VIEW_PATH . '/templates/header.php';
-    if (file_exists(VIEW_PATH . '/home/index.php')) require_once VIEW_PATH . '/home/index.php';
-    if (file_exists(VIEW_PATH . '/templates/footer.php')) require_once VIEW_PATH . '/templates/footer.php';
+    // Jika rute tidak ditemukan, arahkan ke home agar CSS dan data termuat dengan benar
+    header('Location: ' . PUBLIC_URL . '/home');
+    exit;
 }
 ?>
