@@ -269,13 +269,18 @@ document.getElementById('alumniForm').addEventListener('submit', function(e) {
     fetch(url, { method: 'POST', body: formData })
     .then(res => res.json())
     .then(data => {
+        hideLoading();
         if (data.status === 'success' || data.code === 201 || data.code === 200) {
-            closeModal('formModal'); loadAlumni(); alert(id ? 'Data diupdate!' : 'Data disimpan!');
+            closeModal('formModal'); 
+            loadAlumni(); 
+            showSuccess(id ? 'Data alumni berhasil diperbarui!' : 'Alumni baru berhasil ditambahkan!');
         } else { throw new Error(data.message || 'Gagal menyimpan'); }
     })
     .catch(err => {
+        hideLoading();
         formMsg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
         formMsg.classList.remove('hidden');
+        showError(err.message);
     })
     .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data'; });
 });
@@ -284,6 +289,19 @@ function closeModal(modalId) { document.getElementById(modalId).classList.add('h
 document.onkeydown = function(evt) { if (evt.keyCode == 27) { closeModal('detailModal'); closeModal('formModal'); } };
 function hapusAlumni(id, event) { 
     if(event) event.stopPropagation();
-    if(confirm('Hapus data?')) { fetch(API_URL + '/alumni/' + id, { method: 'DELETE' }).then(() => { loadAlumni(); alert('Terhapus'); }); }
+    confirmDelete(() => {
+        showLoading('Menghapus data...');
+        fetch(API_URL + '/alumni/' + id, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(() => { 
+            hideLoading();
+            loadAlumni(); 
+            showSuccess('Data alumni berhasil dihapus!'); 
+        })
+        .catch(err => {
+            hideLoading();
+            showError('Gagal menghapus data');
+        });
+    });
 }
 </script>

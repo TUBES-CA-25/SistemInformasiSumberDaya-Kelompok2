@@ -7,6 +7,9 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <?php
     // --- 1. KONFIGURASI SYSTEM ---
@@ -151,6 +154,30 @@
                 window.location.href = basePath + '/' + route;
             }
         }
+
+        // Set PUBLIC_URL untuk session timeout script
+        const PUBLIC_URL = '<?= PUBLIC_URL ?>';
+        
+        // Pass Flash Messages ke JS
+        <?php
+        $flashSuccess = $_SESSION['flash']['success'] ?? null;
+        $flashError = $_SESSION['flash']['error'] ?? null;
+        $flashWarning = $_SESSION['flash']['warning'] ?? null;
+        
+        // Clear flash messages after reading
+        if ($flashSuccess) unset($_SESSION['flash']['success']);
+        if ($flashError) unset($_SESSION['flash']['error']);
+        if ($flashWarning) unset($_SESSION['flash']['warning']);
+        ?>
+        const FLASH_SUCCESS = <?= json_encode($flashSuccess) ?>;
+        const FLASH_ERROR = <?= json_encode($flashError) ?>;
+        const FLASH_WARNING = <?= json_encode($flashWarning) ?>;
     </script>
+    
+    <!-- Feedback System (SweetAlert2) -->
+    <script src="<?= PUBLIC_URL ?>/js/feedback.js"></script>
+    
+    <!-- Session Timeout Handler - Auto logout setelah 30 menit tidak aktif -->
+    <script src="<?= PUBLIC_URL ?>/js/session-timeout.js"></script>
 </body>
 </html>

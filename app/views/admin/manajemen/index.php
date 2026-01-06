@@ -333,17 +333,20 @@ document.getElementById('manajemenForm').addEventListener('submit', function(e) 
     fetch(url, { method: 'POST', body: formData })
     .then(res => res.json())
     .then(data => {
+        hideLoading();
         if (data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
             loadManajemen();
-            alert(id ? 'Data berhasil diupdate!' : 'Data berhasil disimpan!');
+            showSuccess(id ? 'Data anggota berhasil diperbarui!' : 'Anggota baru berhasil ditambahkan!');
         } else {
             throw new Error(data.message || 'Gagal menyimpan data');
         }
     })
     .catch(err => {
+        hideLoading();
         msg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm mb-4 border border-red-200"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
         msg.classList.remove('hidden');
+        showError(err.message);
     })
     .finally(() => { 
         btn.disabled = false; 
@@ -372,19 +375,25 @@ function closeModal(modalId) {
 
 function hapusManajemen(id, event) {
     if (event) event.stopPropagation();
-    if(confirm('Yakin ingin menghapus anggota ini?')) {
+    
+    confirmDelete(() => {
+        showLoading('Menghapus data...');
         fetch(API_URL + '/manajemen/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(res => { 
+            hideLoading();
             if(res.status === 'success' || res.code === 200) {
                 loadManajemen(); 
-                alert('Data berhasil dihapus');
+                showSuccess('Data anggota berhasil dihapus!');
             } else {
-                alert('Gagal menghapus: ' + (res.message || 'Unknown error'));
+                showError('Gagal menghapus: ' + (res.message || 'Error tidak diketahui'));
             }
         }) 
-        .catch(err => alert('Gagal menghapus (Network Error)'));
-    }
+        .catch(err => {
+            hideLoading();
+            showError('Gagal menghapus (Network Error)');
+        });
+    });
 }
 
 function filterTable(searchTerm) {
