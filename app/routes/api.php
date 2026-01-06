@@ -125,6 +125,15 @@ $router->get('/kontak', 'KontakController', 'getLatest');
 $router->post('/kontak', 'KontakController', 'store');
 $router->put('/kontak/{id}', 'KontakController', 'update');
 
+/**
+ * Format Penulisan Routes
+ */
+$router->get('/formatpenulisan', 'FormatPenulisanController', 'apiIndex');
+$router->get('/formatpenulisan/{id}', 'FormatPenulisanController', 'apiShow');
+$router->post('/formatpenulisan', 'FormatPenulisanController', 'store');
+$router->put('/formatpenulisan/{id}', 'FormatPenulisanController', 'update');
+$router->delete('/formatpenulisan/{id}', 'FormatPenulisanController', 'delete');
+
 // Health check endpoint
 $router->get('/health', 'HealthController', 'check');
 ?>

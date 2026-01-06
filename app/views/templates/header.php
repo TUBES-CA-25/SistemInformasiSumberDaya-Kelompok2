@@ -43,7 +43,7 @@
             'home'         => 'home.css',
             'tatatertib'   => 'praktikum.css',
             'jadwal'       => 'praktikum.css',
-            'format-penulisan' => 'praktikum.css',
+            'formatpenulisan' => 'praktikum.css',
             'kepala'       => 'sumberdaya.css',
             'asisten'      => 'sumberdaya.css',
             'sumberdaya'   => 'sumberdaya.css', 
@@ -90,7 +90,7 @@
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/tatatertib">Tata Tertib</a>
                         <a href="<?= PUBLIC_URL ?>/jadwal">Jadwal</a>
-                        <a href="<?= PUBLIC_URL ?>/format-penulisan">Format Penulisan</a>
+                        <a href="<?= PUBLIC_URL ?>/formatpenulisan">Format Penulisan</a>
                     </div>
                 </li>
                 

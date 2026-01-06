@@ -73,7 +73,8 @@
                     <img id="detailFoto" src="" class="w-full h-full object-cover">
                 </div>
                 
-                <h2 id="detailNama" class="text-2xl font-bold text-gray-800 text-center mb-2">Nama Lengkap</h2>
+                <h2 id="detailNama" class="text-2xl font-bold text-gray-800 text-center mb-1">Nama Lengkap</h2>
+                <p id="detailNidn" class="text-sm text-gray-500 mb-4 font-medium italic"></p>
                 <div class="bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-sm font-bold border border-blue-100 mb-6">
                     <span id="detailJabatan">Jabatan</span>
                 </div>
@@ -125,6 +126,13 @@
                             <input type="text" id="inputNama" name="nama" required
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                                    placeholder="Contoh: Dr. Budi Santoso, M.T.">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">NIDN</label>
+                            <input type="text" id="inputNidn" name="nidn"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                                   placeholder="Contoh: 0912345678">
                         </div>
 
                         <div>
@@ -249,6 +257,7 @@ function openDetailModal(id) {
     document.body.style.overflow = 'hidden';
 
     document.getElementById('detailNama').innerText = data.nama;
+    document.getElementById('detailNidn').innerText = data.nidn ? `NIDN: ${data.nidn}` : 'NIDN: -';
     document.getElementById('detailJabatan').innerText = data.jabatan;
     
     // Logika Gambar Detail
@@ -293,6 +302,7 @@ function openFormModal(id = null, event = null) {
         if (data) {
             document.getElementById('inputId').value = data.idManajemen;
             document.getElementById('inputNama').value = data.nama;
+            document.getElementById('inputNidn').value = data.nidn || '';
             document.getElementById('inputJabatan').value = data.jabatan;
             
             // Logic Preview saat Edit

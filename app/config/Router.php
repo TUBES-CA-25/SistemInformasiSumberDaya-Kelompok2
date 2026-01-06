@@ -48,6 +48,7 @@ class Router {
         $this->get('/laboratorium/{id}', 'InformasiLabController', 'detail');
         $this->get('/praktikum', 'PraktikumController', 'index');
         $this->get('/praktikum/sanksi', 'SanksiController', 'index');
+        $this->get('/praktikum/formatpenulisan', 'FormatPenulisanController', 'index');
         $this->get('/peraturan', 'PeraturanLabController', 'index');
         // Aliases for Indonesian naming used in legacy
         $this->get('/tata-tertib', 'PeraturanLabController', 'index');
@@ -153,6 +154,12 @@ class Router {
         $this->put('/admin/sanksi/{id}', 'SanksiController', 'update');
         $this->delete('/admin/sanksi/{id}', 'SanksiController', 'delete');
 
+        // Admin Format Penulisan
+        $this->get('/admin/formatpenulisan', 'FormatPenulisanController', 'adminIndex');
+        $this->post('/admin/formatpenulisan', 'FormatPenulisanController', 'store');
+        $this->put('/admin/formatpenulisan/{id}', 'FormatPenulisanController', 'update');
+        $this->delete('/admin/formatpenulisan/{id}', 'FormatPenulisanController', 'delete');
+
         // API routes
         $this->get('/api/health', 'HealthController', 'check');
         $this->get('/api/alumni', 'AlumniController', 'apiIndex');
@@ -166,6 +173,8 @@ class Router {
         $this->get('/api/peraturan-lab/{id}', 'PeraturanLabController', 'apiShow');
         $this->get('/api/tata-tertib', 'PeraturanLabController', 'apiIndex');
         $this->get('/api/manajemen', 'KepalaLabController', 'apiIndex');
+        $this->get('/api/formatpenulisan', 'FormatPenulisanController', 'apiIndex');
+        $this->get('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'apiShow');
     }
 
     /**
