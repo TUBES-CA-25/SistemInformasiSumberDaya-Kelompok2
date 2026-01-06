@@ -93,6 +93,13 @@ if ($isAdminArea) {
         if ($module === 'format-penulisan' || $module === 'format_penulisan') {
             $module = 'formatpenulisan';
         }
+
+        if ($module === 'peraturan' || $module === 'sanksi') {
+            $module = 'peraturan_sanksi';
+        }
+        
+        // Pastikan module tersedia global agar bisa dibaca oleh header.php
+        $GLOBALS['module'] = $module;
         
         // [FIX] Cek apakah segmen ke-2 adalah ID (angka)
         if (isset($subParts[1]) && is_numeric($subParts[1])) {

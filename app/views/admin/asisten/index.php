@@ -54,13 +54,9 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div><label class="block text-sm font-semibold text-gray-700 mb-1">Jurusan</label><select id="inputJurusan" name="jurusan" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Teknik Informatika">Teknik Informatika</option><option value="Sistem Informasi">Sistem Informasi</option></select></div>
-                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Status Asisten</label><select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Asisten">Asisten Aktif</option><option value="CA">Calon Asisten</option><option value="Tidak Aktif">Tidak Aktif</option></select></div>
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Status Asisten</label><select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Asisten">Asisten</option><option value="CA">Calon Asisten</option></select></div>
                     </div>
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">LinkedIn URL</label><input type="url" id="inputLinkedin" name="linkedin" placeholder="https://linkedin.com/in/..." class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
-                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Upload Foto</label><input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"><div id="fotoPreviewInfo" class="hidden mt-1 text-xs text-emerald-600"><i class="fas fa-check-circle"></i> Foto sudah ada.</div></div>
-                    </div>
-                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Keahlian (Pisahkan koma)</label><input type="text" id="inputSkills" name="skills" placeholder="PHP, Networking, Design" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
+                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Upload Foto</label><input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"><div id="fotoPreviewInfo" class="hidden mt-1 text-xs text-emerald-600"><i class="fas fa-check-circle"></i> Foto sudah ada.</div></div>
                     <div><label class="block text-sm font-semibold text-gray-700 mb-1">Bio / Tentang Saya</label><textarea id="inputBio" name="bio" rows="3" placeholder="Deskripsi singkat..." class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></textarea></div>
                     <div id="formMessage" class="hidden"></div>
                     <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
@@ -94,8 +90,6 @@
                             <div class="text-right"><p class="text-xs text-gray-500">Email</p><p id="mEmail" class="font-bold">-</p></div>
                         </div>
                         <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500 mb-1">Bio</p><p id="mBio" class="italic text-gray-700">-</p></div>
-                        <a id="mLinkedin" href="#" target="_blank" class="hidden text-blue-600 hover:underline flex items-center gap-1"><i class="fab fa-linkedin"></i> LinkedIn Profile</a>
-                        <div><p class="text-xs text-gray-500 mb-1">Keahlian</p><div id="mSkills" class="flex flex-wrap gap-2"></div></div>
                     </div>
                 </div>
             </div>
