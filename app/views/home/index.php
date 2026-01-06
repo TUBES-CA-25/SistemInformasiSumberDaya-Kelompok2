@@ -1,14 +1,51 @@
+<?php
+// LOGIKA DATA MANAJEMEN (KEPALA LAB & LABORAN)
+global $pdo;
+$kepala_lab_list = [];
+$laboran_list = [];
+
+try {
+    // Ambil data dari tabel manajemen
+    $stmt = $pdo->query("SELECT * FROM manajemen ORDER BY idManajemen ASC");
+    $manajemen_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($manajemen_data as $row) {
+        // Pisahkan Kepala Lab vs Staff Biasa
+        if (stripos($row['jabatan'], 'Kepala') !== false) {
+            $kepala_lab_list[] = $row;
+        } else {
+            $laboran_list[] = $row;
+        }
+    }
+} catch (Exception $e) {
+    // Fallback jika database error
+    $kepala_lab_list = [];
+    $laboran_list = [];
+}
+
+// Helper Foto
+function getHomeFotoUrl($row) {
+    $foto = $row['foto'] ?? '';
+    if (empty($foto)) {
+        return "https://ui-avatars.com/api/?name=" . urlencode($row['nama']) . "&background=eff6ff&color=2563eb";
+    }
+    return defined('ASSETS_URL') ? ASSETS_URL . '/assets/uploads/' . $foto : 'assets/uploads/' . $foto;
+}
+?>
+
 <section class="hero-section">
     <div class="container">
         <div class="hero-content reveal fade-left">
             <h1>Sistem Informasi Sumber Daya Laboratorium</h1>
             <p>Platform terintegrasi untuk manajemen praktikum, peminjaman fasilitas, dan pendataan asisten laboratorium Fakultas Ilmu Komputer secara efisien dan profesional.</p>
             <div class="btn-group">
-                <a href="index.php?page=praktikum" class="btn-primary">Jelajahi Profil <i class="ri-arrow-right-line"></i></a>
+                <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
+                    Gabung Sekarang <i class="ri-arrow-right-line"></i>
+                </a>
             </div>
         </div>
         <div class="hero-image reveal fade-right">
-            <img src="https://placehold.co/600x400/e2e8f0/1e293b?text=Digital+Laboratory" alt="Ilustrasi Lab">
+            <img src="images/logo-iclabs.png" alt="Logo ICLabs" class="hero-logo-img">
         </div>
     </div>
 </section>
@@ -49,6 +86,13 @@
 </section>
 
 <section class="features-slider-section">
+    
+    <div class="container">
+        <div class="section-header reveal fade-up">
+            <span class="badge-pill">Keunggulan Kami</span>
+            <h2>Ekosistem & Fasilitas</h2>
+        </div>
+    </div>
     <div class="slider-container reveal fade-up">
         
         <button class="slider-btn prev-btn" onclick="moveSlide(-1)">
@@ -111,6 +155,49 @@
         <div class="video-placeholder">
             <img src="https://placehold.co/1000x500/f1f5f9/94a3b8?text=PLAY+PROFILE+VIDEO" alt="Video Player">
         </div>
+    </div>
+</section>
+
+<section class="management-section">
+    <div class="container">
+        
+        <div class="section-header reveal fade-up">
+            <span class="badge-pill">Struktur Organisasi</span>
+            <h2>Pimpinan & Staff Laboratorium</h2>
+        </div>
+
+        <?php if (!empty($kepala_lab_list)) : ?>
+            <div class="pimpinan-wrapper reveal fade-up" style="display:flex; justify-content:center; gap:30px; margin-bottom:50px;">
+                <?php foreach ($kepala_lab_list as $row) : ?>
+                    <div class="staff-card-home">
+                        <div class="staff-photo-box">
+                            <img src="<?= getHomeFotoUrl($row) ?>" alt="<?= htmlspecialchars($row['nama']) ?>">
+                        </div>
+                        <div class="staff-content">
+                            <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
+                            <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($laboran_list)) : ?>
+            <div class="laboran-grid reveal fade-up" style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px;">
+                <?php foreach ($laboran_list as $row) : ?>
+                    <div class="staff-card-home">
+                        <div class="staff-photo-box">
+                            <img src="<?= getHomeFotoUrl($row) ?>" alt="<?= htmlspecialchars($row['nama']) ?>">
+                        </div>
+                        <div class="staff-content">
+                            <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
+                            <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
     </div>
 </section>
 
