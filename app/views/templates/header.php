@@ -72,7 +72,7 @@
         <div class="container">
             <div class="logo">
                 <a href="<?= PUBLIC_URL ?>/home" class="brand-logo">
-                    <img src="<?= PUBLIC_URL ?>/images/logo-iclabs.png" alt="Logo IC-Labs" class="logo-img">
+                    <img src="<?= PUBLIC_URL ?>/images/navbar-icon.png" alt="Logo IC-Labs" class="logo-img">
                 </a>
             </div>
 
@@ -83,7 +83,7 @@
             </div>
 
             <ul class="nav-links">
-                <li><a href="<?= PUBLIC_URL ?>/home">Home</a></li>
+                <li><a href="<?= PUBLIC_URL ?>/home">Beranda</a></li>
                 
                 <li class="dropdown">
                     <a href="#" class="dropbtn">Praktikum ▾</a>
@@ -111,11 +111,11 @@
                 </li>
                 
                 <li><a href="<?= PUBLIC_URL ?>/alumni">Alumni</a></li>
-                <li><a href="<?= PUBLIC_URL ?>/contact">Contact</a></li>
+                <li><a href="<?= PUBLIC_URL ?>/contact">Kontak</a></li>
 
                 <li>
                     <a href="<?= PUBLIC_URL ?>/apps" class="btn-nav-apps">
-                        <i class="ri-apps-2-line"></i> Apps
+                        <i class="ri-apps-2-line"></i> IC-Labs Apps
                     </a>
                 </li>
             </ul>

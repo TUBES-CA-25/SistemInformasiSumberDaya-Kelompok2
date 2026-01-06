@@ -4,7 +4,7 @@
             
             <div class="footer-section brand-col">
                 <div class="footer-logo">
-                    <img src="<?php echo ASSETS_URL; ?>/images/logo-iclabs.png" alt="Logo" style="height: 40px; object-fit: contain;">
+                    <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.png" alt="Logo" style="height: 40px; object-fit: contain;">
                     <span style="font-weight: 800; font-size: 1.2rem; color: #fff;">IC-Labs</span>
                 </div>
                 <p class="footer-desc">

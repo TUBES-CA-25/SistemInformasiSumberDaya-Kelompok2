@@ -1,3 +1,8 @@
+/* =======================================================
+   HOME PAGE STYLESHEET (Bold Blue Theme)
+   ======================================================= */
+
+/* --- Animasi Reveal --- */
 .reveal {
   opacity: 0;
   visibility: hidden;
@@ -21,6 +26,7 @@
   transform: translate(0, 0);
 }
 
+/* --- Badge & Header Default --- */
 .badge-pill {
   display: inline-block;
   background: #eff6ff;
@@ -49,6 +55,7 @@
   letter-spacing: -1px;
 }
 
+/* --- Hero Section --- */
 .hero-section {
   padding: 140px 0 120px;
   background: radial-gradient(
@@ -92,7 +99,7 @@
 }
 
 .btn-primary {
-  background: #0f172a;
+  background: #2563eb;
   color: #fff;
   padding: 16px 36px;
   border-radius: 10px;
@@ -103,10 +110,11 @@
   gap: 12px;
   transition: all 0.3s ease;
   border: 1px solid transparent;
+  text-decoration: none;
 }
 
 .btn-primary:hover {
-  background: #2563eb;
+  background: #1d4ed8;
   transform: translateY(-3px);
   box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
 }
@@ -116,11 +124,23 @@
   position: relative;
 }
 
-.hero-image img {
+.hero-image img.hero-logo-img {
+  /* Ukuran & Posisi */
   width: 100%;
-  border-radius: 24px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  max-width: 450px; /* Batasi lebar logo agar proporsional */
+  height: auto;
+  margin: 0 auto; /* Tengah */
+  display: block;
 
+  /* Reset Style Bawaan Gambar Hero Lama */
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+
+  /* Efek Bayangan Khusus Logo PNG (Mengikuti bentuk logo) */
+  filter: drop-shadow(0 20px 30px rgba(37, 99, 235, 0.2));
+
+  /* Animasi Melayang (Tetap dipakai biar keren) */
   animation: floatHero 6s ease-in-out infinite;
 }
 
@@ -134,6 +154,7 @@
   }
 }
 
+/* --- Visi Misi Section (White Background) --- */
 .visi-misi-section {
   padding: 100px 0;
   background: #fff;
@@ -210,12 +231,34 @@
   flex-shrink: 0;
 }
 
-.features-slider-section {
+/* =======================================================
+   BOLD BLUE SECTIONS (Slider & Management)
+   ======================================================= */
+
+.features-slider-section,
+.management-section {
+  /* Gradasi Kuat: Warna Tombol (#2563eb) ke Biru Gelap (#1d4ed8) */
+  background: linear-gradient(135deg, #60a5fa 0%, #1e40af 100%) !important;
   padding: 100px 0;
-  background: #f8fafc;
   overflow: hidden;
 }
 
+/* --- Override Header Text Color for Blue Sections --- */
+.features-slider-section .section-header h2,
+.management-section .section-header h2 {
+  color: #ffffff !important; /* Judul Jadi Putih */
+}
+
+/* --- Override Badge Style for Blue Sections --- */
+.features-slider-section .badge-pill,
+.management-section .badge-pill {
+  background: #ffffff !important;
+  color: #2563eb !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Slider Elements --- */
 .slider-container {
   max-width: 1280px;
   margin: 0 auto;
@@ -234,15 +277,16 @@
   box-sizing: border-box;
 }
 
+/* Kartu Slider (Tetap Putih agar Kontras) */
 .slide-content-wrapper {
   display: flex;
   align-items: center;
   gap: 60px;
-  background: #fff;
+  background: #fff; /* Tetap Putih */
   padding: 60px;
   border-radius: 30px;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.2); /* Shadow lebih gelap */
+  border: none;
 }
 
 .slide-image {
@@ -261,17 +305,18 @@
 }
 .slide-text h2 {
   font-size: 2.5rem;
-  color: #0f172a;
+  color: #0f172a !important; /* Teks dalam kartu tetap gelap */
   margin-bottom: 25px;
   font-weight: 700;
   letter-spacing: -1px;
 }
 .slide-text p {
   font-size: 1.1rem;
-  color: #64748b;
+  color: #64748b !important; /* Teks dalam kartu tetap abu */
   line-height: 1.8;
 }
 
+/* Slider Dots & Buttons */
 .slider-dots {
   display: flex;
   justify-content: center;
@@ -282,7 +327,7 @@
 .dot {
   width: 8px;
   height: 8px;
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.4); /* Dot inactive jadi transparan putih */
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -290,11 +335,44 @@
 }
 
 .dot.active {
-  background: #2563eb;
-  transform: scale(1.2);
-  box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+  background: #ffffff; /* Dot active jadi Putih solid */
+  transform: scale(1.4);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.slider-btn:hover {
+  background: #0f172a; /* Tombol hover jadi gelap agar kontras */
+  color: #fff;
+  border-color: #0f172a;
+}
+.prev-btn {
+  left: 10px;
+}
+.next-btn {
+  right: 10px;
+}
+
+/* --- Video Section --- */
 .video-section {
   padding: 100px 0;
   background: #fff;
@@ -309,7 +387,6 @@
   overflow: hidden;
   box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  group: video-group;
 }
 
 .video-placeholder img {
@@ -317,7 +394,6 @@
   display: block;
   transition: transform 0.5s ease;
 }
-
 .video-placeholder:hover img {
   transform: scale(1.03);
 }
@@ -342,7 +418,6 @@
   transition: all 0.3s ease;
   padding-left: 5px;
 }
-
 .video-placeholder:hover::after {
   background: #2563eb;
   border-color: #2563eb;
@@ -350,9 +425,69 @@
   box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
 }
 
+/* --- Management Section (Kartu Staff) --- */
+/* (Background sudah diatur di blok 'Bold Blue Sections' diatas) */
+
+.staff-card-home {
+  background: #ffffff; /* Kartu tetap putih */
+  border: none;
+  border-radius: 20px;
+  width: 280px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Shadow lebih kuat */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.staff-card-home:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+}
+
+.staff-photo-box {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+.staff-photo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s ease;
+}
+.staff-card-home:hover .staff-photo-box img {
+  transform: scale(1.05);
+}
+
+.staff-content {
+  padding: 20px;
+  text-align: center;
+  background: #fff;
+}
+.staff-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 5px;
+  line-height: 1.3;
+}
+.staff-role {
+  font-size: 0.85rem;
+  color: #2563eb;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- Info Section --- */
 .info-section {
   padding: 120px 0;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 .info-grid {
@@ -385,7 +520,6 @@
 .info-card:hover::before {
   width: 100%;
 }
-
 .info-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
@@ -398,7 +532,6 @@
   transition: 0.4s;
   display: inline-block;
 }
-
 .info-card:hover .card-icon {
   color: #2563eb;
   transform: scale(1.1);
@@ -410,7 +543,6 @@
   margin-bottom: 15px;
   font-weight: 700;
 }
-
 .info-card p {
   color: #64748b;
   margin-bottom: 30px;
@@ -427,7 +559,6 @@
   font-size: 0.95rem;
   transition: 0.3s;
 }
-
 .link-arrow i {
   transition: 0.3s;
 }
@@ -435,6 +566,7 @@
   transform: translateX(5px);
 }
 
+/* --- Partner Section --- */
 .partner-section {
   padding: 60px 0;
   background: #ffffff;
@@ -442,7 +574,6 @@
   border-bottom: 1px solid #f1f5f9;
   overflow: hidden;
 }
-
 .partner-section .slider {
   margin: auto;
   position: relative;
@@ -451,7 +582,6 @@
   overflow: hidden;
   background: transparent;
 }
-
 .partner-section .slider::before,
 .partner-section .slider::after {
   background: linear-gradient(
@@ -508,7 +638,6 @@
   transition: all 0.3s;
   user-select: none;
 }
-
 .partner-box:hover {
   border-color: #3b82f6;
   color: #2563eb;
@@ -525,27 +654,24 @@
     transform: translateX(calc(-250px * 5));
   }
 }
-
 .partner-section .slider:hover .slide-track {
   animation-play-state: paused;
 }
 
+/* --- Media Queries --- */
 @media (max-width: 768px) {
   .partner-section .slider::before,
   .partner-section .slider::after {
     width: 50px;
   }
-
   .partner-slide {
     width: 180px;
     min-width: 180px;
   }
-
   .slide-track {
     width: calc(180px * 10);
     animation: scrollPartnerMobile 20s linear infinite;
   }
-
   @keyframes scrollPartnerMobile {
     0% {
       transform: translateX(0);
@@ -553,6 +679,18 @@
     100% {
       transform: translateX(calc(-180px * 5));
     }
+  }
+  .slider-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .prev-btn {
+    left: 5px;
+  }
+  .next-btn {
+    right: 5px;
   }
 }
 
@@ -573,11 +711,7 @@
   .hero-section .container {
     flex-direction: column;
   }
-  .hero-content h1 {
-    font-size: 2.5rem;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  .hero-content h1,
   .hero-content p {
     margin-left: auto;
     margin-right: auto;
@@ -586,9 +720,7 @@
     justify-content: center;
   }
 
-  .visi-misi-grid {
-    grid-template-columns: 1fr;
-  }
+  .visi-misi-grid,
   .info-grid {
     grid-template-columns: 1fr;
   }
@@ -621,53 +753,21 @@
   }
 }
 
-.slider-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: #0f172a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.slider-btn:hover {
-  background: #2563eb;
-  color: #fff;
-  border-color: #2563eb;
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
-  transform: translateY(-50%) scale(1.1);
-}
-
-.prev-btn {
-  left: 10px;
-}
-
-.next-btn {
-  right: 10px;
+@media (max-width: 600px) {
+  .pimpinan-wrapper,
+  .laboran-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .staff-card-home {
+    width: 100%;
+    max-width: 320px;
+  }
 }
 
 @media (max-width: 768px) {
-  .slider-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-    background: rgba(255, 255, 255, 0.9);
-  }
-  .prev-btn {
-    left: 5px;
-  }
-  .next-btn {
-    right: 5px;
+  .hero-image img.hero-logo-img {
+    max-width: 280px; /* Logo lebih kecil di HP */
+    margin-top: 30px;
   }
 }
