@@ -56,21 +56,17 @@ $data = $alumni ?? null;
                             Ex-Divisi <?= htmlspecialchars($data['divisi'] ?? 'Asisten Lab'); ?>
                         </span>
                     </div>
+
+                    <?php if(!empty($data['mata_kuliah']) && $data['mata_kuliah'] !== '-'): ?>
+                        <div class="mt-2 text-sm text-gray-600">
+                            <strong>Mata Kuliah Diajar:</strong> <?= htmlspecialchars($data['mata_kuliah']); ?>
+                        </div>
+                    <?php endif; ?>
                     
                     <h1 class="profile-name">
                         <?= htmlspecialchars($data['nama']); ?>
                     </h1>
                     
-                    <div class="specialization-box">
-                        <span class="member-specialization">
-                            <i class="ri-briefcase-line"></i> 
-                            <?= htmlspecialchars($data['pekerjaan'] ?? ''); ?> 
-                            <?php if(!empty($data['perusahaan']) && $data['perusahaan'] !== '-'): ?>
-                                <span class="company-name">at <?= htmlspecialchars($data['perusahaan']); ?></span>
-                            <?php endif; ?>
-                        </span>
-                    </div>
-
                     <h4 class="section-title">Kesan & Pesan</h4>
                     <div class="profile-bio alumni-quote">
                         "<?= htmlspecialchars($data['testimoni'] ?? 'Tidak ada kesan pesan.'); ?>"
@@ -89,18 +85,6 @@ $data = $alumni ?? null;
                         <?php if(!empty($data['email'])): ?>
                             <a href="mailto:<?= htmlspecialchars($data['email']); ?>" class="btn-contact">
                                 <i class="ri-mail-send-line"></i> Email
-                            </a>
-                        <?php endif; ?>
-
-                        <?php if(!empty($data['linkedin'])): ?>
-                            <a href="<?= htmlspecialchars($data['linkedin']); ?>" target="_blank" class="btn-contact btn-linkedin">
-                                <i class="ri-linkedin-box-fill"></i> LinkedIn
-                            </a>
-                        <?php endif; ?>
-
-                        <?php if(!empty($data['portfolio'])): ?>
-                            <a href="<?= htmlspecialchars($data['portfolio']); ?>" target="_blank" class="btn-contact btn-portfolio">
-                                <i class="ri-dribbble-line"></i> Portfolio
                             </a>
                         <?php endif; ?>
                     </div>

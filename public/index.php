@@ -89,6 +89,18 @@ if ($isAdminArea) {
         $subParts = array_values(array_filter(explode('/', $subPath), fn($s) => $s !== ''));
         $module   = $subParts[0] ?? 'dashboard';
         
+        // Alias module mapping
+        if ($module === 'format-penulisan' || $module === 'format_penulisan') {
+            $module = 'formatpenulisan';
+        }
+
+        if ($module === 'peraturan' || $module === 'sanksi') {
+            $module = 'peraturan_sanksi';
+        }
+        
+        // Pastikan module tersedia global agar bisa dibaca oleh header.php
+        $GLOBALS['module'] = $module;
+        
         // [FIX] Cek apakah segmen ke-2 adalah ID (angka)
         if (isset($subParts[1]) && is_numeric($subParts[1])) {
             // Format: /admin/module/ID/action (contoh: /admin/asisten/2/edit)
@@ -178,7 +190,6 @@ $id = $_GET['id'] ?? ($segments[1] ?? null);
 $aliases = [
     'tata-tertib'    => 'tatatertib',
     'peraturan'      => 'tatatertib',
-    'format-laporan'   => 'format-penulisan',
     'kepala-lab'     => 'kepala',
     'struktur'       => 'kepala',
     'profil'         => 'kepala',
@@ -223,7 +234,7 @@ if (isset($segments[1]) && $segments[1] !== '') {
 
 $pageCss = 'style.css'; // Fallback default
 if ($page == 'home')                               $pageCss = 'home.css';
-if ($page == 'tatatertib' || $page == 'jadwal' || $page == 'format-penulisan') {
+if ($page == 'tatatertib' || $page == 'jadwal' || $page == 'formatpenulisan') {
     $pageCss = 'praktikum.css';
 }
 if ($page == 'kepala' || $page == 'asisten' || $page == 'detail')      $pageCss = 'sumberdaya.css';
@@ -259,7 +270,7 @@ $direct_views = [
     'apps'         => 'home/apps.php',
     'jadwal'       => 'praktikum/jadwal.php',
     'tatatertib'   => 'praktikum/tatatertib.php',
-   'format-penulisan' => 'praktikum/format_penulisan.php',
+    'formatpenulisan' => 'praktikum/format_penulisan.php',
     'riset'        => 'fasilitas/riset.php',
     'laboratorium' => 'fasilitas/laboratorium.php',
     'detail_fasilitas' => 'fasilitas/detail.php',
@@ -267,6 +278,13 @@ $direct_views = [
 ];
 
 if (array_key_exists($page, $direct_views)) {
+    if ($page === 'formatpenulisan') {
+        require_once CONTROLLER_PATH . '/FormatPenulisanController.php';
+        $ctl = new FormatPenulisanController();
+        $ctl->index();
+        exit;
+    }
+
     if ($page === 'kepala' && file_exists(CONTROLLER_PATH . '/KepalaLabController.php')) {
         require_once CONTROLLER_PATH . '/KepalaLabController.php';
         $ctl = new KepalaLabController();
@@ -297,6 +315,7 @@ $mvc_routes = [
     'logout'           => ['AuthController', 'logout', []],
 
     'asisten'          => ['AsistenController', 'index', []],
+    'formatpenulisan' => ['FormatPenulisanController', 'index', []],
     'detail'           => ['AsistenController', 'detail', ['id' => $id]],
     'detail-asisten'   => ['AsistenController', 'detail', ['id' => $id]],
 
@@ -339,8 +358,8 @@ if (array_key_exists($page, $mvc_routes)) {
     }
 
 } else {
-    if (file_exists(VIEW_PATH . '/templates/header.php')) require_once VIEW_PATH . '/templates/header.php';
-    if (file_exists(VIEW_PATH . '/home/index.php')) require_once VIEW_PATH . '/home/index.php';
-    if (file_exists(VIEW_PATH . '/templates/footer.php')) require_once VIEW_PATH . '/templates/footer.php';
+    // Jika rute tidak ditemukan, arahkan ke home agar CSS dan data termuat dengan benar
+    header('Location: ' . PUBLIC_URL . '/home');
+    exit;
 }
 ?>

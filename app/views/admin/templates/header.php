@@ -90,51 +90,60 @@
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
                 <?php
-                // --- LOGIKA ROUTING SEDERHANA (SPA MODE) ---
+                // --- LOGIKA ROUTING SEDERHANA ---
                 
-                // 1. Ambil URL
-                $request = $_SERVER['REQUEST_URI'];
-                $request = strtok($request, '?'); // Hapus query string
-                
-                // Default Variables
-                $module = 'dashboard'; 
-
-                // 2. Parsing URL untuk menentukan Module saja
-                if (strpos($request, '/admin/') !== false) {
-                    $parts = explode('/admin/', $request);
-                    if (isset($parts[1]) && !empty($parts[1])) {
-                        $urlSegments = explode('/', $parts[1]);
-                        // Ambil nama folder (misal: alumni, asisten)
-                        $module = isset($urlSegments[0]) ? $urlSegments[0] : 'dashboard';
+                // Prioritas 1: Gunakan module dari global (set di index.php)
+                // Prioritas 2: Gunakan module dari local variable (jika di-include)
+                // Fallback: Parsing manual
+                if (isset($GLOBALS['module'])) {
+                    $module = $GLOBALS['module'];
+                } elseif (!isset($module)) {
+                    $request = $_SERVER['REQUEST_URI'];
+                    $request = strtok($request, '?');
+                    $module = 'dashboard'; 
+                    if (strpos($request, '/admin/') !== false) {
+                        $parts = explode('/admin/', $request);
+                        if (isset($parts[1]) && !empty($parts[1])) {
+                            $urlSegments = explode('/', $parts[1]);
+                            $module = isset($urlSegments[0]) ? $urlSegments[0] : 'dashboard';
+                        }
                     }
+                    $module = preg_replace('/[^a-zA-Z0-9_]/', '', $module);
                 }
 
-                // Sanitasi nama folder
-                $module = preg_replace('/[^a-zA-Z0-9_]/', '', $module);
+                // Normalisasi nama modul (Alias)
+                if ($module === 'peraturan' || $module === 'sanksi') {
+                    $module = 'peraturan_sanksi';
+                }
+                if ($module === 'format_penulisan' || $module === 'format-penulisan') {
+                    $module = 'formatpenulisan';
+                }
 
                 // 3. Tentukan File Target
-                // KITA TIDAK LAGI CEK ACTION (create/edit/detail) KARENA SEMUA PAKA MODAL
-                $viewsPath = ROOT_PROJECT . '/app/views/admin/';
+                // Gunakan VIEW_PATH yang sudah didefinisikan di index.php jika ada
+                $baseAdminPath = defined('VIEW_PATH') ? VIEW_PATH . '/admin/' : ROOT_PROJECT . '/app/views/admin/';
                 
                 if ($module === 'dashboard') {
-                    $targetFile = $viewsPath . 'dashboard.php';
-                    if (!file_exists($targetFile)) $targetFile = $viewsPath . 'dashboard/index.php';
+                    $targetFile = $baseAdminPath . 'dashboard.php';
+                    if (!file_exists($targetFile)) $targetFile = $baseAdminPath . 'dashboard/index.php';
                 } 
                 else {
                     // Apapun yang terjadi, selalu buka index.php milik module tersebut
-                    // JavaScript di dalam index.php yang akan mengatur Modal
-                    $targetFile = $viewsPath . $module . '/index.php';
+                    $targetFile = $baseAdminPath . $module . '/index.php';
                 }
 
                 // 4. Eksekusi Include
                 if (file_exists($targetFile)) {
                     include $targetFile;
                 } else {
+                    $debugInfo = "Module: $module, Route: " . ($_SERVER['REQUEST_URI'] ?? 'unknown');
                     echo "
+                    <!-- DEBUG: $debugInfo -->
                     <div class='flex flex-col items-center justify-center min-h-[50vh] text-gray-500'>
                         <i class='fas fa-exclamation-triangle text-4xl mb-4 text-yellow-500'></i>
                         <h2 class='text-xl font-bold'>Halaman Tidak Ditemukan</h2>
                         <p class='text-sm mt-2'>Modul <b>'$module'</b> belum tersedia.</p>
+                        <p class='text-[10px] text-gray-400 mt-1'>Mencoba memuat: $targetFile</p>
                     </div>";
                 }
                 ?>

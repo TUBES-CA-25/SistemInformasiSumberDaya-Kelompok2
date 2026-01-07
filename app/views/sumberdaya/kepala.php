@@ -93,6 +93,11 @@ function getFotoUrl($row) {
 
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
+                                <?php if (!empty($row['nidn'])) : ?>
+                                    <span class="staff-nidn" style="display: block; font-size: 0.75rem; color: #64748b; margin-top: -2px; margin-bottom: 4px; font-weight: 500;">
+                                        NIDN: <?= htmlspecialchars($row['nidn']) ?>
+                                    </span>
+                                <?php endif; ?>
                                 <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
 
                                 <div class="staff-footer">
@@ -129,6 +134,11 @@ function getFotoUrl($row) {
 
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
+                                <?php if (!empty($row['nidn'])) : ?>
+                                    <span class="staff-nidn" style="display: block; font-size: 0.75rem; color: #64748b; margin-top: -2px; margin-bottom: 4px; font-weight: 500;">
+                                        NIDN: <?= htmlspecialchars($row['nidn']) ?>
+                                    </span>
+                                <?php endif; ?>
                                 <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
 
                                 <div class="staff-footer">
