@@ -55,6 +55,33 @@ function getRuleStyle($index) {
             <p>Pedoman standar operasional dan kedisiplinan bagi seluruh praktikan di lingkungan Laboratorium Terpadu FIKOM UMI.</p>
         </header>
 
+        <div class="rules-grid" style="margin-bottom: 30px;">
+            <article class="rule-card">
+                <div class="rule-img-box" style="height: 500px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
+                    <img src="<?= ASSETS_URL ?>/assets/uploads/Pria.jpg" alt="Standar Pakaian Pria" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                </div>
+                <h3>Standar Pakaian Pria</h3>
+                <ul class="rule-list">
+                    <li><i class="ri-checkbox-circle-fill"></i> <span>Berpakaian rapi memakai kemeja putih polos</span></li>
+                    <li><i class="ri-checkbox-circle-fill"></i> <span>Menggunakan celana kain berwarna hitam bukan dari bahan jeans atau semi jeans</span></li>
+                    <li><i class="ri-checkbox-circle-fill"></i> <span>Rambut rapi dan tidak panjang</span></li>
+                </ul>
+            </article>
+
+            <article class="rule-card">
+                <div class="rule-img-box" style="height: 500px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
+                    <img src="<?= ASSETS_URL ?>/assets/uploads/Wanita.jpg" alt="Standar Pakaian Wanita" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                </div>
+                <h3>Standar Pakaian Wanita</h3>
+                <ul class="rule-list">
+                    <li><i class="ri-checkbox-circle-fill"></i> <span>Berpakaian rapi memakai kemeja tunik putih polos (tidak transparan)</span></li>
+                    <li><i class="ri-checkbox-circle-fill"></i> <span>Memakai Jilbab Segitiga Hitam (bukan pasmina) dan menutupi dada</span></li>
+                    <li><i class="ri-checkbox-circle-fill"></i> <span>Menggunakan Rok Panjang berwarna hitam yang menutupi mata kaki, tidak terbelah, tidak span, dan bukan bahan jeans/semi jeans</span></li>
+                    <li><i class="ri-checkbox-circle-fill"></i> <span>Memakai kaos kaki dengan tinggi minimal 10 cm di atas mata kaki</span></li>
+                </ul>
+            </article>
+        </div>
+
         <div class="rules-grid">
             
             <?php if (!empty($rules_data)) : ?>
