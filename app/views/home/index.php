@@ -94,7 +94,7 @@ function getHomeFotoUrl($row) {
         </div>
     </div>
     <div class="slider-container reveal fade-up">
-        
+
         <button class="slider-btn prev-btn" onclick="moveSlide(-1)">
             <i class="ri-arrow-left-s-line"></i>
         </button>
