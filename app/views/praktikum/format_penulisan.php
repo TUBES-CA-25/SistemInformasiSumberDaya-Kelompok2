@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div style="flex: 1;">
                         <h4 style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem; font-size: 1rem;">${item.judul}</h4>
                         <div class="download-actions" style="display: flex; gap: 0.5rem;">
-                            ${item.file ? `<a href="${assetsUrl}/uploads/format_penulisan/${item.file}" target="_blank" class="download-btn" style="font-size: 0.8rem; color: #2563eb; font-weight: 500;">Unduh PDF</a>` : ''}
+                            ${item.file ? `<a href="${assetsUrl}/assets/uploads/format_penulisan/${item.file}" target="_blank" class="download-btn" style="font-size: 0.8rem; color: #2563eb; font-weight: 500;">Unduh PDF</a>` : ''}
                             ${item.link_external ? `<a href="${item.link_external}" target="_blank" class="link-btn" style="font-size: 0.8rem; color: #64748b; font-weight: 500;">Buka Link</a>` : ''}
                         </div>
                     </div>
