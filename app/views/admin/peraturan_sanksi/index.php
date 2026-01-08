@@ -1,3 +1,25 @@
+<style>
+    .desc-container {
+        max-height: 80px;
+        overflow-y: auto;
+        padding-right: 8px;
+    }
+    .desc-container::-webkit-scrollbar {
+        width: 4px;
+    }
+    .desc-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    .desc-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+    .desc-container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+
 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
     <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
         <i class="fas fa-gavel text-blue-600"></i> 
@@ -38,8 +60,9 @@
             <thead>
                 <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
                     <th class="px-6 py-4 font-semibold text-center w-16">No</th>
-                    <th class="px-6 py-4 font-semibold w-64">Judul Aturan</th>
-                    <th class="px-6 py-4 font-semibold text-center w-32">Tipe</th>
+                    <th class="px-6 py-4 font-semibold w-48">Judul Aturan</th>
+                    <th class="px-6 py-4 font-semibold text-center w-24">Tipe</th>
+                    <th class="px-6 py-4 font-semibold w-32">Kategori</th>
                     <th class="px-6 py-4 font-semibold">Deskripsi</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
                 </tr>
@@ -48,6 +71,31 @@
                 <!-- Data loaded via JS -->
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Modal Detail -->
+<div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full sm:max-w-xl border border-gray-100">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-info-circle text-blue-600"></i> Detail Peraturan/Sanksi
+                </h3>
+                <button onclick="closeModal('detailModal')" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div id="detailContent" class="space-y-4">
+                    <!-- Loaded via JS -->
+                </div>
+                <div class="mt-6 pt-6 border-t border-gray-100 flex justify-end">
+                    <button onclick="closeModal('detailModal')" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors">Tutup</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -222,7 +270,9 @@ function renderTable(data) {
             .join('');
             
         const finalDeskripsi = deskripsiPoin 
-            ? `<ul class="list-disc pl-4 space-y-1 text-[10px] italic font-serif">${deskripsiPoin}</ul>` 
+            ? `<div class="desc-container">
+                 <ul class="list-disc pl-4 space-y-1 text-[10px] italic font-serif">${deskripsiPoin}</ul>
+               </div>` 
             : '<span class="text-gray-400">-</span>';
 
         const typeBadge = item._tipe === 'peraturan' 
@@ -230,10 +280,10 @@ function renderTable(data) {
             : '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-50 text-amber-600 uppercase border border-amber-100">Sanksi</span>';
         
         html += `
-            <tr class="hover:bg-blue-50/30 transition-colors border-b border-gray-100">
+            <tr class="hover:bg-blue-50/50 transition-colors border-b border-gray-100 cursor-pointer group/row" onclick="showDetail('${item._tipe}', ${item.id})">
                 <td class="px-6 py-4 text-center font-medium text-gray-400 text-xs">${tipeIndex}</td>
                 <td class="px-6 py-4">
-                    <div class="font-bold text-gray-800 text-sm">${escapeHtml(item.judul)}</div>
+                    <div class="font-bold text-gray-800 text-sm line-clamp-2 group-hover/row:text-blue-600 transition-colors" title="${escapeHtml(item.judul)}">${escapeHtml(item.judul)}</div>
                     ${item.gambar ? `<div class="text-[9px] text-blue-500 mt-0.5"><i class="fas fa-image mr-1"></i> Gambar: ${item.gambar}</div>` : ''}
                 </td>
                 <td class="px-6 py-4 text-center">
@@ -245,7 +295,7 @@ function renderTable(data) {
                 <td class="px-6 py-4 text-gray-600">
                     ${finalDeskripsi}
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4" onclick="event.stopPropagation()">
                     <div class="flex justify-center items-center gap-2">
                         <button onclick="editData('${item._tipe}', ${item.id})" class="w-8 h-8 rounded-lg bg-white border border-gray-200 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm flex items-center justify-center group" title="Edit">
                             <i class="fas fa-pen text-[10px]"></i>
@@ -410,6 +460,73 @@ function hapusData(tipe, id) {
     } else {
         if (confirm('Yakin ingin menghapus data ini?')) doDelete();
     }
+}
+
+function showDetail(tipe, id) {
+    const data = allData.find(i => i._tipe === tipe && i.id == id);
+    if (!data) return;
+
+    const modal = document.getElementById('detailModal');
+    const content = document.getElementById('detailContent');
+    
+    // Format deskripsi
+    const deskripsiPoin = (data.deskripsi || '').split('\n')
+        .filter(line => line.trim() !== '')
+        .map(line => `<li class="mb-2 font-serif italic">${escapeHtml(line)}</li>`)
+        .join('');
+
+    // Logic path gambar: di sanksi_lab controller kita simpan 'sanksi/filename.jpg'
+    // tapi di peraturan_lab controller kita tadinya simpan filename-nya saja.
+    // Namun di update terakhir saya buat simpan 'peraturan/filename.jpg'
+    // Kita buat pendeteksi simple.
+    let imgPath = data.gambar;
+    if (imgPath && !imgPath.includes('/')) {
+        imgPath = (data._tipe === 'peraturan' ? 'peraturan/' : 'sanksi/') + imgPath;
+    }
+
+    content.innerHTML = `
+        <div class="space-y-5">
+            <div class="flex justify-between items-start gap-4">
+                <div class="flex-1">
+                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Judul Aturan</h4>
+                    <p class="text-gray-900 font-bold text-lg leading-tight">${escapeHtml(data.judul)}</p>
+                </div>
+                <div class="text-right">
+                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Tipe</h4>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold ${data._tipe === 'peraturan' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700'} border border-current uppercase">
+                        ${data._tipe === 'peraturan' ? 'Peraturan' : 'Sanksi'}
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-3 bg-blue-50/50 rounded-lg border border-blue-100/50">
+                <h4 class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">Kategori</h4>
+                <p class="text-blue-800 font-semibold text-sm">${escapeHtml(data.kategori || (data._tipe === 'sanksi' ? 'Pelanggaran' : 'Umum'))}</p>
+            </div>
+
+            <div>
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Isi Detail :</h4>
+                <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 shadow-inner">
+                    <ul class="list-disc pl-5 text-gray-700 text-sm space-y-2">
+                        ${deskripsiPoin || '<li class="text-gray-400 italic">Tidak ada deskripsi detail.</li>'}
+                    </ul>
+                </div>
+            </div>
+
+            ${data.gambar ? `
+            <div>
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Lampiran Digital</h4>
+                <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                    <img src="${ASSETS_URL}/assets/uploads/${imgPath}" 
+                         class="w-full h-auto object-cover max-h-64"
+                         alt="Lampiran">
+                </div>
+            </div>` : ''}
+        </div>
+    `;
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
 }
 
 function closeModal(modalId) {
