@@ -76,7 +76,8 @@ CREATE TABLE `asisten` (
   `email` varchar(100) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
   `statusAktif` varchar(20) DEFAULT 'Asisten',
-  `isKoordinator` tinyint(1) DEFAULT 0
+  `isKoordinator` tinyint(1) DEFAULT 0,
+  `urutanTampilan` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

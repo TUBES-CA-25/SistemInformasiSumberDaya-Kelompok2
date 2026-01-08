@@ -100,6 +100,14 @@
                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
                             </div>
                             <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Urutan Tampilan</label>
+                                <input type="number" id="inputUrutanTampilan" name="urutanTampilan" placeholder="0" min="0" value="0"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1">Keahlian Utama</label>
                                 <input type="text" id="inputKeahlian" name="keahlian" placeholder="PHP, Laravel, React"
                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
@@ -310,6 +318,7 @@ function openFormModal(id = null, event = null) {
                 document.getElementById('inputEmail').value = d.email || '';
                 document.getElementById('inputKesanPesan').value = d.kesan_pesan || '';
                 document.getElementById('inputMataKuliah').value = d.mata_kuliah || '';
+                document.getElementById('inputUrutanTampilan').value = d.urutanTampilan || '0';
 
                 if(d.foto) document.getElementById('fotoPreviewInfo').classList.remove('hidden');
             }

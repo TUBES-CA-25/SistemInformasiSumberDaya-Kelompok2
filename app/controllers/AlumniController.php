@@ -113,7 +113,8 @@ class AlumniController extends Controller {
                 'mata_kuliah' => $_POST['mata_kuliah'] ?? '',
                 'kesan_pesan' => $_POST['kesan_pesan'] ?? '',
                 'keahlian' => $_POST['keahlian'] ?? '',
-                'email' => $_POST['email'] ?? ''
+                'email' => $_POST['email'] ?? '',
+                'urutanTampilan' => $_POST['urutanTampilan'] ?? '0'
             ];
             
             // Validasi field wajib
@@ -182,7 +183,8 @@ class AlumniController extends Controller {
                 'mata_kuliah' => $_POST['mata_kuliah'] ?? '',
                 'kesan_pesan' => $_POST['kesan_pesan'] ?? '',
                 'keahlian' => $_POST['keahlian'] ?? '',
-                'email' => $_POST['email'] ?? ''
+                'email' => $_POST['email'] ?? '',
+                'urutanTampilan' => $_POST['urutanTampilan'] ?? '0'
             ];
             
             // Validasi field wajib

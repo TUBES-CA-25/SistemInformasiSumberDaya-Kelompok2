@@ -69,6 +69,10 @@
                         <div><label class="block text-sm font-semibold text-gray-700 mb-1">Jurusan</label><select id="inputJurusan" name="jurusan" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Teknik Informatika">Teknik Informatika</option><option value="Sistem Informasi">Sistem Informasi</option></select></div>
                         <div><label class="block text-sm font-semibold text-gray-700 mb-1">Status Asisten</label><select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Asisten">Asisten</option><option value="CA">Calon Asisten</option></select></div>
                     </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Urutan Tampilan</label><input type="number" id="inputUrutanTampilan" name="urutanTampilan" placeholder="0" min="0" value="0" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
+                        <div></div>
+                    </div>
                     <div><label class="block text-sm font-semibold text-gray-700 mb-1">Upload Foto</label><input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"><div id="fotoPreviewInfo" class="hidden mt-1 text-xs text-emerald-600"><i class="fas fa-check-circle"></i> Foto sudah ada.</div></div>
                     <div><label class="block text-sm font-semibold text-gray-700 mb-1">Bio / Tentang Saya</label><textarea id="inputBio" name="bio" rows="3" placeholder="Deskripsi singkat..." class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></textarea></div>
                     <div id="formMessage" class="hidden"></div>
@@ -262,6 +266,7 @@ function openFormModal(id = null, event = null) {
                 document.getElementById('inputJurusan').value = d.jurusan || 'Teknik Informatika';
                 document.getElementById('inputLinkedin').value = d.linkedin || '';
                 document.getElementById('inputBio').value = d.bio || '';
+                document.getElementById('inputUrutanTampilan').value = d.urutanTampilan || '0';
                 let status = d.statusAktif; if (status == '1') status = 'Asisten'; if (status == '0') status = 'Tidak Aktif';
                 document.getElementById('inputStatus').value = status || 'Asisten';
                 let skillsStr = ''; try { let s = JSON.parse(d.skills); if(Array.isArray(s)) skillsStr = s.join(', '); else skillsStr = d.skills; } catch(e) { skillsStr = d.skills || ''; }
