@@ -82,6 +82,25 @@ function getRuleStyle($index) {
             </article>
         </div>
 
+        <div style="margin-bottom: 50px;">
+            <div class="sanksi-title" style="margin-bottom: 20px;">
+                <i class="ri-video-line" style="color: #2563eb; font-size: 1.5rem;"></i>
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: #1e293b;">Video Panduan & Tata Tertib Lab</h2>
+            </div>
+            
+            <div style="width: 100%; max-width: 900px; margin: 0 auto; background: #000; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe 
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;"
+                        src="https://www.youtube.com/embed/OLLK4sF2XyM?rel=0&modestbranding=1" 
+                        title="Video Panduan Lab FIKOM UMI" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
         <div class="rules-grid">
             
             <?php if (!empty($rules_data)) : ?>
