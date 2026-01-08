@@ -41,13 +41,9 @@ class AlumniController extends Controller {
             'nama' => $alumniRow['nama'],
             'angkatan' => $alumniRow['angkatan'],
             'divisi' => $alumniRow['divisi'] ?? 'Asisten Lab',
-            'pekerjaan' => $alumniRow['pekerjaan'] ?? 'Belum terisi',
-            'perusahaan' => $alumniRow['perusahaan'] ?? '-',
+            'mata_kuliah' => $alumniRow['mata_kuliah'] ?? '-',
             'foto' => $alumniRow['foto'],
             'email' => $alumniRow['email'],
-            'linkedin' => $alumniRow['linkedin'],
-            'portfolio' => $alumniRow['portfolio'],
-            'tahun_lulus' => $alumniRow['tahun_lulus'],
             'testimoni' => $alumniRow['kesan_pesan'] ?? 'Tidak ada kesan pesan.',
             'skills' => $skills
         ];
@@ -113,13 +109,9 @@ class AlumniController extends Controller {
                 'nama' => $_POST['nama'] ?? '',
                 'angkatan' => $_POST['angkatan'] ?? '',
                 'divisi' => $_POST['divisi'] ?? '',
-                'pekerjaan' => $_POST['pekerjaan'] ?? '',
-                'perusahaan' => $_POST['perusahaan'] ?? '',
+                'mata_kuliah' => $_POST['mata_kuliah'] ?? '',
                 'kesan_pesan' => $_POST['kesan_pesan'] ?? '',
-                'tahun_lulus' => $_POST['tahun_lulus'] ?? '',
                 'keahlian' => $_POST['keahlian'] ?? '',
-                'linkedin' => $_POST['linkedin'] ?? '',
-                'portfolio' => $_POST['portfolio'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
             
@@ -185,13 +177,9 @@ class AlumniController extends Controller {
                 'nama' => $_POST['nama'] ?? '',
                 'angkatan' => $_POST['angkatan'] ?? '',
                 'divisi' => $_POST['divisi'] ?? '',
-                'pekerjaan' => $_POST['pekerjaan'] ?? '',
-                'perusahaan' => $_POST['perusahaan'] ?? '',
+                'mata_kuliah' => $_POST['mata_kuliah'] ?? '',
                 'kesan_pesan' => $_POST['kesan_pesan'] ?? '',
-                'tahun_lulus' => $_POST['tahun_lulus'] ?? '',
                 'keahlian' => $_POST['keahlian'] ?? '',
-                'linkedin' => $_POST['linkedin'] ?? '',
-                'portfolio' => $_POST['portfolio'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
             

@@ -26,7 +26,7 @@ if (!empty($all_alumni) && is_array($all_alumni)) {
             <p>Daftar lulusan yang telah berkontribusi dan kini berkarya di berbagai industri.</p>
 
             <div class="search-container">
-                <input type="text" id="searchAlumni" placeholder="Cari nama, pekerjaan, atau perusahaan..." class="search-input">
+                <input type="text" id="searchAlumni" placeholder="Cari nama atau angkatan..." class="search-input">
                 <div class="search-icon-box">
                     <i class="ri-search-line"></i>
                 </div>
@@ -74,8 +74,6 @@ if (!empty($all_alumni) && is_array($all_alumni)) {
                                 }
 
                                 // Data Text
-                                $pekerjaan = $row['pekerjaan'] ?? 'Alumni';
-                                $perusahaan = $row['perusahaan'] ?? '-';
                                 $divisi = $row['divisi'] ?? 'Asisten Lab';
                             ?>
 
@@ -87,19 +85,7 @@ if (!empty($all_alumni) && is_array($all_alumni)) {
                                     
                                     <div class="staff-content">
                                         <div class="staff-name"><?= htmlspecialchars($row['nama']) ?></div>
-                                        <span class="staff-role"><?= htmlspecialchars($pekerjaan) ?></span>
-                                        
-                                        <div class="staff-footer">
-                                            <?php if($perusahaan !== '-'): ?>
-                                                <div class="meta-item">
-                                                    <i class="ri-building-line"></i> <?= htmlspecialchars($perusahaan) ?>
-                                                </div>
-                                            <?php endif; ?>
-                                            
-                                            <div class="meta-item">
-                                                <i class="ri-briefcase-line"></i> <?= htmlspecialchars($divisi) ?>
-                                            </div>
-                                        </div>
+                                        <span class="staff-role"><?= htmlspecialchars($divisi) ?></span>
                                     </div>
                                 </div>
                             </a>

@@ -17,7 +17,6 @@
                     <th class="px-6 py-4 font-semibold text-center w-24">Foto</th>
                     <th class="px-6 py-4 font-semibold">Nama Alumni</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Angkatan</th>
-                    <th class="px-6 py-4 font-semibold">Pekerjaan</th>
                     <th class="px-6 py-4 font-semibold text-center w-40">Aksi</th>
                 </tr>
             </thead>
@@ -42,84 +41,89 @@
             </div>
             
             <div class="p-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
-                <form id="alumniForm" enctype="multipart/form-data" class="space-y-5">
+                <form id="alumniForm" enctype="multipart/form-data" class="space-y-6">
                     <input type="hidden" id="inputId" name="id">
 
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
-                        <input type="text" id="inputNama" name="nama" placeholder="Contoh: Budi Santoso, S.Kom" required
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
-                    </div>
+                    <!-- Bagian Informasi Pribadi -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                            <i class="fas fa-id-card text-blue-500"></i>
+                            <h4 class="font-bold text-gray-800 uppercase text-xs tracking-wider">Identitas Alumni</h4>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
+                            <input type="text" id="inputNama" name="nama" placeholder="Contoh: Budi Santoso, S.Kom" required
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
+                        </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun Angkatan <span class="text-red-500">*</span></label>
-                            <input type="number" id="inputAngkatan" name="angkatan" placeholder="2020" min="2000" max="2030" required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Divisi / Posisi</label>
-                            <input type="text" id="inputDivisi" name="divisi" placeholder="Contoh: Koordinator Lab / Asisten"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Pekerjaan Saat Ini</label>
-                            <input type="text" id="inputPekerjaan" name="pekerjaan" placeholder="Contoh: Software Engineer"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Perusahaan</label>
-                            <input type="text" id="inputPerusahaan" name="perusahaan" placeholder="Contoh: Tokopedia / Shopee"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+                                <input type="email" id="inputEmail" name="email" placeholder="contoh@gmail.com"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun Angkatan <span class="text-red-500">*</span></label>
+                                <input type="number" id="inputAngkatan" name="angkatan" placeholder="2020" min="2000" max="2030" required
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Tahun Lulus</label>
-                            <input type="text" id="inputTahunLulus" name="tahun_lulus" placeholder="Contoh: 2024"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
+                    <!-- Bagian Riwayat Lab -->
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                            <i class="fas fa-flask text-indigo-500"></i>
+                            <h4 class="font-bold text-gray-800 uppercase text-xs tracking-wider">Riwayat Laboratorium</h4>
                         </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Divisi / Posisi Terakhir</label>
+                                <input type="text" id="inputDivisi" name="divisi" placeholder="Contoh: Koordinator Lab / Asisten"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Keahlian Utama</label>
+                                <input type="text" id="inputKeahlian" name="keahlian" placeholder="PHP, Laravel, React"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Upload Foto</label>
-                            <input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                            <p class="text-xs text-gray-500 mt-1">Format: JPG/PNG. Max 2MB.</p>
-                            <div id="fotoPreviewInfo" class="hidden mt-1 text-xs text-emerald-600 font-medium"><i class="fas fa-check-circle"></i> Foto sudah ada.</div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Mata Kuliah Pernah Diajar</label>
+                            <input type="text" id="inputMataKuliah" name="mata_kuliah" placeholder="Contoh: Pemrograman Dasar, Basis Data"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
+                            <p class="text-[10px] text-gray-400 mt-1 italic leading-tight"><i class="fas fa-info-circle mr-1"></i> Pisahkan dengan koma jika Anda pernah mengajar lebih dari satu mata kuliah.</p>
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Keahlian</label>
-                        <input type="text" id="inputKeahlian" name="keahlian" placeholder="Contoh: PHP, Laravel, React, MySQL (Pisahkan koma)"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-                            <input type="email" id="inputEmail" name="email" placeholder="contoh@gmail.com"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
+                    <!-- Bagian Media & Pesan -->
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
+                            <i class="fas fa-comment-dots text-emerald-500"></i>
+                            <h4 class="font-bold text-gray-800 uppercase text-xs tracking-wider">Media & Testimoni</h4>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">LinkedIn URL</label>
-                            <input type="url" id="inputLinkedin" name="linkedin" placeholder="https://linkedin.com/in/username"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Portfolio URL</label>
-                        <input type="url" id="inputPortfolio" name="portfolio" placeholder="https://mywebsite.com"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400">
-                    </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Kesan & Pesan</label>
-                        <textarea id="inputKesanPesan" name="kesan_pesan" rows="3" placeholder="Tuliskan pengalaman berkesan selama menjadi asisten..."
-                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors placeholder-gray-400"></textarea>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Upload Foto Profil</label>
+                            <div class="flex items-center gap-4">
+                                <div class="flex-1">
+                                    <input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all cursor-pointer">
+                                </div>
+                                <div id="fotoPreviewInfo" class="hidden">
+                                    <span class="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-[10px] font-bold border border-emerald-100 whitespace-nowrap"><i class="fas fa-image mr-1"></i> Foto Tersimpan</span>
+                                </div>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-1">Format: JPG/PNG/WEBP. Rekomendasi 1:1 (Square). Maksimal 2MB.</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Kesan & Pesan Selama Di Lab</label>
+                            <textarea id="inputKesanPesan" name="kesan_pesan" rows="3" placeholder="Tuliskan pengalaman berkesan Anda..."
+                                      class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30"></textarea>
+                        </div>
                     </div>
 
                     <div id="formMessage" class="hidden"></div>
@@ -151,19 +155,32 @@
                     </div>
                     <div class="space-y-4 text-sm">
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500">Angkatan</p><p id="dAngkatan" class="font-bold">-</p></div>
-                            <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500">Lulus</p><p id="dTahunLulus" class="font-bold">-</p></div>
+                            <div class="bg-gray-50/50 p-3.5 rounded-2xl border border-gray-100">
+                                <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Angkatan</p>
+                                <p id="dAngkatan" class="font-bold text-gray-800">-</p>
+                            </div>
+                            <div class="bg-gray-50/50 p-3.5 rounded-2xl border border-gray-100">
+                                <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Email</p>
+                                <p id="dEmail" class="font-bold text-gray-800 truncate">-</p>
+                            </div>
                         </div>
-                        <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500">Email</p><p id="dEmail" class="font-bold truncate">-</p></div>
-                        <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500">Karir</p><p class="font-bold"><span id="dPekerjaan">-</span> at <span id="dPerusahaan">-</span></p></div>
                         
-                        <div class="flex gap-2" id="dSocials">
-                            <a id="dLinkedin" href="#" target="_blank" class="hidden text-blue-600 hover:underline flex items-center gap-1"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                            <a id="dPortfolio" href="#" target="_blank" class="hidden text-purple-600 hover:underline flex items-center gap-1 ml-4"><i class="fas fa-globe"></i> Portfolio</a>
+                        <div class="bg-blue-50/30 p-3.5 rounded-2xl border border-blue-50 flex flex-col gap-1">
+                             <p class="text-[10px] uppercase font-bold text-blue-400 tracking-wider flex items-center gap-2">
+                                <i class="fas fa-book-reader text-[10px]"></i> Mata Kuliah Pernah Diajar
+                             </p>
+                             <p id="dMataKuliah" class="font-semibold text-gray-700 leading-relaxed">-</p>
                         </div>
 
-                        <div><p class="text-xs text-gray-500 mb-1">Keahlian</p><div id="dKeahlian" class="flex flex-wrap gap-2"></div></div>
-                        <div class="bg-blue-50 p-3 rounded-lg italic text-gray-700 relative"><i class="fas fa-quote-left text-blue-200 mr-2"></i><span id="dKesan"></span></div>
+                        <div class="space-y-2">
+                            <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider ml-1">Keahlian & Kompetensi</p>
+                            <div id="dKeahlian" class="flex flex-wrap gap-2"></div>
+                        </div>
+
+                        <div class="bg-indigo-50/50 p-5 rounded-3xl border border-indigo-100 italic text-gray-700 relative overflow-hidden">
+                            <i class="fas fa-quote-left text-indigo-100/50 text-5xl absolute -top-1 -left-1"></i>
+                            <span id="dKesan" class="relative z-10 block"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,7 +189,9 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', loadAlumni);
+document.addEventListener('DOMContentLoaded', () => {
+    loadAlumni();
+});
 
 function loadAlumni() {
     fetch(API_URL + '/alumni').then(res => res.json()).then(res => {
@@ -186,7 +205,6 @@ function loadAlumni() {
                         <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"></div></td>
                         <td class="px-6 py-4"><div class="flex flex-col"><span class="font-bold text-gray-800 text-sm">${item.nama}</span><span class="text-xs text-gray-500 uppercase mt-0.5">${item.divisi || 'Asisten'}</span></div></td>
                         <td class="px-6 py-4 text-center"><span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold border border-blue-100">${item.angkatan || '-'}</span></td>
-                        <td class="px-6 py-4 text-gray-600 text-sm font-medium">${item.pekerjaan || '<span class="text-gray-400 italic text-xs">Belum diisi</span>'}</td>
                         <td class="px-6 py-4">
                             <div class="flex justify-center items-center gap-2">
                                 <button onclick="openFormModal(${item.id}, event)" class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center justify-center"><i class="fas fa-pen text-xs"></i></button>
@@ -207,14 +225,12 @@ function openDetailModal(id) {
         if((res.status === 'success' || res.code === 200) && res.data) {
             const d = res.data;
             document.getElementById('dNama').innerText = d.nama; document.getElementById('dDivisi').innerText = d.divisi || 'Alumni';
-            document.getElementById('dAngkatan').innerText = d.angkatan; document.getElementById('dTahunLulus').innerText = d.tahun_lulus || '-';
-            document.getElementById('dEmail').innerText = d.email || '-'; document.getElementById('dPekerjaan').innerText = d.pekerjaan || '-';
-            document.getElementById('dPerusahaan').innerText = d.perusahaan || '-'; document.getElementById('dKesan').innerText = d.kesan_pesan ? `"${d.kesan_pesan}"` : "-";
+            document.getElementById('dAngkatan').innerText = d.angkatan;
+            document.getElementById('dEmail').innerText = d.email || '-';
+            document.getElementById('dMataKuliah').innerText = d.mata_kuliah || '-';
+            document.getElementById('dKesan').innerText = d.kesan_pesan ? `"${d.kesan_pesan}"` : "-";
             const fotoUrl = d.foto ? (d.foto.includes('http') ? d.foto : ASSETS_URL + '/assets/uploads/' + d.foto) : `https://placehold.co/150x150?text=${d.nama.charAt(0)}`;
             document.getElementById('dFoto').src = fotoUrl;
-            const lnk=document.getElementById('dLinkedin'), prt=document.getElementById('dPortfolio');
-            if(d.linkedin){lnk.href=d.linkedin;lnk.classList.remove('hidden');lnk.classList.add('flex')}else{lnk.classList.add('hidden')}
-            if(d.portfolio){prt.href=d.portfolio;prt.classList.remove('hidden');prt.classList.add('flex')}else{prt.classList.add('hidden')}
             const sDiv=document.getElementById('dKeahlian'); sDiv.innerHTML=''; let skills=d.keahlian; try{if(skills.includes('['))skills=JSON.parse(skills);else skills=skills.split(',')}catch(e){if(skills)skills=skills.split(',')}
             if(Array.isArray(skills)){skills.forEach(s=>{if(s.trim())sDiv.innerHTML+=`<span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-100">${s.trim()}</span>`})}else{sDiv.innerHTML='-'}
         }
@@ -240,14 +256,11 @@ function openFormModal(id = null, event = null) {
                 document.getElementById('inputNama').value = d.nama;
                 document.getElementById('inputAngkatan').value = d.angkatan;
                 document.getElementById('inputDivisi').value = d.divisi || '';
-                document.getElementById('inputPekerjaan').value = d.pekerjaan || '';
-                document.getElementById('inputPerusahaan').value = d.perusahaan || '';
-                document.getElementById('inputTahunLulus').value = d.tahun_lulus || '';
                 document.getElementById('inputKeahlian').value = d.keahlian || '';
                 document.getElementById('inputEmail').value = d.email || '';
-                document.getElementById('inputLinkedin').value = d.linkedin || '';
-                document.getElementById('inputPortfolio').value = d.portfolio || '';
                 document.getElementById('inputKesanPesan').value = d.kesan_pesan || '';
+                document.getElementById('inputMataKuliah').value = d.mata_kuliah || '';
+
                 if(d.foto) document.getElementById('fotoPreviewInfo').classList.remove('hidden');
             }
         });

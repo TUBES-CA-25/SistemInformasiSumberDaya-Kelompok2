@@ -99,6 +99,7 @@ class Controller {
     protected function success($data = null, $message = 'Success', $status = 200) {
         $this->response([
             'status' => 'success',
+            'code' => $status,
             'message' => $message,
             'data' => $data
         ], $status);
@@ -110,6 +111,7 @@ class Controller {
     protected function error($message = 'Error', $data = null, $status = 400) {
         $this->response([
             'status' => 'error',
+            'code' => $status,
             'message' => $message,
             'data' => $data
         ], $status);
