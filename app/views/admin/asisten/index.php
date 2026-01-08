@@ -1,10 +1,18 @@
 <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
-        <i class="fas fa-users text-blue-600"></i> Data Asisten Laboratorium
+        <i class="fas fa-users text-blue-600"></i> Data Asisten
     </h1>
     <div class="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
+        <div class="relative w-full sm:w-64">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+            </span>
+            <input type="text" id="searchInput" placeholder="Cari asisten..." 
+                   class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow text-sm">
+        </div>
+
         <button onclick="openKoordinatorModal()" 
-           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5">
+           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
             <i class="fas fa-crown"></i> Pilih Koordinator
         </button>
         
@@ -16,6 +24,11 @@
 </div>
 
 <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <span class="text-sm text-gray-500 font-medium">Daftar Asisten Laboratorium</span>
+        <span id="totalData" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Total: 0</span>
+    </div>
+
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
@@ -142,40 +155,71 @@
 
 <script>
 window.BASE_URL = '<?= BASE_URL ?>';
-document.addEventListener('DOMContentLoaded', loadAsisten);
+let allAsistenData = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadAsisten();
+    
+    // Live Search
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        const keyword = e.target.value.toLowerCase();
+        const filtered = allAsistenData.filter(item => 
+            (item.nama && item.nama.toLowerCase().includes(keyword)) ||
+            (item.email && item.email.toLowerCase().includes(keyword)) ||
+            (item.jurusan && item.jurusan.toLowerCase().includes(keyword))
+        );
+        renderTable(filtered);
+    });
+});
 
 // --- 1. LOAD DATA UTAMA ---
 function loadAsisten() {
     fetch(API_URL + '/asisten').then(res => res.json()).then(res => {
-        const tbody = document.getElementById('tableBody'); tbody.innerHTML = ''; 
-        if((res.status === 'success' || res.code === 200) && res.data && res.data.length > 0) {
-            res.data.forEach((item, index) => {
-                let statusBadge = '';
-                if (item.isKoordinator == 1) { statusBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200"><i class="fas fa-crown mr-1 text-xs"></i> Koordinator</span>`; } 
-                else {
-                    let st = item.statusAktif == '1' ? 'Asisten' : (item.statusAktif == '0' ? 'Tidak Aktif' : item.statusAktif);
-                    let cls = st === 'Tidak Aktif' ? 'bg-red-100 text-red-800' : (st === 'CA' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800');
-                    statusBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}">${st}</span>`;
-                }
-                const fotoUrl = item.foto ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) : 'https://placehold.co/50x50?text=Foto';
-                const row = `
-                    <tr onclick="openDetailModal(${item.idAsisten})" class="hover:bg-gray-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
-                        <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
-                        <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"></div></td>
-                        <td class="px-6 py-4"><div class="flex flex-col"><span class="font-bold text-gray-800 text-base">${item.nama}</span><span class="text-xs text-gray-500 mt-0.5 flex items-center gap-1"><i class="fas fa-envelope text-gray-300"></i> ${item.email || '-'}</span></div></td>
-                        <td class="px-6 py-4 text-gray-600 font-medium">${item.jurusan || '-'}</td>
-                        <td class="px-6 py-4 text-center">${statusBadge}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex justify-center items-center gap-2">
-                                <button onclick="openFormModal(${item.idAsisten}, event)" class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all duration-200 flex items-center justify-center"><i class="fas fa-pen text-xs"></i></button>
-                                <button onclick="hapusAsisten(${item.idAsisten}, event)" class="w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-200 flex items-center justify-center"><i class="fas fa-trash-alt text-xs"></i></button>
-                            </div>
-                        </td>
-                    </tr>`;
-                tbody.innerHTML += row;
-            });
-        } else { tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Belum ada data asisten</td></tr>`; }
+        if((res.status === 'success' || res.code === 200) && res.data) {
+            allAsistenData = res.data;
+            renderTable(allAsistenData);
+        } else {
+            renderTable([]);
+        }
+    }).catch(err => {
+        console.error(err);
+        document.getElementById('tableBody').innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-red-500">Gagal memuat data</td></tr>`;
     });
+}
+
+function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    const totalEl = document.getElementById('totalData');
+    tbody.innerHTML = ''; 
+    totalEl.innerText = `Total: ${data.length}`;
+
+    if(data && data.length > 0) {
+        data.forEach((item, index) => {
+            let statusBadge = '';
+            if (item.isKoordinator == 1) { statusBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200"><i class="fas fa-crown mr-1 text-xs"></i> Koordinator</span>`; } 
+            else {
+                let st = item.statusAktif == '1' ? 'Asisten' : (item.statusAktif == '0' ? 'Tidak Aktif' : item.statusAktif);
+                let cls = st === 'Tidak Aktif' ? 'bg-red-100 text-red-800' : (st === 'CA' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800');
+                statusBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}">${st}</span>`;
+            }
+            const fotoUrl = item.foto ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) : 'https://placehold.co/50x50?text=Foto';
+            const row = `
+                <tr onclick="openDetailModal(${item.idAsisten})" class="hover:bg-gray-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
+                    <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
+                    <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"></div></td>
+                    <td class="px-6 py-4"><div class="flex flex-col"><span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">${item.nama}</span><span class="text-xs text-gray-500 mt-0.5 flex items-center gap-1"><i class="fas fa-envelope text-gray-300"></i> ${item.email || '-'}</span></div></td>
+                    <td class="px-6 py-4 text-gray-600 font-medium">${item.jurusan || '-'}</td>
+                    <td class="px-6 py-4 text-center">${statusBadge}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex justify-center items-center gap-2">
+                            <button onclick="openFormModal(${item.idAsisten}, event)" class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all duration-200 flex items-center justify-center"><i class="fas fa-pen text-xs"></i></button>
+                            <button onclick="hapusAsisten(${item.idAsisten}, event)" class="w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-200 flex items-center justify-center"><i class="fas fa-trash-alt text-xs"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+            tbody.innerHTML += row;
+        });
+    } else { tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Data asisten tidak ditemukan</td></tr>`; }
 }
 
 // --- 2. MODAL DETAIL ---

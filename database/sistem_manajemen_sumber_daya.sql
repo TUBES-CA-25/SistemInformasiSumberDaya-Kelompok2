@@ -307,8 +307,7 @@ INSERT INTO `laboratorium_gambar` (`idGambar`, `idLaboratorium`, `namaGambar`, `
 
 CREATE TABLE `manajemen` (
   `idManajemen` int(11) NOT NULL,
-  `nama` varchar(100) NOT NULL,
-  `nidn` varchar(20) DEFAULT NULL,
+  `nama` varchar(100) NOT NULL,  `email` varchar(255) DEFAULT NULL,  `nidn` varchar(20) DEFAULT NULL,
   `jabatan` varchar(100) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -317,11 +316,11 @@ CREATE TABLE `manajemen` (
 -- Dumping data untuk tabel `manajemen`
 --
 
-INSERT INTO `manajemen` (`idManajemen`, `nama`, `nidn`, `jabatan`, `foto`) VALUES
-(1, 'Ir. Abdul Rachman Manga\', S.Kom., M.T., MTA., MCF', NULL, 'Kepala Laboratorium Jaringan Dan Pemrograman', 'manajemen_1767600768_7768.jpg'),
-(5, 'Ir. Huzain Azis, S.Kom., M.Cs. MTA', NULL, 'Kepala Laboratorium Komputasi Dasar', 'manajemen_1767600806_3284.jpg'),
-(6, 'Herdianti, S.Si., M.Eng., MTA.', NULL, 'Kepala Laboratorium Riset', 'manajemen_1767600880_4656.JPG'),
-(7, 'Fatimah AR. Tuasamu, S.Kom., MTA, MOS', NULL, 'Laboran', 'manajemen_1767600916_8750.JPG');
+INSERT INTO `manajemen` (`idManajemen`, `nama`, `email`, `nidn`, `jabatan`, `foto`) VALUES
+(1, 'Ir. Abdul Rachman Manga\', S.Kom., M.T., MTA., MCF', NULL, NULL, 'Kepala Laboratorium Jaringan Dan Pemrograman', 'manajemen_1767600768_7768.jpg'),
+(5, 'Ir. Huzain Azis, S.Kom., M.Cs. MTA', NULL, NULL, 'Kepala Laboratorium Komputasi Dasar', 'manajemen_1767600806_3284.jpg'),
+(6, 'Herdianti, S.Si., M.Eng., MTA.', NULL, NULL, 'Kepala Laboratorium Riset', 'manajemen_1767600880_4656.JPG'),
+(7, 'Fatimah AR. Tuasamu, S.Kom., MTA, MOS', NULL, NULL, 'Laboran', 'manajemen_1767600916_8750.JPG');
 
 -- --------------------------------------------------------
 

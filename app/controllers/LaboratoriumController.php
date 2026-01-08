@@ -18,6 +18,12 @@ class LaboratoriumController extends Controller {
     // API methods
     public function apiIndex() {
         $data = $this->model->getAll();
+        
+        // Load images for each laboratorium
+        foreach ($data as &$lab) {
+            $lab['images'] = $this->gambarModel->getByLaboratorium($lab['idLaboratorium']);
+        }
+        
         $this->success($data, 'Data Laboratorium retrieved successfully');
     }
 
@@ -319,6 +325,46 @@ class LaboratoriumController extends Controller {
             $this->success([], 'Laboratorium deleted successfully');
         }
         $this->error('Failed to delete laboratorium', null, 500);
+    }
+
+    /**
+     * Delete specific image only
+     */
+    public function deleteImage($params) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->error('ID gambar tidak ditemukan', null, 400);
+            return;
+        }
+
+        try {
+            $gambar = $this->gambarModel->getById($id, 'idGambar');
+            if (!$gambar) {
+                $this->error('Data gambar tidak ditemukan di database (ID: ' . $id . ')', null, 404);
+                return;
+            }
+
+            // Hapus file fisik jika ada
+            $filename = $gambar['namaGambar'];
+            $filePath = dirname(__DIR__, 2) . '/public/assets/uploads/' . $filename;
+            
+            if (file_exists($filePath)) {
+                if (!unlink($filePath)) {
+                    // Jika gagal hapus file tapi lanjut hapus DB? 
+                    // Kita catat saja, tapi utamakan konsistensi DB
+                    error_log("Gagal menghapus file fisik: " . $filePath);
+                }
+            }
+
+            $result = $this->gambarModel->deleteImage($id);
+            if ($result) {
+                $this->success(['id' => $id], 'Gambar berhasil dihapus');
+            } else {
+                $this->error('Gagal menghapus record gambar di database', null, 500);
+            }
+        } catch (Exception $e) {
+            $this->error('Terjadi kesalahan: ' . $e->getMessage(), null, 500);
+        }
     }
 }
 ?>

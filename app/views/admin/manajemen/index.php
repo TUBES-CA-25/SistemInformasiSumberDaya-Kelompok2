@@ -74,6 +74,7 @@
                 </div>
                 
                 <h2 id="detailNama" class="text-2xl font-bold text-gray-800 text-center mb-1">Nama Lengkap</h2>
+                <p id="detailEmail" class="text-sm text-blue-600 mb-1 font-medium"></p>
                 <p id="detailNidn" class="text-sm text-gray-500 mb-4 font-medium italic"></p>
                 <div class="bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-sm font-bold border border-blue-100 mb-6">
                     <span id="detailJabatan">Jabatan</span>
@@ -126,6 +127,13 @@
                             <input type="text" id="inputNama" name="nama" required
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                                    placeholder="Contoh: Dr. Budi Santoso, M.T.">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+                            <input type="email" id="inputEmail" name="email" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                                   placeholder="Contoh: budi@university.ac.id">
                         </div>
 
                         <div>
@@ -225,6 +233,15 @@ function renderTable(data) {
                 </td>
                 <td class="px-6 py-4">
                     <span class="font-bold text-gray-800 text-sm block group-hover:text-blue-600 transition-colors">${escapeHtml(item.nama)}</span>
+                    <div class="flex flex-col gap-0.5 mt-1">
+                        <span class="text-xs text-blue-600 flex items-center gap-1.5 font-medium">
+                            <i class="far fa-envelope text-[10px]"></i> ${escapeHtml(item.email || '-')}
+                        </span>
+                        ${item.nidn ? `
+                        <span class="text-[10px] text-gray-500 flex items-center gap-1.5">
+                            <i class="far fa-id-card text-[10px]"></i> ${escapeHtml(item.nidn)}
+                        </span>` : ''}
+                    </div>
                 </td>
                 <td class="px-6 py-4">
                     <span class="inline-flex px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
@@ -257,6 +274,7 @@ function openDetailModal(id) {
     document.body.style.overflow = 'hidden';
 
     document.getElementById('detailNama').innerText = data.nama;
+    document.getElementById('detailEmail').innerText = data.email || '';
     document.getElementById('detailNidn').innerText = data.nidn ? `NIDN: ${data.nidn}` : 'NIDN: -';
     document.getElementById('detailJabatan').innerText = data.jabatan;
     
@@ -302,6 +320,7 @@ function openFormModal(id = null, event = null) {
         if (data) {
             document.getElementById('inputId').value = data.idManajemen;
             document.getElementById('inputNama').value = data.nama;
+            document.getElementById('inputEmail').value = data.email || '';
             document.getElementById('inputNidn').value = data.nidn || '';
             document.getElementById('inputJabatan').value = data.jabatan;
             
@@ -413,7 +432,9 @@ function filterTable(searchTerm) {
     }
     const filtered = allManajemenData.filter(item => 
         (item.nama && item.nama.toLowerCase().includes(searchTerm)) ||
-        (item.jabatan && item.jabatan.toLowerCase().includes(searchTerm))
+        (item.jabatan && item.jabatan.toLowerCase().includes(searchTerm)) ||
+        (item.email && item.email.toLowerCase().includes(searchTerm)) ||
+        (item.nidn && item.nidn.toLowerCase().includes(searchTerm))
     );
     renderTable(filtered);
 }

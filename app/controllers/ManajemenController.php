@@ -83,11 +83,12 @@ class ManajemenController extends Controller {
             if (isset($_FILES['foto'])) {
                 $input = [
                     'nama' => $_POST['nama'] ?? '',
+                    'email' => $_POST['email'] ?? '',
                     'nidn' => $_POST['nidn'] ?? null,
                     'jabatan' => $_POST['jabatan'] ?? ''
                 ];
 
-                $required = ['nama', 'jabatan'];
+                $required = ['nama', 'email', 'jabatan'];
                 $missing = $this->validateRequired($input, $required);
                 if (!empty($missing)) {
                     $this->error('Field required: ' . implode(', ', $missing), null, 400);
@@ -121,7 +122,7 @@ class ManajemenController extends Controller {
             } else {
                 // Fallback: JSON atau POST tanpa file
                 $input = $this->getJson() ?? $_POST;
-                $required = ['nama', 'jabatan'];
+                $required = ['nama', 'email', 'jabatan'];
                 $missing = $this->validateRequired($input, $required);
                 if (!empty($missing)) {
                     $this->error('Field required: ' . implode(', ', $missing), null, 400);
@@ -154,6 +155,7 @@ class ManajemenController extends Controller {
             if (isset($_FILES['foto'])) {
                 $input = [
                     'nama' => $_POST['nama'] ?? $existing['nama'],
+                    'email' => $_POST['email'] ?? $existing['email'],
                     'nidn' => $_POST['nidn'] ?? $existing['nidn'],
                     'jabatan' => $_POST['jabatan'] ?? $existing['jabatan']
                 ];
@@ -163,6 +165,7 @@ class ManajemenController extends Controller {
                     $input = $this->getJson() ?? [];
                 }
                 if (empty($input['nama'])) $input['nama'] = $existing['nama'];
+                if (empty($input['email'])) $input['email'] = $existing['email'] ?? '';
                 if (empty($input['jabatan'])) $input['jabatan'] = $existing['jabatan'];
             }
 

@@ -107,6 +107,7 @@ class Router {
         $this->get('/admin/laboratorium/{id}/edit', 'LaboratoriumController', 'edit');
         $this->put('/admin/laboratorium/{id}', 'LaboratoriumController', 'update');
         $this->delete('/admin/laboratorium/{id}', 'LaboratoriumController', 'delete');
+        $this->delete('/admin/laboratorium/image/{id}', 'LaboratoriumController', 'deleteImage');
 
         // Admin Informasi Lab (detail/konten)
         $this->get('/admin/informasi-lab', 'InformasiLabController', 'adminIndex');

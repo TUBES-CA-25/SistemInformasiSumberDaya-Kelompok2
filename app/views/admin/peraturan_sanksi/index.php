@@ -1,58 +1,53 @@
-<div class="space-y-6">
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
-            <i class="fas fa-gavel text-blue-600"></i> Peraturan & Sanksi Lab
-        </h1>
-        
+<div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+        <i class="fas fa-gavel text-blue-600"></i> 
+        Peraturan & Sanksi Lab
+    </h1>
+    
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <div class="relative w-full sm:w-64">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+            </span>
+            <input type="text" id="searchInput" placeholder="Cari peraturan / sanksi..." 
+                   class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow text-sm">
+        </div>
+
         <button onclick="openFormModal()" 
            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
             <i class="fas fa-plus"></i> Tambah Data
         </button>
     </div>
+</div>
 
-    <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row justify-between items-md-center gap-4 bg-gray-50/50">
-            <div class="flex items-center gap-4">
-                <span class="text-sm text-gray-500 font-medium">Daftar Peraturan & Sanksi</span>
-                <select id="filterTipe" onchange="filterData()" class="text-xs border border-gray-300 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500">
-                    <option value="all">Semua Tipe</option>
-                    <option value="peraturan">Peraturan saja</option>
-                    <option value="sanksi">Sanksi saja</option>
-                </select>
-            </div>
-            <div class="relative w-full md:w-64">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                    <i class="fas fa-search text-xs"></i>
-                </span>
-                <input type="text" id="searchInput" placeholder="Cari data..." 
-                       class="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 outline-none transition-all">
-            </div>
+<div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-500 font-medium">Daftar Aturan Kerja & Sanksi</span>
+            <select id="filterTipe" onchange="filterData()" class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                <option value="all">Semua Tipe</option>
+                <option value="peraturan">Peraturan Saja</option>
+                <option value="sanksi">Sanksi Saja</option>
+            </select>
         </div>
+        <span id="totalData" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Total: 0</span>
+    </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-gray-800 text-white text-xs uppercase tracking-wider">
-                        <th class="px-6 py-4 font-semibold text-center w-16">No</th>
-                        <th class="px-6 py-4 font-semibold w-1/4">Judul</th>
-                        <th class="px-6 py-4 font-semibold w-32 text-center">Tipe</th>
-                        <th class="px-6 py-4 font-semibold w-40">Kategori</th>
-                        <th class="px-6 py-4 font-semibold">Deskripsi</th>
-                        <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
-                    <tr>
-                        <td colspan="6" class="px-6 py-12 text-center text-gray-500">
-                            <div class="flex flex-col items-center gap-2">
-                                <i class="fas fa-circle-notch fa-spin text-blue-500 text-2xl"></i>
-                                <span class="font-medium">Memuat data...</span>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
+                    <th class="px-6 py-4 font-semibold text-center w-16">No</th>
+                    <th class="px-6 py-4 font-semibold w-64">Judul Aturan</th>
+                    <th class="px-6 py-4 font-semibold text-center w-32">Tipe</th>
+                    <th class="px-6 py-4 font-semibold">Deskripsi</th>
+                    <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
+                <!-- Data loaded via JS -->
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -188,6 +183,8 @@ async function loadAllData() {
 
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
+    const totalEl = document.getElementById('totalData');
+    if(totalEl) totalEl.innerText = `Total: ${data.length}`;
     tbody.innerHTML = '';
     
     if (data.length === 0) {

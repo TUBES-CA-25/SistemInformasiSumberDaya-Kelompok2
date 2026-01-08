@@ -3,35 +3,45 @@
     <p class="text-gray-500 text-sm">Selamat datang, Admin! Berikut ringkasan aktivitas laboratorium hari ini.</p>
 </div>
 
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     
     <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex items-center justify-between hover:shadow-md transition-all cursor-default group">
         <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Jadwal Hari Ini</p>
-            <h2 class="text-4xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors" id="statJadwal">0</h2>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Jadwal Hari Ini</p>
+            <h2 class="text-3xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors" id="statJadwal">0</h2>
         </div>
-        <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all transform group-hover:scale-110">
-            <i class="fas fa-calendar-day text-2xl"></i>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex items-center justify-between hover:shadow-md transition-all cursor-default group">
-        <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Anggota</p>
-            <h2 class="text-4xl font-bold text-gray-800 group-hover:text-emerald-600 transition-colors" id="statAsisten">0</h2>
-        </div>
-        <div class="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all transform group-hover:scale-110">
-            <i class="fas fa-users text-2xl"></i>
+        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all transform group-hover:scale-110">
+            <i class="fas fa-calendar-day text-xl"></i>
         </div>
     </div>
 
     <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex items-center justify-between hover:shadow-md transition-all cursor-default group">
         <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Ruang Lab</p>
-            <h2 class="text-4xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors" id="statLab">0</h2>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Asisten</p>
+            <h2 class="text-3xl font-bold text-gray-800 group-hover:text-emerald-600 transition-colors" id="statAsisten">0</h2>
         </div>
-        <div class="w-14 h-14 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-all transform group-hover:scale-110">
-            <i class="fas fa-flask text-2xl"></i>
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all transform group-hover:scale-110">
+            <i class="fas fa-users text-xl"></i>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex items-center justify-between hover:shadow-md transition-all cursor-default group">
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Ruang Lab</p>
+            <h2 class="text-3xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors" id="statLab">0</h2>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-all transform group-hover:scale-110">
+            <i class="fas fa-flask text-xl"></i>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex items-center justify-between hover:shadow-md transition-all cursor-default group">
+        <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Total Alumni</p>
+            <h2 class="text-3xl font-bold text-gray-800 group-hover:text-amber-600 transition-colors" id="statAlumni">0</h2>
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-all transform group-hover:scale-110">
+            <i class="fas fa-user-graduate text-xl"></i>
         </div>
     </div>
 </div>
@@ -161,10 +171,10 @@ function loadDashboardStats() {
             const data = res.data;
 
             // A. Isi Kartu Statistik
-            // Gunakan animasi sederhana count-up (opsional) atau langsung text
             document.getElementById('statJadwal').innerText = data.total_jadwal_hari_ini || 0;
             document.getElementById('statAsisten').innerText = data.total_asisten || 0;
             document.getElementById('statLab').innerText = data.total_lab || 0;
+            document.getElementById('statAlumni').innerText = data.total_alumni || 0;
 
             // B. Render Card Jadwal
             renderJadwalCards(data.jadwal_hari_ini);
