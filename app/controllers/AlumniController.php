@@ -1,6 +1,7 @@
 <?php
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/AlumniModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class AlumniController extends Controller {
     private $model;
@@ -123,7 +124,8 @@ class AlumniController extends Controller {
             
             // Handle file upload jika ada
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'alumni/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
@@ -134,11 +136,11 @@ class AlumniController extends Controller {
                     return;
                 }
                 
-                $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                $filename = Helper::generateFilename('alumni', $input['nama'], $ext);
                 $target = $uploadDir . $filename;
                 
                 if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
-                    $input['foto'] = $filename;
+                    $input['foto'] = $subFolder . $filename;
                 } else {
                     $this->error('Gagal mengupload file', null, 500);
                     return;
@@ -191,7 +193,8 @@ class AlumniController extends Controller {
             
             // Handle file upload jika ada file baru
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'alumni/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
@@ -204,17 +207,20 @@ class AlumniController extends Controller {
                 
                 // Delete old file if exists
                 if (!empty($alumni['foto'])) {
-                    $oldFile = $uploadDir . $alumni['foto'];
-                    if (file_exists($oldFile)) {
-                        unlink($oldFile);
+                    $oldFilePath = $alumni['foto'];
+                    $baseUploadPath = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                    $fullOldPath = $baseUploadPath . $oldFilePath;
+                    
+                    if (file_exists($fullOldPath) && is_file($fullOldPath)) {
+                        @unlink($fullOldPath);
                     }
                 }
                 
-                $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                $filename = Helper::generateFilename('alumni', $input['nama'], $ext);
                 $target = $uploadDir . $filename;
                 
                 if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
-                    $input['foto'] = $filename;
+                    $input['foto'] = $subFolder . $filename;
                 } else {
                     $this->error('Gagal mengupload file', null, 500);
                     return;
@@ -241,4 +247,3 @@ class AlumniController extends Controller {
         $this->error('Failed to delete alumni', null, 500);
     }
 }
-?>

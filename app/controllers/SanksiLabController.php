@@ -1,6 +1,7 @@
 <?php
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/SanksiLabModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class SanksiLabController extends Controller {
     private $model;
@@ -67,22 +68,19 @@ class SanksiLabController extends Controller {
         
         // Optional: handle file upload for gambar
         if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = dirname(__DIR__, 2) . '/storage/uploads/';
+            $subFolder = 'sanksi/';
+            $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
             
             $file = $_FILES['gambar'];
-            error_log('DEBUG STORE: File upload - name: ' . $file['name'] . ', size: ' . $file['size'] . ', tmp: ' . $file['tmp_name']);
-            
             $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-            $filename = 'sanksi_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+            $filename = Helper::generateFilename('sanksi', $input['judul'], $ext);
             $target = $uploadDir . $filename;
-            
-            error_log('DEBUG STORE: Target path: ' . $target);
             
             if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
                 error_log('DEBUG STORE: File upload SUCCESS');
-                // Simpan hanya nama file, path akan diatur di view
-                $input['gambar'] = $filename;
+                // Simpan path relatif ke uploads/
+                $input['gambar'] = $subFolder . $filename;
             } else {
                 error_log('DEBUG STORE: File upload FAILED');
                 $this->error('Gagal upload gambar. Pastikan folder storage/uploads dapat ditulis.', null, 500);
@@ -133,31 +131,35 @@ class SanksiLabController extends Controller {
         
         // Optional: handle file upload for gambar
         if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = dirname(__DIR__, 2) . '/storage/uploads/';
+            $subFolder = 'sanksi/';
+            $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
             
             // Hapus gambar lama jika ada
             if (isset($oldData['gambar']) && !empty($oldData['gambar'])) {
-                $oldImagePath = $uploadDir . $oldData['gambar'];
+                $oldFile = basename($oldData['gambar']);
+                $oldImagePath = $uploadDir . $oldFile;
+                $legacyPath_sub = dirname(__DIR__, 2) . '/storage/uploads/sanksi/' . $oldFile;
+                $legacyPath_root = dirname(__DIR__, 2) . '/storage/uploads/' . $oldFile;
+                
                 if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
+                    @unlink($oldImagePath);
+                } elseif (file_exists($legacyPath_sub)) {
+                    @unlink($legacyPath_sub);
+                } elseif (file_exists($legacyPath_root)) {
+                    @unlink($legacyPath_root);
                 }
             }
             
             // Upload gambar baru
             $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-            $filename = 'sanksi_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+            $filename = Helper::generateFilename('sanksi', $input['judul'], $ext);
             $target = $uploadDir . $filename;
             
-            error_log('DEBUG UPDATE: Target path: ' . $target);
-            
             if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                error_log('DEBUG UPDATE: File upload SUCCESS');
-                // Simpan hanya nama file, path akan diatur di view
-                $input['gambar'] = $filename;
+                $input['gambar'] = $subFolder . $filename;
             } else {
-                error_log('DEBUG UPDATE: File upload FAILED');
-                $this->error('Gagal upload gambar. Pastikan folder storage/uploads dapat ditulis.', null, 500);
+                $this->error('Gagal upload gambar.', null, 500);
             }
         }
         $result = $this->model->update($id, $input);

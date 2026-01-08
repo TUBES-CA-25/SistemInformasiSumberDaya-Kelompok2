@@ -3,6 +3,7 @@ require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../models/LaboratoriumModel.php';
 require_once __DIR__ . '/../models/AsistenModel.php';
 require_once __DIR__ . '/../models/LaboratoriumGambarModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class LaboratoriumController extends Controller {
     private $model;
@@ -137,7 +138,8 @@ class LaboratoriumController extends Controller {
             // Handle multiple file uploads
             $uploadedImages = [];
             if (isset($_FILES['gambar']) && is_array($_FILES['gambar']['name'])) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'laboratorium/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $fileCount = count($_FILES['gambar']['name']);
@@ -151,12 +153,12 @@ class LaboratoriumController extends Controller {
                             return;
                         }
                         
-                        $filename = 'lab_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                        $filename = Helper::generateFilename('lab', $input['nama'], $ext);
                         $target = $uploadDir . $filename;
                         
                         if (move_uploaded_file($_FILES['gambar']['tmp_name'][$i], $target)) {
                             $uploadedImages[] = [
-                                'filename' => $filename,
+                                'filename' => $subFolder . $filename,
                                 'description' => $_POST['gambar_desc'][$i] ?? null
                             ];
                         } else {
@@ -245,7 +247,8 @@ class LaboratoriumController extends Controller {
             // Handle multiple file uploads
             $uploadedImages = [];
             if (isset($_FILES['gambar']) && is_array($_FILES['gambar']['name'])) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'laboratorium/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $fileCount = count($_FILES['gambar']['name']);
@@ -259,12 +262,12 @@ class LaboratoriumController extends Controller {
                             return;
                         }
                         
-                        $filename = 'lab_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                        $filename = Helper::generateFilename('lab', $input['nama'], $ext);
                         $target = $uploadDir . $filename;
                         
                         if (move_uploaded_file($_FILES['gambar']['tmp_name'][$i], $target)) {
                             $uploadedImages[] = [
-                                'filename' => $filename,
+                                'filename' => $subFolder . $filename,
                                 'description' => $_POST['gambar_desc'][$i] ?? null
                             ];
                         } else {
@@ -346,13 +349,18 @@ class LaboratoriumController extends Controller {
 
             // Hapus file fisik jika ada
             $filename = $gambar['namaGambar'];
-            $filePath = dirname(__DIR__, 2) . '/public/assets/uploads/' . $filename;
+            $rootUploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+            
+            // Cek di root (jika data lama) atau di subfolder (jika data baru dengan prefix)
+            $filePath = $rootUploadDir . $filename;
             
             if (file_exists($filePath)) {
-                if (!unlink($filePath)) {
-                    // Jika gagal hapus file tapi lanjut hapus DB? 
-                    // Kita catat saja, tapi utamakan konsistensi DB
-                    error_log("Gagal menghapus file fisik: " . $filePath);
+                @unlink($filePath);
+            } else {
+                // Mencoba cek tanpa prefix jika ternyata prefix ditambahkan tapi file ada di root
+                $baseName = basename($filename);
+                if (file_exists($rootUploadDir . $baseName)) {
+                    @unlink($rootUploadDir . $baseName);
                 }
             }
 
@@ -367,4 +375,3 @@ class LaboratoriumController extends Controller {
         }
     }
 }
-?>
