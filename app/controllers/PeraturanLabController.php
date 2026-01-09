@@ -100,10 +100,10 @@ class PeraturanLabController extends Controller {
         // Cek apakah request multipart/form-data (upload file)
         if (isset($_FILES['gambar'])) {
             $input = [
-                'judul' => $_POST['judul'] ?? '',
-                'kategori' => $_POST['kategori'] ?? 'Larangan Umum',
-                'deskripsi' => $_POST['deskripsi'] ?? '',
-                'urutan' => $_POST['urutan'] ?? 0
+                'judul' => $_POST['judul'] ?? ($oldData['judul'] ?? ''),
+                'kategori' => $_POST['kategori'] ?? ($oldData['kategori'] ?? 'Larangan Umum'),
+                'deskripsi' => $_POST['deskripsi'] ?? ($oldData['deskripsi'] ?? ''),
+                'urutan' => $_POST['urutan'] ?? ($oldData['urutan'] ?? 0)
             ];
         } else {
             // Coba ambil dari $_POST dulu, jika kosong ambil dari JSON
@@ -113,10 +113,16 @@ class PeraturanLabController extends Controller {
             }
         }
         
-        // Validasi field wajib
-        if (empty($input['judul']) || empty($input['deskripsi'])) {
+        // Validasi field wajib - gunakan data baru jika ada, jika tidak gunakan data lama
+        $judul = !empty($input['judul']) ? $input['judul'] : $oldData['judul'];
+        $deskripsi = !empty($input['deskripsi']) ? $input['deskripsi'] : $oldData['deskripsi'];
+        
+        if (empty($judul) || empty($deskripsi)) {
             $this->error('Field judul dan deskripsi wajib diisi', null, 400);
         }
+        
+        $input['judul'] = $judul;
+        $input['deskripsi'] = $deskripsi;
         
         // Optional: handle file upload for gambar
         if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
@@ -141,7 +147,7 @@ class PeraturanLabController extends Controller {
             }
             
             $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-            $filename = Helper::generateFilename('peraturan', $input['judul'], $ext);
+            $filename = Helper::generateFilename('peraturan', $judul, $ext);
             $target = $uploadDir . $filename;
             
             if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {

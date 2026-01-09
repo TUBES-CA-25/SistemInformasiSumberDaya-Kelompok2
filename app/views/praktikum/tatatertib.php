@@ -108,23 +108,12 @@ function getRuleStyle($index) {
                     <?php 
                         // Ambil style default (ikon & warna) berdasarkan urutan
                         $style = getRuleStyle($index); 
-
-                        // Cek apakah ada gambar di database?
-                        $hasImage = !empty($row['gambar']);
-                        $imageUrl = ASSETS_URL . '/assets/uploads/' . $row['gambar'];
                     ?>
 
                     <article class="rule-card">
-                        
-                        <?php if ($hasImage) : ?>
-                            <div class="rule-img-box">
-                                <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($row['judul']) ?>" loading="lazy">
-                            </div>
-                        <?php else : ?>
-                            <div class="rule-icon <?= $style['class'] ?>">
-                                <i class="<?= $style['icon'] ?>"></i>
-                            </div>
-                        <?php endif; ?>
+                        <div class="rule-icon <?= $style['class'] ?>">
+                            <i class="<?= $style['icon'] ?>"></i>
+                        </div>
                         
                         <h3><?= htmlspecialchars($row['judul']) ?></h3>
                         

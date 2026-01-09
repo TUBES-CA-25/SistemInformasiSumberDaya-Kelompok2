@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 06 Jan 2026 pada 20.19
+-- Waktu pembuatan: 09 Jan 2026 pada 11.59
 -- Versi server: 10.4.32-MariaDB-log
 -- Versi PHP: 8.2.12
 
@@ -38,24 +38,25 @@ CREATE TABLE `alumni` (
   `keahlian` text DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `urutanTampilan` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `alumni`
 --
 
-INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `mata_kuliah`, `foto`, `kesan_pesan`, `keahlian`, `email`, `created_at`, `updated_at`) VALUES
-(2, 'Siti Nurhaliza bapak', '2023', 'Divisi Jaringan', NULL, 'https://placehold.co/300x300/667eea/white?text=Siti', 'Awal yang baik untuk karir di dunia telekomunikasi. Terima kasih atas bimbingan selama menjadi asisten.', 'Cisco, Networking, Linux', 'siti@email.com', '2025-12-15 02:28:26', '2025-12-19 11:05:25'),
-(3, 'Ahmad Pratama', '2022', 'Divisi Multimedia', NULL, 'https://placehold.co/300x300/667eea/white?text=Ahmad', 'Laboratorium membentuk kreativitas saya dan membuat saya percaya bahwa desain itu penting.', 'Figma, Adobe XD, UI/UX Design, Web Design', 'ahmad@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
-(4, 'Dwi Putri Lestari', '2022', 'Koordinator Lab', NULL, 'https://placehold.co/300x300/667eea/white?text=Dwi', 'Bangga bisa melayani negara dengan keahlian yang didapat dari laboratorium. Semoga lab terus berkembang.', 'Public Policy, IT Governance, Java', 'dwi@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
-(5, 'Budi Santoso', '2021', 'Divisi Database', NULL, 'https://placehold.co/300x300/667eea/white?text=Budi', 'Belajar banyak tentang data dan database management. Menjadi asisten adalah keputusan terbaik saya.', 'SQL, Python, Data Analysis, PostgreSQL', 'budi@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
-(6, 'Eka Sulistyaningrum', '2021', 'Divisi Web', NULL, 'https://placehold.co/300x300/667eea/white?text=Eka', 'Pengalaman di lab mengajarkan saya tentang deadline management dan code quality yang baik.', 'JavaScript, React, Vue, HTML/CSS', 'eka@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
-(7, 'Fajar Wijaya', '2020', 'Divisi Sistem', NULL, 'https://placehold.co/300x300/667eea/white?text=Fajar', 'Infrastruktur yang kami bangun di lab menjadi fondasi pengetahuan saya tentang system administration.', 'AWS, Docker, Kubernetes, Linux', 'fajar@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
-(8, 'Hani Khoirunisa', '2020', 'Divisi Multimedia', NULL, 'https://placehold.co/300x300/667eea/white?text=Hani', 'Lab memberikan saya portofolio yang solid untuk masuk ke industri kreatif.', 'After Effects, Premiere Pro, Animation, UI Design', 'hani@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26'),
-(9, 'Rizwan Ardiyan', '2023', 'Koordinator Lab', NULL, 'alumni_1766078894_8729.png', 'Pengalaman yang luar biasa menjadi asisten di lab ini. Banyak ilmu yang saya dapatkan terutama dalam teamwork dan kepemimpinan.', 'PHP, Laravel, React, MySQL, Docker', 'rizwan@email.com', '2025-12-19 01:20:54', '2025-12-19 01:28:14'),
-(10, 'Rizwan Alfian', '2023', 'Koordinator Lab', NULL, 'https://placehold.co/300x300/667eea/white?text=Rizwan', 'Pengalaman yang luar biasa menjadi asisten di lab ini. Banyak ilmu yang saya dapatkan terutama dalam teamwork dan kepemimpinan.', 'PHP, Laravel, React, MySQL, Docker', 'rizwan@email.com', '2025-12-20 15:43:11', '2025-12-20 15:43:11'),
-(11, 'Siti Nurhaliza', '2023', 'Divisi Jaringan', NULL, 'https://placehold.co/300x300/667eea/white?text=Siti', 'Awal yang baik untuk karir di dunia telekomunikasi. Terima kasih atas bimbingan selama menjadi asisten.', 'Cisco, Networking, Linux', 'siti@email.com', '2025-12-20 15:43:11', '2025-12-20 15:43:11');
+INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `mata_kuliah`, `foto`, `kesan_pesan`, `keahlian`, `email`, `created_at`, `updated_at`, `urutanTampilan`) VALUES
+(2, 'Siti Nurhaliza bapak', '2023', 'Divisi Jaringan', NULL, 'https://placehold.co/300x300/667eea/white?text=Siti', 'Awal yang baik untuk karir di dunia telekomunikasi. Terima kasih atas bimbingan selama menjadi asisten.', 'Cisco, Networking, Linux', 'siti@email.com', '2025-12-15 02:28:26', '2025-12-19 11:05:25', 0),
+(3, 'Ahmad Pratama', '2022', 'Divisi Multimedia', '', 'https://placehold.co/300x300/667eea/white?text=Ahmad', 'Laboratorium membentuk kreativitas saya dan membuat saya percaya bahwa desain itu penting.', 'Figma, Adobe XD, UI/UX Design, Web Design', 'ahmad@email.com', '2025-12-15 02:28:26', '2026-01-09 01:16:37', 1),
+(4, 'Dwi Putri Lestari', '2022', 'Koordinator Lab', NULL, 'https://placehold.co/300x300/667eea/white?text=Dwi', 'Bangga bisa melayani negara dengan keahlian yang didapat dari laboratorium. Semoga lab terus berkembang.', 'Public Policy, IT Governance, Java', 'dwi@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26', 0),
+(5, 'Budi Santoso', '2021', 'Divisi Database', NULL, 'https://placehold.co/300x300/667eea/white?text=Budi', 'Belajar banyak tentang data dan database management. Menjadi asisten adalah keputusan terbaik saya.', 'SQL, Python, Data Analysis, PostgreSQL', 'budi@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26', 0),
+(6, 'Eka Sulistyaningrum', '2021', 'Divisi Web', NULL, 'https://placehold.co/300x300/667eea/white?text=Eka', 'Pengalaman di lab mengajarkan saya tentang deadline management dan code quality yang baik.', 'JavaScript, React, Vue, HTML/CSS', 'eka@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26', 0),
+(7, 'Fajar Wijaya', '2020', 'Divisi Sistem', NULL, 'https://placehold.co/300x300/667eea/white?text=Fajar', 'Infrastruktur yang kami bangun di lab menjadi fondasi pengetahuan saya tentang system administration.', 'AWS, Docker, Kubernetes, Linux', 'fajar@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26', 0),
+(8, 'Hani Khoirunisa', '2020', 'Divisi Multimedia', NULL, 'https://placehold.co/300x300/667eea/white?text=Hani', 'Lab memberikan saya portofolio yang solid untuk masuk ke industri kreatif.', 'After Effects, Premiere Pro, Animation, UI Design', 'hani@email.com', '2025-12-15 02:28:26', '2025-12-15 02:28:26', 0),
+(9, 'Rizwan Ardiyan', '2023', 'Koordinator Lab', '', 'alumni/alumni_1767890039_1626.png', 'Pengalaman yang luar biasa menjadi asisten di lab ini. Banyak ilmu yang saya dapatkan terutama dalam teamwork dan kepemimpinan.', 'PHP, Laravel, React, MySQL, Docker', 'rizwan@email.com', '2025-12-19 01:20:54', '2026-01-09 00:33:59', 0),
+(10, 'Rizwan Alfian', '2023', 'Koordinator Lab', '', 'alumni/alumni_rizwan-alfian_1767890758_194.jpeg', 'Pengalaman yang luar biasa menjadi asisten di lab ini. Banyak ilmu yang saya dapatkan terutama dalam teamwork dan kepemimpinan.', 'PHP, Laravel, React, MySQL, Docker', 'rizwan@email.com', '2025-12-20 15:43:11', '2026-01-09 00:45:58', 0),
+(11, 'Siti Nurhaliza', '2023', 'Divisi Jaringan', NULL, 'https://placehold.co/300x300/667eea/white?text=Siti', 'Awal yang baik untuk karir di dunia telekomunikasi. Terima kasih atas bimbingan selama menjadi asisten.', 'Cisco, Networking, Linux', 'siti@email.com', '2025-12-20 15:43:11', '2025-12-20 15:43:11', 0);
 
 -- --------------------------------------------------------
 
@@ -67,12 +68,7 @@ CREATE TABLE `asisten` (
   `idAsisten` int(11) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `jurusan` varchar(100) DEFAULT NULL,
-  `jabatan` varchar(100) DEFAULT NULL,
-  `kategori` varchar(50) DEFAULT NULL,
-  `lab` varchar(100) DEFAULT NULL,
-  `spesialisasi` varchar(255) DEFAULT NULL,
   `bio` text DEFAULT NULL,
-  `skills` text DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
   `statusAktif` varchar(20) DEFAULT 'Asisten',
@@ -84,14 +80,14 @@ CREATE TABLE `asisten` (
 -- Dumping data untuk tabel `asisten`
 --
 
-INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `lab`, `spesialisasi`, `bio`, `skills`, `email`, `foto`, `statusAktif`, `isKoordinator`) VALUES
-(2, 'Budi Santoso', 'Teknik Informatika', NULL, NULL, '', '', '', '', 'budi@mail.com', NULL, 'CA', 0),
-(3, 'Siti Nurhaliza', 'Sistem Informasi', NULL, NULL, NULL, NULL, '', '', 'siti@mail.com', NULL, 'Asisten', 0),
-(4, 'Ahmad Wijaya', 'Teknik Komputer', NULL, NULL, NULL, NULL, NULL, NULL, 'ahmad@mail.com', NULL, '1', 0),
-(5, 'Rina Puspita', 'Informatika', NULL, NULL, NULL, NULL, NULL, NULL, 'rina@mail.com', NULL, '1', 0),
-(9, 'M RIZWAN', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'halo saya rizwan', '[\"PHP\",\"Laravel\"]', 'rizwan@example.com', 'asisten_1766495391_7606.png', 'Asisten', 1),
-(10, 'Abbas Asis', 'Teknik Informatika', NULL, NULL, NULL, NULL, '', '[\"Jago tidur\"]', 'abbas@contoh.com', NULL, 'CA', 0),
-(11, 'Savier', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Saya adalah calon asisten', '[\"PHP\",\"Laravel\"]', 'Savier@umi.ac.id', 'asisten_1767282345_8755.jpg', 'CA', 0);
+INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `bio`, `email`, `foto`, `statusAktif`, `isKoordinator`, `urutanTampilan`) VALUES
+(2, 'Budi Santoso', 'Teknik Informatika', '', 'budi@mail.com', NULL, 'Asisten', 0, 1),
+(3, 'Siti Nurhaliza', 'Sistem Informasi', '', 'siti@mail.com', NULL, 'Asisten', 0, 0),
+(4, 'Ahmad Wijaya', 'Teknik Komputer', NULL, 'ahmad@mail.com', NULL, '1', 0, 0),
+(5, 'Rina Puspita', 'Informatika', NULL, 'rina@mail.com', NULL, '1', 0, 0),
+(9, 'M RIZWAN', 'Teknik Informatika', '', 'rizwan@example.com', 'asisten/asisten_1767890003_4149.png', 'Asisten', 1, 0),
+(10, 'Abbas Asis', 'Teknik Informatika', '', 'abbas@contoh.com', NULL, 'CA', 0, 0),
+(11, 'Savier', 'Teknik Informatika', '', 'Savier@umi.ac.id', 'asisten/asisten_savier_1767890917_138.jpg', 'Asisten', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -258,7 +254,7 @@ CREATE TABLE `laboratorium` (
 --
 
 INSERT INTO `laboratorium` (`idLaboratorium`, `nama`, `jenis`, `idKordinatorAsisten`, `deskripsi`, `gambar`, `jumlahPc`, `jumlahKursi`, `lokasi`, `kapasitas`, `processor`, `ram`, `storage`, `gpu`, `monitor`, `software`, `fasilitas_pendukung`, `koordinator_nama`, `koordinator_foto`) VALUES
-(7, 'Microcontroller', 'Laboratorium', NULL, 'Tempat untuk belajar Microcontroller', 'lab_1766758039_2354.jpg', 30, 25, 'Gedung Fakultas Ilmu Komputer lantai 2', 25, 'Inter core i7', '16GB RAM', '256GB SSD', 'NVDIA RTX 5060', '24inch ', 'Cisco', 'AC Central', 'M. Rizwan', 'koordinator_1766067968_69440f0027653.png'),
+(7, 'Microcontroller', 'Laboratorium', NULL, 'Tempat untuk belajar Microcontroller', 'laboratorium/lab_microcontroller_1767891501_778.jpg', 30, 25, 'Gedung Fakultas Ilmu Komputer lantai 2', 25, 'Inter core i7', '16GB RAM', '256GB SSD', 'NVDIA RTX 5060', '24inch ', 'Cisco', 'AC Central', 'M. Rizwan', 'koordinator_1766067968_69440f0027653.png'),
 (14, 'Ruangan Riset 1', 'Riset', 2, 'fda', 'lab_1766758916_1873.jpg', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL),
 (17, 'IoT', 'Laboratorium', 9, 'Ruangan untuk melakukan pembelajaran IoT', 'lab_1767285997_4783.jpg', 24, NULL, NULL, 0, 'Inter core i7', '16GB RAM', '256GB SSD', 'NVDIA RTX 5060', '24inch ', 'Visual Studio Code, Xampp, Arduiono IDE', 'AC Central', NULL, NULL),
 (18, 'Riset 2', 'Riset', NULL, 'Ruangan Riset 2 Laboratorium atau Ruangan Meeting', 'lab_1767439910_3095.jpg', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL),
@@ -289,7 +285,6 @@ CREATE TABLE `laboratorium_gambar` (
 INSERT INTO `laboratorium_gambar` (`idGambar`, `idLaboratorium`, `namaGambar`, `deskripsiGambar`, `isUtama`, `urutan`, `created_at`) VALUES
 (1, 7, 'lab_1766584749_5435.jpg', 'Gambar ruangan utama', 1, 0, '2025-12-26 20:47:37'),
 (5, 7, 'lab_1766758039_2354.jpg', NULL, 1, 0, '2025-12-26 22:07:19'),
-(6, 7, 'lab_1766758039_5470.jpg', NULL, 0, 1, '2025-12-26 22:07:19'),
 (10, 14, 'lab_1766758916_1873.jpg', NULL, 1, 0, '2025-12-26 22:21:56'),
 (11, 14, 'lab_1766758916_7564.jpg', NULL, 0, 1, '2025-12-26 22:21:56'),
 (12, 17, 'lab_1767285321_3208.jpg', NULL, 1, 0, '2026-01-02 00:35:21'),
@@ -298,7 +293,8 @@ INSERT INTO `laboratorium_gambar` (`idGambar`, `idLaboratorium`, `namaGambar`, `
 (15, 17, 'lab_1767285997_4783.jpg', NULL, 1, 0, '2026-01-02 00:46:37'),
 (16, 17, 'lab_1767285997_3584.jpg', NULL, 0, 1, '2026-01-02 00:46:37'),
 (17, 17, 'lab_1767285997_5317.jpg', NULL, 0, 2, '2026-01-02 00:46:37'),
-(18, 18, 'lab_1767439910_3095.jpg', NULL, 1, 0, '2026-01-03 19:31:50');
+(18, 18, 'lab_1767439910_3095.jpg', NULL, 1, 0, '2026-01-03 19:31:50'),
+(20, 7, 'laboratorium/lab_microcontroller_1767891501_778.jpg', NULL, 1, 0, '2026-01-09 00:58:21');
 
 -- --------------------------------------------------------
 
@@ -308,8 +304,10 @@ INSERT INTO `laboratorium_gambar` (`idGambar`, `idLaboratorium`, `namaGambar`, `
 
 CREATE TABLE `manajemen` (
   `idManajemen` int(11) NOT NULL,
-  `nama` varchar(100) NOT NULL,  `email` varchar(255) DEFAULT NULL,  `nidn` varchar(20) DEFAULT NULL,
+  `nama` varchar(100) NOT NULL,
+  `nidn` varchar(20) DEFAULT NULL,
   `jabatan` varchar(100) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -317,11 +315,11 @@ CREATE TABLE `manajemen` (
 -- Dumping data untuk tabel `manajemen`
 --
 
-INSERT INTO `manajemen` (`idManajemen`, `nama`, `email`, `nidn`, `jabatan`, `foto`) VALUES
-(1, 'Ir. Abdul Rachman Manga\', S.Kom., M.T., MTA., MCF', NULL, NULL, 'Kepala Laboratorium Jaringan Dan Pemrograman', 'manajemen_1767600768_7768.jpg'),
-(5, 'Ir. Huzain Azis, S.Kom., M.Cs. MTA', NULL, NULL, 'Kepala Laboratorium Komputasi Dasar', 'manajemen_1767600806_3284.jpg'),
-(6, 'Herdianti, S.Si., M.Eng., MTA.', NULL, NULL, 'Kepala Laboratorium Riset', 'manajemen_1767600880_4656.JPG'),
-(7, 'Fatimah AR. Tuasamu, S.Kom., MTA, MOS', NULL, NULL, 'Laboran', 'manajemen_1767600916_8750.JPG');
+INSERT INTO `manajemen` (`idManajemen`, `nama`, `nidn`, `jabatan`, `email`, `foto`) VALUES
+(1, 'Ir. Abdul Rachman Manga\', S.Kom., M.T., MTA., MCF', '839459', 'Kepala Laboratorium Jaringan Dan Pemrograman', 'admin@example.com', 'manajemen/manajemen_1767889920_9979.jpg'),
+(5, 'Ir. Huzain Azis, S.Kom., M.Cs. MTA', '', 'Kepala Laboratorium Komputasi Dasar', 'admin@example.com', 'manajemen/manajemen_1767889969_4980.jpg'),
+(6, 'Herdianti, S.Si., M.Eng., MTA.', NULL, 'Kepala Laboratorium Riset', NULL, 'manajemen_1767600880_4656.JPG'),
+(7, 'Fatimah AR. Tuasamu, S.Kom., MTA, MOS', NULL, 'Laboran', NULL, 'manajemen_1767600916_8750.JPG');
 
 -- --------------------------------------------------------
 
@@ -362,7 +360,6 @@ CREATE TABLE `peraturan_lab` (
   `id` int(11) NOT NULL,
   `judul` varchar(150) NOT NULL,
   `deskripsi` text NOT NULL,
-  `gambar` varchar(255) DEFAULT NULL,
   `urutan` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -373,13 +370,13 @@ CREATE TABLE `peraturan_lab` (
 -- Dumping data untuk tabel `peraturan_lab`
 --
 
-INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`, `kategori`) VALUES
-(1, 'Tata Tertib Umum Laboratorium', 'Peraturan dasar yang harus dipatuhi oleh semua pengguna laboratorium teknologi informasi', NULL, 1, '2025-12-18 23:53:18', '2026-01-03 00:23:49', 'Larangan Umum'),
-(2, 'Penggunaan Peralatan Lab', 'Ketentuan penggunaan komputer, jaringan, dan peralatan elektronik di laboratorium', NULL, 2, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'larangan-umum'),
-(3, 'Jadwal dan Reservasi Ruangan', 'Prosedur pemesanan dan penggunaan ruang laboratorium untuk kegiatan praktikum', NULL, 3, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'kehadiran-akademik'),
-(4, 'Keamanan dan Kebersihan', 'Aturan menjaga keamanan data, perangkat, dan kebersihan lingkungan laboratorium', NULL, 4, '2025-12-18 23:53:18', '2026-01-03 00:10:41', 'larangan-umum'),
-(5, 'Sanksi dan Pelanggaran', 'Konsekuensi yang berlaku bagi mahasiswa yang melanggar tata tertib laboratorium', NULL, 5, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'larangan-umum'),
-(6, 'test', 'halo tkajgkla\r\nketuhanan yang maha esa\r\nkemanusian yang adil dan beradap\r\npersatuan indonesia\r\nkerakyatan yang di pimpin oleh hikmat dan kebijaksanaan', NULL, 0, '2026-01-07 03:04:42', '2026-01-07 03:04:42', 'Kehadiran & Akademik');
+INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `urutan`, `created_at`, `updated_at`, `kategori`) VALUES
+(1, 'Tata Tertib Umum Laboratorium', 'Peraturan dasar yang harus dipatuhi oleh semua pengguna laboratorium teknologi informasi', 1, '2025-12-18 23:53:18', '2026-01-03 00:23:49', 'Larangan Umum'),
+(2, 'Penggunaan Peralatan Lab', 'Ketentuan penggunaan komputer, jaringan, dan peralatan elektronik di laboratorium', 2, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'larangan-umum'),
+(3, 'Jadwal dan Reservasi Ruangan', 'Prosedur pemesanan dan penggunaan ruang laboratorium untuk kegiatan praktikum', 3, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'kehadiran-akademik'),
+(4, 'Keamanan dan Kebersihan', 'Aturan menjaga keamanan data, perangkat, dan kebersihan lingkungan laboratorium', 4, '2025-12-18 23:53:18', '2026-01-03 00:10:41', 'larangan-umum'),
+(5, 'Sanksi dan Pelanggaran', 'Konsekuensi yang berlaku bagi mahasiswa yang melanggar tata tertib laboratorium', 5, '2025-12-18 23:53:18', '2026-01-03 00:11:18', 'larangan-umum'),
+(6, 'test', 'halo tkajgkla\r\nketuhanan yang maha esa\r\nkemanusian yang adil dan beradap\r\npersatuan indonesia\r\nkerakyatan yang di pimpin oleh hikmat dan kebijaksanaan', 0, '2026-01-07 03:04:42', '2026-01-07 03:04:42', 'Kehadiran & Akademik');
 
 -- --------------------------------------------------------
 
@@ -429,7 +426,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `last_login`, `created_at`) VALUES
 (2, '$2y$10$l710L0YPlhSBRxW23TpS..A8o9pbUd1RLcPLFY77Zm3', 'admin', 'admin', NULL, '2025-12-20 17:28:27'),
-(4, 'admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin', '2026-01-06 23:41:08', '2025-12-22 14:47:00');
+(4, 'admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin', '2026-01-09 12:30:31', '2025-12-22 14:47:00');
 
 --
 -- Indexes for dumped tables
@@ -560,7 +557,7 @@ ALTER TABLE `laboratorium`
 -- AUTO_INCREMENT untuk tabel `laboratorium_gambar`
 --
 ALTER TABLE `laboratorium_gambar`
-  MODIFY `idGambar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `idGambar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `manajemen`

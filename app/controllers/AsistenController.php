@@ -100,7 +100,7 @@ class AsistenController extends Controller {
                     'email' => $_POST['email'] ?? '',
                     'jurusan' => $_POST['jurusan'] ?? '',
                     'bio' => $_POST['bio'] ?? '',
-                    'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]', // Expecting JSON string or will process later
+                    'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
                     'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
                     'isKoordinator' => $_POST['isKoordinator'] ?? '0',
                     'urutanTampilan' => $_POST['urutanTampilan'] ?? '0'

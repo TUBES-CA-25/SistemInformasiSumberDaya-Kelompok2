@@ -94,6 +94,7 @@ class Router {
         $this->get('/admin/jadwal/{id}/edit', 'JadwalPraktikumController', 'edit');
         $this->put('/admin/jadwal/{id}', 'JadwalPraktikumController', 'update');
         $this->delete('/admin/jadwal/{id}', 'JadwalPraktikumController', 'delete');
+        $this->post('/admin/jadwal/delete-multiple', 'JadwalPraktikumController', 'deleteMultiple');
         $this->get('/admin/jadwal/upload', 'JadwalPraktikumController', 'uploadForm');
         $this->post('/admin/jadwal/upload', 'JadwalPraktikumController', 'uploadProcess');
         $this->get('/admin/jadwal/csv-upload', 'JadwalPraktikumController', 'csvUploadForm');

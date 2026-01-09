@@ -22,7 +22,14 @@
 
 <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-        <span class="text-sm text-gray-500 font-medium">Daftar Pedoman & Unduhan</span>
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-500 font-medium">Daftar Pedoman & Unduhan</span>
+            <select id="filterKategori" onchange="filterData()" class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                <option value="all">Semua Kategori</option>
+                <option value="pedoman">Pedoman Penulisan</option>
+                <option value="unduhan">Pusat Unduhan</option>
+            </select>
+        </div>
         <span id="totalData" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Total: 0</span>
     </div>
 
@@ -193,16 +200,25 @@ document.addEventListener('DOMContentLoaded', function() {
     loadData();
 
     // Live Search
-    document.getElementById('searchInput').addEventListener('keyup', function(e) {
-        const keyword = e.target.value.toLowerCase();
-        const filtered = allData.filter(item => 
-            (item.judul && item.judul.toLowerCase().includes(keyword)) ||
-            (item.kategori && item.kategori.toLowerCase().includes(keyword)) ||
-            (item.deskripsi && item.deskripsi.toLowerCase().includes(keyword))
-        );
-        renderTable(filtered);
-    });
+    document.getElementById('searchInput').addEventListener('keyup', filterData);
 });
+
+function filterData() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    const kategori = document.getElementById('filterKategori').value;
+    
+    const filtered = allData.filter(item => {
+        const matchesSearch = (item.judul && item.judul.toLowerCase().includes(keyword)) ||
+                            (item.kategori && item.kategori.toLowerCase().includes(keyword)) ||
+                            (item.deskripsi && item.deskripsi.toLowerCase().includes(keyword));
+        
+        const matchesKategori = kategori === 'all' || item.kategori === kategori;
+        
+        return matchesSearch && matchesKategori;
+    });
+    
+    renderTable(filtered);
+}
 
 function loadData() {
     const tbody = document.getElementById('tableBody');
@@ -213,7 +229,7 @@ function loadData() {
     .then(response => {
         if((response.status === 'success' || response.code === 200) && response.data) {
             allData = response.data;
-            renderTable(allData);
+            filterData();
         } else {
             renderTable([]);
         }

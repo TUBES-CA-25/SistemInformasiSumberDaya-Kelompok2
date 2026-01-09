@@ -59,26 +59,94 @@
                 <button onclick="closeModal('formModal')" class="text-gray-400 hover:text-gray-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
             </div>
             <div class="p-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
-                <form id="asistenForm" enctype="multipart/form-data" class="space-y-5">
+                <form id="asistenForm" enctype="multipart/form-data" class="space-y-6">
                     <input type="hidden" id="inputIdAsisten" name="idAsisten">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label><input type="text" id="inputNama" name="nama" placeholder="Contoh: Ahmad Fulan" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
-                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Email <span class="text-red-500">*</span></label><input type="email" id="inputEmail" name="email" placeholder="email@umi.ac.id" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
+                    
+                    <!-- Section IDENTITAS -->
+                    <div class="bg-blue-50/30 p-4 rounded-xl border border-blue-100/50 space-y-4">
+                        <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <i class="fas fa-id-card"></i> Identitas Utama
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
+                                <input type="text" id="inputNama" name="nama" placeholder="Contoh: Ahmad Fulan" required 
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Email UMI <span class="text-red-500">*</span></label>
+                                <input type="email" id="inputEmail" name="email" placeholder="email@umi.ac.id" required 
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Jurusan</label>
+                                <select id="inputJurusan" name="jurusan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                    <option value="Teknik Informatika">Teknik Informatika</option>
+                                    <option value="Sistem Informasi">Sistem Informasi</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Jurusan</label><select id="inputJurusan" name="jurusan" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Teknik Informatika">Teknik Informatika</option><option value="Sistem Informasi">Sistem Informasi</option></select></div>
-                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Status Asisten</label><select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"><option value="Asisten">Asisten</option><option value="CA">Calon Asisten</option></select></div>
+
+                    <!-- Section PENGATURAN -->
+                    <div class="bg-amber-50/30 p-4 rounded-xl border border-amber-100/50 space-y-4">
+                        <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <i class="fas fa-user-cog"></i> Status & Tampilan
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Status Asisten</label>
+                                <select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                                    <option value="Asisten">Asisten Aktif</option>
+                                    <option value="CA">Calon Asisten</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Urutan Tampilan</label>
+                                <input type="number" id="inputUrutanTampilan" name="urutanTampilan" placeholder="0" min="0" value="0" 
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="block text-sm font-semibold text-gray-700 mb-1">Urutan Tampilan</label><input type="number" id="inputUrutanTampilan" name="urutanTampilan" placeholder="0" min="0" value="0" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></div>
-                        <div></div>
+
+                    <!-- Section PROFIL -->
+                    <div class="bg-gray-50/50 p-4 rounded-xl border border-gray-100 space-y-4">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <i class="fas fa-briefcase"></i> Profil Publik
+                        </h4>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kompetensi & Keahlian <span class="text-xs font-normal text-gray-400 italic">(Pisahkan dengan koma)</span></label>
+                            <input type="text" id="inputSkills" name="skills" placeholder="Contoh: Web Dev, Networking, PHP" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Bio Singkat</label>
+                            <textarea id="inputBio" name="bio" rows="3" placeholder="Deskripsi singkat diri..." 
+                                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"></textarea>
+                        </div>
+                        <div class="p-4 bg-white border border-dashed border-gray-300 rounded-xl transition-all hover:border-emerald-300">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                <i class="fas fa-camera text-gray-400"></i> Foto Profil
+                            </label>
+                            <input type="file" id="inputFoto" name="foto" accept="image/*" 
+                                   class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                            <div id="fotoPreviewInfo" class="hidden mt-2 text-xs text-blue-600 bg-blue-50 p-2 rounded-lg items-center gap-2">
+                                <i class="fas fa-check-circle"></i> Foto sudah tersedia
+                            </div>
+                        </div>
                     </div>
-                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Upload Foto</label><input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"><div id="fotoPreviewInfo" class="hidden mt-1 text-xs text-emerald-600"><i class="fas fa-check-circle"></i> Foto sudah ada.</div></div>
-                    <div><label class="block text-sm font-semibold text-gray-700 mb-1">Bio / Tentang Saya</label><textarea id="inputBio" name="bio" rows="3" placeholder="Deskripsi singkat..." class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none"></textarea></div>
+
                     <div id="formMessage" class="hidden"></div>
-                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                        <button type="button" onclick="closeModal('formModal')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition-colors">Batal</button>
-                        <button type="submit" id="btnSave" class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors flex items-center gap-2"><i class="fas fa-save"></i> Simpan Data</button>
+
+                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-100">
+                        <button type="button" onclick="closeModal('formModal')" 
+                                class="px-6 py-2.5 bg-gray-100 text-gray-600 rounded-xl font-semibold hover:bg-gray-200 transition-all active:scale-95">
+                            Batal
+                        </button>
+                        <button type="submit" id="btnSave" 
+                                class="px-6 py-2.5 bg-emerald-600 text-white rounded-xl font-semibold shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-all transform active:scale-95 flex items-center gap-2">
+                            <i class="fas fa-save"></i> Simpan Data
+                        </button>
                     </div>
                 </form>
             </div>
@@ -106,6 +174,7 @@
                             <div><p class="text-xs text-gray-500">Jurusan</p><p id="mJurusan" class="font-bold">-</p></div>
                             <div class="text-right"><p class="text-xs text-gray-500">Email</p><p id="mEmail" class="font-bold">-</p></div>
                         </div>
+                        <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500 mb-1">Kompetensi & Keahlian</p><div id="mSkills" class="flex flex-wrap gap-2 mt-1"></div></div>
                         <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500 mb-1">Bio</p><p id="mBio" class="italic text-gray-700">-</p></div>
                     </div>
                 </div>
@@ -234,11 +303,11 @@ function openDetailModal(id) {
         if((res.status === 'success' || res.code === 200) && res.data) {
             const d = res.data;
             document.getElementById('mNama').innerText = d.nama; document.getElementById('mJurusan').innerText = d.jurusan || '-';
-            document.getElementById('mEmail').innerText = d.email || '-'; document.getElementById('mBio').innerText = d.bio || 'Tidak ada bio.';
+            document.getElementById('mEmail').innerText = d.email || '-'; 
+            document.getElementById('mBio').innerText = d.bio || 'Tidak ada bio.';
             const fotoUrl = d.foto ? (d.foto.includes('http') ? d.foto : ASSETS_URL + '/assets/uploads/' + d.foto) : `https://placehold.co/150x150?text=${d.nama.charAt(0)}`;
             document.getElementById('mFoto').src = fotoUrl;
             const bDiv=document.getElementById('mBadges'); bDiv.innerHTML=''; let st=d.statusAktif=='1'?'Asisten':(d.statusAktif=='0'?'Tidak Aktif':d.statusAktif); let color=st==='Asisten'?'bg-emerald-100 text-emerald-800':'bg-gray-100 text-gray-800'; bDiv.innerHTML+=`<span class="${color} px-3 py-1 rounded-full text-xs font-bold border border-transparent">${st}</span>`; if(d.isKoordinator==1){bDiv.innerHTML+=`<span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold border border-blue-700 shadow flex items-center gap-1"><i class="fas fa-crown text-yellow-300"></i> Koordinator</span>`}
-            const lnk=document.getElementById('mLinkedin'); if(d.linkedin){lnk.href=d.linkedin;lnk.classList.remove('hidden');lnk.classList.add('flex')}else{lnk.classList.add('hidden')}
             const sDiv=document.getElementById('mSkills'); sDiv.innerHTML=''; let skills=d.skills; try{if(skills.includes('['))skills=JSON.parse(skills);else skills=skills.split(',')}catch(e){if(skills)skills=skills.split(',')}
             if(Array.isArray(skills)){skills.forEach(s=>{if(s.trim())sDiv.innerHTML+=`<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold border border-gray-200">${s.trim()}</span>`})}else{sDiv.innerHTML='<span class="text-gray-400 text-xs italic">Tidak ada data</span>'}
         }
@@ -264,7 +333,6 @@ function openFormModal(id = null, event = null) {
                 document.getElementById('inputNama').value = d.nama;
                 document.getElementById('inputEmail').value = d.email;
                 document.getElementById('inputJurusan').value = d.jurusan || 'Teknik Informatika';
-                document.getElementById('inputLinkedin').value = d.linkedin || '';
                 document.getElementById('inputBio').value = d.bio || '';
                 document.getElementById('inputUrutanTampilan').value = d.urutanTampilan || '0';
                 let status = d.statusAktif; if (status == '1') status = 'Asisten'; if (status == '0') status = 'Tidak Aktif';

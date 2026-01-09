@@ -127,51 +127,49 @@
                                     <option value="sanksi">Sanksi Pelanggaran</option>
                                 </select>
                             </div>
-                            <div id="groupKategori">
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kategori Peraturan <span class="text-red-500">*</span></label>
-                                <select id="inputKategori" name="kategori"
-                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white">
-                                    <option value="Kehadiran & Akademik">Kehadiran & Akademik</option>
-                                    <option value="Standar Pakaian">Standar Pakaian</option>
-                                    <option value="Larangan Umum">Larangan Umum</option>
-                                    <option value="umum">Umum</option>
-                                </select>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Urutan Tampil</label>
+                                <input type="number" id="inputUrutan" name="urutan" value="0"
+                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none">
                             </div>
                         </div>
 
+                        <div id="groupKategori">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kategori Peraturan <span class="text-red-500">*</span></label>
+                            <select id="inputKategori" name="kategori"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white">
+                                <option value="Kehadiran & Akademik">Kehadiran & Akademik</option>
+                                <option value="Standar Pakaian">Standar Pakaian</option>
+                                <option value="Larangan Umum">Larangan Umum</option>
+                                <option value="umum">Umum</option>
+                            </select>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Judul <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Judul Aturan <span class="text-red-500">*</span></label>
                             <input type="text" id="inputJudul" name="judul" required
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none"
                                    placeholder="Contoh: Terlambat Datang Sanksi">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Deskripsi <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Deskripsi Detail <span class="text-red-500">*</span></label>
                             <textarea id="inputDeskripsi" name="deskripsi" rows="5" required
                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none resize-none"
-                                      placeholder="Tuliskan detail di sini..."></textarea>
+                                      placeholder="Tuliskan detail poin-poin di sini..."></textarea>
                         </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Urutan Tampil</label>
-                                <input type="number" id="inputUrutan" name="urutan" value="0"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Gambar (Opsional)</label>
-                                <input type="file" id="inputGambar" name="gambar" accept="image/*"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none text-xs">
-                            </div>
-                        </div>
+                    </div>
                     </div>
 
                     <div id="formMessage" class="hidden mt-4"></div>
 
-                    <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-100">
-                        <button type="button" onclick="closeModal('formModal')" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 font-medium transition-colors">Batal</button>
-                        <button type="submit" id="btnSave" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors flex items-center gap-2 shadow-sm">
+                    <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 mt-8 border-t border-gray-100">
+                        <button type="button" onclick="closeModal('formModal')" 
+                                class="w-full sm:w-auto px-6 py-2.5 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 font-semibold transition-all duration-200 order-2 sm:order-1">
+                            Batal
+                        </button>
+                        <button type="submit" id="btnSave" 
+                                class="w-full sm:w-auto px-8 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-blue-200 order-1 sm:order-2">
                             <i class="fas fa-save"></i> <span>Simpan Data</span>
                         </button>
                     </div>
@@ -328,9 +326,9 @@ function filterData() {
 function toggleTipeFields(tipe) {
     const groupKategori = document.getElementById('groupKategori');
     if (tipe === 'peraturan') {
-        groupKategori.classList.remove('invisible');
+        groupKategori.classList.remove('hidden');
     } else {
-        groupKategori.classList.add('invisible');
+        groupKategori.classList.add('hidden');
     }
 }
 

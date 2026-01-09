@@ -235,4 +235,24 @@ class JadwalPraktikumController extends Controller {
         }
         exit;
     }
+
+    public function deleteMultiple($params = []) {
+        while (ob_get_level()) { ob_end_clean(); }
+        header('Content-Type: application/json; charset=utf-8');
+        try {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $ids = $input['ids'] ?? [];
+            if (empty($ids)) throw new Exception('Tidak ada data yang dipilih');
+
+            if ($this->model->deleteMultiple($ids)) {
+                echo json_encode(['status' => 'success', 'code' => 200, 'message' => count($ids) . ' jadwal berhasil dihapus']);
+            } else {
+                throw new Exception('Gagal menghapus data');
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
+        }
+        exit;
+    }
 }
