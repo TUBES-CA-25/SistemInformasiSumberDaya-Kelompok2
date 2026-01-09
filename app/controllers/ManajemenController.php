@@ -83,6 +83,7 @@ class ManajemenController extends Controller {
             if (isset($_FILES['foto'])) {
                 $input = [
                     'nama' => $_POST['nama'] ?? '',
+                    'nidn' => $_POST['nidn'] ?? null,
                     'jabatan' => $_POST['jabatan'] ?? ''
                 ];
 
@@ -153,6 +154,7 @@ class ManajemenController extends Controller {
             if (isset($_FILES['foto'])) {
                 $input = [
                     'nama' => $_POST['nama'] ?? $existing['nama'],
+                    'nidn' => $_POST['nidn'] ?? $existing['nidn'],
                     'jabatan' => $_POST['jabatan'] ?? $existing['jabatan']
                 ];
             } else {

@@ -82,7 +82,6 @@
                                 <option value="">-- Pilih Jenis --</option>
                                 <option value="Laboratorium">Ruangan Laboratorium</option>
                                 <option value="Riset">Ruangan Riset</option>
-                                <option value="Multimedia">Multimedia</option>
                             </select>
                         </div>
                         <div>
@@ -138,8 +137,11 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-600 mb-1">Jumlah Unit PC</label>
-                                <input type="number" id="inputJumlahPc" name="jumlahPc" placeholder="0" min="0"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-sm">
+                                <input type="number" id="inputJumlahPc" name="jumlahPc" placeholder="0" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Kapasitas Mahasiswa </label>
+                                <input type="number" id="inputKapasitas" name="kapasitas" placeholder="0" required min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
                             </div>
                         </div>
                     </div>
@@ -432,6 +434,7 @@ function openFormModal(id = null, event = null) {
             document.getElementById('inputNama').value = data.nama;
             document.getElementById('inputJenis').value = data.jenis || 'Laboratorium';
             document.getElementById('inputJumlahPc').value = data.jumlahPc;
+            document.getElementById('inputKapasitas').value = data.kapasitas;
             document.getElementById('inputDeskripsi').value = data.deskripsi;
             
             // Specs
@@ -481,17 +484,20 @@ document.getElementById('labForm').addEventListener('submit', function(e) {
     fetch(url, { method: 'POST', body: formData })
     .then(res => res.json())
     .then(data => {
+        hideLoading();
         if (data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
             loadLaboratorium();
-            alert(id ? 'Data berhasil diupdate!' : 'Data berhasil disimpan!');
+            showSuccess(id ? 'Data laboratorium berhasil diperbarui!' : 'Laboratorium baru berhasil ditambahkan!');
         } else {
             throw new Error(data.message || 'Gagal menyimpan data');
         }
     })
     .catch(err => {
+        hideLoading();
         msg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm mb-4 border border-red-200"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
         msg.classList.remove('hidden');
+        showError(err.message);
     })
     .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data'; });
 });
@@ -620,11 +626,20 @@ function closeModal(modalId) {
 
 function hapusLaboratorium(id, event) {
     if(event) event.stopPropagation();
-    if(confirm('Yakin ingin menghapus laboratorium ini?')) {
+    confirmDelete(() => {
+        showLoading('Menghapus data...');
         fetch(API_URL + '/laboratorium/' + id, { method: 'DELETE' })
         .then(res => res.json())
-        .then(() => { loadLaboratorium(); alert('Data terhapus!'); });
-    }
+        .then(() => { 
+            hideLoading();
+            loadLaboratorium(); 
+            showSuccess('Laboratorium berhasil dihapus!'); 
+        })
+        .catch(err => {
+            hideLoading();
+            showError('Gagal menghapus data');
+        });
+    }, 'Data laboratorium dan gambar terkait akan dihapus permanen!');
 }
 
 document.onkeydown = function(evt) {

@@ -4,140 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin - SISDA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: monospace;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .login-box {
-            background: white;
-            padding: 40px;
-            border: 2px solid black;
-            width: 300px;
-            box-shadow: 10px 10px 0px black;
-        }
-        h2 {
-            text-align: center;
-            margin-top: 0;
-            border-bottom: 2px solid black;
-            padding-bottom: 10px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid black;
-            font-family: inherit;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background: black;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        button:hover {
-            opacity: 0.8;
-        }
-        .alert {
-            border: 2px solid;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 0.9em;
-            font-weight: normal;
-            line-height: 1.4;
-        }
-        .alert.error {
-            background-color: #ffeaea;
-            border-color: #d32f2f;
-            color: #b71c1c;
-        }
-        .alert.success {
-            background-color: #e8f5e8;
-            border-color: #4caf50;
-            color: #2e7d32;
-        }
-        .form-info {
-            background-color: #f0f8ff;
-            border: 1px solid #2196f3;
-            padding: 12px;
-            margin-top: 20px;
-            font-size: 0.8em;
-            text-align: center;
-            color: #1976d2;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
 
-<div class="login-box">
-    <h2>ADMIN LOGIN</h2>
-    
-    <?php 
-    $flashError = $_SESSION['flash']['error'] ?? null;
-    if ($flashError): 
-        unset($_SESSION['flash']['error']);
-    ?>
-        <div class="alert error">
-            <?= $flashError; ?>
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+        
+        <div class="bg-blue-600 p-8 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 mb-4 backdrop-blur-sm">
+                <i class="fas fa-user-shield text-3xl text-white"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white tracking-wide">ADMIN SISDA</h2>
+            <p class="text-blue-100 text-sm mt-1">Silakan login untuk melanjutkan</p>
         </div>
-    <?php endif; ?>
-    
-    <?php 
-    $flashSuccess = $_SESSION['flash']['success'] ?? null;
-    if ($flashSuccess): 
-        unset($_SESSION['flash']['success']);
-    ?>
-        <div class="alert success">
-            <?= $flashSuccess; ?>
-        </div>
-    <?php endif; ?>
 
-    <form action="<?= PUBLIC_URL ?>/auth" method="POST">
-        <div class="form-group">
-            <label>USERNAME</label>
-            <input type="text" name="username" required autofocus autocomplete="off" 
-                   placeholder="Masukkan username admin"
-                   value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">
+        <div class="p-8">
+            <?php 
+            $flashError = $_SESSION['flash']['error'] ?? null;
+            if ($flashError): 
+                unset($_SESSION['flash']['error']);
+            ?>
+                <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-200 rounded-lg bg-red-50" role="alert">
+                    <i class="fas fa-circle-exclamation mr-2"></i>
+                    <div><?= $flashError; ?></div>
+                </div>
+            <?php endif; ?>
+            
+            <?php 
+            $flashSuccess = $_SESSION['flash']['success'] ?? null;
+            if ($flashSuccess): 
+                unset($_SESSION['flash']['success']);
+            ?>
+                <div class="flex items-center p-4 mb-4 text-sm text-emerald-800 border border-emerald-200 rounded-lg bg-emerald-50" role="alert">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <div><?= $flashSuccess; ?></div>
+                </div>
+            <?php endif; ?>
+
+            <form action="<?= PUBLIC_URL ?>/auth" method="POST" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-slate-400"></i>
+                        </div>
+                        <input type="text" name="username" required autofocus autocomplete="off" 
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                            placeholder="Masukkan username"
+                            value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-slate-400"></i>
+                        </div>
+                        <input type="password" name="password" required
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                            placeholder="Masukkan password">
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-3 transition-colors duration-200 shadow-lg shadow-blue-500/30">
+                    LOGIN <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <a href="<?= rtrim(PUBLIC_URL, '/') . '/home' ?>" class="text-sm text-slate-500 hover:text-blue-600 font-medium transition-colors">
+                    <i class="fas fa-arrow-left mr-1"></i> Kembali ke Home
+                </a>
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label>PASSWORD</label>
-            <input type="password" name="password" required
-                   placeholder="Masukkan password">
-        </div>
-        
-        <button type="submit">LOGIN →</button>
-    </form>
-    
-    <div class="form-info">
-        <strong>📝 Kredensial Default:</strong><br>
-        Username: <code>admin</code><br>
-        Password: <code>admin123</code>
     </div>
-    
-    <div style="text-align:center; margin-top:20px; font-size:12px;">
-        <a href="<?= rtrim(PUBLIC_URL, '/') . '/home' ?>" style="color:black;">&larr; Kembali ke Home</a>
-    </div>
-</div>
 
 </body>
 </html>
-    }

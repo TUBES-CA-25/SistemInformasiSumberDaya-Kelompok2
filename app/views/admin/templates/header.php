@@ -7,6 +7,9 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <?php
     // --- 1. KONFIGURASI SYSTEM ---
@@ -87,51 +90,60 @@
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
                 <?php
-                // --- LOGIKA ROUTING SEDERHANA (SPA MODE) ---
+                // --- LOGIKA ROUTING SEDERHANA ---
                 
-                // 1. Ambil URL
-                $request = $_SERVER['REQUEST_URI'];
-                $request = strtok($request, '?'); // Hapus query string
-                
-                // Default Variables
-                $module = 'dashboard'; 
-
-                // 2. Parsing URL untuk menentukan Module saja
-                if (strpos($request, '/admin/') !== false) {
-                    $parts = explode('/admin/', $request);
-                    if (isset($parts[1]) && !empty($parts[1])) {
-                        $urlSegments = explode('/', $parts[1]);
-                        // Ambil nama folder (misal: alumni, asisten)
-                        $module = isset($urlSegments[0]) ? $urlSegments[0] : 'dashboard';
+                // Prioritas 1: Gunakan module dari global (set di index.php)
+                // Prioritas 2: Gunakan module dari local variable (jika di-include)
+                // Fallback: Parsing manual
+                if (isset($GLOBALS['module'])) {
+                    $module = $GLOBALS['module'];
+                } elseif (!isset($module)) {
+                    $request = $_SERVER['REQUEST_URI'];
+                    $request = strtok($request, '?');
+                    $module = 'dashboard'; 
+                    if (strpos($request, '/admin/') !== false) {
+                        $parts = explode('/admin/', $request);
+                        if (isset($parts[1]) && !empty($parts[1])) {
+                            $urlSegments = explode('/', $parts[1]);
+                            $module = isset($urlSegments[0]) ? $urlSegments[0] : 'dashboard';
+                        }
                     }
+                    $module = preg_replace('/[^a-zA-Z0-9_]/', '', $module);
                 }
 
-                // Sanitasi nama folder
-                $module = preg_replace('/[^a-zA-Z0-9_]/', '', $module);
+                // Normalisasi nama modul (Alias)
+                if ($module === 'peraturan' || $module === 'sanksi') {
+                    $module = 'peraturan_sanksi';
+                }
+                if ($module === 'format_penulisan' || $module === 'format-penulisan') {
+                    $module = 'formatpenulisan';
+                }
 
                 // 3. Tentukan File Target
-                // KITA TIDAK LAGI CEK ACTION (create/edit/detail) KARENA SEMUA PAKA MODAL
-                $viewsPath = ROOT_PROJECT . '/app/views/admin/';
+                // Gunakan VIEW_PATH yang sudah didefinisikan di index.php jika ada
+                $baseAdminPath = defined('VIEW_PATH') ? VIEW_PATH . '/admin/' : ROOT_PROJECT . '/app/views/admin/';
                 
                 if ($module === 'dashboard') {
-                    $targetFile = $viewsPath . 'dashboard.php';
-                    if (!file_exists($targetFile)) $targetFile = $viewsPath . 'dashboard/index.php';
+                    $targetFile = $baseAdminPath . 'dashboard.php';
+                    if (!file_exists($targetFile)) $targetFile = $baseAdminPath . 'dashboard/index.php';
                 } 
                 else {
                     // Apapun yang terjadi, selalu buka index.php milik module tersebut
-                    // JavaScript di dalam index.php yang akan mengatur Modal
-                    $targetFile = $viewsPath . $module . '/index.php';
+                    $targetFile = $baseAdminPath . $module . '/index.php';
                 }
 
                 // 4. Eksekusi Include
                 if (file_exists($targetFile)) {
                     include $targetFile;
                 } else {
+                    $debugInfo = "Module: $module, Route: " . ($_SERVER['REQUEST_URI'] ?? 'unknown');
                     echo "
+                    <!-- DEBUG: $debugInfo -->
                     <div class='flex flex-col items-center justify-center min-h-[50vh] text-gray-500'>
                         <i class='fas fa-exclamation-triangle text-4xl mb-4 text-yellow-500'></i>
                         <h2 class='text-xl font-bold'>Halaman Tidak Ditemukan</h2>
                         <p class='text-sm mt-2'>Modul <b>'$module'</b> belum tersedia.</p>
+                        <p class='text-[10px] text-gray-400 mt-1'>Mencoba memuat: $targetFile</p>
                     </div>";
                 }
                 ?>
@@ -151,6 +163,30 @@
                 window.location.href = basePath + '/' + route;
             }
         }
+
+        // Set PUBLIC_URL untuk session timeout script
+        const PUBLIC_URL = '<?= PUBLIC_URL ?>';
+        
+        // Pass Flash Messages ke JS
+        <?php
+        $flashSuccess = $_SESSION['flash']['success'] ?? null;
+        $flashError = $_SESSION['flash']['error'] ?? null;
+        $flashWarning = $_SESSION['flash']['warning'] ?? null;
+        
+        // Clear flash messages after reading
+        if ($flashSuccess) unset($_SESSION['flash']['success']);
+        if ($flashError) unset($_SESSION['flash']['error']);
+        if ($flashWarning) unset($_SESSION['flash']['warning']);
+        ?>
+        const FLASH_SUCCESS = <?= json_encode($flashSuccess) ?>;
+        const FLASH_ERROR = <?= json_encode($flashError) ?>;
+        const FLASH_WARNING = <?= json_encode($flashWarning) ?>;
     </script>
+    
+    <!-- Feedback System (SweetAlert2) -->
+    <script src="<?= PUBLIC_URL ?>/js/feedback.js"></script>
+    
+    <!-- Session Timeout Handler - Auto logout setelah 30 menit tidak aktif -->
+    <script src="<?= PUBLIC_URL ?>/js/session-timeout.js"></script>
 </body>
 </html>

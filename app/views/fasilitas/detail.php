@@ -207,7 +207,7 @@ if ($lab) {
                         <div class="coord-name-large">
                             <?= htmlspecialchars($coordName) ?>
                         </div>
-                        <span class="coord-role-badge">Koordinator / Kepala Lab</span>
+                        <span class="coord-role-badge">Koordinator</span>
 
                         <?php if ($coordEmail): ?>
                             <a href="mailto:<?= htmlspecialchars($coordEmail) ?>" class="coord-contact-btn">
