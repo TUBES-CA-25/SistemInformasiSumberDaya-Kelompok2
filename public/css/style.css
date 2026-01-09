@@ -20,6 +20,12 @@ body {
   padding-top: 80px;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden; /* KUNCI UTAMA: Mencegah scroll samping */
+}
+
 .container {
   width: 100%;
   max-width: 1200px;
