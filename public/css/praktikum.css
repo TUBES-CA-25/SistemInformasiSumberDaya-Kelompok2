@@ -1,6 +1,9 @@
+/* ========================================================
+   GLOBAL SECTION BACKGROUND & LAYOUT
+   ======================================================== */
 .rules-section,
 .praktikum-section {
-  padding: 80px 0;
+  padding: 100px 0;
   background-color: #f8fafc;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
   min-height: 100vh;
@@ -13,104 +16,147 @@
 }
 
 .rules-header,
-.page-header {
+.page-header,
+.section-header {
   text-align: center;
   max-width: 800px;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 70px auto;
   padding-top: 10px;
 }
 
+/* --- BADGES --- */
 .badge-pill,
 .header-badge {
-  display: inline-block;
-  background-color: #e0e7ff;
-  color: #3730a3;
-  padding: 10px 24px;
-  border-radius: 50px;
-  font-weight: 800;
-  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
+  letter-spacing: 1.5px;
+  margin-bottom: 24px;
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
 }
 
+/* --- TYPOGRAPHY (JUDUL HITAM) --- */
 .rules-header h1,
-.page-header h1 {
+.page-header h1,
+.section-header h2 {
   font-size: 3.5rem;
-  font-weight: 900;
-  color: #0f172a;
-  letter-spacing: -2px;
-  margin-bottom: 20px;
+  font-weight: 800;
+  color: #0f172a; /* Hitam Dark Slate */
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
   line-height: 1.1;
   margin-top: 0;
 }
 
-.rules-header p,
-.page-header p {
-  color: #475569;
-  font-size: 1.25rem;
-  line-height: 1.6;
-  margin: 0 auto;
-  font-weight: 500;
+.section-header h2 {
+  font-size: 2.5rem; /* Ukuran h2 sedikit lebih kecil dari h1 */
 }
 
+.rules-header p,
+.page-header p,
+.section-header p {
+  color: #64748b;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  margin: 0 auto;
+  font-weight: 400;
+  max-width: 85%;
+}
+
+/* ========================================================
+   RULES & PEDOMAN CARD STYLES
+   ======================================================== */
 .rules-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 30px;
-  margin-bottom: 60px;
+  gap: 40px;
+  margin-bottom: 80px;
 }
 
 .rule-card {
   background: #ffffff;
-  border: 2px solid #e2e8f0;
+  border: 1px solid #e2e8f0;
   border-radius: 24px;
   padding: 40px;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 10px 15px -3px rgba(0, 0, 0, 0.04);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  position: relative;
 }
 
 .rule-card:hover {
-  transform: translateY(-8px);
-  border-color: #0f172a;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-10px);
+  border-color: #3b82f6;
+  box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.15);
 }
 
+/* --- GAMBAR DALAM KARTU --- */
+.rule-img-box {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  margin-bottom: 35px;
+  border-radius: 16px;
+  background-color: #f1f5f9;
+  border: 1px solid #f1f5f9;
+}
+
+.rule-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.rule-card:hover .rule-img-box img {
+  transform: scale(1.1);
+}
+
+/* --- ICONS --- */
 .rule-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 20px;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
-  margin-bottom: 30px;
+  font-size: 2rem;
+  margin-bottom: 25px;
   color: #ffffff;
 }
 
 .icon-blue {
-  background: #2563eb;
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
 }
 .icon-pink {
-  background: #db2777;
-  box-shadow: 0 10px 20px rgba(219, 39, 119, 0.3);
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  box-shadow: 0 10px 25px -5px rgba(219, 39, 119, 0.4);
 }
 .icon-red {
-  background: #dc2626;
-  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.4);
 }
 
 .rule-card h3 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #0f172a;
-  margin-bottom: 25px;
-  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
 }
 
+/* --- LIST ITEMS --- */
 .rule-list {
   list-style: none;
   padding: 0;
@@ -120,30 +166,34 @@
 .rule-list li {
   display: flex;
   align-items: flex-start;
-  gap: 15px;
-  color: #334155;
+  gap: 16px;
+  color: #475569;
   line-height: 1.6;
-  margin-bottom: 18px;
-  font-size: 1.05rem;
+  margin-bottom: 16px;
+  font-size: 1rem;
   font-weight: 500;
 }
 
 .rule-list li i {
-  font-size: 1.3rem;
-  margin-top: 3px;
+  font-size: 1.25rem;
+  margin-top: 2px;
   flex-shrink: 0;
-  color: #0f172a;
+  color: #2563eb;
 }
 
+/* ========================================================
+   SANKSI CONTAINER (RED ALERT THEME)
+   ======================================================== */
 .sanksi-container {
-  background: #0f172a;
-  color: #ffffff;
+  background: #ffffff;
+  color: #1e293b;
   padding: 60px;
   border-radius: 32px;
   position: relative;
   overflow: hidden;
-  margin-top: 20px;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+  margin-top: 50px;
+  box-shadow: 0 20px 50px -10px rgba(220, 38, 38, 0.1);
+  border: 1px solid #fee2e2;
 }
 
 .sanksi-container::after {
@@ -151,12 +201,12 @@
   position: absolute;
   top: -100px;
   right: -100px;
-  width: 300px;
-  height: 300px;
+  width: 400px;
+  height: 400px;
   background: radial-gradient(
     circle,
-    rgba(59, 130, 246, 0.15) 0%,
-    rgba(59, 130, 246, 0) 70%
+    rgba(239, 68, 68, 0.06) 0%,
+    rgba(239, 68, 68, 0) 70%
   );
   border-radius: 50%;
   pointer-events: none;
@@ -169,54 +219,287 @@
   margin-bottom: 50px;
   position: relative;
   z-index: 2;
+  border-bottom: 2px solid #fee2e2;
+  padding-bottom: 20px;
 }
 
 .sanksi-title h2 {
   font-size: 2.2rem;
   font-weight: 900;
   margin: 0;
-  color: #ffffff;
+  color: #991b1b;
+  letter-spacing: -0.02em;
 }
+
 .sanksi-title i {
-  color: #3b82f6;
+  color: #dc2626;
   font-size: 2.5rem;
 }
 
 .sanksi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 50px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
   position: relative;
   z-index: 2;
 }
 
 .sanksi-item {
-  border-left: 4px solid #3b82f6;
-  padding-left: 20px;
+  background: #fffafa;
+  padding: 25px;
+  border-radius: 20px;
+  border: 1px solid #fee2e2;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  transition: all 0.3s ease;
 }
-.sanksi-item h4 {
-  color: #60a5fa;
-  margin-bottom: 12px;
-  font-size: 1.25rem;
+
+.sanksi-item:hover {
+  transform: translateY(-5px);
+  background: #ffffff;
+  box-shadow: 0 15px 30px -5px rgba(220, 38, 38, 0.1);
+  border-color: #fca5a5;
+}
+
+.sanksi-icon-box {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: #fee2e2;
+  color: #dc2626;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.sanksi-content {
+  flex: 1;
+}
+
+.sanksi-content h4 {
+  color: #b91c1c;
+  margin-bottom: 8px;
+  font-size: 1.15rem;
   font-weight: 800;
-  text-transform: uppercase;
+  margin-top: 0;
 }
-.sanksi-item p {
-  color: #e2e8f0;
-  font-size: 1.1rem;
-  line-height: 1.7;
+
+.sanksi-content p {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.6;
   margin: 0;
 }
 
+/* ========================================================
+   VIDEO SECTION HEADER
+   ======================================================== */
+.video-header-wrapper {
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.video-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #fef2f2;
+  color: #dc2626;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid #fecaca;
+  margin-bottom: 15px;
+}
+
+.video-title-box h2 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin: 0;
+  letter-spacing: -0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.video-play-icon {
+  width: 50px;
+  height: 50px;
+  background: #dc2626;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+  animation: pulse-red 2s infinite;
+}
+
+.video-desc {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin-top: 15px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+    transform: scale(1);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(220, 38, 38, 0);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+    transform: scale(1);
+  }
+}
+
+/* ========================================================
+   JADWAL & CLOCK STYLES
+   ======================================================== */
+.live-clock-badge {
+  display: inline-block;
+  background: #2563eb;
+  color: #ffffff;
+  font-family: "JetBrains Mono", "Consolas", monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  padding: 15px 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+  border: 2px solid #60a5fa;
+  letter-spacing: 2px;
+  margin-top: 20px;
+}
+
+.lab-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.lab-icon {
+  width: 50px;
+  height: 50px;
+  background: #eff6ff;
+  color: #2563eb;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+}
+
+.lab-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.empty-schedule {
+  background: #fff;
+  border-radius: 20px;
+  padding: 60px;
+  text-align: center;
+  border: 2px dashed #cbd5e1;
+}
+.empty-schedule i {
+  font-size: 4rem;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+.empty-schedule h3 {
+  font-size: 1.5rem;
+  color: #475569;
+  margin-bottom: 10px;
+}
+
+.status-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-ongoing {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+  animation: pulse-green 2s infinite;
+}
+
+.badge-upcoming {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.badge-finished {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 0 0 0 rgba(22, 101, 52, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(22, 101, 52, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(22, 101, 52, 0);
+  }
+}
+
+.asisten-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.asisten-name {
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
 .schedule-wrapper {
-  margin-top: 40px;
+  margin-top: 60px;
 }
 
 .table-responsive {
   overflow-x: auto;
   border-radius: 20px;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
-  border: 2px solid #e2e8f0;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05),
+    0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  border: 1px solid #e2e8f0;
   background: #ffffff;
 }
 
@@ -228,23 +511,24 @@
 }
 
 .table-schedule thead {
-  background: #0f172a;
+  background: #2563eb;
   color: #ffffff;
 }
 
 .table-schedule th {
-  padding: 22px 20px;
+  padding: 24px;
   text-align: left;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 0.85rem;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   color: #ffffff;
+  border-bottom: 4px solid #1e40af;
 }
 
 .table-schedule tbody tr {
   border-bottom: 1px solid #f1f5f9;
-  transition: background 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .table-schedule tbody tr:last-child {
@@ -256,8 +540,8 @@
 }
 
 .table-schedule td {
-  padding: 20px;
-  color: #334155;
+  padding: 24px;
+  color: #475569;
   font-weight: 600;
   font-size: 1rem;
   vertical-align: middle;
@@ -266,84 +550,156 @@
 .table-schedule td:first-child {
   color: #2563eb;
   font-weight: 800;
+  font-family: monospace;
+  font-size: 1.1rem;
 }
 
-.status-label {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-size: 0.8rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+/* ========================================================
+   DOWNLOAD SECTION STYLES (FORMAT PENULISAN)
+   ======================================================== */
+
+.downloads-section {
+  margin-top: 80px;
+  padding-top: 60px;
+  border-top: 2px dashed #e2e8f0; /* Garis pemisah putus-putus */
 }
 
-.status-active {
-  background-color: #dcfce7;
-  color: #166534;
+.downloads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
 }
 
-.status-closed {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-/* --- Style Khusus Gambar di Kartu Aturan --- */
-.rule-card {
-  /* Pastikan overflow hidden agar gambar tidak keluar dari radius kartu */
-  overflow: hidden;
+/* --- DOWNLOAD CARD (FILE STYLE) --- */
+.download-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 25px;
   display: flex;
-  flex-direction: column;
-}
-
-.rule-img-box {
-  width: 100%;
-  height: 180px; /* Tinggi gambar dibatasi agar seragam */
+  align-items: flex-start;
+  gap: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
   overflow: hidden;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  background-color: #f1f5f9; /* Warna abu muda loading */
 }
 
-.rule-img-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Agar gambar tidak gepeng (tetap proporsional) */
-  transition: transform 0.3s ease;
+.download-card:hover {
+  transform: translateY(-5px);
+  border-color: #3b82f6;
+  box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.15);
 }
 
-/* Efek Zoom saat kartu di-hover */
-.rule-card:hover .rule-img-box img {
-  transform: scale(1.05);
-}
-
-/* Penyesuaian agar ikon tetap bagus (kode lama tetap jalan) */
-.rule-icon {
+/* Icon Box (File Type) */
+.file-icon-box {
   width: 60px;
   height: 60px;
-  border-radius: 12px;
+  background: #eff6ff; /* Biru Sangat Muda */
+  color: #2563eb; /* Biru Utama */
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  border: 1px solid #dbeafe;
 }
 
+.download-content {
+  flex: 1;
+}
+
+.download-content h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 5px 0;
+  line-height: 1.4;
+}
+
+.file-meta {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* --- ACTION BUTTONS --- */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn-download:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-external {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.btn-external:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
 @media (max-width: 768px) {
   .rules-header h1,
-  .page-header h1 {
+  .page-header h1,
+  .section-header h2 {
     font-size: 2.5rem;
   }
   .rules-section,
   .praktikum-section {
-    padding: 50px 0;
+    padding: 60px 0;
   }
   .sanksi-container {
-    padding: 40px 25px;
+    padding: 40px 24px;
+  }
+  .sanksi-item {
+    flex-direction: column;
+  }
+  .video-title-box h2 {
+    font-size: 1.6rem;
+    flex-direction: column;
+    gap: 10px;
   }
   .table-schedule th,
   .table-schedule td {
-    padding: 15px;
+    padding: 16px;
     font-size: 0.9rem;
+  }
+  .downloads-grid {
+    grid-template-columns: 1fr;
   }
 }
