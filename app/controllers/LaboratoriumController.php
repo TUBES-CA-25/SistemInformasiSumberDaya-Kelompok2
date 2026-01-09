@@ -3,6 +3,7 @@ require_once __DIR__ . '/Controller.php';
 require_once __DIR__ . '/../models/LaboratoriumModel.php';
 require_once __DIR__ . '/../models/AsistenModel.php';
 require_once __DIR__ . '/../models/LaboratoriumGambarModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class LaboratoriumController extends Controller {
     private $model;
@@ -18,6 +19,12 @@ class LaboratoriumController extends Controller {
     // API methods
     public function apiIndex() {
         $data = $this->model->getAll();
+        
+        // Load images for each laboratorium
+        foreach ($data as &$lab) {
+            $lab['images'] = $this->gambarModel->getByLaboratorium($lab['idLaboratorium']);
+        }
+        
         $this->success($data, 'Data Laboratorium retrieved successfully');
     }
 
@@ -131,7 +138,8 @@ class LaboratoriumController extends Controller {
             // Handle multiple file uploads
             $uploadedImages = [];
             if (isset($_FILES['gambar']) && is_array($_FILES['gambar']['name'])) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'laboratorium/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $fileCount = count($_FILES['gambar']['name']);
@@ -145,12 +153,12 @@ class LaboratoriumController extends Controller {
                             return;
                         }
                         
-                        $filename = 'lab_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                        $filename = Helper::generateFilename('lab', $input['nama'], $ext);
                         $target = $uploadDir . $filename;
                         
                         if (move_uploaded_file($_FILES['gambar']['tmp_name'][$i], $target)) {
                             $uploadedImages[] = [
-                                'filename' => $filename,
+                                'filename' => $subFolder . $filename,
                                 'description' => $_POST['gambar_desc'][$i] ?? null
                             ];
                         } else {
@@ -239,7 +247,8 @@ class LaboratoriumController extends Controller {
             // Handle multiple file uploads
             $uploadedImages = [];
             if (isset($_FILES['gambar']) && is_array($_FILES['gambar']['name'])) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'laboratorium/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $fileCount = count($_FILES['gambar']['name']);
@@ -253,12 +262,12 @@ class LaboratoriumController extends Controller {
                             return;
                         }
                         
-                        $filename = 'lab_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                        $filename = Helper::generateFilename('lab', $input['nama'], $ext);
                         $target = $uploadDir . $filename;
                         
                         if (move_uploaded_file($_FILES['gambar']['tmp_name'][$i], $target)) {
                             $uploadedImages[] = [
-                                'filename' => $filename,
+                                'filename' => $subFolder . $filename,
                                 'description' => $_POST['gambar_desc'][$i] ?? null
                             ];
                         } else {
@@ -320,5 +329,49 @@ class LaboratoriumController extends Controller {
         }
         $this->error('Failed to delete laboratorium', null, 500);
     }
+
+    /**
+     * Delete specific image only
+     */
+    public function deleteImage($params) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->error('ID gambar tidak ditemukan', null, 400);
+            return;
+        }
+
+        try {
+            $gambar = $this->gambarModel->getById($id, 'idGambar');
+            if (!$gambar) {
+                $this->error('Data gambar tidak ditemukan di database (ID: ' . $id . ')', null, 404);
+                return;
+            }
+
+            // Hapus file fisik jika ada
+            $filename = $gambar['namaGambar'];
+            $rootUploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+            
+            // Cek di root (jika data lama) atau di subfolder (jika data baru dengan prefix)
+            $filePath = $rootUploadDir . $filename;
+            
+            if (file_exists($filePath)) {
+                @unlink($filePath);
+            } else {
+                // Mencoba cek tanpa prefix jika ternyata prefix ditambahkan tapi file ada di root
+                $baseName = basename($filename);
+                if (file_exists($rootUploadDir . $baseName)) {
+                    @unlink($rootUploadDir . $baseName);
+                }
+            }
+
+            $result = $this->gambarModel->deleteImage($id);
+            if ($result) {
+                $this->success(['id' => $id], 'Gambar berhasil dihapus');
+            } else {
+                $this->error('Gagal menghapus record gambar di database', null, 500);
+            }
+        } catch (Exception $e) {
+            $this->error('Terjadi kesalahan: ' . $e->getMessage(), null, 500);
+        }
+    }
 }
-?>

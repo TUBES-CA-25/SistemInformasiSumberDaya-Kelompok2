@@ -1,6 +1,7 @@
 <?php
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/AsistenModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class AsistenController extends Controller {
     private $model;
@@ -99,9 +100,10 @@ class AsistenController extends Controller {
                     'email' => $_POST['email'] ?? '',
                     'jurusan' => $_POST['jurusan'] ?? '',
                     'bio' => $_POST['bio'] ?? '',
-                    'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]', // Expecting JSON string or will process later
+                    'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
                     'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
-                    'isKoordinator' => $_POST['isKoordinator'] ?? '0'
+                    'isKoordinator' => $_POST['isKoordinator'] ?? '0',
+                    'urutanTampilan' => $_POST['urutanTampilan'] ?? '0'
                 ];
 
                 // Jika skills dikirim sebagai string dipisah koma, ubah ke JSON array
@@ -120,7 +122,8 @@ class AsistenController extends Controller {
                 }
 
                 // Process file upload
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'asisten/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -135,11 +138,11 @@ class AsistenController extends Controller {
                         return;
                     }
                     
-                    $filename = 'asisten_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                    $filename = Helper::generateFilename('asisten', $input['nama'], $ext);
                     $destination = $uploadDir . $filename;
                     
                     if (move_uploaded_file($file['tmp_name'], $destination)) {
-                        $input['foto'] = $filename;
+                        $input['foto'] = $subFolder . $filename;
                     } else {
                         $this->error('Gagal mengupload file', null, 500);
                         return;
@@ -191,7 +194,8 @@ class AsistenController extends Controller {
                     'bio' => $_POST['bio'] ?? '',
                     'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
                     'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
-                    'isKoordinator' => $_POST['isKoordinator'] ?? '0'
+                    'isKoordinator' => $_POST['isKoordinator'] ?? '0',
+                    'urutanTampilan' => $_POST['urutanTampilan'] ?? '0'
                 ];
 
                 // Jika skills dikirim sebagai string dipisah koma, ubah ke JSON array
@@ -205,7 +209,8 @@ class AsistenController extends Controller {
                 // Process file upload if new file provided
                 $file = $_FILES['foto'];
                 if ($file['error'] === UPLOAD_ERR_OK) {
-                    $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                    $subFolder = 'asisten/';
+                    $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                     if (!is_dir($uploadDir)) {
                         mkdir($uploadDir, 0777, true);
                     }
@@ -218,19 +223,19 @@ class AsistenController extends Controller {
                         return;
                     }
                     
-                    // Delete old file if exists
+                    // Delete old file if exists (Robust path handling)
                     if (!empty($asisten['foto'])) {
-                        $oldFile = $uploadDir . $asisten['foto'];
-                        if (file_exists($oldFile)) {
-                            unlink($oldFile);
+                        $oldFilePath = dirname(__DIR__, 2) . '/public/assets/uploads/' . $asisten['foto'];
+                        if (file_exists($oldFilePath)) {
+                            @unlink($oldFilePath);
                         }
                     }
                     
-                    $filename = 'asisten_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
+                    $filename = Helper::generateFilename('asisten', $input['nama'], $ext);
                     $destination = $uploadDir . $filename;
                     
                     if (move_uploaded_file($file['tmp_name'], $destination)) {
-                        $input['foto'] = $filename;
+                        $input['foto'] = $subFolder . $filename;
                     } else {
                         $this->error('Gagal mengupload file', null, 500);
                         return;
@@ -315,4 +320,3 @@ class AsistenController extends Controller {
         }
     }
 }
-?>

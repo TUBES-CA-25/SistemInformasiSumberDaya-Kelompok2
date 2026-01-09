@@ -87,6 +87,9 @@ class Controller {
      * Return JSON response
      */
     protected function response($data, $status = 200) {
+        // Hapus output buffer jika ada (menghindari warning yang merusak JSON)
+        if (ob_get_length()) ob_clean();
+        
         header('Content-Type: application/json');
         http_response_code($status);
         echo json_encode($data);

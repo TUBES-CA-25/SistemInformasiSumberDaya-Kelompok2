@@ -176,7 +176,10 @@
                             </label>
                         </div>
                         
-                        <div id="previewContainer" class="mt-3 grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+                        <div id="previewContainer" class="mt-3 grid grid-cols-3 sm:grid-cols-4 gap-3">
+                            <div id="savedImagesContainer" class="contents"></div>
+                            <div id="newImagesContainer" class="contents"></div>
+                        </div>
                         <div id="gambarPreviewInfo" class="hidden mt-2 text-xs text-blue-600 bg-blue-50 p-2 rounded border border-blue-100 flex items-center gap-2">
                             <i class="fas fa-info-circle"></i> Gambar lama tersimpan. Upload baru untuk menambah/mengganti.
                         </div>
@@ -306,16 +309,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Image Preview (Form)
     document.getElementById('inputGambar').addEventListener('change', function(e) {
-        const container = document.getElementById('previewContainer');
+        const container = document.getElementById('newImagesContainer');
         container.innerHTML = '';
         if(this.files) {
             Array.from(this.files).forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.className = 'w-full h-20 object-cover rounded-lg border border-gray-200 shadow-sm hover:opacity-80 transition-opacity';
-                    container.appendChild(img);
+                    const div = document.createElement('div');
+                    div.className = 'relative aspect-square rounded-lg overflow-hidden border border-emerald-300 shadow-sm';
+                    div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">
+                                     <div class="absolute top-0 right-0 p-1"><span class="bg-emerald-500 text-white text-[8px] px-1 rounded-bl">BARU</span></div>`;
+                    container.appendChild(div);
                 }
                 reader.readAsDataURL(file);
             });
@@ -419,7 +423,8 @@ function openFormModal(id = null, event = null) {
     document.getElementById('formMessage').classList.add('hidden');
     document.getElementById('labForm').reset();
     document.getElementById('inputId').value = '';
-    document.getElementById('previewContainer').innerHTML = '';
+    document.getElementById('savedImagesContainer').innerHTML = '';
+    document.getElementById('newImagesContainer').innerHTML = '';
     document.getElementById('gambarPreviewInfo').classList.add('hidden');
 
     if (id) {
@@ -450,16 +455,36 @@ function openFormModal(id = null, event = null) {
             if(coordSelect.options.length > 1) coordSelect.value = data.idKordinatorAsisten || '';
             else pendingKordinator = data.idKordinatorAsisten;
 
-            // Preview Gambar Lama
-            if (data.gambar || (data.images && data.images.length > 0)) {
+            // Preview Gambar Lama (dengan fitur hapus)
+            const savedContainer = document.getElementById('savedImagesContainer');
+            
+            let images = [];
+            if (data.images && Array.isArray(data.images)) images = data.images;
+            else if (data.gambar) images = data.gambar.replace(/[\[\]"]/g, '').split(',').map(img => ({ namaGambar: img.trim() }));
+
+            if (images.length > 0) {
                 document.getElementById('gambarPreviewInfo').classList.remove('hidden');
-                let imgPath = data.gambar;
-                if (data.images && data.images.length > 0) imgPath = data.images[0].namaGambar || data.images[0];
-                // Bersihkan string
-                if (imgPath) imgPath = imgPath.replace(/[\[\]"]/g, '').split(',')[0];
-                
-                imgPath = imgPath.includes('http') ? imgPath : ASSETS_URL + '/assets/uploads/' + imgPath;
-                document.getElementById('previewContainer').innerHTML = `<img src="${imgPath}" class="w-full h-20 object-cover rounded-lg border border-blue-300 opacity-70" title="Contoh gambar saat ini">`;
+                images.forEach(img => {
+                    let idGambar = img.idGambar || null;
+                    let namaFile = img.namaGambar || img;
+                    if (!namaFile || typeof namaFile !== 'string') return;
+
+                    let imgUrl = namaFile.includes('http') ? namaFile : ASSETS_URL + '/assets/uploads/' + namaFile;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'relative group aspect-square rounded-lg overflow-hidden border border-blue-200 shadow-sm';
+                    div.innerHTML = `
+                        <img src="${imgUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            ${idGambar ? `
+                                <button type="button" onclick="hapusGambar(${idGambar}, this)" class="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-110">
+                                    <i class="fas fa-trash-alt text-xs"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                    savedContainer.appendChild(div);
+                });
             }
         }
     } else {
@@ -637,6 +662,44 @@ function hapusLaboratorium(id, event) {
             showError('Gagal menghapus data');
         });
     }, 'Data laboratorium dan gambar terkait akan dihapus permanen!');
+}
+
+function hapusGambar(idGambar, btnEl) {
+    Swal.fire({
+        title: 'Hapus Gambar?',
+        text: "Gambar akan dihapus permanen dari server.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            showLoading('Menghapus gambar...');
+            fetch(API_URL + '/laboratorium/image/' + idGambar, { method: 'DELETE' })
+            .then(res => res.json())
+            .then(data => {
+                hideLoading();
+                if (data.status === 'success' || data.code === 200) {
+                    showSuccess('Gambar berhasil dihapus');
+                    // Hapus elemen dari UI
+                    const divImg = btnEl.closest('.relative.group');
+                    if (divImg) divImg.remove();
+                    
+                    // Refresh data agar slider terupdate jika nanti dibuka
+                    const currentId = document.getElementById('inputId').value;
+                    loadLaboratorium();
+                } else {
+                    showError(data.message || 'Gagal menghapus gambar');
+                }
+            })
+            .catch(err => {
+                hideLoading();
+                showError('Terjadi kesalahan saat menghapus gambar');
+            });
+        }
+    });
 }
 
 document.onkeydown = function(evt) {
