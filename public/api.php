@@ -90,6 +90,8 @@ $routes = [
         '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'apiShow'],
         '/kontak' => ['controller' => 'KontakController', 'method' => 'getLatest'],
         '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'show'],
+        '/user' => ['controller' => 'UserController', 'method' => 'apiIndex'],
+        '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiShow'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'index'],
         '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'show'],
         '/formatpenulisan' => ['controller' => 'FormatPenulisanController', 'method' => 'apiIndex'],
@@ -123,6 +125,7 @@ $routes = [
         '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'update'], // For file upload
         '/formatpenulisan' => ['controller' => 'FormatPenulisanController', 'method' => 'store'],
         '/formatpenulisan/{id}' => ['controller' => 'FormatPenulisanController', 'method' => 'update'],
+        '/user' => ['controller' => 'UserController', 'method' => 'apiStore'],
         '/kontak' => ['controller' => 'KontakController', 'method' => 'store'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'store'],
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
@@ -144,6 +147,7 @@ $routes = [
         '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'update'],
         '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'],
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'update'],
+        '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiUpdate'],
     ],
     'DELETE' => [
         '/laboratorium/image/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'deleteImage'],
@@ -162,6 +166,7 @@ $routes = [
         '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'delete'],
         '/tata-tertib/{id}'        => ['controller' => 'TataTerbibController', 'method' => 'delete'],
         '/integrasi-web/{id}'      => ['controller' => 'IntegrsiWebController', 'method' => 'delete'],
+        '/user/{id}'               => ['controller' => 'UserController', 'method' => 'apiDelete'],
     ],
 ];
 

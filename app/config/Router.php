@@ -87,6 +87,9 @@ class Router {
         $this->get('/admin/asisten/koordinator', 'AsistenController', 'pilihKoordinator');
         $this->post('/admin/asisten/koordinator', 'AsistenController', 'setKoordinator');
 
+        // Admin User (Super Admin Only)
+        $this->get('/admin/user', 'UserController', 'adminIndex');
+
         // Admin Jadwal
         $this->get('/admin/jadwal', 'JadwalPraktikumController', 'adminIndex');
         $this->get('/admin/jadwal/create', 'JadwalPraktikumController', 'create');
