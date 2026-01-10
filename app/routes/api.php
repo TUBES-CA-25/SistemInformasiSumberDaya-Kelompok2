@@ -1,21 +1,38 @@
-/**
- * Peraturan Lab Routes
- * GET    /api/peraturan-lab              - Get all peraturan lab
- * GET    /api/peraturan-lab/{id}         - Get peraturan lab by ID
- * POST   /api/peraturan-lab              - Create peraturan lab
- * PUT    /api/peraturan-lab/{id}         - Update peraturan lab
- * DELETE /api/peraturan-lab/{id}         - Delete peraturan lab
- */
-$router->get('/peraturan-lab', 'PeraturanLabController', 'index');
-$router->get('/peraturan-lab/{id}', 'PeraturanLabController', 'show');
-$router->post('/peraturan-lab', 'PeraturanLabController', 'store');
-$router->put('/peraturan-lab/{id}', 'PeraturanLabController', 'update');
-$router->delete('/peraturan-lab/{id}', 'PeraturanLabController', 'delete');
 <?php
 /**
  * API Routes
  * Define semua routes untuk API
  */
+
+/**
+ * Peraturan Lab Routes
+ * GET    /api/peraturan-lab              - Get all peraturan lab
+ * GET    /api/peraturan-lab/{id}         - Get peraturan lab by ID
+ * POST   /api/peraturan-lab              - Create peraturan lab
+ * POST   /api/peraturan-lab/{id}         - Update peraturan lab (dengan FormData)
+ * DELETE /api/peraturan-lab/{id}         - Delete peraturan lab
+ */
+$router->get('/peraturan-lab', 'PeraturanLabController', 'index');
+$router->get('/peraturan-lab/{id}', 'PeraturanLabController', 'show');
+$router->post('/peraturan-lab', 'PeraturanLabController', 'store');
+$router->post('/peraturan-lab/{id}', 'PeraturanLabController', 'update'); // Accept POST for FormData update
+$router->put('/peraturan-lab/{id}', 'PeraturanLabController', 'update');
+$router->delete('/peraturan-lab/{id}', 'PeraturanLabController', 'delete');
+
+/**
+ * Sanksi Lab Routes
+ * GET    /api/sanksi-lab                 - Get all sanksi lab
+ * GET    /api/sanksi-lab/{id}            - Get sanksi lab by ID
+ * POST   /api/sanksi-lab                 - Create sanksi lab
+ * POST   /api/sanksi-lab/{id}            - Update sanksi lab (dengan FormData)
+ * DELETE /api/sanksi-lab/{id}            - Delete sanksi lab
+ */
+$router->get('/sanksi-lab', 'SanksiLabController', 'apiIndex');
+$router->get('/sanksi-lab/{id}', 'SanksiLabController', 'apiShow');
+$router->post('/sanksi-lab', 'SanksiLabController', 'store');
+$router->post('/sanksi-lab/{id}', 'SanksiLabController', 'update'); // Accept POST for FormData update
+$router->put('/sanksi-lab/{id}', 'SanksiLabController', 'update');
+$router->delete('/sanksi-lab/{id}', 'SanksiLabController', 'delete');
 
 /**
  * Laboratorium Routes

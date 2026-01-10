@@ -115,7 +115,7 @@
             <div class="p-6">
                 <form id="mainForm">
                     <input type="hidden" id="inputId" name="id">
-                    <input type="hidden" id="oldTipe" name="old_tipe">
+                    <input type="hidden" id="oldTipe">
 
                     <div class="space-y-5">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -143,6 +143,18 @@
                                 <option value="Larangan Umum">Larangan Umum</option>
                                 <option value="umum">Umum</option>
                             </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Format Tampilan <span class="text-red-500">*</span></label>
+                            <select id="inputDisplayFormat" name="display_format" required
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white">
+                                <option value="list">List / Poin-Poin (Dipisah Baris Baru)</option>
+                                <option value="plain">Plain / Teks Biasa</option>
+                            </select>
+                            <p class="text-xs text-gray-500 mt-1">
+                                💡 <strong>List:</strong> Akan menampilkan setiap baris sebagai poin. <strong>Plain:</strong> Akan menampilkan sebagai paragraf biasa.
+                            </p>
                         </div>
 
                         <div>
@@ -360,6 +372,7 @@ function openFormModal(tipe = 'peraturan', id = null) {
             document.getElementById('inputJudul').value = data.judul;
             document.getElementById('inputDeskripsi').value = data.deskripsi;
             document.getElementById('inputUrutan').value = data.urutan || 0;
+            document.getElementById('inputDisplayFormat').value = data.display_format || 'list';
             
             if (data._tipe === 'peraturan') {
                 document.getElementById('inputKategori').value = data.kategori || 'Larangan Umum';
@@ -372,6 +385,7 @@ function openFormModal(tipe = 'peraturan', id = null) {
         title.innerHTML = '<i class="fas fa-plus text-blue-600"></i> Tambah Peraturan & Sanksi';
         btnSave.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
         document.getElementById('inputTipe').value = tipe;
+        document.getElementById('inputDisplayFormat').value = 'list';
         toggleTipeFields(tipe);
     }
 }
@@ -388,16 +402,31 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     const tipe = document.getElementById('inputTipe').value;
     const oldTipe = document.getElementById('oldTipe').value;
 
-    // Jika ganti tipe saat edit, kita butuh logic khusus (delete lama, create baru)
-    // Tapi untuk simple-nya, kita gunakan API yang sesuai
+    // Tentukan endpoint berdasarkan tipe
     const endpoint = tipe === 'peraturan' ? '/peraturan-lab' : '/sanksi-lab';
-    const url = id && (tipe === oldTipe) ? API_URL + endpoint + '/' + id : API_URL + endpoint;
-    const method = id && (tipe === oldTipe) ? 'PUT' : 'POST';
+    
+    // Jika update dan tipe sama, gunakan endpoint dengan ID
+    // Jika create atau tipe berbeda, gunakan endpoint base
+    const isUpdate = id && (tipe === oldTipe);
+    const url = isUpdate ? (API_URL + endpoint + '/' + id) : (API_URL + endpoint);
+    
+    // Selalu gunakan POST untuk form submission dengan FormData
+    // Router akan mengarahkan POST /endpoint/{id} ke update method
+    const method = 'POST';
 
-    // FormData for image upload
+    // FormData untuk upload file dan data form
     const formData = new FormData(this);
     
-    // If it was an edit but type changed, we MUST delete the old one first or just treat as new
+    // Debug: log semua FormData entries
+    console.log('=== FORM SUBMISSION DEBUG ===');
+    console.log('URL:', url);
+    console.log('Method:', method);
+    console.log('FormData entries:');
+    for (let [key, value] of formData.entries()) {
+        console.log(`  ${key}:`, value);
+    }
+    
+    // Jika mengubah tipe saat edit, delete data lama terlebih dahulu
     if (id && oldTipe && tipe !== oldTipe) {
         if (!confirm('Anda mengubah tipe data. Data lama akan dihapus dan dibuat baru. Lanjutkan?')) return;
         try {
@@ -416,12 +445,19 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
             method: method, 
             body: formData 
         });
-        const data = await response.json();
+        
+        // Debug response
+        const responseText = await response.text();
+        console.log('Response Status:', response.status);
+        console.log('Response Text:', responseText);
+        
+        // Try parse JSON
+        const data = JSON.parse(responseText);
+        console.log('Response JSON:', data);
 
         if (data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
             loadAllData();
-            // Assuming global showSuccess function exists
             if (typeof showSuccess === 'function') showSuccess('Data berhasil disimpan!');
             else alert('Data berhasil disimpan!');
         } else {
@@ -467,16 +503,25 @@ function showDetail(tipe, id) {
     const modal = document.getElementById('detailModal');
     const content = document.getElementById('detailContent');
     
-    // Format deskripsi
-    const deskripsiPoin = (data.deskripsi || '').split('\n')
-        .filter(line => line.trim() !== '')
-        .map(line => `<li class="mb-2 font-serif italic">${escapeHtml(line)}</li>`)
-        .join('');
+    // Format deskripsi berdasarkan display_format
+    let deskripsiHtml = '';
+    if (data.display_format === 'list') {
+        // List format: tampilkan sebagai poin-poin
+        const deskripsiPoin = (data.deskripsi || '').split('\n')
+            .filter(line => line.trim() !== '')
+            .map(line => `<li class="mb-2 font-serif italic">${escapeHtml(line)}</li>`)
+            .join('');
+        deskripsiHtml = `
+            <ul class="list-disc pl-5 text-gray-700 text-sm space-y-2">
+                ${deskripsiPoin || '<li class="text-gray-400 italic">Tidak ada deskripsi detail.</li>'}
+            </ul>
+        `;
+    } else {
+        // Plain format: tampilkan sebagai paragraf biasa
+        deskripsiHtml = `<p class="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">${escapeHtml(data.deskripsi || 'Tidak ada deskripsi detail.')}</p>`;
+    }
 
-    // Logic path gambar: di sanksi_lab controller kita simpan 'sanksi/filename.jpg'
-    // tapi di peraturan_lab controller kita tadinya simpan filename-nya saja.
-    // Namun di update terakhir saya buat simpan 'peraturan/filename.jpg'
-    // Kita buat pendeteksi simple.
+    // Logic path gambar
     let imgPath = data.gambar;
     if (imgPath && !imgPath.includes('/')) {
         imgPath = (data._tipe === 'peraturan' ? 'peraturan/' : 'sanksi/') + imgPath;
@@ -502,12 +547,17 @@ function showDetail(tipe, id) {
                 <p class="text-blue-800 font-semibold text-sm">${escapeHtml(data.kategori || (data._tipe === 'sanksi' ? 'Pelanggaran' : 'Umum'))}</p>
             </div>
 
+            <div class="p-3 bg-purple-50/50 rounded-lg border border-purple-100/50">
+                <h4 class="text-[10px] font-bold text-purple-400 uppercase tracking-widest mb-1">Format Tampilan</h4>
+                <p class="text-purple-800 font-semibold text-sm">
+                    ${data.display_format === 'list' ? '📋 List / Poin-Poin' : '📄 Plain / Teks Biasa'}
+                </p>
+            </div>
+
             <div>
                 <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Isi Detail :</h4>
                 <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 shadow-inner">
-                    <ul class="list-disc pl-5 text-gray-700 text-sm space-y-2">
-                        ${deskripsiPoin || '<li class="text-gray-400 italic">Tidak ada deskripsi detail.</li>'}
-                    </ul>
+                    ${deskripsiHtml}
                 </div>
             </div>
 

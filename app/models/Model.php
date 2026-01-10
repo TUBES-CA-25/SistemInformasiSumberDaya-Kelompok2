@@ -98,9 +98,16 @@ class Model {
 
         $query = "UPDATE " . $this->table . " SET " . $set . " WHERE " . $idColumn . " = ?";
         $stmt = $this->db->prepare($query);
+        
+        if (!$stmt) {
+            return false;
+        }
+        
         $stmt->bind_param($types, ...$values);
+        $result = $stmt->execute();
+        $stmt->close();
 
-        return $stmt->execute();
+        return $result;
     }
 
     /**

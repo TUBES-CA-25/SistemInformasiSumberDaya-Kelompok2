@@ -3,6 +3,9 @@
  * API Entry Point with Proper HTTP Method Routing
  */
 
+// Start session for authenticated requests
+session_start();
+
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);

@@ -119,12 +119,28 @@ try {
                         
                         <h3><?= htmlspecialchars($row['judul']) ?></h3>
                         
-                        <ul class="rule-list">
-                            <li>
-                                <i class="ri-prohibited-line" style="color: #dc2626;"></i>
-                                <span><?= htmlspecialchars($row['deskripsi']) ?></span>
-                            </li>
-                        </ul>
+                        <?php 
+                            // Render based on display_format
+                            $format = $row['display_format'] ?? 'list';
+                            $deskripsi = $row['deskripsi'];
+                            
+                            if ($format === 'list') {
+                                // Split by line breaks and render as list items
+                                $items = array_filter(array_map('trim', explode("\n", $deskripsi)));
+                                if (!empty($items)) {
+                                    echo '<ul class="rule-list">';
+                                    foreach ($items as $item) {
+                                        echo '<li><i class="ri-prohibited-line" style="color: #dc2626;"></i><span>' . htmlspecialchars($item) . '</span></li>';
+                                    }
+                                    echo '</ul>';
+                                } else {
+                                    echo '<ul class="rule-list"><li><i class="ri-prohibited-line" style="color: #dc2626;"></i><span>' . htmlspecialchars($deskripsi) . '</span></li></ul>';
+                                }
+                            } else {
+                                // Plain text format
+                                echo '<p style="color: #475569; line-height: 1.6;">' . nl2br(htmlspecialchars($deskripsi)) . '</p>';
+                            }
+                        ?>
                     </article>
                 <?php endforeach; ?>
             <?php else : ?>
@@ -173,7 +189,29 @@ try {
 
                             <div class="sanksi-content">
                                 <h4><?= htmlspecialchars($row['judul']) ?></h4>
-                                <p><?= htmlspecialchars($row['deskripsi']) ?></p>
+                                
+                                <?php 
+                                    // Render based on display_format
+                                    $format = $row['display_format'] ?? 'list';
+                                    $deskripsi = $row['deskripsi'];
+                                    
+                                    if ($format === 'list') {
+                                        // Split by line breaks and render as list items
+                                        $items = array_filter(array_map('trim', explode("\n", $deskripsi)));
+                                        if (!empty($items)) {
+                                            echo '<ul style="list-style: disc; margin-left: 20px; color: #475569;">';
+                                            foreach ($items as $item) {
+                                                echo '<li style="margin-bottom: 6px;">' . htmlspecialchars($item) . '</li>';
+                                            }
+                                            echo '</ul>';
+                                        } else {
+                                            echo '<p>' . htmlspecialchars($deskripsi) . '</p>';
+                                        }
+                                    } else {
+                                        // Plain text format
+                                        echo '<p style="color: #475569; line-height: 1.6;">' . nl2br(htmlspecialchars($deskripsi)) . '</p>';
+                                    }
+                                ?>
                             </div>
                         </div>
 
