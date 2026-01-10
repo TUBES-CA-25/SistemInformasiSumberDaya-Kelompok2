@@ -115,7 +115,7 @@ function getHomeFotoUrl($row) {
             <div class="slide">
                 <div class="slide-content-wrapper"> 
                     <div class="slide-image">
-                        <img src="https://placehold.co/800x600/e2e8f0/1e293b?text=Kompetensi+Digital" alt="Image">
+                        <img src="images/Pusat-Kompetensi.jpg" alt="Pusat Kompetensi Digital">
                     </div>
                     <div class="slide-text">
                         <h2>Pusat Kompetensi</h2>
@@ -123,10 +123,11 @@ function getHomeFotoUrl($row) {
                     </div>
                 </div>
             </div>
+            
             <div class="slide">
                 <div class="slide-content-wrapper">
                     <div class="slide-image">
-                        <img src="https://placehold.co/800x600/e2e8f0/1e293b?text=Infrastruktur+IT" alt="Image">
+                        <img src="images/Infrastruktur-Modern.jpg" alt="Infrastruktur Laboratorium Modern">
                     </div>
                     <div class="slide-text">
                         <h2>Infrastruktur Modern</h2>
@@ -134,10 +135,11 @@ function getHomeFotoUrl($row) {
                     </div>
                 </div>
             </div>
-             <div class="slide">
+            
+            <div class="slide">
                 <div class="slide-content-wrapper">
                     <div class="slide-image">
-                        <img src="https://placehold.co/800x600/e2e8f0/1e293b?text=Riset+Inovasi" alt="Image">
+                        <img src="images/RisetDanInovasi.png" alt="Riset dan Inovasi Laboratorium">
                     </div>
                     <div class="slide-text">
                         <h2>Riset & Inovasi</h2>
@@ -167,9 +169,16 @@ function getHomeFotoUrl($row) {
             <span class="badge-pill">Profil Video</span>
             <h2>Mengapa Memilih Kami?</h2>
         </div>
-        <div class="video-placeholder">
-            <img src="https://placehold.co/1000x500/f1f5f9/94a3b8?text=PLAY+PROFILE+VIDEO" alt="Video Player">
+        
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/jxczLAHdX3M?rel=0" 
+                title="Profil Laboratorium FIKOM UMI" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
         </div>
+
     </div>
 </section>
 

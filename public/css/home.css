@@ -1,5 +1,5 @@
 /* =======================================================
-   HOME PAGE STYLESHEET (Bold Blue Theme - FINAL LAYERED)
+   HOME PAGE STYLESHEET (Bold Blue Theme - FINAL LAYERED + VIDEO FIX)
    ======================================================= */
 
 /* --- Animasi Reveal --- */
@@ -64,7 +64,7 @@
   position: relative;
   overflow: hidden;
 
-  /* PERBAIKAN 1: Z-Index diturunkan jadi 1 agar blob dari bawah bisa lewat di atasnya */
+  /* Z-Index diturunkan jadi 1 agar blob dari bawah bisa lewat di atasnya */
   z-index: 1;
 }
 
@@ -75,7 +75,6 @@
   top: 0;
   width: 100%;
   height: 100%;
-  /* Ubah ujung gradasi dari rgba(...) menjadi #ffffff */
   background: linear-gradient(
     to bottom,
     rgba(248, 250, 252, 0) 0%,
@@ -216,7 +215,6 @@
   border-radius: 50%;
   filter: blur(80px);
   opacity: 0.6;
-  /* Z-Index 0 agar di atas background putih section, tapi di bawah teks */
   z-index: 0;
   animation: floatBlob 10s ease-in-out infinite alternate;
   pointer-events: none;
@@ -389,7 +387,7 @@
   overflow: hidden;
   position: relative;
 
-  /* PERBAIKAN: Layer rendah agar tertimpa blob dari section atas */
+  /* Layer rendah agar tertimpa blob dari section atas */
   z-index: 1;
 }
 .features-slider-section .section-header h2,
@@ -509,54 +507,43 @@
   right: 10px;
 }
 
-/* --- Video Section --- */
+/* --- Video Section (YouTube Embed Fix) --- */
 .video-section {
   padding: 100px 0;
   background: #fff;
   text-align: center;
 }
-.video-placeholder {
+
+.video-container {
   position: relative;
   max-width: 1000px;
   margin: 50px auto 0;
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
+  /* Rasio 16:9 agar responsif */
+  aspect-ratio: 16 / 9;
+  background: #000;
 }
-.video-placeholder img {
+
+.video-container iframe {
   width: 100%;
+  height: 100%;
+  border: none;
   display: block;
-  transition: transform 0.5s ease;
 }
-.video-placeholder:hover img {
-  transform: scale(1.03);
-}
-.video-placeholder::after {
-  content: "▶";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90px;
-  height: 90px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  border: 2px solid #fff;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  padding-left: 5px;
-}
-.video-placeholder:hover::after {
-  background: #2563eb;
-  border-color: #2563eb;
-  transform: translate(-50%, -50%) scale(1.1);
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
+
+/* Responsif untuk browser lama yang tidak dukung aspect-ratio */
+@supports not (aspect-ratio: 16 / 9) {
+  .video-container {
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 */
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
 
 /* --- Management Section --- */
