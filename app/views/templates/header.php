@@ -68,6 +68,7 @@
             'fasilitas'    => 'fasilitas.css',
             'riset'        => 'fasilitas.css',
             'laboratorium' => 'fasilitas.css',
+            'sop'          => 'sumberdaya.css',
             'alumni'       => 'alumni.css',
             'contact'      => 'contact.css',
             'apps'         => 'apps.css'
@@ -124,6 +125,7 @@
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/laboratorium">Ruang Lab</a>
                         <a href="<?= PUBLIC_URL ?>/riset">Ruang Riset</a>
+                        <a href="<?= PUBLIC_URL ?>/sop">SOP & Prosedur</a>
                     </div>
                 </li>
                 

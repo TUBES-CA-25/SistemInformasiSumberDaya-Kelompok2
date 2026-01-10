@@ -60,6 +60,7 @@ error_log("API Debug - Parsed path: $path");
 // Route mapping dengan HTTP METHOD
 $routes = [
     'GET' => [
+        '/sop' => ['controller' => 'SopController', 'method' => 'getJson'],
             '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'apiIndex'],
             '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'apiShow'],
             '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'apiIndex'],
@@ -101,6 +102,8 @@ $routes = [
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'index'],
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],            '/dashboard/stats' => ['controller' => 'DashboardController', 'method' => 'stats'],    ],
     'POST' => [
+        '/sop' => ['controller' => 'SopController', 'method' => 'store'],
+        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'update'],
             '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'store'],
             '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'], // For file upload
             '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'store'],
@@ -132,6 +135,7 @@ $routes = [
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'store'],
     ],
     'PUT' => [
+        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'update'],
             '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'],
         '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'update'],
         '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'],
@@ -150,6 +154,8 @@ $routes = [
         '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiUpdate'],
     ],
     'DELETE' => [
+        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'delete'],
+
         '/laboratorium/image/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'deleteImage'],
         '/laboratorium/{id}'       => ['controller' => 'LaboratoriumController', 'method' => 'delete'],
         '/asisten/{id}'            => ['controller' => 'AsistenController', 'method' => 'delete'],

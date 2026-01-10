@@ -238,8 +238,12 @@ if ($page == 'home')                               $pageCss = 'home.css';
 if ($page == 'tatatertib' || $page == 'jadwal' || $page == 'formatpenulisan') {
     $pageCss = 'praktikum.css';
 }
-if ($page == 'kepala' || $page == 'asisten' || $page == 'detail')      $pageCss = 'sumberdaya.css';
-if ($page == 'laboratorium' || $page == 'riset' || $page == 'detail_fasilitas')  $pageCss = 'fasilitas.css';
+if ($page == 'kepala' || $page == 'asisten' || $page == 'detail' || $page == 'sop') {
+    $pageCss = 'sumberdaya.css';
+}
+if ($page == 'laboratorium' || $page == 'riset' || $page == 'detail_fasilitas') {
+    $pageCss = 'fasilitas.css';
+}
 if ($page == 'apps')                               $pageCss = 'apps.css';
 if ($page == 'contact')                            $pageCss = 'contact.css';
 if ($page == 'alumni' || $page == 'detail_alumni')                             $pageCss = 'alumni.css';
@@ -325,6 +329,8 @@ $mvc_routes = [
 
     'detail_fasilitas' => ['LaboratoriumController', 'detail', ['id' => $id]],
     'detail_manajemen' => ['KepalaLabController', 'detail', ['id' => $id]],
+
+    'sop'              => ['SopController', 'index', []],
 ];
 
 if (array_key_exists($page, $mvc_routes)) {
