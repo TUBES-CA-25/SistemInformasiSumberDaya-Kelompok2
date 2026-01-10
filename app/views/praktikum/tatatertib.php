@@ -1,6 +1,6 @@
 <?php
 /**
- * VIEW: TATA TERTIB & SANKSI (FINAL FIXED - ALL RED & CINEMATIC VIDEO)
+ * VIEW: TATA TERTIB & SANKSI (FINAL FIXED - NO ERROR)
  * Menggunakan tabel: peraturan_lab & sanksi_lab
  */
 
@@ -67,7 +67,6 @@ try {
         </div>
 
         <div style="margin-bottom: 80px;">
-            
             <div class="video-header-wrapper">
                 <div class="video-badge">
                     <i class="ri-movie-line"></i> Wajib Disimak
@@ -102,8 +101,9 @@ try {
             <?php if (!empty($rules_data)) : ?>
                 <?php foreach ($rules_data as $index => $row) : ?>
                     <?php 
+                        // FIX: Cek apakah kolom 'gambar' ada dan tidak kosong
                         $hasImage = !empty($row['gambar']);
-                        $imageUrl = ASSETS_URL . '/assets/uploads/' . $row['gambar'];
+                        $imageUrl = $hasImage ? ASSETS_URL . '/assets/uploads/' . $row['gambar'] : '';
                     ?>
 
                     <article class="rule-card">
@@ -113,7 +113,7 @@ try {
                             </div>
                         <?php else : ?>
                             <div class="rule-icon icon-red">
-                                <i class="ri-prohibited-line"></i>
+                                <i class="ri-error-warning-line"></i>
                             </div>
                         <?php endif; ?>
                         
@@ -144,10 +144,31 @@ try {
             <div class="sanksi-grid">
                 <?php if (!empty($sanksi_data)) : ?>
                     <?php foreach ($sanksi_data as $row) : ?>
+                        <?php
+                            // 1. Ambil nama file dari DB
+                            $gambarDB = $row['gambar'] ?? '';
+                            $sanksiImgUrl = '';
+
+                            // 2. Cek apakah file fisik BENAR-BENAR ADA di folder
+                            if (!empty($gambarDB)) {
+                                // Definisikan path fisik komputer (bukan URL)
+                                $pathFisik = defined('ROOT_PROJECT') 
+                                    ? ROOT_PROJECT . '/public/assets/uploads/' . $gambarDB 
+                                    : dirname(__DIR__, 3) . '/public/assets/uploads/' . $gambarDB;
+
+                                if (file_exists($pathFisik)) {
+                                    $sanksiImgUrl = ASSETS_URL . '/assets/uploads/' . $gambarDB;
+                                }
+                            }
+                        ?>
                         
                         <div class="sanksi-item">
                             <div class="sanksi-icon-box">
-                                <i class="ri-prohibited-line"></i>
+                                <?php if (!empty($sanksiImgUrl)): ?>
+                                    <img src="<?= $sanksiImgUrl ?>" alt="Sanksi" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                                <?php else : ?>
+                                    <i class="ri-alarm-warning-fill" style="font-size: 2rem;"></i>
+                                <?php endif; ?>
                             </div>
 
                             <div class="sanksi-content">
