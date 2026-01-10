@@ -38,12 +38,12 @@
                     
                     <li>
                         <a href="https://fikom.umi.ac.id" target="_blank" style="color: #ffffffff;">
-                            <i class="ri-external-link-line"></i> Website FIKOM
+                            Website FIKOM
                         </a>
                     </li>
                     <li>
-                        <a href="https://umi.ac.id" target="_blank" style="color: #ffffffff;"
-                            <i class="ri-external-link-line"></i> Website UMI
+                        <a href="https://umi.ac.id" target="_blank" style="color: #ffffffff;">
+                            Website UMI
                         </a>
                     </li>
                 </ul>
