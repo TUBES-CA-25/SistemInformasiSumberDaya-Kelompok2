@@ -569,7 +569,7 @@
     grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom di HP */
     gap: 15px;
   }
-  
+
   .container {
     padding: 0 16px;
   }
@@ -588,22 +588,22 @@
     height: 100%;
     object-fit: cover; /* Jangan contain, tapi cover biar full */
     object-position: top center;
-    transform: none; 
+    transform: none;
   }
 
   .staff-card:hover .staff-photo-box img {
     transform: none;
   }
-  
+
   .staff-content {
-      padding: 12px;
+    padding: 12px;
   }
 }
 
 @media (max-width: 420px) {
-    /* Untuk HP sangat kecil, baru jadi 1 kolom biar ga terlalu gepeng */
-    .staff-grid {
-        grid-template-columns: 1fr; 
-        gap: 15px;
-    }
+  /* Untuk HP sangat kecil, baru jadi 1 kolom biar ga terlalu gepeng */
+  .staff-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
 }

@@ -1,36 +1,35 @@
 <?php
 /**
- * VIEW: DETAIL ASISTEN & MANAJEMEN (FINAL: URL PARSING + STYLE FIX)
+ * VIEW: DETAIL ASISTEN & MANAJEMEN (DATA FIX BASED ON DB)
  * File: app/views/sumberdaya/detail-asisten.php
  */
+
+// Pastikan ROOT_PROJECT terdefinisi agar file_exists berjalan
+if (!defined('ROOT_PROJECT')) {
+    define('ROOT_PROJECT', dirname(__DIR__, 3)); 
+}
 
 global $pdo;
 
 // ==========================================
-// 1. LOGIKA ID YANG KUAT (URL PARSING)
+// 1. LOGIKA ID & URL
 // ==========================================
 $id = 0;
 
-// A. Cek dari Controller ($data)
 if (isset($data['id'])) {
     $id = $data['id'];
-}
-// B. Cek dari $_GET biasa (?id=...)
-elseif (isset($_GET['id'])) {
+} elseif (isset($_GET['id'])) {
     $id = $_GET['id'];
-}
-// C. Cek Manual dari URL Path (/detail_asisten/5)
-else {
+} else {
     $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $segments = explode('/', trim($path, '/'));
     $lastSegment = end($segments);
-    
     if (is_numeric($lastSegment)) {
         $id = $lastSegment;
     }
 }
 
-// Ambil Tipe (manajemen/asisten)
+// Ambil Tipe (default asisten)
 $type = $_GET['type'] ?? 'asisten'; 
 
 $dataDetail = null;
@@ -38,42 +37,46 @@ $backLink = 'index.php?page=asisten';
 
 try {
     if ($type === 'manajemen') {
-        // --- MANAJEMEN ---
+        // --- DATA MANAJEMEN ---
+        // Sesuai DB: idManajemen, nama, nidn, jabatan, email, foto
         $stmt = $pdo->prepare("SELECT * FROM manajemen WHERE idManajemen = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Link kembali ke halaman Kepala/Struktur
         $backLink = PUBLIC_URL . '/kepala'; 
 
         if ($row) {
             $isKepala = stripos(($row['jabatan'] ?? ''), 'Kepala') !== false;
-            // Style Hardcoded (Aman)
+            
+            // Style Asli (Tidak diubah)
             $badgeStyle = $isKepala 
-                ? 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;' // Biru Pimpinan
-                : 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;'; // Abu Staff
+                ? 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;' 
+                : 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;';
 
             $dataDetail = [
                 'nama'      => $row['nama'] ?? 'Tanpa Nama',
                 'jabatan'   => $row['jabatan'] ?? '-',
                 'kategori'  => $isKepala ? 'Pimpinan' : 'Staff Laboratorium',
+                // Data NIDN
                 'sub_info'  => !empty($row['nidn']) ? 'NIDN: ' . $row['nidn'] : 'Fakultas Ilmu Komputer',
                 'sub_icon'  => 'ri-id-card-line',
                 'foto'      => $row['foto'] ?? '',
                 'email'     => $row['email'] ?? '-', 
-                'bio'       => !empty($row['bio']) ? $row['bio'] : "Staff/Pimpinan aktif.",
-                'skills'    => ['Management', 'Administration', 'Laboratory'],
+                // FIX: Tabel manajemen TIDAK punya kolom 'bio'. Gunakan default.
+                'bio'       => "Staff/Pimpinan aktif di Laboratorium Fakultas Ilmu Komputer UMI.",
+                // FIX: Tabel manajemen TIDAK punya kolom 'skills'. Gunakan default.
+                'skills'    => ['Manajemen Lab', 'Administrasi', 'Akademik'], 
                 'badge_style' => $badgeStyle 
             ];
         }
 
     } else {
-        // --- ASISTEN ---
+        // --- DATA ASISTEN ---
+        // Sesuai DB: idAsisten, nama, jurusan, bio, skills, email, foto, statusAktif, isKoordinator
         $stmt = $pdo->prepare("SELECT * FROM asisten WHERE idAsisten = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Link kembali ke halaman Asisten
         $backLink = PUBLIC_URL . '/asisten';
 
         if ($row) {
@@ -83,8 +86,6 @@ try {
             
             $jabatan = 'Asisten Praktikum';
             $kategori = 'Asisten Laboratorium';
-            
-            // Default Style (Biru Muda)
             $badgeStyle = 'background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;'; 
 
             if ($isCoord) {
@@ -97,50 +98,56 @@ try {
                 $badgeStyle = 'background: #fffbeb; color: #d97706; border: 1px solid #fcd34d;'; 
             }
 
-            // Skill Parsing
+            // Parsing Skills (JSON dari DB)
             $skills = [];
             if (!empty($row['skills'])) {
+                // Cek apakah format JSON ["Skill1", "Skill2"]
                 $decoded = json_decode($row['skills'], true);
-                $skills = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : array_map('trim', explode(',', $row['skills']));
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    $skills = $decoded;
+                } else {
+                    // Fallback jika format koma: "Skill1, Skill2"
+                    $skills = array_map('trim', explode(',', $row['skills']));
+                }
             } else {
-                $skills = ['Teaching', 'Mentoring'];
+                $skills = ['Teaching', 'Mentoring']; // Default jika kosong
             }
 
             $dataDetail = [
                 'nama'      => $row['nama'] ?? 'Tanpa Nama',
                 'jabatan'   => $jabatan,
                 'kategori'  => $kategori,
-                'sub_info'  => $row['jurusan'] ?? 'Teknik Informatika',
+                'sub_info'  => $row['jurusan'] ?? 'Teknik Informatika', // Kolom 'jurusan' ada di DB
                 'sub_icon'  => 'ri-graduation-cap-line',
                 'foto'      => $row['foto'] ?? '',
                 'email'     => $row['email'] ?? '-',
-                'bio'       => !empty($row['bio']) ? $row['bio'] : "Mahasiswa aktif.",
+                'bio'       => !empty($row['bio']) ? $row['bio'] : "Mahasiswa aktif dan asisten laboratorium.",
                 'skills'    => $skills,
                 'badge_style' => $badgeStyle 
             ];
         }
     }
-} catch (PDOException $e) {}
+} catch (PDOException $e) {
+    // Error handling silent
+}
 
-// Helper Foto
-function getDetailPhoto($name, $fotoName, $type) {
+// Helper Foto (Disesuaikan dengan format DB: 'folder/file.jpg')
+function getDetailPhoto($name, $fotoName) {
     $namaEnc = urlencode($name);
     $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=64748b&size=512&font-size=0.35&bold=true";
 
-    if (!empty($fotoName) && strpos($fotoName, 'ui-avatars') === false) {
+    if (!empty($fotoName)) {
         if (strpos($fotoName, 'http') === 0) {
-            $imgUrl = $fotoName;
-        } else {
-            $folder = ($type === 'manajemen') ? 'manajemen' : 'asisten';
-            $altFolder = ($type === 'manajemen') ? 'asisten' : 'manajemen';
-            
-            if (file_exists(ROOT_PROJECT . "/public/assets/uploads/" . $fotoName)) {
-                $imgUrl = ASSETS_URL . "/assets/uploads/" . $fotoName;
-            } elseif (file_exists(ROOT_PROJECT . "/public/images/{$folder}/" . $fotoName)) {
-                $imgUrl = ASSETS_URL . "/images/{$folder}/" . $fotoName;
-            } elseif (file_exists(ROOT_PROJECT . "/public/images/{$altFolder}/" . $fotoName)) {
-                $imgUrl = ASSETS_URL . "/images/{$altFolder}/" . $fotoName;
-            }
+            return $fotoName;
+        }
+        
+        // Cek file fisik di folder uploads
+        // DB sudah menyimpan 'asisten/foto.jpg' atau 'manajemen/foto.jpg'
+        // Jadi kita hanya perlu menyambungnya ke path uploads
+        $pathFisik = ROOT_PROJECT . "/public/assets/uploads/" . $fotoName;
+        
+        if (file_exists($pathFisik)) {
+            return (defined('ASSETS_URL') ? ASSETS_URL : 'assets') . "/assets/uploads/" . $fotoName;
         }
     }
     return $imgUrl;
@@ -159,7 +166,7 @@ function getDetailPhoto($name, $fotoName, $type) {
 
             <div class="profile-wrapper">
                 <div class="profile-image">
-                    <img src="<?= getDetailPhoto($dataDetail['nama'], $dataDetail['foto'], $type) ?>" 
+                    <img src="<?= getDetailPhoto($dataDetail['nama'], $dataDetail['foto']) ?>" 
                          alt="<?= htmlspecialchars($dataDetail['nama']) ?>">
                 </div>
                 
