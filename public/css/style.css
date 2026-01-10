@@ -17,6 +17,13 @@ body {
   background-color: #f8fbff; /* Background Biru Sangat Muda */
   color: #1a202c;
   line-height: 1.6;
+  padding-top: 80px;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden; /* KUNCI UTAMA: Mencegah scroll samping */
 }
 
 .container {
@@ -48,11 +55,19 @@ img {
    2. NAVBAR STYLING
    ------------------------------------------------------- */
 .navbar {
-  background: #fff;
-  padding: 10px 0;
-  border-bottom: 1px solid #e2e8f0;
-  position: relative;
-  z-index: 1000;
+  /* 1. Membuat elemen melayang dan tetap di posisi layar */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; /* Pastikan lebar penuh */
+
+  /* 2. Agar navbar berada di lapisan paling depan (tidak tertutup gambar/konten lain) */
+  z-index: 9999;
+
+  /* 3. Style tambahan agar terlihat rapi */
+  background-color: #ffffff; /* Wajib ada warna, jangan transparan */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bayangan tipis di bawah */
+  padding: 15px 0; /* Sesuaikan ketebalan */
 }
 
 .navbar .container {

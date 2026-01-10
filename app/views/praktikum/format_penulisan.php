@@ -3,35 +3,38 @@
         <header class="page-header">
             <span class="header-badge">Pedoman ICLabs 2025</span>
             <h1>Format Penulisan Tugas</h1>
-            <p>Pedoman teknis penyusunan laporan praktikum sesuai standar Laboratorium Terpadu FIKOM UMI.</p>
+            <p>Standar penyusunan laporan, makalah, dan tugas praktikum di lingkungan Fakultas Ilmu Komputer UMI.</p>
         </header>
 
         <div id="pedoman-container" class="rules-grid">
-            <div class="text-center py-10 w-full col-span-full">
-                <p class="text-gray-500">Memuat data...</p>
+            <div class="col-span-full" style="grid-column: 1/-1; text-align: center; padding: 60px; color: #94a3b8;">
+                <i class="fas fa-circle-notch fa-spin fa-3x" style="color: #cbd5e1; margin-bottom: 20px;"></i>
+                <p>Memuat data pedoman...</p>
             </div>
         </div>
 
-        <div id="unduhan-section" class="downloads-section" style="margin-top: 4rem; display: none;">
+        <div id="unduhan-section" class="downloads-section" style="display: none;">
             <header class="section-header" style="text-align: center; margin-bottom: 2rem;">
-                <h2 style="font-size: 2rem; font-weight: 700; color: #1e293b;">Pusat Unduhan</h2>
-                <p style="color: #64748b;">Dapatkan berkas format laporan dan dokumen pendukung lainnya.</p>
+                <span class="badge-pill" style="margin-bottom: 15px; background: #ecfdf5; color: #059669; border-color: #a7f3d0;">
+                    <i class="fas fa-cloud-download-alt" style="margin-right: 5px;"></i> Resources
+                </span>
+                <h2>Pusat Unduhan Berkas</h2>
+                <p style="color: #64748b; max-width: 600px; margin: 0 auto;">
+                    Dapatkan template resmi dan dokumen pendukung praktikum. Silakan unduh sesuai kebutuhan mata kuliah Anda.
+                </p>
             </header>
             
-            <div id="unduhan-container" class="downloads-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
-                <!-- Diterapkan via JS -->
-            </div>
+            <div id="unduhan-container" class="downloads-grid">
+                </div>
         </div>
     </div>
 </section>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const pedomanContainer = document.getElementById('pedoman-container');
-    const unduhanContainer = document.getElementById('unduhan-container');
-    const unduhanSection = document.getElementById('unduhan-section');
-    const assetsUrl = '<?= ASSETS_URL ?>';
-    const apiUrl = '<?= BASE_URL ?>/api.php/formatpenulisan';
+    // Definisi URL API
+    const baseUrl = '<?= BASE_URL ?>';
+    const apiUrl = baseUrl + '/api.php/formatpenulisan';
 
     async function loadContent() {
         try {
@@ -41,70 +44,105 @@ document.addEventListener('DOMContentLoaded', function() {
             if (result.status === 'success' || result.code === 200) {
                 renderContent(result.data);
             } else {
-                pedomanContainer.innerHTML = '<div class="col-span-full text-center py-10"><p>Gagal memuat data.</p></div>';
+                showEmptyState();
             }
         } catch (error) {
-            console.error('Error fetching data:', error);
-            pedomanContainer.innerHTML = '<div class="col-span-full text-center py-10"><p>Terjadi kesalahan sistem.</p></div>';
+            console.error('API Error:', error);
+            showErrorState();
         }
     }
 
     function renderContent(data) {
-        if (!data || data.length === 0) {
-            pedomanContainer.innerHTML = `
-                <article class="rule-card">
-                    <div class="rule-icon icon-blue">
-                        <i class="ri-layout-line"></i>
-                    </div>
-                    <h3>Belum Ada Data</h3>
-                    <p>Konten pedoman penulisan sedang disiapkan.</p>
-                </article>
-            `;
-            return;
-        }
+        const pedomanContainer = document.getElementById('pedoman-container');
+        const unduhanContainer = document.getElementById('unduhan-container');
+        const unduhanSection = document.getElementById('unduhan-section');
 
-        // Render Pedoman
-        const pedoman = data.filter(item => (item.kategori || 'pedoman') === 'pedoman');
+        // 1. RENDER PEDOMAN (Guidelines)
+        const pedoman = data.filter(item => (item.kategori || 'pedoman').toLowerCase() === 'pedoman');
+        
         if (pedoman.length > 0) {
             pedomanContainer.innerHTML = pedoman.map(info => `
                 <article class="rule-card">
-                    <div class="rule-icon ${info.warna || 'icon-blue'}">
-                        <i class="${info.icon || 'ri-layout-line'}"></i>
+                    <div class="rule-icon icon-blue">
+                        <i class="${info.icon || 'ri-book-open-line'}"></i>
                     </div>
+                    
                     <h3>${info.judul}</h3>
+                    
                     <ul class="rule-list">
-                        ${(info.deskripsi || '').split('\n')
-                            .filter(line => line.trim() !== '')
-                            .map(line => `<li><i class="ri-checkbox-circle-fill"></i> ${line.trim()}</li>`)
+                        ${(info.deskripsi || '')
+                            .split('\n')
+                            .filter(l => l.trim())
+                            .map(l => `<li><i class="ri-checkbox-circle-fill" style="color: #2563eb;"></i> <span>${l.trim()}</span></li>`)
                             .join('')}
                     </ul>
                 </article>
             `).join('');
         } else {
-            pedomanContainer.innerHTML = '<div class="col-span-full text-center py-10"><p>Belum ada pedoman.</p></div>';
+            pedomanContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #64748b;">Belum ada data pedoman.</div>`;
         }
 
-        // Render Unduhan
-        const unduhan = data.filter(item => item.kategori === 'unduhan');
+        // 2. RENDER UNDUHAN (Downloads)
+        const unduhan = data.filter(item => (item.kategori || '').toLowerCase() === 'unduhan');
+        
         if (unduhan.length > 0) {
-            unduhanSection.style.display = 'block';
-            unduhanContainer.innerHTML = unduhan.map(item => `
-                <div class="download-item" style="background: white; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); display: flex; align-items: center; gap: 1rem;">
-                    <div class="file-icon" style="width: 45px; height: 45px; background: #eff6ff; color: #2563eb; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-                        <i class="ri-file-download-line"></i>
-                    </div>
-                    <div style="flex: 1;">
-                        <h4 style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem; font-size: 1rem;">${item.judul}</h4>
-                        <div class="download-actions" style="display: flex; gap: 0.5rem;">
-                            ${item.file ? `<a href="${assetsUrl}/assets/uploads/format_penulisan/${item.file}" target="_blank" class="download-btn" style="font-size: 0.8rem; color: #2563eb; font-weight: 500;">Unduh PDF</a>` : ''}
-                            ${item.link_external ? `<a href="${item.link_external}" target="_blank" class="link-btn" style="font-size: 0.8rem; color: #64748b; font-weight: 500;">Buka Link</a>` : ''}
+            unduhanSection.style.display = 'block'; // Tampilkan section jika ada data
+            
+            unduhanContainer.innerHTML = unduhan.map(item => {
+                const fileName = item.file ? item.file.trim() : '';
+                // Path file disesuaikan dengan struktur folder Anda
+                const downloadPath = `assets/uploads/format_penulisan/${fileName}`;
+                
+                // Tentukan ekstensi file untuk ikon yang sesuai (Opsional)
+                let fileIcon = 'ri-file-text-line';
+                if(fileName.endsWith('.pdf')) fileIcon = 'ri-file-pdf-line';
+                if(fileName.endsWith('.doc') || fileName.endsWith('.docx')) fileIcon = 'ri-file-word-line';
+                if(fileName.endsWith('.zip') || fileName.endsWith('.rar')) fileIcon = 'ri-file-zip-line';
+
+                return `
+                    <div class="download-card">
+                        <div class="file-icon-box">
+                            <i class="${fileIcon}"></i>
+                        </div>
+                        
+                        <div class="download-content">
+                            <h4>${item.judul}</h4>
+                            
+                            <div class="file-meta">
+                                <i class="ri-information-line"></i> Dokumen Resmi ICLabs
+                            </div>
+
+                            <div class="action-buttons">
+                                ${item.file ? `
+                                    <a href="${downloadPath}" 
+                                       target="_blank" 
+                                       download="${fileName}"
+                                       class="btn-download">
+                                        <i class="ri-download-cloud-2-fill"></i> Unduh
+                                    </a>` : ''}
+                                
+                                ${item.link_external ? `
+                                    <a href="${item.link_external}" 
+                                       target="_blank" 
+                                       class="btn-external">
+                                        <i class="ri-external-link-line"></i> Link Drive
+                                    </a>` : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
-        } else {
-            unduhanSection.style.display = 'none';
+                `;
+            }).join('');
         }
+    }
+
+    function showEmptyState() {
+        document.getElementById('pedoman-container').innerHTML = 
+            `<div style="grid-column: 1/-1; text-align:center; padding:40px;"><p>Data tidak ditemukan.</p></div>`;
+    }
+
+    function showErrorState() {
+        document.getElementById('pedoman-container').innerHTML = 
+            `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#ef4444;"><p>Gagal memuat data dari server.</p></div>`;
     }
 
     loadContent();

@@ -103,7 +103,7 @@
                 <li><a href="<?= PUBLIC_URL ?>/home">Beranda</a></li>
                 
                 <li class="dropdown">
-                    <a href="#" class="dropbtn">Praktikum ▾</a>
+                    <a href="javascript:void(0);" class="dropbtn">Praktikum ▾</a>
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/tatatertib">Tata Tertib</a>
                         <a href="<?= PUBLIC_URL ?>/jadwal">Jadwal</a>
@@ -112,7 +112,7 @@
                 </li>
                 
                 <li class="dropdown">
-                    <a href="#" class="dropbtn">Sumber Daya ▾</a>
+                    <a href="javascript:void(0);" class="dropbtn">Sumber Daya ▾</a>
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/kepala">Kepala Lab</a>
                         <a href="<?= PUBLIC_URL ?>/asisten">Asisten</a>
@@ -120,7 +120,7 @@
                 </li>
                 
                 <li class="dropdown">
-                    <a href="#" class="dropbtn">Fasilitas ▾</a>
+                    <a href="javascript:void(0);" class="dropbtn">Fasilitas ▾</a>
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/laboratorium">Ruang Lab</a>
                         <a href="<?= PUBLIC_URL ?>/riset">Ruang Riset</a>

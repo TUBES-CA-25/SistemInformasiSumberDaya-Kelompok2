@@ -82,7 +82,6 @@
                                 <option value="">-- Pilih Jenis --</option>
                                 <option value="Laboratorium">Ruangan Laboratorium</option>
                                 <option value="Riset">Ruangan Riset</option>
-                                <option value="Multimedia">Multimedia</option>
                             </select>
                         </div>
                         <div>
@@ -138,8 +137,11 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-600 mb-1">Jumlah Unit PC</label>
-                                <input type="number" id="inputJumlahPc" name="jumlahPc" placeholder="0" min="0"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-sm">
+                                <input type="number" id="inputJumlahPc" name="jumlahPc" placeholder="0" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Kapasitas Mahasiswa </label>
+                                <input type="number" id="inputKapasitas" name="kapasitas" placeholder="0" required min="1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
                             </div>
                         </div>
                     </div>
@@ -437,6 +439,7 @@ function openFormModal(id = null, event = null) {
             document.getElementById('inputNama').value = data.nama;
             document.getElementById('inputJenis').value = data.jenis || 'Laboratorium';
             document.getElementById('inputJumlahPc').value = data.jumlahPc;
+            document.getElementById('inputKapasitas').value = data.kapasitas;
             document.getElementById('inputDeskripsi').value = data.deskripsi;
             
             // Specs

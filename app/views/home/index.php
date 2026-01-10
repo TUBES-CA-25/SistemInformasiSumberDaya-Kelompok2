@@ -51,6 +51,9 @@ function getHomeFotoUrl($row) {
 </section>
 
 <section class="visi-misi-section">
+    <div class="blob-decoration blob-blue"></div>
+    <div class="blob-decoration blob-cyan"></div>
+
     <div class="container">
         <div class="section-header reveal fade-up">
             <span class="badge-pill">Tentang Kami</span>
@@ -87,14 +90,20 @@ function getHomeFotoUrl($row) {
 
 <section class="features-slider-section">
     
+    <div class="custom-shape-divider-top">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        </svg>
+    </div>
+
     <div class="container">
         <div class="section-header reveal fade-up">
             <span class="badge-pill">Keunggulan Kami</span>
             <h2>Ekosistem & Fasilitas</h2>
         </div>
     </div>
+    
     <div class="slider-container reveal fade-up">
-        
         <button class="slider-btn prev-btn" onclick="moveSlide(-1)">
             <i class="ri-arrow-left-s-line"></i>
         </button>
@@ -106,7 +115,7 @@ function getHomeFotoUrl($row) {
             <div class="slide">
                 <div class="slide-content-wrapper"> 
                     <div class="slide-image">
-                        <img src="https://placehold.co/800x600/e2e8f0/1e293b?text=Kompetensi+Digital" alt="Image">
+                        <img src="images/Pusat-Kompetensi.jpg" alt="Pusat Kompetensi Digital">
                     </div>
                     <div class="slide-text">
                         <h2>Pusat Kompetensi</h2>
@@ -114,10 +123,11 @@ function getHomeFotoUrl($row) {
                     </div>
                 </div>
             </div>
+            
             <div class="slide">
                 <div class="slide-content-wrapper">
                     <div class="slide-image">
-                        <img src="https://placehold.co/800x600/e2e8f0/1e293b?text=Infrastruktur+IT" alt="Image">
+                        <img src="images/Infrastruktur-Modern.jpg" alt="Infrastruktur Laboratorium Modern">
                     </div>
                     <div class="slide-text">
                         <h2>Infrastruktur Modern</h2>
@@ -125,10 +135,11 @@ function getHomeFotoUrl($row) {
                     </div>
                 </div>
             </div>
-             <div class="slide">
+            
+            <div class="slide">
                 <div class="slide-content-wrapper">
                     <div class="slide-image">
-                        <img src="https://placehold.co/800x600/e2e8f0/1e293b?text=Riset+Inovasi" alt="Image">
+                        <img src="images/RisetDanInovasi.png" alt="Riset dan Inovasi Laboratorium">
                     </div>
                     <div class="slide-text">
                         <h2>Riset & Inovasi</h2>
@@ -144,6 +155,12 @@ function getHomeFotoUrl($row) {
             <button class="dot" onclick="goToSlide(2)"></button>
         </div>
     </div>
+
+    <div class="custom-shape-divider-bottom">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        </svg>
+    </div>
 </section>
 
 <section class="video-section">
@@ -152,13 +169,27 @@ function getHomeFotoUrl($row) {
             <span class="badge-pill">Profil Video</span>
             <h2>Mengapa Memilih Kami?</h2>
         </div>
-        <div class="video-placeholder">
-            <img src="https://placehold.co/1000x500/f1f5f9/94a3b8?text=PLAY+PROFILE+VIDEO" alt="Video Player">
+        
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/jxczLAHdX3M?rel=0" 
+                title="Profil Laboratorium FIKOM UMI" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
         </div>
+
     </div>
 </section>
 
 <section class="management-section">
+    
+    <div class="custom-shape-divider-top">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        </svg>
+    </div>
+
     <div class="container">
         
         <div class="section-header reveal fade-up">
@@ -167,7 +198,7 @@ function getHomeFotoUrl($row) {
         </div>
 
         <?php if (!empty($kepala_lab_list)) : ?>
-            <div class="pimpinan-wrapper reveal fade-up" style="display:flex; justify-content:center; gap:30px; margin-bottom:50px;">
+            <div class="pimpinan-wrapper reveal fade-up">
                 <?php foreach ($kepala_lab_list as $row) : ?>
                     <div class="staff-card-home">
                         <div class="staff-photo-box">
@@ -183,7 +214,7 @@ function getHomeFotoUrl($row) {
         <?php endif; ?>
 
         <?php if (!empty($laboran_list)) : ?>
-            <div class="laboran-grid reveal fade-up" style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px;">
+            <div class="laboran-grid reveal fade-up">
                 <?php foreach ($laboran_list as $row) : ?>
                     <div class="staff-card-home">
                         <div class="staff-photo-box">
@@ -199,9 +230,18 @@ function getHomeFotoUrl($row) {
         <?php endif; ?>
 
     </div>
+
+    <div class="custom-shape-divider-bottom">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        </svg>
+    </div>
 </section>
 
 <section class="info-section">
+    <div class="blob-decoration blob-cyan" style="top: -50px; right: -50px; bottom: auto;"></div>
+    <div class="blob-decoration blob-purple"></div>
+
     <div class="container">
         <div class="section-header reveal fade-up">
             <span class="badge-pill">Layanan</span>
@@ -237,17 +277,19 @@ function getHomeFotoUrl($row) {
     <div class="slider">
         <div class="slide-track">
             
-            <div class="partner-slide"><div class="partner-box">Partner 1</div></div>
-            <div class="partner-slide"><div class="partner-box">Partner 2</div></div>
-            <div class="partner-slide"><div class="partner-box">Partner 3</div></div>
-            <div class="partner-slide"><div class="partner-box">Partner 4</div></div>
-            <div class="partner-slide"><div class="partner-box">Partner 5</div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
 
-            <div class="partner-slide"><div class="partner-box">Partner 1</div></div>
-            <div class="partner-slide"><div class="partner-box">Partner 2</div></div>
-            <div class="partner-slide"><div class="partner-box">Partner 3</div></div>
-            <div class="partner-slide"><div class="partner-box">Partner 4</div></div>
-            <div class="partner-slide"><div class="partner-box">Partner 5</div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
 
         </div>
     </div>
