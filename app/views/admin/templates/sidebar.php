@@ -133,6 +133,16 @@
                     </a>
                 </li>
 
+                <?php $active = strpos($uri, 'jadwalupk') !== false; ?>
+                <li>
+                    <a href="javascript:void(0)" onclick="navigate('admin/jadwalupk')" 
+                        class="<?= $active ? 'text-amber-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                        data-active="<?= $active ? 'true' : 'false' ?>">
+                        <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></span><?php endif; ?>
+                        Jadwal UPK
+                    </a>
+                </li>
+
                 <?php $active = strpos($uri, 'peraturan') !== false || strpos($uri, 'sanksi') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/peraturan')" 
