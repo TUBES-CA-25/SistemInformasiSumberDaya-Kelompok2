@@ -67,7 +67,7 @@ function getHomeFotoUrl($row) {
                 </div>
                 <div class="vm-content">
                     <h3>Visi Laboratorium</h3>
-                    <p>"Menjadi pusat unggulan pengembangan teknologi informasi yang adaptif terhadap industri 4.0 dan berlandaskan nilai-nilai integritas."</p>
+                    <p>"Menjadikan laboratorium sebagai pusat kegiatan belajar dan interaksi yang dapat menghasilkan informasi dan karya baru secara ilmiah dibidang teknologi informasi."</p>
                 </div>
             </div>
 
@@ -78,9 +78,8 @@ function getHomeFotoUrl($row) {
                 <div class="vm-content">
                     <h3>Misi Utama</h3>
                     <ul class="professional-list">
-                        <li><i class="ri-checkbox-circle-line"></i> Penyelenggaraan praktikum berbasis kompetensi industri.</li>
-                        <li><i class="ri-checkbox-circle-line"></i> Penyediaan infrastruktur riset yang mutakhir.</li>
-                        <li><i class="ri-checkbox-circle-line"></i> Pengembangan soft-skill asisten laboratorium.</li>
+                        <li><i class="ri-checkbox-circle-line"></i> Menjadi pusat kegiatan belajar dan pelatihan untuk merancang dan mengembangkan ilmu pengetahuan khususnya perangkat lunak dan perangkat keras komputer.</li>
+                        <li><i class="ri-checkbox-circle-line"></i> Ikut aktif dalam menyelesaikan permasalahan software dan hardware di masyarakat dengan melibatkan peran serta mahasiswa, asisten, dan dosen laboratorium.</li>
                     </ul>
                 </div>
             </div>
