@@ -76,6 +76,18 @@ class JadwalPraktikumModel extends Model {
     }
 
     /**
+     * Delete multiple jadwal
+     */
+    public function deleteMultiple($ids) {
+        if (empty($ids)) return false;
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $query = "DELETE FROM jadwalpraktikum WHERE idJadwal IN ($placeholders)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param(str_repeat('i', count($ids)), ...$ids);
+        return $stmt->execute();
+    }
+
+    /**
      * Get jadwal by ID
      */
     public function getById($id, $idColumn = 'idJadwal') {

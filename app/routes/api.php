@@ -74,6 +74,7 @@ $router->delete('/matakuliah/{id}', 'MatakuliahController', 'delete');
 $router->get('/jadwal', 'JadwalPraktikumController', 'index');
 $router->get('/jadwal/{id}', 'JadwalPraktikumController', 'show');
 $router->post('/jadwal', 'JadwalPraktikumController', 'store');
+$router->post('/jadwal/delete-multiple', 'JadwalPraktikumController', 'deleteMultiple');
 $router->put('/jadwal/{id}', 'JadwalPraktikumController', 'update');
 $router->delete('/jadwal/{id}', 'JadwalPraktikumController', 'delete');
 

@@ -87,6 +87,9 @@ class Router {
         $this->get('/admin/asisten/koordinator', 'AsistenController', 'pilihKoordinator');
         $this->post('/admin/asisten/koordinator', 'AsistenController', 'setKoordinator');
 
+        // Admin User (Super Admin Only)
+        $this->get('/admin/user', 'UserController', 'adminIndex');
+
         // Admin Jadwal
         $this->get('/admin/jadwal', 'JadwalPraktikumController', 'adminIndex');
         $this->get('/admin/jadwal/create', 'JadwalPraktikumController', 'create');
@@ -94,6 +97,7 @@ class Router {
         $this->get('/admin/jadwal/{id}/edit', 'JadwalPraktikumController', 'edit');
         $this->put('/admin/jadwal/{id}', 'JadwalPraktikumController', 'update');
         $this->delete('/admin/jadwal/{id}', 'JadwalPraktikumController', 'delete');
+        $this->post('/admin/jadwal/delete-multiple', 'JadwalPraktikumController', 'deleteMultiple');
         $this->get('/admin/jadwal/upload', 'JadwalPraktikumController', 'uploadForm');
         $this->post('/admin/jadwal/upload', 'JadwalPraktikumController', 'uploadProcess');
         $this->get('/admin/jadwal/csv-upload', 'JadwalPraktikumController', 'csvUploadForm');
@@ -107,6 +111,7 @@ class Router {
         $this->get('/admin/laboratorium/{id}/edit', 'LaboratoriumController', 'edit');
         $this->put('/admin/laboratorium/{id}', 'LaboratoriumController', 'update');
         $this->delete('/admin/laboratorium/{id}', 'LaboratoriumController', 'delete');
+        $this->delete('/admin/laboratorium/image/{id}', 'LaboratoriumController', 'deleteImage');
 
         // Admin Informasi Lab (detail/konten)
         $this->get('/admin/informasi-lab', 'InformasiLabController', 'adminIndex');

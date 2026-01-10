@@ -4,15 +4,32 @@
         Format Penulisan Tugas
     </h1>
     
-    <button onclick="openFormModal()" 
-       class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5">
-        <i class="fas fa-plus"></i> Tambah Format
-    </button>
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <div class="relative w-full sm:w-64">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+            </span>
+            <input type="text" id="searchInput" placeholder="Cari format / pedoman..." 
+                   class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow text-sm">
+        </div>
+
+        <button onclick="openFormModal()" 
+           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
+            <i class="fas fa-plus"></i> Tambah Format
+        </button>
+    </div>
 </div>
 
 <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-        <span class="text-sm text-gray-500 font-medium">Daftar Pedoman & Unduhan</span>
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-500 font-medium">Daftar Pedoman & Unduhan</span>
+            <select id="filterKategori" onchange="filterData()" class="text-xs border border-gray-300 rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                <option value="all">Semua Kategori</option>
+                <option value="pedoman">Pedoman Penulisan</option>
+                <option value="unduhan">Pusat Unduhan</option>
+            </select>
+        </div>
         <span id="totalData" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Total: 0</span>
     </div>
 
@@ -181,7 +198,27 @@ let allData = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     loadData();
+
+    // Live Search
+    document.getElementById('searchInput').addEventListener('keyup', filterData);
 });
+
+function filterData() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    const kategori = document.getElementById('filterKategori').value;
+    
+    const filtered = allData.filter(item => {
+        const matchesSearch = (item.judul && item.judul.toLowerCase().includes(keyword)) ||
+                            (item.kategori && item.kategori.toLowerCase().includes(keyword)) ||
+                            (item.deskripsi && item.deskripsi.toLowerCase().includes(keyword));
+        
+        const matchesKategori = kategori === 'all' || item.kategori === kategori;
+        
+        return matchesSearch && matchesKategori;
+    });
+    
+    renderTable(filtered);
+}
 
 function loadData() {
     const tbody = document.getElementById('tableBody');
@@ -192,7 +229,7 @@ function loadData() {
     .then(response => {
         if((response.status === 'success' || response.code === 200) && response.data) {
             allData = response.data;
-            renderTable(allData);
+            filterData();
         } else {
             renderTable([]);
         }

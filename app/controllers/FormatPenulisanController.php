@@ -1,6 +1,7 @@
 <?php
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/FormatPenulisanModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class FormatPenulisanController extends Controller {
     private $model;
@@ -84,7 +85,7 @@ class FormatPenulisanController extends Controller {
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $fileExtension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-                $fileName = time() . '_' . bin2hex(random_bytes(4)) . '.' . $fileExtension;
+                $fileName = Helper::generateFilename('format', $input['judul'], $fileExtension);
                 
                 if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadDir . $fileName)) {
                     $input['file'] = $fileName;
@@ -137,7 +138,7 @@ class FormatPenulisanController extends Controller {
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $fileExtension = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-                $fileName = time() . '_' . bin2hex(random_bytes(4)) . '.' . $fileExtension;
+                $fileName = Helper::generateFilename('format', $input['judul'] ?? $existing['judul'], $fileExtension);
 
                 if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadDir . $fileName)) {
                     // Hapus file lama jika ada

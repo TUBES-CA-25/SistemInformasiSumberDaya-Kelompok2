@@ -35,19 +35,19 @@ class AuthController extends Controller {
         // Validasi input kosong
         if (empty($username) && empty($password)) {
             $this->setFlash('error', '⚠️ Username dan Password tidak boleh kosong!');
-            $this->redirect(PUBLIC_URL . '/login');
+            $this->redirect(PUBLIC_URL . '/pintuSISDA');
             return;
         }
         
         if (empty($username)) {
             $this->setFlash('error', '⚠️ Username tidak boleh kosong!');
-            $this->redirect(PUBLIC_URL . '/login');
+            $this->redirect(PUBLIC_URL . '/pintuSISDA');
             return;
         }
         
         if (empty($password)) {
             $this->setFlash('error', '⚠️ Password tidak boleh kosong!');
-            $this->redirect(PUBLIC_URL . '/login');
+            $this->redirect(PUBLIC_URL . '/pintuSISDA');
             return;
         }
 
@@ -57,14 +57,14 @@ class AuthController extends Controller {
         if (!$user) {
             // Username tidak ditemukan
             $this->setFlash('error', '❌ Username "<strong>' . htmlspecialchars($username) . '</strong>" tidak terdaftar dalam sistem!<br><small style="color: #666;">💡 Pastikan username yang Anda masukkan benar.</small>');
-            $this->redirect(PUBLIC_URL . '/login');
+            $this->redirect(PUBLIC_URL . '/pintuSISDA');
             return;
         }
         
         if (!password_verify($password, $user['password'])) {
             // Password salah (username benar tapi password salah)
             $this->setFlash('error', '❌ Password salah untuk user "<strong>' . htmlspecialchars($username) . '</strong>"!<br><small style="color: #666;">💡 Username benar, tapi password yang Anda masukkan salah.</small>');
-            $this->redirect(PUBLIC_URL . '/login');
+            $this->redirect(PUBLIC_URL . '/pintuSISDA');
             return;
         }
 
@@ -93,7 +93,7 @@ class AuthController extends Controller {
         session_start();
         $_SESSION['flash']['success'] = '👋 <strong>' . $username . '</strong> telah logout. Terima kasih!<br><small style="color: #666;">💡 Login kembali jika diperlukan.</small>';
         
-        header('Location: ' . PUBLIC_URL . '/login');
+        header('Location: ' . PUBLIC_URL . '/pintuSISDA');
         exit;
     }
 }
