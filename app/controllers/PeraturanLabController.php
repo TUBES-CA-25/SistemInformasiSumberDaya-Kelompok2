@@ -50,45 +50,61 @@ class PeraturanLabController extends Controller {
     }
 
     public function store() {
-        // Cek apakah request multipart/form-data (upload file)
-        if (isset($_FILES['gambar'])) {
+        try {
+            // Log request data
+            error_log('PERATURAN STORE - REQUEST METHOD: ' . $_SERVER['REQUEST_METHOD']);
+            error_log('PERATURAN STORE - POST: ' . json_encode($_POST));
+            error_log('PERATURAN STORE - FILES: ' . json_encode(array_keys($_FILES ?? [])));
+            
+            // Filter only database fields, ignore 'tipe' and 'id' (used for routing only)
             $input = [
                 'judul' => $_POST['judul'] ?? '',
                 'kategori' => $_POST['kategori'] ?? 'Larangan Umum',
                 'deskripsi' => $_POST['deskripsi'] ?? '',
-                'urutan' => $_POST['urutan'] ?? 0
+                'urutan' => $_POST['urutan'] ?? 0,
+                'display_format' => $_POST['display_format'] ?? 'list'
             ];
-        } else {
-            // Coba ambil dari $_POST dulu, jika kosong ambil dari JSON
-            $input = $_POST;
-            if (empty($input)) {
-                $input = $this->getJson() ?? [];
-            }
-        }
-        
-        // Validasi field wajib
-        if (empty($input['judul']) || empty($input['deskripsi'])) {
-            $this->error('Field judul dan deskripsi wajib diisi', null, 400);
-        }
-        
-        // Optional: handle file upload for gambar
-        // Optional: handle file upload for gambar
-        if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
-            $subFolder = 'peraturan/';
-            $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
             
-            $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-            $filename = Helper::generateFilename('peraturan', $input['judul'], $ext);
-            $target = $uploadDir . $filename;
+            error_log('PERATURAN STORE - INPUT: ' . json_encode($input));
             
-            if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                $input['gambar'] = $subFolder . $filename;
+            // Validasi field wajib
+            if (empty($input['judul']) || empty($input['deskripsi'])) {
+                $this->error('Field judul dan deskripsi wajib diisi', null, 400);
             }
+            
+            // Set default display_format jika kosong
+            if (empty($input['display_format'])) {
+                $input['display_format'] = 'list';
+            }
+            
+            // Optional: handle file upload for gambar
+            if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+                $subFolder = 'peraturan/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+                
+                $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
+                $filename = Helper::generateFilename('peraturan', $input['judul'], $ext);
+                $target = $uploadDir . $filename;
+                
+                if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
+                    $input['gambar'] = $subFolder . $filename;
+                }
+            }
+            
+            error_log('PERATURAN STORE - FINAL INPUT: ' . json_encode($input));
+            $result = $this->model->insert($input);
+            error_log('PERATURAN STORE - INSERT RESULT: ' . ($result ? 'SUCCESS' : 'FAILED'));
+            
+            if ($result) {
+                $this->success([], 'Peraturan lab created', 201);
+            }
+            
+            $this->error('Failed to create peraturan lab', null, 500);
+        } catch (Exception $e) {
+            error_log('PERATURAN STORE - EXCEPTION: ' . $e->getMessage());
+            $this->error('Error: ' . $e->getMessage(), null, 500);
         }
-        $result = $this->model->insert($input);
-        if ($result) $this->success([], 'Peraturan lab created', 201);
-        $this->error('Failed to create peraturan lab', null, 500);
     }
 
     public function update($params) {
@@ -96,33 +112,35 @@ class PeraturanLabController extends Controller {
         if (!$id) $this->error('ID tidak ditemukan', null, 400);
         
         $oldData = $this->model->getById($id);
+        if (!$oldData) $this->error('Data tidak ditemukan', null, 404);
         
-        // Cek apakah request multipart/form-data (upload file)
-        if (isset($_FILES['gambar'])) {
-            $input = [
-                'judul' => $_POST['judul'] ?? ($oldData['judul'] ?? ''),
-                'kategori' => $_POST['kategori'] ?? ($oldData['kategori'] ?? 'Larangan Umum'),
-                'deskripsi' => $_POST['deskripsi'] ?? ($oldData['deskripsi'] ?? ''),
-                'urutan' => $_POST['urutan'] ?? ($oldData['urutan'] ?? 0)
-            ];
-        } else {
-            // Coba ambil dari $_POST dulu, jika kosong ambil dari JSON
-            $input = $_POST;
-            if (empty($input)) {
-                $input = $this->getJson() ?? [];
-            }
-        }
+        // Ambil input data dari $_POST (FormData akan tersimpan di sini untuk POST)
+        $input = $_POST ?? [];
+        
+        // Debug logging
+        error_log('PERATURAN UPDATE - ID: ' . $id . ', POST keys: ' . json_encode(array_keys($input)) . ', FILES: ' . json_encode(array_keys($_FILES ?? [])));
+        error_log('PERATURAN UPDATE - POST values: ' . json_encode($input));
         
         // Validasi field wajib - gunakan data baru jika ada, jika tidak gunakan data lama
-        $judul = !empty($input['judul']) ? $input['judul'] : $oldData['judul'];
-        $deskripsi = !empty($input['deskripsi']) ? $input['deskripsi'] : $oldData['deskripsi'];
+        $judul = !empty($input['judul']) ? trim($input['judul']) : $oldData['judul'];
+        $kategori = !empty($input['kategori']) ? $input['kategori'] : ($oldData['kategori'] ?? 'Larangan Umum');
+        $deskripsi = !empty($input['deskripsi']) ? trim($input['deskripsi']) : $oldData['deskripsi'];
+        $urutan = !empty($input['urutan']) ? intval($input['urutan']) : ($oldData['urutan'] ?? 0);
+        $displayFormat = !empty($input['display_format']) ? $input['display_format'] : ($oldData['display_format'] ?? 'list');
         
         if (empty($judul) || empty($deskripsi)) {
             $this->error('Field judul dan deskripsi wajib diisi', null, 400);
         }
         
-        $input['judul'] = $judul;
-        $input['deskripsi'] = $deskripsi;
+        $input = [
+            'judul' => $judul,
+            'kategori' => $kategori,
+            'deskripsi' => $deskripsi,
+            'urutan' => $urutan,
+            'display_format' => $displayFormat
+        ];
+        
+        error_log('PERATURAN UPDATE - Final input: ' . json_encode($input));
         
         // Optional: handle file upload for gambar
         if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
