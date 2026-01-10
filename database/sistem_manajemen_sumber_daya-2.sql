@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 10, 2026 at 03:46 AM
+-- Generation Time: Jan 10, 2026 at 04:35 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -47,7 +47,7 @@ CREATE TABLE `alumni` (
 --
 
 INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `mata_kuliah`, `foto`, `kesan_pesan`, `keahlian`, `email`, `created_at`, `updated_at`, `urutanTampilan`) VALUES
-(18, 'Arisa Tien Hardianti, S.Kom', '2020', 'Asisten', 'Basis Data I', NULL, '', '', '', '2026-01-08 15:23:35', '2026-01-08 15:23:35', 0);
+(18, 'Arisa Tien Hardianti, S.Kom', '2020', 'Asisten', 'Basis Data I', NULL, '', 'Basis Data, SQL, Pengajaran', '', '2026-01-08 15:23:35', '2026-01-10 11:30:22', 0);
 
 -- --------------------------------------------------------
 
@@ -86,7 +86,7 @@ INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `l
 (19, 'Muhammad Alif Maulana. R', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Jaringan Komputer, Basisdata, Pengenalan Pemrograman', '[]', 'muhalifmaulanaar.iclabs@umi.ac.id', 'asisten_1767846799_3970.png', 'Asisten', 0, 0),
 (20, 'Tazkira Amalia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengantar Teknologi Informasi, Struktur Data, PBO', '[]', 'tazkirahamalia.iclabs@umi.ac.id', 'asisten_1767846911_7163.jpg', 'Asisten', 0, 0),
 (21, 'Wahyu Kadri Rahmat Suat', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Basisdata, Struktur Data', '[]', 'wahyukadrirahmatsuat.iclabs@umi.ac.id', 'asisten_1767846974_2116.png', 'Asisten', 0, 0),
-(22, 'Aan Maulana Sampe', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek, Jaringan Komputer', '[]', '13020230081@student.umi.ac.id', 'asisten_1767847118_5230.png', 'CA', 0, 0),
+(22, 'Aan Maulana Sampe', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek, Jaringan Komputer', '[\"Mobile\"]', '13020230081@student.umi.ac.id', 'asisten_1767847118_5230.png', 'CA', 0, 0),
 (23, 'Andi Ahsan Ashuri', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[]', '13020230224@student.umi.ac.id', 'asisten_1767847163_2915.png', 'CA', 0, 0),
 (24, 'Andi Ikhlas Mallomo', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Basisdata', '[]', '13020230251@student.umi.ac.id', 'asisten_1767847230_1778.jpg', 'CA', 0, 0),
 (25, 'Andi Rifqi Aunur Rahman', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Basisdata', '[]', '13020230219@student.umi.ac.id', 'asisten_1767847292_2856.png', 'CA', 0, 0),
@@ -100,7 +100,7 @@ INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `l
 (33, 'Muhammad Rafli', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230290@student.umi.ac.id', 'asisten_1767848005_7910.jpg', 'CA', 0, 0),
 (34, 'Muhammad Rifky Saputra Scania', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230193@student.umi.ac.id', 'asisten_1767848075_4678.jpg', 'CA', 0, 0),
 (35, 'M. Rizwan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman, Basisdata', '[]', '13020230100@student.umi.ac.id', 'asisten_1767848152_4734.png', 'CA', 0, 0),
-(36, 'Nahwa Kaka Saputra Anggareksa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[]', '13020230187@student.umi.ac.id', 'asisten_1767848210_2417.jpg', 'CA', 0, 0),
+(36, 'Nahwa Kaka Saputra Anggareksa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\", \"UI/UX\", \"React\", \"Web Development\"]', '13020230187@student.umi.ac.id', 'asisten_1767848210_2417.jpg', 'CA', 0, 0),
 (37, 'Nurfajri Mukmin Saputra', 'Sistem Informasi', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Pengantar Teknologi Informasi', '[]', '13120230033@student.umi.ac.id', 'asisten_1767848284_9117.jpg', 'CA', 0, 0),
 (38, 'Raihan Nur Rizqillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230306@student.umi.ac.id', 'asisten_1767848364_3306.png', 'CA', 0, 0),
 (39, 'Rizqi Ananda Jalil', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Pengenalan Pemrograman', '[]', '13020230244@student.umi.ac.id', 'asisten_1767848419_6838.jpg', 'CA', 0, 0),
