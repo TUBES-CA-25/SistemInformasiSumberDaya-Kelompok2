@@ -75,7 +75,8 @@ $isAdminArea = (strpos($uri_clean, '/admin') !== false) || (strpos($uri_clean, '
 if ($isAdminArea) {
 
     if (!isset($_SESSION['status']) || $_SESSION['status'] != "login") {
-        header("Location: " . PUBLIC_URL . "/login");
+        // Alihkan ke home (beranda) alih-alih login agar lokasi pintu masuk tetap rahasia
+        header("Location: " . PUBLIC_URL . "/home");
         exit;
     }
 
@@ -310,7 +311,7 @@ if (array_key_exists($page, $direct_views)) {
 
 $mvc_routes = [
     'contact'          => ['ContactController', 'index', []],
-    'login'            => ['AuthController', 'login', []],
+    'pintuSISDA'       => ['AuthController', 'login', []],
     'auth'             => ['AuthController', 'authenticate', []],
     'logout'           => ['AuthController', 'logout', []],
 

@@ -27,14 +27,28 @@
 
 <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-        <span class="text-sm text-gray-500 font-medium">Daftar Jadwal Praktikum</span>
-        <span id="totalData" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Total: 0</span>
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-500 font-medium">Daftar Jadwal Praktikum</span>
+            <div id="bulkActions" class="hidden flex items-center gap-2 animate-fade-in">
+                <span class="text-xs text-gray-400">|</span>
+                <span id="selectedCount" class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded">0 terpilih</span>
+                <button onclick="bulkDelete()" class="text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg transition-colors flex items-center gap-1">
+                    <i class="fas fa-trash-alt"></i> Hapus Terpilih
+                </button>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <span id="totalData" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Total: 0</span>
+        </div>
     </div>
 
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
+                    <th class="px-6 py-4 font-semibold text-center w-8">
+                        <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                    </th>
                     <th class="px-6 py-4 font-semibold text-center w-12">No</th>
                     <th class="px-6 py-4 font-semibold">Mata Kuliah</th>
                     <th class="px-6 py-4 font-semibold">Laboratorium</th>
@@ -46,7 +60,7 @@
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
                 <tr>
-                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                    <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                         <div class="flex flex-col items-center gap-2">
                             <i class="fas fa-circle-notch fa-spin text-blue-500 text-2xl"></i>
                             <span class="font-medium">Memuat data...</span>
@@ -285,7 +299,7 @@ function loadJadwal() {
         }
     }).catch(err => {
         console.error(err);
-        document.getElementById('tableBody').innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-red-500">Gagal memuat data: ${err.message}</td></tr>`;
+        document.getElementById('tableBody').innerHTML = `<tr><td colspan="8" class="px-6 py-12 text-center text-red-500">Gagal memuat data: ${err.message}</td></tr>`;
     });
 }
 
@@ -294,10 +308,15 @@ function renderTable(data) {
     const totalEl = document.getElementById('totalData');
     tbody.innerHTML = '';
     
+    // Reset Select All
+    const selectAll = document.getElementById('selectAll');
+    if(selectAll) selectAll.checked = false;
+    updateBulkActionsVisibility();
+
     if(totalEl) totalEl.innerText = `Total: ${data.length}`;
 
-    if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
+    if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
         return;
     }
 
@@ -310,16 +329,22 @@ function renderTable(data) {
         const waktuSelesai = item.waktuSelesai ? item.waktuSelesai.substring(0, 5) : '--:--';
 
         const row = `
-            <tr onclick="openFormModal(${item.idJadwal}, event)" class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
+            <tr class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100">
+                <td class="px-6 py-4 text-center">
+                    <input type="checkbox" name="selectedIds[]" value="${item.idJadwal}" 
+                           onchange="updateBulkActionsVisibility()"
+                           onclick="event.stopPropagation()"
+                           class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                </td>
                 <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <div class="flex flex-col">
                         <span class="font-bold text-gray-800 text-sm">${item.namaMatakuliah || '-'}</span>
                         <span class="text-xs text-gray-400 font-mono mt-0.5">${item.kodeMatakuliah || '-'}</span>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-gray-600 text-sm font-medium">${item.namaLab || '-'}</td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 text-gray-600 text-sm font-medium cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">${item.namaLab || '-'}</td>
+                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <div class="flex flex-col">
                         <span class="font-bold text-gray-700 text-sm">${item.hari || '-'}</span>
                         <span class="text-xs text-gray-500 flex items-center gap-1">
@@ -327,10 +352,10 @@ function renderTable(data) {
                         </span>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-center">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-bold border border-gray-200">${item.kelas || '-'}</span>
                 </td>
-                <td class="px-6 py-4 text-center">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <span class="${statusClass} px-2.5 py-1 rounded-full text-xs font-semibold border">${item.status || 'Nonaktif'}</span>
                 </td>
                 <td class="px-6 py-4">
@@ -346,6 +371,62 @@ function renderTable(data) {
             </tr>`;
         tbody.innerHTML += row;
     });
+}
+
+// --- BULK ACTION HELPERS ---
+function updateBulkActionsVisibility() {
+    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+    const bulkActions = document.getElementById('bulkActions');
+    const countSpan = document.getElementById('selectedCount');
+    
+    if (checkboxes.length > 0) {
+        bulkActions.classList.remove('hidden');
+        countSpan.innerText = `${checkboxes.length} terpilih`;
+    } else {
+        bulkActions.classList.add('hidden');
+    }
+}
+
+// Event Listener Select All
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('selectAll');
+    if(selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+            updateBulkActionsVisibility();
+        });
+    }
+});
+
+function bulkDelete() {
+    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+    const ids = Array.from(checkboxes).map(cb => cb.value);
+    
+    if (ids.length === 0) return;
+
+    confirmDelete(() => {
+        showLoading(`Menghapus ${ids.length} data...`);
+        fetch(API_URL + '/jadwal/delete-multiple', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids: ids })
+        })
+        .then(res => res.json())
+        .then(data => {
+            hideLoading();
+            if (data.status === 'success') {
+                loadJadwal();
+                showSuccess(`${ids.length} data berhasil dihapus!`);
+            } else {
+                throw new Error(data.message || 'Gagal menghapus data');
+            }
+        })
+        .catch(err => {
+            hideLoading();
+            showError(err.message || 'Gagal menghapus data terpilih');
+        });
+    }, `Apakah Anda yakin ingin menghapus ${ids.length} data yang dipilih?`);
 }
 
 // --- 2. MODAL FORM & OPTIONS ---

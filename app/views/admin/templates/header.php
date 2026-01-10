@@ -75,18 +75,46 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             
             <header class="h-16 bg-white shadow-sm flex items-center justify-between px-8 z-10">
-                <div>
-                    <h1 class="text-xl font-bold text-gray-700">Selamat Datang, Admin!</h1>
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-2 text-sm font-medium text-gray-400">
+                        <i class="fas fa-home text-xs"></i>
+                        <span>Admin</span>
+                        <i class="fas fa-chevron-right text-[10px]"></i>
+                        <span class="text-blue-600 font-bold capitalize" id="breadcrumb-current"><?= $module ?? 'Dashboard' ?></span>
+                    </div>
                 </div>
 
-                <div class="flex items-center space-x-4">
-                    <div class="text-right">
-                        <div class="text-sm font-semibold text-gray-800"><?= $_SESSION['username'] ?? 'Admin' ?></div>
-                        <div class="text-xs text-gray-500">Administrator</div>
+                <div class="flex items-center space-x-6">
+                    <div class="hidden lg:flex items-center bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 text-gray-500">
+                        <i class="far fa-clock text-xs mr-2 text-blue-500"></i>
+                        <span id="headerClock" class="text-xs font-mono font-bold uppercase tracking-widest text-gray-600">00:00:00</span>
                     </div>
-                    <img src="https://ui-avatars.com/api/?name=<?= $_SESSION['username'] ?? 'Admin' ?>&background=0D8ABC&color=fff" alt="Profile" class="h-10 w-10 rounded-full border-2 border-gray-100 shadow-sm">
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right hidden sm:block">
+                            <div class="text-sm font-bold text-gray-800 leading-none mb-0.5"><?= $_SESSION['username'] ?? 'Administrator' ?></div>
+                            <div class="text-[10px] text-emerald-500 font-black uppercase tracking-tighter flex items-center justify-end gap-1">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                                Online
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <img src="https://ui-avatars.com/api/?name=<?= $_SESSION['username'] ?? 'Admin' ?>&background=0D8ABC&color=fff" alt="Profile" class="h-10 w-10 rounded-xl border-2 border-white shadow-md cursor-pointer group-hover:ring-2 group-hover:ring-blue-100 transition-all">
+                        </div>
+                    </div>
                 </div>
             </header>
+
+            <script>
+            function updateHeaderClock() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-GB', { hour12: false });
+                const clockEl = document.getElementById('headerClock');
+                if(clockEl) clockEl.innerText = timeStr;
+            }
+            setInterval(updateHeaderClock, 1000);
+            updateHeaderClock();
+            </script>
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6 md:p-8">
                 <?php

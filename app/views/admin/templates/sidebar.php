@@ -93,6 +93,21 @@
             </ul>
         </div>
 
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'super_admin'): ?>
+        <div id="groupSystem" class="mt-4">
+            <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Sistem</p>
+            <ul class="space-y-1">
+                <li>
+                    <a href="javascript:void(0)" onclick="navigate('admin/user')" 
+                       class="<?= $uri == 'admin/user' ? 'bg-purple-600/10 text-purple-400 border-purple-500' : 'text-slate-400 border-transparent hover:text-white hover:bg-slate-800/50' ?> group flex items-center px-4 py-3 text-sm font-medium rounded-xl border-l-[3px] transition-all duration-200">
+                        <i class="fas fa-users-cog w-5 text-center <?= $uri == 'admin/user' ? 'text-purple-400' : 'text-slate-500 group-hover:text-white' ?> transition-colors"></i>
+                        <span class="ml-3">Manajemen User</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <?php endif; ?>
+
         <div id="groupOps" class="mt-4">
             <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Operasional</p>
             

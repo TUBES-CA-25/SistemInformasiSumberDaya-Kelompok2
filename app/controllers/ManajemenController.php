@@ -1,6 +1,7 @@
 <?php
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/ManajemenModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class ManajemenController extends Controller {
     private $model;
@@ -83,18 +84,20 @@ class ManajemenController extends Controller {
             if (isset($_FILES['foto'])) {
                 $input = [
                     'nama' => $_POST['nama'] ?? '',
+                    'email' => $_POST['email'] ?? '',
                     'nidn' => $_POST['nidn'] ?? null,
                     'jabatan' => $_POST['jabatan'] ?? ''
                 ];
 
-                $required = ['nama', 'jabatan'];
+                $required = ['nama', 'email', 'jabatan'];
                 $missing = $this->validateRequired($input, $required);
                 if (!empty($missing)) {
                     $this->error('Field required: ' . implode(', ', $missing), null, 400);
                 }
 
                 // Process file upload (store in public assets so images are web-accessible)
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'manajemen/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -102,10 +105,10 @@ class ManajemenController extends Controller {
                 $file = $_FILES['foto'];
                 if ($file['error'] === UPLOAD_ERR_OK) {
                     $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-                    $filename = 'manajemen_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                    $filename = Helper::generateFilename('manajemen', $input['nama'], $ext);
                     $target = $uploadDir . $filename;
                     if (move_uploaded_file($file['tmp_name'], $target)) {
-                        $input['foto'] = $filename;
+                        $input['foto'] = $subFolder . $filename;
                     } else {
                         $input['foto'] = '';
                     }
@@ -121,7 +124,7 @@ class ManajemenController extends Controller {
             } else {
                 // Fallback: JSON atau POST tanpa file
                 $input = $this->getJson() ?? $_POST;
-                $required = ['nama', 'jabatan'];
+                $required = ['nama', 'email', 'jabatan'];
                 $missing = $this->validateRequired($input, $required);
                 if (!empty($missing)) {
                     $this->error('Field required: ' . implode(', ', $missing), null, 400);
@@ -154,6 +157,7 @@ class ManajemenController extends Controller {
             if (isset($_FILES['foto'])) {
                 $input = [
                     'nama' => $_POST['nama'] ?? $existing['nama'],
+                    'email' => $_POST['email'] ?? $existing['email'],
                     'nidn' => $_POST['nidn'] ?? $existing['nidn'],
                     'jabatan' => $_POST['jabatan'] ?? $existing['jabatan']
                 ];
@@ -163,32 +167,41 @@ class ManajemenController extends Controller {
                     $input = $this->getJson() ?? [];
                 }
                 if (empty($input['nama'])) $input['nama'] = $existing['nama'];
+                if (empty($input['email'])) $input['email'] = $existing['email'] ?? '';
                 if (empty($input['jabatan'])) $input['jabatan'] = $existing['jabatan'];
             }
 
             // Handle file upload
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
-                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+                $subFolder = 'manajemen/';
+                $baseUploadPath = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $uploadDir = $baseUploadPath . $subFolder;
+                
+                if (!is_dir($uploadDir)) {
+                    @mkdir($uploadDir, 0777, true);
+                }
                 
                 // Delete old foto if exists
                 if (isset($existing['foto']) && !empty($existing['foto'])) {
-                    $oldImagePath = $uploadDir . $existing['foto'];
-                    if (file_exists($oldImagePath)) {
-                        unlink($oldImagePath);
+                    $oldFilePath = $existing['foto'];
+                    // Cek di root atau subfolder
+                    $fullOldPath = $baseUploadPath . $oldFilePath;
+                    if (file_exists($fullOldPath) && is_file($fullOldPath)) {
+                        @unlink($fullOldPath);
                     }
                 }
                 
                 // Upload new foto
                 $file = $_FILES['foto'];
-                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-                $filename = 'manajemen_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                $filename = Helper::generateFilename('manajemen', $input['nama'], $ext);
                 $target = $uploadDir . $filename;
                 
                 if (move_uploaded_file($file['tmp_name'], $target)) {
-                    $input['foto'] = $filename;
+                    $input['foto'] = $subFolder . $filename;
                 } else {
-                    $this->error('Gagal upload foto', null, 500);
+                    $this->error('Gagal upload foto ke ' . $subFolder, null, 500);
+                    return;
                 }
             }
 
@@ -223,4 +236,3 @@ class ManajemenController extends Controller {
         $this->error('Failed to delete manajemen', null, 500);
     }
 }
-?>
