@@ -114,10 +114,17 @@
                         <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2">
                             <i class="fas fa-briefcase"></i> Profil Publik
                         </h4>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kompetensi & Keahlian <span class="text-xs font-normal text-gray-400 italic">(Pisahkan dengan koma)</span></label>
-                            <input type="text" id="inputSkills" name="skills" placeholder="Contoh: Web Dev, Networking, PHP" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+                        <div class="relative">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kompetensi & Keahlian</label>
+                            <div id="skillsTagContainer" class="flex flex-wrap gap-2 p-2.5 min-h-[45px] border border-gray-300 rounded-lg bg-white focus-within:ring-2 focus-within:ring-emerald-500 transition-all cursor-text">
+                                <input type="text" id="tagInput" class="flex-grow outline-none text-sm min-w-[150px] bg-transparent" placeholder="Ketik keahlian (contoh: Web Dev)...">
+                            </div>
+                            <!-- Dropdown Saran -->
+                            <div id="skillsSuggestions" class="hidden absolute z-[100] mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto py-2">
+                                <!-- List saran diisi JS -->
+                            </div>
+                            <input type="hidden" id="inputSkills" name="skills">
+                            <p class="text-[10px] text-gray-400 mt-1.5 italic"><i class="fas fa-info-circle"></i> Tekan Enter atau pilih saran untuk menambahkan keahlian baru.</p>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Bio Singkat</label>
@@ -263,10 +270,11 @@ function loadAsisten() {
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
     const totalEl = document.getElementById('totalData');
-    tbody.innerHTML = ''; 
+    
     totalEl.innerText = `Total: ${data.length}`;
 
     if(data && data.length > 0) {
+        let rowsHtml = '';
         data.forEach((item, index) => {
             let statusBadge = '';
             if (item.isKoordinator == 1) { statusBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200"><i class="fas fa-crown mr-1 text-xs"></i> Koordinator</span>`; } 
@@ -276,7 +284,7 @@ function renderTable(data) {
                 statusBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}">${st}</span>`;
             }
             const fotoUrl = item.foto ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) : 'https://placehold.co/50x50?text=Foto';
-            const row = `
+            rowsHtml += `
                 <tr onclick="openDetailModal(${item.idAsisten})" class="hover:bg-gray-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
                     <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
                     <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"></div></td>
@@ -290,8 +298,8 @@ function renderTable(data) {
                         </div>
                     </td>
                 </tr>`;
-            tbody.innerHTML += row;
         });
+        tbody.innerHTML = rowsHtml;
     } else { tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Data asisten tidak ditemukan</td></tr>`; }
 }
 
@@ -337,14 +345,39 @@ function openFormModal(id = null, event = null) {
                 document.getElementById('inputUrutanTampilan').value = d.urutanTampilan || '0';
                 let status = d.statusAktif; if (status == '1') status = 'Asisten'; if (status == '0') status = 'Tidak Aktif';
                 document.getElementById('inputStatus').value = status || 'Asisten';
-                let skillsStr = ''; try { let s = JSON.parse(d.skills); if(Array.isArray(s)) skillsStr = s.join(', '); else skillsStr = d.skills; } catch(e) { skillsStr = d.skills || ''; }
-                document.getElementById('inputSkills').value = skillsStr;
+                
+                // --- UPDATE SKILLS TAGS ---
+                let skillsArray = [];
+                try {
+                    let s = JSON.parse(d.skills);
+                    if(Array.isArray(s)) skillsArray = s;
+                    else if(d.skills) skillsArray = d.skills.split(',').map(item => item.trim());
+                } catch(e) {
+                    if(d.skills) skillsArray = d.skills.split(',').map(item => item.trim());
+                }
+                
+                selectedSkills = [];
+                const container = document.getElementById('skillsTagContainer');
+                const tagInput = document.getElementById('tagInput');
+                // Hapus tag lama kecuali input
+                container.querySelectorAll('.skill-tag').forEach(el => el.remove());
+                
+                skillsArray.forEach(skill => {
+                    if(skill) addTag(skill, false); // false agar tidak fokus ke input saat loading data
+                });
+                
                 if(d.foto) document.getElementById('fotoPreviewInfo').classList.remove('hidden');
             }
         });
     } else {
         document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-plus text-emerald-600"></i> Tambah Asisten Baru';
         document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+        
+        // Reset Skills Tags for NEW entry
+        selectedSkills = [];
+        const container = document.getElementById('skillsTagContainer');
+        container.querySelectorAll('.skill-tag').forEach(el => el.remove());
+        document.getElementById('inputSkills').value = '';
     }
 }
 
@@ -462,6 +495,119 @@ document.getElementById('koordinatorForm').addEventListener('submit', function(e
     })
     .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Pilihan'; });
 });
+
+// --- 4. SISTEM TAGGING KEAHLIAN (LinkedIn Style) ---
+const IT_SKILLS_LIST = [
+    "Web Development", "PHP", "Laravel", "Javascript", "React", "Vue", "Node.js", "Express", "Tailwind CSS", "Bootstrap",
+    "Database Management", "SQL", "MySQL", "PostgreSQL", "MongoDB", "Firebase",
+    "Mobile Development", "Flutter", "React Native", "Android Studio", "iOS Development",
+    "Artificial Intelligence", "Machine Learning", "Python", "Data Science", "R Programming",
+    "Cybersecurity", "Networking", "Cisco", "Linux Administration",
+    "Cloud Computing", "AWS", "Google Cloud", "UI/UX Design", "Figma", "Adobe XD",
+    "Internet of Things (IoT)", "Arduino", "Raspberry Pi", "Game Development", "Unity", "C#", "C++"
+];
+
+let selectedSkills = [];
+
+function initTaggingSystem() {
+    const container = document.getElementById('skillsTagContainer');
+    const tagInput = document.getElementById('tagInput');
+    const suggestionBox = document.getElementById('skillsSuggestions');
+    const hiddenInput = document.getElementById('inputSkills');
+
+    // Klik container otomatis fokus ke input
+    container.addEventListener('click', () => tagInput.focus());
+
+    tagInput.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        if(!val) {
+            suggestionBox.classList.add('hidden');
+            return;
+        }
+
+        const filtered = IT_SKILLS_LIST.filter(s => 
+            s.toLowerCase().includes(val) && !selectedSkills.includes(s)
+        ).slice(0, 5); // Limit 5 saran
+
+        if(filtered.length > 0) {
+            suggestionBox.innerHTML = filtered.map(s => `
+                <div class="px-4 py-2 hover:bg-emerald-50 cursor-pointer flex items-center gap-2 group" onclick="addTag('${s.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-plus-circle text-gray-300 group-hover:text-emerald-500 transition-colors"></i>
+                    <span class="text-sm font-medium text-gray-700">${s}</span>
+                </div>
+            `).join('');
+            suggestionBox.classList.remove('hidden');
+        } else {
+            // Beri opsi tambah manual jika tidak ada di list
+            suggestionBox.innerHTML = `
+                <div class="px-4 py-2 hover:bg-emerald-50 cursor-pointer flex items-center gap-2 group" onclick="addTag('${tagInput.value.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-plus-circle text-emerald-500"></i>
+                    <span class="text-sm font-medium text-gray-700">Tambahkan "${tagInput.value}"</span>
+                </div>`;
+            suggestionBox.classList.remove('hidden');
+        }
+    });
+
+    tagInput.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+            const val = tagInput.value.trim();
+            if(val) addTag(val);
+        } else if(e.key === 'Backspace' && !tagInput.value && selectedSkills.length > 0) {
+            removeTag(selectedSkills[selectedSkills.length - 1]);
+        }
+    });
+
+    // Sembunyikan saran saat klik di luar
+    document.addEventListener('click', (e) => {
+        if(!container.contains(e.target) && !suggestionBox.contains(e.target)) {
+            suggestionBox.classList.add('hidden');
+        }
+    });
+}
+
+function addTag(skill, focus = true) {
+    if(!skill || selectedSkills.includes(skill)) {
+        document.getElementById('tagInput').value = '';
+        document.getElementById('skillsSuggestions').classList.add('hidden');
+        return;
+    }
+
+    selectedSkills.push(skill);
+    updateHiddenInput();
+
+    const container = document.getElementById('skillsTagContainer');
+    const tagInput = document.getElementById('tagInput');
+
+    const tagEl = document.createElement('div');
+    tagEl.className = 'skill-tag inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold border border-emerald-100 animate-in fade-in zoom-in duration-200';
+    tagEl.dataset.skill = skill;
+    tagEl.innerHTML = `
+        <span>${skill}</span>
+        <button type="button" onclick="event.stopPropagation(); removeTag('${skill.replace(/'/g, "\\'")}')" class="hover:text-emerald-900 transition-colors">
+            <i class="fas fa-times-circle"></i>
+        </button>
+    `;
+    
+    container.insertBefore(tagEl, tagInput);
+    tagInput.value = '';
+    document.getElementById('skillsSuggestions').classList.add('hidden');
+    if(focus) tagInput.focus();
+}
+
+function removeTag(skill) {
+    selectedSkills = selectedSkills.filter(s => s !== skill);
+    updateHiddenInput();
+    const tagEl = document.querySelector(`.skill-tag[data-skill="${skill}"]`);
+    if(tagEl) tagEl.remove();
+}
+
+function updateHiddenInput() {
+    document.getElementById('inputSkills').value = JSON.stringify(selectedSkills);
+}
+
+// Jalankan init tagging saat halaman siap
+document.addEventListener('DOMContentLoaded', initTaggingSystem);
 
 // --- HELPER FUNCTIONS ---
 function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); document.body.style.overflow = 'auto'; }

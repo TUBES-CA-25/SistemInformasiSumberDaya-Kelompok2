@@ -320,6 +320,7 @@ function renderTable(data) {
         return;
     }
 
+    let rowsHtml = '';
     data.forEach((item, index) => {
         const statusClass = item.status === 'Aktif' 
             ? 'bg-emerald-100 text-emerald-700 border-emerald-200' 
@@ -328,7 +329,7 @@ function renderTable(data) {
         const waktuMulai = item.waktuMulai ? item.waktuMulai.substring(0, 5) : '--:--';
         const waktuSelesai = item.waktuSelesai ? item.waktuSelesai.substring(0, 5) : '--:--';
 
-        const row = `
+        rowsHtml += `
             <tr class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100">
                 <td class="px-6 py-4 text-center">
                     <input type="checkbox" name="selectedIds[]" value="${item.idJadwal}" 
@@ -369,8 +370,8 @@ function renderTable(data) {
                     </div>
                 </td>
             </tr>`;
-        tbody.innerHTML += row;
     });
+    tbody.innerHTML = rowsHtml;
 }
 
 // --- BULK ACTION HELPERS ---

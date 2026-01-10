@@ -185,12 +185,13 @@ function renderTable(data) {
         return;
     }
 
+    let rowsHtml = '';
     data.forEach((item, index) => {
         const semesterVal = item.semester || item.smt || item.Semester || '-';
         const sksVal = item.sksKuliah || item.sks || item.SKS || '-';
         const semColor = (semesterVal !== '-' && semesterVal % 2 !== 0) ? 'bg-orange-100 text-orange-800 border-orange-200' : 'bg-purple-100 text-purple-800 border-purple-200';
 
-        const row = `
+        rowsHtml += `
             <tr onclick="openFormModal(${item.idMatakuliah}, event)" class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
                 <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
                 <td class="px-6 py-4 text-center">
@@ -219,8 +220,8 @@ function renderTable(data) {
                     </div>
                 </td>
             </tr>`;
-        tbody.innerHTML += row;
     });
+    tbody.innerHTML = rowsHtml;
 }
 
 // --- 2. MODAL FORM ---
