@@ -807,6 +807,8 @@
   display: block;
   width: calc(100% + 1.3px);
   height: 60px;
+
+  transform: translate3d(0, 0, 0);
 }
 .custom-shape-divider-top .shape-fill,
 .custom-shape-divider-bottom .shape-fill {

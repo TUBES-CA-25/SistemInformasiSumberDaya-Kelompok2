@@ -143,6 +143,16 @@
                     </a>
                 </li>
 
+                <?php $active = strpos($uri, 'sop') !== false; ?>
+                <li>
+                    <a href="javascript:void(0)" onclick="navigate('admin/sop')" 
+                       class="<?= $active ? 'text-amber-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
+                       data-active="<?= $active ? 'true' : 'false' ?>">
+                       <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></span><?php endif; ?>
+                       SOP Laboratorium
+                    </a>
+                </li>
+
                 <?php $active = strpos($uri, 'formatpenulisan') !== false; ?>
                 <li>
                     <a href="javascript:void(0)" onclick="navigate('admin/formatpenulisan')" 
@@ -182,13 +192,11 @@
 </style>
 
 <script>
-// 1. Fungsi Toggle Menu (Buka/Tutup saat diklik)
 function toggleMenu(menuId, arrowId) {
     const menu = document.getElementById(menuId);
     const arrow = document.getElementById(arrowId);
     
     if (menu.classList.contains('hidden')) {
-        // BUKA
         menu.classList.remove('hidden');
         menu.classList.add('block');
         if(arrow) {
@@ -197,7 +205,6 @@ function toggleMenu(menuId, arrowId) {
             arrow.classList.add('text-white');
         }
     } else {
-        // TUTUP
         menu.classList.add('hidden');
         menu.classList.remove('block');
         if(arrow) {
@@ -208,23 +215,15 @@ function toggleMenu(menuId, arrowId) {
     }
 }
 
-// 2. [PENTING] AUTO EXPAND SCRIPT
-// Script ini berjalan otomatis saat halaman selesai dimuat.
-// Ia mencari link yang aktif, lalu memaksa menu induknya terbuka.
 document.addEventListener("DOMContentLoaded", function() {
-    // Cari semua link yang punya atribut data-active="true"
     const activeLinks = document.querySelectorAll('a[data-active="true"]');
     
     activeLinks.forEach(link => {
-        // Cari elemen UL pembungkus (Parent Menu)
         const parentMenu = link.closest('ul');
         if (parentMenu) {
-            // Paksa Buka Menu
             parentMenu.classList.remove('hidden');
             parentMenu.classList.add('block');
             
-            // Putar Panahnya juga
-            // Kita cari ID panah berdasarkan ID menu
             let arrowId = '';
             if (parentMenu.id === 'menuMaster') arrowId = 'arrowMaster';
             if (parentMenu.id === 'menuOps') arrowId = 'arrowOps';
