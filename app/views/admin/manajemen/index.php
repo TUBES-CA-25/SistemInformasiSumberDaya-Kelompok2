@@ -214,6 +214,7 @@ function renderTable(data) {
         return;
     }
     
+    let rowsHtml = '';
     data.forEach((item, index) => {
         // 1. Buat URL Avatar Default (Inisial Nama) sebagai cadangan
         const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.nama)}&background=random&color=fff&size=128`;
@@ -222,7 +223,7 @@ function renderTable(data) {
         // Jika ada foto di DB, pakai path lokal. Jika tidak, pakai default.
         let photoUrl = item.foto ? `${BASE_URL}/assets/uploads/${item.foto}` : defaultAvatar;
 
-        const row = `
+        rowsHtml += `
             <tr onclick="openDetailModal(${item.idManajemen})" class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
                 <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
                 <td class="px-6 py-4 text-center">
@@ -260,8 +261,8 @@ function renderTable(data) {
                 </td>
             </tr>
         `;
-        tbody.innerHTML += row;
     });
+    tbody.innerHTML = rowsHtml;
 }
 
 // --- 2. MODAL DETAIL ---

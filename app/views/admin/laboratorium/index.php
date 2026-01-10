@@ -374,6 +374,7 @@ function renderTable(data) {
         return;
     }
 
+    let rowsHtml = '';
     data.forEach((item, index) => {
         // Cek gambar pertama
         let firstImg = 'https://placehold.co/100x70?text=No+Img';
@@ -390,7 +391,7 @@ function renderTable(data) {
         if (item.jenis === 'Riset') badgeColor = 'bg-purple-50 text-purple-700 border-purple-100';
         if (item.jenis === 'Multimedia') badgeColor = 'bg-orange-50 text-orange-700 border-orange-100';
 
-        const row = `
+        rowsHtml += `
             <tr onclick="openDetailModal(${item.idLaboratorium})" class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
                 <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
                 <td class="px-6 py-4 text-center">
@@ -413,8 +414,8 @@ function renderTable(data) {
                     </div>
                 </td>
             </tr>`;
-        tbody.innerHTML += row;
     });
+    tbody.innerHTML = rowsHtml;
 }
 
 // --- 2. MODAL FORM ---

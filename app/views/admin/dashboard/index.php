@@ -186,6 +186,7 @@ function renderJadwalCards(data) {
     }
 
     // Render Data Asli
+    let cardsHtml = '';
     data.forEach(item => {
         // Format Waktu (Hapus detik 00)
         const mulai = item.waktuMulai.substring(0, 5);
@@ -239,7 +240,8 @@ function renderJadwalCards(data) {
                 </div>
             </div>
         `;
-        container.innerHTML += card;
+        cardsHtml += card;
     });
+    container.innerHTML = cardsHtml;
 }
 </script>

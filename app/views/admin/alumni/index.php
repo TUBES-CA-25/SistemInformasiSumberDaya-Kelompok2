@@ -107,18 +107,31 @@
                         </div>
 
                         <div class="grid grid-cols-1 gap-4">
-                            <div>
+                            <div class="relative">
                                 <label class="block text-sm font-semibold text-gray-700 mb-1">Keahlian Utama</label>
-                                <input type="text" id="inputKeahlian" name="keahlian" placeholder="PHP, Laravel, React"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
+                                <div id="keahlianTagContainer" class="flex flex-wrap gap-2 p-2.5 min-h-[46px] border border-gray-300 rounded-xl bg-gray-50/30 focus-within:ring-2 focus-within:ring-blue-500 focus-within:bg-white transition-all cursor-text">
+                                    <input type="text" id="tagInputKeahlian" class="flex-grow outline-none text-sm min-w-[150px] bg-transparent" placeholder="Ketik keahlian (contoh: PHP, Laravel)...">
+                                </div>
+                                <!-- Dropdown Saran -->
+                                <div id="keahlianSuggestions" class="hidden absolute z-[100] mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto py-2">
+                                    <!-- List saran diisi JS -->
+                                </div>
+                                <input type="hidden" id="inputKeahlian" name="keahlian">
+                                <p class="text-[10px] text-gray-400 mt-1.5 italic"><i class="fas fa-info-circle"></i> Tekan Enter atau pilih saran untuk menambahkan keahlian baru.</p>
                             </div>
                         </div>
 
-                        <div>
+                        <div class="relative">
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Mata Kuliah Pernah Diajar</label>
-                            <input type="text" id="inputMataKuliah" name="mata_kuliah" placeholder="Contoh: Pemrograman Dasar, Basis Data"
-                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
-                            <p class="text-[10px] text-gray-400 mt-1 italic leading-tight"><i class="fas fa-info-circle mr-1"></i> Pisahkan dengan koma jika Anda pernah mengajar lebih dari satu mata kuliah.</p>
+                            <div id="matkulTagContainer" class="flex flex-wrap gap-2 p-2.5 min-h-[46px] border border-gray-300 rounded-xl bg-gray-50/30 focus-within:ring-2 focus-within:ring-blue-500 focus-within:bg-white transition-all cursor-text">
+                                <input type="text" id="tagInputMatkul" class="flex-grow outline-none text-sm min-w-[150px] bg-transparent" placeholder="Ketik mata kuliah...">
+                            </div>
+                            <!-- Dropdown Saran -->
+                            <div id="matkulSuggestions" class="hidden absolute z-[100] mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto py-2">
+                                <!-- List saran diisi JS -->
+                            </div>
+                            <input type="hidden" id="inputMataKuliah" name="mata_kuliah">
+                            <p class="text-[10px] text-gray-400 mt-1 italic leading-tight"><i class="fas fa-info-circle mr-1"></i> Tekan Enter atau pilih saran untuk menambahkan mata kuliah.</p>
                         </div>
                     </div>
 
@@ -247,13 +260,14 @@ function loadAlumni() {
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
     const totalEl = document.getElementById('totalData');
-    tbody.innerHTML = '';
+    
     if(totalEl) totalEl.innerText = `Total: ${data.length}`;
 
     if(data && data.length > 0) {
+        let rowsHtml = '';
         data.forEach((item, index) => {
             const fotoUrl = item.foto ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) : `https://ui-avatars.com/api/?name=${encodeURIComponent(item.nama)}&background=random&color=fff`;
-            const row = `
+            rowsHtml += `
                 <tr onclick="openDetailModal(${item.id})" class="hover:bg-blue-50 transition-colors duration-150 cursor-pointer group border-b border-gray-100">
                     <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
                     <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"></div></td>
@@ -271,8 +285,8 @@ function renderTable(data) {
                         </div>
                     </td>
                 </tr>`;
-            tbody.innerHTML += row;
         });
+        tbody.innerHTML = rowsHtml;
     } else { tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Data alumni tidak ditemukan</td></tr>`; }
 }
 
@@ -314,7 +328,49 @@ function openFormModal(id = null, event = null) {
                 document.getElementById('inputNama').value = d.nama;
                 document.getElementById('inputAngkatan').value = d.angkatan;
                 document.getElementById('inputDivisi').value = d.divisi || '';
-                document.getElementById('inputKeahlian').value = d.keahlian || '';
+                
+                // --- UPDATE KEAHLIAN TAGS ---
+                let keahlianArray = [];
+                try {
+                    if(d.keahlian.startsWith('[') || d.keahlian.startsWith('{')) {
+                        let parsed = JSON.parse(d.keahlian);
+                        keahlianArray = Array.isArray(parsed) ? parsed : [parsed];
+                    } else if(d.keahlian) {
+                        keahlianArray = d.keahlian.split(',').map(item => item.trim());
+                    }
+                } catch(e) {
+                    if(d.keahlian) keahlianArray = d.keahlian.split(',').map(item => item.trim());
+                }
+                
+                selectedKeahlian = [];
+                const container = document.getElementById('keahlianTagContainer');
+                container.querySelectorAll('.skill-tag').forEach(el => el.remove());
+                
+                keahlianArray.forEach(skill => {
+                    if(skill) addKeahlianTag(skill, false);
+                });
+
+                // --- UPDATE MATA KULIAH TAGS ---
+                let matkulArray = [];
+                try {
+                    if(d.mata_kuliah.startsWith('[') || d.mata_kuliah.startsWith('{')) {
+                        let parsed = JSON.parse(d.mata_kuliah);
+                        matkulArray = Array.isArray(parsed) ? parsed : [parsed];
+                    } else if(d.mata_kuliah) {
+                        matkulArray = d.mata_kuliah.split(',').map(item => item.trim());
+                    }
+                } catch(e) {
+                    if(d.mata_kuliah) matkulArray = d.mata_kuliah.split(',').map(item => item.trim());
+                }
+
+                selectedMatkul = [];
+                const matkulContainer = document.getElementById('matkulTagContainer');
+                matkulContainer.querySelectorAll('.matkul-tag').forEach(el => el.remove());
+
+                matkulArray.forEach(m => {
+                    if(m) addMatkulTag(m, false);
+                });
+
                 document.getElementById('inputEmail').value = d.email || '';
                 document.getElementById('inputKesanPesan').value = d.kesan_pesan || '';
                 document.getElementById('inputMataKuliah').value = d.mata_kuliah || '';
@@ -326,6 +382,18 @@ function openFormModal(id = null, event = null) {
     } else {
         document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-plus text-emerald-600"></i> Tambah Alumni Baru';
         document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+        
+        // Reset Keahlian Tags
+        selectedKeahlian = [];
+        const container = document.getElementById('keahlianTagContainer');
+        container.querySelectorAll('.skill-tag').forEach(el => el.remove());
+        document.getElementById('inputKeahlian').value = '';
+
+        // Reset Matkul Tags
+        selectedMatkul = [];
+        const matkulContainer = document.getElementById('matkulTagContainer');
+        matkulContainer.querySelectorAll('.matkul-tag').forEach(el => el.remove());
+        document.getElementById('inputMataKuliah').value = '';
     }
 }
 
@@ -376,4 +444,220 @@ function hapusAlumni(id, event) {
         });
     });
 }
+
+// --- 4. SISTEM TAGGING KEAHLIAN (LinkedIn Style) ---
+const IT_SKILLS_LIST = [
+    "Web Development", "PHP", "Laravel", "Javascript", "React", "Vue", "Node.js", "Express", "Tailwind CSS", "Bootstrap",
+    "Database Management", "SQL", "MySQL", "PostgreSQL", "MongoDB", "Firebase",
+    "Mobile Development", "Flutter", "React Native", "Android Studio", "iOS Development",
+    "Artificial Intelligence", "Machine Learning", "Python", "Data Science", "R Programming",
+    "Cybersecurity", "Networking", "Cisco", "Linux Administration",
+    "Cloud Computing", "AWS", "Google Cloud", "UI/UX Design", "Figma", "Adobe XD",
+    "Internet of Things (IoT)", "Arduino", "Raspberry Pi", "Game Development", "Unity", "C#", "C++"
+];
+
+const COURSE_LIST = [
+    "Pemrograman Dasar", "Basis Data", "Pemrograman Web", "Pemrograman Berorientasi Objek",
+    "Struktur Data", "Algoritma & Pemrograman", "Sistem Operasi", "Jaringan Komputer",
+    "Analisis & Desain Sistem", "Rekayasa Perangkat Lunak", "Kecerdasan Buatan",
+    "Mobile Programming", "Cloud Computing", "Keamanan Informasi", "Interaksi Manusia & Komputer"
+];
+
+let selectedKeahlian = [];
+let selectedMatkul = [];
+
+function initKeahlianTagging() {
+    const container = document.getElementById('keahlianTagContainer');
+    const tagInput = document.getElementById('tagInputKeahlian');
+    const suggestionBox = document.getElementById('keahlianSuggestions');
+
+    if(!container || !tagInput) return;
+
+    container.addEventListener('click', () => tagInput.focus());
+
+    tagInput.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        if(!val) {
+            suggestionBox.classList.add('hidden');
+            return;
+        }
+
+        const filtered = IT_SKILLS_LIST.filter(s => 
+            s.toLowerCase().includes(val) && !selectedKeahlian.includes(s)
+        ).slice(0, 5);
+
+        if(filtered.length > 0) {
+            suggestionBox.innerHTML = filtered.map(s => `
+                <div class="px-4 py-2 hover:bg-blue-50 cursor-pointer flex items-center gap-2 group" onclick="addKeahlianTag('${s.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-plus-circle text-gray-300 group-hover:text-blue-500 transition-colors"></i>
+                    <span class="text-sm font-medium text-gray-700">${s}</span>
+                </div>
+            `).join('');
+            suggestionBox.classList.remove('hidden');
+        } else {
+            suggestionBox.innerHTML = `
+                <div class="px-4 py-2 hover:bg-blue-50 cursor-pointer flex items-center gap-2 group" onclick="addKeahlianTag('${tagInput.value.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-plus-circle text-blue-500"></i>
+                    <span class="text-sm font-medium text-gray-700">Tambahkan "${tagInput.value}"</span>
+                </div>`;
+            suggestionBox.classList.remove('hidden');
+        }
+    });
+
+    tagInput.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+            const val = tagInput.value.trim();
+            if(val) addKeahlianTag(val);
+        } else if(e.key === 'Backspace' && !tagInput.value && selectedKeahlian.length > 0) {
+            removeKeahlianTag(selectedKeahlian[selectedKeahlian.length - 1]);
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if(!container.contains(e.target) && !suggestionBox.contains(e.target)) {
+            suggestionBox.classList.add('hidden');
+        }
+    });
+}
+
+function initMatkulTagging() {
+    const container = document.getElementById('matkulTagContainer');
+    const tagInput = document.getElementById('tagInputMatkul');
+    const suggestionBox = document.getElementById('matkulSuggestions');
+
+    if(!container || !tagInput) return;
+
+    container.addEventListener('click', () => tagInput.focus());
+
+    tagInput.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        if(!val) {
+            suggestionBox.classList.add('hidden');
+            return;
+        }
+
+        const filtered = COURSE_LIST.filter(s => 
+            s.toLowerCase().includes(val) && !selectedMatkul.includes(s)
+        ).slice(0, 5);
+
+        if(filtered.length > 0) {
+            suggestionBox.innerHTML = filtered.map(s => `
+                <div class="px-4 py-2 hover:bg-emerald-50 cursor-pointer flex items-center gap-2 group" onclick="addMatkulTag('${s.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-plus-circle text-gray-300 group-hover:text-emerald-500 transition-colors"></i>
+                    <span class="text-sm font-medium text-gray-700">${s}</span>
+                </div>
+            `).join('');
+            suggestionBox.classList.remove('hidden');
+        } else {
+            suggestionBox.innerHTML = `
+                <div class="px-4 py-2 hover:bg-emerald-50 cursor-pointer flex items-center gap-2 group" onclick="addMatkulTag('${tagInput.value.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-plus-circle text-emerald-500"></i>
+                    <span class="text-sm font-medium text-gray-700">Tambahkan "${tagInput.value}"</span>
+                </div>`;
+            suggestionBox.classList.remove('hidden');
+        }
+    });
+
+    tagInput.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+            const val = tagInput.value.trim();
+            if(val) addMatkulTag(val);
+        } else if(e.key === 'Backspace' && !tagInput.value && selectedMatkul.length > 0) {
+            removeMatkulTag(selectedMatkul[selectedMatkul.length - 1]);
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if(!container.contains(e.target) && !suggestionBox.contains(e.target)) {
+            suggestionBox.classList.add('hidden');
+        }
+    });
+}
+
+function addKeahlianTag(skill, focus = true) {
+    if(!skill || selectedKeahlian.includes(skill)) {
+        document.getElementById('tagInputKeahlian').value = '';
+        document.getElementById('keahlianSuggestions').classList.add('hidden');
+        return;
+    }
+
+    selectedKeahlian.push(skill);
+    updateHiddenInputKeahlian();
+
+    const container = document.getElementById('keahlianTagContainer');
+    const tagInput = document.getElementById('tagInputKeahlian');
+
+    const tagEl = document.createElement('div');
+    tagEl.className = 'skill-tag inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100 animate-in fade-in zoom-in duration-200';
+    tagEl.dataset.skill = skill;
+    tagEl.innerHTML = `
+        <span>${skill}</span>
+        <button type="button" onclick="event.stopPropagation(); removeKeahlianTag('${skill.replace(/'/g, "\\'")}')" class="hover:text-blue-900 transition-colors">
+            <i class="fas fa-times-circle"></i>
+        </button>
+    `;
+    
+    container.insertBefore(tagEl, tagInput);
+    tagInput.value = '';
+    document.getElementById('keahlianSuggestions').classList.add('hidden');
+    if(focus) tagInput.focus();
+}
+
+function removeKeahlianTag(skill) {
+    selectedKeahlian = selectedKeahlian.filter(s => s !== skill);
+    updateHiddenInputKeahlian();
+    const tagEl = document.querySelector(`.skill-tag[data-skill="${skill}"]`);
+    if(tagEl) tagEl.remove();
+}
+
+function updateHiddenInputKeahlian() {
+    document.getElementById('inputKeahlian').value = JSON.stringify(selectedKeahlian);
+}
+
+function addMatkulTag(matkul, focus = true) {
+    if(!matkul || selectedMatkul.includes(matkul)) {
+        document.getElementById('tagInputMatkul').value = '';
+        document.getElementById('matkulSuggestions').classList.add('hidden');
+        return;
+    }
+
+    selectedMatkul.push(matkul);
+    updateHiddenInputMatkul();
+
+    const container = document.getElementById('matkulTagContainer');
+    const tagInput = document.getElementById('tagInputMatkul');
+
+    const tagEl = document.createElement('div');
+    tagEl.className = 'matkul-tag inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold border border-emerald-100 animate-in fade-in zoom-in duration-200';
+    tagEl.dataset.matkul = matkul;
+    tagEl.innerHTML = `
+        <span>${matkul}</span>
+        <button type="button" onclick="event.stopPropagation(); removeMatkulTag('${matkul.replace(/'/g, "\\'")}')" class="hover:text-emerald-900 transition-colors">
+            <i class="fas fa-times-circle"></i>
+        </button>
+    `;
+    
+    container.insertBefore(tagEl, tagInput);
+    tagInput.value = '';
+    document.getElementById('matkulSuggestions').classList.add('hidden');
+    if(focus) tagInput.focus();
+}
+
+function removeMatkulTag(matkul) {
+    selectedMatkul = selectedMatkul.filter(s => s !== matkul);
+    updateHiddenInputMatkul();
+    const tagEl = document.querySelector(`.matkul-tag[data-matkul="${matkul}"]`);
+    if(tagEl) tagEl.remove();
+}
+
+function updateHiddenInputMatkul() {
+    document.getElementById('inputMataKuliah').value = JSON.stringify(selectedMatkul);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initKeahlianTagging();
+    initMatkulTagging();
+});
 </script>
