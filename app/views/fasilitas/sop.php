@@ -197,3 +197,5 @@
         </div>
     </div>
 </section>
+
+<script src="<?= ASSETS_URL ?>/js/sop.js"></script>

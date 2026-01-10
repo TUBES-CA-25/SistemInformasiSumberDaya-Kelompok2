@@ -9,7 +9,7 @@
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <i class="fas fa-search"></i>
             </span>
-            <input type="text" id="searchInput" placeholder="Cari Judul SOP..." 
+            <input type="text" id="searchInput" placeholder="Cari Judul atau Deskripsi SOP..." 
                    class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm w-64">
         </div>
 
@@ -143,9 +143,17 @@ function loadData() {
     });
 }
 
+// FUNGSI UTAMA PENCARIAN
 function renderTable() {
     const keyword = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = allData.filter(item => item.judul.toLowerCase().includes(keyword));
+    
+    // Memfilter berdasarkan Judul ATAU Deskripsi
+    const filtered = allData.filter(item => {
+        const matchJudul = item.judul && item.judul.toLowerCase().includes(keyword);
+        const matchDesc = item.deskripsi && item.deskripsi.toLowerCase().includes(keyword);
+        return matchJudul || matchDesc;
+    });
+    
     const tbody = document.getElementById('tableBody');
     
     if (filtered.length === 0) {
