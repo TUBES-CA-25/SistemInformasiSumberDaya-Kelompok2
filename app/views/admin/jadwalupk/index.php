@@ -1,130 +1,128 @@
-<div class="w-full animate__animated animate__fadeIn">
+<div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 animate__animated animate__fadeIn">
+    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+        <i class="fas fa-calendar-check text-blue-600"></i> 
+        Manajemen Jadwal UPK
+    </h1>
     
-    <div class="flex flex-col lg:flex-row justify-between items-center mb-8 gap-4">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-200">
-                <i class="fas fa-calendar-check text-white text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-2xl font-black text-slate-800 tracking-tight">Manajemen Jadwal UPK</h1>
-                <p class="text-xs text-slate-400 font-medium uppercase tracking-wider">Dashboard Administrasi Ujian</p>
-            </div>
-        </div>
-        
-        <div class="flex flex-wrap justify-center gap-3 w-full lg:w-auto">
-            <div class="relative group w-full sm:w-64">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
-                    <i class="fas fa-search"></i>
-                </span>
-                <input type="text" id="searchInput" placeholder="Cari Mata Kuliah..." 
-                       class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none text-sm transition-all shadow-sm">
-            </div>
-
-            <button onclick="openUploadModal()" 
-               class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl shadow-md shadow-emerald-200 transition-all flex items-center gap-2 font-bold text-xs uppercase tracking-wide">
-                <i class="fas fa-file-csv"></i> Import CSV
-            </button>
-
-            <button onclick="openFormModal()" 
-               class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl shadow-md shadow-blue-200 transition-all flex items-center gap-2 font-bold text-xs uppercase tracking-wide">
-                <i class="fas fa-plus"></i> Tambah Jadwal
-            </button>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-[1.5rem] shadow-sm border border-slate-200 overflow-hidden w-full">
-        <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
-            <div class="flex items-center gap-4">
-                <span class="text-xs font-black text-slate-400 uppercase tracking-widest">Daftar Jadwal</span>
-                <div id="bulkActions" class="hidden">
-                    <button onclick="bulkDelete()" class="text-xs font-bold text-red-500 bg-red-50 px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors">
-                        <i class="fas fa-trash-alt mr-1"></i> Hapus Terpilih (<span id="selectedCount">0</span>)
-                    </button>
-                </div>
-            </div>
-            <span id="totalData" class="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 uppercase tracking-tighter">Memuat...</span>
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <div class="relative w-full sm:w-64">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search"></i>
+            </span>
+            <input type="text" id="searchInput" placeholder="Cari MK, Dosen, Kelas..." 
+                   class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow text-sm">
         </div>
 
-        <div class="overflow-x-auto w-full">
-            <table class="w-full text-left border-collapse table-auto">
-                <thead>
-                    <tr class="bg-slate-50/50 text-slate-400 text-[10px] uppercase tracking-[0.15em] font-black border-b border-slate-100">
-                        <th class="px-8 py-4 text-center w-8">
-                            <input type="checkbox" id="selectAll" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
-                        </th>
-                        <th class="px-4 py-4 text-center w-12">No</th>
-                        <th class="px-6 py-4">Mata Kuliah & Dosen</th>
-                        <th class="px-6 py-4 text-center">Prodi</th>
-                        <th class="px-6 py-4">Waktu & Tanggal</th>
-                        <th class="px-6 py-4 text-center">Kelas</th>
-                        <th class="px-6 py-4 text-center">Ruangan</th>
-                        <th class="px-8 py-4 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody" class="divide-y divide-slate-50 text-slate-600 text-sm">
-                    <tr>
-                        <td colspan="8" class="px-6 py-20 text-center">
-                            <i class="fas fa-circle-notch fa-spin text-blue-500 text-3xl mb-3"></i>
-                            <p class="text-slate-400 font-medium">Menyinkronkan data...</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <button onclick="openUploadModal()" 
+           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
+            <i class="fas fa-file-csv"></i> Upload CSV
+        </button>
+
+        <button onclick="openFormModal()" 
+           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
+            <i class="fas fa-plus"></i> Tambah Jadwal
+        </button>
     </div>
 </div>
 
-<div id="formModal" class="fixed inset-0 z-[60] hidden overflow-y-auto">
-    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal('formModal')"></div>
-    <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative transform overflow-hidden rounded-[2rem] bg-white shadow-2xl transition-all w-full max-w-2xl border border-slate-100">
-            <div class="bg-slate-50/50 px-8 py-5 border-b border-slate-100 flex justify-between items-center">
-                <h3 id="formModalTitle" class="text-xl font-bold text-slate-800">Tambah Jadwal Baru</h3>
-                <button onclick="closeModal('formModal')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-xl"></i></button>
+<div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-500 font-medium">Daftar Jadwal UPK</span>
+            <div id="bulkActions" class="hidden flex items-center gap-2 animate-fade-in">
+                <span class="text-xs text-gray-400">|</span>
+                <span id="selectedCount" class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded">0 terpilih</span>
+                <button onclick="bulkDelete()" class="text-xs font-bold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg transition-colors flex items-center gap-1">
+                    <i class="fas fa-trash-alt"></i> Hapus Terpilih
+                </button>
             </div>
-            <div class="p-8">
+        </div>
+        <div class="flex items-center gap-3">
+            <span id="totalData" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Total: 0</span>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
+                    <th class="px-6 py-4 font-semibold text-center w-8">
+                        <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                    </th>
+                    <th class="px-6 py-4 font-semibold text-center w-12">No</th>
+                    <th class="px-6 py-4 font-semibold">Mata Kuliah & Dosen</th>
+                    <th class="px-6 py-4 font-semibold text-center">Prodi</th>
+                    <th class="px-6 py-4 font-semibold">Waktu & Tanggal</th>
+                    <th class="px-6 py-4 font-semibold text-center w-24">Kelas</th>
+                    <th class="px-6 py-4 font-semibold text-center w-32">Ruangan</th>
+                    <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
+                <tr>
+                    <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                        <div class="flex flex-col items-center gap-2">
+                            <i class="fas fa-circle-notch fa-spin text-blue-500 text-2xl"></i>
+                            <span class="font-medium">Memuat data...</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="formModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full sm:max-w-2xl border border-gray-100">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 z-10">
+                <h3 id="formModalTitle" class="text-xl font-bold text-gray-800 flex items-center gap-2">Tambah Jadwal Baru</h3>
+                <button onclick="closeModal('formModal')" class="text-gray-400 hover:text-gray-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6">
                 <form id="jadwalForm" class="space-y-5">
                     <input type="hidden" id="inputId" name="id">
                     <div class="grid grid-cols-2 gap-5">
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Program Studi</label>
-                            <select id="inputProdi" name="prodi" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Program Studi</label>
+                            <select id="inputProdi" name="prodi" required class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all">
                                 <option value="TI">Teknik Informatika</option>
                                 <option value="SI">Sistem Informasi</option>
                             </select>
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Mata Kuliah</label>
-                            <input type="text" id="inputMK" name="mata_kuliah" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Mata Kuliah</label>
+                            <input type="text" id="inputMK" name="mata_kuliah" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Dosen Pengampu</label>
-                            <input type="text" id="inputDosen" name="dosen" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Dosen Pengampu</label>
+                            <input type="text" id="inputDosen" name="dosen" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Tanggal</label>
-                            <input type="date" id="inputTanggal" name="tanggal" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Tanggal</label>
+                            <input type="date" id="inputTanggal" name="tanggal" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Waktu (Jam)</label>
-                            <input type="text" id="inputJam" name="jam" placeholder="08.00 - 10.00" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Waktu (Jam)</label>
+                            <input type="text" id="inputJam" name="jam" placeholder="08.00 - 10.00" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Ruangan</label>
-                            <input type="text" id="inputRuangan" name="ruangan" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Ruangan</label>
+                            <input type="text" id="inputRuangan" name="ruangan" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Kelas</label>
-                            <input type="text" id="inputKelas" name="kelas" placeholder="A1" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Kelas</label>
+                            <input type="text" id="inputKelas" name="kelas" placeholder="A1" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Frekuensi</label>
-                            <input type="text" id="inputFreq" name="frekuensi" placeholder="TI_SD-1" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Frekuensi</label>
+                            <input type="text" id="inputFreq" name="frekuensi" placeholder="TI_SD-1" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                     </div>
                     <div class="flex justify-end gap-3 pt-6">
-                        <button type="button" onclick="closeModal('formModal')" class="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-all">Batal</button>
-                        <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all">Simpan Jadwal</button>
+                        <button type="button" onclick="closeModal('formModal')" class="px-6 py-2.5 bg-gray-100 text-gray-600 rounded-lg font-semibold hover:bg-gray-200 transition-all">Batal</button>
+                        <button type="submit" class="px-8 py-2.5 bg-blue-600 text-white rounded-lg font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all">Simpan Jadwal</button>
                     </div>
                 </form>
             </div>
@@ -132,13 +130,13 @@
     </div>
 </div>
 
-<div id="uploadModal" class="fixed inset-0 z-[60] hidden overflow-y-auto">
-    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal('uploadModal')"></div>
+<div id="uploadModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
     <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative transform overflow-hidden rounded-[2rem] bg-white shadow-2xl transition-all w-full max-w-md border border-slate-100">
-            <div class="bg-emerald-50 px-8 py-5 border-b border-emerald-100 flex justify-between items-center">
-                <h3 class="text-xl font-bold text-emerald-800">Import Jadwal CSV</h3>
-                <button onclick="closeModal('uploadModal')" class="text-emerald-600 hover:text-emerald-800"><i class="fas fa-times text-xl"></i></button>
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full max-w-md border border-gray-100">
+            <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-100 flex justify-between items-center bg-emerald-50/50">
+                <h3 class="text-xl font-bold text-emerald-800">Import Jadwal Excel / CSV</h3>
+                <button onclick="closeModal('uploadModal')" class="text-emerald-400 hover:text-emerald-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
             </div>
             <div class="p-8 text-center">
                 <form action="<?= PUBLIC_URL ?>/admin/jadwalupk/upload" method="POST" enctype="multipart/form-data">
@@ -183,7 +181,8 @@ window.closeModal = function(id) {
 
 window.openUploadModal = function() { openModal('uploadModal'); };
 
-window.openFormModal = function(id = null) {
+window.openFormModal = function(id = null, event = null) {
+    if(event) event.stopPropagation();
     openModal('formModal');
     const title = document.getElementById('formModalTitle');
     const form = document.getElementById('jadwalForm');
@@ -192,7 +191,7 @@ window.openFormModal = function(id = null) {
     
     if(id) {
         title.innerHTML = '<i class="fas fa-edit text-blue-600 mr-2"></i> Edit Jadwal UPK';
-        const data = allJadwal.find(i => i.id == id);
+        const data = allJadwalData.find(i => i.id == id);
         if(data) {
             document.getElementById('inputId').value = data.id;
             document.getElementById('inputProdi').value = data.prodi;
@@ -209,7 +208,8 @@ window.openFormModal = function(id = null) {
     }
 };
 
-window.hapusData = function(id) {
+window.hapusJadwal = function(id, event = null) {
+    if(event) event.stopPropagation();
     Swal.fire({
         title: 'Hapus data?',
         text: "Data yang dihapus tidak bisa dikembalikan!",
@@ -226,14 +226,14 @@ window.hapusData = function(id) {
     });
 };
 
-async function loadData() {
+async function loadJadwal() {
     const tbody = document.getElementById('tableBody');
     try {
         const response = await fetch('<?= PUBLIC_URL ?>/api.php/jadwal-upk');
         const result = await response.json();
         if(result.status === 'success') {
-            allJadwal = result.data;
-            renderTable(allJadwal);
+            allJadwalData = result.data;
+            renderTable(allJadwalData);
         }
     } catch (err) {
         console.error("API Error:", err);
@@ -243,76 +243,121 @@ async function loadData() {
 
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
-    document.getElementById('totalData').innerText = `TOTAL: ${data.length} JADWAL`;
-    tbody.innerHTML = '';
+    document.getElementById('totalData').innerText = `Total: ${data.length}`;
+    
+    // Reset Select All
+    const selectAll = document.getElementById('selectAll');
+    if(selectAll) selectAll.checked = false;
+    updateBulkActionsVisibility();
 
-    if(data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-20 text-slate-300 font-bold uppercase tracking-widest text-xs">Belum ada data jadwal</td></tr>`;
+    if(!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-20 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
         return;
     }
 
+    let rowsHtml = '';
     data.forEach((item, index) => {
         const tgl = new Date(item.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
-        tbody.innerHTML += `
-            <tr class="hover:bg-blue-50/40 transition-all duration-200">
-                <td class="px-8 py-5 text-center">
-                    <input type="checkbox" value="${item.id}" onchange="updateBulkActionsVisibility()" class="row-checkbox w-4 h-4 rounded border-slate-300 text-blue-600">
+        rowsHtml += `
+            <tr class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100">
+                <td class="px-6 py-4 text-center">
+                    <input type="checkbox" value="${item.id}" 
+                           onchange="updateBulkActionsVisibility()" 
+                           onclick="event.stopPropagation()"
+                           class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                 </td>
-                <td class="px-4 py-5 text-center text-slate-300 font-mono text-xs">${index + 1}</td>
-                <td class="px-6 py-5">
+                <td class="px-6 py-4 text-center text-gray-400 font-medium font-mono text-xs">${index + 1}</td>
+                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.id}, event)">
                     <div class="flex flex-col">
-                        <span class="font-bold text-slate-800 text-sm mb-0.5">${item.mata_kuliah}</span>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tight">${item.dosen}</span>
+                        <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.mata_kuliah}</span>
+                        <span class="text-xs text-gray-500 flex items-center gap-1"><i class="fas fa-user-tie text-[10px]"></i> ${item.dosen}</span>
                     </div>
                 </td>
-                <td class="px-6 py-5 text-center">
-                    <span class="text-[10px] font-black px-2 py-1 bg-slate-100 text-slate-500 rounded border border-slate-200">${item.prodi}</span>
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                    <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded border border-gray-200 uppercase tracking-tight">${item.prodi}</span>
                 </td>
-                <td class="px-6 py-5">
-                    <div class="flex flex-col">
-                        <span class="font-bold text-slate-700 text-sm">${tgl}</span>
-                        <span class="text-xs text-blue-600 font-black mt-0.5 tracking-tighter"><i class="far fa-clock mr-1"></i>${item.jam}</span>
-                    </div>
-                </td>
-                <td class="px-6 py-5 text-center">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
                     <div class="flex flex-col items-center">
-                        <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-xl text-[10px] font-black border border-blue-100">${item.kelas}</span>
-                        <span class="text-[8px] text-slate-300 mt-1 font-bold">${item.frekuensi || '-'}</span>
+                        <span class="font-bold text-gray-700 text-sm">${tgl}</span>
+                        <span class="text-xs text-blue-600 flex items-center gap-1 font-medium">
+                            <i class="far fa-clock"></i> ${item.jam}
+                        </span>
                     </div>
                 </td>
-                <td class="px-6 py-5 text-center">
-                    <span class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded-2xl text-xs font-black border border-emerald-100 shadow-sm shadow-emerald-50">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-100">${item.kelas}</span>
+                </td>
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                    <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold border border-emerald-100">
                         ${item.ruangan}
                     </span>
                 </td>
-                <td class="px-8 py-5 text-center">
-                    <div class="flex justify-center gap-2">
-                        <button onclick="openFormModal(${item.id})" class="w-9 h-9 rounded-2xl bg-amber-50 text-amber-500 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center border border-amber-100 shadow-sm">
-                            <i class="fas fa-pen text-[10px]"></i>
+                <td class="px-6 py-4">
+                    <div class="flex justify-center items-center gap-2">
+                        <button onclick="openFormModal(${item.id}, event)" class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center shadow-sm" title="Edit">
+                            <i class="fas fa-pen text-xs"></i>
                         </button>
-                        <button onclick="hapusData(${item.id})" class="w-9 h-9 rounded-2xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center border border-red-100 shadow-sm">
-                            <i class="fas fa-trash-alt text-[10px]"></i>
+                        <button onclick="hapusJadwal(${item.id}, event)" class="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-sm" title="Hapus">
+                            <i class="fas fa-trash-alt text-xs"></i>
                         </button>
                     </div>
                 </td>
             </tr>`;
     });
+    tbody.innerHTML = rowsHtml;
 }
 
 window.updateBulkActionsVisibility = function() {
     const checked = document.querySelectorAll('.row-checkbox:checked').length;
     const actions = document.getElementById('bulkActions');
-    document.getElementById('selectedCount').innerText = checked;
+    const countSpan = document.getElementById('selectedCount');
+    
+    if (countSpan) countSpan.innerText = `${checked} terpilih`;
     checked > 0 ? actions.classList.remove('hidden') : actions.classList.add('hidden');
 };
 
+window.bulkDelete = function() {
+    const selected = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
+    if(selected.length === 0) return;
+
+    Swal.fire({
+        title: `Hapus ${selected.length} data?`,
+        text: "Data yang dipilih akan dihapus permanen!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Ya, Hapus Semua!',
+        cancelButtonText: 'Batal'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch('<?= API_URL ?>/jadwal-upk/delete-multiple', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids: selected })
+                });
+                const res = await response.json();
+                if(res.status === 'success') {
+                    Swal.fire('Berhasil!', 'Data pilihan telah dihapus.', 'success');
+                    loadJadwal();
+                    document.getElementById('selectAll').checked = false;
+                    updateBulkActionsVisibility();
+                }
+            } catch (err) {
+                Swal.fire('Error', 'Gagal menghapus data.', 'error');
+            }
+        }
+    });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-    loadData();
+    loadJadwal();
     
     // Search Handler
     document.getElementById('searchInput').addEventListener('keyup', (e) => {
         const key = e.target.value.toLowerCase();
-        const filtered = allJadwal.filter(i => 
+        const filtered = allJadwalData.filter(i => 
             i.mata_kuliah.toLowerCase().includes(key) || 
             i.dosen.toLowerCase().includes(key)
         );
@@ -344,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await response.json();
             if(res.status === 'success' || res.code === 200) {
                 closeModal('formModal');
-                loadData();
+                loadJadwal();
                 Swal.fire('Berhasil!', 'Data telah disimpan.', 'success');
             }
         } catch (err) {

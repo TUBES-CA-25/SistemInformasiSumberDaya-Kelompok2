@@ -44,4 +44,44 @@ class JadwalUpkController extends Controller {
             'data' => $data
         ]);
     }
+
+    public function apiShow($id) {
+        $data = $this->model('JadwalUpkModel')->getById($id);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    public function store() {
+        $data = json_decode(file_get_contents('php://input'), true);
+        if ($this->model('JadwalUpkModel')->create($data)) {
+            echo json_encode(['status' => 'success', 'message' => 'Data berhasil ditambahkan']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Gagal menambahkan data']);
+        }
+    }
+
+    public function update($id) {
+        $data = json_decode(file_get_contents('php://input'), true);
+        if ($this->model('JadwalUpkModel')->update($id, $data)) {
+            echo json_encode(['status' => 'success', 'message' => 'Data berhasil diupdate']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Gagal mengupdate data']);
+        }
+    }
+
+    public function deleteMultiple() {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $ids = $data['ids'] ?? [];
+        if (!empty($ids)) {
+            if ($this->model('JadwalUpkModel')->deleteMultiple($ids)) {
+                echo json_encode(['status' => 'success', 'message' => 'Data berhasil dihapus']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Gagal menghapus data']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Tidak ada data dipilih']);
+        }
+    }
 }

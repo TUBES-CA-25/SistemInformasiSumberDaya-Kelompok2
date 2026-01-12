@@ -19,6 +19,60 @@ class JadwalUpkModel {
         return $stmt->execute([$id]);
     }
 
+    public function getById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function create($data) {
+        $sql = "INSERT INTO $this->table (prodi, mata_kuliah, dosen, tanggal, jam, kelas, ruangan, frekuensi) 
+                VALUES (:prodi, :mata_kuliah, :dosen, :tanggal, :jam, :kelas, :ruangan, :frekuensi)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            'prodi' => $data['prodi'],
+            'mata_kuliah' => $data['mata_kuliah'],
+            'dosen' => $data['dosen'],
+            'tanggal' => $data['tanggal'],
+            'jam' => $data['jam'],
+            'kelas' => $data['kelas'],
+            'ruangan' => $data['ruangan'],
+            'frekuensi' => $data['frekuensi'] ?? ''
+        ]);
+    }
+
+    public function update($id, $data) {
+        $sql = "UPDATE $this->table SET 
+                prodi = :prodi, 
+                mata_kuliah = :mata_kuliah, 
+                dosen = :dosen, 
+                tanggal = :tanggal, 
+                jam = :jam, 
+                kelas = :kelas, 
+                ruangan = :ruangan, 
+                frekuensi = :frekuensi 
+                WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            'id' => $id,
+            'prodi' => $data['prodi'],
+            'mata_kuliah' => $data['mata_kuliah'],
+            'dosen' => $data['dosen'],
+            'tanggal' => $data['tanggal'],
+            'jam' => $data['jam'],
+            'kelas' => $data['kelas'],
+            'ruangan' => $data['ruangan'],
+            'frekuensi' => $data['frekuensi'] ?? ''
+        ]);
+    }
+
+    public function deleteMultiple($ids) {
+        $placeholders = str_repeat('?,', count($ids) - 1) . '?';
+        $sql = "DELETE FROM $this->table WHERE id IN ($placeholders)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($ids);
+    }
+
     public function importCSV($filename) {
         // Kosongkan tabel
         $this->db->exec("TRUNCATE TABLE " . $this->table);
