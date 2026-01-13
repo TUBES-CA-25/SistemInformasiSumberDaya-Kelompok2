@@ -55,12 +55,11 @@
                     <th class="px-6 py-4 font-semibold">Hari & Waktu</th>
                     <th class="px-6 py-4 font-semibold text-center w-24">Kelas</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Status</th>
-                    <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
                 <tr>
-                    <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                         <div class="flex flex-col items-center gap-2">
                             <i class="fas fa-circle-notch fa-spin text-blue-500 text-2xl"></i>
                             <span class="font-medium">Memuat data...</span>
@@ -311,12 +310,12 @@ function renderTable(data) {
     // Reset Select All
     const selectAll = document.getElementById('selectAll');
     if(selectAll) selectAll.checked = false;
-    updateBulkActionsVisibility();
 
     if(totalEl) totalEl.innerText = `Total: ${data.length}`;
 
     if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
+        updateBulkActionsVisibility();
         return;
     }
 
@@ -340,7 +339,7 @@ function renderTable(data) {
                 <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
                 <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <div class="flex flex-col">
-                        <span class="font-bold text-gray-800 text-sm">${item.namaMatakuliah || '-'}</span>
+                        <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.namaMatakuliah || '-'}</span>
                         <span class="text-xs text-gray-400 font-mono mt-0.5">${item.kodeMatakuliah || '-'}</span>
                     </div>
                 </td>
@@ -359,19 +358,12 @@ function renderTable(data) {
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <span class="${statusClass} px-2.5 py-1 rounded-full text-xs font-semibold border">${item.status || 'Nonaktif'}</span>
                 </td>
-                <td class="px-6 py-4">
-                    <div class="flex justify-center items-center gap-2">
-                        <button onclick="openFormModal(${item.idJadwal}, event)" class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center" title="Edit">
-                            <i class="fas fa-pen text-xs"></i>
-                        </button>
-                        <button onclick="hapusJadwal(${item.idJadwal}, event)" class="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center" title="Hapus">
-                            <i class="fas fa-trash-alt text-xs"></i>
-                        </button>
-                    </div>
-                </td>
             </tr>`;
     });
     tbody.innerHTML = rowsHtml;
+    
+    // Panggil update visibility setelah DOM terupdate
+    updateBulkActionsVisibility();
 }
 
 // --- BULK ACTION HELPERS ---

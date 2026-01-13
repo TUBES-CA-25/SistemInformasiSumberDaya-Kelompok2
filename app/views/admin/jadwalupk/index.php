@@ -15,7 +15,7 @@
 
         <button onclick="openUploadModal()" 
            class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
-            <i class="fas fa-file-excel"></i> Import Excel/CSV
+            <i class="fas fa-file-excel"></i> Upload Exel
         </button>
 
         <button onclick="openFormModal()" 
@@ -55,7 +55,6 @@
                     <th class="px-6 py-4 font-semibold">Waktu & Tanggal</th>
                     <th class="px-6 py-4 font-semibold text-center w-24">Kelas</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Ruangan</th>
-                    <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
@@ -328,10 +327,10 @@ function renderTable(data) {
     // Reset Select All
     const selectAll = document.getElementById('selectAll');
     if(selectAll) selectAll.checked = false;
-    updateBulkActionsVisibility();
 
     if(!data || data.length === 0) {
         tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-20 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
+        updateBulkActionsVisibility();
         return;
     }
 
@@ -347,16 +346,16 @@ function renderTable(data) {
                            class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                 </td>
                 <td class="px-6 py-4 text-center text-gray-400 font-medium font-mono text-xs">${index + 1}</td>
-                <td class="px-6 py-4 cursor-pointer" onclick="openDetailModal(${item.id}, event)">
+                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.id}, event)">
                     <div class="flex flex-col">
                         <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.mata_kuliah}</span>
                         <span class="text-xs text-gray-500 flex items-center gap-1"><i class="fas fa-user-tie text-[10px]"></i> ${item.dosen}</span>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openDetailModal(${item.id}, event)">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
                     <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded border border-gray-200 uppercase tracking-tight">${item.prodi}</span>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openDetailModal(${item.id}, event)">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
                     <div class="flex flex-col items-center">
                         <span class="font-bold text-gray-700 text-sm">${tgl}</span>
                         <span class="text-xs text-blue-600 flex items-center gap-1 font-medium">
@@ -364,27 +363,20 @@ function renderTable(data) {
                         </span>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openDetailModal(${item.id}, event)">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
                     <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-100">${item.kelas}</span>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openDetailModal(${item.id}, event)">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
                     <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold border border-emerald-100">
                         ${item.ruangan}
                     </span>
                 </td>
-                <td class="px-6 py-4">
-                    <div class="flex justify-center items-center gap-2">
-                        <button onclick="openFormModal(${item.id}, event)" class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all flex items-center justify-center shadow-sm" title="Edit">
-                            <i class="fas fa-pen text-xs"></i>
-                        </button>
-                        <button onclick="hapusJadwal(${item.id}, event)" class="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-sm" title="Hapus">
-                            <i class="fas fa-trash-alt text-xs"></i>
-                        </button>
-                    </div>
-                </td>
             </tr>`;
     });
     tbody.innerHTML = rowsHtml;
+    
+    // Panggil update visibility setelah DOM terupdate
+    updateBulkActionsVisibility();
 }
 
 window.updateBulkActionsVisibility = function() {
