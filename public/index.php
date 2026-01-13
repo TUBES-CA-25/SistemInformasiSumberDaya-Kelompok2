@@ -140,6 +140,24 @@ if ($isAdminArea) {
         }
     }
 
+    // Di dalam blok if ($isAdminArea) pada public/index.php
+    if ($module === 'jadwalupk') {
+        require_once CONTROLLER_PATH . '/JadwalUpkController.php';
+        $ctrl = new JadwalUpkController();
+        
+        if ($action === 'upload') {
+            $ctrl->upload();
+        } elseif ($action === 'delete') {
+            // Ambil ID dari subParts[2] jika ada, jika tidak cek $_GET['id']
+            $targetId = $subParts[2] ?? ($_GET['id'] ?? null);
+            $ctrl->delete($targetId);
+        } else {
+            // Ini akan memanggil fungsi admin_index() yang menyiapkan variabel $data
+            $ctrl->admin_index(); 
+        }
+        exit; // Stop agar tidak melakukan require view secara manual di bawah
+    }
+
     if (file_exists($adminHeader)) require_once $adminHeader;
 
     if (file_exists($targetFile)) {
@@ -152,6 +170,9 @@ if ($isAdminArea) {
     chdir(ROOT_PROJECT . '/public');
     if (file_exists($adminFooter)) require_once $adminFooter;
     exit;
+
+
+
 }
 
 
@@ -235,7 +256,7 @@ if (isset($segments[1]) && $segments[1] !== '') {
 
 $pageCss = 'style.css'; // Fallback default
 if ($page == 'home')                               $pageCss = 'home.css';
-if ($page == 'tatatertib' || $page == 'jadwal' || $page == 'formatpenulisan') {
+if ($page == 'tatatertib' || $page == 'jadwal' || $page == 'jadwalupk' || $page == 'formatpenulisan') {
     $pageCss = 'praktikum.css';
 }
 if ($page == 'kepala' || $page == 'asisten' || $page == 'detail' || $page == 'sop') {
@@ -320,6 +341,7 @@ $mvc_routes = [
     'logout'           => ['AuthController', 'logout', []],
 
     'asisten'          => ['AsistenController', 'index', []],
+    'jadwalupk' => ['JadwalUpkController', 'index', []],
     'formatpenulisan' => ['FormatPenulisanController', 'index', []],
     'detail'           => ['AsistenController', 'detail', ['id' => $id]],
     'detail-asisten'   => ['AsistenController', 'detail', ['id' => $id]],

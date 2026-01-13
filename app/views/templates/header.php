@@ -108,6 +108,7 @@
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/tatatertib">Tata Tertib</a>
                         <a href="<?= PUBLIC_URL ?>/jadwal">Jadwal</a>
+                        <a href="<?= PUBLIC_URL ?>/jadwalupk">Jadwal UPK</a>
                         <a href="<?= PUBLIC_URL ?>/formatpenulisan">Format Penulisan</a>
                     </div>
                 </li>
