@@ -15,7 +15,7 @@
 
         <button onclick="openUploadModal()" 
            class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
-            <i class="fas fa-file-csv"></i> Upload CSV
+            <i class="fas fa-file-excel"></i> Import Excel/CSV
         </button>
 
         <button onclick="openFormModal()" 
@@ -140,16 +140,66 @@
             </div>
             <div class="p-8 text-center">
                 <form action="<?= PUBLIC_URL ?>/admin/jadwalupk/upload" method="POST" enctype="multipart/form-data">
-                    <label for="file_csv" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-emerald-200 rounded-3xl cursor-pointer bg-emerald-50/30 hover:bg-emerald-50 transition-all mb-6 group">
+                    <label for="file_import" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-emerald-200 rounded-3xl cursor-pointer bg-emerald-50/30 hover:bg-emerald-50 transition-all mb-6 group">
                         <div class="w-16 h-16 bg-emerald-100 text-emerald-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                             <i class="fas fa-cloud-upload-alt text-2xl"></i>
                         </div>
-                        <p class="text-sm text-slate-600">Klik untuk pilih file <b>.csv</b></p>
-                        <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">Gunakan format pemisah koma (,)</p>
-                        <input id="file_csv" name="file_csv" type="file" class="hidden" accept=".csv" required />
+                        <p class="text-sm text-slate-600">Klik untuk pilih file <b>.xlsx / .xls / .csv</b></p>
+                        <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">Gunakan format yang sesuai (Prodi, Tanggal, Jam, dst)</p>
+                        <input id="file_import" name="file_import" type="file" class="hidden" accept=".csv, .xlsx, .xls" required />
                     </label>
                     <button type="submit" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 uppercase tracking-widest text-xs">Mulai Import Data</button>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full max-w-lg border border-gray-100">
+            <div class="bg-blue-50 px-6 py-4 border-b border-blue-100 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-blue-800 flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i> Detail Jadwal UPK
+                </h3>
+                <button onclick="closeModal('detailModal')" class="text-blue-400 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-3 gap-2 border-b border-gray-50 pb-3">
+                    <span class="text-gray-500 text-sm">Mata Kuliah</span>
+                    <span id="detailMK" class="col-span-2 font-bold text-gray-800"></span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 border-b border-gray-50 pb-3">
+                    <span class="text-gray-500 text-sm">Dosen</span>
+                    <span id="detailDosen" class="col-span-2 font-medium text-gray-700"></span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 border-b border-gray-50 pb-3">
+                    <span class="text-gray-500 text-sm">Program Studi</span>
+                    <span id="detailProdi" class="col-span-2 font-bold text-blue-600"></span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 border-b border-gray-50 pb-3">
+                    <span class="text-gray-500 text-sm">Waktu & Tanggal</span>
+                    <div class="col-span-2">
+                        <span id="detailTanggal" class="block font-medium text-gray-700"></span>
+                        <span id="detailJam" class="text-sm text-blue-500 font-bold"></span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 border-b border-gray-50 pb-3">
+                    <span class="text-gray-500 text-sm">Kelas & Ruangan</span>
+                    <span class="col-span-2 font-medium text-gray-700">
+                        <span id="detailKelas" class="font-bold"></span> - <span id="detailRuangan"></span>
+                    </span>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <span class="text-gray-500 text-sm">Frekuensi</span>
+                    <span id="detailFreq" class="col-span-2 font-mono text-xs bg-gray-100 px-2 py-1 rounded w-fit"></span>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-6 py-4 flex justify-end">
+                <button onclick="closeModal('detailModal')" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition-all">Tutup</button>
             </div>
         </div>
     </div>
@@ -180,6 +230,22 @@ window.closeModal = function(id) {
 };
 
 window.openUploadModal = function() { openModal('uploadModal'); };
+
+window.openDetailModal = function(id, event = null) {
+    if(event) event.stopPropagation();
+    const data = allJadwalData.find(i => i.id == id);
+    if(data) {
+        document.getElementById('detailMK').innerText = data.mata_kuliah;
+        document.getElementById('detailDosen').innerText = data.dosen;
+        document.getElementById('detailProdi').innerText = data.prodi;
+        document.getElementById('detailTanggal').innerText = new Date(data.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+        document.getElementById('detailJam').innerText = data.jam;
+        document.getElementById('detailKelas').innerText = data.kelas;
+        document.getElementById('detailRuangan').innerText = data.ruangan;
+        document.getElementById('detailFreq').innerText = data.frekuensi || '-';
+        openModal('detailModal');
+    }
+};
 
 window.openFormModal = function(id = null, event = null) {
     if(event) event.stopPropagation();
@@ -219,9 +285,23 @@ window.hapusJadwal = function(id, event = null) {
         cancelButtonColor: '#64748b',
         confirmButtonText: 'Ya, Hapus!',
         cancelButtonText: 'Batal'
-    }).then((result) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
-            window.location.href = `<?= PUBLIC_URL ?>/admin/jadwalupk/delete/${id}`;
+            try {
+                const response = await fetch(`<?= API_URL ?>/jadwal-upk/${id}`, {
+                    method: 'DELETE'
+                });
+                const res = await response.json();
+                if(res.status === 'success') {
+                    Swal.fire('Berhasil!', 'Data telah dihapus.', 'success');
+                    loadJadwal();
+                } else {
+                    Swal.fire('Gagal', res.message || 'Gagal menghapus data.', 'error');
+                }
+            } catch (err) {
+                console.error("Delete Error:", err);
+                Swal.fire('Error', 'Gagal menghubungi server.', 'error');
+            }
         }
     });
 };
@@ -267,16 +347,16 @@ function renderTable(data) {
                            class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                 </td>
                 <td class="px-6 py-4 text-center text-gray-400 font-medium font-mono text-xs">${index + 1}</td>
-                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                <td class="px-6 py-4 cursor-pointer" onclick="openDetailModal(${item.id}, event)">
                     <div class="flex flex-col">
                         <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.mata_kuliah}</span>
                         <span class="text-xs text-gray-500 flex items-center gap-1"><i class="fas fa-user-tie text-[10px]"></i> ${item.dosen}</span>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openDetailModal(${item.id}, event)">
                     <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded border border-gray-200 uppercase tracking-tight">${item.prodi}</span>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openDetailModal(${item.id}, event)">
                     <div class="flex flex-col items-center">
                         <span class="font-bold text-gray-700 text-sm">${tgl}</span>
                         <span class="text-xs text-blue-600 flex items-center gap-1 font-medium">
@@ -284,10 +364,10 @@ function renderTable(data) {
                         </span>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openDetailModal(${item.id}, event)">
                     <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-100">${item.kelas}</span>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openDetailModal(${item.id}, event)">
                     <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold border border-emerald-100">
                         ${item.ruangan}
                     </span>
@@ -308,11 +388,19 @@ function renderTable(data) {
 }
 
 window.updateBulkActionsVisibility = function() {
+    const checks = document.querySelectorAll('.row-checkbox');
     const checked = document.querySelectorAll('.row-checkbox:checked').length;
+    const selectAll = document.getElementById('selectAll');
     const actions = document.getElementById('bulkActions');
     const countSpan = document.getElementById('selectedCount');
     
     if (countSpan) countSpan.innerText = `${checked} terpilih`;
+    
+    // Sinkronisasi checkbox Select All
+    if (selectAll) {
+        selectAll.checked = (checks.length > 0 && checked === checks.length);
+    }
+
     checked > 0 ? actions.classList.remove('hidden') : actions.classList.add('hidden');
 };
 
@@ -331,21 +419,29 @@ window.bulkDelete = function() {
         cancelButtonText: 'Batal'
     }).then(async (result) => {
         if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Sedang menghapus...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
             try {
                 const response = await fetch('<?= API_URL ?>/jadwal-upk/delete-multiple', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ids: selected })
                 });
+                
                 const res = await response.json();
                 if(res.status === 'success') {
-                    Swal.fire('Berhasil!', 'Data pilihan telah dihapus.', 'success');
+                    Swal.fire('Berhasil!', res.message || 'Data pilihan telah dihapus.', 'success');
                     loadJadwal();
-                    document.getElementById('selectAll').checked = false;
-                    updateBulkActionsVisibility();
+                } else {
+                    Swal.fire('Gagal', res.message || 'Terjadi kesalahan saat menghapus data.', 'error');
                 }
             } catch (err) {
-                Swal.fire('Error', 'Gagal menghapus data.', 'error');
+                console.error("Delete Error:", err);
+                Swal.fire('Error', 'Gagal menghubungi server.', 'error');
             }
         }
     });

@@ -128,9 +128,9 @@ $routes = [
         '/jadwal-praktikum/upload' => ['controller' => 'JadwalPraktikumController', 'method' => 'uploadExcel'],
         '/jadwal-praktikum/upload-csv' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'uploadCSV'],
         '/jadwal-upk' => ['controller' => 'JadwalUpkController', 'method' => 'store'],
-        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'update'],
         '/jadwal-upk/delete-multiple' => ['controller' => 'JadwalUpkController', 'method' => 'deleteMultiple'],
         '/jadwal-upk/upload' => ['controller' => 'JadwalUpkController', 'method' => 'upload'],
+        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'update'],
         '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'store'],
         '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'store'],
         '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'store'],
@@ -160,6 +160,7 @@ $routes = [
         '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'update'],
         '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'],
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'update'],
+        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'update'],
         '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiUpdate'],
     ],
     'DELETE' => [

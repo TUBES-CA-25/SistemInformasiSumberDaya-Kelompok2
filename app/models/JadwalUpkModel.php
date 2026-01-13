@@ -67,10 +67,47 @@ class JadwalUpkModel {
     }
 
     public function deleteMultiple($ids) {
+        if (empty($ids)) return false;
+        
+        // Pastikan $ids adalah array terindeks bersih
+        $ids = array_values($ids);
         $placeholders = str_repeat('?,', count($ids) - 1) . '?';
+        
         $sql = "DELETE FROM $this->table WHERE id IN ($placeholders)";
         $stmt = $this->db->prepare($sql);
+        
         return $stmt->execute($ids);
+    }
+
+    public function importData($dataList) {
+        try {
+            // Kosongkan tabel
+            $this->db->exec("TRUNCATE TABLE " . $this->table);
+
+            $sql = "INSERT INTO $this->table (prodi, tanggal, jam, mata_kuliah, dosen, frekuensi, kelas, ruangan) VALUES (?,?,?,?,?,?,?,?)";
+            $stmt = $this->db->prepare($sql);
+
+            $this->db->beginTransaction();
+            foreach ($dataList as $row) {
+                $stmt->execute([
+                    $row['prodi'],
+                    $row['tanggal'],
+                    $row['jam'],
+                    $row['mata_kuliah'],
+                    $row['dosen'],
+                    $row['frekuensi'],
+                    $row['kelas'],
+                    $row['ruangan']
+                ]);
+            }
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            return false;
+        }
     }
 
     public function importCSV($filename) {
@@ -97,15 +134,16 @@ class JadwalUpkModel {
 
                 if (empty($row[0])) continue;
 
-                // Mapping kolom (Prodi, Tanggal, Jam, MK, Dosen, Freq, Kelas, Ruangan)
-                $prodi   = trim($row[0] ?? '');
-                $rawTgl  = trim($row[1] ?? ''); // "29 December 2025"
-                $jam     = trim($row[2] ?? '');
-                $mk      = trim($row[3] ?? '');
-                $dosen   = trim($row[4] ?? '');
-                $freq    = trim($row[5] ?? '');
-                $kelas   = trim($row[6] ?? '');
-                $ruangan = trim($row[7] ?? '');
+            // Mapping kolom (No, Prodi, Tanggal, Jam, MK, Dosen, Freq, Kelas, Ruangan)
+                // Kita mulai dari index 1 karena index 0 biasanya kolom "No"
+                $prodi   = trim($row[1] ?? '');
+                $rawTgl  = trim($row[2] ?? ''); // "29 December 2025"
+                $jam     = trim($row[3] ?? '');
+                $mk      = trim($row[4] ?? '');
+                $dosen   = trim($row[5] ?? '');
+                $freq    = trim($row[6] ?? '');
+                $kelas   = trim($row[7] ?? '');
+                $ruangan = trim($row[8] ?? '');
 
                 // Konversi tanggal cerdas
                 $tanggalDB = date('Y-m-d', strtotime($rawTgl));

@@ -148,7 +148,9 @@ if ($isAdminArea) {
         if ($action === 'upload') {
             $ctrl->upload();
         } elseif ($action === 'delete') {
-            $ctrl->delete($_GET['id']);
+            // Ambil ID dari subParts[2] jika ada, jika tidak cek $_GET['id']
+            $targetId = $subParts[2] ?? ($_GET['id'] ?? null);
+            $ctrl->delete($targetId);
         } else {
             // Ini akan memanggil fungsi admin_index() yang menyiapkan variabel $data
             $ctrl->admin_index(); 

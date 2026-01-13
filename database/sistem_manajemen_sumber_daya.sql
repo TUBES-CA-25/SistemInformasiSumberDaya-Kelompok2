@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jan 10, 2026 at 08:34 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Jan 10, 2026 at 06:06 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -176,6 +176,153 @@ CREATE TABLE `jadwalpraktikum` (
   `status` varchar(50) DEFAULT 'Aktif'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `jadwalpraktikum`
+--
+
+INSERT INTO `jadwalpraktikum` (`idJadwal`, `idMatakuliah`, `kelas`, `idLaboratorium`, `hari`, `waktuMulai`, `waktuSelesai`, `dosen`, `asisten1`, `asisten2`, `frekuensi`, `tanggal`, `status`) VALUES
+(1, 8, 'A1,A2,A3', 38, 'Senin', '07:00:00', '09:30:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Muhammad Nur Fuad', 'TI_MICRO-5', NULL, 'Aktif'),
+(2, 9, 'A3', 39, 'Senin', '07:00:00', '09:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Muhammad Alif Maulana. R', 'Ichwal', 'TI_SD-3', NULL, 'Aktif'),
+(3, 9, 'A4', 40, 'Senin', '07:00:00', '09:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Ahmad Mufli Ramadhan', 'Sitti Lutfia', 'TI_SD-4', NULL, 'Aktif'),
+(4, 10, 'A1', 41, 'Senin', '09:40:00', '12:10:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Thalita Sherly Putri Jasmin', 'SI_PBO-1', NULL, 'Aktif'),
+(5, 10, 'B1', 42, 'Senin', '09:40:00', '12:10:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Julisa', 'Tazkirah Amaliah', 'SI_PBO-2', NULL, 'Aktif'),
+(6, 8, 'A3', 38, 'Senin', '09:40:00', '12:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Maharani Safwa Andini', 'Farid Wajdi Mufti', 'TI_MICRO-3', NULL, 'Aktif'),
+(7, 11, 'A7', 39, 'Senin', '13:00:00', '15:30:00', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'Tazkirah Amaliah', 'M. Rizwan', 'TI_BD2-7', NULL, 'Aktif'),
+(8, 11, 'A8', 40, 'Senin', '13:00:00', '15:30:00', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'Maharani Safwa Andini', 'Andi Rifqi Aunur Rahman', 'TI_BD2-8', NULL, 'Aktif'),
+(9, 8, 'A5', 38, 'Senin', '13:00:00', '15:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Laode Muhammad Dhaifan Kasyfillah', 'TI_MICRO-6', NULL, 'Aktif'),
+(10, 9, 'B2', 42, 'Senin', '13:00:00', '15:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Farid Wajdi Mufti', 'Aan Maulana Sampe', 'TI_SD-10', NULL, 'Aktif'),
+(11, 9, 'B1', 41, 'Senin', '13:00:00', '15:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Dewi Ernita Rahma', 'Andi Ahsan Ashuri', 'TI_SD-9', NULL, 'Aktif'),
+(12, 8, 'A6', 38, 'Senin', '15:40:00', '18:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Raihan Nur Rizqillah', 'TI_MICRO-7', NULL, 'Aktif'),
+(13, 9, 'A1', 41, 'Senin', '15:40:00', '18:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'M. Rizwan', 'TI_SD-1', NULL, 'Aktif'),
+(14, 9, 'A2', 42, 'Senin', '15:40:00', '18:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Wahyu Kadri Rahmat Suat', 'Maharani Safwa Andini', 'TI_SD-2', NULL, 'Aktif'),
+(15, 11, 'A3', 39, 'Selasa', '07:00:00', '09:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Dewi Ernita Rahma', 'Sitti Lutfia', 'TI_BD2-3', NULL, 'Aktif'),
+(16, 11, 'A5', 40, 'Selasa', '07:00:00', '09:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Farah Tsabitaputri Az Zahra', 'TI_BD2-5', NULL, 'Aktif'),
+(17, 13, 'A1', 41, 'Selasa', '07:00:00', '10:20:00', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'Tazkirah Amaliah', 'Nurfajri Mukmin Saputra', 'SI_PTI-1', NULL, 'Aktif'),
+(18, 13, 'B1', 42, 'Selasa', '07:00:00', '10:20:00', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'Ahmad Mufli Ramadhan', 'Muh. Fatwah Fajriansyah M.', 'SI_PTI-2', NULL, 'Aktif'),
+(19, 8, 'B2', 38, 'Selasa', '09:40:00', '12:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Muhammad Nur Fuad', 'TI_MICRO-11', NULL, 'Aktif'),
+(20, 14, 'B1', 39, 'Selasa', '09:40:00', '12:10:00', 'Fahmi, S.Kom., M.T.', 'Muhammad Alif Maulana. R', 'Aan Maulana Sampe', 'SI_JARKOM-2', NULL, 'Aktif'),
+(21, 12, 'A3', 41, 'Selasa', '10:30:00', '14:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Dewi Ernita Rahma', 'Siti Safira Tawetubun', 'TI_ALPRO-3', NULL, 'Aktif'),
+(22, 14, 'A1', 39, 'Selasa', '13:00:00', '15:30:00', 'Fahmi, S.Kom., M.T.', 'Muhammad Alif Maulana. R', 'Ichwal', 'SI_JARKOM-1', NULL, 'Aktif'),
+(23, 11, 'A1', 41, 'Selasa', '15:40:00', '18:10:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Sitti Nurhalimah', 'TI_BD2-1', NULL, 'Aktif'),
+(24, 11, 'A2', 42, 'Selasa', '15:40:00', '18:10:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Rizqi Ananda Jalil', 'TI_BD2-2', NULL, 'Aktif'),
+(25, 8, 'B1', 38, 'Selasa', '15:40:00', '18:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Muhammad Rafli', 'TI_MICRO-10', NULL, 'Aktif'),
+(26, 9, 'B3', 39, 'Sabtu', '07:00:00', '09:30:00', 'Nurul Fadhillah, S.Kom., M.Kom', 'Muhammad Alif Maulana. R', 'Nahwa Kaka Saputra Anggareksa', 'TI_SD-11', NULL, 'Aktif'),
+(27, 12, 'A2', 41, 'Sabtu', '07:00:00', '10:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Dewi Ernita Rahma', 'Siti Safira Tawetubun', 'TI_ALPRO-2', NULL, 'Aktif'),
+(28, 9, 'B4', 39, 'Sabtu', '09:40:00', '12:10:00', 'Nurul Fadhillah, S.Kom., M.Kom', 'Wahyu Kadri Rahmat Suat', 'Muhammad Rifky Saputra Scania', 'TI_SD-12', NULL, 'Aktif'),
+(29, 12, 'A4', 41, 'Sabtu', '10:30:00', '14:20:00', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Nahwa Kaka Saputra Anggareksa', 'TI_ALPRO-4', NULL, 'Aktif'),
+(30, 11, 'A4', 39, 'Sabtu', '13:00:00', '15:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Andi Ikhlas Mallomo', 'TI_BD2-4', NULL, 'Aktif'),
+(31, 11, 'A6', 40, 'Sabtu', '13:00:00', '15:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Dewi Ernita Rahma', 'Thalita Sherly Putri Jasmin', 'TI_BD2-6', NULL, 'Aktif'),
+(32, 8, 'A5,A7,B1,B2,B3', 38, 'Sabtu', '13:00:00', '15:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Maharani Safwa Andini', 'Muhammad Rafli', 'TI_MICRO-13', NULL, 'Aktif'),
+(33, 12, 'B1', 41, 'Sabtu', '14:30:00', '18:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Ichwal', 'TI_ALPRO-5', NULL, 'Aktif'),
+(34, 8, 'B3', 38, 'Rabu', '07:00:00', '09:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Farid Wajdi Mufti', 'Muhammad Rifky Saputra Scania', 'TI_MICRO-12', NULL, 'Aktif'),
+(35, 11, 'B4', 40, 'Rabu', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Dewi Ernita Rahma', 'Muh. Fatwah Fajriansyah M.', 'TI_BD2-12', NULL, 'Aktif'),
+(36, 8, 'A7', 38, 'Rabu', '09:40:00', '12:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Maharani Safwa Andini', 'Raihan Nur Rizqillah', 'TI_MICRO-8', NULL, 'Aktif'),
+(37, 9, 'A7', 39, 'Rabu', '09:40:00', '12:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'Muhammad Rifky Saputra Scania', 'TI_SD-7', NULL, 'Aktif'),
+(38, 9, 'A8', 40, 'Rabu', '09:40:00', '12:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Muhammad Alif Maulana. R', 'Nahwa Kaka Saputra Anggareksa', 'TI_SD-8', NULL, 'Aktif'),
+(39, 15, 'A1', 41, 'Rabu', '10:30:00', '14:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Sitti Nurhalimah', 'TI_PP-1', NULL, 'Aktif'),
+(40, 9, 'A5', 39, 'Rabu', '13:00:00', '15:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Ahmad Mufli Ramadhan', 'Zaki Falihin Ayyubi', 'TI_SD-5', NULL, 'Aktif'),
+(41, 9, 'A6', 40, 'Rabu', '13:00:00', '15:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'Muh. Fatwah Fajriansyah M.', 'TI_SD-6', NULL, 'Aktif'),
+(42, 8, 'A8', 38, 'Rabu', '13:00:00', '15:30:00', 'Tasrif Hasanuddin, S.T., M.Cs.', 'Maharani Safwa Andini', 'Raihan Nur Rizqillah', 'TI_MICRO-9', NULL, 'Aktif'),
+(43, 15, 'A2', 41, 'Rabu', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Hendrawan', 'TI_PP-2', NULL, 'Aktif'),
+(44, 15, 'A4', 42, 'Rabu', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Muhammad Alif Maulana. R', 'Andi Ikhlas Mallomo', 'TI_PP-4', NULL, 'Aktif'),
+(45, 11, 'B2', 42, 'Kamis', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Farid Wajdi Mufti', 'Rizqi Ananda Jalil', 'TI_BD2-10', NULL, 'Aktif'),
+(46, 11, 'B1', 41, 'Kamis', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Julisa', 'Andi Rifqi Aunur Rahman', 'TI_BD2-9', NULL, 'Aktif'),
+(47, 16, 'C2', 39, 'Kamis', '07:00:00', '09:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Muhammad Nur Fuad', 'TI_MOBILE-1', NULL, 'Aktif'),
+(48, 12, 'B2', 41, 'Kamis', '10:30:00', '14:20:00', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'Dewi Ernita Rahma', 'M. Rizwan', 'TI_ALPRO-6', NULL, 'Aktif'),
+(49, 12, 'B3', 42, 'Kamis', '10:30:00', '14:20:00', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'Berlian Septiani, S.Kom., MCF', 'Hendrawan', 'TI_ALPRO-7', NULL, 'Aktif'),
+(50, 15, 'A3', 41, 'Kamis', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Tazkirah Amaliah', 'Nurfajri Mukmin Saputra', 'TI_PP-3', NULL, 'Aktif'),
+(51, 11, 'B3', 40, 'Jumat', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Julisa', 'Firli Anastasya Hafid', 'TI_BD2-11', NULL, 'Aktif'),
+(52, 8, 'A1', 38, 'Jumat', '07:00:00', '09:30:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Andi Ahsan Ashuri', 'TI_MICRO-1', NULL, 'Aktif'),
+(53, 12, 'A1', 41, 'Jumat', '07:00:00', '10:20:00', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Andi Rifqi Aunur Rahman', 'SI_ALPRO-1', NULL, 'Aktif'),
+(54, 12, 'B1', 42, 'Jumat', '07:00:00', '10:20:00', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Laode Muhammad Dhaifan Kasyfillah', 'SI_ALPRO-2', NULL, 'Aktif'),
+(55, 8, 'A2', 38, 'Jumat', '09:40:00', '12:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Muhammad Alif Maulana. R', 'Zaki Falihin Ayyubi', 'TI_MICRO-2', NULL, 'Aktif'),
+(56, 15, 'B2', 39, 'Jumat', '10:30:00', '14:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Nurfajri Mukmin Saputra', 'TI_PP-6', NULL, 'Aktif'),
+(57, 12, 'A1', 41, 'Jumat', '10:30:00', '14:20:00', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Julisa', 'TI_ALPRO-1', NULL, 'Aktif'),
+(58, 15, 'B1', 41, 'Jumat', '14:30:00', '18:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Julisa', 'Firli Anastasya Hafid', 'TI_PP-5', NULL, 'Aktif'),
+(59, 15, 'B3', 42, 'Jumat', '14:30:00', '18:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Laode Muhammad Dhaifan Kasyfillah', 'TI_PP-7', NULL, 'Aktif'),
+(60, 8, 'A4', 38, 'Jumat', '15:40:00', '18:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Farah Tsabitaputri Az Zahra', 'TI_MICRO-4', NULL, 'Aktif');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jadwalupk`
+--
+
+CREATE TABLE `jadwalupk` (
+  `id` int(11) NOT NULL,
+  `prodi` varchar(50) DEFAULT NULL,
+  `tanggal` date NOT NULL,
+  `jam` varchar(100) NOT NULL,
+  `mata_kuliah` varchar(255) NOT NULL,
+  `dosen` varchar(255) NOT NULL,
+  `frekuensi` varchar(100) DEFAULT NULL,
+  `kelas` varchar(100) DEFAULT NULL,
+  `ruangan` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `jadwalupk`
+--
+
+INSERT INTO `jadwalupk` (`id`, `prodi`, `tanggal`, `jam`, `mata_kuliah`, `dosen`, `frekuensi`, `kelas`, `ruangan`) VALUES
+(1, 'TI', '2025-12-29', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-1', 'A1', 'Lab Microcontroller'),
+(2, 'TI', '2025-12-31', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-5', 'A1,A2,A3', 'Lab Microcontroller'),
+(3, 'TI', '2026-01-02', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-10', 'B1', 'Lab Microcontroller'),
+(4, 'TI', '2026-01-03', '10.15 - 12.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-12', 'B3', 'Lab Microcontroller'),
+(5, 'TI', '2026-01-03', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-4', 'A4', 'Lab Microcontroller'),
+(6, 'TI', '2026-01-05', '08.00 - 10.00', 'Algoritma Pemrograman', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'TI_ALPRO-1', 'A1', 'Lab Startup'),
+(7, 'TI', '2026-01-05', '08.00 - 10.00', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-5', 'B1', 'Lab Computer Vision'),
+(8, 'TI', '2026-01-05', '10.15 - 12.15', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-3', 'A3', 'Lab Computer Vision'),
+(9, 'TI', '2026-01-05', '10.15 - 12.15', 'Algoritma Pemrograman', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'TI_ALPRO-4', 'A4', 'Lab Startup'),
+(10, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-2', 'A2', 'Lab Computer Vision'),
+(11, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'TI_ALPRO-6', 'B2', 'Lab Startup'),
+(12, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'TI_ALPRO-7', 'B3', 'Lab IoT'),
+(13, 'SI', '2026-01-05', '16.00 - 18.00', 'Algoritma Pemrograman', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'SI_ALPRO-1', 'A1', 'Lab Startup'),
+(14, 'SI', '2026-01-05', '16.00 - 18.00', 'Algoritma Pemrograman', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'SI_ALPRO-2', 'B1', 'Lab IoT'),
+(15, 'TI', '2026-01-05', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-6', 'A5', 'Lab Microcontroller'),
+(16, 'TI', '2026-01-06', '08.00 - 10.00', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-10', 'B2', 'Lab IoT'),
+(17, 'TI', '2026-01-06', '08.00 - 10.00', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-9', 'B1', 'Lab Startup'),
+(18, 'TI', '2026-01-06', '08.00 - 10.00', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-1', 'A1', 'Lab Computer Vision'),
+(19, 'TI', '2026-01-06', '10.15 - 12.15', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-12', 'B4', 'Lab IoT'),
+(20, 'TI', '2026-01-06', '10.15 - 12.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-2', 'A2', 'Lab Computer Vision'),
+(21, 'TI', '2026-01-06', '13.15 - 15.15', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-11', 'B3', 'Lab Computer Vision'),
+(22, 'TI', '2026-01-06', '13.15 - 15.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-3', 'A3', 'Lab Startup'),
+(23, 'TI', '2026-01-06', '13.15 - 15.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-4', 'A4', 'Lab IoT'),
+(24, 'SI', '2026-01-06', '16.00 - 18.00', 'Pengantar Teknologi Informasi', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'SI_PTI-1', 'A1', 'Lab Startup'),
+(25, 'SI', '2026-01-06', '16.00 - 18.00', 'Pengantar Teknologi Informasi', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'SI_PTI-2', 'B1', 'Lab IoT'),
+(26, 'TI', '2026-01-07', '08.00 - 10.00', 'Basis Data II', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'TI_BD2-7', 'A7', 'Lab Computer Vision'),
+(27, 'TI', '2026-01-07', '08.00 - 10.00', 'Basis Data II', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'TI_BD2-8', 'A8', 'Lab Data Science'),
+(28, 'TI', '2026-01-07', '08.00 - 10.00', 'Struktur Data', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_SD-10', 'B2', 'Lab IoT'),
+(29, 'TI', '2026-01-07', '08.00 - 10.00', 'Struktur Data', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_SD-9', 'B1', 'Lab Startup'),
+(30, 'TI', '2026-01-07', '10.15 - 12.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-3', 'A3', 'Lab Computer Vision'),
+(31, 'TI', '2026-01-07', '10.15 - 12.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-5', 'A5', 'Lab Data Science'),
+(32, 'TI', '2026-01-07', '10.15 - 12.15', 'Struktur Data', 'Nurul Fadhillah, S.Kom., M.Kom', 'TI_SD-11', 'B3', 'Lab Startup'),
+(33, 'TI', '2026-01-07', '13.15 - 15.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-4', 'A4', 'Lab Computer Vision'),
+(34, 'TI', '2026-01-07', '13.15 - 15.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-6', 'A6', 'Lab Data Science'),
+(35, 'TI', '2026-01-07', '13.15 - 15.15', 'Struktur Data', 'Nurul Fadhillah, S.Kom., M.Kom', 'TI_SD-12', 'B4', 'Lab Startup'),
+(36, 'TI', '2026-01-07', '16.00 - 18.00', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-1', 'A1', 'Lab Computer Vision'),
+(37, 'TI', '2026-01-07', '16.00 - 18.00', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-2', 'A2', 'Lab Data Science'),
+(38, 'TI', '2026-01-07', '16.00 - 18.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-7', 'A7', 'Lab Startup'),
+(39, 'TI', '2026-01-07', '16.00 - 18.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-8', 'A8', 'Lab IoT'),
+(40, 'TI', '2026-01-08', '08.00 - 10.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-1', 'A1', 'Lab Computer Vision'),
+(41, 'TI', '2026-01-08', '08.00 - 10.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-2', 'A2', 'Lab Data Science'),
+(42, 'SI', '2026-01-08', '08.00 - 10.00', 'Pemrograman Berorientasi Objek', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'SI_PBO-1', 'A1', 'Lab Startup'),
+(43, 'SI', '2026-01-08', '08.00 - 10.00', 'Pemrograman Berorientasi Objek', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'SI_PBO-2', 'B1', 'Lab IoT'),
+(44, 'TI', '2026-01-08', '08.00 - 10.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-7', 'A6', 'Lab Microcontroller'),
+(45, 'TI', '2026-01-08', '10.15 - 12.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-3', 'A3', 'Lab Computer Vision'),
+(46, 'TI', '2026-01-08', '10.15 - 12.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-4', 'A4', 'Lab Data Science'),
+(47, 'TI', '2026-01-08', '13.15 - 15.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-5', 'A5', 'Lab Computer Vision'),
+(48, 'TI', '2026-01-08', '13.15 - 15.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-6', 'A6', 'Lab Data Science'),
+(49, 'SI', '2026-01-08', '13.15 - 15.15', 'Jaringan Komputer', 'Fahmi, S.Kom., M.T.', 'SI_JARKOM-1', 'A1', 'Lab Startup'),
+(50, 'SI', '2026-01-08', '13.15 - 15.15', 'Jaringan Komputer', 'Fahmi, S.Kom., M.T.', 'SI_JARKOM-2', 'B1', 'Lab IoT'),
+(51, 'TI', '2026-01-08', '13.15 - 15.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-11', 'B2', 'Lab Microcontroller'),
+(52, 'TI', '2026-01-08', '16.00 - 18.00', 'Pemrograman Mobile', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_MOBILE-1', 'C2', 'Lab Computer Vision'),
+(53, 'TI', '2026-01-08', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-13', 'A5,A7,B1,B2,B3', 'Lab Microcontroller'),
+(54, 'TI', '2026-01-09', '08.00 - 10.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-2', 'A2', 'Lab Microcontroller'),
+(55, 'TI', '2026-01-09', '10.15 - 12.15', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-3', 'A3', 'Lab Microcontroller'),
+(56, 'TI', '2026-01-09', '13.15 - 15.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-8', 'A7', 'Lab Microcontroller'),
+(57, 'TI', '2026-01-09', '16.00 - 18.00', 'Microcontroller', 'Tasrif Hasanuddin, S.T., M.Cs.', 'TI_MICRO-9', 'A8', 'Lab Microcontroller');
+
 -- --------------------------------------------------------
 
 --
@@ -218,7 +365,17 @@ INSERT INTO `laboratorium` (`idLaboratorium`, `nama`, `jenis`, `idKordinatorAsis
 (29, 'Laboratorium Microcontroler', 'Laboratorium', 18, 'Laboratorium Microcontroler adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 25 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854892_3342.jpg', 25, NULL, NULL, 0, 'CPU [Intel Core i5-4460]', 'RAM DDR4 [8 GB]', 'HDD [1 TB]', 'VGA NVIDIA Geforce GT 1650', 'Monitor LG 20” Inch', 'Livewire, Arduino, Microsoft Office, Google Chrome', '1 TV TCL 75” Inch, USB to HDMI, Kabel HDMI', NULL, NULL),
 (30, 'Research Room 1', 'Riset', 17, 'Research Room 1 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767854958_8098.png', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL),
 (31, 'Research Room 2', 'Riset', 20, 'Research Room 2 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767855066_4115.jpg', 0, NULL, NULL, 0, '', '', '', '', '', '', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(32, 'Research Room 3', 'Riset', 16, 'Research Room 3 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767855107_4991.png', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL);
+(32, 'Research Room 3', 'Riset', 16, 'Research Room 3 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767855107_4991.png', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL),
+(38, 'Microcontroller', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(39, 'Computer Vision', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(40, 'Data Science', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(41, 'Start Up', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(42, 'IoT', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(43, 'Lab Microcontroller', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44, 'Lab Startup', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, 'Lab Computer Vision', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(46, 'Lab IoT', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(47, 'Lab Data Science', 'Laboratorium', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -430,7 +587,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `last_login`, `created_at`) VALUES
 (2, '$2y$10$l710L0YPlhSBRxW23TpS..A8o9pbUd1RLcPLFY77Zm3', 'admin', 'admin', NULL, '2025-12-20 17:28:27'),
-(4, 'admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin', '2026-01-10 15:04:49', '2025-12-22 14:47:00');
+(4, 'admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin', '2026-01-10 19:35:59', '2025-12-22 14:47:00');
 
 --
 -- Indexes for dumped tables
@@ -469,6 +626,12 @@ ALTER TABLE `jadwalpraktikum`
   ADD PRIMARY KEY (`idJadwal`),
   ADD KEY `idx_jadwal_matakuliah` (`idMatakuliah`),
   ADD KEY `idx_jadwal_lab` (`idLaboratorium`);
+
+--
+-- Indexes for table `jadwalupk`
+--
+ALTER TABLE `jadwalupk`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `laboratorium`
@@ -555,13 +718,19 @@ ALTER TABLE `integrsiweb`
 -- AUTO_INCREMENT for table `jadwalpraktikum`
 --
 ALTER TABLE `jadwalpraktikum`
-  MODIFY `idJadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `idJadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+
+--
+-- AUTO_INCREMENT for table `jadwalupk`
+--
+ALTER TABLE `jadwalupk`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `laboratorium`
 --
 ALTER TABLE `laboratorium`
-  MODIFY `idLaboratorium` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `idLaboratorium` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `laboratorium_gambar`
