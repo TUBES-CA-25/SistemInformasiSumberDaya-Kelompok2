@@ -20,11 +20,11 @@ if (isset($data['id'])) {
     if (is_numeric($lastSegment)) $id_lab = $lastSegment;
 }
 
-// 2. QUERY DATABASE (UPDATE: JOIN KE TABEL ASISTEN UNTUK EMAIL)
+// 2. QUERY DATABASE (UPDATE: JOIN KE TABEL ASISTEN UNTUK EMAIL & FOTO)
 if ($id_lab > 0) {
     try {
-        // Gunakan LEFT JOIN untuk mengambil email dari tabel asisten
-        $query = "SELECT l.*, a.email as email_koordinator, a.nama as nama_asisten 
+        // Gunakan LEFT JOIN untuk mengambil email dan foto dari tabel asisten
+        $query = "SELECT l.*, a.email as email_koordinator, a.nama as nama_asisten, a.foto as foto_asisten 
                   FROM laboratorium l 
                   LEFT JOIN asisten a ON l.idKordinatorAsisten = a.idAsisten 
                   WHERE l.idLaboratorium = ?";
@@ -196,9 +196,19 @@ if ($lab) {
                         <span class="coord-label-top">PENANGGUNG JAWAB</span>
                         
                         <div class="coord-photo-frame">
-                            <?php if(!empty($lab['koordinator_foto']) && file_exists(ROOT_PROJECT.'/public/assets/uploads/'.$lab['koordinator_foto'])): ?>
-                                <img src="<?= ASSETS_URL ?>/assets/uploads/<?= $lab['koordinator_foto'] ?>" 
-                                     class="coord-img-circle" alt="Foto Koordinator">
+                            <?php 
+                                // Prioritas: foto dari lab > foto dari asisten > avatar dengan inisial
+                                $fotoKoord = null;
+                                
+                                if (!empty($lab['koordinator_foto']) && file_exists(ROOT_PROJECT.'/public/assets/uploads/'.$lab['koordinator_foto'])) {
+                                    $fotoKoord = ASSETS_URL . '/assets/uploads/' . $lab['koordinator_foto'];
+                                } elseif (!empty($lab['foto_asisten']) && file_exists(ROOT_PROJECT.'/public/assets/uploads/'.$lab['foto_asisten'])) {
+                                    $fotoKoord = ASSETS_URL . '/assets/uploads/' . $lab['foto_asisten'];
+                                }
+                                
+                                if ($fotoKoord): 
+                            ?>
+                                <img src="<?= $fotoKoord ?>" class="coord-img-circle" alt="Foto Koordinator" loading="lazy">
                             <?php else: ?>
                                 <div class="coord-avatar-circle"><?= $initials ?></div>
                             <?php endif; ?>

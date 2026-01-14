@@ -72,10 +72,10 @@ if (!empty($alumni_data)) {
                         }
                     }
                 ?>
-                <div class="card-link exec-margin"> 
+                <div class="card-link exec-margin" data-id="<?= $coord['idAsisten'] ?>" data-type="asisten"> 
                     <div class="exec-card">
                         <div class="exec-photo">
-                            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($coord['nama']) ?>">
+                            <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($coord['nama']) ?>" class="asisten-photo" loading="lazy">
                         </div>
                         <div class="exec-info">
                             <span class="exec-badge">Koordinator</span>
@@ -96,7 +96,7 @@ if (!empty($alumni_data)) {
                             <div class="exec-action" style="margin-top: 10px; padding-top: 10px;">
 
                                 <!-- FIX LINK DETAIL -->
-                                <a href="index.php?page=detail-asisten&id=<?= $coord['idAsisten'] ?>&type=asisten" class="btn-contact">
+                                <a href="javascript:void(0)" data-id="<?= $coord['idAsisten'] ?>" data-type="asisten" class="btn-contact asisten-detail-link">
                                     Lihat Profil
                                 </a>
 
@@ -135,10 +135,10 @@ if (!empty($alumni_data)) {
                     ?>
                     
                     <!-- FIX LINK DETAIL -->
-                    <a href="index.php?page=detail-asisten&id=<?= $row['idAsisten'] ?>&type=asisten" class="card-link">
+                    <a href="javascript:void(0)" data-id="<?= $row['idAsisten'] ?>" data-type="asisten" class="card-link asisten-detail-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
-                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="asisten-photo" loading="lazy">
                             </div>
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
@@ -188,10 +188,10 @@ if (!empty($alumni_data)) {
                     ?>
                     
                     <!-- FIX LINK DETAIL -->
-                    <a href="index.php?page=detail-asisten&id=<?= $row['idAsisten'] ?>&type=asisten" class="card-link">
+                    <a href="javascript:void(0)" data-id="<?= $row['idAsisten'] ?>" data-type="asisten" class="card-link asisten-detail-link">
                         <div class="staff-card">
                                 <div class="staff-photo-box">
-                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="asisten-photo" loading="lazy">
                                 <span class="badge-ca">CA</span>
                             </div>
                             <div class="staff-content">
@@ -242,10 +242,10 @@ if (!empty($alumni_data)) {
                         }
                     ?>
                     
-                    <a href="index.php?page=detail-asisten&id=<?= $row['idAsisten'] ?>&type=alumni" class="card-link">
+                    <a href="javascript:void(0)" data-id="<?= $row['idAsisten'] ?>" data-type="alumni" class="card-link asisten-detail-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
-                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama'] ?? '') ?>" loading="lazy">
+                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama'] ?? '') ?>" class="asisten-photo" loading="lazy">
                                 <span class="badge-alumni">Alumni</span>
                             </div>
                             <div class="staff-content">

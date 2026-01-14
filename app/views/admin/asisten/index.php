@@ -240,33 +240,96 @@ let allAsistenData = [];
 document.addEventListener('DOMContentLoaded', function() {
     loadAsisten();
     
-    // Live Search
+    // ✅ OPTIMASI: Debounce search
     document.getElementById('searchInput').addEventListener('keyup', function(e) {
-        const keyword = e.target.value.toLowerCase();
-        const filtered = allAsistenData.filter(item => 
-            (item.nama && item.nama.toLowerCase().includes(keyword)) ||
-            (item.email && item.email.toLowerCase().includes(keyword)) ||
-            (item.jurusan && item.jurusan.toLowerCase().includes(keyword))
-        );
-        renderTable(filtered);
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const keyword = e.target.value.toLowerCase();
+            const filtered = allAsistenData.filter(item => 
+                (item.nama && item.nama.toLowerCase().includes(keyword)) ||
+                (item.email && item.email.toLowerCase().includes(keyword)) ||
+                (item.jurusan && item.jurusan.toLowerCase().includes(keyword))
+            );
+            renderTable(filtered);
+        }, 300);
     });
+    
+    // ✅ OPTIMASI: Event Delegation (1 listener vs multiple onclick)
+    // Mengurangi DOM listener dari 2N menjadi 1 (N = jumlah asisten)
+    document.getElementById('tableBody').addEventListener('click', function(e) {
+        // Stop propagation untuk button clicks
+        if(e.target.closest('.edit-btn, .delete-btn')) {
+            e.stopPropagation();
+        }
+        
+        const row = e.target.closest('tr[data-id]');
+        if(!row) return;
+        
+        const id = row.dataset.id;
+        
+        // Handle edit button
+        if(e.target.closest('.edit-btn')) {
+            openFormModal(id, e);
+        }
+        // Handle delete button
+        else if(e.target.closest('.delete-btn')) {
+            hapusAsisten(id, e);
+        }
+        // Handle row click (detail modal)
+        else {
+            openDetailModal(id);
+        }
+    }, { passive: true }); // ✅ Passive listener meningkatkan scroll performance
 });
 
-// --- 1. LOAD DATA UTAMA ---
-function loadAsisten() {
-    fetch(API_URL + '/asisten').then(res => res.json()).then(res => {
+// --- OPTIMASI: Cache Global untuk Detail & Search Timeout ---
+let allAsistenCache = {}; // Cache detail asisten (avoid multiple API calls)
+let searchTimeout;        // Debounce search
+
+// --- 1. LOAD DATA UTAMA (Optimized dengan cache pre-loading) ---
+async function loadAsisten() {
+    try {
+        const response = await fetch(API_URL + '/asisten');
+        const res = await response.json();
+        
         if((res.status === 'success' || res.code === 200) && res.data) {
             allAsistenData = res.data;
+            
+            // ✅ OPTIMASI: Pre-cache semua data detail saat load pertama
+            // Ini menghindari API call berulang saat klik detail modal
+            res.data.forEach(item => {
+                allAsistenCache[item.idAsisten] = item;
+            });
+            
             renderTable(allAsistenData);
         } else {
             renderTable([]);
         }
-    }).catch(err => {
+    } catch(err) {
         console.error(err);
         document.getElementById('tableBody').innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-red-500">Gagal memuat data</td></tr>`;
-    });
+    }
 }
 
+// ✅ OPTIMASI: Intersection Observer untuk Lazy Load Foto
+let photoObserver;
+function initPhotoObserver() {
+    if(photoObserver) return;
+    photoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                const img = entry.target;
+                if(img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    photoObserver.unobserve(img);
+                }
+            }
+        });
+    }, { rootMargin: '50px' });
+}
+
+// ✅ OPTIMASI: Gunakan DocumentFragment untuk batch DOM updates (lebih cepat)
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
     const totalEl = document.getElementById('totalData');
@@ -274,7 +337,9 @@ function renderTable(data) {
     totalEl.innerText = `Total: ${data.length}`;
 
     if(data && data.length > 0) {
-        let rowsHtml = '';
+        const fragment = document.createDocumentFragment();
+        const placeholderImg = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50"%3E%3Crect fill="%23e5e7eb" width="50" height="50"/%3E%3C/svg%3E';
+        
         data.forEach((item, index) => {
             let statusBadge = '';
             if (item.isKoordinator == 1) { statusBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200"><i class="fas fa-crown mr-1 text-xs"></i> Koordinator</span>`; } 
@@ -283,49 +348,110 @@ function renderTable(data) {
                 let cls = st === 'Tidak Aktif' ? 'bg-red-100 text-red-800' : (st === 'CA' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800');
                 statusBadge = `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}">${st}</span>`;
             }
+            
             const fotoUrl = item.foto ? (item.foto.includes('http') ? item.foto : ASSETS_URL + '/assets/uploads/' + item.foto) : 'https://placehold.co/50x50?text=Foto';
-            rowsHtml += `
-                <tr onclick="openDetailModal(${item.idAsisten})" class="hover:bg-gray-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
-                    <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
-                    <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"></div></td>
-                    <td class="px-6 py-4"><div class="flex flex-col"><span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">${item.nama}</span><span class="text-xs text-gray-500 mt-0.5 flex items-center gap-1"><i class="fas fa-envelope text-gray-300"></i> ${item.email || '-'}</span></div></td>
-                    <td class="px-6 py-4 text-gray-600 font-medium">${item.jurusan || '-'}</td>
-                    <td class="px-6 py-4 text-center">${statusBadge}</td>
-                    <td class="px-6 py-4">
-                        <div class="flex justify-center items-center gap-2">
-                            <button onclick="openFormModal(${item.idAsisten}, event)" class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all duration-200 flex items-center justify-center"><i class="fas fa-pen text-xs"></i></button>
-                            <button onclick="hapusAsisten(${item.idAsisten}, event)" class="w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-200 flex items-center justify-center"><i class="fas fa-trash-alt text-xs"></i></button>
-                        </div>
-                    </td>
-                </tr>`;
+            
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50 transition-colors group border-b border-gray-100 cursor-pointer';
+            row.dataset.id = item.idAsisten;
+            row.innerHTML = `
+                <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
+                <td class="px-6 py-4"><div class="flex justify-center"><img src="${placeholderImg}" data-src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md" alt="${item.nama}"></div></td>
+                <td class="px-6 py-4"><div class="flex flex-col"><span class="font-bold text-gray-800 text-base group-hover:text-blue-600 transition-colors">${item.nama}</span><span class="text-xs text-gray-500 mt-0.5 flex items-center gap-1"><i class="fas fa-envelope text-gray-300"></i> ${item.email || '-'}</span></div></td>
+                <td class="px-6 py-4 text-gray-600 font-medium">${item.jurusan || '-'}</td>
+                <td class="px-6 py-4 text-center">${statusBadge}</td>
+                <td class="px-6 py-4">
+                    <div class="flex justify-center items-center gap-2">
+                        <button class="edit-btn w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all duration-200 flex items-center justify-center"><i class="fas fa-pen text-xs"></i></button>
+                        <button class="delete-btn w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-200 flex items-center justify-center"><i class="fas fa-trash-alt text-xs"></i></button>
+                    </div>
+                </td>
+            `;
+            fragment.appendChild(row);
         });
-        tbody.innerHTML = rowsHtml;
-    } else { tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Data asisten tidak ditemukan</td></tr>`; }
+        
+        tbody.innerHTML = '';
+        tbody.appendChild(fragment);
+        
+        initPhotoObserver();
+        tbody.querySelectorAll('img[data-src]').forEach(img => photoObserver.observe(img));
+    } else { 
+        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-gray-500">Data asisten tidak ditemukan</td></tr>`; 
+    }
 }
 
-// --- 2. MODAL DETAIL ---
+// --- 2. MODAL DETAIL (Optimized dengan Cache) ---
+// ✅ OPTIMASI: Check cache dulu sebelum API call
+// Ini eliminasi multiple API calls untuk data yang sama
 function openDetailModal(id) {
-    document.getElementById('detailModal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
+    document.getElementById('detailModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
     document.getElementById('mNama').innerText = "Memuat...";
-    fetch(API_URL + '/asisten/' + id).then(res => res.json()).then(res => {
-        if((res.status === 'success' || res.code === 200) && res.data) {
-            const d = res.data;
-            document.getElementById('mNama').innerText = d.nama; document.getElementById('mJurusan').innerText = d.jurusan || '-';
-            document.getElementById('mEmail').innerText = d.email || '-'; 
-            document.getElementById('mBio').innerText = d.bio || 'Tidak ada bio.';
-            const fotoUrl = d.foto ? (d.foto.includes('http') ? d.foto : ASSETS_URL + '/assets/uploads/' + d.foto) : `https://placehold.co/150x150?text=${d.nama.charAt(0)}`;
-            document.getElementById('mFoto').src = fotoUrl;
-            const bDiv=document.getElementById('mBadges'); bDiv.innerHTML=''; let st=d.statusAktif=='1'?'Asisten':(d.statusAktif=='0'?'Tidak Aktif':d.statusAktif); let color=st==='Asisten'?'bg-emerald-100 text-emerald-800':'bg-gray-100 text-gray-800'; bDiv.innerHTML+=`<span class="${color} px-3 py-1 rounded-full text-xs font-bold border border-transparent">${st}</span>`; if(d.isKoordinator==1){bDiv.innerHTML+=`<span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold border border-blue-700 shadow flex items-center gap-1"><i class="fas fa-crown text-yellow-300"></i> Koordinator</span>`}
-            const sDiv=document.getElementById('mSkills'); sDiv.innerHTML=''; let skills=d.skills; try{if(skills.includes('['))skills=JSON.parse(skills);else skills=skills.split(',')}catch(e){if(skills)skills=skills.split(',')}
-            if(Array.isArray(skills)){skills.forEach(s=>{if(s.trim())sDiv.innerHTML+=`<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold border border-gray-200">${s.trim()}</span>`})}else{sDiv.innerHTML='<span class="text-gray-400 text-xs italic">Tidak ada data</span>'}
-        }
-    });
+    
+    // ✅ Check cache dulu (instant, no API call)
+    if(allAsistenCache[id]) {
+        populateDetailModal(allAsistenCache[id]);
+    } else {
+        // Jika belum cache, fetch dari API (hanya pertama kali)
+        fetch(API_URL + '/asisten/' + id)
+            .then(res => res.json())
+            .then(res => {
+                if((res.status === 'success' || res.code === 200) && res.data) {
+                    allAsistenCache[id] = res.data; // Simpan ke cache
+                    populateDetailModal(res.data);
+                }
+            });
+    }
 }
 
-// --- 3. MODAL FORM ---
+// ✅ Helper function untuk populate detail modal
+function populateDetailModal(d) {
+    document.getElementById('mNama').innerText = d.nama;
+    document.getElementById('mJurusan').innerText = d.jurusan || '-';
+    document.getElementById('mEmail').innerText = d.email || '-';
+    document.getElementById('mBio').innerText = d.bio || 'Tidak ada bio.';
+    
+    const fotoUrl = d.foto ? (d.foto.includes('http') ? d.foto : ASSETS_URL + '/assets/uploads/' + d.foto) : `https://placehold.co/150x150?text=${d.nama.charAt(0)}`;
+    document.getElementById('mFoto').src = fotoUrl;
+    
+    const bDiv = document.getElementById('mBadges');
+    bDiv.innerHTML = '';
+    let st = d.statusAktif == '1' ? 'Asisten' : (d.statusAktif == '0' ? 'Tidak Aktif' : d.statusAktif);
+    let color = st === 'Asisten' ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-800';
+    bDiv.innerHTML += `<span class="${color} px-3 py-1 rounded-full text-xs font-bold border border-transparent">${st}</span>`;
+    if(d.isKoordinator == 1) {
+        bDiv.innerHTML += `<span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold border border-blue-700 shadow flex items-center gap-1"><i class="fas fa-crown text-yellow-300"></i> Koordinator</span>`;
+    }
+    
+    const sDiv = document.getElementById('mSkills');
+    sDiv.innerHTML = '';
+    let skills = d.skills;
+    try {
+        if(skills && skills.includes('[')) {
+            skills = JSON.parse(skills);
+        } else if(skills) {
+            skills = skills.split(',');
+        }
+    } catch(e) {
+        if(skills) skills = skills.split(',');
+    }
+    
+    if(Array.isArray(skills) && skills.length > 0) {
+        skills.forEach(s => {
+            if(s && s.trim()) {
+                sDiv.innerHTML += `<span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold border border-gray-200">${s.trim()}</span>`;
+            }
+        });
+    } else {
+        sDiv.innerHTML = '<span class="text-gray-400 text-xs italic">Tidak ada data</span>';
+    }
+}
+
+// --- 3. MODAL FORM (Optimized dengan Cache) ---
 function openFormModal(id = null, event = null) {
     if(event) event.stopPropagation();
-    document.getElementById('formModal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
+    document.getElementById('formModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
     document.getElementById('formMessage').classList.add('hidden');
     document.getElementById('asistenForm').reset();
     document.getElementById('inputIdAsisten').value = '';
@@ -334,41 +460,20 @@ function openFormModal(id = null, event = null) {
     if (id) {
         document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-edit text-emerald-600"></i> Edit Asisten';
         document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Update Data';
-        fetch(API_URL + '/asisten/' + id).then(res => res.json()).then(res => {
-            if(res.data) {
-                const d = res.data;
-                document.getElementById('inputIdAsisten').value = d.idAsisten;
-                document.getElementById('inputNama').value = d.nama;
-                document.getElementById('inputEmail').value = d.email;
-                document.getElementById('inputJurusan').value = d.jurusan || 'Teknik Informatika';
-                document.getElementById('inputBio').value = d.bio || '';
-                document.getElementById('inputUrutanTampilan').value = d.urutanTampilan || '0';
-                let status = d.statusAktif; if (status == '1') status = 'Asisten'; if (status == '0') status = 'Tidak Aktif';
-                document.getElementById('inputStatus').value = status || 'Asisten';
-                
-                // --- UPDATE SKILLS TAGS ---
-                let skillsArray = [];
-                try {
-                    let s = JSON.parse(d.skills);
-                    if(Array.isArray(s)) skillsArray = s;
-                    else if(d.skills) skillsArray = d.skills.split(',').map(item => item.trim());
-                } catch(e) {
-                    if(d.skills) skillsArray = d.skills.split(',').map(item => item.trim());
-                }
-                
-                selectedSkills = [];
-                const container = document.getElementById('skillsTagContainer');
-                const tagInput = document.getElementById('tagInput');
-                // Hapus tag lama kecuali input
-                container.querySelectorAll('.skill-tag').forEach(el => el.remove());
-                
-                skillsArray.forEach(skill => {
-                    if(skill) addTag(skill, false); // false agar tidak fokus ke input saat loading data
+        
+        // ✅ OPTIMASI: Check cache dulu sebelum API call
+        if(allAsistenCache[id]) {
+            populateFormData(allAsistenCache[id]);
+        } else {
+            fetch(API_URL + '/asisten/' + id)
+                .then(res => res.json())
+                .then(res => {
+                    if(res.data) {
+                        allAsistenCache[id] = res.data; // Simpan ke cache
+                        populateFormData(res.data);
+                    }
                 });
-                
-                if(d.foto) document.getElementById('fotoPreviewInfo').classList.remove('hidden');
-            }
-        });
+        }
     } else {
         document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-plus text-emerald-600"></i> Tambah Asisten Baru';
         document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Simpan Data';
@@ -379,6 +484,42 @@ function openFormModal(id = null, event = null) {
         container.querySelectorAll('.skill-tag').forEach(el => el.remove());
         document.getElementById('inputSkills').value = '';
     }
+}
+
+// ✅ Helper function untuk populate form data
+function populateFormData(d) {
+    document.getElementById('inputIdAsisten').value = d.idAsisten;
+    document.getElementById('inputNama').value = d.nama;
+    document.getElementById('inputEmail').value = d.email;
+    document.getElementById('inputJurusan').value = d.jurusan || 'Teknik Informatika';
+    document.getElementById('inputBio').value = d.bio || '';
+    document.getElementById('inputUrutanTampilan').value = d.urutanTampilan || '0';
+    let status = d.statusAktif;
+    if (status == '1') status = 'Asisten';
+    if (status == '0') status = 'Tidak Aktif';
+    document.getElementById('inputStatus').value = status || 'Asisten';
+    
+    // --- UPDATE SKILLS TAGS ---
+    let skillsArray = [];
+    try {
+        let s = JSON.parse(d.skills);
+        if(Array.isArray(s)) skillsArray = s;
+        else if(d.skills) skillsArray = d.skills.split(',').map(item => item.trim());
+    } catch(e) {
+        if(d.skills) skillsArray = d.skills.split(',').map(item => item.trim());
+    }
+    
+    selectedSkills = [];
+    const container = document.getElementById('skillsTagContainer');
+    const tagInput = document.getElementById('tagInput');
+    // Hapus tag lama kecuali input
+    container.querySelectorAll('.skill-tag').forEach(el => el.remove());
+    
+    skillsArray.forEach(skill => {
+        if(skill) addTag(skill, false); // false agar tidak fokus ke input saat loading data
+    });
+    
+    if(d.foto) document.getElementById('fotoPreviewInfo').classList.remove('hidden');
 }
 
 document.getElementById('asistenForm').addEventListener('submit', function(e) {
