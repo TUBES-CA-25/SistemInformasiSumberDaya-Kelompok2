@@ -290,6 +290,7 @@
 window.BASE_URL = '<?= BASE_URL ?>';
 let allLabData = [];
 let pendingKordinator = null;
+let searchTimeout; // Untuk debounce search
 
 // Variabel Global untuk Slider
 let currentLabImages = [];
@@ -299,14 +300,17 @@ document.addEventListener('DOMContentLoaded', function() {
     loadLaboratorium();
     loadAsistenOptions(); // Load data asisten untuk dropdown
 
-    // Live Search
+    // ✅ OPTIMASI: Debounce search (tunggu 300ms setelah user selesai ketik)
     document.getElementById('searchInput').addEventListener('keyup', function(e) {
-        const keyword = e.target.value.toLowerCase();
-        const filtered = allLabData.filter(item => 
-            item.nama.toLowerCase().includes(keyword) || 
-            (item.deskripsi && item.deskripsi.toLowerCase().includes(keyword))
-        );
-        renderTable(filtered);
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const keyword = e.target.value.toLowerCase();
+            const filtered = allLabData.filter(item => 
+                item.nama.toLowerCase().includes(keyword) || 
+                (item.deskripsi && item.deskripsi.toLowerCase().includes(keyword))
+            );
+            renderTable(filtered);
+        }, 300);
     });
 
     // Image Preview (Form)
@@ -327,6 +331,26 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+    
+    // ✅ OPTIMASI: Event Delegation (1 listener untuk semua row)
+    document.getElementById('tableBody').addEventListener('click', function(e) {
+        if(e.target.closest('.edit-btn, .delete-btn')) {
+            e.stopPropagation();
+        }
+        
+        const row = e.target.closest('tr[data-id]');
+        if(!row) return;
+        
+        const id = row.dataset.id;
+        
+        if(e.target.closest('.edit-btn')) {
+            openFormModal(id, e);
+        } else if(e.target.closest('.delete-btn')) {
+            hapusLaboratorium(id, e);
+        } else {
+            openDetailModal(id);
+        }
+    }, { passive: true });
 });
 
 // --- 1. LOAD DATA ---
@@ -363,10 +387,27 @@ function loadAsistenOptions() {
     });
 }
 
+// --- OPTIMASI: Intersection Observer untuk Lazy Load Gambar Lab ---
+let labPhotoObserver;
+function initLabPhotoObserver() {
+    if(labPhotoObserver) return;
+    labPhotoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                const img = entry.target;
+                if(img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    labPhotoObserver.unobserve(img);
+                }
+            }
+        });
+    }, { rootMargin: '50px' });
+}
+
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
     const totalEl = document.getElementById('totalData');
-    tbody.innerHTML = '';
     totalEl.innerText = `Total: ${data.length}`;
 
     if (data.length === 0) {
@@ -374,7 +415,10 @@ function renderTable(data) {
         return;
     }
 
-    let rowsHtml = '';
+    // ✅ OPTIMASI: Gunakan DocumentFragment + Event Delegation
+    const fragment = document.createDocumentFragment();
+    const placeholderImg = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 70"%3E%3Crect fill="%23e5e7eb" width="100" height="70"/%3E%3C/svg%3E';
+
     data.forEach((item, index) => {
         // Cek gambar pertama
         let firstImg = 'https://placehold.co/100x70?text=No+Img';
@@ -382,7 +426,6 @@ function renderTable(data) {
              const path = item.images[0].namaGambar || item.images[0];
              firstImg = path.includes('http') ? path : ASSETS_URL + '/assets/uploads/' + path;
         } else if (item.gambar) {
-             // Bersihkan string (antisipasi format json string)
              let clean = item.gambar.replace(/[\[\]"]/g, '').split(',')[0];
              firstImg = clean.includes('http') ? clean : ASSETS_URL + '/assets/uploads/' + clean;
         }
@@ -391,31 +434,40 @@ function renderTable(data) {
         if (item.jenis === 'Riset') badgeColor = 'bg-purple-50 text-purple-700 border-purple-100';
         if (item.jenis === 'Multimedia') badgeColor = 'bg-orange-50 text-orange-700 border-orange-100';
 
-        rowsHtml += `
-            <tr onclick="openDetailModal(${item.idLaboratorium})" class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100 cursor-pointer">
-                <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
-                <td class="px-6 py-4 text-center">
-                    <img src="${firstImg}" class="w-16 h-12 object-cover rounded-lg border border-gray-200 mx-auto shadow-sm group-hover:scale-105 transition-transform">
-                </td>
-                <td class="px-6 py-4">
-                    <span class="font-bold text-gray-800 text-sm block">${item.nama}</span>
-                    <span class="text-xs text-gray-400 truncate block max-w-[200px]">${item.deskripsi ? item.deskripsi.substring(0, 50) + '...' : ''}</span>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <span class="${badgeColor} px-2.5 py-1 rounded-full text-xs font-semibold border">${item.jenis}</span>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold"><i class="fas fa-desktop mr-1"></i> ${item.jumlahPc}</span>
-                </td>
-                <td class="px-6 py-4">
-                    <div class="flex justify-center items-center gap-2">
-                        <button onclick="openFormModal(${item.idLaboratorium}, event)" class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center justify-center"><i class="fas fa-pen text-xs"></i></button>
-                        <button onclick="hapusLaboratorium(${item.idLaboratorium}, event)" class="w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center"><i class="fas fa-trash-alt text-xs"></i></button>
-                    </div>
-                </td>
-            </tr>`;
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-blue-50 transition-colors group border-b border-gray-100 cursor-pointer';
+        row.dataset.id = item.idLaboratorium;
+        row.innerHTML = `
+            <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
+            <td class="px-6 py-4 text-center">
+                <img src="${placeholderImg}" data-src="${firstImg}" class="w-16 h-12 object-cover rounded-lg border border-gray-200 mx-auto shadow-sm group-hover:scale-105 transition-transform">
+            </td>
+            <td class="px-6 py-4">
+                <span class="font-bold text-gray-800 text-sm block">${item.nama}</span>
+                <span class="text-xs text-gray-400 truncate block max-w-[200px]">${item.deskripsi ? item.deskripsi.substring(0, 50) + '...' : ''}</span>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="${badgeColor} px-2.5 py-1 rounded-full text-xs font-semibold border">${item.jenis}</span>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold"><i class="fas fa-desktop mr-1"></i> ${item.jumlahPc}</span>
+            </td>
+            <td class="px-6 py-4">
+                <div class="flex justify-center items-center gap-2">
+                    <button class="edit-btn w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center justify-center"><i class="fas fa-pen text-xs"></i></button>
+                    <button class="delete-btn w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center"><i class="fas fa-trash-alt text-xs"></i></button>
+                </div>
+            </td>
+        `;
+        fragment.appendChild(row);
     });
-    tbody.innerHTML = rowsHtml;
+    
+    tbody.innerHTML = '';
+    tbody.appendChild(fragment);
+    
+    // ✅ Setup Intersection Observer untuk lazy-load gambar
+    initLabPhotoObserver();
+    tbody.querySelectorAll('img[data-src]').forEach(img => labPhotoObserver.observe(img));
 }
 
 // --- 2. MODAL FORM ---
