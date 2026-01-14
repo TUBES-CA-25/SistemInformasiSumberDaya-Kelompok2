@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 10, 2026 at 06:06 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Waktu pembuatan: 14 Jan 2026 pada 16.51
+-- Versi server: 10.4.32-MariaDB-log
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `alumni`
+-- Struktur dari tabel `alumni`
 --
 
 CREATE TABLE `alumni` (
@@ -43,7 +43,7 @@ CREATE TABLE `alumni` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `alumni`
+-- Dumping data untuk tabel `alumni`
 --
 
 INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `mata_kuliah`, `foto`, `kesan_pesan`, `keahlian`, `email`, `created_at`, `updated_at`, `urutanTampilan`) VALUES
@@ -52,7 +52,7 @@ INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `mata_kuliah`, `foto`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `asisten`
+-- Struktur dari tabel `asisten`
 --
 
 CREATE TABLE `asisten` (
@@ -73,7 +73,7 @@ CREATE TABLE `asisten` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `asisten`
+-- Dumping data untuk tabel `asisten`
 --
 
 INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `lab`, `spesialisasi`, `bio`, `skills`, `email`, `foto`, `statusAktif`, `isKoordinator`, `urutanTampilan`) VALUES
@@ -86,9 +86,9 @@ INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `l
 (19, 'Muhammad Alif Maulana. R', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Jaringan Komputer, Basisdata, Pengenalan Pemrograman', '[]', 'muhalifmaulanaar.iclabs@umi.ac.id', 'asisten_1767846799_3970.png', 'Asisten', 0, 0),
 (20, 'Tazkira Amalia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengantar Teknologi Informasi, Struktur Data, PBO', '[]', 'tazkirahamalia.iclabs@umi.ac.id', 'asisten_1767846911_7163.jpg', 'Asisten', 0, 0),
 (21, 'Wahyu Kadri Rahmat Suat', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Basisdata, Struktur Data', '[]', 'wahyukadrirahmatsuat.iclabs@umi.ac.id', 'asisten_1767846974_2116.png', 'Asisten', 0, 0),
-(22, 'Aan Maulana Sampe', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek, Jaringan Komputer', '[\"Mobile\"]', '13020230081@student.umi.ac.id', 'asisten_1767847118_5230.png', 'CA', 0, 0),
-(23, 'Andi Ahsan Ashuri', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[]', '13020230224@student.umi.ac.id', 'asisten_1767847163_2915.png', 'CA', 0, 0),
-(24, 'Andi Ikhlas Mallomo', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Basisdata', '[]', '13020230251@student.umi.ac.id', 'asisten_1767847230_1778.jpg', 'CA', 0, 0),
+(22, 'Aan Maulana Sampe', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek, Jaringan Komputer', '[\"Mobile\"]', '13020230081@student.umi.ac.id', 'asisten_1767847118_5230.png', 'CA', 0, 3),
+(23, 'Andi Ahsan Ashuri', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Mobile\"]', '13020230224@student.umi.ac.id', 'asisten_1767847163_2915.png', 'CA', 0, 3),
+(24, 'Andi Ikhlas Mallomo', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Basisdata', '[\"Mobile\"]', '13020230251@student.umi.ac.id', 'asisten_1767847230_1778.jpg', 'CA', 0, 3),
 (25, 'Andi Rifqi Aunur Rahman', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Basisdata', '[]', '13020230219@student.umi.ac.id', 'asisten_1767847292_2856.png', 'CA', 0, 0),
 (26, 'Farah Tsabitaputri Az Zahra', 'Teknik Informatika', NULL, NULL, NULL, NULL, '', '[]', '13020230268@student.umi.ac.id', 'asisten_1767847358_6722.jpg', 'CA', 0, 0),
 (27, 'Firli Anastasya Hafid', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Algoritma Pemrograman', '[]', '13020230241@student.umi.ac.id', 'asisten_1767847436_9017.jpg', 'CA', 0, 0),
@@ -99,7 +99,7 @@ INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `l
 (32, 'Muhammad Nur Fuad', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230030@student.umi.ac.id', 'asisten_1767847914_6148.jpg', 'CA', 0, 0),
 (33, 'Muhammad Rafli', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230290@student.umi.ac.id', 'asisten_1767848005_7910.jpg', 'CA', 0, 0),
 (34, 'Muhammad Rifky Saputra Scania', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230193@student.umi.ac.id', 'asisten_1767848075_4678.jpg', 'CA', 0, 0),
-(35, 'M. Rizwan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman, Basisdata', '[]', '13020230100@student.umi.ac.id', 'asisten_1767848152_4734.png', 'CA', 0, 0),
+(35, 'M. Rizwan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman, Basisdata', '', '13020230100@student.umi.ac.id', 'asisten_1767848152_4734.png', 'CA', 0, 0),
 (36, 'Nahwa Kaka Saputra Anggareksa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\", \"UI/UX\", \"React\", \"Web Development\"]', '13020230187@student.umi.ac.id', 'asisten_1767848210_2417.jpg', 'CA', 0, 0),
 (37, 'Nurfajri Mukmin Saputra', 'Sistem Informasi', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Pengantar Teknologi Informasi', '[]', '13120230033@student.umi.ac.id', 'asisten_1767848284_9117.jpg', 'CA', 0, 0),
 (38, 'Raihan Nur Rizqillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230306@student.umi.ac.id', 'asisten_1767848364_3306.png', 'CA', 0, 0),
@@ -113,7 +113,7 @@ INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `l
 -- --------------------------------------------------------
 
 --
--- Table structure for table `format_penulisan`
+-- Struktur dari tabel `format_penulisan`
 --
 
 CREATE TABLE `format_penulisan` (
@@ -130,7 +130,7 @@ CREATE TABLE `format_penulisan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `format_penulisan`
+-- Dumping data untuk tabel `format_penulisan`
 --
 
 INSERT INTO `format_penulisan` (`id_format`, `judul`, `deskripsi`, `file`, `kategori`, `link_external`, `tanggal_update`, `icon`, `warna`, `urutan`) VALUES
@@ -144,7 +144,7 @@ INSERT INTO `format_penulisan` (`id_format`, `judul`, `deskripsi`, `file`, `kate
 -- --------------------------------------------------------
 
 --
--- Table structure for table `integrsiweb`
+-- Struktur dari tabel `integrsiweb`
 --
 
 CREATE TABLE `integrsiweb` (
@@ -157,7 +157,7 @@ CREATE TABLE `integrsiweb` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jadwalpraktikum`
+-- Struktur dari tabel `jadwalpraktikum`
 --
 
 CREATE TABLE `jadwalpraktikum` (
@@ -177,12 +177,10 @@ CREATE TABLE `jadwalpraktikum` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `jadwalpraktikum`
+-- Dumping data untuk tabel `jadwalpraktikum`
 --
 
 INSERT INTO `jadwalpraktikum` (`idJadwal`, `idMatakuliah`, `kelas`, `idLaboratorium`, `hari`, `waktuMulai`, `waktuSelesai`, `dosen`, `asisten1`, `asisten2`, `frekuensi`, `tanggal`, `status`) VALUES
-(1, 8, 'A1,A2,A3', 38, 'Senin', '07:00:00', '09:30:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Muhammad Nur Fuad', 'TI_MICRO-5', NULL, 'Aktif'),
-(2, 9, 'A3', 39, 'Senin', '07:00:00', '09:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Muhammad Alif Maulana. R', 'Ichwal', 'TI_SD-3', NULL, 'Aktif'),
 (3, 9, 'A4', 40, 'Senin', '07:00:00', '09:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Ahmad Mufli Ramadhan', 'Sitti Lutfia', 'TI_SD-4', NULL, 'Aktif'),
 (4, 10, 'A1', 41, 'Senin', '09:40:00', '12:10:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Thalita Sherly Putri Jasmin', 'SI_PBO-1', NULL, 'Aktif'),
 (5, 10, 'B1', 42, 'Senin', '09:40:00', '12:10:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Julisa', 'Tazkirah Amaliah', 'SI_PBO-2', NULL, 'Aktif'),
@@ -245,7 +243,7 @@ INSERT INTO `jadwalpraktikum` (`idJadwal`, `idMatakuliah`, `kelas`, `idLaborator
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jadwalupk`
+-- Struktur dari tabel `jadwalupk`
 --
 
 CREATE TABLE `jadwalupk` (
@@ -261,72 +259,63 @@ CREATE TABLE `jadwalupk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `jadwalupk`
+-- Dumping data untuk tabel `jadwalupk`
 --
 
 INSERT INTO `jadwalupk` (`id`, `prodi`, `tanggal`, `jam`, `mata_kuliah`, `dosen`, `frekuensi`, `kelas`, `ruangan`) VALUES
-(1, 'TI', '2025-12-29', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-1', 'A1', 'Lab Microcontroller'),
-(2, 'TI', '2025-12-31', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-5', 'A1,A2,A3', 'Lab Microcontroller'),
-(3, 'TI', '2026-01-02', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-10', 'B1', 'Lab Microcontroller'),
-(4, 'TI', '2026-01-03', '10.15 - 12.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-12', 'B3', 'Lab Microcontroller'),
-(5, 'TI', '2026-01-03', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-4', 'A4', 'Lab Microcontroller'),
-(6, 'TI', '2026-01-05', '08.00 - 10.00', 'Algoritma Pemrograman', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'TI_ALPRO-1', 'A1', 'Lab Startup'),
-(7, 'TI', '2026-01-05', '08.00 - 10.00', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-5', 'B1', 'Lab Computer Vision'),
-(8, 'TI', '2026-01-05', '10.15 - 12.15', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-3', 'A3', 'Lab Computer Vision'),
-(9, 'TI', '2026-01-05', '10.15 - 12.15', 'Algoritma Pemrograman', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'TI_ALPRO-4', 'A4', 'Lab Startup'),
-(10, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-2', 'A2', 'Lab Computer Vision'),
-(11, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'TI_ALPRO-6', 'B2', 'Lab Startup'),
-(12, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'TI_ALPRO-7', 'B3', 'Lab IoT'),
-(13, 'SI', '2026-01-05', '16.00 - 18.00', 'Algoritma Pemrograman', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'SI_ALPRO-1', 'A1', 'Lab Startup'),
-(14, 'SI', '2026-01-05', '16.00 - 18.00', 'Algoritma Pemrograman', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'SI_ALPRO-2', 'B1', 'Lab IoT'),
-(15, 'TI', '2026-01-05', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-6', 'A5', 'Lab Microcontroller'),
-(16, 'TI', '2026-01-06', '08.00 - 10.00', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-10', 'B2', 'Lab IoT'),
-(17, 'TI', '2026-01-06', '08.00 - 10.00', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-9', 'B1', 'Lab Startup'),
-(18, 'TI', '2026-01-06', '08.00 - 10.00', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-1', 'A1', 'Lab Computer Vision'),
-(19, 'TI', '2026-01-06', '10.15 - 12.15', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-12', 'B4', 'Lab IoT'),
-(20, 'TI', '2026-01-06', '10.15 - 12.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-2', 'A2', 'Lab Computer Vision'),
-(21, 'TI', '2026-01-06', '13.15 - 15.15', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-11', 'B3', 'Lab Computer Vision'),
-(22, 'TI', '2026-01-06', '13.15 - 15.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-3', 'A3', 'Lab Startup'),
-(23, 'TI', '2026-01-06', '13.15 - 15.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-4', 'A4', 'Lab IoT'),
-(24, 'SI', '2026-01-06', '16.00 - 18.00', 'Pengantar Teknologi Informasi', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'SI_PTI-1', 'A1', 'Lab Startup'),
-(25, 'SI', '2026-01-06', '16.00 - 18.00', 'Pengantar Teknologi Informasi', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'SI_PTI-2', 'B1', 'Lab IoT'),
-(26, 'TI', '2026-01-07', '08.00 - 10.00', 'Basis Data II', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'TI_BD2-7', 'A7', 'Lab Computer Vision'),
-(27, 'TI', '2026-01-07', '08.00 - 10.00', 'Basis Data II', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'TI_BD2-8', 'A8', 'Lab Data Science'),
-(28, 'TI', '2026-01-07', '08.00 - 10.00', 'Struktur Data', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_SD-10', 'B2', 'Lab IoT'),
-(29, 'TI', '2026-01-07', '08.00 - 10.00', 'Struktur Data', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_SD-9', 'B1', 'Lab Startup'),
-(30, 'TI', '2026-01-07', '10.15 - 12.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-3', 'A3', 'Lab Computer Vision'),
-(31, 'TI', '2026-01-07', '10.15 - 12.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-5', 'A5', 'Lab Data Science'),
-(32, 'TI', '2026-01-07', '10.15 - 12.15', 'Struktur Data', 'Nurul Fadhillah, S.Kom., M.Kom', 'TI_SD-11', 'B3', 'Lab Startup'),
-(33, 'TI', '2026-01-07', '13.15 - 15.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-4', 'A4', 'Lab Computer Vision'),
-(34, 'TI', '2026-01-07', '13.15 - 15.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-6', 'A6', 'Lab Data Science'),
-(35, 'TI', '2026-01-07', '13.15 - 15.15', 'Struktur Data', 'Nurul Fadhillah, S.Kom., M.Kom', 'TI_SD-12', 'B4', 'Lab Startup'),
-(36, 'TI', '2026-01-07', '16.00 - 18.00', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-1', 'A1', 'Lab Computer Vision'),
-(37, 'TI', '2026-01-07', '16.00 - 18.00', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-2', 'A2', 'Lab Data Science'),
-(38, 'TI', '2026-01-07', '16.00 - 18.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-7', 'A7', 'Lab Startup'),
-(39, 'TI', '2026-01-07', '16.00 - 18.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-8', 'A8', 'Lab IoT'),
-(40, 'TI', '2026-01-08', '08.00 - 10.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-1', 'A1', 'Lab Computer Vision'),
-(41, 'TI', '2026-01-08', '08.00 - 10.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-2', 'A2', 'Lab Data Science'),
-(42, 'SI', '2026-01-08', '08.00 - 10.00', 'Pemrograman Berorientasi Objek', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'SI_PBO-1', 'A1', 'Lab Startup'),
-(43, 'SI', '2026-01-08', '08.00 - 10.00', 'Pemrograman Berorientasi Objek', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'SI_PBO-2', 'B1', 'Lab IoT'),
-(44, 'TI', '2026-01-08', '08.00 - 10.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-7', 'A6', 'Lab Microcontroller'),
-(45, 'TI', '2026-01-08', '10.15 - 12.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-3', 'A3', 'Lab Computer Vision'),
-(46, 'TI', '2026-01-08', '10.15 - 12.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-4', 'A4', 'Lab Data Science'),
-(47, 'TI', '2026-01-08', '13.15 - 15.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-5', 'A5', 'Lab Computer Vision'),
-(48, 'TI', '2026-01-08', '13.15 - 15.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-6', 'A6', 'Lab Data Science'),
-(49, 'SI', '2026-01-08', '13.15 - 15.15', 'Jaringan Komputer', 'Fahmi, S.Kom., M.T.', 'SI_JARKOM-1', 'A1', 'Lab Startup'),
-(50, 'SI', '2026-01-08', '13.15 - 15.15', 'Jaringan Komputer', 'Fahmi, S.Kom., M.T.', 'SI_JARKOM-2', 'B1', 'Lab IoT'),
-(51, 'TI', '2026-01-08', '13.15 - 15.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-11', 'B2', 'Lab Microcontroller'),
-(52, 'TI', '2026-01-08', '16.00 - 18.00', 'Pemrograman Mobile', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_MOBILE-1', 'C2', 'Lab Computer Vision'),
-(53, 'TI', '2026-01-08', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-13', 'A5,A7,B1,B2,B3', 'Lab Microcontroller'),
-(54, 'TI', '2026-01-09', '08.00 - 10.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-2', 'A2', 'Lab Microcontroller'),
-(55, 'TI', '2026-01-09', '10.15 - 12.15', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-3', 'A3', 'Lab Microcontroller'),
-(56, 'TI', '2026-01-09', '13.15 - 15.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-8', 'A7', 'Lab Microcontroller'),
-(57, 'TI', '2026-01-09', '16.00 - 18.00', 'Microcontroller', 'Tasrif Hasanuddin, S.T., M.Cs.', 'TI_MICRO-9', 'A8', 'Lab Microcontroller');
+(11, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-2', 'A2', 'Lab Computer Vision'),
+(12, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'TI_ALPRO-6', 'B2', 'Lab Startup'),
+(13, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'TI_ALPRO-7', 'B3', 'Lab IoT'),
+(14, 'SI', '2026-01-05', '16.00 - 18.00', 'Algoritma Pemrograman', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'SI_ALPRO-1', 'A1', 'Lab Startup'),
+(15, 'SI', '2026-01-05', '16.00 - 18.00', 'Algoritma Pemrograman', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'SI_ALPRO-2', 'B1', 'Lab IoT'),
+(16, 'TI', '2026-01-05', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-6', 'A5', 'Lab Microcontroller'),
+(17, 'TI', '2026-01-06', '08.00 - 10.00', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-10', 'B2', 'Lab IoT'),
+(18, 'TI', '2026-01-06', '08.00 - 10.00', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-9', 'B1', 'Lab Startup'),
+(19, 'TI', '2026-01-06', '08.00 - 10.00', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-1', 'A1', 'Lab Computer Vision'),
+(20, 'TI', '2026-01-06', '10.15 - 12.15', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-12', 'B4', 'Lab IoT'),
+(21, 'TI', '2026-01-06', '10.15 - 12.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-2', 'A2', 'Lab Computer Vision'),
+(22, 'TI', '2026-01-06', '13.15 - 15.15', 'Basis Data II', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'TI_BD2-11', 'B3', 'Lab Computer Vision'),
+(23, 'TI', '2026-01-06', '13.15 - 15.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-3', 'A3', 'Lab Startup'),
+(24, 'TI', '2026-01-06', '13.15 - 15.15', 'Pengenalan Pemrograman', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_PP-4', 'A4', 'Lab IoT'),
+(25, 'SI', '2026-01-06', '16.00 - 18.00', 'Pengantar Teknologi Informasi', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'SI_PTI-1', 'A1', 'Lab Startup'),
+(26, 'SI', '2026-01-06', '16.00 - 18.00', 'Pengantar Teknologi Informasi', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'SI_PTI-2', 'B1', 'Lab IoT'),
+(27, 'TI', '2026-01-07', '08.00 - 10.00', 'Basis Data II', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'TI_BD2-7', 'A7', 'Lab Computer Vision'),
+(28, 'TI', '2026-01-07', '08.00 - 10.00', 'Basis Data II', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'TI_BD2-8', 'A8', 'Lab Data Science'),
+(29, 'TI', '2026-01-07', '08.00 - 10.00', 'Struktur Data', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_SD-10', 'B2', 'Lab IoT'),
+(30, 'TI', '2026-01-07', '08.00 - 10.00', 'Struktur Data', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_SD-9', 'B1', 'Lab Startup'),
+(31, 'TI', '2026-01-07', '10.15 - 12.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-3', 'A3', 'Lab Computer Vision'),
+(32, 'TI', '2026-01-07', '10.15 - 12.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-5', 'A5', 'Lab Data Science'),
+(33, 'TI', '2026-01-07', '10.15 - 12.15', 'Struktur Data', 'Nurul Fadhillah, S.Kom., M.Kom', 'TI_SD-11', 'B3', 'Lab Startup'),
+(34, 'TI', '2026-01-07', '13.15 - 15.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-4', 'A4', 'Lab Computer Vision'),
+(35, 'TI', '2026-01-07', '13.15 - 15.15', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-6', 'A6', 'Lab Data Science'),
+(36, 'TI', '2026-01-07', '13.15 - 15.15', 'Struktur Data', 'Nurul Fadhillah, S.Kom., M.Kom', 'TI_SD-12', 'B4', 'Lab Startup'),
+(37, 'TI', '2026-01-07', '16.00 - 18.00', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-1', 'A1', 'Lab Computer Vision'),
+(38, 'TI', '2026-01-07', '16.00 - 18.00', 'Basis Data II', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'TI_BD2-2', 'A2', 'Lab Data Science'),
+(39, 'TI', '2026-01-07', '16.00 - 18.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-7', 'A7', 'Lab Startup'),
+(40, 'TI', '2026-01-07', '16.00 - 18.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-8', 'A8', 'Lab IoT'),
+(41, 'TI', '2026-01-08', '08.00 - 10.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-1', 'A1', 'Lab Computer Vision'),
+(42, 'TI', '2026-01-08', '08.00 - 10.00', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-2', 'A2', 'Lab Data Science'),
+(43, 'SI', '2026-01-08', '08.00 - 10.00', 'Pemrograman Berorientasi Objek', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'SI_PBO-1', 'A1', 'Lab Startup'),
+(44, 'SI', '2026-01-08', '08.00 - 10.00', 'Pemrograman Berorientasi Objek', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'SI_PBO-2', 'B1', 'Lab IoT'),
+(45, 'TI', '2026-01-08', '08.00 - 10.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-7', 'A6', 'Lab Microcontroller'),
+(46, 'TI', '2026-01-08', '10.15 - 12.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-3', 'A3', 'Lab Computer Vision'),
+(47, 'TI', '2026-01-08', '10.15 - 12.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-4', 'A4', 'Lab Data Science'),
+(48, 'TI', '2026-01-08', '13.15 - 15.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-5', 'A5', 'Lab Computer Vision'),
+(49, 'TI', '2026-01-08', '13.15 - 15.15', 'Struktur Data', 'Syariful Mujaddid, S.Kom.,M.T.', 'TI_SD-6', 'A6', 'Lab Data Science'),
+(50, 'SI', '2026-01-08', '13.15 - 15.15', 'Jaringan Komputer', 'Fahmi, S.Kom., M.T.', 'SI_JARKOM-1', 'A1', 'Lab Startup'),
+(51, 'SI', '2026-01-08', '13.15 - 15.15', 'Jaringan Komputer', 'Fahmi, S.Kom., M.T.', 'SI_JARKOM-2', 'B1', 'Lab IoT'),
+(52, 'TI', '2026-01-08', '13.15 - 15.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-11', 'B2', 'Lab Microcontroller'),
+(53, 'TI', '2026-01-08', '16.00 - 18.00', 'Pemrograman Mobile', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'TI_MOBILE-1', 'C2', 'Lab Computer Vision'),
+(54, 'TI', '2026-01-08', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-13', 'A5,A7,B1,B2,B3', 'Lab Microcontroller'),
+(55, 'TI', '2026-01-09', '08.00 - 10.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-2', 'A2', 'Lab Microcontroller'),
+(56, 'TI', '2026-01-09', '10.15 - 12.15', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-3', 'A3', 'Lab Microcontroller'),
+(57, 'TI', '2026-01-09', '13.15 - 15.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-8', 'A7', 'Lab Microcontroller'),
+(58, 'TI', '2026-01-09', '16.00 - 18.00', 'Microcontroller', 'Tasrif Hasanuddin, S.T., M.Cs.', 'TI_MICRO-9', 'A8', 'Lab Microcontroller');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `laboratorium`
+-- Struktur dari tabel `laboratorium`
 --
 
 CREATE TABLE `laboratorium` (
@@ -352,7 +341,7 @@ CREATE TABLE `laboratorium` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `laboratorium`
+-- Dumping data untuk tabel `laboratorium`
 --
 
 INSERT INTO `laboratorium` (`idLaboratorium`, `nama`, `jenis`, `idKordinatorAsisten`, `deskripsi`, `gambar`, `jumlahPc`, `jumlahKursi`, `lokasi`, `kapasitas`, `processor`, `ram`, `storage`, `gpu`, `monitor`, `software`, `fasilitas_pendukung`, `koordinator_nama`, `koordinator_foto`) VALUES
@@ -362,7 +351,7 @@ INSERT INTO `laboratorium` (`idLaboratorium`, `nama`, `jenis`, `idKordinatorAsis
 (26, 'Laboratorium Data Science', 'Laboratorium', 18, 'Laboratorium Data Science adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 26 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854477_4975.jpg', 26, NULL, NULL, 26, 'CPU [Intel i7-12700f]', 'RAM DDR4 [16 GB]', 'SSD NVME 512 GB', 'VGA MSI GeForce GTX 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '1 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
 (27, 'Laboratorium Computer Vision', 'Laboratorium', 19, 'Laboratorium Computer Vision adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 26 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854621_5299.jpg', 26, NULL, NULL, 0, 'CPU [Intel i7-12700f]', 'RAM DDR4 [16 GB]', 'SSD NVME 512 GB', 'VGA NVIDIA Geforce GT 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '1 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
 (28, 'Laboratorium Multimedia', 'Laboratorium', 19, 'Laboratorium Multimedia adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 30 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 30 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854751_1846.jpg', 30, NULL, NULL, 0, 'CPU [Intel i7-12700f]', 'RAM DDR4 16 GB', 'SSD NVME 512 GB', 'VGA MSI GeForce GTX 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(29, 'Laboratorium Microcontroler', 'Laboratorium', 18, 'Laboratorium Microcontroler adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 25 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854892_3342.jpg', 25, NULL, NULL, 0, 'CPU [Intel Core i5-4460]', 'RAM DDR4 [8 GB]', 'HDD [1 TB]', 'VGA NVIDIA Geforce GT 1650', 'Monitor LG 20” Inch', 'Livewire, Arduino, Microsoft Office, Google Chrome', '1 TV TCL 75” Inch, USB to HDMI, Kabel HDMI', NULL, NULL),
+(29, 'Laboratorium Microcontroler', 'Laboratorium', 18, 'Laboratorium Microcontroler adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 25 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854892_3342.jpg', 25, NULL, NULL, 25, 'CPU [Intel Core i5-4460]', 'RAM DDR4 [8 GB]', 'HDD [1 TB]', 'VGA NVIDIA Geforce GT 1650', 'Monitor LG 20” Inch', 'Livewire, Arduino, Microsoft Office, Google Chrome', '1 TV TCL 75” Inch, USB to HDMI, Kabel HDMI', NULL, NULL),
 (30, 'Research Room 1', 'Riset', 17, 'Research Room 1 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767854958_8098.png', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL),
 (31, 'Research Room 2', 'Riset', 20, 'Research Room 2 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767855066_4115.jpg', 0, NULL, NULL, 0, '', '', '', '', '', '', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
 (32, 'Research Room 3', 'Riset', 16, 'Research Room 3 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767855107_4991.png', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL),
@@ -380,7 +369,7 @@ INSERT INTO `laboratorium` (`idLaboratorium`, `nama`, `jenis`, `idKordinatorAsis
 -- --------------------------------------------------------
 
 --
--- Table structure for table `laboratorium_gambar`
+-- Struktur dari tabel `laboratorium_gambar`
 --
 
 CREATE TABLE `laboratorium_gambar` (
@@ -394,7 +383,7 @@ CREATE TABLE `laboratorium_gambar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `laboratorium_gambar`
+-- Dumping data untuk tabel `laboratorium_gambar`
 --
 
 INSERT INTO `laboratorium_gambar` (`idGambar`, `idLaboratorium`, `namaGambar`, `deskripsiGambar`, `isUtama`, `urutan`, `created_at`) VALUES
@@ -432,7 +421,7 @@ INSERT INTO `laboratorium_gambar` (`idGambar`, `idLaboratorium`, `namaGambar`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `manajemen`
+-- Struktur dari tabel `manajemen`
 --
 
 CREATE TABLE `manajemen` (
@@ -445,7 +434,7 @@ CREATE TABLE `manajemen` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `manajemen`
+-- Dumping data untuk tabel `manajemen`
 --
 
 INSERT INTO `manajemen` (`idManajemen`, `nama`, `nidn`, `jabatan`, `foto`, `urutanTampilan`) VALUES
@@ -457,7 +446,7 @@ INSERT INTO `manajemen` (`idManajemen`, `nama`, `nidn`, `jabatan`, `foto`, `urut
 -- --------------------------------------------------------
 
 --
--- Table structure for table `matakuliah`
+-- Struktur dari tabel `matakuliah`
 --
 
 CREATE TABLE `matakuliah` (
@@ -469,7 +458,7 @@ CREATE TABLE `matakuliah` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `matakuliah`
+-- Dumping data untuk tabel `matakuliah`
 --
 
 INSERT INTO `matakuliah` (`idMatakuliah`, `kodeMatakuliah`, `namaMatakuliah`, `semester`, `sksKuliah`) VALUES
@@ -486,7 +475,7 @@ INSERT INTO `matakuliah` (`idMatakuliah`, `kodeMatakuliah`, `namaMatakuliah`, `s
 -- --------------------------------------------------------
 
 --
--- Table structure for table `peraturan_lab`
+-- Struktur dari tabel `peraturan_lab`
 --
 
 CREATE TABLE `peraturan_lab` (
@@ -501,7 +490,7 @@ CREATE TABLE `peraturan_lab` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `peraturan_lab`
+-- Dumping data untuk tabel `peraturan_lab`
 --
 
 INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`, `kategori`) VALUES
@@ -514,7 +503,7 @@ INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `cr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sanksi_lab`
+-- Struktur dari tabel `sanksi_lab`
 --
 
 CREATE TABLE `sanksi_lab` (
@@ -528,7 +517,7 @@ CREATE TABLE `sanksi_lab` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `sanksi_lab`
+-- Dumping data untuk tabel `sanksi_lab`
 --
 
 INSERT INTO `sanksi_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`) VALUES
@@ -540,7 +529,7 @@ INSERT INTO `sanksi_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `creat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sop`
+-- Struktur dari tabel `sop`
 --
 
 CREATE TABLE `sop` (
@@ -556,7 +545,7 @@ CREATE TABLE `sop` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `sop`
+-- Dumping data untuk tabel `sop`
 --
 
 INSERT INTO `sop` (`id_sop`, `judul`, `icon`, `warna`, `file`, `deskripsi`, `urutan`, `created_at`, `updated_at`) VALUES
@@ -569,7 +558,7 @@ INSERT INTO `sop` (`id_sop`, `judul`, `icon`, `warna`, `file`, `deskripsi`, `uru
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -582,25 +571,27 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `last_login`, `created_at`) VALUES
-(2, '$2y$10$l710L0YPlhSBRxW23TpS..A8o9pbUd1RLcPLFY77Zm3', 'admin', 'admin', NULL, '2025-12-20 17:28:27'),
-(4, 'admin', '$2y$10$9dZeOKeyCyGLbICQl4l2S.rhW9VQd7Tj5iqbdSe43yG1YKUv3Utey', 'admin', '2026-01-10 19:35:59', '2025-12-22 14:47:00');
+(5, '13020230100@student.umi.ac.id', '$2y$10$iVDxzPWLuukG7qlOxo1WFORcqFPKWD68EapvAP/Lf4ruJ6cqaMD.6', 'super_admin', '2026-01-14 23:42:43', '2026-01-09 22:25:18'),
+(6, '13020230217@student.umi.ac.id', '$2y$10$khY/qBg0XaAE/x0apN54CuiPJeYczQVAvEPd4qJDK13hBEe7DIDh2', 'admin', '2026-01-09 22:32:12', '2026-01-09 22:26:27'),
+(7, '13020230187@student.umi.ac.id', '$2y$10$FhUh8hCCg6noMBFw.YEsLuVuzUa.4jSNDVJgk3Q6oCJBD0k058ugi', 'admin', '2026-01-09 22:33:44', '2026-01-09 22:28:15'),
+(8, 'superadmin@student.umi.ac.id', '$2y$10$UzYX.F.BjuMC8s1nsl/1pe0l9j6tO1Go2hIaxAwvSo0nOw.PCA7WG', 'super_admin', '2026-01-10 11:32:04', '2026-01-09 22:35:55');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `alumni`
+-- Indeks untuk tabel `alumni`
 --
 ALTER TABLE `alumni`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `asisten`
+-- Indeks untuk tabel `asisten`
 --
 ALTER TABLE `asisten`
   ADD PRIMARY KEY (`idAsisten`),
@@ -608,19 +599,19 @@ ALTER TABLE `asisten`
   ADD KEY `idx_asisten_email` (`email`);
 
 --
--- Indexes for table `format_penulisan`
+-- Indeks untuk tabel `format_penulisan`
 --
 ALTER TABLE `format_penulisan`
   ADD PRIMARY KEY (`id_format`);
 
 --
--- Indexes for table `integrsiweb`
+-- Indeks untuk tabel `integrsiweb`
 --
 ALTER TABLE `integrsiweb`
   ADD PRIMARY KEY (`idIntegrasi`);
 
 --
--- Indexes for table `jadwalpraktikum`
+-- Indeks untuk tabel `jadwalpraktikum`
 --
 ALTER TABLE `jadwalpraktikum`
   ADD PRIMARY KEY (`idJadwal`),
@@ -628,33 +619,33 @@ ALTER TABLE `jadwalpraktikum`
   ADD KEY `idx_jadwal_lab` (`idLaboratorium`);
 
 --
--- Indexes for table `jadwalupk`
+-- Indeks untuk tabel `jadwalupk`
 --
 ALTER TABLE `jadwalupk`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `laboratorium`
+-- Indeks untuk tabel `laboratorium`
 --
 ALTER TABLE `laboratorium`
   ADD PRIMARY KEY (`idLaboratorium`),
   ADD KEY `idKordinatorAsisten` (`idKordinatorAsisten`);
 
 --
--- Indexes for table `laboratorium_gambar`
+-- Indeks untuk tabel `laboratorium_gambar`
 --
 ALTER TABLE `laboratorium_gambar`
   ADD PRIMARY KEY (`idGambar`),
   ADD KEY `idLaboratorium` (`idLaboratorium`);
 
 --
--- Indexes for table `manajemen`
+-- Indeks untuk tabel `manajemen`
 --
 ALTER TABLE `manajemen`
   ADD PRIMARY KEY (`idManajemen`);
 
 --
--- Indexes for table `matakuliah`
+-- Indeks untuk tabel `matakuliah`
 --
 ALTER TABLE `matakuliah`
   ADD PRIMARY KEY (`idMatakuliah`),
@@ -662,137 +653,137 @@ ALTER TABLE `matakuliah`
   ADD KEY `idx_matakuliah_kode` (`kodeMatakuliah`);
 
 --
--- Indexes for table `peraturan_lab`
+-- Indeks untuk tabel `peraturan_lab`
 --
 ALTER TABLE `peraturan_lab`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sanksi_lab`
+-- Indeks untuk tabel `sanksi_lab`
 --
 ALTER TABLE `sanksi_lab`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sop`
+-- Indeks untuk tabel `sop`
 --
 ALTER TABLE `sop`
   ADD PRIMARY KEY (`id_sop`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `alumni`
+-- AUTO_INCREMENT untuk tabel `alumni`
 --
 ALTER TABLE `alumni`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `asisten`
+-- AUTO_INCREMENT untuk tabel `asisten`
 --
 ALTER TABLE `asisten`
   MODIFY `idAsisten` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
--- AUTO_INCREMENT for table `format_penulisan`
+-- AUTO_INCREMENT untuk tabel `format_penulisan`
 --
 ALTER TABLE `format_penulisan`
   MODIFY `id_format` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT for table `integrsiweb`
+-- AUTO_INCREMENT untuk tabel `integrsiweb`
 --
 ALTER TABLE `integrsiweb`
   MODIFY `idIntegrasi` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `jadwalpraktikum`
+-- AUTO_INCREMENT untuk tabel `jadwalpraktikum`
 --
 ALTER TABLE `jadwalpraktikum`
   MODIFY `idJadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
--- AUTO_INCREMENT for table `jadwalupk`
+-- AUTO_INCREMENT untuk tabel `jadwalupk`
 --
 ALTER TABLE `jadwalupk`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
--- AUTO_INCREMENT for table `laboratorium`
+-- AUTO_INCREMENT untuk tabel `laboratorium`
 --
 ALTER TABLE `laboratorium`
   MODIFY `idLaboratorium` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
--- AUTO_INCREMENT for table `laboratorium_gambar`
+-- AUTO_INCREMENT untuk tabel `laboratorium_gambar`
 --
 ALTER TABLE `laboratorium_gambar`
   MODIFY `idGambar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
--- AUTO_INCREMENT for table `manajemen`
+-- AUTO_INCREMENT untuk tabel `manajemen`
 --
 ALTER TABLE `manajemen`
   MODIFY `idManajemen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `matakuliah`
+-- AUTO_INCREMENT untuk tabel `matakuliah`
 --
 ALTER TABLE `matakuliah`
   MODIFY `idMatakuliah` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT for table `peraturan_lab`
+-- AUTO_INCREMENT untuk tabel `peraturan_lab`
 --
 ALTER TABLE `peraturan_lab`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `sanksi_lab`
+-- AUTO_INCREMENT untuk tabel `sanksi_lab`
 --
 ALTER TABLE `sanksi_lab`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `sop`
+-- AUTO_INCREMENT untuk tabel `sop`
 --
 ALTER TABLE `sop`
   MODIFY `id_sop` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `jadwalpraktikum`
+-- Ketidakleluasaan untuk tabel `jadwalpraktikum`
 --
 ALTER TABLE `jadwalpraktikum`
   ADD CONSTRAINT `jadwalpraktikum_ibfk_1` FOREIGN KEY (`idMatakuliah`) REFERENCES `matakuliah` (`idMatakuliah`) ON DELETE CASCADE,
   ADD CONSTRAINT `jadwalpraktikum_ibfk_2` FOREIGN KEY (`idLaboratorium`) REFERENCES `laboratorium` (`idLaboratorium`) ON DELETE CASCADE;
 
 --
--- Constraints for table `laboratorium`
+-- Ketidakleluasaan untuk tabel `laboratorium`
 --
 ALTER TABLE `laboratorium`
   ADD CONSTRAINT `laboratorium_ibfk_1` FOREIGN KEY (`idKordinatorAsisten`) REFERENCES `asisten` (`idAsisten`) ON DELETE SET NULL;
 
 --
--- Constraints for table `laboratorium_gambar`
+-- Ketidakleluasaan untuk tabel `laboratorium_gambar`
 --
 ALTER TABLE `laboratorium_gambar`
   ADD CONSTRAINT `fk_lab_gambar_lab` FOREIGN KEY (`idLaboratorium`) REFERENCES `laboratorium` (`idLaboratorium`) ON DELETE CASCADE;
