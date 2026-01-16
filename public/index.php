@@ -13,8 +13,7 @@ define('CONFIG_PATH',     APP_PATH . '/config');
 
 require_once APP_PATH . '/config/config.php';
 
-// --- BAGIAN PERBAIKAN 1: Deteksi URL yang lebih akurat ---
-// --- PERBAIKAN: Deteksi PUBLIC_URL yang fleksibel ---
+// --- DETEKSI URL PUBLIK ---
 if (!defined('PUBLIC_URL')) {
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8000';
@@ -70,12 +69,11 @@ if (in_array($uri_clean, ['/', '', '/index.php'], true)) {
 $isAdminArea = (strpos($uri_clean, '/admin') !== false) || (strpos($uri_clean, '/dashboard') !== false);
 
 /* ===============================
-   ROUTING ADMIN (DIPERBAIKI)
+   ROUTING ADMIN
 =============================== */
 if ($isAdminArea) {
 
     if (!isset($_SESSION['status']) || $_SESSION['status'] != "login") {
-        // Alihkan ke home (beranda) alih-alih login agar lokasi pintu masuk tetap rahasia
         header("Location: " . PUBLIC_URL . "/home");
         exit;
     }
@@ -99,16 +97,12 @@ if ($isAdminArea) {
             $module = 'peraturan_sanksi';
         }
         
-        // Pastikan module tersedia global agar bisa dibaca oleh header.php
         $GLOBALS['module'] = $module;
         
-        // [FIX] Cek apakah segmen ke-2 adalah ID (angka)
         if (isset($subParts[1]) && is_numeric($subParts[1])) {
-            // Format: /admin/module/ID/action (contoh: /admin/asisten/2/edit)
-            $_GET['id'] = $subParts[1]; // Inject ID ke $_GET agar view bisa membacanya
-            $action     = $subParts[2] ?? 'index'; // Jika tidak ada action, default ke index/detail
+            $_GET['id'] = $subParts[1];
+            $action     = $subParts[2] ?? 'index';
         } else {
-            // Format: /admin/module/action (contoh: /admin/asisten/create)
             $action = $subParts[1] ?? 'index';
         }
     }
@@ -119,14 +113,12 @@ if ($isAdminArea) {
     if ($module === 'dashboard') {
         $targetFile = VIEW_PATH . '/admin/index.php';
     } else {
-        // Cari file view spesifik berdasarkan action (misal: edit.php, create.php)
         $specificFile = VIEW_PATH . '/admin/' . $module . '/' . $action . '.php';
         $indexFile    = VIEW_PATH . '/admin/' . $module . '/index.php';
 
         if (file_exists($specificFile)) {
             $targetFile = $specificFile;
         } else {
-            // Fallback: jika create/edit tidak ada file spesifik, cek form.php
             if (in_array($action, ['create', 'edit'])) {
                 $formFile = VIEW_PATH . '/admin/' . $module . '/form.php';
                 if (file_exists($formFile)) {
@@ -140,7 +132,7 @@ if ($isAdminArea) {
         }
     }
 
-    // Di dalam blok if ($isAdminArea) pada public/index.php
+    // Routing Khusus Admin Jadwal UPK
     if ($module === 'jadwalupk') {
         require_once CONTROLLER_PATH . '/JadwalUpkController.php';
         $ctrl = new JadwalUpkController();
@@ -148,14 +140,12 @@ if ($isAdminArea) {
         if ($action === 'upload') {
             $ctrl->upload();
         } elseif ($action === 'delete') {
-            // Ambil ID dari subParts[2] jika ada, jika tidak cek $_GET['id']
             $targetId = $subParts[2] ?? ($_GET['id'] ?? null);
             $ctrl->delete($targetId);
         } else {
-            // Ini akan memanggil fungsi admin_index() yang menyiapkan variabel $data
             $ctrl->admin_index(); 
         }
-        exit; // Stop agar tidak melakukan require view secara manual di bawah
+        exit; 
     }
 
     if (file_exists($adminHeader)) require_once $adminHeader;
@@ -170,9 +160,6 @@ if ($isAdminArea) {
     chdir(ROOT_PROJECT . '/public');
     if (file_exists($adminFooter)) require_once $adminFooter;
     exit;
-
-
-
 }
 
 
@@ -183,7 +170,6 @@ if ($isAdminArea) {
 $pageParam = $_GET['page'] ?? null;
 $routeParam = $_GET['route'] ?? null;
 
-// Ambil path setelah folder 'public'
 $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
 $uri_clean   = explode('?', $request_uri)[0];
 $script_name = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
@@ -196,7 +182,6 @@ $segments = array_values(array_filter(
     fn($s) => $s !== ''
 ));
 
-// JIKA KOSONG, PAKSA JADI HOME AGAR CSS KE-LOAD
 $page = $segments[0] ?? 'home';
 if ($page === 'index.php' || empty($page)) {
     $page = 'home';
@@ -218,11 +203,19 @@ $aliases = [
     'fasilitas'      => 'riset',
     'kontak'         => 'contact',
     'hubungi'        => 'contact',
-    'daftar-asisten' => 'asisten'
+    'daftar-asisten' => 'asisten',
+    // UPDATE: Alias untuk denah
+    'peta'           => 'denah',
+    'floorplan'      => 'denah'
 ];
 
 if (array_key_exists($page, $aliases)) {
     $page = $aliases[$page];
+}
+
+// UPDATE: Routing khusus untuk /laboratorium/denah agar dikenali sebagai 'denah'
+if ($page === 'laboratorium' && isset($segments[1]) && $segments[1] === 'denah') {
+    $page = 'denah'; 
 }
 
 // Support shorthand URLs logic (Public)
@@ -251,23 +244,24 @@ if (isset($segments[1]) && $segments[1] !== '') {
 
 
 /* ===============================
-   CSS
+   CSS MAPPING
 =============================== */
 
-$pageCss = 'style.css'; // Fallback default
+$pageCss = 'style.css'; 
 if ($page == 'home')                               $pageCss = 'home.css';
-if ($page == 'tatatertib' || $page == 'jadwal' || $page == 'jadwalupk' || $page == 'formatpenulisan') {
+if (in_array($page, ['tatatertib', 'jadwal', 'jadwalupk', 'formatpenulisan'])) {
     $pageCss = 'praktikum.css';
 }
-if ($page == 'kepala' || $page == 'asisten' || $page == 'detail' || $page == 'sop') {
+if (in_array($page, ['kepala', 'asisten', 'detail', 'sop'])) {
     $pageCss = 'sumberdaya.css';
 }
-if ($page == 'laboratorium' || $page == 'riset' || $page == 'detail_fasilitas') {
+// UPDATE: Tambahkan 'denah' agar memuat fasilitas.css
+if (in_array($page, ['laboratorium', 'riset', 'detail_fasilitas', 'denah'])) {
     $pageCss = 'fasilitas.css';
 }
 if ($page == 'apps')                               $pageCss = 'apps.css';
 if ($page == 'contact')                            $pageCss = 'contact.css';
-if ($page == 'alumni' || $page == 'detail_alumni')                             $pageCss = 'alumni.css';
+if (in_array($page, ['alumni', 'detail_alumni']))  $pageCss = 'alumni.css';
 
 
 /* ===============================
@@ -300,7 +294,9 @@ $direct_views = [
     'riset'        => 'fasilitas/riset.php',
     'laboratorium' => 'fasilitas/laboratorium.php',
     'detail_fasilitas' => 'fasilitas/detail.php',
-    'kepala'       => 'sumberdaya/kepala.php'
+    'kepala'       => 'sumberdaya/kepala.php',
+    // Opsi tambahan jika ingin view langsung tanpa controller (tapi disarankan via MVC route di bawah)
+    // 'denah'     => 'fasilitas/denah.php' 
 ];
 
 if (array_key_exists($page, $direct_views)) {
@@ -341,8 +337,8 @@ $mvc_routes = [
     'logout'           => ['AuthController', 'logout', []],
 
     'asisten'          => ['AsistenController', 'index', []],
-    'jadwalupk' => ['JadwalUpkController', 'index', []],
-    'formatpenulisan' => ['FormatPenulisanController', 'index', []],
+    'jadwalupk'        => ['JadwalUpkController', 'index', []],
+    'formatpenulisan'  => ['FormatPenulisanController', 'index', []],
     'detail'           => ['AsistenController', 'detail', ['id' => $id]],
     'detail-asisten'   => ['AsistenController', 'detail', ['id' => $id]],
 
@@ -353,6 +349,9 @@ $mvc_routes = [
     'detail_manajemen' => ['KepalaLabController', 'detail', ['id' => $id]],
 
     'sop'              => ['SopController', 'index', []],
+    
+    // UPDATE: Menambahkan route untuk Denah
+    'denah'            => ['LaboratoriumController', 'denah', []],
 ];
 
 if (array_key_exists($page, $mvc_routes)) {
@@ -387,7 +386,7 @@ if (array_key_exists($page, $mvc_routes)) {
     }
 
 } else {
-    // Jika rute tidak ditemukan, arahkan ke home agar CSS dan data termuat dengan benar
+    // Jika rute tidak ditemukan, arahkan ke home
     header('Location: ' . PUBLIC_URL . '/home');
     exit;
 }

@@ -97,6 +97,13 @@ class LaboratoriumController extends Controller {
         $this->success($data, 'Data Laboratorium retrieved successfully');
     }
 
+    public function denah() {
+        $data['judul'] = 'Denah Lokasi & Tata Letak';
+        
+        $this->view('fasilitas/denah', $data);
+
+    }
+
     public function show($params) {
         $id = $params['id'] ?? null;
         if (!$id) {
