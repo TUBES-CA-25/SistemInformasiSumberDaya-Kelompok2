@@ -1,12 +1,13 @@
 <?php
 /**
- * VIEW: DETAIL FASILITAS (FIXED SLIDER & CONTACT)
+ * VIEW: DETAIL FASILITAS (FIXED SLIDER & CONTACT & DYNAMIC BACK BUTTON)
  */
 
 global $pdo;
 $lab = null;
 $gallery = [];
 $id_lab = 0;
+$linkKembali = PUBLIC_URL . '/laboratorium'; // Default link jika data null
 
 // 1. LOGIKA ID
 if (isset($data['id'])) {
@@ -20,10 +21,9 @@ if (isset($data['id'])) {
     if (is_numeric($lastSegment)) $id_lab = $lastSegment;
 }
 
-// 2. QUERY DATABASE (UPDATE: JOIN KE TABEL ASISTEN UNTUK EMAIL & FOTO)
+// 2. QUERY DATABASE
 if ($id_lab > 0) {
     try {
-        // Gunakan LEFT JOIN untuk mengambil email dan foto dari tabel asisten
         $query = "SELECT l.*, a.email as email_koordinator, a.nama as nama_asisten, a.foto as foto_asisten 
                   FROM laboratorium l 
                   LEFT JOIN asisten a ON l.idKordinatorAsisten = a.idAsisten 
@@ -60,8 +60,22 @@ if ($id_lab > 0) {
     } catch (Exception $e) {}
 }
 
-// 3. DATA PROCESSING
+// 3. DATA PROCESSING & DYNAMIC LINK LOGIC
 if ($lab) {
+    // --- A. LOGIKA TOMBOL KEMBALI DINAMIS ---
+    $kategori = isset($lab['jenis']) ? strtolower($lab['jenis']) : '';
+    
+    // Cek jika ini adalah Ruang Riset
+    if (strpos($kategori, 'riset') !== false || strpos($kategori, 'research') !== false) {
+        $linkKembali = PUBLIC_URL . '/fasilitas/ruang_riset';
+    } 
+    // Cek jika ini adalah Fasilitas Umum
+    else if (strpos($kategori, 'umum') !== false || strpos($kategori, 'public') !== false) {
+        $linkKembali = PUBLIC_URL . '/fasilitas/public_area';
+    }
+    // Default tetap ke Laboratorium
+
+    // --- B. DATA SPESIFIKASI ---
     $hardwareData = [
         'Processor' => $lab['processor'],
         'RAM'       => $lab['ram'],
@@ -74,13 +88,9 @@ if ($lab) {
     $softwareList  = !empty($lab['software']) ? array_map('trim', explode(',', $lab['software'])) : [];
     $pendukungList = !empty($lab['fasilitas_pendukung']) ? array_map('trim', explode(',', $lab['fasilitas_pendukung'])) : [];
     
-    // Nama Koordinator: Prioritas dari kolom manual di tabel lab, kalau kosong ambil dari tabel asisten
     $coordName = !empty($lab['koordinator_nama']) ? $lab['koordinator_nama'] : ($lab['nama_asisten'] ?? 'Koordinator Lab');
-    
-    // Email: Ambil dari hasil join
     $coordEmail = $lab['email_koordinator'] ?? null;
 
-    // Inisial untuk Avatar
     $initials = '';
     foreach (explode(' ', $coordName) as $part) {
         if (ctype_alpha($part[0])) $initials .= strtoupper($part[0]);
@@ -93,7 +103,7 @@ if ($lab) {
     <div class="container">
         
         <?php if ($lab) : ?>
-            <a href="<?= PUBLIC_URL ?>/laboratorium" class="btn-back">
+            <a href="<?= $linkKembali ?>" class="btn-back">
                 <i class="ri-arrow-left-line"></i> Kembali ke Daftar Fasilitas
             </a>
 
@@ -197,9 +207,7 @@ if ($lab) {
                         
                         <div class="coord-photo-frame">
                             <?php 
-                                // Prioritas: foto dari lab > foto dari asisten > avatar dengan inisial
                                 $fotoKoord = null;
-                                
                                 if (!empty($lab['koordinator_foto']) && file_exists(ROOT_PROJECT.'/public/assets/uploads/'.$lab['koordinator_foto'])) {
                                     $fotoKoord = ASSETS_URL . '/assets/uploads/' . $lab['koordinator_foto'];
                                 } elseif (!empty($lab['foto_asisten']) && file_exists(ROOT_PROJECT.'/public/assets/uploads/'.$lab['foto_asisten'])) {
