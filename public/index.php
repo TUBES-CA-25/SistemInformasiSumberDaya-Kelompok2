@@ -148,6 +148,24 @@ if ($isAdminArea) {
         exit; 
     }
 
+    // Routing Khusus Admin Modul Praktikum
+    if ($module === 'modul') {
+        require_once CONTROLLER_PATH . '/AdminModulController.php';
+        $ctrl = new AdminModulController();
+        
+        if ($action === 'add') {
+            $ctrl->add();
+        } elseif ($action === 'delete') {
+            // Mengambil ID dari URL segmen ke-3 atau $_GET
+            $targetId = $subParts[1] ?? ($_GET['id'] ?? null); 
+            $ctrl->delete($targetId);
+        } else {
+            $ctrl->index(); 
+        }
+        exit; 
+    }
+
+
     if (file_exists($adminHeader)) require_once $adminHeader;
 
     if (file_exists($targetFile)) {
@@ -249,7 +267,7 @@ if (isset($segments[1]) && $segments[1] !== '') {
 
 $pageCss = 'style.css'; 
 if ($page == 'home')                               $pageCss = 'home.css';
-if (in_array($page, ['tatatertib', 'jadwal', 'jadwalupk', 'formatpenulisan'])) {
+if (in_array($page, ['tatatertib', 'jadwal', 'jadwalupk',  'modul','formatpenulisan'])) {
     $pageCss = 'praktikum.css';
 }
 if (in_array($page, ['kepala', 'asisten', 'detail', 'sop'])) {
@@ -347,6 +365,8 @@ $mvc_routes = [
 
     'detail_fasilitas' => ['LaboratoriumController', 'detail', ['id' => $id]],
     'detail_manajemen' => ['KepalaLabController', 'detail', ['id' => $id]],
+
+    'modul'            => ['ModulController', 'index', []],
 
     'sop'              => ['SopController', 'index', []],
     

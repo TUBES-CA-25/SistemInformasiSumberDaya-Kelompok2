@@ -104,6 +104,8 @@ $routes = [
         '/formatpenulisan/{id}' => ['controller' => 'FormatPenulisanController', 'method' => 'apiShow'],
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'index'],
         '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'show'],
+        '/modul' => ['controller' => 'ModulController', 'method' => 'getJson'],
+        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'getById'], 
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'index'],
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],            '/dashboard/stats' => ['controller' => 'DashboardController', 'method' => 'stats'],    ],
     'POST' => [
@@ -141,6 +143,8 @@ $routes = [
         '/kontak' => ['controller' => 'KontakController', 'method' => 'store'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'store'],
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
+        '/modul' => ['controller' => 'ModulController', 'method' => 'store'],
+        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'update'],
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'store'],
     ],
     'PUT' => [
@@ -161,6 +165,7 @@ $routes = [
         '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'],
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'update'],
         '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'update'],
+        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'update'],
         '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiUpdate'],
     ],
     'DELETE' => [
@@ -182,6 +187,7 @@ $routes = [
         '/formatpenulisan/{id}'    => ['controller' => 'FormatPenulisanController', 'method' => 'delete'],
         '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'delete'],
         '/tata-tertib/{id}'        => ['controller' => 'TataTerbibController', 'method' => 'delete'],
+        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'delete'],
         '/integrasi-web/{id}'      => ['controller' => 'IntegrsiWebController', 'method' => 'delete'],
         '/user/{id}'               => ['controller' => 'UserController', 'method' => 'apiDelete'],
     ],
