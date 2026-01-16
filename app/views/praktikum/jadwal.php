@@ -33,11 +33,9 @@ function startClock() {
 
     setInterval(() => {
         const now = new Date();
-        // Format Waktu: 14:05:30
         const timeString = now.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':');
         clockElement.innerText = timeString;
         
-        // Update Hari
         dayDisplay.innerText = "Jadwal Hari " + hariIndo[now.getDay()];
     }, 1000);
 }
@@ -54,13 +52,9 @@ function updateDashboard() {
             const hariIndo = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
             const hariIni = hariIndo[now.getDay()];
             
-            // Format jam sekarang (HH:mm) untuk perbandingan
             const jamSekarang = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-
-            // Filter data hanya hari ini
             const dataHariIni = res.data.filter(item => item.hari === hariIni);
 
-            // JIKA KOSONG
             if (dataHariIni.length === 0) {
                 container.innerHTML = `
                     <div class="empty-schedule">
@@ -71,14 +65,11 @@ function updateDashboard() {
                 return;
             }
 
-            // Grouping berdasarkan Lab
             const labs = [...new Set(dataHariIni.map(item => item.namaLab))].sort();
             let finalHtml = '';
 
             labs.forEach(lab => {
                 const jadwalLab = dataHariIni.filter(item => item.namaLab === lab);
-                
-                // Urutkan jadwal berdasarkan jam mulai
                 jadwalLab.sort((a, b) => a.waktuMulai.localeCompare(b.waktuMulai));
 
                 finalHtml += `
@@ -92,9 +83,9 @@ function updateDashboard() {
                         <table class="table-schedule">
                             <thead>
                                 <tr>
-                                    <th width="12%">Waktu</th>
+                                    <th class="text-nowrap">Waktu</th>
                                     <th width="25%">Mata Kuliah</th>
-                                    <th width="8%">Kls/Freq</th>
+                                    <th class="text-nowrap">Kls/Freq</th>
                                     <th width="20%">Dosen</th>
                                     <th width="20%">Asisten</th>
                                     <th width="15%" class="text-center">Status</th>
@@ -106,7 +97,6 @@ function updateDashboard() {
                     const start = item.waktuMulai.substring(0, 5);
                     const end = item.waktuSelesai.substring(0, 5);
                     
-                    // Logic Status yang Lebih Cerdas
                     let statusBadge = '';
                     let statusText = '';
                     
@@ -121,17 +111,15 @@ function updateDashboard() {
                         statusBadge = 'status-label badge-finished';
                     }
 
-                    // Gabung Kelas & Freq
                     const kelasFreq = `<b>${item.kelas || '-'}</b> <span style="color:#94a3b8">/</span> ${item.frekuensi || '-'}`;
                     
-                    // Formatting Asisten (Biar Rapi)
                     const asisten1 = item.asisten1 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.asisten1}</div>` : '';
                     const asisten2 = item.asisten2 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.asisten2}</div>` : '';
                     const asistenDisplay = (asisten1 || asisten2) ? `<div class="asisten-cell">${asisten1}${asisten2}</div>` : '<span style="color:#cbd5e1">-</span>';
 
                     finalHtml += `
                         <tr>
-                            <td style="font-family:'JetBrains Mono', monospace; font-size:0.95rem;">
+                            <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.95rem;">
                                 ${start} - ${end}
                             </td>
                             
@@ -139,7 +127,7 @@ function updateDashboard() {
                                 ${item.namaMatakuliah}
                             </td>
                             
-                            <td>${kelasFreq}</td>
+                            <td class="text-nowrap">${kelasFreq}</td>
                             
                             <td>
                                 <div style="display:flex; align-items:center; gap:8px;">
@@ -173,5 +161,5 @@ function updateDashboard() {
 // Jalankan Fungsi
 startClock();
 updateDashboard();
-setInterval(updateDashboard, 30000); // Auto-refresh tiap 30 detik
+setInterval(updateDashboard, 30000); 
 </script>
