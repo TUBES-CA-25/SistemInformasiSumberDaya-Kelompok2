@@ -46,11 +46,11 @@ function getLabImg($row) {
                         $deskripsi = strlen($descRaw) > 150 ? substr($descRaw, 0, 150) . '...' : $descRaw;
                     ?>
 
-                    <a href="<?= PUBLIC_URL ?>/detail_fasilitas/<?= $row['idLaboratorium'] ?>" class="facility-row">
+                    <a href="<?= PUBLIC_URL ?>/detail_fasilitas/<?= $row['idLaboratorium'] ?>" class="facility-row" data-id="<?= $row['idLaboratorium'] ?>" data-link>
                         <div class="facility-img-side">
                             <?php if ($imgSrc) : ?>
                                 <img src="<?= $imgSrc ?>" alt="<?= htmlspecialchars($row['nama']) ?>" 
-                                     style="width:100%; height:100%; object-fit:cover;">
+                                     style="width:100%; height:100%; object-fit:cover;" loading="lazy">
                             <?php else : ?>
                                 <div class="img-overlay-placeholder">
                                     <i class="ri-computer-line"></i>
@@ -93,3 +93,5 @@ function getLabImg($row) {
         </div>
     </div>
 </section>
+
+<script src="<?= ASSETS_URL ?>/js/fasilitas.js"></script>

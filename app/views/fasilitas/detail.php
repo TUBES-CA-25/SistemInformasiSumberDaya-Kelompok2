@@ -96,6 +96,9 @@ if ($lab) {
         if (ctype_alpha($part[0])) $initials .= strtoupper($part[0]);
         if (strlen($initials) >= 2) break;
     }
+    
+    // Tentukan link kembali berdasarkan jenis fasilitas
+    $backLink = ($lab['jenis'] === 'Riset') ? PUBLIC_URL . '/riset' : PUBLIC_URL . '/laboratorium';
 }
 ?>
 
@@ -103,7 +106,7 @@ if ($lab) {
     <div class="container">
         
         <?php if ($lab) : ?>
-            <a href="<?= $linkKembali ?>" class="btn-back">
+            <a href="<?= $backLink ?>" class="btn-back">
                 <i class="ri-arrow-left-line"></i> Kembali ke Daftar Fasilitas
             </a>
 

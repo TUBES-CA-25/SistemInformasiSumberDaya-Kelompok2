@@ -54,11 +54,11 @@ function getRisetStyle($nama) {
                         $deskripsi = strlen($descRaw) > 120 ? substr($descRaw, 0, 120) . '...' : $descRaw;
                     ?>
 
-                    <a href="<?= PUBLIC_URL ?>/detail_fasilitas/<?= $row['idLaboratorium'] ?>" class="facility-row">
+                    <a href="<?= PUBLIC_URL ?>/detail_fasilitas/<?= $row['idLaboratorium'] ?>" class="facility-row" data-id="<?= $row['idLaboratorium'] ?>" data-link>
                         <div class="facility-img-side" style="background: <?= $style['bg'] ?>;">
                             <?php if(!empty($row['gambar']) && file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $row['gambar'])): ?>
                                 <img src="<?= ASSETS_URL ?>/assets/uploads/<?= $row['gambar'] ?>" 
-                                     style="width:100%; height:100%; object-fit:cover; opacity:0.9;">
+                                     style="width:100%; height:100%; object-fit:cover; opacity:0.9;" loading="lazy">
                             <?php else: ?>
                                 <div class="img-overlay-placeholder" style="background: transparent;">
                                     <i class="<?= $style['icon'] ?>" style="color: <?= $style['color'] ?>;"></i>
@@ -98,3 +98,5 @@ function getRisetStyle($nama) {
         </div>
     </div>
 </section>
+
+<script src="<?= ASSETS_URL ?>/js/fasilitas.js"></script>
