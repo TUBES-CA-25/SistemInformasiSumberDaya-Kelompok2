@@ -64,3 +64,22 @@ function resetTimer() {
     clearInterval(slideInterval);
     startTimer();
 }
+
+// ============================================
+// OPTIMISASI: Event Delegation untuk Facility Links
+// ============================================
+document.addEventListener('click', function(e) {
+    const facilityLink = e.target.closest('[data-link]');
+    if (facilityLink) {
+        e.preventDefault();
+        const href = facilityLink.getAttribute('href');
+        if (href) {
+            window.location.href = href;
+        }
+    }
+}, { passive: false }); // Non-passive karena ada preventDefault()
+
+// ============================================
+// OPTIMISASI: Passive listener untuk scroll performance
+// ============================================
+document.addEventListener('scroll', () => {}, { passive: true });

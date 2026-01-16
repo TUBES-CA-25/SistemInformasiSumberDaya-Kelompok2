@@ -88,9 +88,9 @@ $router->delete('/matakuliah/{id}', 'MatakuliahController', 'delete');
  * PUT    /api/jadwal/{id}               - Update jadwal
  * DELETE /api/jadwal/{id}               - Delete jadwal
  */
-$router->get('/jadwal', 'JadwalPraktikumController', 'index');
+$router->get('/jadwal', 'JadwalPraktikumController', 'apiIndex');
 $router->get('/jadwal/{id}', 'JadwalPraktikumController', 'show');
-$router->post('/jadwal', 'JadwalPraktikumController', 'store');
+$router->post('/jadwal', 'JadwalPraktikumController', 'create');
 $router->post('/jadwal/delete-multiple', 'JadwalPraktikumController', 'deleteMultiple');
 $router->put('/jadwal/{id}', 'JadwalPraktikumController', 'update');
 $router->delete('/jadwal/{id}', 'JadwalPraktikumController', 'delete');

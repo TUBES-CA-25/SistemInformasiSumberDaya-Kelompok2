@@ -500,6 +500,10 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
 
     btn.disabled = true; 
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
+    
+    console.log('Form Data:', dataObj);
+    console.log('Request URL:', url);
+    console.log('Method:', method);
 
     fetch(url, { 
         method: method, 
@@ -508,8 +512,12 @@ document.getElementById('jadwalForm').addEventListener('submit', function(e) {
         },
         body: JSON.stringify(dataObj) 
     })
-    .then(res => res.json())
+    .then(res => {
+        console.log('Response Status:', res.status);
+        return res.json();
+    })
     .then(data => {
+        console.log('Response Data:', data);
         hideLoading();
         if (data.status === true || data.status === 'success' || data.code === 200 || data.code === 201) {
             closeModal('formModal');
