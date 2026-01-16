@@ -62,6 +62,7 @@
             'tatatertib'   => 'praktikum.css',
             'jadwal'       => 'praktikum.css',
             'jadwalupk'    => 'praktikum.css',
+            'modul'           => 'praktikum.css',
             'formatpenulisan' => 'praktikum.css',
             'kepala'       => 'sumberdaya.css',
             'asisten'      => 'sumberdaya.css',
@@ -113,6 +114,7 @@
                         <a href="<?= PUBLIC_URL ?>/tatatertib">Tata Tertib</a>
                         <a href="<?= PUBLIC_URL ?>/jadwal">Jadwal</a>
                         <a href="<?= PUBLIC_URL ?>/jadwalupk">Jadwal UPK</a>
+                        <a href="<?= PUBLIC_URL ?>/modul">Modul Praktikum</a>
                         <a href="<?= PUBLIC_URL ?>/formatpenulisan">Format Penulisan</a>
                     </div>
                 </li>
