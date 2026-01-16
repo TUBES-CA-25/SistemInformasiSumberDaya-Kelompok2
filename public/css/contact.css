@@ -1,112 +1,155 @@
+/* =========================================
+   CONTACT SECTION STYLE (GRADIENT BG & COLOR MAP)
+   ========================================= */
+
 .contact-section {
-  padding: 80px 0;
-  background-color: #fcfdfe;
+  padding: 100px 0;
+
+  /* Background Gradasi Halus */
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+
   min-height: 100vh;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  position: relative;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 2;
 }
 
 .contact-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 60px;
-  align-items: start;
-  margin-bottom: 60px;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 80px;
+  align-items: flex-start;
+  margin-bottom: 80px;
 }
 
+/* --- Kiri: Info Kontak --- */
 .contact-info-side h2 {
-  font-size: 2.8rem;
-  font-weight: 900;
+  font-size: 3rem;
+  font-weight: 800;
   color: #0f172a;
-  margin-bottom: 20px;
-  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
 }
 
 .contact-info-side p {
   color: #64748b;
-  font-size: 1.1rem;
+  font-size: 1.125rem;
   line-height: 1.8;
-  margin-bottom: 45px;
+  margin-bottom: 48px;
+  max-width: 90%;
 }
 
 .contact-methods {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .method-item {
   display: flex;
-  gap: 24px;
-  align-items: flex-start;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  /* Background putih dengan sedikit transparansi agar menyatu dengan gradasi */
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.method-item:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
 }
 
 .method-icon {
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  width: 60px;
+  height: 60px;
+  background: #eff6ff;
   color: #2563eb;
-  border-radius: 16px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+  transition: 0.3s ease;
+}
+
+.method-item:hover .method-icon {
+  background: #2563eb;
+  color: #ffffff;
+  transform: rotate(-10deg);
 }
 
 .method-text h4 {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: #0f172a;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin: 0 0 4px 0;
 }
 
 .method-text span {
   color: #64748b;
   font-size: 0.95rem;
-  line-height: 1.6;
-  display: block;
+  font-weight: 500;
 }
 
+/* --- Kanan: Form Card --- */
 .contact-form-card {
   background: #ffffff;
-  padding: 48px;
-  border-radius: 24px;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+  padding: 50px;
+  border-radius: 30px;
+  border: 1px solid #e2e8f0;
+  /* Shadow yang lebih menonjol di atas gradasi */
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.1);
+  position: relative;
+  z-index: 10;
 }
 
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .form-group label {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: #334155;
+  color: #475569;
   margin-bottom: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.05em;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 14px 20px;
+  padding: 16px 20px;
   background: #f8fafc;
-  border: 2px solid #f1f5f9;
-  border-radius: 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
   font-family: inherit;
   font-size: 1rem;
   color: #0f172a;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
 }
 
 .form-group input:focus,
@@ -114,7 +157,7 @@
   outline: none;
   background: #ffffff;
   border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
 }
 
 .btn-submit {
@@ -123,40 +166,52 @@
   color: #fff;
   padding: 18px;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
+  letter-spacing: 0.02em;
 }
 
 .btn-submit:hover {
-  background: #1e293b;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
 }
 
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+/* --- Map Section --- */
 .map-container {
-  margin-top: 60px;
+  margin-top: 80px;
   background: #ffffff;
-  border: 1px solid #f1f5f9;
-  border-radius: 28px;
+  border: 1px solid #e2e8f0;
+  border-radius: 30px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+  /* Shadow agar peta terlihat "mengambang" di atas gradasi */
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.08);
+  position: relative;
+  z-index: 2;
 }
 
 .map-header {
-  padding: 24px 32px;
+  padding: 24px 40px;
   background: #ffffff;
   border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .map-header h3 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: #0f172a;
   display: flex;
@@ -173,43 +228,54 @@
 .map-iframe-wrapper {
   width: 100%;
   line-height: 0;
+  position: relative;
 }
 
 .map-iframe-wrapper iframe {
-  filter: contrast(1.05);
-  transition: 0.5s ease;
+  width: 100%;
+  height: 450px;
+  border: 0;
+  /* PERBAIKAN: Hapus filter grayscale agar peta berwarna */
+  filter: none;
+  transition: filter 0.3s ease;
 }
 
+/* Opsional: Sedikit efek kontras saat di-hover agar lebih interaktif */
+.map-container:hover iframe {
+  filter: contrast(1.05);
+}
+
+/* --- Responsive Media Queries --- */
 @media (max-width: 1024px) {
   .contact-wrapper {
     grid-template-columns: 1fr;
-    gap: 50px;
+    gap: 60px;
   }
 
   .contact-info-side {
-    text-align: center;
-  }
-
-  .contact-info-side p {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .method-item {
+    max-width: 800px;
+    margin: 0 auto;
     text-align: left;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .contact-section {
-    padding: 50px 0;
+    padding: 60px 0;
   }
+
   .contact-info-side h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
+
   .contact-form-card {
-    padding: 30px 20px;
+    padding: 30px 24px;
   }
+
+  .method-item {
+    padding: 15px;
+  }
+
   .map-iframe-wrapper iframe {
     height: 350px;
   }
