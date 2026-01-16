@@ -6,7 +6,7 @@ class JadwalPraktikumModel extends Model {
 
     public function getAll() {
         // LEFT JOIN memastikan data tampil meskipun asisten belum diisi di database
-        $query = "SELECT j.*, m.namaMatakuliah, l.nama as namaLab 
+        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab 
                   FROM jadwalpraktikum j
                   LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
@@ -91,7 +91,7 @@ class JadwalPraktikumModel extends Model {
      * Get jadwal by ID
      */
     public function getById($id, $idColumn = 'idJadwal') {
-        $query = "SELECT j.*, m.namaMatakuliah, l.nama as namaLab 
+        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab 
                   FROM jadwalpraktikum j
                   LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
