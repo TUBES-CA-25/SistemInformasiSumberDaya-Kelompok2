@@ -192,7 +192,7 @@ if (!empty($alumni_data)) {
                         <div class="staff-card">
                                 <div class="staff-photo-box">
                                 <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="asisten-photo" loading="lazy">
-                                <span class="badge-ca">CA</span>
+                                
                             </div>
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>

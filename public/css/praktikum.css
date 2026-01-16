@@ -3,7 +3,7 @@
    ======================================================== */
 .rules-section,
 .praktikum-section {
-  padding: 100px 0;
+  padding: 80px 0;
   background-color: #f8fafc;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
   min-height: 100vh;
@@ -20,7 +20,7 @@
 .section-header {
   text-align: center;
   max-width: 800px;
-  margin: 0 auto 70px auto;
+  margin: 0 auto 60px auto;
   padding-top: 10px;
 }
 
@@ -46,28 +46,28 @@
 .rules-header h1,
 .page-header h1,
 .section-header h2 {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 800;
-  color: #0f172a; /* Hitam Dark Slate */
+  color: #0f172a;
   letter-spacing: -0.04em;
-  margin-bottom: 24px;
-  line-height: 1.1;
+  margin-bottom: 20px;
+  line-height: 1.2;
   margin-top: 0;
 }
 
 .section-header h2 {
-  font-size: 2.5rem; /* Ukuran h2 sedikit lebih kecil dari h1 */
+  font-size: 2.5rem;
 }
 
 .rules-header p,
 .page-header p,
 .section-header p {
   color: #64748b;
-  font-size: 1.25rem;
-  line-height: 1.7;
+  font-size: 1.15rem;
+  line-height: 1.6;
   margin: 0 auto;
   font-weight: 400;
-  max-width: 85%;
+  max-width: 700px;
 }
 
 /* ========================================================
@@ -100,7 +100,6 @@
   box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.15);
 }
 
-/* --- GAMBAR DALAM KARTU --- */
 .rule-img-box {
   width: 100%;
   height: 220px;
@@ -122,7 +121,6 @@
   transform: scale(1.1);
 }
 
-/* --- ICONS --- */
 .rule-icon {
   width: 64px;
   height: 64px;
@@ -156,7 +154,6 @@
   letter-spacing: -0.02em;
 }
 
-/* --- LIST ITEMS --- */
 .rule-list {
   list-style: none;
   padding: 0;
@@ -182,7 +179,7 @@
 }
 
 /* ========================================================
-   SANKSI CONTAINER (RED ALERT THEME)
+   SANKSI CONTAINER
    ======================================================== */
 .sanksi-container {
   background: #ffffff;
@@ -230,7 +227,6 @@
   color: #991b1b;
   letter-spacing: -0.02em;
 }
-
 .sanksi-title i {
   color: #dc2626;
   font-size: 2.5rem;
@@ -275,10 +271,6 @@
   font-size: 1.5rem;
 }
 
-.sanksi-content {
-  flex: 1;
-}
-
 .sanksi-content h4 {
   color: #b91c1c;
   margin-bottom: 8px;
@@ -286,7 +278,6 @@
   font-weight: 800;
   margin-top: 0;
 }
-
 .sanksi-content p {
   color: #475569;
   font-size: 1rem;
@@ -295,14 +286,13 @@
 }
 
 /* ========================================================
-   VIDEO SECTION HEADER
+   VIDEO SECTION
    ======================================================== */
 .video-header-wrapper {
   text-align: center;
   margin-bottom: 40px;
   position: relative;
 }
-
 .video-badge {
   display: inline-flex;
   align-items: center;
@@ -318,7 +308,6 @@
   border: 1px solid #fecaca;
   margin-bottom: 15px;
 }
-
 .video-title-box h2 {
   font-size: 2.2rem;
   font-weight: 900;
@@ -329,7 +318,6 @@
   align-items: center;
   gap: 15px;
 }
-
 .video-play-icon {
   width: 50px;
   height: 50px;
@@ -343,7 +331,6 @@
   box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
   animation: pulse-red 2s infinite;
 }
-
 .video-desc {
   color: #64748b;
   font-size: 1.1rem;
@@ -355,23 +342,21 @@
 }
 
 @keyframes pulse-red {
-  0% {
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
     transform: scale(1);
   }
   70% {
     box-shadow: 0 0 0 15px rgba(220, 38, 38, 0);
     transform: scale(1.05);
   }
-  100% {
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
-    transform: scale(1);
-  }
 }
 
 /* ========================================================
-   JADWAL & CLOCK STYLES
+   JADWAL UPK & TABLES (UPDATED)
    ======================================================== */
+
 .live-clock-badge {
   display: inline-block;
   background: #2563eb;
@@ -387,13 +372,22 @@
   margin-top: 20px;
 }
 
+.schedule-wrapper {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
 .lab-header {
   display: flex;
   align-items: center;
   gap: 15px;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #e2e8f0;
+  padding: 20px 30px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .lab-icon {
@@ -418,24 +412,110 @@
   letter-spacing: 0.5px;
 }
 
-.empty-schedule {
-  background: #fff;
-  border-radius: 20px;
-  padding: 60px;
-  text-align: center;
-  border: 2px dashed #cbd5e1;
-}
-.empty-schedule i {
-  font-size: 4rem;
-  color: #94a3b8;
-  margin-bottom: 20px;
-}
-.empty-schedule h3 {
-  font-size: 1.5rem;
-  color: #475569;
-  margin-bottom: 10px;
+/* --- TABEL JADWAL --- */
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
 }
 
+.table-schedule {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  min-width: 800px;
+}
+
+.table-schedule thead th {
+  background: #2563eb; /* Header Biru sesuai request */
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 20px 24px;
+  text-align: left;
+  border-bottom: 4px solid #1e40af;
+}
+
+.table-schedule tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s ease;
+}
+.table-schedule tbody tr:last-child {
+  border-bottom: none;
+}
+.table-schedule tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.table-schedule td {
+  padding: 24px;
+  vertical-align: middle;
+}
+
+/* Typography Khusus Tabel Jadwal (NEW) */
+.schedule-date {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+  margin-bottom: 4px;
+}
+
+.schedule-time {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+  color: #2563eb;
+  font-weight: 700;
+  background: #eff6ff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.schedule-matkul {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1rem;
+  display: block;
+}
+
+.badge-prodi {
+  font-size: 0.7rem;
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  display: inline-block;
+  margin-top: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.schedule-kelas {
+  font-weight: 700;
+  color: #475569;
+  display: block;
+}
+
+.schedule-freq {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.dosen-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dosen-name {
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+/* Status Labels */
 .status-label {
   display: inline-flex;
   align-items: center;
@@ -479,91 +559,32 @@
   }
 }
 
-.asisten-cell {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.asisten-name {
-  font-weight: 600;
-  color: #334155;
-  font-size: 0.9rem;
-}
-
-.schedule-wrapper {
-  margin-top: 60px;
-}
-
-.table-responsive {
-  overflow-x: auto;
+.empty-schedule {
+  background: #fff;
   border-radius: 20px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05),
-    0 8px 10px -6px rgba(0, 0, 0, 0.01);
-  border: 1px solid #e2e8f0;
-  background: #ffffff;
+  padding: 60px;
+  text-align: center;
+  border: 2px dashed #cbd5e1;
 }
-
-.table-schedule {
-  width: 100%;
-  border-collapse: collapse;
-  background: #ffffff;
-  min-width: 800px;
+.empty-schedule i {
+  font-size: 4rem;
+  color: #94a3b8;
+  margin-bottom: 20px;
 }
-
-.table-schedule thead {
-  background: #2563eb;
-  color: #ffffff;
-}
-
-.table-schedule th {
-  padding: 24px;
-  text-align: left;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 1.2px;
-  color: #ffffff;
-  border-bottom: 4px solid #1e40af;
-}
-
-.table-schedule tbody tr {
-  border-bottom: 1px solid #f1f5f9;
-  transition: background-color 0.2s ease;
-}
-
-.table-schedule tbody tr:last-child {
-  border-bottom: none;
-}
-
-.table-schedule tbody tr:hover {
-  background-color: #f8fafc;
-}
-
-.table-schedule td {
-  padding: 24px;
+.empty-schedule h3 {
+  font-size: 1.5rem;
   color: #475569;
-  font-weight: 600;
-  font-size: 1rem;
-  vertical-align: middle;
-}
-
-.table-schedule td:first-child {
-  color: #2563eb;
-  font-weight: 800;
-  font-family: monospace;
-  font-size: 1.1rem;
+  margin-bottom: 10px;
 }
 
 /* ========================================================
-   DOWNLOAD SECTION STYLES (FORMAT PENULISAN)
+   DOWNLOAD SECTION (Format Penulisan)
    ======================================================== */
-
 .downloads-section {
   margin-top: 80px;
   padding-top: 60px;
-  border-top: 2px dashed #e2e8f0; /* Garis pemisah putus-putus */
+  border-top: 2px dashed #e2e8f0;
 }
-
 .downloads-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -571,7 +592,6 @@
   margin-top: 40px;
 }
 
-/* --- DOWNLOAD CARD (FILE STYLE) --- */
 .download-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -584,19 +604,17 @@
   position: relative;
   overflow: hidden;
 }
-
 .download-card:hover {
   transform: translateY(-5px);
   border-color: #3b82f6;
   box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.15);
 }
 
-/* Icon Box (File Type) */
 .file-icon-box {
   width: 60px;
   height: 60px;
-  background: #eff6ff; /* Biru Sangat Muda */
-  color: #2563eb; /* Biru Utama */
+  background: #eff6ff;
+  color: #2563eb;
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -609,7 +627,6 @@
 .download-content {
   flex: 1;
 }
-
 .download-content h4 {
   font-size: 1.1rem;
   font-weight: 700;
@@ -617,7 +634,6 @@
   margin: 0 0 5px 0;
   line-height: 1.4;
 }
-
 .file-meta {
   font-size: 0.85rem;
   color: #94a3b8;
@@ -627,13 +643,11 @@
   gap: 5px;
 }
 
-/* --- ACTION BUTTONS --- */
 .action-buttons {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
-
 .btn-download {
   display: inline-flex;
   align-items: center;
@@ -647,11 +661,9 @@
   text-decoration: none;
   transition: background 0.2s;
 }
-
 .btn-download:hover {
   background-color: #1d4ed8;
 }
-
 .btn-external {
   display: inline-flex;
   align-items: center;
@@ -666,7 +678,6 @@
   border: 1px solid #e2e8f0;
   transition: all 0.2s;
 }
-
 .btn-external:hover {
   background-color: #e2e8f0;
   color: #0f172a;
@@ -677,7 +688,7 @@
   .rules-header h1,
   .page-header h1,
   .section-header h2 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
   .rules-section,
   .praktikum-section {

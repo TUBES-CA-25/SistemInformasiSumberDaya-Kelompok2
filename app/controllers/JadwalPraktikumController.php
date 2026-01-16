@@ -212,6 +212,38 @@ class JadwalPraktikumController extends Controller {
         exit;
     }
 
+    public function show($params = []) {
+        while (ob_get_level()) { ob_end_clean(); }
+        header('Content-Type: application/json; charset=utf-8');
+        
+        try {
+            $id = $params['id'] ?? null;
+            if (!$id) {
+                throw new Exception('ID jadwal tidak ditemukan');
+            }
+
+            $jadwal = $this->model->getById($id);
+            if (!$jadwal) {
+                throw new Exception('Jadwal tidak ditemukan');
+            }
+
+            echo json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'data' => $jadwal
+            ]);
+        } catch (Exception $e) {
+            http_response_code(404);
+            echo json_encode([
+                'status' => 'error',
+                'code' => 404,
+                'message' => $e->getMessage()
+            ]);
+        }
+        exit;
+    }
+
+
     public function delete($params = []) {
         // Bersihkan semua output buffer
         while (ob_get_level()) { ob_end_clean(); }
@@ -274,6 +306,170 @@ class JadwalPraktikumController extends Controller {
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
+        }
+        exit;
+    }
+
+    public function create($params = []) {
+        // Bersihkan semua output buffer
+        while (ob_get_level()) { ob_end_clean(); }
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr
+            ]));
+        });
+
+        try {
+            $input = json_decode(file_get_contents('php://input'), true);
+            
+            // Validasi input - pastikan input bukan null
+            if (!$input || !is_array($input)) {
+                throw new Exception('Data tidak valid atau format JSON salah');
+            }
+            
+            // Validasi required fields
+            $required = ['idMatakuliah', 'idLaboratorium', 'hari', 'kelas', 'waktuMulai', 'waktuSelesai'];
+            foreach ($required as $field) {
+                if (empty($input[$field])) {
+                    throw new Exception("Field '{$field}' wajib diisi");
+                }
+            }
+
+            $data = [
+                'idMatakuliah' => (int)$input['idMatakuliah'],
+                'kelas' => trim($input['kelas']),
+                'idLaboratorium' => (int)$input['idLaboratorium'],
+                'hari' => trim($input['hari']),
+                'waktuMulai' => trim($input['waktuMulai']),
+                'waktuSelesai' => trim($input['waktuSelesai']),
+                'dosen' => trim($input['dosen'] ?? ''),
+                'asisten1' => trim($input['asisten1'] ?? ''),
+                'asisten2' => trim($input['asisten2'] ?? ''),
+                'frekuensi' => trim($input['frekuensi'] ?? '1'),
+                'status' => trim($input['status'] ?? 'Aktif')
+            ];
+
+            // Cek duplikasi
+            if ($this->model->checkDuplicate($data['idMatakuliah'], $data['kelas'], $data['hari'], 
+                                             $data['waktuMulai'], $data['waktuSelesai'], $data['idLaboratorium'])) {
+                throw new Exception('Jadwal dengan kombinasi MK, Kelas, Hari, Jam, dan Lab sudah ada');
+            }
+
+            if ($this->model->insert($data)) {
+                http_response_code(201);
+                echo json_encode([
+                    'status' => 'success',
+                    'code' => 201,
+                    'message' => 'Jadwal berhasil ditambahkan'
+                ], JSON_UNESCAPED_UNICODE);
+            } else {
+                throw new Exception('Gagal menyimpan ke database: ' . $this->model->db->error);
+            }
+        } catch (Exception $e) {
+            http_response_code(400);
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => $e->getMessage()
+            ], JSON_UNESCAPED_UNICODE);
+        } finally {
+            restore_error_handler();
+        }
+        exit;
+    }
+
+    public function update($params = []) {
+        // Bersihkan semua output buffer
+        while (ob_get_level()) { ob_end_clean(); }
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr
+            ]));
+        });
+
+        try {
+            $id = $params['id'] ?? null;
+            if (!$id) throw new Exception('ID jadwal tidak ditemukan');
+
+            $input = json_decode(file_get_contents('php://input'), true);
+            
+            // Validasi input - pastikan input bukan null
+            if (!$input || !is_array($input)) {
+                throw new Exception('Data tidak valid atau format JSON salah');
+            }
+            
+            // Validasi required fields
+            $required = ['idMatakuliah', 'idLaboratorium', 'hari', 'kelas', 'waktuMulai', 'waktuSelesai'];
+            foreach ($required as $field) {
+                if (empty($input[$field])) {
+                    throw new Exception("Field '{$field}' wajib diisi");
+                }
+            }
+
+            $data = [
+                'idMatakuliah' => (int)$input['idMatakuliah'],
+                'kelas' => trim($input['kelas']),
+                'idLaboratorium' => (int)$input['idLaboratorium'],
+                'hari' => trim($input['hari']),
+                'waktuMulai' => trim($input['waktuMulai']),
+                'waktuSelesai' => trim($input['waktuSelesai']),
+                'dosen' => trim($input['dosen'] ?? ''),
+                'asisten1' => trim($input['asisten1'] ?? ''),
+                'asisten2' => trim($input['asisten2'] ?? ''),
+                'frekuensi' => trim($input['frekuensi'] ?? '1'),
+                'status' => trim($input['status'] ?? 'Aktif')
+            ];
+
+            // Update query
+            $query = "UPDATE jadwalpraktikum SET 
+                      idMatakuliah = ?, kelas = ?, idLaboratorium = ?, 
+                      hari = ?, waktuMulai = ?, waktuSelesai = ?, 
+                      dosen = ?, asisten1 = ?, asisten2 = ?, 
+                      frekuensi = ?, status = ?
+                      WHERE idJadwal = ?";
+            
+            $stmt = $this->model->db->prepare($query);
+            $stmt->bind_param("isisissssssi",
+                $data['idMatakuliah'], $data['kelas'], $data['idLaboratorium'],
+                $data['hari'], $data['waktuMulai'], $data['waktuSelesai'],
+                $data['dosen'], $data['asisten1'], $data['asisten2'],
+                $data['frekuensi'], $data['status'], $id
+            );
+
+            if ($stmt->execute()) {
+                echo json_encode([
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Jadwal berhasil diperbarui'
+                ], JSON_UNESCAPED_UNICODE);
+            } else {
+                throw new Exception('Gagal update database: ' . $this->model->db->error);
+            }
+        } catch (Exception $e) {
+            http_response_code(400);
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => $e->getMessage()
+            ], JSON_UNESCAPED_UNICODE);
+        } finally {
+            restore_error_handler();
         }
         exit;
     }

@@ -123,7 +123,7 @@ $routes = [
         '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'], // For file upload
         '/asisten/{id}/koordinator' => ['controller' => 'AsistenController', 'method' => 'setKoordinator'], // Set koordinator
         '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'store'],
-        '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'store'],
+        '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'create'],
         '/jadwal/delete-multiple' => ['controller' => 'JadwalPraktikumController', 'method' => 'deleteMultiple'],
         '/jadwal-praktikum/upload' => ['controller' => 'JadwalPraktikumController', 'method' => 'uploadExcel'],
         '/jadwal-praktikum/upload-csv' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'uploadCSV'],

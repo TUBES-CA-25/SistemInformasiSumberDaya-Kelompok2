@@ -29,6 +29,7 @@
             'fasilitas'        => 'riset',
             'kontak'           => 'contact',
             'hubungi'          => 'contact',
+            'peta'             => 'denah',
             'daftar-asisten'   => 'asisten'
         ];
 
@@ -60,6 +61,7 @@
             'home'         => 'home.css',
             'tatatertib'   => 'praktikum.css',
             'jadwal'       => 'praktikum.css',
+            'jadwalupk'    => 'praktikum.css',
             'formatpenulisan' => 'praktikum.css',
             'kepala'       => 'sumberdaya.css',
             'asisten'      => 'sumberdaya.css',
@@ -68,10 +70,12 @@
             'fasilitas'    => 'fasilitas.css',
             'riset'        => 'fasilitas.css',
             'laboratorium' => 'fasilitas.css',
+            'denah'        => 'fasilitas.css',
             'sop'          => 'sumberdaya.css',
             'alumni'       => 'alumni.css',
             'contact'      => 'contact.css',
             'apps'         => 'apps.css'
+            
         ];
 
         // 4. Load CSS
@@ -126,6 +130,7 @@
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/laboratorium">Ruang Lab</a>
                         <a href="<?= PUBLIC_URL ?>/riset">Ruang Riset</a>
+                        <a href="<?= PUBLIC_URL ?>/denah">Denah Lokasi</a>
                         <a href="<?= PUBLIC_URL ?>/sop">SOP & Prosedur</a>
                     </div>
                 </li>

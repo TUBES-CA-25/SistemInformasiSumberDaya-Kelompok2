@@ -2,9 +2,10 @@
     
     <div class="h-20 flex items-center px-6 border-b border-slate-800/50 bg-slate-900/50 backdrop-blur-sm">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.png" alt="Logo" style="height: 50px; object-fit: contain;">
+            <!-- <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <i class="fas fa-flask text-white text-lg"></i>
-            </div>
+            </div> -->
             <div>
                 <h1 class="text-white font-bold text-lg tracking-wide">SISTEM LAB</h1>
                 <p class="text-xs text-slate-400 font-medium">Administrator</p>
