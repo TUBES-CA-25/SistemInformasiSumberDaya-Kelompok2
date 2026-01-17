@@ -220,12 +220,12 @@ document.getElementById('modulForm').addEventListener('submit', async function(e
         if (data.status === 'success') {
             closeModal();
             loadData();
-            alert('Modul Berhasil Disimpan!');
+            showSuccess(id ? 'Modul berhasil diperbarui!' : 'Modul baru berhasil ditambahkan!');
         } else {
-            alert('Gagal: ' + (data.message || 'Terjadi kesalahan'));
+            showError('Gagal: ' + (data.message || 'Terjadi kesalahan'));
         }
     } catch (err) {
-        alert('Error System: ' + err.message);
+        showError('Error System: ' + err.message);
     } finally {
         btn.disabled = false;
         btn.innerHTML = originalText;
@@ -233,14 +233,23 @@ document.getElementById('modulForm').addEventListener('submit', async function(e
 });
 
 async function deleteData(id) {
-    if(confirm('Yakin ingin menghapus modul ini?')) {
-        const res = await fetch(API_MODUL + '/' + id, { 
-            method: 'DELETE',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        });
-        const result = await res.json();
-        if(result.status === 'success') loadData();
-    }
+    confirmDelete(async () => {
+        try {
+            const res = await fetch(API_MODUL + '/' + id, { 
+                method: 'DELETE',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const result = await res.json();
+            if(result.status === 'success') {
+                loadData();
+                showSuccess('Modul berhasil dihapus!');
+            } else {
+                showError('Gagal menghapus modul');
+            }
+        } catch (err) {
+            showError('Error: ' + err.message);
+        }
+    }, 'Yakin ingin menghapus modul ini?');
 }
 
 function closeModal() {

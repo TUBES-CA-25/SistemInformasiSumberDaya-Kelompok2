@@ -185,7 +185,7 @@
                                 </p>
                             </div>
                             
-                            <a href="<?= PUBLIC_URL ?>/assets/uploads/<?= $sop['file'] ?>" target="_blank" class="btn-sop-action">
+                            <a href="<?= PUBLIC_URL ?>/assets/uploads/pdf/<?= $sop['file'] ?>" target="_blank" class="btn-sop-action">
                                 Buka Dokumen <i class="ri-arrow-right-line"></i>
                             </a>
                         </div>

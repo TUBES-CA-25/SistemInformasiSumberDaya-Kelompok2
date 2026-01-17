@@ -57,25 +57,78 @@ class SopController extends Controller {
     }
 
     public function store() {
-        require_once '../app/models/SopModel.php';
-        $sopModel = new SopModel();
+        // Mulai output buffering untuk menangkap output yang tidak terduga
+        ob_start();
         
-        if ($sopModel->tambahDataSop($_POST, $_FILES['file']) > 0) {
-            echo json_encode(['status' => 'success', 'code' => 200, 'message' => 'Berhasil ditambahkan']);
-        } else {
-            echo json_encode(['status' => 'error', 'code' => 500, 'message' => 'Gagal upload file atau simpan database']);
+        // Set JSON header terlebih dahulu
+        header('Content-Type: application/json; charset=utf-8');
+        
+        try {
+            require_once '../app/models/SopModel.php';
+            $sopModel = new SopModel();
+            
+            // Debug log
+            error_log('Store POST Data: ' . json_encode($_POST));
+            error_log('Store FILE Data: ' . json_encode($_FILES));
+            
+            // Validasi input
+            if (empty($_POST['judul'])) {
+                throw new Exception('Judul SOP harus diisi');
+            }
+            
+            if (empty($_FILES['file']['name'])) {
+                throw new Exception('File PDF harus diupload');
+            }
+            
+            $result = $sopModel->tambahDataSop($_POST, $_FILES['file']);
+            if ($result > 0) {
+                ob_end_clean(); // Hapus output buffer apapun
+                http_response_code(200);
+                echo json_encode(['status' => 'success', 'code' => 200, 'message' => 'Berhasil ditambahkan']);
+            } else {
+                throw new Exception('Gagal menyimpan data SOP ke database');
+            }
+        } catch (Exception $e) {
+            ob_end_clean(); // Hapus output buffer apapun
+            error_log('SOP Store Error: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
         }
         exit;
     }
 
     public function update() {
-        require_once '../app/models/SopModel.php';
-        $sopModel = new SopModel();
+        // Mulai output buffering untuk menangkap output yang tidak terduga
+        ob_start();
         
-        if ($sopModel->updateDataSop($_POST, $_FILES['file'] ?? ['error' => 4])) {
-            echo json_encode(['status' => 'success', 'code' => 200, 'message' => 'Berhasil diupdate']);
-        } else {
-            echo json_encode(['status' => 'error', 'code' => 500, 'message' => 'Gagal update']);
+        // Set JSON header terlebih dahulu
+        header('Content-Type: application/json; charset=utf-8');
+        
+        try {
+            require_once '../app/models/SopModel.php';
+            $sopModel = new SopModel();
+            
+            if (empty($_POST['id_sop'])) {
+                throw new Exception('ID SOP tidak valid');
+            }
+            
+            if (empty($_POST['judul'])) {
+                throw new Exception('Judul SOP harus diisi');
+            }
+            
+            $result = $sopModel->updateDataSop($_POST, $_FILES['file'] ?? ['error' => 4]);
+            if ($result) {
+                ob_end_clean(); // Hapus output buffer apapun
+                http_response_code(200);
+                echo json_encode(['status' => 'success', 'code' => 200, 'message' => 'Berhasil diupdate']);
+            } else {
+                throw new Exception('Gagal mengupdate data SOP');
+            }
+        } catch (Exception $e) {
+            ob_end_clean(); // Hapus output buffer apapun
+            error_log('SOP Update Error: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
         }
         exit;
     }

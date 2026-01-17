@@ -102,23 +102,23 @@
                     </div>
                 </button>
 
-                <button onclick="navigate('admin/manajemen')" class="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50 hover:shadow-sm transition-all text-left bg-white">
+                <button onclick="navigate('admin/asisten')" class="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50 hover:shadow-sm transition-all text-left bg-white">
                     <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
                         <i class="fas fa-user-plus"></i>
                     </div>
                     <div>
                         <h4 class="font-bold text-gray-700 group-hover:text-emerald-700 text-sm">Anggota Baru</h4>
-                        <p class="text-[10px] text-gray-400">Tambah asisten/staf</p>
+                        <p class="text-[10px] text-gray-400">Kelola asisten lab</p>
                     </div>
                 </button>
 
-                <button onclick="navigate('admin/peraturan')" class="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50 hover:shadow-sm transition-all text-left bg-white">
+                <button onclick="navigate('admin/matakuliah')" class="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50 hover:shadow-sm transition-all text-left bg-white">
                     <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
-                        <i class="fas fa-book"></i>
+                        <i class="fas fa-book-open"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-gray-700 group-hover:text-purple-700 text-sm">Peraturan</h4>
-                        <p class="text-[10px] text-gray-400">Update tata tertib</p>
+                        <h4 class="font-bold text-gray-700 group-hover:text-purple-700 text-sm">Mata Kuliah</h4>
+                        <p class="text-[10px] text-gray-400">Kelola daftar kuliah</p>
                     </div>
                 </button>
 
