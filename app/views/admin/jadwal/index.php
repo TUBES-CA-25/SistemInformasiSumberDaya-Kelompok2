@@ -52,7 +52,7 @@
                     <th class="px-6 py-4 font-semibold text-center w-12">No</th>
                     <th class="px-6 py-4 font-semibold">Mata Kuliah</th>
                     <th class="px-6 py-4 font-semibold">Laboratorium</th>
-                    <th class="px-6 py-4 font-semibold">Hari & Waktu</th>
+                    <th class="px-6 py-4 font-semibold min-w-[160px]">Hari & Waktu</th>
                     <th class="px-6 py-4 font-semibold text-center w-24">Kelas</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Status</th>
                 </tr>
@@ -344,7 +344,7 @@ function renderTable(data) {
                     </div>
                 </td>
                 <td class="px-6 py-4 text-gray-600 text-sm font-medium cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">${item.namaLab || '-'}</td>
-                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
+                <td class="px-6 py-4 cursor-pointer min-w-[160px]" onclick="openFormModal(${item.idJadwal}, event)">
                     <div class="flex flex-col">
                         <span class="font-bold text-gray-700 text-sm">${item.hari || '-'}</span>
                         <span class="text-xs text-gray-500 flex items-center gap-1">

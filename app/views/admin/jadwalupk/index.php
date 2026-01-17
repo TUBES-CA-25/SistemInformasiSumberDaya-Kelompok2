@@ -91,8 +91,10 @@
                             </select>
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Mata Kuliah</label>
-                            <input type="text" id="inputMK" name="mata_kuliah" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Mata Kuliah <span class="text-red-500">*</span></label>
+                            <select id="inputMK" name="mata_kuliah" required class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                                <option value="">-- Pilih Mata Kuliah --</option>
+                            </select>
                         </div>
                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Dosen Pengampu</label>
@@ -107,8 +109,10 @@
                             <input type="text" id="inputJam" name="jam" placeholder="08.00 - 10.00" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Ruangan</label>
-                            <input type="text" id="inputRuangan" name="ruangan" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Ruangan <span class="text-red-500">*</span></label>
+                            <select id="inputRuangan" name="ruangan" required class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                                <option value="">-- Pilih Ruangan --</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Kelas</label>
@@ -116,7 +120,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Frekuensi</label>
-                            <input type="text" id="inputFreq" name="frekuensi" placeholder="TI_SD-1" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <input type="text" id="inputFreq" name="frekuensi" placeholder="TI_SD-1" readonly class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500 outline-none transition-all" title="Otomatis terisi dari data mata kuliah">
                         </div>
                     </div>
                     <div class="flex justify-end gap-3 pt-6">
@@ -439,7 +443,54 @@ window.bulkDelete = function() {
     });
 };
 
+// Load Mata Kuliah dan Laboratorium dari API
+async function loadDropdownData() {
+    try {
+        // Load Matakuliah
+        const mkRes = await fetch('<?= API_URL ?>/jadwal-praktikum');
+        const mkData = await mkRes.json();
+        const mkSelect = document.getElementById('inputMK');
+        const mkMap = {}; // Store MK data for frekuensi lookup
+
+        if(mkData.status === 'success' && Array.isArray(mkData.data)) {
+            // Get unique mata kuliah
+            const uniqueMK = [...new Map(mkData.data.map(item => [item.namaMatakuliah, item])).values()];
+            uniqueMK.forEach(mk => {
+                const option = document.createElement('option');
+                option.value = mk.namaMatakuliah;
+                option.textContent = `${mk.kodeMatakuliah || ''} - ${mk.namaMatakuliah}`;
+                option.dataset.frekuensi = mk.frekuensi || '';
+                mkSelect.appendChild(option);
+                mkMap[mk.namaMatakuliah] = mk.frekuensi || '';
+            });
+        }
+
+        // Load Laboratorium
+        const labRes = await fetch('<?= API_URL ?>/laboratorium');
+        const labData = await labRes.json();
+        const labSelect = document.getElementById('inputRuangan');
+        if(labData.status === 'success' && Array.isArray(labData.data)) {
+            labData.data.forEach(lab => {
+                const option = document.createElement('option');
+                option.value = lab.nama;
+                option.textContent = lab.nama;
+                labSelect.appendChild(option);
+            });
+        }
+
+        // Event listener untuk auto-fill frekuensi
+        mkSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const frekuensi = selectedOption.dataset.frekuensi || '';
+            document.getElementById('inputFreq').value = frekuensi;
+        });
+    } catch (err) {
+        console.error("Error loading dropdown data:", err);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    loadDropdownData();
     loadJadwal();
     
     // Search Handler

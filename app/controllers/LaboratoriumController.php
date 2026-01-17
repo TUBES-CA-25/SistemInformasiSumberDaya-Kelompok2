@@ -331,6 +331,31 @@ class LaboratoriumController extends Controller {
             $this->error('Laboratorium tidak ditemukan', null, 404);
         }
 
+        // Cek apakah lab masih digunakan di jadwal praktikum
+        $db = new Database();
+        $mysqli = method_exists($db, 'getConnection') ? $db->getConnection() : $db->getPdo();
+        
+        // Query untuk check jadwal praktikum
+        if (is_object($mysqli) && get_class($mysqli) === 'mysqli') {
+            // MySQLi
+            $stmt = $mysqli->prepare("SELECT COUNT(*) as count FROM jadwalpraktikum WHERE idLaboratorium = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result()->fetch_assoc();
+            $jadwalCount = $result['count'] ?? 0;
+        } else {
+            // PDO
+            $stmt = $mysqli->prepare("SELECT COUNT(*) as count FROM jadwalpraktikum WHERE idLaboratorium = ?");
+            $stmt->execute([$id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $jadwalCount = $result['count'] ?? 0;
+        }
+
+        if ($jadwalCount > 0) {
+            $this->error("Laboratorium tidak bisa dihapus karena masih digunakan dalam $jadwalCount jadwal praktikum. Silakan hapus jadwal tersebut terlebih dahulu.", null, 400);
+            return;
+        }
+
         $result = $this->model->delete($id, 'idLaboratorium');
         
         if ($result) {

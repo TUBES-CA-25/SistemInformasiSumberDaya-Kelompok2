@@ -38,6 +38,7 @@ class JadwalPraktikumController extends Controller {
             $worksheet = $spreadsheet->getActiveSheet();
             $success = 0;
             $duplicate = 0;
+            $invalidLab = 0;
 
             foreach ($worksheet->getRowIterator(2) as $row) {
                 $cellIterator = $row->getCellIterator();
@@ -65,7 +66,13 @@ class JadwalPraktikumController extends Controller {
 
                 // ANTI-0 IMPOR: Cari atau buat otomatis data master
                 $idMK = $this->findOrCreateMaster('matakuliah', 'namaMatakuliah', $mkNama);
-                $idLab = $this->findOrCreateMaster('laboratorium', 'nama', $labNama);
+                $idLab = $this->findExistingMaster('laboratorium', 'nama', $labNama);
+
+                if (!$idLab) {
+                    // Skip jika lab tidak ada di database
+                    $invalidLab++;
+                    continue;
+                }
 
                 if ($idMK && $idLab) {
                     // CEK DUPLIKASI sebelum insert
@@ -96,6 +103,9 @@ class JadwalPraktikumController extends Controller {
             if ($duplicate > 0) {
                 $message .= " ($duplicate data duplikat dilewati)";
             }
+            if ($invalidLab > 0) {
+                $message .= " ($invalidLab baris dilewati karena lab tidak terdaftar)";
+            }
             echo json_encode(['status' => 'success', 'code' => 201, 'message' => $message]);
         } catch (Exception $e) {
             http_response_code(400);
@@ -119,6 +129,18 @@ class JadwalPraktikumController extends Controller {
         // Buat baru jika tidak ditemukan (Menghindari gagal impor karena data master kosong)
         $db->query("INSERT INTO $table ($column) VALUES ('".addslashes($name)."')");
         return $db->insert_id;
+    }
+
+    private function findExistingMaster($table, $column, $name) {
+        if (empty($name)) return null;
+        $db = $this->model->db;
+        $stmt = $db->prepare("SELECT * FROM $table WHERE LCASE(TRIM($column)) = LCASE(TRIM(?)) LIMIT 1");
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        
+        // Hanya return ID jika lab sudah ada (tidak auto-create)
+        return $res ? $res[array_key_first($res)] : null;
     }
 
     public function apiIndex() {
