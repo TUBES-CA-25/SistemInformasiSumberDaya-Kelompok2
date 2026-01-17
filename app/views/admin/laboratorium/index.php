@@ -559,8 +559,19 @@ document.getElementById('labForm').addEventListener('submit', function(e) {
     const id = document.getElementById('inputId').value;
     const url = id ? API_URL + '/laboratorium/' + id : API_URL + '/laboratorium';
 
-    fetch(url, { method: 'POST', body: formData })
-    .then(res => res.json())
+    fetch(url, { 
+        method: 'POST', 
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        return res.json();
+    })
     .then(data => {
         hideLoading();
         if (data.status === 'success' || data.code === 200 || data.code === 201) {
@@ -573,6 +584,7 @@ document.getElementById('labForm').addEventListener('submit', function(e) {
     })
     .catch(err => {
         hideLoading();
+        console.error('Form submit error:', err);
         msg.innerHTML = `<div class="bg-red-50 text-red-800 p-3 rounded text-sm mb-4 border border-red-200"><i class="fas fa-exclamation-circle"></i> ${err.message}</div>`;
         msg.classList.remove('hidden');
         showError(err.message);
@@ -733,9 +745,26 @@ function hapusGambar(idGambar, btnEl) {
     }).then((result) => {
         if (result.isConfirmed) {
             showLoading('Menghapus gambar...');
-            fetch(API_URL + '/laboratorium/image/' + idGambar, { method: 'DELETE' })
-            .then(res => res.json())
+            const deleteUrl = API_URL + '/laboratorium/image/' + idGambar;
+            console.log('Deleting image:', deleteUrl);
+            
+            fetch(deleteUrl, { 
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => {
+                console.log('Delete response status:', res.status, res.statusText);
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                }
+                return res.json();
+            })
             .then(data => {
+                console.log('Delete response data:', data);
                 hideLoading();
                 if (data.status === 'success' || data.code === 200) {
                     showSuccess('Gambar berhasil dihapus');
@@ -744,7 +773,6 @@ function hapusGambar(idGambar, btnEl) {
                     if (divImg) divImg.remove();
                     
                     // Refresh data agar slider terupdate jika nanti dibuka
-                    const currentId = document.getElementById('inputId').value;
                     loadLaboratorium();
                 } else {
                     showError(data.message || 'Gagal menghapus gambar');
@@ -752,7 +780,8 @@ function hapusGambar(idGambar, btnEl) {
             })
             .catch(err => {
                 hideLoading();
-                showError('Terjadi kesalahan saat menghapus gambar');
+                console.error('Delete error:', err);
+                showError('Terjadi kesalahan saat menghapus gambar: ' + err.message);
             });
         }
     });

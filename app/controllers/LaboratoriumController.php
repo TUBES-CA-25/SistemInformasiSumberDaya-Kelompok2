@@ -405,6 +405,7 @@ class LaboratoriumController extends Controller {
                 $this->error('Gagal menghapus record gambar di database', null, 500);
             }
         } catch (Exception $e) {
+            error_log('Error in deleteImage: ' . $e->getMessage());
             $this->error('Terjadi kesalahan: ' . $e->getMessage(), null, 500);
         }
     }

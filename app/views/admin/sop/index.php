@@ -179,7 +179,7 @@ function renderTable() {
                 </td>
                 <td class="px-6 py-4">
                     ${item.file ? 
-                        `<a href="${PUBLIC_URL}/assets/uploads/${item.file}" target="_blank" class="flex items-center gap-2 text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 w-fit">
+                        `<a href="${PUBLIC_URL}/assets/uploads/pdf/${item.file}" target="_blank" class="flex items-center gap-2 text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 w-fit">
                             <i class="fas fa-file-pdf"></i> Lihat PDF
                         </a>` : 
                         '<span class="text-gray-400 text-xs italic">Tidak ada file</span>'}
@@ -249,18 +249,31 @@ document.getElementById('sopForm').addEventListener('submit', function(e) {
     btn.innerHTML = 'Menyimpan...';
 
     fetch(url, { method: 'POST', body: formData })
-    .then(res => res.json())
+    .then(res => {
+        // Check if response is actually JSON
+        const contentType = res.headers.get('content-type');
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        if (!contentType || !contentType.includes('application/json')) {
+            return res.text().then(text => {
+                throw new Error('Server returned non-JSON response: ' + text.substring(0, 200));
+            });
+        }
+        return res.json();
+    })
     .then(data => {
         if (data.status === 'success' || data.code === 200) {
             closeModal();
             loadData();
-            alert('SOP Berhasil Disimpan!');
+            showSuccess(id ? 'SOP berhasil diperbarui!' : 'SOP baru berhasil ditambahkan!');
         } else {
-            alert('Gagal: ' + (data.message || 'Terjadi kesalahan'));
+            showError('Gagal: ' + (data.message || 'Terjadi kesalahan'));
         }
     })
     .catch(err => {
-        alert('Error System: ' + err.message);
+        console.error('SOP Save Error:', err);
+        showError('Error System: ' + err.message);
     })
     .finally(() => {
         btn.disabled = false;
@@ -269,13 +282,21 @@ document.getElementById('sopForm').addEventListener('submit', function(e) {
 });
 
 function deleteData(id) {
-    if(confirm('Yakin ingin menghapus SOP ini?')) {
+    confirmDelete(() => {
         fetch(ENDPOINT_SOP + '/' + id, { method: 'DELETE' })
         .then(res => res.json())
         .then(res => {
-            if(res.status === 'success') loadData();
+            if(res.status === 'success') {
+                loadData();
+                showSuccess('SOP berhasil dihapus!');
+            } else {
+                showError('Gagal menghapus SOP');
+            }
+        })
+        .catch(err => {
+            showError('Error: ' + err.message);
         });
-    }
+    }, 'Apakah Anda yakin ingin menghapus SOP ini?');
 }
 
 function closeModal() {
