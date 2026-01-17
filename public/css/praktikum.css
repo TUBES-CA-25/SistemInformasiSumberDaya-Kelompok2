@@ -719,3 +719,250 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ========================================================
+   MODUL PAGE SPECIFIC STYLES (NEW)
+   ======================================================== */
+
+/* Layout Helper */
+.full-height {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-grow {
+  flex: 1;
+}
+
+/* Grid Layout for Modules */
+.modul-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Default stack ke bawah */
+  gap: 50px;
+  margin-bottom: 80px;
+}
+
+/* Modul Card Container */
+.modul-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modul-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Modul Header Styles */
+.modul-header {
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient Backgrounds */
+.header-ti {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.header-si {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+}
+
+/* Dekorasi Background Header */
+.modul-header::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.modul-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.header-text h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.header-text span {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+/* Table Styles Khusus Modul */
+.table-modul {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-modul thead th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  padding: 20px 24px;
+  text-align: left;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.table-modul tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.2s;
+}
+
+.table-modul tbody tr:hover {
+  background: #f8fafc;
+}
+
+.table-modul tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table-modul td {
+  padding: 20px 24px;
+  vertical-align: middle;
+}
+
+/* Column Widths */
+.w-no {
+  width: 80px;
+}
+.w-action {
+  width: 180px;
+}
+
+/* Content Typography inside Table */
+.number-col {
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.matkul-name {
+  display: block;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1rem;
+}
+
+.modul-title {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* Button Download Pill */
+.btn-download-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.btn-download-pill:hover {
+  background-color: #2563eb;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-download-pill i {
+  font-size: 1.1rem;
+}
+
+/* Empty State Styling */
+.empty-state {
+  padding: 60px !important;
+  text-align: center;
+}
+
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  color: #94a3b8;
+}
+
+.empty-content i {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.empty-content p {
+  margin: 0;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* Responsive Adjustments for Modul */
+@media (max-width: 768px) {
+  .modul-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .header-text h3 {
+    font-size: 1.25rem;
+  }
+
+  .table-modul th,
+  .table-modul td {
+    padding: 15px;
+  }
+
+  .btn-download-pill span {
+    display: none;
+  }
+
+  .btn-download-pill {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .w-action {
+    width: 80px;
+  }
+}

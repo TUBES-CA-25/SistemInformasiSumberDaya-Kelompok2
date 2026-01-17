@@ -62,7 +62,7 @@
             'tatatertib'   => 'praktikum.css',
             'jadwal'       => 'praktikum.css',
             'jadwalupk'    => 'praktikum.css',
-            'modul'           => 'praktikum.css',
+            'modul'        => 'praktikum.css',
             'formatpenulisan' => 'praktikum.css',
             'kepala'       => 'sumberdaya.css',
             'asisten'      => 'sumberdaya.css',
