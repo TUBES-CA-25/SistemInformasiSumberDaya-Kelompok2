@@ -1,10 +1,47 @@
 <?php
 /**
  * VIEW: DETAIL ALUMNI
- * Menggunakan data yang dipassing dari controller sebagai `$alumni`.
+ * Update: Support JSON Data (Keahlian & Matkul) + Fallback Image
  */
 
 $data = $alumni ?? null;
+
+// --- PRE-PROCESSING DATA ---
+if ($data) {
+    // 1. Decode Keahlian/Skills (JSON -> Array)
+    $skillsRaw = $data['keahlian'] ?? '[]';
+    $skillsList = json_decode($skillsRaw, true);
+    // Fallback jika data lama bukan JSON
+    if (!is_array($skillsList) && !empty($skillsRaw)) {
+        $skillsList = [$skillsRaw];
+    } elseif (!is_array($skillsList)) {
+        $skillsList = [];
+    }
+
+    // 2. Decode Mata Kuliah (JSON -> String untuk tampilan baris)
+    $matkulRaw = $data['mata_kuliah'] ?? '[]';
+    $matkulList = json_decode($matkulRaw, true);
+    // Fallback
+    if (!is_array($matkulList) && !empty($matkulRaw)) {
+        $matkulList = [$matkulRaw]; 
+    } elseif (!is_array($matkulList)) {
+        $matkulList = [];
+    }
+    // Ubah array menjadi string dipisah koma (agar sesuai layout lama)
+    $matkulString = !empty($matkulList) ? implode(', ', $matkulList) : '-';
+
+    // 3. Setup Gambar
+    $dbFoto = $data['foto'] ?? '';
+    $namaEnc = urlencode($data['nama'] ?? '');
+    $defaultAvatar = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
+
+    if (!empty($dbFoto)) {
+        // Asumsi ASSETS_URL sudah didefinisikan di config utama
+        $imgUrl = ASSETS_URL . '/assets/uploads/' . $dbFoto;
+    } else {
+        $imgUrl = $defaultAvatar;
+    }
+}
 ?>
 
 <section class="alumni-section">
@@ -20,32 +57,9 @@ $data = $alumni ?? null;
             <div class="profile-wrapper">
                 
                 <div class="profile-image">
-                    <?php 
-                        // --- LOGIKA GAMBAR PINTAR (SAMA DENGAN ALUMNI.PHP) ---
-                        $fotoName = $data['foto'] ?? '';
-                        $namaEnc = urlencode($data['nama'] ?? '');
-
-                        // Default: Avatar Inisial (Abu-abu, Bold, Ukuran Besar 512px)
-                        $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
-
-                        if (!empty($fotoName)) {
-                            if (strpos($fotoName, 'ui-avatars.com') !== false) {
-                                // keep default
-                            } elseif (strpos($fotoName, 'http') !== false) {
-                                $imgUrl = $fotoName;
-                            } else {
-                                $path1 = ROOT_PROJECT . "/public/images/alumni/" . $fotoName;
-                                $path2 = ROOT_PROJECT . "/public/assets/uploads/" . $fotoName;
-
-                                if (file_exists($path2)) {
-                                    $imgUrl = ASSETS_URL . "/assets/uploads/" . $fotoName;
-                                } elseif (file_exists($path1)) {
-                                    $imgUrl = ASSETS_URL . "/images/alumni/" . $fotoName;
-                                }
-                            }
-                        }
-                    ?>
-                    <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($data['nama'] ?? '') ?>">
+                    <img src="<?= $imgUrl ?>" 
+                         alt="<?= htmlspecialchars($data['nama'] ?? '') ?>"
+                         onerror="this.onerror=null; this.src='<?= $defaultAvatar ?>';">
                 </div>
                 
                 <div class="profile-content">
@@ -57,9 +71,9 @@ $data = $alumni ?? null;
                         </span>
                     </div>
 
-                    <?php if(!empty($data['mata_kuliah']) && $data['mata_kuliah'] !== '-'): ?>
+                    <?php if(!empty($matkulString) && $matkulString !== '-'): ?>
                         <div class="mt-2 text-sm text-gray-600">
-                            <strong>Mata Kuliah Diajar:</strong> <?= htmlspecialchars($data['mata_kuliah']); ?>
+                            <strong>Mata Kuliah Diajar:</strong> <?= htmlspecialchars($matkulString); ?>
                         </div>
                     <?php endif; ?>
                     
@@ -69,13 +83,13 @@ $data = $alumni ?? null;
                     
                     <h4 class="section-title">Kesan & Pesan</h4>
                     <div class="profile-bio alumni-quote">
-                        "<?= htmlspecialchars($data['testimoni'] ?? 'Tidak ada kesan pesan.'); ?>"
+                        "<?= htmlspecialchars($data['kesan_pesan'] ?? 'Tidak ada kesan pesan.'); ?>"
                     </div>
 
-                    <?php if (!empty($data['skills'])): ?>
+                    <?php if (!empty($skillsList)): ?>
                         <h4 class="section-title mt-30">Keahlian & Kompetensi</h4>
                         <div class="skills-container">
-                            <?php foreach($data['skills'] as $skill): ?>
+                            <?php foreach($skillsList as $skill): ?>
                                 <span class="skill-tag"><?= htmlspecialchars($skill); ?></span>
                             <?php endforeach; ?>
                         </div>
