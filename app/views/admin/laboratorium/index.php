@@ -14,7 +14,7 @@
         </div>
 
         <button onclick="openFormModal()" 
-           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
+           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
             <i class="fas fa-plus"></i> Tambah Lab
         </button>
     </div>
@@ -544,7 +544,7 @@ function openFormModal(id = null, event = null) {
             }
         }
     } else {
-        document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-plus text-emerald-600"></i> Tambah Laboratorium';
+        document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-plus text-blue-600"></i> Tambah Laboratorium';
         document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Simpan Data';
     }
 }

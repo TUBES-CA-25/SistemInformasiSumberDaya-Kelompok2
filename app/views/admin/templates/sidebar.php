@@ -1,16 +1,16 @@
-<aside class="w-64 bg-slate-900 flex-shrink-0 flex flex-col h-screen font-sans border-r border-slate-800 transition-all duration-300">
+<aside id="adminSidebar" class="fixed inset-y-0 left-0 z-[60] w-64 bg-slate-900 flex-shrink-0 flex flex-col h-screen font-sans border-r border-slate-800 transition-all duration-300 transform -translate-x-full md:relative md:translate-x-0">
     
-    <div class="h-20 flex items-center px-6 border-b border-slate-800/50 bg-slate-900/50 backdrop-blur-sm">
+    <div class="h-20 flex items-center justify-between px-6 border-b border-slate-800/50 bg-slate-900/50 backdrop-blur-sm">
         <div class="flex items-center gap-3">
             <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.png" alt="Logo" style="height: 50px; object-fit: contain;">
-            <!-- <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <i class="fas fa-flask text-white text-lg"></i>
-            </div> -->
             <div>
                 <h1 class="text-white font-bold text-lg tracking-wide">SISTEM LAB</h1>
                 <p class="text-xs text-slate-400 font-medium">Administrator</p>
             </div>
         </div>
+        <button id="closeSidebar" class="md:hidden text-slate-400 hover:text-white transition-colors">
+            <i class="fas fa-times text-xl"></i>
+        </button>
     </div>
 
     <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-2 custom-scrollbar">
@@ -205,14 +205,77 @@
 
 </aside>
 
+<!-- Overlay for Mobile -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-[45] hidden md:hidden backdrop-blur-sm transition-opacity duration-300"></div>
+
 <style>
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* Desktop Collapse Animation */
+.sidebar-collapsed {
+    width: 0 !important;
+    overflow: hidden !important;
+    border-right-width: 0 !important;
+}
 </style>
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.getElementById('adminSidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const closeBtn = document.getElementById('closeSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar() {
+        if (window.innerWidth < 768) {
+            // Mobile: Slide in/out
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('translate-x-0');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                sidebar.classList.remove('translate-x-0');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        } else {
+            // Desktop: Collapse/Expand
+            sidebar.classList.toggle('sidebar-collapsed');
+        }
+    }
+
+    if(toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+    if(closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+    if(overlay) overlay.addEventListener('click', toggleSidebar);
+
+    // active links handling...
+    const activeLinks = document.querySelectorAll('a[data-active="true"]');
+    
+    activeLinks.forEach(link => {
+        const parentMenu = link.closest('ul');
+        if (parentMenu) {
+            parentMenu.classList.remove('hidden');
+            parentMenu.classList.add('block');
+            
+            let arrowId = '';
+            if (parentMenu.id === 'menuMaster') arrowId = 'arrowMaster';
+            if (parentMenu.id === 'menuOps') arrowId = 'arrowOps';
+            
+            const arrow = document.getElementById(arrowId);
+            if (arrow) {
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-white');
+                arrow.classList.remove('text-slate-600');
+            }
+        }
+    });
+});
+
 function toggleMenu(menuId, arrowId) {
     const menu = document.getElementById(menuId);
     const arrow = document.getElementById(arrowId);

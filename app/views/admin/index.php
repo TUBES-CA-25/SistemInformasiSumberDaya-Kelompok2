@@ -1,48 +1,84 @@
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-icon" style="background: #e8f6f3; color: #27ae60;">
-            <i class="fas fa-users"></i>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-5">
+    <!-- Stat Card 1 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group">
+        <div class="flex items-center justify-between">
+            <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                <i class="fas fa-users text-2xl"></i>
+            </div>
+            <div class="text-right">
+                <p class="text-sm font-medium text-gray-500">Total Asisten</p>
+                <h3 id="count-asisten" class="text-2xl font-bold text-gray-800">-</h3>
+            </div>
         </div>
-        <div class="stat-info">
-            <h3 id="count-asisten">-</h3>
-            <p>Total Asisten</p>
-        </div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-icon" style="background: #fef5e7; color: #f39c12;">
-            <i class="fas fa-desktop"></i>
-        </div>
-        <div class="stat-info">
-            <h3 id="count-lab">-</h3>
-            <p>Laboratorium</p>
+        <div class="mt-4 flex items-center text-xs text-blue-600 font-semibold uppercase tracking-wider">
+            <i class="fas fa-arrow-up mr-1"></i> Data Aktif
         </div>
     </div>
-    <div class="stat-card">
-        <div class="stat-icon" style="background: #f4ecf7; color: #8e44ad;">
-            <i class="fas fa-user-graduate"></i>
+
+    <!-- Stat Card 2 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group">
+        <div class="flex items-center justify-between">
+            <div class="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                <i class="fas fa-desktop text-2xl"></i>
+            </div>
+            <div class="text-right">
+                <p class="text-sm font-medium text-gray-500">Laboratorium</p>
+                <h3 id="count-lab" class="text-2xl font-bold text-gray-800">-</h3>
+            </div>
         </div>
-        <div class="stat-info">
-            <h3 id="count-alumni">-</h3>
-            <p>Alumni Terdaftar</p>
+        <div class="mt-4 flex items-center text-xs text-emerald-600 font-semibold uppercase tracking-wider">
+            <i class="fas fa-check-circle mr-1"></i> Fasilitas Terdata
         </div>
     </div>
-    <div class="stat-card">
-        <div class="stat-icon" style="background: #ebf5fb; color: #3498db;">
-            <i class="fas fa-book"></i>
+
+    <!-- Stat Card 3 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group">
+        <div class="flex items-center justify-between">
+            <div class="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-all duration-300">
+                <i class="fas fa-user-graduate text-2xl"></i>
+            </div>
+            <div class="text-right">
+                <p class="text-sm font-medium text-gray-500">Alumni</p>
+                <h3 id="count-alumni" class="text-2xl font-bold text-gray-800">-</h3>
+            </div>
         </div>
-        <div class="stat-info">
-            <h3 id="count-mk">-</h3>
-            <p>Mata Kuliah</p>
+        <div class="mt-4 flex items-center text-xs text-purple-600 font-semibold uppercase tracking-wider">
+            <i class="fas fa-graduation-cap mr-1"></i> Terdaftar
+        </div>
+    </div>
+
+    <!-- Stat Card 4 -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group">
+        <div class="flex items-center justify-between">
+            <div class="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-all duration-300">
+                <i class="fas fa-book text-2xl"></i>
+            </div>
+            <div class="text-right">
+                <p class="text-sm font-medium text-gray-500">Mata Kuliah</p>
+                <h3 id="count-mk" class="text-2xl font-bold text-gray-800">-</h3>
+            </div>
+        </div>
+        <div class="mt-4 flex items-center text-xs text-amber-600 font-semibold uppercase tracking-wider">
+            <i class="fas fa-calendar-alt mr-1"></i> Praktikum
         </div>
     </div>
 </div>
 
-<div style="margin-top: 40px;">
-    <h2><i class="fas fa-history"></i> Aktivitas Terbaru</h2>
-    <div class="card">
-        <p style="color: #777; text-align: center; padding: 20px;">
-            <i class="fas fa-info-circle"></i> Belum ada aktivitas yang tercatat hari ini.
-        </p>
+<div class="mt-10">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <i class="fas fa-history text-blue-600"></i> Aktivitas Terbaru
+        </h2>
+    </div>
+    
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden min-h-[200px] flex items-center justify-center">
+        <div class="text-center group p-8">
+            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <i class="fas fa-info-circle text-3xl text-gray-300 group-hover:text-blue-400 transition-colors"></i>
+            </div>
+            <p class="text-gray-400 font-medium">Belum ada aktivitas yang tercatat hari ini.</p>
+            <p class="text-xs text-gray-300 mt-2">Log aktivitas sistem akan muncul di sini.</p>
+        </div>
     </div>
 </div>
 

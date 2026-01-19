@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - SISLAB</title>
+    <title>Login Admin - IC-LABS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -92,7 +92,7 @@
                 </div>
                 
                 <h1 class="text-7xl font-extrabold mb-4 tracking-tight text-white drop-shadow-xl animate-enter">
-                    SISLAB
+                    IC-LABS
                 </h1>
 
                 <p class="text-blue-100/90 text-lg font-light max-w-md mx-auto leading-relaxed animate-enter" style="animation-delay: 0.2s">

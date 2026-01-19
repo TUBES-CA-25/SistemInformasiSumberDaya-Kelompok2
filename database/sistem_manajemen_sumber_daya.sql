@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 16 Jan 2026 pada 13.22
+-- Waktu pembuatan: 17 Jan 2026 pada 10.41
 -- Versi server: 10.4.32-MariaDB-log
 -- Versi PHP: 8.2.12
 
@@ -47,7 +47,35 @@ CREATE TABLE `alumni` (
 --
 
 INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `mata_kuliah`, `foto`, `kesan_pesan`, `keahlian`, `email`, `created_at`, `updated_at`, `urutanTampilan`) VALUES
-(18, 'Arisa Tien Hardianti, S.Kom', '2020', 'Asisten', 'Basis Data I', NULL, '', 'Basis Data, SQL, Pengajaran', '', '2026-01-08 15:23:35', '2026-01-10 11:30:22', 0);
+(18, 'Arisa Tien Hardianti, S.Kom', '2020', 'Asisten', 'Basis Data I', NULL, '', 'Basis Data, SQL, Pengajaran', '', '2026-01-08 15:23:35', '2026-01-10 11:30:22', 0),
+(19, 'Syartina Elfarika Basri, S.Kom', '2020', 'Asisten', '[\"Pemrograman Dasar\"]', NULL, '', '[\"Web Development\",\"Javascript\",\"PHP\",\"Laravel\",\"Tailwind CSS\"]', '', '2026-01-17 01:04:43', '2026-01-17 01:04:43', 0),
+(20, 'Irwan Ardyansyah, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Internet of Things (IoT)\",\"Arduino\"]', '', '2026-01-17 01:07:16', '2026-01-17 01:07:16', 0),
+(21, 'Furqaan Ismail, S.Kom', '2020', 'Asisten', '[\"Pemrograman Berorientasi Objek\"]', NULL, '', '[\"java \",\"C++\"]', '', '2026-01-17 01:10:02', '2026-01-17 01:10:02', 0),
+(22, 'Rifqatul Mukarramah, S.Kom', '2020', 'Asisten', '[\"Pemrograman Berorientasi Objek\"]', NULL, '', '[\"Java\",\"C++\"]', '', '2026-01-17 01:11:02', '2026-01-17 01:11:02', 0),
+(23, 'Widyas, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\",\"MySQL\"]', '', '2026-01-17 01:12:49', '2026-01-17 01:12:49', 0),
+(24, 'Ayu Ashari Ramadhan, S.Kom', '2020', 'Asisten', '[\"Desain Grafis\"]', NULL, '', '[\"UI/UX Design\"]', '', '2026-01-17 01:13:56', '2026-01-17 01:13:56', 0),
+(25, 'Muhammad Dhiya Ulhaq, S.Kom', '2020', 'Asisten', '[\"Desain Grafis\"]', NULL, '', '[\"UI/UX Design\"]', '', '2026-01-17 01:14:37', '2026-01-17 01:14:37', 0),
+(26, 'Muh. Syawal, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\"]', '', '2026-01-17 01:15:30', '2026-01-17 01:15:30', 0),
+(27, 'Taufik Baharsyah, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Internet of Things (IoT)\",\"Arduino\"]', '', '2026-01-17 01:16:49', '2026-01-17 01:16:49', 0),
+(28, 'Muhammad Trisnandar, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\",\"Algoritma & Pemrograman\"]', NULL, '', '[\"Internet of Things (IoT)\",\"C++\"]', '', '2026-01-17 01:18:17', '2026-01-17 01:18:17', 0),
+(29, 'Yudha Islami Sulistya, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Arduino\",\"Internet of Things (IoT)\"]', '', '2026-01-17 01:19:14', '2026-01-17 01:19:14', 0),
+(30, 'Nurul A\'ayunnisa, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\"]', '', '2026-01-17 01:20:00', '2026-01-17 01:20:00', 0),
+(31, 'Ericha Apriliyani, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"MySQL\",\"Database Management\"]', '', '2026-01-17 01:20:45', '2026-01-17 01:20:45', 0),
+(32, 'Kasmira, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"MySQL\",\"Database Management\"]', '', '2026-01-17 01:21:35', '2026-01-17 01:21:35', 0),
+(33, 'M. Ikraam Ar Razaaq, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"Database Management\",\"MySQL\"]', '', '2026-01-17 01:22:38', '2026-01-17 01:22:38', 0),
+(34, 'Andi Muchlisa, S.Kom', '2020', '', '[\"Pemrograman Web\"]', NULL, '', '[\"Web Development\",\"MySQL\",\"Tailwind CSS\",\"Javascript\"]', '', '2026-01-17 01:23:38', '2026-01-17 01:23:38', 0),
+(35, 'Naufal Abiyyu Supriadi, S.Kom', '2021', 'Asisten', '[\"Microcontroller\",\"Algoritma & Pemrograman\",\"Pengantar Teknologi Informasi\",\"Pemrograman Web\",\"Elektronika Dasar\",\"Jaringan Komputer\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_naufal-abiyyu-supriadi-s-kom_1768631335_337.png', '', '[\"Arduino\",\"Internet of Things (IoT)\",\"C++\"]', '', '2026-01-17 14:28:55', '2026-01-17 14:43:14', 0),
+(36, 'Nasrullah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Pengantar Teknologi Informasi\",\"Struktur Data\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_nasrullah-s-kom_1768631585_930.png', '', '[\"Laravel\",\"PHP\",\"Web Development\",\"MySQL\",\"Database Management\",\"Data Science\",\"Machine Learning\",\"Artificial Intelligence\"]', '', '2026-01-17 14:33:05', '2026-01-17 14:40:37', 0),
+(37, 'Furqon Fatahillah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pengatar Teknologi Informasi\",\"Pemrograman Berorientasi Objek\",\"Pemrograman Web\",\"Design Grafis\",\"Multemedia System\",\"Pemrograman Mobile\"]', 'alumni/alumni_furqon-fatahillah-s-kom_1768631762_255.png', '', '[\"Web Development\",\"PHP\",\"Tailwind CSS\",\"Laravel\",\"Javascript\"]', '', '2026-01-17 14:36:02', '2026-01-17 14:42:14', 0),
+(38, 'Nurul Azmi, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Struktur Data\",\"Pengantar Teknologi Informasi\",\"Basis Data\",\"Sistem dan Teknologi Informasi\",\"Elektronika Dasar\",\"Jaringan Komputer\"]', 'alumni/alumni_nurul-azmi-s-kom_1768631991_953.png', '', '[\"Database Management\",\"Cisco\",\"C++\"]', '', '2026-01-17 14:39:51', '2026-01-17 14:39:51', 0),
+(39, 'Ahmad Rendi, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Microcontroller\",\"Struktur Data\",\"Pemrograman Web\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_ahmad-rendi-s-kom_1768632508_800.png', '', '[\"Java\",\"c++\",\"Web Development\",\"Android Studio\"]', '', '2026-01-17 14:48:28', '2026-01-17 14:48:28', 0),
+(40, 'As\'syahrin Nanda, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Pengantar Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_as-syahrin-nanda-s-kom_1768632688_557.png', '', '[\"Web Development\",\"Laravel\",\"PHP\",\"Tailwind CSS\",\"Javascript\",\"Database Management\",\"MySQL\"]', '', '2026-01-17 14:51:28', '2026-01-17 14:51:44', 0),
+(41, 'Annisa Pratama Putri, S.Kom', '2021', 'Asisten', '[\"Pengenalan Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_annisa-pratama-putri-s-kom_1768632945_437.png', '', '[\"C++\",\"MySQL\"]', '', '2026-01-17 14:55:45', '2026-01-17 14:55:45', 0),
+(42, 'Nirmala, S.Kom', '2021', '', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Aplikasi Akuntansi\",\"Pemrograman Berorientasi Objek\",\"Pemrograman Web\"]', 'alumni/alumni_nirmala-s-kom_1768633199_598.png', '', '[\"C++\",\"MySQL\",\"Laravel\",\"PHP\",\"Javascript\",\"Bootstrap\"]', '', '2026-01-17 14:59:59', '2026-01-17 14:59:59', 0),
+(43, 'Athar Fathana Rakasyah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Struktur Data\"]', 'alumni/alumni_athar-fathana-rakasyah-s-kom_1768633408_284.png', '', '[\"MySQL\",\"C++\",\"Javascript\",\"PHP\",\"Laravel\",\"Bootstrap\",\"Database Management\"]', '', '2026-01-17 15:02:49', '2026-01-17 15:03:28', 0),
+(44, 'Muhammad Dani Arya Putra, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pengenalan Teknologi Informasi\",\"Aplikasi Akuntansi\",\"Sistem Operasi\",\"Pemrograman Berorientasi Objek\",\"Multimedia System\",\"Pemrograman Mobile\"]', 'alumni/alumni_muhammad-dani-arya-putra-s-kom_1768633687_530.png', '', '[\"Android Studio\",\"C++\",\"java\",\"Mobile Development\"]', '', '2026-01-17 15:08:07', '2026-01-17 15:08:07', 0),
+(45, 'Muhammad Akbar, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Mobile\",\"Pengantar Teknologi Informasi\",\"Struktur Data\",\"Sistem Operasi\"]', 'alumni/alumni_muhammad-akbar-s-kom_1768633975_214.png', '', '[\"Web Development\",\"PHP\",\"Laravel\",\"Bootstrap\",\"MySQL\",\"Database Management\",\"Mobile Development\",\"Tailwind CSS\",\"React\"]', '', '2026-01-17 15:12:55', '2026-01-17 15:12:55', 0),
+(46, 'Imran Afdillah Dahlan, S.Kom', '2021', 'Asisten', '[\"Jaringan Komputer\",\"Basis Data\",\"Pengantar Teknologi Informasi\",\"Sistem dan Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_imran-afdillah-dahlan-s-kom_1768634238_596.png', '', '[\"Network Engineer\",\"Cisco\"]', '', '2026-01-17 15:17:18', '2026-01-17 15:17:18', 0);
 
 -- --------------------------------------------------------
 
@@ -77,38 +105,38 @@ CREATE TABLE `asisten` (
 --
 
 INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `lab`, `spesialisasi`, `bio`, `skills`, `email`, `foto`, `statusAktif`, `isKoordinator`, `urutanTampilan`) VALUES
-(13, 'Adam Adnan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Koordinator Laboratorium', '[]', 'adamadnan.iclabs@umi.ac.id', 'asisten_1767845309_3424.jpg', 'Asisten', 1, 0),
-(14, 'Dewi Ernita Rahma', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Struktur Data, Algoritma Pemrograman', '[]', 'dewiernitarahma.iclabs@umi.ac.id', 'asisten_1767845981_7966.png', 'Asisten', 0, 0),
-(15, 'Farid Wadji Mufti', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Microcontroller', '[]', 'faridwajdimufli.iclabs@umi.ac.id', 'asisten_1767846034_4202.jpg', 'Asisten', 0, 0),
-(16, 'Julisa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Basisdata, Algoritma Pemrograman, Pengenalan Pemrograman', '[]', 'julisa.iclabs@umi.ac.id', 'asisten_1767846124_1097.jpg', 'Asisten', 0, 0),
-(17, 'Maharani Safwa Andini', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Pengenalan Pemrograman', '[]', 'maharanisahwaandini.iclabs@umi.ac.id', 'asisten_1767846492_4226.jpg', 'Asisten', 0, 0),
-(18, 'Ahmad Mufli Ramadhan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Struktur Data, PBO', '[]', 'ahmadmufliramadhan.iclabs@umi.ac.id', 'asisten_1767846654_8523.jpeg', 'Asisten', 0, 0),
-(19, 'Muhammad Alif Maulana. R', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Jaringan Komputer, Basisdata, Pengenalan Pemrograman', '[]', 'muhalifmaulanaar.iclabs@umi.ac.id', 'asisten_1767846799_3970.png', 'Asisten', 0, 0),
-(20, 'Tazkira Amalia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengantar Teknologi Informasi, Struktur Data, PBO', '[]', 'tazkirahamalia.iclabs@umi.ac.id', 'asisten_1767846911_7163.jpg', 'Asisten', 0, 0),
-(21, 'Wahyu Kadri Rahmat Suat', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Basisdata, Struktur Data', '[]', 'wahyukadrirahmatsuat.iclabs@umi.ac.id', 'asisten_1767846974_2116.png', 'Asisten', 0, 0),
-(22, 'Aan Maulana Sampe', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek, Jaringan Komputer', '[\"Mobile\"]', '13020230081@student.umi.ac.id', 'asisten_1767847118_5230.png', 'CA', 0, 3),
-(23, 'Andi Ahsan Ashuri', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Mobile\"]', '13020230224@student.umi.ac.id', 'asisten_1767847163_2915.png', 'CA', 0, 3),
-(24, 'Andi Ikhlas Mallomo', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Basisdata', '[\"Mobile\"]', '13020230251@student.umi.ac.id', 'asisten_1767847230_1778.jpg', 'CA', 0, 3),
-(25, 'Andi Rifqi Aunur Rahman', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Basisdata', '[]', '13020230219@student.umi.ac.id', 'asisten_1767847292_2856.png', 'CA', 0, 0),
-(26, 'Farah Tsabitaputri Az Zahra', 'Teknik Informatika', NULL, NULL, NULL, NULL, '', '[]', '13020230268@student.umi.ac.id', 'asisten_1767847358_6722.jpg', 'CA', 0, 0),
-(27, 'Firli Anastasya Hafid', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Algoritma Pemrograman', '[]', '13020230241@student.umi.ac.id', 'asisten_1767847436_9017.jpg', 'CA', 0, 0),
-(28, 'Hendrawan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengenalan Pemrograman', '[]', '13020230309@student.umi.ac.id', 'asisten_1767847556_5460.jpg', 'CA', 0, 0),
-(29, 'Ichwal', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Jaringan Komputer, PBO, Struktur Data', '[]', '13020230049@student.umi.ac.id', 'asisten_1767847731_2445.jpg', 'CA', 0, 0),
-(30, 'Laode Muhammad Dhaifan Kasyfillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengenalan Pemrograman', '[]', '13020230232@student.umi.ac.id', 'asisten_1767847789_6687.jpg', 'CA', 0, 0),
-(31, 'Muh. Fatwah Fajriansyah M.', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengantar Teknologi Informasi', '[]', '13020230319@student.umi.ac.id', 'asisten_1767847858_7787.jpg', 'CA', 0, 0),
-(32, 'Muhammad Nur Fuad', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230030@student.umi.ac.id', 'asisten_1767847914_6148.jpg', 'CA', 0, 0),
-(33, 'Muhammad Rafli', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230290@student.umi.ac.id', 'asisten_1767848005_7910.jpg', 'CA', 0, 0),
-(34, 'Muhammad Rifky Saputra Scania', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230193@student.umi.ac.id', 'asisten_1767848075_4678.jpg', 'CA', 0, 0),
-(35, 'M. Rizwan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman, Basisdata', '', '13020230100@student.umi.ac.id', 'asisten_1767848152_4734.png', 'CA', 0, 0),
-(36, 'Nahwa Kaka Saputra Anggareksa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\", \"UI/UX\", \"React\", \"Web Development\"]', '13020230187@student.umi.ac.id', 'asisten_1767848210_2417.jpg', 'CA', 0, 0),
-(37, 'Nurfajri Mukmin Saputra', 'Sistem Informasi', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Pengantar Teknologi Informasi', '[]', '13120230033@student.umi.ac.id', 'asisten_1767848284_9117.jpg', 'CA', 0, 0),
-(38, 'Raihan Nur Rizqillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[]', '13020230306@student.umi.ac.id', 'asisten_1767848364_3306.png', 'CA', 0, 0),
-(39, 'Rizqi Ananda Jalil', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Pengenalan Pemrograman', '[]', '13020230244@student.umi.ac.id', 'asisten_1767848419_6838.jpg', 'CA', 0, 0),
-(40, 'Siti Safira Tawetubun', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[]', '13020230217@student.umi.ac.id', 'asisten_1767848474_6358.png', 'CA', 0, 0),
-(41, 'Sitti Lutfia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[]', '13020230255@student.umi.ac.id', 'asisten_1767848519_7591.jpeg', 'CA', 0, 0),
-(42, 'Sitti Nurhalimah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[]', '13020230297@student.umi.ac.id', 'asisten_1767848577_9784.jpeg', 'CA', 0, 0),
-(43, 'Thalita Sherly Putri Jasmin', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek', '[]', '13020230096@student.umi.ac.id', 'asisten_1767848643_6824.png', 'CA', 0, 0),
-(44, 'Zaki Falihin Ayyubi', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[]', '13020230253@student.umi.ac.id', 'asisten_1767848688_9669.jpg', 'CA', 0, 0);
+(13, 'Adam Adnan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Koordinator Laboratorium', '', 'adamadnan.iclabs@umi.ac.id', 'asisten/asisten_adam-adnan_1768638132_989.jpg', 'Asisten', 0, 0),
+(14, 'Dewi Ernita Rahma', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Struktur Data, Algoritma Pemrograman', '', 'dewiernitarahma.iclabs@umi.ac.id', 'asisten/asisten_dewi-ernita-rahma_1768638255_157.png', 'Asisten', 0, 0),
+(15, 'Farid Wadji Mufti', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Microcontroller', '', 'faridwajdimufli.iclabs@umi.ac.id', 'asisten/asisten_farid-wadji-mufti_1768638322_317.jpg', 'Asisten', 0, 0),
+(16, 'Julisa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Basisdata, Algoritma Pemrograman, Pengenalan Pemrograman', '', 'julisa.iclabs@umi.ac.id', 'asisten/asisten_julisa_1768638421_414.jpg', 'Asisten', 0, 0),
+(17, 'Maharani Safwa Andini', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Pengenalan Pemrograman', '', 'maharanisahwaandini.iclabs@umi.ac.id', 'asisten/asisten_maharani-safwa-andini_1768638534_729.jpg', 'Asisten', 0, 0),
+(18, 'Ahmad Mufli Ramadhan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Struktur Data, PBO', '', 'ahmadmufliramadhan.iclabs@umi.ac.id', 'asisten/asisten_ahmad-mufli-ramadhan_1768638173_117.jpeg', 'Asisten', 0, 0),
+(19, 'Muhammad Alif Maulana. R', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Jaringan Komputer, Basisdata, Pengenalan Pemrograman', '', 'muhalifmaulanaar.iclabs@umi.ac.id', 'asisten/asisten_muhammad-alif-maulana-r_1768638571_873.png', 'Asisten', 0, 0),
+(20, 'Tazkira Amalia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengantar Teknologi Informasi, Struktur Data, PBO', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', 'tazkirahamalia.iclabs@umi.ac.id', 'asisten/asisten_tazkira-amalia_1768638762_188.jpg', 'Asisten', 0, 0),
+(21, 'Wahyu Kadri Rahmat Suat', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Basisdata, Struktur Data', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', 'wahyukadrirahmatsuat.iclabs@umi.ac.id', 'asisten/asisten_wahyu-kadri-rahmat-suat_1768638789_507.png', 'Asisten', 0, 0),
+(22, 'Aan Maulana Sampe', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek, Jaringan Komputer', '[\"Mobile\"]', '13020230081@student.umi.ac.id', 'asisten/asisten_aan-maulana-sampe_1768638820_770.png', 'CA', 0, 3),
+(23, 'Andi Ahsan Ashuri', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Mobile\"]', '13020230224@student.umi.ac.id', 'asisten/asisten_andi-ahsan-ashuri_1768638851_622.png', 'CA', 0, 3),
+(24, 'Andi Ikhlas Mallomo', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Basisdata', '[\"Mobile\"]', '13020230251@student.umi.ac.id', 'asisten/asisten_andi-ikhlas-mallomo_1768638836_169.jpg', 'CA', 0, 3),
+(25, 'Andi Rifqi Aunur Rahman', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Basisdata', '', '13020230219@student.umi.ac.id', 'asisten/asisten_andi-rifqi-aunur-rahman_1768638235_110.png', 'CA', 0, 0),
+(26, 'Farah Tsabitaputri Az Zahra', 'Teknik Informatika', NULL, NULL, NULL, NULL, '', '', '13020230268@student.umi.ac.id', 'asisten/asisten_farah-tsabitaputri-az-zahra_1768638292_465.jpg', 'CA', 0, 0),
+(27, 'Firli Anastasya Hafid', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Algoritma Pemrograman', '', '13020230241@student.umi.ac.id', 'asisten/asisten_firli-anastasya-hafid_1768638348_865.jpg', 'CA', 0, 0),
+(28, 'Hendrawan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengenalan Pemrograman', '', '13020230309@student.umi.ac.id', 'asisten/asisten_hendrawan_1768638372_941.jpg', 'CA', 0, 0),
+(29, 'Ichwal', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Jaringan Komputer, PBO, Struktur Data', '', '13020230049@student.umi.ac.id', 'asisten/asisten_ichwal_1768638394_794.jpg', 'CA', 0, 0),
+(30, 'Laode Muhammad Dhaifan Kasyfillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengenalan Pemrograman', '', '13020230232@student.umi.ac.id', 'asisten/asisten_laode-muhammad-dhaifan-kasyfillah_1768638455_997.jpg', 'CA', 0, 0),
+(31, 'Muh. Fatwah Fajriansyah M.', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengantar Teknologi Informasi', '', '13020230319@student.umi.ac.id', 'asisten/asisten_muh-fatwah-fajriansyah-m_1768638556_133.jpg', 'CA', 0, 0),
+(32, 'Muhammad Nur Fuad', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230030@student.umi.ac.id', 'asisten/asisten_muhammad-nur-fuad_1768638587_110.jpg', 'CA', 0, 0),
+(33, 'Muhammad Rafli', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230290@student.umi.ac.id', 'asisten/asisten_muhammad-rafli_1768638601_321.jpg', 'CA', 0, 0),
+(34, 'Muhammad Rifky Saputra Scania', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230193@student.umi.ac.id', 'asisten/asisten_muhammad-rifky-saputra-scania_1768638617_594.jpg', 'CA', 0, 0),
+(35, 'M. Rizwan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman, Basisdata', '', '13020230100@student.umi.ac.id', 'asisten/asisten_m-rizwan_1768638524_885.png', 'CA', 0, 0),
+(36, 'Nahwa Kaka Saputra Anggareksa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230187@student.umi.ac.id', 'asisten/asisten_nahwa-kaka-saputra-anggareksa_1768638664_831.jpg', 'CA', 0, 0),
+(37, 'Nurfajri Mukmin Saputra', 'Sistem Informasi', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Pengantar Teknologi Informasi', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13120230033@student.umi.ac.id', 'asisten/asisten_nurfajri-mukmin-saputra_1768638683_151.jpg', 'CA', 0, 0),
+(38, 'Raihan Nur Rizqillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230306@student.umi.ac.id', 'asisten/asisten_raihan-nur-rizqillah_1768638700_597.png', 'CA', 0, 0),
+(39, 'Rizqi Ananda Jalil', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Pengenalan Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230244@student.umi.ac.id', 'asisten/asisten_rizqi-ananda-jalil_1768638717_257.jpg', 'CA', 0, 0),
+(40, 'Siti Safira Tawetubun', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230217@student.umi.ac.id', 'asisten/asisten_siti-safira-tawetubun_1768638728_262.png', 'CA', 0, 0),
+(41, 'Sitti Lutfia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230255@student.umi.ac.id', 'asisten/asisten_sitti-lutfia_1768638738_708.jpeg', 'CA', 0, 0),
+(42, 'Sitti Nurhalimah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230297@student.umi.ac.id', 'asisten/asisten_sitti-nurhalimah_1768638749_142.jpeg', 'CA', 0, 0),
+(43, 'Thalita Sherly Putri Jasmin', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230096@student.umi.ac.id', 'asisten/asisten_thalita-sherly-putri-jasmin_1768638778_923.png', 'CA', 0, 0),
+(44, 'Zaki Falihin Ayyubi', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230253@student.umi.ac.id', 'asisten/asisten_zaki-falihin-ayyubi_1768638800_581.jpg', 'CA', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -139,7 +167,7 @@ INSERT INTO `format_penulisan` (`id_format`, `judul`, `deskripsi`, `file`, `kate
 (14, 'Buku Panduan Lengkap', '', '1767861278_18d2a6ba.pdf', 'unduhan', 'https://drive.google.com/file/d/1a3_E6rvW_4pDJkSTVTApltDkZSnnFCez/view?usp=sharing', '2026-01-08', '', 'icon-blue', 1),
 (15, 'Watermark ICLabs', '', '1767861288_8bccc44f.png', 'unduhan', 'https://drive.google.com/file/d/1aO9zL2nn06jKxTwYEeX2v0QzazE-z4Pv/view?usp=sharing', '2026-01-08', '', 'icon-blue', 2),
 (16, 'Logo Resmi UMI', '', '1767861296_2998a0c1.png', 'unduhan', 'https://drive.google.com/file/d/1CiX5QyzBXMCJFplUeMDYDMmE2tBZJm4D/view?usp=sharing', '2026-01-08', '', 'icon-blue', 3),
-(17, 'Kelengkapan Sampul', 'Judul: Kapital, Bold, Font 14 (Tengah Atas).\r\nLogo UMI ukuran 5x6 cm (300 dpi).\r\nData: Nama, Stambuk, Frekuensi, Dosen, & Asisten.', NULL, 'pedoman', '', '2026-01-07', 'ri-file-list-3-line', 'icon-red', 1);
+(17, 'Kelengkapan Sampul', 'Judul: Kapital, Bold, Font 14 (Tengah Atas).\r\nLogo UMI ukuran 5x6 cm (300 dpi).\r\nData: Nama, Stambuk, Frekuensi, Dosen, & Asisten.', NULL, 'pedoman', '', '2026-01-17', 'ri-file-list-3-line', 'icon-red', 1);
 
 -- --------------------------------------------------------
 
@@ -350,16 +378,16 @@ CREATE TABLE `laboratorium` (
 --
 
 INSERT INTO `laboratorium` (`idLaboratorium`, `nama`, `jenis`, `idKordinatorAsisten`, `deskripsi`, `gambar`, `jumlahPc`, `jumlahKursi`, `lokasi`, `kapasitas`, `processor`, `ram`, `storage`, `gpu`, `monitor`, `software`, `fasilitas_pendukung`, `koordinator_nama`, `koordinator_foto`) VALUES
-(23, 'Start Up', 'Laboratorium', 18, 'Laboratorium Startup adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 36 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 36 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif', 'lab_1767850945_1246.jpg', 36, NULL, NULL, 36, 'Inter core i7-9700F', 'DDR4 16 GB', 'SSD SATA 500 GB', 'VGA MSI GeForce GTX 1650', 'Monitor LG 22\" Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After, Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '3 TV TCL 75” Inch, 1 Buah Speaker Samsung, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(24, 'IoT', 'Laboratorium', 21, 'Laboratorium IOT adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 24 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 24 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767852021_9734.jpg', 24, NULL, NULL, 24, 'CPU [Intel Core i5-7100]', 'RAM DDR4 [8 GB]', 'HDD [1 TB]', 'VGA NVIDIA Geforce GT 1030', 'Monitor LG 22” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(25, 'Computer Network', 'Laboratorium', 21, 'Laboratorium Computer Network adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 15 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 24 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767853201_6100.png', 15, NULL, NULL, 24, 'CPU [Intel Core i7-10700k]', 'DDR4 16 GB', 'SSD NVME 512 GB', 'VGA MSI GeForce GTX 1650', 'Monitor AOC 27” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '1 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(26, 'Data Science', 'Laboratorium', 18, 'Laboratorium Data Science adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 26 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854477_4975.jpg', 26, NULL, NULL, 26, 'CPU [Intel i7-12700f]', 'RAM DDR4 [16 GB]', 'SSD NVME 512 GB', 'VGA MSI GeForce GTX 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '1 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(27, 'Computer Vision', 'Laboratorium', 19, 'Laboratorium Computer Vision adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 26 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854621_5299.jpg', 26, NULL, NULL, 26, 'CPU [Intel i7-12700f]', 'RAM DDR4 [16 GB]', 'SSD NVME 512 GB', 'VGA NVIDIA Geforce GT 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '1 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(28, 'Multimedia', 'Laboratorium', 19, 'Laboratorium Multimedia adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 30 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 30 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854751_1846.jpg', 30, NULL, NULL, 30, 'CPU [Intel i7-12700f]', 'RAM DDR4 16 GB', 'SSD NVME 512 GB', 'VGA MSI GeForce GTX 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(29, 'Microcontroller', 'Laboratorium', 18, 'Laboratorium Microcontroler adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 25 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'lab_1767854892_3342.jpg', 25, NULL, NULL, 25, 'CPU [Intel Core i5-4460]', 'RAM DDR4 [8 GB]', 'HDD [1 TB]', 'VGA NVIDIA Geforce GT 1650', 'Monitor LG 20” Inch', 'Livewire, Arduino, Microsoft Office, Google Chrome', '1 TV TCL 75” Inch, USB to HDMI, Kabel HDMI', NULL, NULL),
-(30, 'Research Room 1', 'Riset', 17, 'Research Room 1 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767854958_8098.png', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL),
-(31, 'Research Room 2', 'Riset', 20, 'Research Room 2 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767855066_4115.jpg', 0, NULL, NULL, 0, '', '', '', '', '', '', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
-(32, 'Research Room 3', 'Riset', 16, 'Research Room 3 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'lab_1767855107_4991.png', 0, NULL, NULL, 0, '', '', '', '', '', '', '', NULL, NULL);
+(23, 'Start Up', 'Laboratorium', 18, 'Laboratorium Startup adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 36 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 36 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif', 'laboratorium/lab_start-up_1768639559_164.jpg', 36, NULL, NULL, 36, 'Inter core i7-9700F', 'DDR4 16 GB', 'SSD SATA 500 GB', 'VGA MSI GeForce GTX 1650', 'Monitor LG 22\" Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After, Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '3 TV TCL 75” Inch, 1 Buah Speaker Samsung, Spliter HDMI, Kabel HDMI', NULL, NULL),
+(24, 'IoT', 'Laboratorium', 21, 'Laboratorium IOT adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 24 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 24 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'laboratorium/lab_iot_1768639632_573.jpg', 24, NULL, NULL, 24, 'CPU [Intel Core i5-7100]', 'RAM DDR4 [8 GB]', 'HDD [1 TB]', 'VGA NVIDIA Geforce GT 1030', 'Monitor LG 22” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
+(25, 'Computer Network', 'Laboratorium', 21, 'Laboratorium Computer Network adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 15 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 24 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'laboratorium/lab_computer-network_1768639782_134.png', 15, NULL, NULL, 24, 'CPU [Intel Core i7-10700k]', 'DDR4 16 GB', 'SSD NVME 512 GB', 'VGA MSI GeForce GTX 1650', 'Monitor AOC 27” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '1 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
+(26, 'Data Science', 'Laboratorium', 18, 'Laboratorium Data Science adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 26 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'laboratorium/lab_data-science_1768639929_894.jpg', 26, NULL, NULL, 26, 'CPU [Intel i7-12700f]', 'RAM DDR4 [16 GB]', 'SSD NVME 512 GB', 'VGA MSI GeForce GTX 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '1 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
+(27, 'Computer Vision', 'Laboratorium', 19, 'Laboratorium Computer Vision adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 26 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'laboratorium/lab_computer-vision_1768639968_375.jpg', 26, NULL, NULL, 26, 'CPU [Intel i7-12700f]', 'RAM DDR4 [16 GB]', 'SSD NVME 512 GB', 'VGA NVIDIA Geforce GT 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '1 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
+(28, 'Multimedia', 'Laboratorium', 19, 'Laboratorium Multimedia adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 30 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 30 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'laboratorium/lab_multimedia_1768640031_383.jpg', 30, NULL, NULL, 30, 'CPU [Intel i7-12700f]', 'RAM DDR4 16 GB', 'SSD NVME 512 GB', 'VGA MSI GeForce GTX 1650', 'Monitor Mi 23.8” Inch', 'Apache Netbeans, Embarcadero Dev-Cpp / Dev C++, Visual Studio Code, Xampp, Git, Adobe After Effects, Adobe Illustrator, Adobe Photoshop, Adobe Premiere Pro, Postman, Android Studio, Emulator Android, Cisco Packet Tracer, VirtualBox, Geany, MySQL Workbench, Microsoft Office, Browser', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
+(29, 'Microcontroller', 'Laboratorium', 18, 'Laboratorium Microcontroler adalah fasilitas yang menyediakan layanan praktikum bagi mahasiswa untuk mendukung kegiatan pembelajaran. Laboratorium ini dilengkapi dengan 25 set komputer yang dirancang untuk mendukung proses praktikum mahasiswa secara optimal. Dengan kapasitas maksimal 25 mahasiswa, laboratorium ini memastikan suasana belajar yang kondusif dan interaktif.', 'laboratorium/lab_microcontroller_1768640093_501.jpg', 25, NULL, NULL, 25, 'CPU [Intel Core i5-4460]', 'RAM DDR4 [8 GB]', 'HDD [1 TB]', 'VGA NVIDIA Geforce GT 1650', 'Monitor LG 20” Inch', 'Livewire, Arduino, Microsoft Office, Google Chrome', '1 TV TCL 75” Inch, USB to HDMI, Kabel HDMI', NULL, NULL),
+(30, 'Research Room 1', 'Riset', 17, 'Research Room 1 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'laboratorium/lab_research-room-1_1768640174_766.png', 0, NULL, NULL, 12, '', '', '', '', '', '', '', NULL, NULL),
+(31, 'Research Room 2', 'Riset', 20, 'Research Room 2 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'laboratorium/lab_research-room-2_1768640269_731.jpg', 0, NULL, NULL, 12, '', '', '', '', '', '', '2 TV TCL 75” Inch, Spliter HDMI, Kabel HDMI', NULL, NULL),
+(32, 'Research Room 3', 'Riset', 16, 'Research Room 3 adalah laboratorium yang memberikan pelayanan kepada dosen dan mahasiswa dalam melakukan proses kegiatan penelitian. Ruangan ini memiliki daya tampung maksimal 12 orang. dengan kategori Laboratorium Research.', 'laboratorium/lab_research-room-3_1768640323_903.png', 0, NULL, NULL, 12, '', '', '', '', '', '', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -382,36 +410,37 @@ CREATE TABLE `laboratorium_gambar` (
 --
 
 INSERT INTO `laboratorium_gambar` (`idGambar`, `idLaboratorium`, `namaGambar`, `deskripsiGambar`, `isUtama`, `urutan`, `created_at`) VALUES
-(22, 23, 'lab_1767850945_1246.jpg', NULL, 1, 0, '2026-01-08 13:42:25'),
-(23, 23, 'lab_1767850945_1945.jpg', NULL, 0, 1, '2026-01-08 13:42:25'),
-(24, 23, 'lab_1767850945_8490.jpg', NULL, 0, 2, '2026-01-08 13:42:25'),
-(25, 24, 'lab_1767852021_9734.jpg', NULL, 1, 0, '2026-01-08 14:00:21'),
-(26, 24, 'lab_1767852021_6760.jpg', NULL, 0, 1, '2026-01-08 14:00:21'),
-(27, 24, 'lab_1767852021_1796.jpg', NULL, 0, 2, '2026-01-08 14:00:21'),
-(28, 25, 'lab_1767853201_6100.png', NULL, 1, 0, '2026-01-08 14:20:01'),
-(29, 25, 'lab_1767853201_7175.png', NULL, 0, 1, '2026-01-08 14:20:01'),
-(30, 25, 'lab_1767853201_9328.png', NULL, 0, 2, '2026-01-08 14:20:01'),
-(31, 25, 'lab_1767853201_2917.png', NULL, 0, 3, '2026-01-08 14:20:01'),
-(32, 26, 'lab_1767854477_4975.jpg', NULL, 1, 0, '2026-01-08 14:41:17'),
-(33, 26, 'lab_1767854477_4837.jpg', NULL, 0, 1, '2026-01-08 14:41:17'),
-(34, 26, 'lab_1767854477_2177.jpg', NULL, 0, 2, '2026-01-08 14:41:17'),
-(35, 26, 'lab_1767854477_9390.jpg', NULL, 0, 3, '2026-01-08 14:41:17'),
-(36, 27, 'lab_1767854621_5299.jpg', NULL, 1, 0, '2026-01-08 14:43:41'),
-(37, 27, 'lab_1767854621_4842.jpg', NULL, 0, 1, '2026-01-08 14:43:41'),
-(38, 28, 'lab_1767854751_1846.jpg', NULL, 1, 0, '2026-01-08 14:45:51'),
-(39, 28, 'lab_1767854751_7242.jpg', NULL, 0, 1, '2026-01-08 14:45:51'),
-(40, 28, 'lab_1767854751_7621.jpg', NULL, 0, 2, '2026-01-08 14:45:51'),
-(41, 28, 'lab_1767854751_5763.jpg', NULL, 0, 3, '2026-01-08 14:45:51'),
-(42, 28, 'lab_1767854751_6789.jpg', NULL, 0, 4, '2026-01-08 14:45:51'),
-(43, 29, 'lab_1767854892_3342.jpg', NULL, 1, 0, '2026-01-08 14:48:12'),
-(44, 29, 'lab_1767854892_6066.jpg', NULL, 0, 1, '2026-01-08 14:48:12'),
-(45, 29, 'lab_1767854892_1458.jpg', NULL, 0, 2, '2026-01-08 14:48:12'),
-(46, 29, 'lab_1767854892_8927.jpg', NULL, 0, 3, '2026-01-08 14:48:12'),
-(47, 29, 'lab_1767854892_2071.jpg', NULL, 0, 4, '2026-01-08 14:48:12'),
-(48, 30, 'lab_1767854958_8098.png', NULL, 1, 0, '2026-01-08 14:49:18'),
-(49, 31, 'lab_1767855066_4115.jpg', NULL, 1, 0, '2026-01-08 14:51:06'),
-(50, 31, 'lab_1767855066_6985.jpg', NULL, 0, 1, '2026-01-08 14:51:06'),
-(51, 32, 'lab_1767855107_4991.png', NULL, 1, 0, '2026-01-08 14:51:47');
+(55, 23, 'laboratorium/lab_start-up_1768639559_164.jpg', NULL, 1, 0, '2026-01-17 16:45:59'),
+(56, 23, 'laboratorium/lab_start-up_1768639559_453.jpg', NULL, 0, 1, '2026-01-17 16:45:59'),
+(57, 23, 'laboratorium/lab_start-up_1768639559_933.jpg', NULL, 0, 2, '2026-01-17 16:45:59'),
+(58, 24, 'laboratorium/lab_iot_1768639632_573.jpg', NULL, 1, 0, '2026-01-17 16:47:12'),
+(59, 24, 'laboratorium/lab_iot_1768639632_395.jpg', NULL, 0, 1, '2026-01-17 16:47:12'),
+(60, 24, 'laboratorium/lab_iot_1768639632_470.jpg', NULL, 0, 2, '2026-01-17 16:47:12'),
+(61, 25, 'laboratorium/lab_computer-network_1768639782_134.png', NULL, 1, 0, '2026-01-17 16:49:42'),
+(62, 25, 'laboratorium/lab_computer-network_1768639782_782.png', NULL, 0, 1, '2026-01-17 16:49:42'),
+(63, 25, 'laboratorium/lab_computer-network_1768639782_623.png', NULL, 0, 2, '2026-01-17 16:49:42'),
+(64, 25, 'laboratorium/lab_computer-network_1768639782_725.png', NULL, 0, 3, '2026-01-17 16:49:42'),
+(69, 26, 'laboratorium/lab_data-science_1768639929_894.jpg', NULL, 1, 0, '2026-01-17 16:52:09'),
+(70, 26, 'laboratorium/lab_data-science_1768639929_893.jpg', NULL, 0, 1, '2026-01-17 16:52:09'),
+(71, 26, 'laboratorium/lab_data-science_1768639929_872.jpg', NULL, 0, 2, '2026-01-17 16:52:09'),
+(72, 26, 'laboratorium/lab_data-science_1768639929_566.jpg', NULL, 0, 3, '2026-01-17 16:52:09'),
+(73, 27, 'laboratorium/lab_computer-vision_1768639968_375.jpg', NULL, 1, 0, '2026-01-17 16:52:48'),
+(74, 27, 'laboratorium/lab_computer-vision_1768639968_839.jpg', NULL, 0, 1, '2026-01-17 16:52:48'),
+(75, 28, 'laboratorium/lab_multimedia_1768640031_383.jpg', NULL, 1, 0, '2026-01-17 16:53:51'),
+(76, 28, 'laboratorium/lab_multimedia_1768640031_282.jpg', NULL, 0, 1, '2026-01-17 16:53:51'),
+(77, 28, 'laboratorium/lab_multimedia_1768640031_320.jpg', NULL, 0, 2, '2026-01-17 16:53:51'),
+(78, 28, 'laboratorium/lab_multimedia_1768640031_584.jpg', NULL, 0, 3, '2026-01-17 16:53:51'),
+(79, 28, 'laboratorium/lab_multimedia_1768640031_514.jpg', NULL, 0, 4, '2026-01-17 16:53:51'),
+(80, 29, 'laboratorium/lab_microcontroller_1768640093_501.jpg', NULL, 1, 0, '2026-01-17 16:54:53'),
+(81, 29, 'laboratorium/lab_microcontroller_1768640093_384.jpg', NULL, 0, 1, '2026-01-17 16:54:53'),
+(82, 29, 'laboratorium/lab_microcontroller_1768640093_298.jpg', NULL, 0, 2, '2026-01-17 16:54:53'),
+(83, 29, 'laboratorium/lab_microcontroller_1768640093_991.jpg', NULL, 0, 3, '2026-01-17 16:54:53'),
+(84, 29, 'laboratorium/lab_microcontroller_1768640093_704.jpg', NULL, 0, 4, '2026-01-17 16:54:53'),
+(85, 30, 'laboratorium/lab_research-room-1_1768640174_766.png', NULL, 1, 0, '2026-01-17 16:56:14'),
+(86, 31, 'laboratorium/lab_research-room-2_1768640269_731.jpg', NULL, 1, 0, '2026-01-17 16:57:49'),
+(89, 31, 'laboratorium/lab_research-room-2_1768640269_112.jpg', NULL, 0, 3, '2026-01-17 16:57:49'),
+(90, 31, 'laboratorium/lab_research-room-2_1768640269_389.jpg', NULL, 0, 4, '2026-01-17 16:57:49'),
+(91, 32, 'laboratorium/lab_research-room-3_1768640323_903.png', NULL, 1, 0, '2026-01-17 16:58:43');
 
 -- --------------------------------------------------------
 
@@ -424,19 +453,19 @@ CREATE TABLE `manajemen` (
   `nama` varchar(100) NOT NULL,
   `nidn` varchar(20) DEFAULT NULL,
   `jabatan` varchar(100) DEFAULT NULL,
-  `foto` varchar(255) DEFAULT NULL,
-  `urutanTampilan` int(11) DEFAULT 0
+  `email` varchar(255) DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `manajemen`
 --
 
-INSERT INTO `manajemen` (`idManajemen`, `nama`, `nidn`, `jabatan`, `foto`, `urutanTampilan`) VALUES
-(1, 'Ir. Abdul Rachman Manga\', S.Kom., M.T., MTA., MCF', '0931018001', 'Kepala Laboratorium Jaringan Dan Pemrograman', 'manajemen_1767850035_5059.jpg', 0),
-(5, 'Ir. Huzain Azis, S.Kom., M.Cs. MTA', '0920098801', 'Kepala Laboratorium Komputasi Dasar', 'manajemen_1767600806_3284.jpg', 0),
-(6, 'Herdianti, S.Si., M.Eng., MTA.', '0924069001', 'Kepala Laboratorium Riset', 'manajemen_1767600880_4656.JPG', 0),
-(7, 'Fatimah AR. Tuasamu, S.Kom., MTA, MOS', NULL, 'Laboran', 'manajemen_1767600916_8750.JPG', 0);
+INSERT INTO `manajemen` (`idManajemen`, `nama`, `nidn`, `jabatan`, `email`, `foto`) VALUES
+(1, 'Ir. Abdul Rachman Manga\', S.Kom., M.T., MTA., MCF', '0931018001', 'Kepala Laboratorium Jaringan Dan Pemrograman', 'abdulrachman.manga@umi.ac.id', 'manajemen/manajemen_ir-abdul-rachman-manga-s-kom-m-t-mta-mcf_1768640672_324.jpg'),
+(5, 'Ir. Huzain Azis, S.Kom., M.Cs. MTA', '0920098801', 'Kepala Laboratorium Komputasi Dasar', 'huzain.azis@umi.ac.id', 'manajemen/manajemen_ir-huzain-azis-s-kom-m-cs-mta_1768640702_175.jpg'),
+(6, 'Herdianti, S.Si., M.Eng., MTA.', '0924069001', 'Kepala Laboratorium Riset', 'herdianti.darwis@umi.ac.id', 'manajemen/manajemen_herdianti-s-si-m-eng-mta_1768640724_134.jpg'),
+(7, 'Fatimah AR. Tuasamu, S.Kom., MTA, MOS', '-', 'Laboran', 'fatimahar@umi.ac.id', 'manajemen/manajemen_fatimah-ar-tuasamu-s-kom-mta-mos_1768640737_655.jpg');
 
 -- --------------------------------------------------------
 
@@ -470,6 +499,51 @@ INSERT INTO `matakuliah` (`idMatakuliah`, `kodeMatakuliah`, `namaMatakuliah`, `s
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `modul`
+--
+
+CREATE TABLE `modul` (
+  `id_modul` int(11) NOT NULL,
+  `jurusan` enum('TI','SI') NOT NULL,
+  `nama_matakuliah` varchar(100) NOT NULL,
+  `judul` varchar(255) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `file` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `modul`
+--
+
+INSERT INTO `modul` (`id_modul`, `jurusan`, `nama_matakuliah`, `judul`, `deskripsi`, `file`, `created_at`) VALUES
+(1, 'SI', 'Aplikasi Akuntansi', 'Modul Aplikasi Akuntansi', '', '696a40c299cb4.pdf', '2026-01-16 13:44:34'),
+(5, 'SI', 'Algoritma dan Pemrograman I', 'Modul Algoritma dan Pemrograman I', '', '696a58ca54cbc.pdf', '2026-01-16 15:27:06'),
+(6, 'SI', 'Basis Data II', 'Modul Basis Data II', '', '696a597133c96.pdf', '2026-01-16 15:29:53'),
+(7, 'SI', 'Jaringan Komputer', 'Modul Jaringan Komputer', '', '696a598e4c9cc.pdf', '2026-01-16 15:30:22'),
+(8, 'SI', 'Pemrograman Web', 'Modul Pemrograman Web', '', '696a59ab0d1c5.pdf', '2026-01-16 15:30:51'),
+(9, 'SI', 'Sistem dan Teknologi Informasi', 'Modul Sistem dan Teknologi Informasi', '', '696a59f4bfb12.pdf', '2026-01-16 15:32:04'),
+(10, 'SI', 'Sistem Operasi', 'Modul Sistem Operasi', '', '696a5a13a2c57.pdf', '2026-01-16 15:32:35'),
+(11, 'SI', 'Algoritma dan Struktur Data', 'Modul Algoritma dan Struktur Data', '', '696a5a5f080ed.pdf', '2026-01-16 15:33:51'),
+(12, 'SI', 'Desain Grafis', 'Modul Desain Grafis', '', '696a5a7a971a7.pdf', '2026-01-16 15:34:18'),
+(13, 'SI', 'Multimedia System', 'Modul Multimedia System', '', '696a5aa19be94.pdf', '2026-01-16 15:34:57'),
+(14, 'SI', 'Pemrograman Mobile', 'Modul Pemrograman Mobile', '', '696a5abb7e90f.pdf', '2026-01-16 15:35:23'),
+(15, 'TI', 'Algoritma dan Pemrograman I', 'Modul Algoritma dan Pemrograman I', '', '696a5b2b0949c.pdf', '2026-01-16 15:37:15'),
+(16, 'TI', 'Basis Data II', 'Modul Basis Data II', '', '696a5b40a4123.pdf', '2026-01-16 15:37:36'),
+(17, 'TI', 'Microcontroller', 'Modul Microcontroller', '', '696a5b5c8fe3c.pdf', '2026-01-16 15:38:04'),
+(18, 'TI', 'Pemrograman Mobile', 'Modul Pemrograman Mobile', '', '696a5b729aeac.pdf', '2026-01-16 15:38:26'),
+(19, 'TI', 'Pengantar Teknologi Informasi', 'Modul Pengantar Teknologi Informasi', '', '696a5b8c9fda3.pdf', '2026-01-16 15:38:52'),
+(20, 'TI', 'Stuktur Data', 'Modul Stuktur Data', '', '696a5ba361e29.pdf', '2026-01-16 15:39:15'),
+(21, 'TI', 'Algoritma dan Pemrograman II', 'Modul Algoritma dan Pemrograman II', '', '696a5bccf18a3.pdf', '2026-01-16 15:39:56'),
+(22, 'TI', 'Basis Data I', 'Modul Basis Data I', '', '696a5be0db37f.pdf', '2026-01-16 15:40:16'),
+(23, 'TI', 'Elektronika Dasar', 'Modul Elektronika Dasar', '', '696a5bfd939b2.pdf', '2026-01-16 15:40:45'),
+(24, 'TI', 'Jaringan Komputer', 'Modul Jaringan Komputer', '', '696a5c11bed24.pdf', '2026-01-16 15:41:05'),
+(25, 'TI', 'Pemrograman Berorientasi Objek', 'Modul Pemrograman Berorientasi Objek', '', '696a5c2d80201.pdf', '2026-01-16 15:41:33'),
+(26, 'TI', 'Pemrograman Web', 'Modul Pemrograman Web', '', '696a5c40d46bd.pdf', '2026-01-16 15:41:52');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `peraturan_lab`
 --
 
@@ -490,10 +564,9 @@ CREATE TABLE `peraturan_lab` (
 --
 
 INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`, `kategori`, `display_format`) VALUES
-(2, 'Kehadiran', 'Mahasiswa wajib mengikuti pertemuan minimal 10 kali (75% dari total 14 pertemuan). Jika kurang dari 10 kali, mahasiswa tidak diperkenankan mengikuti UAS', NULL, 2, '2025-12-18 23:53:18', '2026-01-16 15:31:01', 'Kehadiran & Akademik', 'plain'),
-(3, 'Durasi Kurikulum 2025', 'Sesi 1: 07.00–10.20\r\nSesi 2: 10.30–14.20\r\nSesi 3: 14.30–18.20', NULL, 3, '2025-12-18 23:53:18', '2026-01-16 15:33:21', 'kehadiran-akademik', 'list'),
-(4, 'Durasi Kurikulum 2021', 'Sesi 1: 07.00-09.30\r\nSesi 2: 09.40-12.10\r\nSesi 3: 13.00-15.30\r\nSesi 4: 15.40-18.10', NULL, 4, '2025-12-18 23:53:18', '2026-01-16 15:34:24', 'larangan-umum', 'list'),
-(11, 'Larangan umum', 'Tidak diperbolehkan mengganggu praktikan lain yang sedang melaksanakan praktikum.\r\nDilarang merokok, membawa makanan, minuman, senjata tajam, dan senjata api ke dalam ruangan.\r\nTidak diperbolehkan membawa handphone ke meja praktikum dan handphone harus dalam mode senyap.\r\nTidak diperbolehkan membawa media penyimpanan eksternal (flashdisk) ke meja praktikum tanpa izin Dosen atau Asisten Lab.\r\nDilarang membawa, mengambil, serta memindahkan perangkat praktikum tanpa instruksi.', NULL, 0, '2026-01-16 15:29:20', '2026-01-16 15:29:20', 'Larangan Umum', 'list');
+(2, 'Kehadiran & Akademik', 'Mahasiswa wajib mengikuti pertemuan di laboratorium minimal 10 kali pertemuan atau 75% dari total 14 kali pertemuan.\r\n\r\nMahasiswa yang tidak memenuhi syarat kehadiran minimal 10 kali pertemuan tidak diperkenankan mengikuti UAS.\r\n\r\nPelaksanaan praktikum di laboratorium dibagi berdasarkan kurikulum yang berlaku dengan durasi waktu yang berbeda.\r\n\r\nPenggunaan fasilitas Laboratorium menyesuaikan dengan kapasitas ruang Laboratorium.', NULL, 2, '2025-12-18 23:53:18', '2026-01-17 00:46:21', 'Kehadiran & Akademik', 'list'),
+(3, 'Durasi & Toleransi Waktu', 'Setiap sesi praktikum untuk Mata Kuliah Kurikulum 2025 berlangsung selama 200 menit.\r\n\r\nSetiap sesi praktikum untuk Mata Kuliah Kurikulum 2021 berlangsung selama 150 menit.\r\n\r\nPraktikum harus dimulai sesuai jadwal yang telah ditentukan.\r\n\r\nToleransi keterlambatan bagi praktikan adalah maksimal 5 menit pada semua sesi.\r\n\r\nKhusus hari Jumat sesi siang setelah Salat Jumat, toleransi keterlambatan maksimal adalah 10 menit.', NULL, 3, '2025-12-18 23:53:18', '2026-01-17 00:46:51', 'kehadiran-akademik', 'list'),
+(11, 'Larangan Umum & Etika', 'Praktikan diwajibkan bersikap tenang, tertib, dan sopan selama berada dalam ruangan.\r\n\r\nPraktikan dilarang mengganggu praktikan lain yang sedang melaksanakan praktikum.\r\n\r\nDilarang merokok, membawa makanan, minuman, senjata tajam, dan senjata api ke dalam ruangan praktikum.\r\n\r\nHandphone tidak diperbolehkan dibawa ke meja praktikum dan wajib diatur dalam mode senyap.\r\n\r\nFlashdisk atau media penyimpanan eksternal dilarang dibawa ke meja praktikum tanpa seizin Dosen atau Asisten.\r\n\r\nDilarang membawa, mengambil, serta memindahkan perangkat praktikum tanpa instruksi dari pengawas.', NULL, 0, '2026-01-16 15:29:20', '2026-01-17 00:47:08', 'Larangan Umum', 'list');
 
 -- --------------------------------------------------------
 
@@ -518,7 +591,7 @@ CREATE TABLE `sanksi_lab` (
 
 INSERT INTO `sanksi_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`, `display_format`) VALUES
 (2, 'Merusak Fasilitas', 'Praktikan merusak peralatan praktikum (Personal Computer) secara sengaja, maka praktikan bertanggung jawab untuk mengganti kerusakan tersebut.', NULL, 0, '2025-12-15 10:11:55', '2026-01-10 13:22:35', 'plain'),
-(12, 'Melanggar Aturan', 'Praktikan tidak mematuhi dan mentaati aturan praktikum maka tidak diperkenankan mengikuti praktikum.', NULL, 2, '2026-01-10 14:01:35', '2026-01-10 14:02:19', 'plain'),
+(12, 'Melanggar Aturan', 'Praktikan tidak mematuhi dan mentaati aturan praktikum maka tidak\r\ndiperkenankan mengikuti praktikum.', NULL, 2, '2026-01-10 14:01:35', '2026-01-17 00:50:56', 'plain'),
 (13, 'Sanksi lain', 'Pelanggaran point lainnya dikenakan sanksi teguran, dikeluarkan/dicoret namanya dalam kegiatan praktikum (mengulang mata kuliah sesuai dengan semester berjalan) sampai sanksi akademik.', NULL, 3, '2026-01-10 14:03:55', '2026-01-10 14:03:55', 'plain');
 
 -- --------------------------------------------------------
@@ -544,11 +617,11 @@ CREATE TABLE `sop` (
 --
 
 INSERT INTO `sop` (`id_sop`, `judul`, `icon`, `warna`, `file`, `deskripsi`, `urutan`, `created_at`, `updated_at`) VALUES
-(2, 'Pemutakhiran Data Aset Laboratorium', 'ri-file-list-3-line', 'icon-blue', '6961ffa4efcd3.pdf', 'Prosedur standar untuk memperbarui data inventaris dan aset laboratorium secara berkala setiap semester.', 0, '2026-01-10 07:28:36', '2026-01-10 07:28:36'),
-(3, 'Penanganan Barang Rusak', 'ri-tools-line', 'icon-blue', '6961ffda1425e.pdf', 'Tata cara pelaporan, pengecekan, dan tindak lanjut perbaikan atau penggantian perangkat laboratorium yang mengalami kerusakan.', 0, '2026-01-10 07:29:30', '2026-01-10 07:29:30'),
-(4, 'Pengembalian Barang ke Fakultas', 'ri-share-forward-box-line', 'icon-blue', '6961fffaef594.pdf', 'Alur administrasi pengembalian aset atau peminjaman barang inventaris kembali ke pihak Fakultas Ilmu Komputer.', 0, '2026-01-10 07:30:02', '2026-01-10 07:30:02'),
-(5, 'Pemeliharaan Perangkat Laboratorium', 'ri-computer-line', 'icon-blue', '6962001b97cfc.pdf', 'Jadwal dan standar perawatan rutin (maintenance) untuk PC, jaringan, dan kelistrikan di dalam laboratorium.', 0, '2026-01-10 07:30:35', '2026-01-10 07:30:35'),
-(6, 'Pemutakhiran Modul Praktikum', 'ri-book-open-line', 'icon-blue', '6962006a3db5b.pdf', 'Mekanisme revisi dan update materi modul praktikum agar sesuai dengan perkembangan teknologi terbaru.', 0, '2026-01-10 07:31:54', '2026-01-10 07:31:54');
+(2, 'Pemutakhiran Data Aset Laboratorium', 'ri-file-list-3-line', 'icon-blue', 'pemutakhiran_data_aset_laboratorium_1768642542.pdf', 'Prosedur standar untuk memperbarui data inventaris dan aset laboratorium secara berkala setiap semester.', 0, '2026-01-10 07:28:36', '2026-01-17 09:35:42'),
+(3, 'Penanganan Barang Rusak', 'ri-tools-line', 'icon-blue', 'penanganan_barang_rusak_1768642660.pdf', 'Tata cara pelaporan, pengecekan, dan tindak lanjut perbaikan atau penggantian perangkat laboratorium yang mengalami kerusakan.', 0, '2026-01-10 07:29:30', '2026-01-17 09:37:40'),
+(4, 'Pengembalian Barang ke Fakultas', 'ri-share-forward-box-line', 'icon-blue', 'pengembalian_barang_ke_fakultas_1768642622.pdf', 'Alur administrasi pengembalian aset atau peminjaman barang inventaris kembali ke pihak Fakultas Ilmu Komputer.', 0, '2026-01-10 07:30:02', '2026-01-17 09:37:02'),
+(5, 'Pemeliharaan Perangkat Laboratorium', 'ri-computer-line', 'icon-blue', 'pemeliharaan_perangkat_laboratorium_1768642596.pdf', 'Jadwal dan standar perawatan rutin (maintenance) untuk PC, jaringan, dan kelistrikan di dalam laboratorium.', 0, '2026-01-10 07:30:35', '2026-01-17 09:36:36'),
+(6, 'Pemutakhiran Modul Praktikum', 'ri-book-open-line', 'icon-blue', 'pemutakhiran_modul_praktikum_1768642469.pdf', 'Mekanisme revisi dan update materi modul praktikum agar sesuai dengan perkembangan teknologi terbaru.', 0, '2026-01-10 07:31:54', '2026-01-17 09:34:29');
 
 -- --------------------------------------------------------
 
@@ -570,8 +643,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `last_login`, `created_at`) VALUES
-(5, '13020230100@student.umi.ac.id', '$2y$10$iVDxzPWLuukG7qlOxo1WFORcqFPKWD68EapvAP/Lf4ruJ6cqaMD.6', 'super_admin', '2026-01-16 20:21:28', '2026-01-09 22:25:18'),
-(6, '13020230217@student.umi.ac.id', '$2y$10$khY/qBg0XaAE/x0apN54CuiPJeYczQVAvEPd4qJDK13hBEe7DIDh2', 'admin', '2026-01-09 22:32:12', '2026-01-09 22:26:27'),
+(5, '13020230100@student.umi.ac.id', '$2y$10$iVDxzPWLuukG7qlOxo1WFORcqFPKWD68EapvAP/Lf4ruJ6cqaMD.6', 'super_admin', '2026-01-17 16:11:39', '2026-01-09 22:25:18'),
+(6, '13020230217@student.umi.ac.id', '$2y$10$khY/qBg0XaAE/x0apN54CuiPJeYczQVAvEPd4qJDK13hBEe7DIDh2', 'admin', '2026-01-16 23:00:47', '2026-01-09 22:26:27'),
 (7, '13020230187@student.umi.ac.id', '$2y$10$FhUh8hCCg6noMBFw.YEsLuVuzUa.4jSNDVJgk3Q6oCJBD0k058ugi', 'admin', '2026-01-09 22:33:44', '2026-01-09 22:28:15'),
 (8, 'superadmin@student.umi.ac.id', '$2y$10$UzYX.F.BjuMC8s1nsl/1pe0l9j6tO1Go2hIaxAwvSo0nOw.PCA7WG', 'super_admin', '2026-01-10 11:32:04', '2026-01-09 22:35:55');
 
@@ -648,6 +721,12 @@ ALTER TABLE `matakuliah`
   ADD KEY `idx_matakuliah_kode` (`kodeMatakuliah`);
 
 --
+-- Indeks untuk tabel `modul`
+--
+ALTER TABLE `modul`
+  ADD PRIMARY KEY (`id_modul`);
+
+--
 -- Indeks untuk tabel `peraturan_lab`
 --
 ALTER TABLE `peraturan_lab`
@@ -680,7 +759,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `alumni`
 --
 ALTER TABLE `alumni`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT untuk tabel `asisten`
@@ -722,7 +801,7 @@ ALTER TABLE `laboratorium`
 -- AUTO_INCREMENT untuk tabel `laboratorium_gambar`
 --
 ALTER TABLE `laboratorium_gambar`
-  MODIFY `idGambar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `idGambar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT untuk tabel `manajemen`
@@ -735,6 +814,12 @@ ALTER TABLE `manajemen`
 --
 ALTER TABLE `matakuliah`
   MODIFY `idMatakuliah` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT untuk tabel `modul`
+--
+ALTER TABLE `modul`
+  MODIFY `id_modul` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT untuk tabel `peraturan_lab`

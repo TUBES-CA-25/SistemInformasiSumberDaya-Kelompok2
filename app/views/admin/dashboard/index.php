@@ -7,7 +7,7 @@
     
     <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex items-center justify-between hover:shadow-md transition-all cursor-default group">
         <div>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Jadwal Hari Ini</p>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Sedang Berlangsung</p>
             <h2 class="text-3xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors" id="statJadwal">0</h2>
         </div>
         <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all transform group-hover:scale-110">
@@ -55,8 +55,8 @@
                 <div class="flex items-center gap-3">
                     <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
                     <div>
-                        <h3 class="font-bold text-lg text-gray-800">Timeline Praktikum</h3>
-                        <p class="text-xs text-gray-500">Sesi yang berlangsung hari ini</p>
+                        <h3 class="font-bold text-lg text-gray-800">Praktikum Saat Ini</h3>
+                        <p class="text-xs text-gray-500">Sesi yang sedang berjalan di laboratorium</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -177,10 +177,10 @@ function renderJadwalCards(data) {
         container.innerHTML = `
             <div class="flex flex-col items-center justify-center py-16 text-center">
                 <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mb-4 border border-gray-100">
-                    <i class="far fa-calendar-check text-3xl"></i>
+                    <i class="fas fa-clock text-3xl"></i>
                 </div>
-                <h3 class="text-gray-600 font-bold text-lg">Jadwal Kosong</h3>
-                <p class="text-gray-400 text-sm mt-1">Hari ini tidak ada praktikum yang aktif.</p>
+                <h3 class="text-gray-600 font-bold text-lg">Tidak Ada Sesi Aktif</h3>
+                <p class="text-gray-400 text-sm mt-1">Saat ini tidak ada jadwal praktikum yang sedang berlangsung.</p>
             </div>`;
         return;
     }

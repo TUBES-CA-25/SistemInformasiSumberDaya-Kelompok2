@@ -12,7 +12,7 @@
         </div>
 
         <button onclick="openFormModal()" 
-           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
+           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
             <i class="fas fa-plus"></i> Tambah Alumni
         </button>
     </div>
@@ -149,7 +149,7 @@
                                     <input type="file" id="inputFoto" name="foto" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all cursor-pointer">
                                 </div>
                                 <div id="fotoPreviewInfo" class="hidden">
-                                    <span class="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-[10px] font-bold border border-emerald-100 whitespace-nowrap"><i class="fas fa-image mr-1"></i> Foto Tersimpan</span>
+                                    <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-[10px] font-bold border border-blue-100 whitespace-nowrap"><i class="fas fa-image mr-1"></i> Foto Tersimpan</span>
                                 </div>
                             </div>
                             <p class="text-[10px] text-gray-400 mt-1">Format: JPG/PNG/WEBP. Rekomendasi 1:1 (Square). Maksimal 2MB.</p>
@@ -380,7 +380,7 @@ function openFormModal(id = null, event = null) {
             }
         });
     } else {
-        document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-plus text-emerald-600"></i> Tambah Alumni Baru';
+        document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-plus text-blue-600"></i> Tambah Alumni Baru';
         document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Simpan Data';
         
         // Reset Keahlian Tags
