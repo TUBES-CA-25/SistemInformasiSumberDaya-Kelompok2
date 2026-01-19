@@ -74,8 +74,11 @@
 
         <div class="flex-1 flex flex-col overflow-hidden">
             
-            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-8 z-10">
+            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-4 md:px-8 z-10 transition-all duration-300">
                 <div class="flex items-center gap-4">
+                    <button id="sidebarToggle" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
                     <div class="hidden md:flex items-center gap-2 text-sm font-medium text-gray-400">
                         <i class="fas fa-home text-xs"></i>
                         <span>Admin</span>
@@ -213,8 +216,5 @@
     
     <!-- Feedback System (SweetAlert2) -->
     <script src="<?= PUBLIC_URL ?>/js/feedback.js"></script>
-    
-    <!-- Session Timeout Handler - Auto logout setelah 30 menit tidak aktif -->
-    <script src="<?= PUBLIC_URL ?>/js/session-timeout.js"></script>
 </body>
 </html>

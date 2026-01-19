@@ -171,17 +171,16 @@
                                       placeholder="Tuliskan detail poin-poin di sini..."></textarea>
                         </div>
                     </div>
-                    </div>
 
                     <div id="formMessage" class="hidden mt-4"></div>
 
-                    <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 mt-8 border-t border-gray-100">
+                    <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-gray-100">
                         <button type="button" onclick="closeModal('formModal')" 
-                                class="w-full sm:w-auto px-6 py-2.5 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 font-semibold transition-all duration-200 order-2 sm:order-1">
+                                class="px-6 py-2.5 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 font-semibold transition-all duration-200">
                             Batal
                         </button>
                         <button type="submit" id="btnSave" 
-                                class="w-full sm:w-auto px-8 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-blue-200 order-1 sm:order-2">
+                                class="px-8 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-blue-200">
                             <i class="fas fa-save"></i> <span>Simpan Data</span>
                         </button>
                     </div>

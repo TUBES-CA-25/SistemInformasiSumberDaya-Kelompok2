@@ -16,6 +16,9 @@ class DashboardController extends Controller {
 
     public function stats() {
         try {
+            // 0. Set timezone ke WITA (UTC+8) agar perhitungan hari dan jam sinkron
+            date_default_timezone_set('Asia/Makassar');
+
             // 1. Inisialisasi Model
             $asistenModel = new AsistenModel();
             $labModel = new LaboratoriumModel();
@@ -31,7 +34,7 @@ class DashboardController extends Controller {
                 $mysqli = $db->getPdo();
             }
 
-            // 3. Tentukan Hari Ini
+            // 3. Tentukan Hari Ini berdasarkan Timezone yang sudah diset
             $days = [
                 'Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa',
                 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'
@@ -60,12 +63,11 @@ class DashboardController extends Controller {
             $result = $stmt->get_result();
             $jadwalHariIni = $result->fetch_all(MYSQLI_ASSOC);
 
-            // 5. FILTER: Hapus jadwal yang sudah selesai
-            // Set timezone ke WITA (UTC+8)
-            date_default_timezone_set('Asia/Makassar');
-            $jamSekarang = date('H:i');
+            // 5. FILTER: Hanya tampilkan praktikum yang SEDANG BERLANGSUNG di jam sekarang
+            $jamSekarang = date('H:i:s');
             $jadwalAktif = array_filter($jadwalHariIni, function($jadwal) use ($jamSekarang) {
-                return $jadwal['waktuSelesai'] > $jamSekarang;
+                // Sesuai permintaan: Hanya yang jam mulai <= sekarang DAN jam selesai >= sekarang
+                return ($jamSekarang >= $jadwal['waktuMulai'] && $jamSekarang <= $jadwal['waktuSelesai']);
             });
             $jadwalAktif = array_values($jadwalAktif);
 

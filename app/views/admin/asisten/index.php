@@ -12,12 +12,12 @@
         </div>
 
         <button onclick="openKoordinatorModal()" 
-           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
+           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
             <i class="fas fa-crown"></i> Pilih Koordinator
         </button>
         
         <button onclick="openFormModal()" 
-           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5">
+           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5">
             <i class="fas fa-plus"></i> Tambah Asisten
         </button>
     </div>
@@ -54,7 +54,7 @@
         <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full sm:max-w-2xl border border-gray-100">
             <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center sticky top-0 z-10">
                 <h3 id="formModalTitle" class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-user-edit text-emerald-600"></i> Form Asisten
+                    <i class="fas fa-user-edit text-blue-600"></i> Form Asisten
                 </h3>
                 <button onclick="closeModal('formModal')" class="text-gray-400 hover:text-gray-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
             </div>
@@ -116,7 +116,7 @@
                         </h4>
                         <div class="relative">
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kompetensi & Keahlian</label>
-                            <div id="skillsTagContainer" class="flex flex-wrap gap-2 p-2.5 min-h-[45px] border border-gray-300 rounded-lg bg-white focus-within:ring-2 focus-within:ring-emerald-500 transition-all cursor-text">
+                            <div id="skillsTagContainer" class="flex flex-wrap gap-2 p-2.5 min-h-[45px] border border-gray-300 rounded-lg bg-white focus-within:ring-2 focus-within:ring-blue-500 transition-all cursor-text">
                                 <input type="text" id="tagInput" class="flex-grow outline-none text-sm min-w-[150px] bg-transparent" placeholder="Ketik keahlian (contoh: Web Dev)...">
                             </div>
                             <!-- Dropdown Saran -->
@@ -129,14 +129,14 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Bio Singkat</label>
                             <textarea id="inputBio" name="bio" rows="3" placeholder="Deskripsi singkat diri..." 
-                                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white"></textarea>
+                                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"></textarea>
                         </div>
-                        <div class="p-4 bg-white border border-dashed border-gray-300 rounded-xl transition-all hover:border-emerald-300">
+                        <div class="p-4 bg-white border border-dashed border-gray-300 rounded-xl transition-all hover:border-blue-300">
                             <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                                 <i class="fas fa-camera text-gray-400"></i> Foto Profil
                             </label>
                             <input type="file" id="inputFoto" name="foto" accept="image/*" 
-                                   class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                                   class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
                             <div id="fotoPreviewInfo" class="hidden mt-2 text-xs text-blue-600 bg-blue-50 p-2 rounded-lg items-center gap-2">
                                 <i class="fas fa-check-circle"></i> Foto sudah tersedia
                             </div>
@@ -151,7 +151,7 @@
                             Batal
                         </button>
                         <button type="submit" id="btnSave" 
-                                class="px-6 py-2.5 bg-emerald-600 text-white rounded-xl font-semibold shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-all transform active:scale-95 flex items-center gap-2">
+                                class="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-semibold shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all transform active:scale-95 flex items-center gap-2">
                             <i class="fas fa-save"></i> Simpan Data
                         </button>
                     </div>
@@ -194,11 +194,11 @@
     <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm" onclick="closeModal('koordinatorModal')"></div>
     <div class="flex min-h-screen items-center justify-center p-4">
         <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl w-full sm:max-w-2xl border border-gray-100">
-            <div class="bg-blue-50 px-6 py-4 border-b border-blue-100 flex justify-between items-center">
-                <h3 class="text-xl font-bold text-blue-800 flex items-center gap-2">
+            <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-100 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-emerald-800 flex items-center gap-2">
                     <i class="fas fa-crown text-yellow-500"></i> Pilih Koordinator Lab
                 </h3>
-                <button onclick="closeModal('koordinatorModal')" class="text-blue-400 hover:text-blue-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
+                <button onclick="closeModal('koordinatorModal')" class="text-emerald-400 hover:text-emerald-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
             </div>
 
             <div class="p-6">
@@ -223,7 +223,7 @@
 
                     <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-4">
                         <button type="button" onclick="closeModal('koordinatorModal')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium">Batal</button>
-                        <button type="submit" id="btnSaveCoord" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium flex items-center gap-2 shadow-sm">
+                        <button type="submit" id="btnSaveCoord" class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium flex items-center gap-2 shadow-sm">
                             <i class="fas fa-save"></i> Simpan Pilihan
                         </button>
                     </div>
@@ -458,7 +458,7 @@ function openFormModal(id = null, event = null) {
     document.getElementById('fotoPreviewInfo').classList.add('hidden');
 
     if (id) {
-        document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-edit text-emerald-600"></i> Edit Asisten';
+        document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-edit text-blue-600"></i> Edit Asisten';
         document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Update Data';
         
         // ✅ OPTIMASI: Check cache dulu sebelum API call
@@ -475,7 +475,7 @@ function openFormModal(id = null, event = null) {
                 });
         }
     } else {
-        document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-plus text-emerald-600"></i> Tambah Asisten Baru';
+        document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-user-plus text-blue-600"></i> Tambah Asisten Baru';
         document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Simpan Data';
         
         // Reset Skills Tags for NEW entry
@@ -581,19 +581,19 @@ function openKoordinatorModal() {
                 
                 // Item List Style
                 const div = document.createElement('label');
-                div.className = `flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${isSelected ? 'bg-blue-50 border-blue-500 ring-1 ring-blue-500' : 'bg-white border-gray-200 hover:bg-gray-50'}`;
+                div.className = `flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${isSelected ? 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500' : 'bg-white border-gray-200 hover:bg-gray-50'}`;
                 div.innerHTML = `
-                    <input type="radio" name="idKoordinator" value="${item.idAsisten}" class="w-4 h-4 text-blue-600" ${isSelected ? 'checked' : ''}>
+                    <input type="radio" name="idKoordinator" value="${item.idAsisten}" class="w-4 h-4 text-emerald-600" ${isSelected ? 'checked' : ''}>
                     <img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border border-gray-300">
                     <div class="flex-1">
                         <p class="text-sm font-bold text-gray-800">${item.nama}</p>
-                        <p class="text-xs text-gray-500">${item.jurusan || '-'} ${isSelected ? '<span class="ml-2 text-blue-600 font-bold">(Current)</span>' : ''}</p>
+                        <p class="text-xs text-gray-500">${item.jurusan || '-'} ${isSelected ? '<span class="ml-2 text-emerald-600 font-bold">(Current)</span>' : ''}</p>
                     </div>
                 `;
                 // Simple toggle visual effect
                 div.addEventListener('change', () => {
                     document.querySelectorAll('#coordList label').forEach(el => el.className = 'flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all bg-white border-gray-200 hover:bg-gray-50');
-                    div.className = 'flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all bg-blue-50 border-blue-500 ring-1 ring-blue-500';
+                    div.className = 'flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500';
                 });
                 listDiv.appendChild(div);
             });
@@ -672,8 +672,8 @@ function initTaggingSystem() {
 
         if(filtered.length > 0) {
             suggestionBox.innerHTML = filtered.map(s => `
-                <div class="px-4 py-2 hover:bg-emerald-50 cursor-pointer flex items-center gap-2 group" onclick="addTag('${s.replace(/'/g, "\\'")}')">
-                    <i class="fas fa-plus-circle text-gray-300 group-hover:text-emerald-500 transition-colors"></i>
+                <div class="px-4 py-2 hover:bg-blue-50 cursor-pointer flex items-center gap-2 group" onclick="addTag('${s.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-plus-circle text-gray-300 group-hover:text-blue-500 transition-colors"></i>
                     <span class="text-sm font-medium text-gray-700">${s}</span>
                 </div>
             `).join('');
@@ -681,8 +681,8 @@ function initTaggingSystem() {
         } else {
             // Beri opsi tambah manual jika tidak ada di list
             suggestionBox.innerHTML = `
-                <div class="px-4 py-2 hover:bg-emerald-50 cursor-pointer flex items-center gap-2 group" onclick="addTag('${tagInput.value.replace(/'/g, "\\'")}')">
-                    <i class="fas fa-plus-circle text-emerald-500"></i>
+                <div class="px-4 py-2 hover:bg-blue-50 cursor-pointer flex items-center gap-2 group" onclick="addTag('${tagInput.value.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-plus-circle text-blue-500"></i>
                     <span class="text-sm font-medium text-gray-700">Tambahkan "${tagInput.value}"</span>
                 </div>`;
             suggestionBox.classList.remove('hidden');
@@ -721,11 +721,11 @@ function addTag(skill, focus = true) {
     const tagInput = document.getElementById('tagInput');
 
     const tagEl = document.createElement('div');
-    tagEl.className = 'skill-tag inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold border border-emerald-100 animate-in fade-in zoom-in duration-200';
+    tagEl.className = 'skill-tag inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100 animate-in fade-in zoom-in duration-200';
     tagEl.dataset.skill = skill;
     tagEl.innerHTML = `
         <span>${skill}</span>
-        <button type="button" onclick="event.stopPropagation(); removeTag('${skill.replace(/'/g, "\\'")}')" class="hover:text-emerald-900 transition-colors">
+        <button type="button" onclick="event.stopPropagation(); removeTag('${skill.replace(/'/g, "\\'")}')" class="hover:text-blue-900 transition-colors">
             <i class="fas fa-times-circle"></i>
         </button>
     `;
