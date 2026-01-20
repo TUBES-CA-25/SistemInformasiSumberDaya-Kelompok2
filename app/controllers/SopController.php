@@ -2,6 +2,14 @@
 
 class SopController extends Controller {
     
+    /**
+     * Admin Index - Kelola SOP Laboratorium
+     */
+    public function adminIndex() {
+        $data['judul'] = 'Kelola SOP Laboratorium';
+        $this->view('admin/sop/index', $data);
+    }
+    
     // Ini fungsi "Router" di dalam Controller
     // Karena index.php mengarahkan semua '/sop' ke sini, kita harus pilah requestnya.
     public function index() {

@@ -78,105 +78,10 @@ if ($isAdminArea) {
         exit;
     }
 
-    $parts   = explode('/admin/', $uri_clean);
-    $subPath = isset($parts[1]) ? trim($parts[1], '/') : '';
-
-    if (empty($subPath)) {
-        $module = 'dashboard';
-        $action = 'index';
-    } else {
-        $subParts = array_values(array_filter(explode('/', $subPath), fn($s) => $s !== ''));
-        $module   = $subParts[0] ?? 'dashboard';
-        
-        // Alias module mapping
-        if ($module === 'format-penulisan' || $module === 'format_penulisan') {
-            $module = 'formatpenulisan';
-        }
-
-        if ($module === 'peraturan' || $module === 'sanksi') {
-            $module = 'peraturan_sanksi';
-        }
-        
-        $GLOBALS['module'] = $module;
-        
-        if (isset($subParts[1]) && is_numeric($subParts[1])) {
-            $_GET['id'] = $subParts[1];
-            $action     = $subParts[2] ?? 'index';
-        } else {
-            $action = $subParts[1] ?? 'index';
-        }
-    }
-
-    $adminHeader = VIEW_PATH . '/admin/templates/header.php';
-    $adminFooter = VIEW_PATH . '/admin/templates/footer.php';
-
-    if ($module === 'dashboard') {
-        $targetFile = VIEW_PATH . '/admin/index.php';
-    } else {
-        $specificFile = VIEW_PATH . '/admin/' . $module . '/' . $action . '.php';
-        $indexFile    = VIEW_PATH . '/admin/' . $module . '/index.php';
-
-        if (file_exists($specificFile)) {
-            $targetFile = $specificFile;
-        } else {
-            if (in_array($action, ['create', 'edit'])) {
-                $formFile = VIEW_PATH . '/admin/' . $module . '/form.php';
-                if (file_exists($formFile)) {
-                    $targetFile = $formFile;
-                } else {
-                    $targetFile = $indexFile;
-                }
-            } else {
-                $targetFile = $indexFile;
-            }
-        }
-    }
-
-    // Routing Khusus Admin Jadwal UPK
-    if ($module === 'jadwalupk') {
-        require_once CONTROLLER_PATH . '/JadwalUpkController.php';
-        $ctrl = new JadwalUpkController();
-        
-        if ($action === 'upload') {
-            $ctrl->upload();
-        } elseif ($action === 'delete') {
-            $targetId = $subParts[2] ?? ($_GET['id'] ?? null);
-            $ctrl->delete($targetId);
-        } else {
-            $ctrl->admin_index(); 
-        }
-        exit; 
-    }
-
-    // Routing Khusus Admin Modul Praktikum
-    if ($module === 'modul') {
-        require_once CONTROLLER_PATH . '/AdminModulController.php';
-        $ctrl = new AdminModulController();
-        
-        if ($action === 'add') {
-            $ctrl->add();
-        } elseif ($action === 'delete') {
-            // Mengambil ID dari URL segmen ke-3 atau $_GET
-            $targetId = $subParts[1] ?? ($_GET['id'] ?? null); 
-            $ctrl->delete($targetId);
-        } else {
-            $ctrl->index(); 
-        }
-        exit; 
-    }
-
-
-    if (file_exists($adminHeader)) require_once $adminHeader;
-
-    if (file_exists($targetFile)) {
-        chdir(dirname($targetFile));
-        require_once $targetFile;
-    } else {
-        echo "<div style='margin-left:260px; padding:30px; color:red;'><h3>404 - Admin Page Not Found</h3><p>Target: $targetFile</p></div>";
-    }
-
-    chdir(ROOT_PROJECT . '/public');
-    if (file_exists($adminFooter)) require_once $adminFooter;
+    // Load Router dan gunakan untuk dispatch admin requests
+    require_once CONFIG_PATH . '/Router.php';
+    $router = new Router();
+    $router->dispatch();
     exit;
 }
 
@@ -325,10 +230,10 @@ if (array_key_exists($page, $direct_views)) {
         exit;
     }
 
-    if ($page === 'kepala' && file_exists(CONTROLLER_PATH . '/KepalaLabController.php')) {
-        require_once CONTROLLER_PATH . '/KepalaLabController.php';
-        $ctl = new KepalaLabController();
-        $ctl->index();
+    if ($page === 'kepala' && file_exists(CONTROLLER_PATH . '/ManajemenController.php')) {
+        require_once CONTROLLER_PATH . '/ManajemenController.php';
+        $ctl = new ManajemenController();
+        $ctl->kepalaIndex();
         exit;
     }
 
@@ -364,7 +269,7 @@ $mvc_routes = [
     'detail_alumni'    => ['AlumniController', 'detail', ['id' => $id]],
 
     'detail_fasilitas' => ['LaboratoriumController', 'detail', ['id' => $id]],
-    'detail_manajemen' => ['KepalaLabController', 'detail', ['id' => $id]],
+    'detail_manajemen' => ['ManajemenController', 'kepalaDetail', ['id' => $id]],
 
     'modul'            => ['ModulController', 'index', []],
 

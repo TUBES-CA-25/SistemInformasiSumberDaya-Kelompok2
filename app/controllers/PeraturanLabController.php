@@ -38,15 +38,15 @@ class PeraturanLabController extends Controller {
     }
 
     public function adminIndex($params = []) {
-        $this->view('admin/peraturan/index');
+        $this->view('admin/peraturan_sanksi/index');
     }
 
     public function create($params = []) {
-        $this->view('admin/peraturan/form', ['action' => 'create']);
+        $this->view('admin/peraturan_sanksi/form', ['action' => 'create']);
     }
 
     public function edit($params = []) {
-        $this->view('admin/peraturan/form', ['action' => 'edit', 'id' => $params['id'] ?? null]);
+        $this->view('admin/peraturan_sanksi/form', ['action' => 'edit', 'id' => $params['id'] ?? null]);
     }
 
     public function store() {

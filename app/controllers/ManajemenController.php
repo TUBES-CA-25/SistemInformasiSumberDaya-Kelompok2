@@ -235,4 +235,27 @@ class ManajemenController extends Controller {
         }
         $this->error('Failed to delete manajemen', null, 500);
     }
+
+    /**
+     * Public Display Methods (from KepalaLabController)
+     */
+    
+    /**
+     * Halaman publik daftar kepala lab
+     */
+    public function kepalaIndex($params = []) {
+        $all = $this->model->getAll();
+        $data = ['manajemen' => $all];
+        $this->view('sumberdaya/kepala', $data);
+    }
+    
+    /**
+     * Detail profil pimpinan/laboran (legacy view, MVC route)
+     */
+    public function kepalaDetail($params = []) {
+        if (!empty($params['id'])) {
+            $_GET['id'] = $params['id'];
+        }
+        $this->view('sumberdaya/detail-asisten');
+    }
 }

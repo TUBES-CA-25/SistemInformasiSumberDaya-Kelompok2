@@ -38,7 +38,6 @@ class Router {
         // Public routes
         $this->get('/', 'HomeController', 'index');
         $this->get('/home', 'HomeController', 'index');
-        $this->get('/contact', 'ContactController', 'index');
         $this->get('/alumni', 'AlumniController', 'index');
         $this->get('/alumni/{id}', 'AlumniController', 'detail');
         $this->get('/asisten', 'AsistenController', 'index');
@@ -55,10 +54,10 @@ class Router {
         $this->get('/tatatertib', 'PeraturanLabController', 'index');
         $this->get('/riset', 'RisetController', 'index');
         $this->get('/profil', 'ProfilController', 'index');
-        $this->get('/kepala-lab', 'KepalaLabController', 'index');
-        $this->get('/kepala-lab/detail/{id}', 'KepalaLabController', 'detail');
+        $this->get('/kepala-lab', 'ManajemenController', 'kepalaIndex');
+        $this->get('/kepala-lab/detail/{id}', 'ManajemenController', 'kepalaDetail');
         // Legacy alias
-        $this->get('/kepala', 'KepalaLabController', 'index');
+        $this->get('/kepala', 'ManajemenController', 'kepalaIndex');
 
         // Auth Routes
         $this->get('/login', 'AuthController', 'login');
@@ -90,7 +89,7 @@ class Router {
         // Admin User (Super Admin Only)
         $this->get('/admin/user', 'UserController', 'adminIndex');
 
-        // Admin Jadwal
+        // Admin Jadwal Praktikum
         $this->get('/admin/jadwal', 'JadwalPraktikumController', 'adminIndex');
         $this->get('/admin/jadwal/create', 'JadwalPraktikumController', 'create');
         $this->post('/admin/jadwal', 'JadwalPraktikumController', 'store');
@@ -102,6 +101,24 @@ class Router {
         $this->post('/admin/jadwal/upload', 'JadwalPraktikumController', 'uploadProcess');
         $this->get('/admin/jadwal/csv-upload', 'JadwalPraktikumController', 'csvUploadForm');
         $this->post('/admin/jadwal/csv-upload', 'JadwalPraktikumController', 'csvUploadProcess');
+
+        // Admin Jadwal UPK
+        $this->get('/admin/jadwalupk', 'JadwalUpkController', 'adminIndex');
+        $this->post('/admin/jadwalupk/upload', 'JadwalUpkController', 'upload');
+
+        // Admin Modul
+        $this->get('/admin/modul', 'ModulController', 'adminIndex');
+        $this->post('/admin/modul', 'ModulController', 'store');
+        $this->put('/admin/modul/{id}', 'ModulController', 'update');
+        $this->delete('/admin/modul/{id}', 'ModulController', 'delete');
+        $this->get('/admin/modul/data', 'ModulController', 'getJson');
+
+        // Admin SOP
+        $this->get('/admin/sop', 'SopController', 'adminIndex');
+        $this->post('/admin/sop', 'SopController', 'store');
+        $this->put('/admin/sop/{id}', 'SopController', 'update');
+        $this->delete('/admin/sop/{id}', 'SopController', 'delete');
+        $this->get('/admin/sop/data', 'SopController', 'getJson');
 
         // Admin Laboratorium (Fasilitas)
         $this->get('/admin/laboratorium', 'LaboratoriumController', 'adminIndex');
@@ -165,8 +182,78 @@ class Router {
         $this->put('/admin/formatpenulisan/{id}', 'FormatPenulisanController', 'update');
         $this->delete('/admin/formatpenulisan/{id}', 'FormatPenulisanController', 'delete');
 
-        // API routes
-        $this->get('/api/health', 'HealthController', 'check');
+        // ========== API ROUTES ==========
+        
+        // Peraturan Lab Routes
+        $this->get('/api/peraturan-lab', 'PeraturanLabController', 'index');
+        $this->get('/api/peraturan-lab/{id}', 'PeraturanLabController', 'show');
+        $this->post('/api/peraturan-lab', 'PeraturanLabController', 'store');
+        $this->post('/api/peraturan-lab/{id}', 'PeraturanLabController', 'update');
+        $this->put('/api/peraturan-lab/{id}', 'PeraturanLabController', 'update');
+        $this->delete('/api/peraturan-lab/{id}', 'PeraturanLabController', 'delete');
+
+        // Sanksi Lab Routes
+        $this->get('/api/sanksi-lab', 'SanksiController', 'apiIndex');
+        $this->get('/api/sanksi-lab/{id}', 'SanksiController', 'apiShow');
+        $this->post('/api/sanksi-lab', 'SanksiController', 'store');
+        $this->post('/api/sanksi-lab/{id}', 'SanksiController', 'update');
+        $this->put('/api/sanksi-lab/{id}', 'SanksiController', 'update');
+        $this->delete('/api/sanksi-lab/{id}', 'SanksiController', 'delete');
+
+        // Laboratorium Routes
+        $this->get('/api/laboratorium', 'LaboratoriumController', 'index');
+        $this->get('/api/laboratorium/{id}', 'LaboratoriumController', 'show');
+        $this->post('/api/laboratorium', 'LaboratoriumController', 'store');
+        $this->put('/api/laboratorium/{id}', 'LaboratoriumController', 'update');
+        $this->delete('/api/laboratorium/{id}', 'LaboratoriumController', 'delete');
+
+        // Asisten Routes
+        $this->get('/api/asisten', 'AsistenController', 'apiIndex');
+        $this->get('/api/asisten/{id}', 'AsistenController', 'show');
+        $this->get('/api/asisten/{id}/matakuliah', 'AsistenController', 'matakuliah');
+        $this->post('/api/asisten', 'AsistenController', 'store');
+        $this->put('/api/asisten/{id}', 'AsistenController', 'update');
+        $this->delete('/api/asisten/{id}', 'AsistenController', 'delete');
+
+        // Matakuliah Routes
+        $this->get('/api/matakuliah', 'MatakuliahController', 'index');
+        $this->get('/api/matakuliah/{id}', 'MatakuliahController', 'show');
+        $this->get('/api/matakuliah/{id}/asisten', 'MatakuliahController', 'asisten');
+        $this->post('/api/matakuliah', 'MatakuliahController', 'store');
+        $this->put('/api/matakuliah/{id}', 'MatakuliahController', 'update');
+        $this->delete('/api/matakuliah/{id}', 'MatakuliahController', 'delete');
+
+        // Jadwal Praktikum Routes
+        $this->get('/api/jadwal', 'JadwalPraktikumController', 'apiIndex');
+        $this->get('/api/jadwal/{id}', 'JadwalPraktikumController', 'show');
+        $this->post('/api/jadwal', 'JadwalPraktikumController', 'create');
+        $this->post('/api/jadwal/delete-multiple', 'JadwalPraktikumController', 'deleteMultiple');
+        $this->put('/api/jadwal/{id}', 'JadwalPraktikumController', 'update');
+        $this->delete('/api/jadwal/{id}', 'JadwalPraktikumController', 'delete');
+
+        // Informasi Lab Routes
+        $this->get('/api/informasi', 'InformasiLabController', 'index');
+        $this->get('/api/informasi/{id}', 'InformasiLabController', 'show');
+        $this->get('/api/informasi/tipe/{type}', 'InformasiLabController', 'byType');
+        $this->post('/api/informasi', 'InformasiLabController', 'store');
+        $this->put('/api/informasi/{id}', 'InformasiLabController', 'update');
+        $this->delete('/api/informasi/{id}', 'InformasiLabController', 'delete');
+
+        // Manajemen Routes
+        $this->get('/api/manajemen', 'ManajemenController', 'index');
+        $this->get('/api/manajemen/{id}', 'ManajemenController', 'show');
+        $this->post('/api/manajemen', 'ManajemenController', 'store');
+        $this->put('/api/manajemen/{id}', 'ManajemenController', 'update');
+        $this->delete('/api/manajemen/{id}', 'ManajemenController', 'delete');
+
+        // Format Penulisan Routes
+        $this->get('/api/formatpenulisan', 'FormatPenulisanController', 'apiIndex');
+        $this->get('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'apiShow');
+        $this->post('/api/formatpenulisan', 'FormatPenulisanController', 'store');
+        $this->put('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'update');
+        $this->delete('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'delete');
+
+        // Alumni Routes
         $this->get('/api/alumni', 'AlumniController', 'apiIndex');
         $this->get('/api/alumni/{id}', 'AlumniController', 'apiShow');
         $this->get('/api/asisten', 'AsistenController', 'apiIndex');
@@ -177,7 +264,7 @@ class Router {
         $this->get('/api/peraturan-lab', 'PeraturanLabController', 'apiIndex');
         $this->get('/api/peraturan-lab/{id}', 'PeraturanLabController', 'apiShow');
         $this->get('/api/tata-tertib', 'PeraturanLabController', 'apiIndex');
-        $this->get('/api/manajemen', 'KepalaLabController', 'apiIndex');
+        $this->get('/api/manajemen', 'ManajemenController', 'apiIndex');
         $this->get('/api/formatpenulisan', 'FormatPenulisanController', 'apiIndex');
         $this->get('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'apiShow');
     }

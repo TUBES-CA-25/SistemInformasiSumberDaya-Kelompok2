@@ -136,22 +136,72 @@
 <div id="uploadModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
     <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full max-w-md border border-gray-100">
-            <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-100 flex justify-between items-center bg-emerald-50/50">
-                <h3 class="text-xl font-bold text-emerald-800">Import Jadwal Excel / CSV</h3>
-                <button onclick="closeModal('uploadModal')" class="text-emerald-400 hover:text-emerald-600 transition-colors"><i class="fas fa-times text-xl"></i></button>
+        <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full sm:max-w-lg border border-gray-100">
+            
+            <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-100 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-emerald-800 flex items-center gap-2">
+                    <i class="fas fa-file-excel"></i> Upload Jadwal UPK Excel
+                </h3>
+                <button onclick="closeModal('uploadModal')" class="text-emerald-600 hover:text-emerald-800 transition-colors"><i class="fas fa-times text-xl"></i></button>
             </div>
-            <div class="p-8 text-center">
-                <form action="<?= PUBLIC_URL ?>/admin/jadwalupk/upload" method="POST" enctype="multipart/form-data">
-                    <label for="file_import" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-emerald-200 rounded-3xl cursor-pointer bg-emerald-50/30 hover:bg-emerald-50 transition-all mb-6 group">
-                        <div class="w-16 h-16 bg-emerald-100 text-emerald-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-cloud-upload-alt text-2xl"></i>
+            
+            <div class="p-6">
+                <div class="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-lg flex items-start gap-3">
+                    <div class="shrink-0 text-blue-500 mt-0.5"><i class="fas fa-info-circle text-lg"></i></div>
+                    <div class="text-sm text-blue-800">
+                        <p class="font-bold mb-1">Panduan Upload:</p>
+                        <ul class="list-disc ml-4 space-y-1 text-blue-700/80 text-xs">
+                            <li>Gunakan template resmi agar format sesuai.</li>
+                            <li>Pastikan kolom data lengkap (Prodi, Tanggal, Jam, dst).</li>
+                            <li>Format Excel: <strong>.xlsx</strong> atau <strong>.xls</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <form id="uploadForm">
+                    <div class="mb-5">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Pilih File Excel (.xlsx / .xls)</label>
+                        
+                        <div class="flex items-center justify-center w-full">
+                            <label for="fileExcel" class="flex flex-col items-center justify-center w-full h-40 border-2 border-emerald-300 border-dashed rounded-xl cursor-pointer bg-emerald-50/30 hover:bg-emerald-50 transition-colors group relative">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                                    <div class="w-12 h-12 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="fas fa-cloud-upload-alt text-2xl"></i>
+                                    </div>
+                                    <p class="mb-1 text-sm text-gray-600"><span class="font-semibold text-emerald-600">Klik upload</span> atau drag file</p>
+                                    <p class="text-xs text-gray-400">Format: .xlsx, .xls (Max 5MB)</p>
+                                </div>
+                                <input id="fileExcel" name="excel_file" type="file" class="hidden" accept=".xlsx, .xls" required />
+                            </label>
                         </div>
-                        <p class="text-sm text-slate-600">Klik untuk pilih file <b>.xlsx / .xls / .csv</b></p>
-                        <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">Gunakan format yang sesuai (Prodi, Tanggal, Jam, dst)</p>
-                        <input id="file_import" name="file_import" type="file" class="hidden" accept=".csv, .xlsx, .xls" required />
-                    </label>
-                    <button type="submit" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 uppercase tracking-widest text-xs">Mulai Import Data</button>
+                        
+                        <div id="fileInfo" class="hidden mt-3 p-3 bg-emerald-50 border border-emerald-100 rounded-lg flex items-center justify-between">
+                            <div class="flex items-center gap-2 overflow-hidden">
+                                <i class="fas fa-file-excel text-emerald-600 text-lg"></i>
+                                <span id="fileNameDisplay" class="text-sm font-medium text-gray-700 truncate">filename.xlsx</span>
+                            </div>
+                            <span id="fileSizeDisplay" class="text-xs text-gray-500 whitespace-nowrap">0 MB</span>
+                        </div>
+                    </div>
+
+                    <div id="uploadProgress" class="hidden mb-4">
+                        <div class="flex justify-between text-xs font-semibold text-gray-600 mb-1">
+                            <span id="progressText">Mengunggah...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                            <div id="progressBar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div id="uploadMessage" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
+
+                    <div class="flex justify-end gap-3 border-t border-gray-100 pt-4">
+                        <button type="button" onclick="closeModal('uploadModal')" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 font-medium transition-colors">Batal</button>
+                        <button type="submit" id="btnUpload" class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium flex items-center gap-2 shadow-sm shadow-emerald-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-upload"></i> Upload & Proses
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -214,7 +264,7 @@
  * Semua fungsi diletakkan di window agar bisa dipanggil oleh 'onclick' HTML
  */
 
-let allJadwal = [];
+let allJadwalData = [];
 
 window.openModal = function(id) {
     const modal = document.getElementById(id);
@@ -232,7 +282,98 @@ window.closeModal = function(id) {
     }
 };
 
-window.openUploadModal = function() { openModal('uploadModal'); };
+window.openUploadModal = function() { 
+    openModal('uploadModal'); 
+    // Reset form states
+    const form = document.getElementById('uploadForm');
+    if(form) form.reset();
+    document.getElementById('fileInfo').classList.add('hidden');
+    document.getElementById('uploadProgress').classList.add('hidden');
+    document.getElementById('uploadMessage').classList.add('hidden');
+};
+
+// Handler Upload File
+document.addEventListener('DOMContentLoaded', () => {
+    const uploadForm = document.getElementById('uploadForm');
+    if(uploadForm) {
+        uploadForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('fileExcel');
+            if(!fileInput.files.length) return;
+
+            const formData = new FormData();
+            formData.append('excel_file', fileInput.files[0]);
+
+            const btn = document.getElementById('btnUpload');
+            const progressDiv = document.getElementById('uploadProgress');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            const msgDiv = document.getElementById('uploadMessage');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memproses...';
+            progressDiv.classList.remove('hidden');
+            msgDiv.classList.add('hidden');
+
+            try {
+                // Simulate progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    if(progress < 90) {
+                        progress += 10;
+                        progressBar.style.width = progress + '%';
+                        progressPercent.innerText = progress + '%';
+                    }
+                }, 100);
+
+                const response = await fetch('<?= API_URL ?>/jadwal-upk/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                clearInterval(interval);
+                const result = await response.json();
+                
+                progressBar.style.width = '100%';
+                progressPercent.innerText = '100%';
+
+                if(result.status === 'success') {
+                    msgDiv.className = 'mb-4 p-3 rounded-lg text-sm bg-emerald-50 text-emerald-800 border border-emerald-100';
+                    msgDiv.innerHTML = `<i class="fas fa-check-circle mr-1"></i> ${result.message}`;
+                    msgDiv.classList.remove('hidden');
+                    setTimeout(() => {
+                        closeModal('uploadModal');
+                        loadJadwal();
+                    }, 1500);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (err) {
+                msgDiv.className = 'mb-4 p-3 rounded-lg text-sm bg-red-50 text-red-800 border border-red-100';
+                msgDiv.innerHTML = `<i class="fas fa-exclamation-circle mr-1"></i> ${err.message}`;
+                msgDiv.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-upload"></i> Upload & Proses';
+            }
+        });
+    }
+
+    const fileInput = document.getElementById('fileExcel');
+    if(fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const info = document.getElementById('fileInfo');
+            if(file) {
+                document.getElementById('fileNameDisplay').innerText = file.name;
+                document.getElementById('fileSizeDisplay').innerText = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+                info.classList.remove('hidden');
+            } else {
+                info.classList.add('hidden');
+            }
+        });
+    }
+});
 
 window.openDetailModal = function(id, event = null) {
     if(event) event.stopPropagation();

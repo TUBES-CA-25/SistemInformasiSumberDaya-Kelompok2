@@ -473,4 +473,110 @@ class JadwalPraktikumController extends Controller {
         }
         exit;
     }
+
+    // Public method untuk halaman jadwal praktikum publik
+    public function index() {
+        $data['judul'] = 'Jadwal Praktikum';
+        $data['jadwal'] = $this->model->getAll();
+        $this->view('praktikum/jadwal', $data);
+    }
+
+    // Admin method untuk dashboard jadwal praktikum
+    public function adminIndex() {
+        $data['judul'] = 'Kelola Jadwal Praktikum';
+        $data['jadwal'] = $this->model->getAll();
+        $this->view('admin/jadwal/index', $data);
+    }
+
+    // Form untuk upload jadwal
+    public function uploadForm() {
+        $data['judul'] = 'Upload Jadwal Praktikum';
+        $this->view('admin/jadwal/upload', $data);
+    }
+
+    // Form untuk edit jadwal
+    public function edit($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal');
+            exit;
+        }
+        $data['judul'] = 'Edit Jadwal Praktikum';
+        $data['jadwal'] = $this->model->getById($id);
+        $this->view('admin/jadwal/edit', $data);
+    }
+
+    // Store jadwal baru (form submission)
+    public function store() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal');
+            exit;
+        }
+        
+        $data = [
+            'idMatakuliah' => $_POST['idMatakuliah'] ?? null,
+            'kelas' => $_POST['kelas'] ?? null,
+            'idLaboratorium' => $_POST['idLaboratorium'] ?? null,
+            'hari' => $_POST['hari'] ?? null,
+            'waktuMulai' => $_POST['waktuMulai'] ?? null,
+            'waktuSelesai' => $_POST['waktuSelesai'] ?? null,
+            'dosen' => $_POST['dosen'] ?? null,
+            'asisten1' => $_POST['asisten1'] ?? null,
+            'asisten2' => $_POST['asisten2'] ?? null,
+            'frekuensi' => $_POST['frekuensi'] ?? null,
+            'status' => 'Aktif'
+        ];
+        
+        if ($this->model->insert($data)) {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal');
+        } else {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal?error=Gagal menyimpan data');
+        }
+        exit;
+    }
+
+    // Process upload jadwal
+    public function uploadProcess() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_FILES['file'])) {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal/upload');
+            exit;
+        }
+
+        try {
+            $file = $_FILES['file'];
+            $spreadsheet = IOFactory::load($file['tmp_name']);
+            $worksheet = $spreadsheet->getActiveSheet();
+
+            foreach ($worksheet->getRowIterator(2) as $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(false);
+                $rowData = [];
+                foreach ($cellIterator as $cell) {
+                    $rowData[] = $cell->getFormattedValue();
+                }
+
+                if (empty(array_filter($rowData))) continue;
+
+                $data = [
+                    'idMatakuliah' => $rowData[0] ?? null,
+                    'kelas' => $rowData[1] ?? null,
+                    'idLaboratorium' => $rowData[2] ?? null,
+                    'hari' => $rowData[3] ?? null,
+                    'waktuMulai' => $rowData[4] ?? null,
+                    'waktuSelesai' => $rowData[5] ?? null,
+                    'dosen' => $rowData[6] ?? null,
+                    'asisten1' => $rowData[7] ?? null,
+                    'asisten2' => $rowData[8] ?? null,
+                    'frekuensi' => $rowData[9] ?? null,
+                    'status' => 'Aktif'
+                ];
+                $this->model->insert($data);
+            }
+            
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal');
+        } catch (Exception $e) {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal/upload?error=' . urlencode($e->getMessage()));
+        }
+        exit;
+    }
 }
