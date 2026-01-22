@@ -86,7 +86,8 @@ class ManajemenController extends Controller {
                     'nama' => $_POST['nama'] ?? '',
                     'email' => $_POST['email'] ?? '',
                     'nidn' => $_POST['nidn'] ?? null,
-                    'jabatan' => $_POST['jabatan'] ?? ''
+                    'jabatan' => $_POST['jabatan'] ?? '',
+                    'tentang' => $_POST['tentang'] ?? ''
                 ];
 
                 $required = ['nama', 'email', 'jabatan'];
@@ -159,7 +160,8 @@ class ManajemenController extends Controller {
                     'nama' => $_POST['nama'] ?? $existing['nama'],
                     'email' => $_POST['email'] ?? $existing['email'],
                     'nidn' => $_POST['nidn'] ?? $existing['nidn'],
-                    'jabatan' => $_POST['jabatan'] ?? $existing['jabatan']
+                    'jabatan' => $_POST['jabatan'] ?? $existing['jabatan'],
+                    'tentang' => $_POST['tentang'] ?? $existing['tentang'] ?? ''
                 ];
             } else {
                 $input = $_POST;

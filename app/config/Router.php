@@ -20,15 +20,31 @@ class Router {
      * Get clean path from request
      */
     private function getPath() {
-        $path = $_GET['route'] ?? '/';
+        // 1. Cek parameter 'route' dari RewriteRule (.htaccess)
+        $path = $_GET['route'] ?? null;
         
-        // Clean path
-        $path = '/' . trim($path, '/');
-        if ($path === '/') {
-            return '/';
+        // 2. Jika tidak ada, cek PATH_INFO atau REQUEST_URI
+        if (!$path) {
+            $path = $_SERVER['PATH_INFO'] ?? null;
         }
         
-        return $path;
+        if (!$path) {
+            $uri = $_SERVER['REQUEST_URI'] ?? '/';
+            $uri = explode('?', $uri)[0];
+            
+            // Hapus base directory jika ada (XAMPP)
+            $script_name = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+            if ($script_name !== '/' && $script_name !== '') {
+                $path = str_replace($script_name, '', $uri);
+            } else {
+                $path = $uri;
+            }
+        }
+        
+        // Normalisasi: selalu awali dengan /
+        $path = '/' . trim($path, '/');
+        
+        return $path === '' ? '/' : $path;
     }
 
     /**

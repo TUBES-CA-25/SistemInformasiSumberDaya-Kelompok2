@@ -74,7 +74,7 @@ $isAdminArea = (strpos($uri_clean, '/admin') !== false) || (strpos($uri_clean, '
 if ($isAdminArea) {
 
     if (!isset($_SESSION['status']) || $_SESSION['status'] != "login") {
-        header("Location: " . PUBLIC_URL . "/home");
+        header("Location: " . PUBLIC_URL . "/pintuSISDA");
         exit;
     }
 
