@@ -1,10 +1,9 @@
 <?php
 /**
- * VIEW: DETAIL ASISTEN & MANAJEMEN (DATA FIX BASED ON DB)
+ * VIEW: DETAIL ASISTEN & MANAJEMEN (BIO FATIMAH & HIDE SKILLS FIX)
  * File: app/views/sumberdaya/detail-asisten.php
  */
 
-// Pastikan ROOT_PROJECT terdefinisi agar file_exists berjalan
 if (!defined('ROOT_PROJECT')) {
     define('ROOT_PROJECT', dirname(__DIR__, 3)); 
 }
@@ -29,16 +28,13 @@ if (isset($data['id'])) {
     }
 }
 
-// Ambil Tipe (default asisten)
 $type = $_GET['type'] ?? 'asisten'; 
-
 $dataDetail = null;
 $backLink = 'index.php?page=asisten'; 
 
 try {
     if ($type === 'manajemen') {
         // --- DATA MANAJEMEN ---
-        // Sesuai DB: idManajemen, nama, nidn, jabatan, email, foto
         $stmt = $pdo->prepare("SELECT * FROM manajemen WHERE idManajemen = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -48,7 +44,27 @@ try {
         if ($row) {
             $isKepala = stripos(($row['jabatan'] ?? ''), 'Kepala') !== false;
             
-            // Style Asli (Tidak diubah)
+            // --- INPUT MANUAL BIO (MANAJEMEN) ---
+            $manualBio = "Staff/Pimpinan aktif di Laboratorium Fakultas Ilmu Komputer UMI.";
+
+            // 1. Ir. Abdul Rachman Manga'
+            if (stripos($row['nama'], 'Abdul Rachman') !== false) {
+                $manualBio = "Ir. Abdul Rachman Manga', S.Kom., M.T., MTA., MCF adalah Kepala Laboratorium Jaringan Dan Pemrograman. Beliau memiliki kepakaran mendalam di bidang infrastruktur jaringan enterprise, keamanan siber, dan rekayasa perangkat lunak.";
+            } 
+            // 2. Ir. Huzain Azis
+            elseif (stripos($row['nama'], 'Huzain Azis') !== false) {
+                                $manualBio = "Ir. Huzain Azis, S.Kom., M.Cs. MTA adalah Kepala Laboratorium Komputasi Dasar. Beliau aktif dalam penelitian bidang kecerdasan buatan dan komputasi.";
+            }
+            // 3. Herdianti
+            elseif (stripos($row['nama'], 'Herdianti') !== false) {
+                $manualBio = "Herdianti, S.Si., M.Eng., MTA. adalah Kepala Laboratorium Riset yang berfokus pada pengembangan penelitian mahasiswa dan inovasi teknologi.";
+            }
+            // 4. Fatimah AR. Tuasamu (BARU)
+            elseif (stripos($row['nama'], 'Fatimah') !== false) {
+                $manualBio = "Fatimah AR. Tuasamu, S.Kom., MTA, MOS adalah Laboran di Fakultas Ilmu Komputer Universitas Muslim Indonesia. Beliau bertanggung jawab atas pengelolaan operasional harian laboratorium, pemeliharaan inventaris aset, serta memfasilitasi kebutuhan administrasi praktikum bagi dosen dan mahasiswa.";
+            }
+            // ------------------------------------
+            
             $badgeStyle = $isKepala 
                 ? 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;' 
                 : 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;';
@@ -57,22 +73,18 @@ try {
                 'nama'      => $row['nama'] ?? 'Tanpa Nama',
                 'jabatan'   => $row['jabatan'] ?? '-',
                 'kategori'  => $isKepala ? 'Pimpinan' : 'Staff Laboratorium',
-                // Data NIDN
-                'sub_info'  => !empty($row['nidn']) ? 'NIDN: ' . $row['nidn'] : 'Fakultas Ilmu Komputer',
+                'sub_info'  => !empty($row['nidn']) && $row['nidn'] != '-' ? 'NIDN: ' . $row['nidn'] : 'Fakultas Ilmu Komputer',
                 'sub_icon'  => 'ri-id-card-line',
                 'foto'      => $row['foto'] ?? '',
                 'email'     => $row['email'] ?? '-', 
-                // FIX: Tabel manajemen TIDAK punya kolom 'bio'. Gunakan default.
-                'bio'       => "Staff/Pimpinan aktif di Laboratorium Fakultas Ilmu Komputer UMI.",
-                // FIX: Tabel manajemen TIDAK punya kolom 'skills'. Gunakan default.
-                'skills'    => ['Manajemen Lab', 'Administrasi', 'Akademik'], 
+                'bio'       => $manualBio,
+                'skills'    => [], // Kosongkan agar section skills hilang
                 'badge_style' => $badgeStyle 
             ];
         }
 
     } else {
         // --- DATA ASISTEN ---
-        // Sesuai DB: idAsisten, nama, jurusan, bio, skills, email, foto, statusAktif, isKoordinator
         $stmt = $pdo->prepare("SELECT * FROM asisten WHERE idAsisten = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -98,26 +110,23 @@ try {
                 $badgeStyle = 'background: #fffbeb; color: #d97706; border: 1px solid #fcd34d;'; 
             }
 
-            // Parsing Skills (JSON dari DB)
             $skills = [];
             if (!empty($row['skills'])) {
-                // Cek apakah format JSON ["Skill1", "Skill2"]
                 $decoded = json_decode($row['skills'], true);
                 if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
                     $skills = $decoded;
                 } else {
-                    // Fallback jika format koma: "Skill1, Skill2"
                     $skills = array_map('trim', explode(',', $row['skills']));
                 }
             } else {
-                $skills = ['Teaching', 'Mentoring']; // Default jika kosong
+                $skills = ['Teaching', 'Mentoring']; 
             }
 
             $dataDetail = [
                 'nama'      => $row['nama'] ?? 'Tanpa Nama',
                 'jabatan'   => $jabatan,
                 'kategori'  => $kategori,
-                'sub_info'  => $row['jurusan'] ?? 'Teknik Informatika', // Kolom 'jurusan' ada di DB
+                'sub_info'  => $row['jurusan'] ?? 'Teknik Informatika',
                 'sub_icon'  => 'ri-graduation-cap-line',
                 'foto'      => $row['foto'] ?? '',
                 'email'     => $row['email'] ?? '-',
@@ -128,24 +137,16 @@ try {
         }
     }
 } catch (PDOException $e) {
-    // Error handling silent
+    // Silent fail
 }
 
-// Helper Foto (Disesuaikan dengan format DB: 'folder/file.jpg')
 function getDetailPhoto($name, $fotoName) {
     $namaEnc = urlencode($name);
     $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=64748b&size=512&font-size=0.35&bold=true";
 
     if (!empty($fotoName)) {
-        if (strpos($fotoName, 'http') === 0) {
-            return $fotoName;
-        }
-        
-        // Cek file fisik di folder uploads
-        // DB sudah menyimpan 'asisten/foto.jpg' atau 'manajemen/foto.jpg'
-        // Jadi kita hanya perlu menyambungnya ke path uploads
+        if (strpos($fotoName, 'http') === 0) { return $fotoName; }
         $pathFisik = ROOT_PROJECT . "/public/assets/uploads/" . $fotoName;
-        
         if (file_exists($pathFisik)) {
             return (defined('ASSETS_URL') ? ASSETS_URL : 'assets') . "/assets/uploads/" . $fotoName;
         }
@@ -171,19 +172,7 @@ function getDetailPhoto($name, $fotoName) {
                 </div>
                 
                 <div class="profile-content">
-                    <span style="
-                        display: inline-block !important; 
-                        width: fit-content !important; 
-                        align-self: flex-start !important; 
-                        padding: 8px 20px; 
-                        border-radius: 50px; 
-                        font-size: 0.85rem; 
-                        font-weight: 800; 
-                        text-transform: uppercase; 
-                        letter-spacing: 1px; 
-                        margin-bottom: 20px;
-                        <?= $dataDetail['badge_style'] ?>
-                    ">
+                    <span class="category-badge" style="<?= $dataDetail['badge_style'] ?>">
                         <?= htmlspecialchars($dataDetail['kategori']); ?>
                     </span>
                     
@@ -212,16 +201,14 @@ function getDetailPhoto($name, $fotoName) {
                     <h4 class="section-title" style="margin-top: 30px;">Tentang</h4>
                     <p class="profile-bio"><?= nl2br(htmlspecialchars($dataDetail['bio'])); ?></p>
 
-                    <h4 class="section-title mt-30">Kompetensi & Keahlian</h4>
-                    <div class="skills-container">
-                        <?php if(!empty($dataDetail['skills'])): ?>
+                    <?php if (!empty($dataDetail['skills'])) : ?>
+                        <h4 class="section-title mt-30">Kompetensi & Keahlian</h4>
+                        <div class="skills-container">
                             <?php foreach($dataDetail['skills'] as $skill): ?>
                                 <span class="skill-tag"><?= htmlspecialchars($skill); ?></span>
                             <?php endforeach; ?>
-                        <?php else: ?>
-                            <span class="skill-tag">-</span>
-                        <?php endif; ?>
-                    </div>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="contact-wrapper">
                         <?php if($dataDetail['email'] !== '-'): ?>
@@ -229,7 +216,7 @@ function getDetailPhoto($name, $fotoName) {
                                 <i class="ri-mail-send-line"></i> Kirim Email
                             </a>
                         <?php else: ?>
-                            <button class="btn-contact btn-disabled" disabled style="opacity: 0.6; cursor: not-allowed;">
+                            <button class="btn-contact btn-disabled" disabled>
                                 <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
                             </button>
                         <?php endif; ?>

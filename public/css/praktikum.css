@@ -934,6 +934,50 @@
   font-size: 1rem;
 }
 
+.day-selector-wrapper {
+  margin-top: 20px;
+  margin-bottom: 0px;
+  position: relative;
+  display: inline-block;
+}
+
+.custom-select {
+  appearance: none;
+  background-color: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 40px 12px 20px;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  color: #0f172a;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.custom-select:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.select-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* Badge khusus untuk jadwal hari lain */
+.badge-scheduled {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
 /* Responsive Adjustments for Modul */
 @media (max-width: 768px) {
   .modul-header {

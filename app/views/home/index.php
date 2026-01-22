@@ -286,6 +286,11 @@ function getHomeFotoUrl($row) {
             <div class="partner-slide"><div class="partner-box"><img src="images/Nvidia-Logo.png" alt="Nvidia"></div></div>
             <div class="partner-slide"><div class="partner-box"><img src="images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
 
+            <div class="partner-slide"><div class="partner-box"><img src="images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Nvidia-Logo.png" alt="Nvidia"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
+
         </div>
     </div>
 </section>

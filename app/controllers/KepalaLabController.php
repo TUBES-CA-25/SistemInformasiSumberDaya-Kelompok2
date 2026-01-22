@@ -34,7 +34,7 @@ class KepalaLabController extends Controller {
         if (!empty($params['id'])) {
             $_GET['id'] = $params['id']; // menjaga kompatibilitas view legacy
         }
-        $this->view('sumberdaya/detail-asisten');
+        $this->view('sumberdaya/detail');
     }
     
     /**
