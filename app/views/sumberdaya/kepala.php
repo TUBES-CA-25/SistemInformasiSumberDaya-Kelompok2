@@ -84,7 +84,7 @@ function getFotoUrl($row) {
                 <?php foreach ($pimpinan_list as $row) : ?>
                     <?php $imgUrl = getFotoUrl($row); ?>
 
-                    <a href="index.php?page=detail-asisten&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
+                    <a href="index.php?page=detail&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
                         
                         <div class="staff-card">
                             <div class="staff-photo-box">
@@ -126,7 +126,7 @@ function getFotoUrl($row) {
                 <?php foreach ($laboran_list as $row) : ?>
                     <?php $imgUrl = getFotoUrl($row); ?>
 
-                    <a href="index.php?page=detail-asisten&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
+                    <a href="index.php?page=detail&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
                                 <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">

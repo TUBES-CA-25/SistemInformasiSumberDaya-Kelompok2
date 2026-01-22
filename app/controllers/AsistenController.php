@@ -23,7 +23,7 @@ class AsistenController extends Controller {
      */
     public function detail($params = []) {
         $id = $params['id'] ?? null;
-        $this->view('sumberdaya/detail-asisten', ['id' => $id]);
+        $this->view('sumberdaya/detail', ['id' => $id]);
     }
 
     /**

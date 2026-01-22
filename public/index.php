@@ -263,7 +263,7 @@ $mvc_routes = [
     'jadwalupk'        => ['JadwalUpkController', 'index', []],
     'formatpenulisan'  => ['FormatPenulisanController', 'index', []],
     'detail'           => ['AsistenController', 'detail', ['id' => $id]],
-    'detail-asisten'   => ['AsistenController', 'detail', ['id' => $id]],
+    'detail'           => ['AsistenController', 'detail', ['id' => $id]],
 
     'alumni'           => ['AlumniController', 'index', []],
     'detail_alumni'    => ['AlumniController', 'detail', ['id' => $id]],
