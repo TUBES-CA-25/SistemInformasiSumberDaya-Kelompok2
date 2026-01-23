@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 17 Jan 2026 pada 10.41
+-- Waktu pembuatan: 23 Jan 2026 pada 10.27
 -- Versi server: 10.4.32-MariaDB-log
 -- Versi PHP: 8.2.12
 
@@ -102,39 +102,39 @@ CREATE TABLE `asisten` (
 -- Dumping data untuk tabel `asisten`
 --
 
-INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `lab`, `spesialisasi`, `bio`, `skills`, `email`, `foto`, `statusAktif`, `isKoordinator`)) VALUES
-(13, 'Adam Adnan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Koordinator Laboratorium', '', 'adamadnan.iclabs@umi.ac.id', 'asisten/asisten_adam-adnan_1768638132_989.jpg', 'Asisten', 0, 0),
-(14, 'Dewi Ernita Rahma', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Struktur Data, Algoritma Pemrograman', '', 'dewiernitarahma.iclabs@umi.ac.id', 'asisten/asisten_dewi-ernita-rahma_1768638255_157.png', 'Asisten', 0, 0),
-(15, 'Farid Wadji Mufti', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Microcontroller', '', 'faridwajdimufli.iclabs@umi.ac.id', 'asisten/asisten_farid-wadji-mufti_1768638322_317.jpg', 'Asisten', 0, 0),
-(16, 'Julisa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Basisdata, Algoritma Pemrograman, Pengenalan Pemrograman', '', 'julisa.iclabs@umi.ac.id', 'asisten/asisten_julisa_1768638421_414.jpg', 'Asisten', 0, 0),
-(17, 'Maharani Safwa Andini', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Pengenalan Pemrograman', '', 'maharanisahwaandini.iclabs@umi.ac.id', 'asisten/asisten_maharani-safwa-andini_1768638534_729.jpg', 'Asisten', 0, 0),
-(18, 'Ahmad Mufli Ramadhan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Struktur Data, PBO', '', 'ahmadmufliramadhan.iclabs@umi.ac.id', 'asisten/asisten_ahmad-mufli-ramadhan_1768638173_117.jpeg', 'Asisten', 0, 0),
-(19, 'Muhammad Alif Maulana. R', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Jaringan Komputer, Basisdata, Pengenalan Pemrograman', '', 'muhalifmaulanaar.iclabs@umi.ac.id', 'asisten/asisten_muhammad-alif-maulana-r_1768638571_873.png', 'Asisten', 0, 0),
-(20, 'Tazkira Amalia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengantar Teknologi Informasi, Struktur Data, PBO', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', 'tazkirahamalia.iclabs@umi.ac.id', 'asisten/asisten_tazkira-amalia_1768638762_188.jpg', 'Asisten', 0, 0),
-(21, 'Wahyu Kadri Rahmat Suat', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Basisdata, Struktur Data', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', 'wahyukadrirahmatsuat.iclabs@umi.ac.id', 'asisten/asisten_wahyu-kadri-rahmat-suat_1768638789_507.png', 'Asisten', 0, 0),
-(22, 'Aan Maulana Sampe', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek, Jaringan Komputer', '[\"Mobile\"]', '13020230081@student.umi.ac.id', 'asisten/asisten_aan-maulana-sampe_1768638820_770.png', 'CA', 0, 3),
-(23, 'Andi Ahsan Ashuri', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Mobile\"]', '13020230224@student.umi.ac.id', 'asisten/asisten_andi-ahsan-ashuri_1768638851_622.png', 'CA', 0, 3),
-(24, 'Andi Ikhlas Mallomo', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Basisdata', '[\"Mobile\"]', '13020230251@student.umi.ac.id', 'asisten/asisten_andi-ikhlas-mallomo_1768638836_169.jpg', 'CA', 0, 3),
-(25, 'Andi Rifqi Aunur Rahman', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Basisdata', '', '13020230219@student.umi.ac.id', 'asisten/asisten_andi-rifqi-aunur-rahman_1768638235_110.png', 'CA', 0, 0),
-(26, 'Farah Tsabitaputri Az Zahra', 'Teknik Informatika', NULL, NULL, NULL, NULL, '', '', '13020230268@student.umi.ac.id', 'asisten/asisten_farah-tsabitaputri-az-zahra_1768638292_465.jpg', 'CA', 0, 0),
-(27, 'Firli Anastasya Hafid', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Algoritma Pemrograman', '', '13020230241@student.umi.ac.id', 'asisten/asisten_firli-anastasya-hafid_1768638348_865.jpg', 'CA', 0, 0),
-(28, 'Hendrawan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengenalan Pemrograman', '', '13020230309@student.umi.ac.id', 'asisten/asisten_hendrawan_1768638372_941.jpg', 'CA', 0, 0),
-(29, 'Ichwal', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Jaringan Komputer, PBO, Struktur Data', '', '13020230049@student.umi.ac.id', 'asisten/asisten_ichwal_1768638394_794.jpg', 'CA', 0, 0),
-(30, 'Laode Muhammad Dhaifan Kasyfillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengenalan Pemrograman', '', '13020230232@student.umi.ac.id', 'asisten/asisten_laode-muhammad-dhaifan-kasyfillah_1768638455_997.jpg', 'CA', 0, 0),
-(31, 'Muh. Fatwah Fajriansyah M.', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengantar Teknologi Informasi', '', '13020230319@student.umi.ac.id', 'asisten/asisten_muh-fatwah-fajriansyah-m_1768638556_133.jpg', 'CA', 0, 0),
-(32, 'Muhammad Nur Fuad', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230030@student.umi.ac.id', 'asisten/asisten_muhammad-nur-fuad_1768638587_110.jpg', 'CA', 0, 0),
-(33, 'Muhammad Rafli', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230290@student.umi.ac.id', 'asisten/asisten_muhammad-rafli_1768638601_321.jpg', 'CA', 0, 0),
-(34, 'Muhammad Rifky Saputra Scania', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230193@student.umi.ac.id', 'asisten/asisten_muhammad-rifky-saputra-scania_1768638617_594.jpg', 'CA', 0, 0),
-(35, 'M. Rizwan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman, Basisdata', '', '13020230100@student.umi.ac.id', 'asisten/asisten_m-rizwan_1768638524_885.png', 'CA', 0, 0),
-(36, 'Nahwa Kaka Saputra Anggareksa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230187@student.umi.ac.id', 'asisten/asisten_nahwa-kaka-saputra-anggareksa_1768638664_831.jpg', 'CA', 0, 0),
-(37, 'Nurfajri Mukmin Saputra', 'Sistem Informasi', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Pengantar Teknologi Informasi', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13120230033@student.umi.ac.id', 'asisten/asisten_nurfajri-mukmin-saputra_1768638683_151.jpg', 'CA', 0, 0),
-(38, 'Raihan Nur Rizqillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230306@student.umi.ac.id', 'asisten/asisten_raihan-nur-rizqillah_1768638700_597.png', 'CA', 0, 0),
-(39, 'Rizqi Ananda Jalil', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Pengenalan Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230244@student.umi.ac.id', 'asisten/asisten_rizqi-ananda-jalil_1768638717_257.jpg', 'CA', 0, 0),
-(40, 'Siti Safira Tawetubun', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230217@student.umi.ac.id', 'asisten/asisten_siti-safira-tawetubun_1768638728_262.png', 'CA', 0, 0),
-(41, 'Sitti Lutfia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230255@student.umi.ac.id', 'asisten/asisten_sitti-lutfia_1768638738_708.jpeg', 'CA', 0, 0),
-(42, 'Sitti Nurhalimah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230297@student.umi.ac.id', 'asisten/asisten_sitti-nurhalimah_1768638749_142.jpeg', 'CA', 0, 0),
-(43, 'Thalita Sherly Putri Jasmin', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230096@student.umi.ac.id', 'asisten/asisten_thalita-sherly-putri-jasmin_1768638778_923.png', 'CA', 0, 0),
-(44, 'Zaki Falihin Ayyubi', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230253@student.umi.ac.id', 'asisten/asisten_zaki-falihin-ayyubi_1768638800_581.jpg', 'CA', 0, 0);
+INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `lab`, `spesialisasi`, `bio`, `skills`, `email`, `foto`, `statusAktif`, `isKoordinator`) VALUES
+(13, 'Adam Adnan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Koordinator Laboratorium', '', 'adamadnan.iclabs@umi.ac.id', 'asisten/asisten_adam-adnan_1768638132_989.jpg', 'Asisten', 1),
+(14, 'Dewi Ernita Rahma', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Struktur Data, Algoritma Pemrograman', '', 'dewiernitarahma.iclabs@umi.ac.id', 'asisten/asisten_dewi-ernita-rahma_1768638255_157.png', 'Asisten', 0),
+(15, 'Farid Wadji Mufti', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Microcontroller', '', 'faridwajdimufli.iclabs@umi.ac.id', 'asisten/asisten_farid-wadji-mufti_1768638322_317.jpg', 'Asisten', 0),
+(16, 'Julisa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Basisdata, Algoritma Pemrograman, Pengenalan Pemrograman', '', 'julisa.iclabs@umi.ac.id', 'asisten/asisten_julisa_1768638421_414.jpg', 'Asisten', 0),
+(17, 'Maharani Safwa Andini', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Pengenalan Pemrograman', '', 'maharanisahwaandini.iclabs@umi.ac.id', 'asisten/asisten_maharani-safwa-andini_1768638534_729.jpg', 'Asisten', 0),
+(18, 'Ahmad Mufli Ramadhan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Struktur Data, PBO', '', 'ahmadmufliramadhan.iclabs@umi.ac.id', 'asisten/asisten_ahmad-mufli-ramadhan_1768638173_117.jpeg', 'Asisten', 0),
+(19, 'Muhammad Alif Maulana. R', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Jaringan Komputer, Basisdata, Pengenalan Pemrograman', '', 'muhalifmaulanaar.iclabs@umi.ac.id', 'asisten/asisten_muhammad-alif-maulana-r_1768638571_873.png', 'Asisten', 0),
+(20, 'Tazkira Amalia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengantar Teknologi Informasi, Struktur Data, PBO', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', 'tazkirahamalia.iclabs@umi.ac.id', 'asisten/asisten_tazkira-amalia_1768638762_188.jpg', 'Asisten', 0),
+(21, 'Wahyu Kadri Rahmat Suat', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Microcontroller, Basisdata, Struktur Data', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', 'wahyukadrirahmatsuat.iclabs@umi.ac.id', 'asisten/asisten_wahyu-kadri-rahmat-suat_1768638789_507.png', 'Asisten', 0),
+(22, 'Aan Maulana Sampe', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek, Jaringan Komputer', '[\"Mobile\"]', '13020230081@student.umi.ac.id', 'asisten/asisten_aan-maulana-sampe_1768638820_770.png', 'CA', 0),
+(23, 'Andi Ahsan Ashuri', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Mobile\"]', '13020230224@student.umi.ac.id', 'asisten/asisten_andi-ahsan-ashuri_1768638851_622.png', 'CA', 0),
+(24, 'Andi Ikhlas Mallomo', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Basisdata', '[\"Mobile\"]', '13020230251@student.umi.ac.id', 'asisten/asisten_andi-ikhlas-mallomo_1768638836_169.jpg', 'CA', 0),
+(25, 'Andi Rifqi Aunur Rahman', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Pengenalan Pemrograman, Basisdata', '', '13020230219@student.umi.ac.id', 'asisten/asisten_andi-rifqi-aunur-rahman_1768638235_110.png', 'CA', 0),
+(26, 'Farah Tsabitaputri Az Zahra', 'Teknik Informatika', NULL, NULL, NULL, NULL, '', '', '13020230268@student.umi.ac.id', 'asisten/asisten_farah-tsabitaputri-az-zahra_1768638292_465.jpg', 'CA', 0),
+(27, 'Firli Anastasya Hafid', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Algoritma Pemrograman', '', '13020230241@student.umi.ac.id', 'asisten/asisten_firli-anastasya-hafid_1768638348_865.jpg', 'CA', 0),
+(28, 'Hendrawan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengenalan Pemrograman', '', '13020230309@student.umi.ac.id', 'asisten/asisten_hendrawan_1768638372_941.jpg', 'CA', 0),
+(29, 'Ichwal', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Jaringan Komputer, PBO, Struktur Data', '', '13020230049@student.umi.ac.id', 'asisten/asisten_ichwal_1768638394_794.jpg', 'CA', 0),
+(30, 'Laode Muhammad Dhaifan Kasyfillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengenalan Pemrograman', '', '13020230232@student.umi.ac.id', 'asisten/asisten_laode-muhammad-dhaifan-kasyfillah_1768638455_997.jpg', 'CA', 0),
+(31, 'Muh. Fatwah Fajriansyah M.', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pengantar Teknologi Informasi', '', '13020230319@student.umi.ac.id', 'asisten/asisten_muh-fatwah-fajriansyah-m_1768638556_133.jpg', 'CA', 0),
+(32, 'Muhammad Nur Fuad', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230030@student.umi.ac.id', 'asisten/asisten_muhammad-nur-fuad_1768638587_110.jpg', 'CA', 0),
+(33, 'Muhammad Rafli', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230290@student.umi.ac.id', 'asisten/asisten_muhammad-rafli_1768638601_321.jpg', 'CA', 0),
+(34, 'Muhammad Rifky Saputra Scania', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '', '13020230193@student.umi.ac.id', 'asisten/asisten_muhammad-rifky-saputra-scania_1768638617_594.jpg', 'CA', 0),
+(35, 'M. Rizwan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman, Basisdata', '', '13020230100@student.umi.ac.id', 'asisten/asisten_m-rizwan_1768638524_885.png', 'CA', 0),
+(36, 'Nahwa Kaka Saputra Anggareksa', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230187@student.umi.ac.id', 'asisten/asisten_nahwa-kaka-saputra-anggareksa_1768638664_831.jpg', 'CA', 0),
+(37, 'Nurfajri Mukmin Saputra', 'Sistem Informasi', NULL, NULL, NULL, NULL, 'Asisten 2 Struktur Data, Pengantar Teknologi Informasi', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13120230033@student.umi.ac.id', 'asisten/asisten_nurfajri-mukmin-saputra_1768638683_151.jpg', 'CA', 0),
+(38, 'Raihan Nur Rizqillah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Microcontroller', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230306@student.umi.ac.id', 'asisten/asisten_raihan-nur-rizqillah_1768638700_597.png', 'CA', 0),
+(39, 'Rizqi Ananda Jalil', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata, Pengenalan Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230244@student.umi.ac.id', 'asisten/asisten_rizqi-ananda-jalil_1768638717_257.jpg', 'CA', 0),
+(40, 'Siti Safira Tawetubun', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Algoritma Pemrograman', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230217@student.umi.ac.id', 'asisten/asisten_siti-safira-tawetubun_1768638728_262.png', 'CA', 0),
+(41, 'Sitti Lutfia', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230255@student.umi.ac.id', 'asisten/asisten_sitti-lutfia_1768638738_708.jpeg', 'CA', 0),
+(42, 'Sitti Nurhalimah', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230297@student.umi.ac.id', 'asisten/asisten_sitti-nurhalimah_1768638749_142.jpeg', 'CA', 0),
+(43, 'Thalita Sherly Putri Jasmin', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Pemrograman Berorientasi Objek', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230096@student.umi.ac.id', 'asisten/asisten_thalita-sherly-putri-jasmin_1768638778_923.png', 'CA', 0),
+(44, 'Zaki Falihin Ayyubi', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten 2 Basisdata', '[\"Design Grafis\",\"UI/UX\",\"React\",\"Web Development\"]', '13020230253@student.umi.ac.id', 'asisten/asisten_zaki-falihin-ayyubi_1768638800_581.jpg', 'CA', 0);
 
 -- --------------------------------------------------------
 
@@ -204,66 +204,66 @@ CREATE TABLE `jadwalpraktikum` (
 --
 
 INSERT INTO `jadwalpraktikum` (`idJadwal`, `idMatakuliah`, `kelas`, `idLaboratorium`, `hari`, `waktuMulai`, `waktuSelesai`, `dosen`, `asisten1`, `asisten2`, `frekuensi`, `tanggal`, `status`) VALUES
-(305, 8, 'A1,A2,A3', 29, 'Senin', '07:00:00', '09:30:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Muhammad Nur Fuad', 'TI_MICRO-5', NULL, 'Aktif'),
-(306, 9, 'A3', 27, 'Senin', '07:00:00', '09:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Muhammad Alif Maulana. R', 'Ichwal', 'TI_SD-3', NULL, 'Aktif'),
-(307, 9, 'A4', 26, 'Senin', '07:00:00', '09:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Ahmad Mufli Ramadhan', 'Sitti Lutfia', 'TI_SD-4', NULL, 'Aktif'),
-(308, 10, 'A1', 23, 'Senin', '09:40:00', '12:10:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Thalita Sherly Putri Jasmin', 'SI_PBO-1', NULL, 'Aktif'),
-(309, 10, 'B1', 24, 'Senin', '09:40:00', '12:10:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Julisa', 'Tazkirah Amaliah', 'SI_PBO-2', NULL, 'Aktif'),
-(310, 8, 'A3', 29, 'Senin', '09:40:00', '12:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Maharani Safwa Andini', 'Farid Wajdi Mufti', 'TI_MICRO-3', NULL, 'Aktif'),
-(311, 11, 'A7', 27, 'Senin', '13:00:00', '15:30:00', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'Tazkirah Amaliah', 'M. Rizwan', 'TI_BD2-7', NULL, 'Aktif'),
-(312, 11, 'A8', 26, 'Senin', '13:00:00', '15:30:00', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'Maharani Safwa Andini', 'Andi Rifqi Aunur Rahman', 'TI_BD2-8', NULL, 'Aktif'),
-(313, 8, 'A5', 29, 'Senin', '13:00:00', '15:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Laode Muhammad Dhaifan Kasyfillah', 'TI_MICRO-6', NULL, 'Aktif'),
-(314, 9, 'B2', 24, 'Senin', '13:00:00', '15:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Farid Wajdi Mufti', 'Aan Maulana Sampe', 'TI_SD-10', NULL, 'Aktif'),
-(315, 9, 'B1', 23, 'Senin', '13:00:00', '15:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Dewi Ernita Rahma', 'Andi Ahsan Ashuri', 'TI_SD-9', NULL, 'Aktif'),
-(316, 8, 'A6', 29, 'Senin', '15:40:00', '18:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Raihan Nur Rizqillah', 'TI_MICRO-7', NULL, 'Aktif'),
-(317, 9, 'A1', 23, 'Senin', '15:40:00', '18:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'M. Rizwan', 'TI_SD-1', NULL, 'Aktif'),
-(318, 9, 'A2', 24, 'Senin', '15:40:00', '18:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Wahyu Kadri Rahmat Suat', 'Maharani Safwa Andini', 'TI_SD-2', NULL, 'Aktif'),
-(319, 11, 'A3', 27, 'Selasa', '07:00:00', '09:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Dewi Ernita Rahma', 'Sitti Lutfia', 'TI_BD2-3', NULL, 'Aktif'),
-(320, 11, 'A5', 26, 'Selasa', '07:00:00', '09:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Farah Tsabitaputri Az Zahra', 'TI_BD2-5', NULL, 'Aktif'),
-(321, 13, 'A1', 23, 'Selasa', '07:00:00', '10:20:00', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'Tazkirah Amaliah', 'Nurfajri Mukmin Saputra', 'SI_PTI-1', NULL, 'Aktif'),
-(322, 13, 'B1', 24, 'Selasa', '07:00:00', '10:20:00', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'Ahmad Mufli Ramadhan', 'Muh. Fatwah Fajriansyah M.', 'SI_PTI-2', NULL, 'Aktif'),
-(323, 8, 'B2', 29, 'Selasa', '09:40:00', '12:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Muhammad Nur Fuad', 'TI_MICRO-11', NULL, 'Aktif'),
-(324, 14, 'B1', 27, 'Selasa', '09:40:00', '12:10:00', 'Fahmi, S.Kom., M.T.', 'Muhammad Alif Maulana. R', 'Aan Maulana Sampe', 'SI_JARKOM-2', NULL, 'Aktif'),
-(325, 12, 'A3', 23, 'Selasa', '10:30:00', '14:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Dewi Ernita Rahma', 'Siti Safira Tawetubun', 'TI_ALPRO-3', NULL, 'Aktif'),
-(326, 14, 'A1', 27, 'Selasa', '13:00:00', '15:30:00', 'Fahmi, S.Kom., M.T.', 'Muhammad Alif Maulana. R', 'Ichwal', 'SI_JARKOM-1', NULL, 'Aktif'),
-(327, 11, 'A1', 23, 'Selasa', '15:40:00', '18:10:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Sitti Nurhalimah', 'TI_BD2-1', NULL, 'Aktif'),
-(328, 11, 'A2', 24, 'Selasa', '15:40:00', '18:10:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Rizqi Ananda Jalil', 'TI_BD2-2', NULL, 'Aktif'),
-(329, 8, 'B1', 29, 'Selasa', '15:40:00', '18:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Muhammad Rafli', 'TI_MICRO-10', NULL, 'Aktif'),
-(330, 9, 'B3', 27, 'Sabtu', '07:00:00', '09:30:00', 'Nurul Fadhillah, S.Kom., M.Kom', 'Muhammad Alif Maulana. R', 'Nahwa Kaka Saputra Anggareksa', 'TI_SD-11', NULL, 'Aktif'),
-(331, 12, 'A2', 23, 'Sabtu', '07:00:00', '10:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Dewi Ernita Rahma', 'Siti Safira Tawetubun', 'TI_ALPRO-2', NULL, 'Aktif'),
-(332, 9, 'B4', 27, 'Sabtu', '09:40:00', '12:10:00', 'Nurul Fadhillah, S.Kom., M.Kom', 'Wahyu Kadri Rahmat Suat', 'Muhammad Rifky Saputra Scania', 'TI_SD-12', NULL, 'Aktif'),
-(333, 12, 'A4', 23, 'Sabtu', '10:30:00', '14:20:00', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Nahwa Kaka Saputra Anggareksa', 'TI_ALPRO-4', NULL, 'Aktif'),
-(334, 11, 'A4', 27, 'Sabtu', '13:00:00', '15:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Andi Ikhlas Mallomo', 'TI_BD2-4', NULL, 'Aktif'),
-(335, 11, 'A6', 26, 'Sabtu', '13:00:00', '15:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Dewi Ernita Rahma', 'Thalita Sherly Putri Jasmin', 'TI_BD2-6', NULL, 'Aktif'),
-(336, 8, 'A5,A7,B1,B2,B3', 29, 'Sabtu', '13:00:00', '15:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Maharani Safwa Andini', 'Muhammad Rafli', 'TI_MICRO-13', NULL, 'Aktif'),
-(337, 12, 'B1', 23, 'Sabtu', '14:30:00', '18:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Ichwal', 'TI_ALPRO-5', NULL, 'Aktif'),
-(338, 8, 'B3', 29, 'Rabu', '07:00:00', '09:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Farid Wajdi Mufti', 'Muhammad Rifky Saputra Scania', 'TI_MICRO-12', NULL, 'Aktif'),
-(339, 11, 'B4', 26, 'Rabu', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Dewi Ernita Rahma', 'Muh. Fatwah Fajriansyah M.', 'TI_BD2-12', NULL, 'Aktif'),
-(340, 8, 'A7', 29, 'Rabu', '09:40:00', '12:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Maharani Safwa Andini', 'Raihan Nur Rizqillah', 'TI_MICRO-8', NULL, 'Aktif'),
-(341, 9, 'A7', 27, 'Rabu', '09:40:00', '12:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'Muhammad Rifky Saputra Scania', 'TI_SD-7', NULL, 'Aktif'),
-(342, 9, 'A8', 26, 'Rabu', '09:40:00', '12:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Muhammad Alif Maulana. R', 'Nahwa Kaka Saputra Anggareksa', 'TI_SD-8', NULL, 'Aktif'),
-(343, 15, 'A1', 23, 'Rabu', '10:30:00', '14:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Sitti Nurhalimah', 'TI_PP-1', NULL, 'Aktif'),
-(344, 9, 'A5', 27, 'Rabu', '13:00:00', '15:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Ahmad Mufli Ramadhan', 'Zaki Falihin Ayyubi', 'TI_SD-5', NULL, 'Aktif'),
-(345, 9, 'A6', 26, 'Rabu', '13:00:00', '15:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'Muh. Fatwah Fajriansyah M.', 'TI_SD-6', NULL, 'Aktif'),
-(346, 8, 'A8', 29, 'Rabu', '13:00:00', '15:30:00', 'Tasrif Hasanuddin, S.T., M.Cs.', 'Maharani Safwa Andini', 'Raihan Nur Rizqillah', 'TI_MICRO-9', NULL, 'Aktif'),
-(347, 15, 'A2', 23, 'Rabu', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Hendrawan', 'TI_PP-2', NULL, 'Aktif'),
-(348, 15, 'A4', 24, 'Rabu', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Muhammad Alif Maulana. R', 'Andi Ikhlas Mallomo', 'TI_PP-4', NULL, 'Aktif'),
-(349, 11, 'B2', 24, 'Kamis', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Farid Wajdi Mufti', 'Rizqi Ananda Jalil', 'TI_BD2-10', NULL, 'Aktif'),
-(350, 11, 'B1', 23, 'Kamis', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Julisa', 'Andi Rifqi Aunur Rahman', 'TI_BD2-9', NULL, 'Aktif'),
-(351, 16, 'C2', 27, 'Kamis', '07:00:00', '09:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Muhammad Nur Fuad', 'TI_MOBILE-1', NULL, 'Aktif'),
-(352, 12, 'B2', 23, 'Kamis', '10:30:00', '14:20:00', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'Dewi Ernita Rahma', 'M. Rizwan', 'TI_ALPRO-6', NULL, 'Aktif'),
-(353, 12, 'B3', 24, 'Kamis', '10:30:00', '14:20:00', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'Berlian Septiani, S.Kom., MCF', 'Hendrawan', 'TI_ALPRO-7', NULL, 'Aktif'),
-(354, 15, 'A3', 23, 'Kamis', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Tazkirah Amaliah', 'Nurfajri Mukmin Saputra', 'TI_PP-3', NULL, 'Aktif'),
-(355, 11, 'B3', 26, 'Jumat', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Julisa', 'Firli Anastasya Hafid', 'TI_BD2-11', NULL, 'Aktif'),
-(356, 8, 'A1', 29, 'Jumat', '07:00:00', '09:30:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Andi Ahsan Ashuri', 'TI_MICRO-1', NULL, 'Aktif'),
-(357, 12, 'A1', 23, 'Jumat', '07:00:00', '10:20:00', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Andi Rifqi Aunur Rahman', 'SI_ALPRO-1', NULL, 'Aktif'),
-(358, 12, 'B1', 24, 'Jumat', '07:00:00', '10:20:00', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Laode Muhammad Dhaifan Kasyfillah', 'SI_ALPRO-2', NULL, 'Aktif'),
-(359, 8, 'A2', 29, 'Jumat', '09:40:00', '12:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Muhammad Alif Maulana. R', 'Zaki Falihin Ayyubi', 'TI_MICRO-2', NULL, 'Aktif'),
-(360, 15, 'B2', 27, 'Jumat', '10:30:00', '14:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Nurfajri Mukmin Saputra', 'TI_PP-6', NULL, 'Aktif'),
-(361, 12, 'A1', 23, 'Jumat', '10:30:00', '14:20:00', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Julisa', 'TI_ALPRO-1', NULL, 'Aktif'),
-(362, 15, 'B1', 23, 'Jumat', '14:30:00', '18:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Julisa', 'Firli Anastasya Hafid', 'TI_PP-5', NULL, 'Aktif'),
-(363, 15, 'B3', 24, 'Jumat', '14:30:00', '18:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Laode Muhammad Dhaifan Kasyfillah', 'TI_PP-7', NULL, 'Aktif'),
-(364, 8, 'A4', 29, 'Jumat', '15:40:00', '18:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Farah Tsabitaputri Az Zahra', 'TI_MICRO-4', NULL, 'Aktif');
+(365, 8, 'A1,A2,A3', 29, 'Senin', '07:00:00', '09:30:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Muhammad Nur Fuad', 'TI_MICRO-5', NULL, 'Aktif'),
+(366, 9, 'A3', 27, 'Senin', '07:00:00', '09:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Muhammad Alif Maulana. R', 'Ichwal', 'TI_SD-3', NULL, 'Aktif'),
+(367, 9, 'A4', 26, 'Senin', '07:00:00', '09:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Ahmad Mufli Ramadhan', 'Sitti Lutfia', 'TI_SD-4', NULL, 'Aktif'),
+(368, 10, 'A1', 23, 'Senin', '09:40:00', '12:10:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Thalita Sherly Putri Jasmin', 'SI_PBO-1', NULL, 'Aktif'),
+(369, 10, 'B1', 24, 'Senin', '09:40:00', '12:10:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Julisa', 'Tazkirah Amaliah', 'SI_PBO-2', NULL, 'Aktif'),
+(370, 8, 'A3', 29, 'Senin', '09:40:00', '12:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Maharani Safwa Andini', 'Farid Wajdi Mufti', 'TI_MICRO-3', NULL, 'Aktif'),
+(371, 11, 'A7', 27, 'Senin', '13:00:00', '15:30:00', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'Tazkirah Amaliah', 'M. Rizwan', 'TI_BD2-7', NULL, 'Aktif'),
+(372, 11, 'A8', 26, 'Senin', '13:00:00', '15:30:00', 'Andi Ulfah Tenripada, S.Kom.,M.Kom.,MTA.', 'Maharani Safwa Andini', 'Andi Rifqi Aunur Rahman', 'TI_BD2-8', NULL, 'Aktif'),
+(373, 8, 'A5', 29, 'Senin', '13:00:00', '15:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Laode Muhammad Dhaifan Kasyfillah', 'TI_MICRO-6', NULL, 'Aktif'),
+(374, 9, 'B2', 24, 'Senin', '13:00:00', '15:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Farid Wajdi Mufti', 'Aan Maulana Sampe', 'TI_SD-10', NULL, 'Aktif'),
+(375, 9, 'B1', 23, 'Senin', '13:00:00', '15:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Dewi Ernita Rahma', 'Andi Ahsan Ashuri', 'TI_SD-9', NULL, 'Aktif'),
+(376, 8, 'A6', 29, 'Senin', '15:40:00', '18:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Raihan Nur Rizqillah', 'TI_MICRO-7', NULL, 'Aktif'),
+(377, 9, 'A1', 23, 'Senin', '15:40:00', '18:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'M. Rizwan', 'TI_SD-1', NULL, 'Aktif'),
+(378, 9, 'A2', 24, 'Senin', '15:40:00', '18:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Wahyu Kadri Rahmat Suat', 'Maharani Safwa Andini', 'TI_SD-2', NULL, 'Aktif'),
+(379, 11, 'A3', 27, 'Selasa', '07:00:00', '09:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Dewi Ernita Rahma', 'Sitti Lutfia', 'TI_BD2-3', NULL, 'Aktif'),
+(380, 11, 'A5', 26, 'Selasa', '07:00:00', '09:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Farah Tsabitaputri Az Zahra', 'TI_BD2-5', NULL, 'Aktif'),
+(381, 13, 'A1', 23, 'Selasa', '07:00:00', '10:20:00', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'Tazkirah Amaliah', 'Nurfajri Mukmin Saputra', 'SI_PTI-1', NULL, 'Aktif'),
+(382, 13, 'B1', 24, 'Selasa', '07:00:00', '10:20:00', 'Dr. Ir. Dolly Indra, S.Kom.,M.MSi.,MTA.', 'Ahmad Mufli Ramadhan', 'Muh. Fatwah Fajriansyah M.', 'SI_PTI-2', NULL, 'Aktif'),
+(383, 8, 'B2', 29, 'Selasa', '09:40:00', '12:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Muhammad Nur Fuad', 'TI_MICRO-11', NULL, 'Aktif'),
+(384, 14, 'B1', 27, 'Selasa', '09:40:00', '12:10:00', 'Fahmi, S.Kom., M.T.', 'Muhammad Alif Maulana. R', 'Aan Maulana Sampe', 'SI_JARKOM-2', NULL, 'Aktif'),
+(385, 12, 'A3', 23, 'Selasa', '10:30:00', '14:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Dewi Ernita Rahma', 'Siti Safira Tawetubun', 'TI_ALPRO-3', NULL, 'Aktif'),
+(386, 14, 'A1', 27, 'Selasa', '13:00:00', '15:30:00', 'Fahmi, S.Kom., M.T.', 'Muhammad Alif Maulana. R', 'Ichwal', 'SI_JARKOM-1', NULL, 'Aktif'),
+(387, 11, 'A1', 23, 'Selasa', '15:40:00', '18:10:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Sitti Nurhalimah', 'TI_BD2-1', NULL, 'Aktif'),
+(388, 11, 'A2', 24, 'Selasa', '15:40:00', '18:10:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Rizqi Ananda Jalil', 'TI_BD2-2', NULL, 'Aktif'),
+(389, 8, 'B1', 29, 'Selasa', '15:40:00', '18:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Muhammad Rafli', 'TI_MICRO-10', NULL, 'Aktif'),
+(390, 9, 'B3', 27, 'Sabtu', '07:00:00', '09:30:00', 'Nurul Fadhillah, S.Kom., M.Kom', 'Muhammad Alif Maulana. R', 'Nahwa Kaka Saputra Anggareksa', 'TI_SD-11', NULL, 'Aktif'),
+(391, 12, 'A2', 23, 'Sabtu', '07:00:00', '10:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Dewi Ernita Rahma', 'Siti Safira Tawetubun', 'TI_ALPRO-2', NULL, 'Aktif'),
+(392, 9, 'B4', 27, 'Sabtu', '09:40:00', '12:10:00', 'Nurul Fadhillah, S.Kom., M.Kom', 'Wahyu Kadri Rahmat Suat', 'Muhammad Rifky Saputra Scania', 'TI_SD-12', NULL, 'Aktif'),
+(393, 12, 'A4', 23, 'Sabtu', '10:30:00', '14:20:00', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Nahwa Kaka Saputra Anggareksa', 'TI_ALPRO-4', NULL, 'Aktif'),
+(394, 11, 'A4', 27, 'Sabtu', '13:00:00', '15:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Julisa', 'Andi Ikhlas Mallomo', 'TI_BD2-4', NULL, 'Aktif'),
+(395, 11, 'A6', 26, 'Sabtu', '13:00:00', '15:30:00', 'Amaliah Faradibah, S.Kom.,M.Kom.,MTA.', 'Dewi Ernita Rahma', 'Thalita Sherly Putri Jasmin', 'TI_BD2-6', NULL, 'Aktif'),
+(396, 8, 'A5,A7,B1,B2,B3', 29, 'Sabtu', '13:00:00', '15:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Maharani Safwa Andini', 'Muhammad Rafli', 'TI_MICRO-13', NULL, 'Aktif'),
+(397, 12, 'B1', 23, 'Sabtu', '14:30:00', '18:20:00', 'Ramdaniah, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Ichwal', 'TI_ALPRO-5', NULL, 'Aktif'),
+(398, 8, 'B3', 29, 'Rabu', '07:00:00', '09:30:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Farid Wajdi Mufti', 'Muhammad Rifky Saputra Scania', 'TI_MICRO-12', NULL, 'Aktif'),
+(399, 11, 'B4', 26, 'Rabu', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Dewi Ernita Rahma', 'Muh. Fatwah Fajriansyah M.', 'TI_BD2-12', NULL, 'Aktif'),
+(400, 8, 'A7', 29, 'Rabu', '09:40:00', '12:10:00', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'Maharani Safwa Andini', 'Raihan Nur Rizqillah', 'TI_MICRO-8', NULL, 'Aktif'),
+(401, 9, 'A7', 27, 'Rabu', '09:40:00', '12:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'Muhammad Rifky Saputra Scania', 'TI_SD-7', NULL, 'Aktif'),
+(402, 9, 'A8', 26, 'Rabu', '09:40:00', '12:10:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Muhammad Alif Maulana. R', 'Nahwa Kaka Saputra Anggareksa', 'TI_SD-8', NULL, 'Aktif'),
+(403, 15, 'A1', 23, 'Rabu', '10:30:00', '14:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Sitti Nurhalimah', 'TI_PP-1', NULL, 'Aktif'),
+(404, 9, 'A5', 27, 'Rabu', '13:00:00', '15:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Ahmad Mufli Ramadhan', 'Zaki Falihin Ayyubi', 'TI_SD-5', NULL, 'Aktif'),
+(405, 9, 'A6', 26, 'Rabu', '13:00:00', '15:30:00', 'Syariful Mujaddid, S.Kom.,M.T.', 'Tazkirah Amaliah', 'Muh. Fatwah Fajriansyah M.', 'TI_SD-6', NULL, 'Aktif'),
+(406, 8, 'A8', 29, 'Rabu', '13:00:00', '15:30:00', 'Tasrif Hasanuddin, S.T., M.Cs.', 'Maharani Safwa Andini', 'Raihan Nur Rizqillah', 'TI_MICRO-9', NULL, 'Aktif'),
+(407, 15, 'A2', 23, 'Rabu', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Hendrawan', 'TI_PP-2', NULL, 'Aktif'),
+(408, 15, 'A4', 24, 'Rabu', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Muhammad Alif Maulana. R', 'Andi Ikhlas Mallomo', 'TI_PP-4', NULL, 'Aktif'),
+(409, 11, 'B2', 24, 'Kamis', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Farid Wajdi Mufti', 'Rizqi Ananda Jalil', 'TI_BD2-10', NULL, 'Aktif'),
+(410, 11, 'B1', 23, 'Kamis', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Julisa', 'Andi Rifqi Aunur Rahman', 'TI_BD2-9', NULL, 'Aktif'),
+(411, 16, 'C2', 27, 'Kamis', '07:00:00', '09:30:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Muhammad Nur Fuad', 'TI_MOBILE-1', NULL, 'Aktif'),
+(412, 12, 'B2', 23, 'Kamis', '10:30:00', '14:20:00', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'Dewi Ernita Rahma', 'M. Rizwan', 'TI_ALPRO-6', NULL, 'Aktif'),
+(413, 12, 'B3', 24, 'Kamis', '10:30:00', '14:20:00', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'Berlian Septiani, S.Kom., MCF', 'Hendrawan', 'TI_ALPRO-7', NULL, 'Aktif'),
+(414, 15, 'A3', 23, 'Kamis', '14:30:00', '18:20:00', 'Lutfi Budi Ilmawan, S.Kom.,M.Cs.,MTA.', 'Tazkirah Amaliah', 'Nurfajri Mukmin Saputra', 'TI_PP-3', NULL, 'Aktif'),
+(415, 11, 'B3', 26, 'Jumat', '07:00:00', '09:30:00', 'Ir. Dedy Atmajaya, S.Kom.,M.Eng.,MTA.', 'Julisa', 'Firli Anastasya Hafid', 'TI_BD2-11', NULL, 'Aktif'),
+(416, 8, 'A1', 29, 'Jumat', '07:00:00', '09:30:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Andi Ahsan Ashuri', 'TI_MICRO-1', NULL, 'Aktif'),
+(417, 12, 'A1', 23, 'Jumat', '07:00:00', '10:20:00', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Andi Rifqi Aunur Rahman', 'SI_ALPRO-1', NULL, 'Aktif'),
+(418, 12, 'B1', 24, 'Jumat', '07:00:00', '10:20:00', 'Ir. St. Hajrah Mansyur, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Laode Muhammad Dhaifan Kasyfillah', 'SI_ALPRO-2', NULL, 'Aktif'),
+(419, 8, 'A2', 29, 'Jumat', '09:40:00', '12:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Muhammad Alif Maulana. R', 'Zaki Falihin Ayyubi', 'TI_MICRO-2', NULL, 'Aktif'),
+(420, 15, 'B2', 27, 'Jumat', '10:30:00', '14:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Berlian Septiani, S.Kom., MCF', 'Nurfajri Mukmin Saputra', 'TI_PP-6', NULL, 'Aktif'),
+(421, 12, 'A1', 23, 'Jumat', '10:30:00', '14:20:00', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'Wahyu Kadri Rahmat Suat', 'Julisa', 'TI_ALPRO-1', NULL, 'Aktif'),
+(422, 15, 'B1', 23, 'Jumat', '14:30:00', '18:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Julisa', 'Firli Anastasya Hafid', 'TI_PP-5', NULL, 'Aktif'),
+(423, 15, 'B3', 24, 'Jumat', '14:30:00', '18:20:00', 'Ir. Huzain Azis, S.Kom.,M.Cs.,MTA.', 'Ahmad Mufli Ramadhan', 'Laode Muhammad Dhaifan Kasyfillah', 'TI_PP-7', NULL, 'Aktif'),
+(424, 8, 'A4', 29, 'Jumat', '15:40:00', '18:10:00', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'Farid Wajdi Mufti', 'Farah Tsabitaputri Az Zahra', 'TI_MICRO-4', NULL, 'Aktif');
 
 -- --------------------------------------------------------
 
@@ -288,6 +288,16 @@ CREATE TABLE `jadwalupk` (
 --
 
 INSERT INTO `jadwalupk` (`id`, `prodi`, `tanggal`, `jam`, `mata_kuliah`, `dosen`, `frekuensi`, `kelas`, `ruangan`) VALUES
+(1, 'Prodi', '1970-01-01', 'Jam', 'Mata Kuliah', 'Dosen', 'Frekuensi', 'Kelas', 'Ruangan'),
+(2, 'TI', '2025-12-29', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-1', 'A1', 'Lab Microcontroller'),
+(3, 'TI', '2025-12-31', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-5', 'A1,A2,A3', 'Lab Microcontroller'),
+(4, 'TI', '2026-01-02', '16.00 - 18.00', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-10', 'B1', 'Lab Microcontroller'),
+(5, 'TI', '2026-01-03', '10.15 - 12.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-12', 'B3', 'Lab Microcontroller'),
+(6, 'TI', '2026-01-03', '16.00 - 18.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-4', 'A4', 'Lab Microcontroller'),
+(7, 'TI', '2026-01-05', '08.00 - 10.00', 'Algoritma Pemrograman', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'TI_ALPRO-1', 'A1', 'Lab Startup'),
+(8, 'TI', '2026-01-05', '08.00 - 10.00', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-5', 'B1', 'Lab Computer Vision'),
+(9, 'TI', '2026-01-05', '10.15 - 12.15', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-3', 'A3', 'Lab Computer Vision'),
+(10, 'TI', '2026-01-05', '10.15 - 12.15', 'Algoritma Pemrograman', 'Suwito Pomalingo, S.Kom.,M.Kom.,MTA.', 'TI_ALPRO-4', 'A4', 'Lab Startup'),
 (11, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-2', 'A2', 'Lab Computer Vision'),
 (12, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'TI_ALPRO-6', 'B2', 'Lab Startup'),
 (13, 'TI', '2026-01-05', '13.15 - 15.15', 'Algoritma Pemrograman', 'Siska Anraeni, S.Kom.,M.T.,MCF.', 'TI_ALPRO-7', 'B3', 'Lab IoT'),
@@ -335,10 +345,7 @@ INSERT INTO `jadwalupk` (`id`, `prodi`, `tanggal`, `jam`, `mata_kuliah`, `dosen`
 (55, 'TI', '2026-01-09', '08.00 - 10.00', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-2', 'A2', 'Lab Microcontroller'),
 (56, 'TI', '2026-01-09', '10.15 - 12.15', 'Microcontroller', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', 'TI_MICRO-3', 'A3', 'Lab Microcontroller'),
 (57, 'TI', '2026-01-09', '13.15 - 15.15', 'Microcontroller', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-8', 'A7', 'Lab Microcontroller'),
-(58, 'TI', '2026-01-09', '16.00 - 18.00', 'Microcontroller', 'Tasrif Hasanuddin, S.T., M.Cs.', 'TI_MICRO-9', 'A8', 'Lab Microcontroller'),
-(59, 'TI', '2026-01-17', '16.00 - 18.00', 'Basis Dataa', 'Ramdaniah, S.Kom., M.T.,MTA.', 'TI_ALPRO-2', 'A', 'Lab Microcontroller'),
-(60, 'TI', '2026-01-17', '10.15 - 12.15', 'bababab', 'Andi Widya Mufila Gaffar, S.T., M.Kom.,MTA.', 'TI_MICRO-12', 'A1', 'Lab Computer Vision'),
-(61, 'TI', '2026-01-17', '13.15 - 15.15', 'Pemrograman Mobile', 'Muhammad Arfah Asis, S.Kom., M.T.,MTA.', '', 'B1', 'Laboratorium Microcontroler');
+(58, 'TI', '2026-01-09', '16.00 - 18.00', 'Microcontroller', 'Tasrif Hasanuddin, S.T., M.Cs.', 'TI_MICRO-9', 'A8', 'Lab Microcontroller');
 
 -- --------------------------------------------------------
 
@@ -448,6 +455,7 @@ CREATE TABLE `manajemen` (
   `nama` varchar(100) NOT NULL,
   `nidn` varchar(20) DEFAULT NULL,
   `jabatan` varchar(100) DEFAULT NULL,
+  `tentang` text DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -456,11 +464,11 @@ CREATE TABLE `manajemen` (
 -- Dumping data untuk tabel `manajemen`
 --
 
-INSERT INTO `manajemen` (`idManajemen`, `nama`, `nidn`, `jabatan`, `email`, `foto`) VALUES
-(1, 'Ir. Abdul Rachman Manga\', S.Kom., M.T., MTA., MCF', '0931018001', 'Kepala Laboratorium Jaringan Dan Pemrograman', 'abdulrachman.manga@umi.ac.id', 'manajemen/manajemen_ir-abdul-rachman-manga-s-kom-m-t-mta-mcf_1768640672_324.jpg'),
-(5, 'Ir. Huzain Azis, S.Kom., M.Cs. MTA', '0920098801', 'Kepala Laboratorium Komputasi Dasar', 'huzain.azis@umi.ac.id', 'manajemen/manajemen_ir-huzain-azis-s-kom-m-cs-mta_1768640702_175.jpg'),
-(6, 'Herdianti, S.Si., M.Eng., MTA.', '0924069001', 'Kepala Laboratorium Riset', 'herdianti.darwis@umi.ac.id', 'manajemen/manajemen_herdianti-s-si-m-eng-mta_1768640724_134.jpg'),
-(7, 'Fatimah AR. Tuasamu, S.Kom., MTA, MOS', '-', 'Laboran', 'fatimahar@umi.ac.id', 'manajemen/manajemen_fatimah-ar-tuasamu-s-kom-mta-mos_1768640737_655.jpg');
+INSERT INTO `manajemen` (`idManajemen`, `nama`, `nidn`, `jabatan`, `tentang`, `email`, `foto`) VALUES
+(1, 'Ir. Abdul Rachman Manga\', S.Kom., M.T., MTA., MCF', '0931018001', 'Kepala Laboratorium Jaringan Dan Pemrograman', 'Ir. Abdul Rachman Manga, S.Kom., M.T., MCF adalah salah satu dosen tetap Badan Wakaf UMI pada Fakultas Ilmu Komputer, Universitas Muslim Indonesia (UMI) Makassar sejak tahun 2009 sampai sekarang. ', 'abdulrachman.manga@umi.ac.id', 'manajemen/manajemen_ir-abdul-rachman-manga-s-kom-m-t-mta-mcf_1768640672_324.jpg'),
+(5, 'Ir. Huzain Azis, S.Kom., M.Cs. MTA', '0920098801', 'Kepala Laboratorium Komputasi Dasar', 'Kepala Laboratorium Komputasi Dasar dengan dedikasi tinggi dalam pengembangan kurikulum dan pelatihan praktikum dasar komputer. Fokus pada peningkatan kualitas pembelajaran.', 'huzain.azis@umi.ac.id', 'manajemen/manajemen_ir-huzain-azis-s-kom-m-cs-mta_1768640702_175.jpg'),
+(6, 'Herdianti, S.Si., M.Eng., MTA.', '0924069001', 'Kepala Laboratorium Riset', 'Kepala Laboratorium Riset dengan portofolio penelitian yang kuat di bidang pengolahan citra digital dan machine learning.', 'herdianti.darwis@umi.ac.id', 'manajemen/manajemen_herdianti-s-si-m-eng-mta_1768640724_134.jpg'),
+(7, 'Fatimah AR. Tuasamu, S.Kom., MTA, MOS', '-', 'Laboran', 'Pranata Laboratorium yang bertugas mengelola administrasi, peralatan, dan fasilitas laboratorium untuk mendukung kegiatan akademik.', 'fatimahar@umi.ac.id', 'manajemen/manajemen_fatimah-ar-tuasamu-s-kom-mta-mos_1768640737_655.jpg');
 
 -- --------------------------------------------------------
 
@@ -523,14 +531,14 @@ INSERT INTO `modul` (`id_modul`, `jurusan`, `nama_matakuliah`, `judul`, `deskrip
 (12, 'SI', 'Desain Grafis', 'Modul Desain Grafis', '', '696a5a7a971a7.pdf', '2026-01-16 15:34:18'),
 (13, 'SI', 'Multimedia System', 'Modul Multimedia System', '', '696a5aa19be94.pdf', '2026-01-16 15:34:57'),
 (14, 'SI', 'Pemrograman Mobile', 'Modul Pemrograman Mobile', '', '696a5abb7e90f.pdf', '2026-01-16 15:35:23'),
-(15, 'TI', 'Algoritma dan Pemrograman I', 'Modul Algoritma dan Pemrograman I', '', '696a5b2b0949c.pdf', '2026-01-16 15:37:15'),
+(15, 'SI', 'Algoritma dan Pemrograman I', 'Modul Algoritma dan Pemrograman I', '', '696a5b2b0949c.pdf', '2026-01-16 15:37:15'),
 (16, 'TI', 'Basis Data II', 'Modul Basis Data II', '', '696a5b40a4123.pdf', '2026-01-16 15:37:36'),
 (17, 'TI', 'Microcontroller', 'Modul Microcontroller', '', '696a5b5c8fe3c.pdf', '2026-01-16 15:38:04'),
 (18, 'TI', 'Pemrograman Mobile', 'Modul Pemrograman Mobile', '', '696a5b729aeac.pdf', '2026-01-16 15:38:26'),
 (19, 'TI', 'Pengantar Teknologi Informasi', 'Modul Pengantar Teknologi Informasi', '', '696a5b8c9fda3.pdf', '2026-01-16 15:38:52'),
 (20, 'TI', 'Stuktur Data', 'Modul Stuktur Data', '', '696a5ba361e29.pdf', '2026-01-16 15:39:15'),
-(21, 'TI', 'Algoritma dan Pemrograman II', 'Modul Algoritma dan Pemrograman II', '', '696a5bccf18a3.pdf', '2026-01-16 15:39:56'),
-(22, 'TI', 'Basis Data I', 'Modul Basis Data I', '', '696a5be0db37f.pdf', '2026-01-16 15:40:16'),
+(21, 'SI', 'Algoritma dan Pemrograman II', 'Modul Algoritma dan Pemrograman II', '', '696a5bccf18a3.pdf', '2026-01-16 15:39:56'),
+(22, 'SI', 'Basis Data I', 'Modul Basis Data I', '', '696a5be0db37f.pdf', '2026-01-16 15:40:16'),
 (23, 'TI', 'Elektronika Dasar', 'Modul Elektronika Dasar', '', '696a5bfd939b2.pdf', '2026-01-16 15:40:45'),
 (24, 'TI', 'Jaringan Komputer', 'Modul Jaringan Komputer', '', '696a5c11bed24.pdf', '2026-01-16 15:41:05'),
 (25, 'TI', 'Pemrograman Berorientasi Objek', 'Modul Pemrograman Berorientasi Objek', '', '696a5c2d80201.pdf', '2026-01-16 15:41:33'),
@@ -632,7 +640,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `last_login`, `created_at`) VALUES
-(5, '13020230100@student.umi.ac.id', '$2y$10$iVDxzPWLuukG7qlOxo1WFORcqFPKWD68EapvAP/Lf4ruJ6cqaMD.6', 'super_admin', '2026-01-17 16:11:39', '2026-01-09 22:25:18'),
+(5, '13020230100@student.umi.ac.id', '$2y$10$iVDxzPWLuukG7qlOxo1WFORcqFPKWD68EapvAP/Lf4ruJ6cqaMD.6', 'super_admin', '2026-01-22 23:11:52', '2026-01-09 22:25:18'),
 (6, '13020230217@student.umi.ac.id', '$2y$10$khY/qBg0XaAE/x0apN54CuiPJeYczQVAvEPd4qJDK13hBEe7DIDh2', 'admin', '2026-01-16 23:00:47', '2026-01-09 22:26:27'),
 (7, '13020230187@student.umi.ac.id', '$2y$10$FhUh8hCCg6noMBFw.YEsLuVuzUa.4jSNDVJgk3Q6oCJBD0k058ugi', 'admin', '2026-01-09 22:33:44', '2026-01-09 22:28:15'),
 (8, 'superadmin@student.umi.ac.id', '$2y$10$UzYX.F.BjuMC8s1nsl/1pe0l9j6tO1Go2hIaxAwvSo0nOw.PCA7WG', 'super_admin', '2026-01-10 11:32:04', '2026-01-09 22:35:55');
@@ -754,7 +762,7 @@ ALTER TABLE `alumni`
 -- AUTO_INCREMENT untuk tabel `asisten`
 --
 ALTER TABLE `asisten`
-  MODIFY `idAsisten` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `idAsisten` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT untuk tabel `format_penulisan`
@@ -772,13 +780,13 @@ ALTER TABLE `integrsiweb`
 -- AUTO_INCREMENT untuk tabel `jadwalpraktikum`
 --
 ALTER TABLE `jadwalpraktikum`
-  MODIFY `idJadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=365;
+  MODIFY `idJadwal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=425;
 
 --
 -- AUTO_INCREMENT untuk tabel `jadwalupk`
 --
 ALTER TABLE `jadwalupk`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT untuk tabel `laboratorium`
@@ -808,25 +816,25 @@ ALTER TABLE `matakuliah`
 -- AUTO_INCREMENT untuk tabel `modul`
 --
 ALTER TABLE `modul`
-  MODIFY `id_modul` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_modul` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT untuk tabel `peraturan_lab`
 --
 ALTER TABLE `peraturan_lab`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `sanksi_lab`
 --
 ALTER TABLE `sanksi_lab`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `sop`
 --
 ALTER TABLE `sop`
-  MODIFY `id_sop` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_sop` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`

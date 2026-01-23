@@ -74,7 +74,7 @@ $isAdminArea = (strpos($uri_clean, '/admin') !== false) || (strpos($uri_clean, '
 if ($isAdminArea) {
 
     if (!isset($_SESSION['status']) || $_SESSION['status'] != "login") {
-        header("Location: " . PUBLIC_URL . "/pintuSISDA");
+        header("Location: " . PUBLIC_URL . "/iclabs-login");
         exit;
     }
 
@@ -127,7 +127,6 @@ $aliases = [
     'kontak'         => 'contact',
     'hubungi'        => 'contact',
     'daftar-asisten' => 'asisten',
-    // UPDATE: Alias untuk denah
     'peta'           => 'denah',
     'floorplan'      => 'denah'
 ];
@@ -255,7 +254,7 @@ if (array_key_exists($page, $direct_views)) {
 
 $mvc_routes = [
     'contact'          => ['ContactController', 'index', []],
-    'pintuSISDA'       => ['AuthController', 'login', []],
+    'iclabs-login'       => ['AuthController', 'login', []],
     'auth'             => ['AuthController', 'authenticate', []],
     'logout'           => ['AuthController', 'logout', []],
 

@@ -6,7 +6,7 @@ class FormatPenulisanModel extends Model {
     protected $primaryKey = 'id_format';
 
     public function getAllFormat() {
-        $query = "SELECT * FROM {$this->table} ORDER BY kategori ASC, urutan ASC";
+        $query = "SELECT * FROM {$this->table} ORDER BY kategori ASC, tanggal_update DESC";
         $result = $this->db->query($query);
         return ($result) ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
