@@ -86,7 +86,8 @@ class ManajemenController extends Controller {
                     'nama' => $_POST['nama'] ?? '',
                     'email' => $_POST['email'] ?? '',
                     'nidn' => $_POST['nidn'] ?? null,
-                    'jabatan' => $_POST['jabatan'] ?? ''
+                    'jabatan' => $_POST['jabatan'] ?? '',
+                    'tentang' => $_POST['tentang'] ?? ''
                 ];
 
                 $required = ['nama', 'email', 'jabatan'];
@@ -159,7 +160,8 @@ class ManajemenController extends Controller {
                     'nama' => $_POST['nama'] ?? $existing['nama'],
                     'email' => $_POST['email'] ?? $existing['email'],
                     'nidn' => $_POST['nidn'] ?? $existing['nidn'],
-                    'jabatan' => $_POST['jabatan'] ?? $existing['jabatan']
+                    'jabatan' => $_POST['jabatan'] ?? $existing['jabatan'],
+                    'tentang' => $_POST['tentang'] ?? $existing['tentang'] ?? ''
                 ];
             } else {
                 $input = $_POST;
@@ -234,5 +236,28 @@ class ManajemenController extends Controller {
             $this->success([], 'Manajemen deleted successfully');
         }
         $this->error('Failed to delete manajemen', null, 500);
+    }
+
+    /**
+     * Public Display Methods (from KepalaLabController)
+     */
+    
+    /**
+     * Halaman publik daftar kepala lab
+     */
+    public function kepalaIndex($params = []) {
+        $all = $this->model->getAll();
+        $data = ['manajemen' => $all];
+        $this->view('sumberdaya/kepala', $data);
+    }
+    
+    /**
+     * Detail profil pimpinan/laboran (legacy view, MVC route)
+     */
+    public function kepalaDetail($params = []) {
+        if (!empty($params['id'])) {
+            $_GET['id'] = $params['id'];
+        }
+        $this->view('sumberdaya/detail-asisten');
     }
 }

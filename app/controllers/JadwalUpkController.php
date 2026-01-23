@@ -4,7 +4,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class JadwalUpkController extends Controller {
 
     public function model($model) {
-        require_once '../app/models/' . $model . '.php';
+        if (defined('MODEL_PATH')) {
+            require_once MODEL_PATH . '/' . $model . '.php';
+        } else {
+            require_once dirname(__DIR__) . '/models/' . $model . '.php';
+        }
         return new $model;
     }
 
@@ -14,7 +18,7 @@ class JadwalUpkController extends Controller {
         $this->view('praktikum/jadwalupk', $data);
     }
 
-    public function admin_index() {
+    public function adminIndex() {
         $data['judul'] = 'Kelola Jadwal UPK';
         
         // PASTI KAN baris ini ada untuk mengambil data dari DB
@@ -25,18 +29,34 @@ class JadwalUpkController extends Controller {
     }
 
     public function upload() {
-        if (isset($_FILES['file_import']['tmp_name'])) {
-            $file = $_FILES['file_import'];
-            $filename = $file['name'];
-            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        // Bersihkan output buffer untuk mencegah karakter sampah
+        while (ob_get_level()) { ob_end_clean(); }
+        
+        // Set header JSON respons jika dipanggil via AJAX
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strpos($_SERVER['REQUEST_URI'], 'api.php') !== false || isset($_FILES['excel_file']);
+        
+        if ($isAjax) {
+            header('Content-Type: application/json; charset=utf-8');
+        }
 
-            if ($ext === 'csv') {
-                if ($this->model('JadwalUpkModel')->importCSV($file['tmp_name'])) {
-                    header('Location: ' . PUBLIC_URL . '/admin/jadwalupk');
-                    exit;
-                }
-            } elseif ($ext === 'xlsx' || $ext === 'xls') {
-                try {
+        $fileKey = isset($_FILES['excel_file']) ? 'excel_file' : (isset($_FILES['file_import']) ? 'file_import' : null);
+
+        if ($fileKey && isset($_FILES[$fileKey]['tmp_name'])) {
+            $file = $_FILES[$fileKey];
+            $filename = $file['name'];
+            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+            try {
+                if ($ext === 'csv') {
+                    if ($this->model('JadwalUpkModel')->importCSV($file['tmp_name'])) {
+                        if ($isAjax) {
+                            echo json_encode(['status' => 'success', 'message' => 'Data CSV berhasil diimpor']);
+                            exit;
+                        }
+                        header('Location: ' . PUBLIC_URL . '/admin/jadwalupk');
+                        exit;
+                    }
+                } elseif ($ext === 'xlsx' || $ext === 'xls') {
                     $spreadsheet = IOFactory::load($file['tmp_name']);
                     $worksheet = $spreadsheet->getActiveSheet();
                     $dataImport = [];
@@ -51,8 +71,6 @@ class JadwalUpkController extends Controller {
 
                         if (empty(array_filter($rowData))) continue;
 
-                        // Mapping based on common format: No, Prodi, Tanggal, Jam, MK, Dosen, Freq, Kelas, Ruangan
-                        // Assuming Column A (index 0) is "No", so we start from index 1
                         $dataImport[] = [
                             'prodi'       => trim($rowData[1] ?? ''),
                             'tanggal'     => date('Y-m-d', strtotime(trim($rowData[2] ?? ''))),
@@ -67,16 +85,31 @@ class JadwalUpkController extends Controller {
 
                     if (!empty($dataImport)) {
                         if ($this->model('JadwalUpkModel')->importData($dataImport)) {
+                            if ($isAjax) {
+                                echo json_encode(['status' => 'success', 'message' => 'Data Excel berhasil diimpor']);
+                                exit;
+                            }
                             header('Location: ' . PUBLIC_URL . '/admin/jadwalupk');
                             exit;
                         }
                     }
-                } catch (Exception $e) {
-                    // Log error if needed
-                    header('Location: ' . PUBLIC_URL . '/admin/jadwalupk?error=' . urlencode($e->getMessage()));
+                }
+                throw new Exception("Gagal memproses file atau format tidak didukung.");
+            } catch (Exception $e) {
+                if ($isAjax) {
+                    http_response_code(400);
+                    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
                     exit;
                 }
+                header('Location: ' . PUBLIC_URL . '/admin/jadwalupk?error=' . urlencode($e->getMessage()));
+                exit;
             }
+        }
+        
+        if ($isAjax) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Tidak ada file yang diunggah']);
+            exit;
         }
         header('Location: ' . PUBLIC_URL . '/admin/jadwalupk');
         exit;

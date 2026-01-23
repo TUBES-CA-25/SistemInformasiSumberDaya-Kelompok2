@@ -2,6 +2,14 @@
 
 class SopController extends Controller {
     
+    /**
+     * Admin Index - Kelola SOP Laboratorium
+     */
+    public function adminIndex() {
+        $data['judul'] = 'Kelola SOP Laboratorium';
+        $this->view('admin/sop/index', $data);
+    }
+    
     // Ini fungsi "Router" di dalam Controller
     // Karena index.php mengarahkan semua '/sop' ke sini, kita harus pilah requestnya.
     public function index() {
@@ -13,7 +21,7 @@ class SopController extends Controller {
             $data['active_page'] = 'sop';
             
             // Load Model Manual
-            require_once '../app/models/SopModel.php';
+            require_once ROOT_PROJECT . '/app/models/SopModel.php';
             $sopModel = new SopModel();
             $data['sop_list'] = $sopModel->getAllSop();
             
@@ -44,7 +52,7 @@ class SopController extends Controller {
     // --- API Methods ---
 
     public function getJson() {
-        require_once '../app/models/SopModel.php';
+        require_once ROOT_PROJECT . '/app/models/SopModel.php';
         $sopModel = new SopModel();
         $data = $sopModel->getAllSop();
         
@@ -64,7 +72,7 @@ class SopController extends Controller {
         header('Content-Type: application/json; charset=utf-8');
         
         try {
-            require_once '../app/models/SopModel.php';
+            require_once ROOT_PROJECT . '/app/models/SopModel.php';
             $sopModel = new SopModel();
             
             // Debug log
@@ -105,7 +113,7 @@ class SopController extends Controller {
         header('Content-Type: application/json; charset=utf-8');
         
         try {
-            require_once '../app/models/SopModel.php';
+            require_once ROOT_PROJECT . '/app/models/SopModel.php';
             $sopModel = new SopModel();
             
             if (empty($_POST['id_sop'])) {
@@ -140,7 +148,7 @@ class SopController extends Controller {
         $segments = explode('/', rtrim($url, '/'));
         $id = end($segments);
 
-        require_once '../app/models/SopModel.php';
+        require_once ROOT_PROJECT . '/app/models/SopModel.php';
         $sopModel = new SopModel();
 
         if ($sopModel->deleteSop($id) > 0) {

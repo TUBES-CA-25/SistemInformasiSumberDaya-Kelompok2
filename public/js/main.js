@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault(); // Mencegah shortcut bawaan browser
         
         console.log('Shortcut detected! Redirecting to login...');
-        window.location.href = 'pintuSISDA'; 
+        window.location.href = '/iclabs-login'; 
     }
   });
 
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (clickCount === 5) {
         clickCount = 0;
-        window.location.href = 'pintuSISDA';
+        window.location.href = '/iclabs-login';
       }
     }, true); // Use capture phase for extra precision
     

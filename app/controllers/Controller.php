@@ -32,11 +32,18 @@ class Controller {
             }
         }
         
-        // Tentukan layout berdasarkan route
+        // Tentukan layout berdasarkan route - multiple detection methods
         $route = $_GET['route'] ?? '';
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '';
         $routePath = ltrim($route, '/');
-        // Robust admin detection: by route or by view path prefix
-        $isAdmin = (strpos($routePath, 'admin/') === 0) || ($routePath === 'admin') || (strpos($view, 'admin/') === 0);
+        
+        // Robust admin detection: check route param, REQUEST_URI, or view path
+        $isAdmin = (strpos($routePath, 'admin/') === 0) || 
+                   ($routePath === 'admin') || 
+                   (strpos($requestUri, '/admin') !== false) ||
+                   (strpos($requestUri, '/dashboard') !== false) ||
+                   (strpos($view, 'admin/') === 0);
+        
         $isApi = strpos($routePath, 'api/') === 0;
         
         if ($isApi) {

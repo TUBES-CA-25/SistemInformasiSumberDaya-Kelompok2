@@ -44,26 +44,31 @@ try {
         if ($row) {
             $isKepala = stripos(($row['jabatan'] ?? ''), 'Kepala') !== false;
             
-            // --- INPUT MANUAL BIO (MANAJEMEN) ---
-            $manualBio = "Staff/Pimpinan aktif di Laboratorium Fakultas Ilmu Komputer UMI.";
+            // --- AMBIL BIO DARI DATABASE ATAU FALLBACK ---
+            // Prioritas 1: Gunakan field 'tentang' dari database jika ada
+            if (!empty($row['tentang'])) {
+                $manualBio = $row['tentang'];
+            } else {
+                // Prioritas 2: Gunakan bio manual sebagai fallback
+                $manualBio = "Staff/Pimpinan aktif di Laboratorium Fakultas Ilmu Komputer UMI.";
 
-            // 1. Ir. Abdul Rachman Manga'
-            if (stripos($row['nama'], 'Abdul Rachman') !== false) {
-                $manualBio = "Ir. Abdul Rachman Manga', S.Kom., M.T., MTA., MCF adalah Kepala Laboratorium Jaringan Dan Pemrograman. Beliau memiliki kepakaran mendalam di bidang infrastruktur jaringan enterprise, keamanan siber, dan rekayasa perangkat lunak.";
-            } 
-            // 2. Ir. Huzain Azis
-            elseif (stripos($row['nama'], 'Huzain Azis') !== false) {
-                                $manualBio = "Ir. Huzain Azis, S.Kom., M.Cs. MTA adalah Kepala Laboratorium Komputasi Dasar. Beliau aktif dalam penelitian bidang kecerdasan buatan dan komputasi.";
+                // 1. Ir. Abdul Rachman Manga'
+                if (stripos($row['nama'], 'Abdul Rachman') !== false) {
+                    $manualBio = "Ir. Abdul Rachman Manga', S.Kom., M.T., MTA., MCF adalah Kepala Laboratorium Jaringan Dan Pemrograman. Beliau memiliki kepakaran mendalam di bidang infrastruktur jaringan enterprise, keamanan siber, dan rekayasa perangkat lunak.";
+                } 
+                // 2. Ir. Huzain Azis
+                elseif (stripos($row['nama'], 'Huzain Azis') !== false) {
+                    $manualBio = "Ir. Huzain Azis, S.Kom., M.Cs. MTA adalah Kepala Laboratorium Komputasi Dasar. Beliau aktif dalam penelitian bidang kecerdasan buatan dan komputasi.";
+                }
+                // 3. Herdianti
+                elseif (stripos($row['nama'], 'Herdianti') !== false) {
+                    $manualBio = "Herdianti, S.Si., M.Eng., MTA. adalah Kepala Laboratorium Riset yang berfokus pada pengembangan penelitian mahasiswa dan inovasi teknologi.";
+                }
+                // 4. Fatimah AR. Tuasamu (BARU)
+                elseif (stripos($row['nama'], 'Fatimah') !== false) {
+                    $manualBio = "Fatimah AR. Tuasamu, S.Kom., MTA, MOS adalah Laboran di Fakultas Ilmu Komputer Universitas Muslim Indonesia. Beliau bertanggung jawab atas pengelolaan operasional harian laboratorium, pemeliharaan inventaris aset, serta memfasilitasi kebutuhan administrasi praktikum bagi dosen dan mahasiswa.";
+                }
             }
-            // 3. Herdianti
-            elseif (stripos($row['nama'], 'Herdianti') !== false) {
-                $manualBio = "Herdianti, S.Si., M.Eng., MTA. adalah Kepala Laboratorium Riset yang berfokus pada pengembangan penelitian mahasiswa dan inovasi teknologi.";
-            }
-            // 4. Fatimah AR. Tuasamu (BARU)
-            elseif (stripos($row['nama'], 'Fatimah') !== false) {
-                $manualBio = "Fatimah AR. Tuasamu, S.Kom., MTA, MOS adalah Laboran di Fakultas Ilmu Komputer Universitas Muslim Indonesia. Beliau bertanggung jawab atas pengelolaan operasional harian laboratorium, pemeliharaan inventaris aset, serta memfasilitasi kebutuhan administrasi praktikum bagi dosen dan mahasiswa.";
-            }
-            // ------------------------------------
             
             $badgeStyle = $isKepala 
                 ? 'background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;' 

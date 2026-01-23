@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../config/Database.php';
 
 class SopModel {
     private $table = 'sop';
@@ -16,7 +17,7 @@ class SopModel {
     }
 
     public function getAllSop() {
-        $stmt = $this->pdo->prepare("SELECT * FROM " . $this->table . " ORDER BY urutan ASC, created_at DESC");
+        $stmt = $this->pdo->prepare("SELECT * FROM " . $this->table . " ORDER BY created_at DESC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -37,9 +38,9 @@ class SopModel {
             }
 
             $query = "INSERT INTO " . $this->table . " 
-                        (judul, icon, warna, file, deskripsi, urutan) 
+                        (judul, file, deskripsi) 
                       VALUES 
-                        (:judul, :icon, :warna, :file, :deskripsi, 0)";
+                        (:judul, :file, :deskripsi)";
 
             $stmt = $this->pdo->prepare($query);
             if (!$stmt) {
@@ -47,8 +48,6 @@ class SopModel {
             }
             
             $stmt->bindValue(':judul', $data['judul']);
-            $stmt->bindValue(':icon', !empty($data['icon']) ? $data['icon'] : 'ri-file-text-line');
-            $stmt->bindValue(':warna', !empty($data['warna']) ? $data['warna'] : 'icon-blue');
             $stmt->bindValue(':file', $fileName);
             $stmt->bindValue(':deskripsi', $data['deskripsi'] ?? '');
 
@@ -72,15 +71,11 @@ class SopModel {
             // Default Query: Update tanpa ganti file
             $query = "UPDATE " . $this->table . " SET 
                         judul = :judul, 
-                        icon = :icon, 
-                        warna = :warna, 
                         deskripsi = :deskripsi 
                       WHERE id_sop = :id";
             
             $params = [
                 ':judul' => $data['judul'],
-                ':icon' => $data['icon'] ?? 'ri-file-text-line',
-                ':warna' => $data['warna'] ?? 'icon-blue',
                 ':deskripsi' => $data['deskripsi'] ?? '',
                 ':id' => $data['id_sop']
             ];
@@ -103,8 +98,6 @@ class SopModel {
                 if ($fileBaru) {
                     $query = "UPDATE " . $this->table . " SET 
                                 judul = :judul, 
-                                icon = :icon, 
-                                warna = :warna, 
                                 file = :file, 
                                 deskripsi = :deskripsi 
                               WHERE id_sop = :id";

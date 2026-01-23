@@ -38,15 +38,15 @@ class PeraturanLabController extends Controller {
     }
 
     public function adminIndex($params = []) {
-        $this->view('admin/peraturan/index');
+        $this->view('admin/peraturan_sanksi/index');
     }
 
     public function create($params = []) {
-        $this->view('admin/peraturan/form', ['action' => 'create']);
+        $this->view('admin/peraturan_sanksi/form', ['action' => 'create']);
     }
 
     public function edit($params = []) {
-        $this->view('admin/peraturan/form', ['action' => 'edit', 'id' => $params['id'] ?? null]);
+        $this->view('admin/peraturan_sanksi/form', ['action' => 'edit', 'id' => $params['id'] ?? null]);
     }
 
     public function store() {
@@ -59,9 +59,7 @@ class PeraturanLabController extends Controller {
             // Filter only database fields, ignore 'tipe' and 'id' (used for routing only)
             $input = [
                 'judul' => $_POST['judul'] ?? '',
-                'kategori' => $_POST['kategori'] ?? 'Larangan Umum',
                 'deskripsi' => $_POST['deskripsi'] ?? '',
-                'urutan' => $_POST['urutan'] ?? 0,
                 'display_format' => $_POST['display_format'] ?? 'list'
             ];
             

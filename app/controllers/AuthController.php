@@ -10,18 +10,17 @@ class AuthController extends Controller {
     }
 
     public function login() {
-        // Cek status login
-        if (isset($_SESSION['status']) && $_SESSION['status'] == 'login') {
+        // Cek status login - HANYA redirect jika SEMUA session lengkap
+        if (isset($_SESSION['status']) && $_SESSION['status'] == 'login' &&
+            isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
             $this->redirect(PUBLIC_URL . '/admin');
             return;
         }
         
-        // Bersihkan sesi residu
-        if (isset($_SESSION['user_id'])) {
-            session_unset();
-            session_destroy();
-            session_start();
-        }
+        // Bersihkan sesi yang tidak lengkap atau error
+        session_unset();
+        session_destroy();
+        session_start();
         
         $this->partial('auth/login');
     }
@@ -34,7 +33,7 @@ class AuthController extends Controller {
         // 1. Validasi Input Kosong
         if (empty($username) || empty($password)) {
             $this->setFlash('error', 'Username dan Password wajib diisi.');
-            $this->redirect(PUBLIC_URL . '/pintuSISDA');
+            $this->redirect(PUBLIC_URL . '/iclabs-login');
             return;
         }
 
@@ -57,7 +56,7 @@ class AuthController extends Controller {
             }
             */
 
-            $this->redirect(PUBLIC_URL . '/pintuSISDA');
+            $this->redirect(PUBLIC_URL . '/iclabs-login');
             return;
         }
 
@@ -90,7 +89,7 @@ class AuthController extends Controller {
         // Pesan Logout yang Elegan
         $this->setFlash('success', 'Anda telah berhasil logout dari sistem.');
         
-        header('Location: ' . PUBLIC_URL . '/pintuSISDA');
+        header('Location: ' . PUBLIC_URL . '/iclabs-login');
         exit;
     }
 }

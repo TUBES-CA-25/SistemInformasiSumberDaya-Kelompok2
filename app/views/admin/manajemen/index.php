@@ -80,6 +80,13 @@
                     <span id="detailJabatan">Jabatan</span>
                 </div>
 
+                <div id="detailTentangSection" class="w-full text-gray-600 text-sm mb-6 border-t border-gray-100 pt-4 px-2">
+                    <p class="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-blue-500"></i> Tentang
+                    </p>
+                    <p id="detailTentang" class="italic leading-relaxed">Belum ada informasi tambahan.</p>
+                </div>
+
                 <div class="w-full border-t border-gray-100 pt-4 text-center">
                     <button onclick="closeModal('detailModal')" class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors w-full">
                         Tutup
@@ -148,6 +155,14 @@
                             <input type="text" id="inputJabatan" name="jabatan" required
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                                    placeholder="Contoh: Kepala Laboratorium">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Tentang / Deskripsi Singkat</label>
+                            <textarea id="inputTentang" name="tentang" rows="3"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
+                                   placeholder="Contoh: Bertanggung jawab atas seluruh operasional laboratorium dan pengembangan kurikulum..."></textarea>
+                            <p class="text-xs text-gray-500 mt-1">Opsional - Untuk menampilkan deskripsi singkat di profil publik</p>
                         </div>
                     </div>
 
@@ -278,6 +293,7 @@ function openDetailModal(id) {
     document.getElementById('detailEmail').innerText = data.email || '';
     document.getElementById('detailNidn').innerText = data.nidn ? `NIDN: ${data.nidn}` : 'NIDN: -';
     document.getElementById('detailJabatan').innerText = data.jabatan;
+    document.getElementById('detailTentang').innerText = data.tentang || 'Belum ada informasi tambahan.';
     
     // Logika Gambar Detail
     const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.nama)}&background=random&color=fff&size=256`;
@@ -324,6 +340,7 @@ function openFormModal(id = null, event = null) {
             document.getElementById('inputEmail').value = data.email || '';
             document.getElementById('inputNidn').value = data.nidn || '';
             document.getElementById('inputJabatan').value = data.jabatan;
+            document.getElementById('inputTentang').value = data.tentang || '';
             
             // Logic Preview saat Edit
             if (data.foto) {

@@ -5,10 +5,10 @@ class AsistenModel extends Model {
     protected $table = 'asisten';
 
     /**
-     * Get all asisten sorted by urutan tampilan
+     * Get all asisten sorted by nama
      */
     public function getAll() {
-        $query = "SELECT * FROM " . $this->table . " ORDER BY urutanTampilan ASC, nama ASC";
+        $query = "SELECT * FROM " . $this->table . " ORDER BY nama ASC";
         $result = $this->db->query($query);
         return $result->fetch_all(MYSQLI_ASSOC);
     }

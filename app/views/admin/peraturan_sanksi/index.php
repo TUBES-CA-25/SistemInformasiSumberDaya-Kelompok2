@@ -62,7 +62,6 @@
                     <th class="px-6 py-4 font-semibold text-center w-16">No</th>
                     <th class="px-6 py-4 font-semibold w-48">Judul Aturan</th>
                     <th class="px-6 py-4 font-semibold text-center w-24">Tipe</th>
-                    <th class="px-6 py-4 font-semibold w-32">Kategori</th>
                     <th class="px-6 py-4 font-semibold">Deskripsi</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
                 </tr>
@@ -118,7 +117,7 @@
                     <input type="hidden" id="oldTipe">
 
                     <div class="space-y-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tipe Data <span class="text-red-500">*</span></label>
                                 <select id="inputTipe" name="tipe" required onchange="toggleTipeFields(this.value)"
@@ -127,22 +126,6 @@
                                     <option value="sanksi">Sanksi Pelanggaran</option>
                                 </select>
                             </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Urutan Tampil</label>
-                                <input type="number" id="inputUrutan" name="urutan" value="0"
-                                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none">
-                            </div>
-                        </div>
-
-                        <div id="groupKategori">
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kategori Peraturan <span class="text-red-500">*</span></label>
-                            <select id="inputKategori" name="kategori"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white">
-                                <option value="Kehadiran & Akademik">Kehadiran & Akademik</option>
-                                <option value="Standar Pakaian">Standar Pakaian</option>
-                                <option value="Larangan Umum">Larangan Umum</option>
-                                <option value="umum">Umum</option>
-                            </select>
                         </div>
 
                         <div>
@@ -224,12 +207,6 @@ async function loadAllData() {
             ...listSanksi.map(item => ({ ...item, _tipe: 'sanksi' }))
         ];
 
-        // Sort by tipe (to group them) then urutan
-        allData.sort((a, b) => {
-            if (a._tipe !== b._tipe) return a._tipe.localeCompare(b._tipe);
-            return (a.urutan || 0) - (b.urutan || 0);
-        });
-
         renderTable(allData);
 
     } catch (err) {
@@ -298,9 +275,6 @@ function renderTable(data) {
                 <td class="px-6 py-4 text-center">
                     ${typeBadge}
                 </td>
-                <td class="px-6 py-4">
-                    <span class="text-[10px] text-gray-500 font-semibold px-2 py-1 rounded-md bg-gray-100">${escapeHtml(item.kategori || (item._tipe === 'sanksi' ? 'Pelanggaran' : '-'))}</span>
-                </td>
                 <td class="px-6 py-4 text-gray-600">
                     ${finalDeskripsi}
                 </td>
@@ -334,14 +308,7 @@ function filterData() {
     renderTable(filtered);
 }
 
-function toggleTipeFields(tipe) {
-    const groupKategori = document.getElementById('groupKategori');
-    if (tipe === 'peraturan') {
-        groupKategori.classList.remove('hidden');
-    } else {
-        groupKategori.classList.add('hidden');
-    }
-}
+
 
 function openFormModal(tipe = 'peraturan', id = null) {
     const modal = document.getElementById('formModal');
@@ -370,11 +337,9 @@ function openFormModal(tipe = 'peraturan', id = null) {
             document.getElementById('inputTipe').value = data._tipe;
             document.getElementById('inputJudul').value = data.judul;
             document.getElementById('inputDeskripsi').value = data.deskripsi;
-            document.getElementById('inputUrutan').value = data.urutan || 0;
             document.getElementById('inputDisplayFormat').value = data.display_format || 'list';
             
             if (data._tipe === 'peraturan') {
-                document.getElementById('inputKategori').value = data.kategori || 'Larangan Umum';
                 toggleTipeFields('peraturan');
             } else {
                 toggleTipeFields('sanksi');
@@ -539,11 +504,6 @@ function showDetail(tipe, id) {
                         ${data._tipe === 'peraturan' ? 'Peraturan' : 'Sanksi'}
                     </span>
                 </div>
-            </div>
-
-            <div class="p-3 bg-blue-50/50 rounded-lg border border-blue-100/50">
-                <h4 class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1">Kategori</h4>
-                <p class="text-blue-800 font-semibold text-sm">${escapeHtml(data.kategori || (data._tipe === 'sanksi' ? 'Pelanggaran' : 'Umum'))}</p>
             </div>
 
             <div class="p-3 bg-purple-50/50 rounded-lg border border-purple-100/50">

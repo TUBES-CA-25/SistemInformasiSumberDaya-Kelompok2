@@ -1,5 +1,14 @@
 <?php
 class ModulController extends Controller {
+    
+    /**
+     * Admin Index - Kelola Modul Praktikum
+     */
+    public function adminIndex() {
+        $data['judul'] = 'Kelola Modul Praktikum';
+        $this->view('admin/modul/index', $data);
+    }
+
     public function index() {
         $method = $_SERVER['REQUEST_METHOD'];
         $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';

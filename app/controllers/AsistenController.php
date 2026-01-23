@@ -102,8 +102,7 @@ class AsistenController extends Controller {
                     'bio' => $_POST['bio'] ?? '',
                     'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
                     'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
-                    'isKoordinator' => $_POST['isKoordinator'] ?? '0',
-                    'urutanTampilan' => $_POST['urutanTampilan'] ?? '0'
+                    'isKoordinator' => $_POST['isKoordinator'] ?? '0'
                 ];
 
                 // Jika skills dikirim sebagai string dipisah koma, ubah ke JSON array
@@ -194,8 +193,7 @@ class AsistenController extends Controller {
                     'bio' => $_POST['bio'] ?? '',
                     'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
                     'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
-                    'isKoordinator' => $_POST['isKoordinator'] ?? '0',
-                    'urutanTampilan' => $_POST['urutanTampilan'] ?? '0'
+                    'isKoordinator' => $_POST['isKoordinator'] ?? '0'
                 ];
 
                 // Jika skills dikirim sebagai string dipisah koma, ubah ke JSON array
