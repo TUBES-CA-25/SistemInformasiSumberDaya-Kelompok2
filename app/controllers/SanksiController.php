@@ -53,7 +53,6 @@ class SanksiController extends Controller {
             $input = [
                 'judul' => $_POST['judul'] ?? '',
                 'deskripsi' => $_POST['deskripsi'] ?? '',
-                'urutan' => $_POST['urutan'] ?? 0,
                 'display_format' => $_POST['display_format'] ?? 'list'
             ];
             

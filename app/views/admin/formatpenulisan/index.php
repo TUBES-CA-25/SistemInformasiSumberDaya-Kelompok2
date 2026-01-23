@@ -38,7 +38,7 @@
             <thead>
                 <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
                     <th class="px-6 py-4 font-semibold text-center w-16">No</th>
-                    <th class="px-6 py-4 font-semibold w-64">Judul & Ikon</th>
+                    <th class="px-6 py-4 font-semibold w-64">Judul</th>
                     <th class="px-6 py-4 font-semibold">Konten / Deskripsi</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Aksi</th>
                 </tr>
@@ -72,14 +72,14 @@
                             <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-2 flex items-center gap-2">
                                 <i class="fas fa-info-circle"></i> Informasi Utama
                             </h4>
-                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-                                <div class="md:col-span-12">
+                            <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                                <div class="md:col-span-1">
                                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Judul / Nama <span class="text-red-500">*</span></label>
                                     <input type="text" id="inputJudul" name="judul" required
                                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white shadow-sm"
                                            placeholder="Contoh: Teknik Penulisan Laporan">
                                 </div>
-                                <div class="md:col-span-7">
+                                <div class="md:col-span-1">
                                     <label class="block text-sm font-semibold text-gray-700 mb-1.5">Kategori <span class="text-red-500">*</span></label>
                                     <select id="inputKategori" name="kategori" required onchange="toggleFormFields(this.value)"
                                             class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white shadow-sm font-medium">
@@ -87,50 +87,14 @@
                                         <option value="unduhan">Unduhan (File/Link Eksternal)</option>
                                     </select>
                                 </div>
-                                <div class="md:col-span-5">
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">No Urut Tampil</label>
-                                    <input type="number" id="inputUrutan" name="urutan" value="0"
-                                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white shadow-sm"
-                                           placeholder="0">
-                                </div>
                             </div>
                         </div>
 
                         <!-- Konfigurasi Pedoman -->
                         <div id="sectionPedoman" class="p-4 rounded-xl border border-gray-100 bg-gray-50/50 space-y-4">
                             <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-                                <i class="fas fa-palette"></i> Tampilan Card
+                                <i class="fas fa-palette"></i> Konten Pedoman
                             </h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">
-                                        Icon (Remix Icon) 
-                                        <a href="https://remixicon.com/" target="_blank" class="text-[10px] text-blue-500 hover:underline font-normal ml-1">
-                                            <i class="ri-external-link-line"></i> Cari Icon
-                                        </a>
-                                    </label>
-                                    <div class="relative">
-                                        <input type="text" id="inputIcon" name="icon" onkeyup="updateIconPreview(this.value)"
-                                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none pr-10"
-                                               placeholder="ri-book-line">
-                                        <div class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-gray-100 rounded text-gray-600">
-                                            <i id="previewIcon" class="ri-question-line text-lg"></i>
-                                        </div>
-                                    </div>
-                                    <p class="text-[10px] text-gray-500 mt-1 italic">Contoh: ri-layout-line, ri-pencil-line</p>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1.5">Warna Aksen Icon</label>
-                                    <select id="inputWarna" name="warna" 
-                                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none">
-                                        <option value="icon-blue">Biru (Default)</option>
-                                        <option value="icon-pink">Merah Muda</option>
-                                        <option value="icon-red">Merah</option>
-                                        <option value="icon-orange">Oranye</option>
-                                        <option value="icon-emerald">Hijau (Emerald)</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">Deskripsi / Konten <span class="text-xs font-normal text-gray-400 font-italic">(Enter = Poin baru)</span></label>
                                 <textarea id="inputDeskripsi" name="deskripsi" rows="5" 
@@ -283,8 +247,6 @@ function renderTable(data) {
                         <span class="px-1.5 py-0.5 rounded ${isPedoman ? 'bg-blue-50 text-blue-600' : 'bg-green-50 text-green-600'}">
                             ${isPedoman ? 'Pedoman' : 'Unduhan'}
                         </span>
-                        | Urutan: ${item.urutan} 
-                        ${isPedoman ? `| <i class="${item.icon}"></i> ${item.warna}` : ''}
                     </div>
                 </td>
                 <td class="px-6 py-4 text-xs text-gray-600">
@@ -325,10 +287,7 @@ function openFormModal(id = null) {
         if (data) {
             document.getElementById('inputId').value = data.id_format;
             document.getElementById('inputJudul').value = data.judul;
-            document.getElementById('inputUrutan').value = data.urutan;
             document.getElementById('inputKategori').value = data.kategori || 'pedoman';
-            document.getElementById('inputIcon').value = data.icon || '';
-            document.getElementById('inputWarna').value = data.warna || 'icon-blue';
             document.getElementById('inputDeskripsi').value = data.deskripsi || '';
             document.getElementById('inputLink').value = data.link_external || '';
             

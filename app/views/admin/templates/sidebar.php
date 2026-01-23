@@ -4,7 +4,7 @@
         <div class="flex items-center gap-3">
             <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.png" alt="Logo" style="height: 50px; object-fit: contain;">
             <div>
-                <h1 class="text-white font-bold text-lg tracking-wide">SISTEM LAB</h1>
+                <h1 class="text-white font-bold text-lg tracking-wide">SISTEM IC-LABS</h1>
                 <p class="text-xs text-slate-400 font-medium">Administrator</p>
             </div>
         </div>
@@ -68,7 +68,7 @@
                        class="<?= $active ? 'text-emerald-400 font-semibold' : 'text-slate-400 hover:text-white' ?> block py-2 pl-4 text-sm transition-colors relative"
                        data-active="<?= $active ? 'true' : 'false' ?>">
                        <?php if($active): ?><span class="absolute -left-[21px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span><?php endif; ?>
-                       Struktur Organisasi
+                       Pimpinan
                     </a>
                 </li>
 

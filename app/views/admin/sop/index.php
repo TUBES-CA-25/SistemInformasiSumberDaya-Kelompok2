@@ -61,29 +61,6 @@
                                    placeholder="Contoh: SOP Peminjaman Alat">
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Icon (Remix Icon)</label>
-                                <div class="relative">
-                                    <input type="text" id="inputIcon" name="icon" onkeyup="updateIconPreview(this.value)"
-                                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none pr-10"
-                                           placeholder="ri-file-list-3-line">
-                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600">
-                                        <i id="previewIcon" class="ri-question-line text-lg"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Warna Icon</label>
-                                <select id="inputWarna" name="warna" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none">
-                                    <option value="icon-blue">Biru</option>
-                                    <option value="icon-red">Merah</option>
-                                    <option value="icon-orange">Oranye</option>
-                                    <option value="icon-emerald">Hijau</option>
-                                </select>
-                            </div>
-                        </div>
-
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Upload File PDF</label>
                             <input type="file" id="inputFile" name="file" accept=".pdf"
@@ -167,15 +144,7 @@ function renderTable() {
             <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
                 <td class="px-6 py-4 text-center font-medium text-gray-400 text-xs">${index + 1}</td>
                 <td class="px-6 py-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-                            <i class="${item.icon || 'ri-file-text-line'} text-lg"></i>
-                        </div>
-                        <div>
-                            <div class="font-bold text-gray-800 text-sm">${escapeHtml(item.judul)}</div>
-                            <div class="text-[10px] text-gray-400">Warna: ${item.warna || 'Default'}</div>
-                        </div>
-                    </div>
+                    <div class="font-bold text-gray-800 text-sm">${escapeHtml(item.judul)}</div>
                 </td>
                 <td class="px-6 py-4">
                     ${item.file ? 
@@ -210,7 +179,6 @@ function openFormModal(id = null) {
     form.reset();
     document.getElementById('inputId').value = '';
     document.getElementById('currentFile').classList.add('hidden');
-    updateIconPreview('');
 
     if (id) {
         document.getElementById('formModalTitle').innerText = 'Edit SOP';
@@ -219,10 +187,8 @@ function openFormModal(id = null) {
         if (data) {
             document.getElementById('inputId').value = data.id_sop;
             document.getElementById('inputJudul').value = data.judul;
-            document.getElementById('inputIcon').value = data.icon || '';
-            document.getElementById('inputWarna').value = data.warna || 'icon-blue';
+
             document.getElementById('inputDeskripsi').value = data.deskripsi || '';
-            updateIconPreview(data.icon);
             
             if (data.file) {
                 document.getElementById('currentFile').classList.remove('hidden');
@@ -301,10 +267,6 @@ function deleteData(id) {
 
 function closeModal() {
     document.getElementById('formModal').classList.add('hidden');
-}
-
-function updateIconPreview(val) {
-    document.getElementById('previewIcon').className = val ? val : 'ri-question-line';
 }
 
 function escapeHtml(text) {

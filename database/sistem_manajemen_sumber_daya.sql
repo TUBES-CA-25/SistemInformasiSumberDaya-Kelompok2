@@ -38,44 +38,43 @@ CREATE TABLE `alumni` (
   `keahlian` text DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `urutanTampilan` int(11) DEFAULT 0
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `alumni`
 --
 
-INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `mata_kuliah`, `foto`, `kesan_pesan`, `keahlian`, `email`, `created_at`, `updated_at`, `urutanTampilan`) VALUES
-(18, 'Arisa Tien Hardianti, S.Kom', '2020', 'Asisten', 'Basis Data I', NULL, '', 'Basis Data, SQL, Pengajaran', '', '2026-01-08 15:23:35', '2026-01-10 11:30:22', 0),
-(19, 'Syartina Elfarika Basri, S.Kom', '2020', 'Asisten', '[\"Pemrograman Dasar\"]', NULL, '', '[\"Web Development\",\"Javascript\",\"PHP\",\"Laravel\",\"Tailwind CSS\"]', '', '2026-01-17 01:04:43', '2026-01-17 01:04:43', 0),
-(20, 'Irwan Ardyansyah, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Internet of Things (IoT)\",\"Arduino\"]', '', '2026-01-17 01:07:16', '2026-01-17 01:07:16', 0),
-(21, 'Furqaan Ismail, S.Kom', '2020', 'Asisten', '[\"Pemrograman Berorientasi Objek\"]', NULL, '', '[\"java \",\"C++\"]', '', '2026-01-17 01:10:02', '2026-01-17 01:10:02', 0),
-(22, 'Rifqatul Mukarramah, S.Kom', '2020', 'Asisten', '[\"Pemrograman Berorientasi Objek\"]', NULL, '', '[\"Java\",\"C++\"]', '', '2026-01-17 01:11:02', '2026-01-17 01:11:02', 0),
-(23, 'Widyas, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\",\"MySQL\"]', '', '2026-01-17 01:12:49', '2026-01-17 01:12:49', 0),
-(24, 'Ayu Ashari Ramadhan, S.Kom', '2020', 'Asisten', '[\"Desain Grafis\"]', NULL, '', '[\"UI/UX Design\"]', '', '2026-01-17 01:13:56', '2026-01-17 01:13:56', 0),
-(25, 'Muhammad Dhiya Ulhaq, S.Kom', '2020', 'Asisten', '[\"Desain Grafis\"]', NULL, '', '[\"UI/UX Design\"]', '', '2026-01-17 01:14:37', '2026-01-17 01:14:37', 0),
-(26, 'Muh. Syawal, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\"]', '', '2026-01-17 01:15:30', '2026-01-17 01:15:30', 0),
-(27, 'Taufik Baharsyah, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Internet of Things (IoT)\",\"Arduino\"]', '', '2026-01-17 01:16:49', '2026-01-17 01:16:49', 0),
-(28, 'Muhammad Trisnandar, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\",\"Algoritma & Pemrograman\"]', NULL, '', '[\"Internet of Things (IoT)\",\"C++\"]', '', '2026-01-17 01:18:17', '2026-01-17 01:18:17', 0),
-(29, 'Yudha Islami Sulistya, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Arduino\",\"Internet of Things (IoT)\"]', '', '2026-01-17 01:19:14', '2026-01-17 01:19:14', 0),
-(30, 'Nurul A\'ayunnisa, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\"]', '', '2026-01-17 01:20:00', '2026-01-17 01:20:00', 0),
-(31, 'Ericha Apriliyani, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"MySQL\",\"Database Management\"]', '', '2026-01-17 01:20:45', '2026-01-17 01:20:45', 0),
-(32, 'Kasmira, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"MySQL\",\"Database Management\"]', '', '2026-01-17 01:21:35', '2026-01-17 01:21:35', 0),
-(33, 'M. Ikraam Ar Razaaq, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"Database Management\",\"MySQL\"]', '', '2026-01-17 01:22:38', '2026-01-17 01:22:38', 0),
-(34, 'Andi Muchlisa, S.Kom', '2020', '', '[\"Pemrograman Web\"]', NULL, '', '[\"Web Development\",\"MySQL\",\"Tailwind CSS\",\"Javascript\"]', '', '2026-01-17 01:23:38', '2026-01-17 01:23:38', 0),
-(35, 'Naufal Abiyyu Supriadi, S.Kom', '2021', 'Asisten', '[\"Microcontroller\",\"Algoritma & Pemrograman\",\"Pengantar Teknologi Informasi\",\"Pemrograman Web\",\"Elektronika Dasar\",\"Jaringan Komputer\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_naufal-abiyyu-supriadi-s-kom_1768631335_337.png', '', '[\"Arduino\",\"Internet of Things (IoT)\",\"C++\"]', '', '2026-01-17 14:28:55', '2026-01-17 14:43:14', 0),
-(36, 'Nasrullah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Pengantar Teknologi Informasi\",\"Struktur Data\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_nasrullah-s-kom_1768631585_930.png', '', '[\"Laravel\",\"PHP\",\"Web Development\",\"MySQL\",\"Database Management\",\"Data Science\",\"Machine Learning\",\"Artificial Intelligence\"]', '', '2026-01-17 14:33:05', '2026-01-17 14:40:37', 0),
-(37, 'Furqon Fatahillah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pengatar Teknologi Informasi\",\"Pemrograman Berorientasi Objek\",\"Pemrograman Web\",\"Design Grafis\",\"Multemedia System\",\"Pemrograman Mobile\"]', 'alumni/alumni_furqon-fatahillah-s-kom_1768631762_255.png', '', '[\"Web Development\",\"PHP\",\"Tailwind CSS\",\"Laravel\",\"Javascript\"]', '', '2026-01-17 14:36:02', '2026-01-17 14:42:14', 0),
-(38, 'Nurul Azmi, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Struktur Data\",\"Pengantar Teknologi Informasi\",\"Basis Data\",\"Sistem dan Teknologi Informasi\",\"Elektronika Dasar\",\"Jaringan Komputer\"]', 'alumni/alumni_nurul-azmi-s-kom_1768631991_953.png', '', '[\"Database Management\",\"Cisco\",\"C++\"]', '', '2026-01-17 14:39:51', '2026-01-17 14:39:51', 0),
-(39, 'Ahmad Rendi, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Microcontroller\",\"Struktur Data\",\"Pemrograman Web\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_ahmad-rendi-s-kom_1768632508_800.png', '', '[\"Java\",\"c++\",\"Web Development\",\"Android Studio\"]', '', '2026-01-17 14:48:28', '2026-01-17 14:48:28', 0),
-(40, 'As\'syahrin Nanda, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Pengantar Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_as-syahrin-nanda-s-kom_1768632688_557.png', '', '[\"Web Development\",\"Laravel\",\"PHP\",\"Tailwind CSS\",\"Javascript\",\"Database Management\",\"MySQL\"]', '', '2026-01-17 14:51:28', '2026-01-17 14:51:44', 0),
-(41, 'Annisa Pratama Putri, S.Kom', '2021', 'Asisten', '[\"Pengenalan Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_annisa-pratama-putri-s-kom_1768632945_437.png', '', '[\"C++\",\"MySQL\"]', '', '2026-01-17 14:55:45', '2026-01-17 14:55:45', 0),
-(42, 'Nirmala, S.Kom', '2021', '', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Aplikasi Akuntansi\",\"Pemrograman Berorientasi Objek\",\"Pemrograman Web\"]', 'alumni/alumni_nirmala-s-kom_1768633199_598.png', '', '[\"C++\",\"MySQL\",\"Laravel\",\"PHP\",\"Javascript\",\"Bootstrap\"]', '', '2026-01-17 14:59:59', '2026-01-17 14:59:59', 0),
-(43, 'Athar Fathana Rakasyah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Struktur Data\"]', 'alumni/alumni_athar-fathana-rakasyah-s-kom_1768633408_284.png', '', '[\"MySQL\",\"C++\",\"Javascript\",\"PHP\",\"Laravel\",\"Bootstrap\",\"Database Management\"]', '', '2026-01-17 15:02:49', '2026-01-17 15:03:28', 0),
-(44, 'Muhammad Dani Arya Putra, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pengenalan Teknologi Informasi\",\"Aplikasi Akuntansi\",\"Sistem Operasi\",\"Pemrograman Berorientasi Objek\",\"Multimedia System\",\"Pemrograman Mobile\"]', 'alumni/alumni_muhammad-dani-arya-putra-s-kom_1768633687_530.png', '', '[\"Android Studio\",\"C++\",\"java\",\"Mobile Development\"]', '', '2026-01-17 15:08:07', '2026-01-17 15:08:07', 0),
-(45, 'Muhammad Akbar, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Mobile\",\"Pengantar Teknologi Informasi\",\"Struktur Data\",\"Sistem Operasi\"]', 'alumni/alumni_muhammad-akbar-s-kom_1768633975_214.png', '', '[\"Web Development\",\"PHP\",\"Laravel\",\"Bootstrap\",\"MySQL\",\"Database Management\",\"Mobile Development\",\"Tailwind CSS\",\"React\"]', '', '2026-01-17 15:12:55', '2026-01-17 15:12:55', 0),
-(46, 'Imran Afdillah Dahlan, S.Kom', '2021', 'Asisten', '[\"Jaringan Komputer\",\"Basis Data\",\"Pengantar Teknologi Informasi\",\"Sistem dan Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_imran-afdillah-dahlan-s-kom_1768634238_596.png', '', '[\"Network Engineer\",\"Cisco\"]', '', '2026-01-17 15:17:18', '2026-01-17 15:17:18', 0);
+INSERT INTO `alumni` (`id`, `nama`, `angkatan`, `divisi`, `mata_kuliah`, `foto`, `kesan_pesan`, `keahlian`, `email`, `created_at`, `updated_at`) VALUES
+(18, 'Arisa Tien Hardianti, S.Kom', '2020', 'Asisten', 'Basis Data I', NULL, '', 'Basis Data, SQL, Pengajaran', '', '2026-01-08 15:23:35', '2026-01-10 11:30:22'),
+(19, 'Syartina Elfarika Basri, S.Kom', '2020', 'Asisten', '[\"Pemrograman Dasar\"]', NULL, '', '[\"Web Development\",\"Javascript\",\"PHP\",\"Laravel\",\"Tailwind CSS\"]', '', '2026-01-17 01:04:43', '2026-01-17 01:04:43'),
+(20, 'Irwan Ardyansyah, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Internet of Things (IoT)\",\"Arduino\"]', '', '2026-01-17 01:07:16', '2026-01-17 01:07:16'),
+(21, 'Furqaan Ismail, S.Kom', '2020', 'Asisten', '[\"Pemrograman Berorientasi Objek\"]', NULL, '', '[\"java \",\"C++\"]', '', '2026-01-17 01:10:02', '2026-01-17 01:10:02'),
+(22, 'Rifqatul Mukarramah, S.Kom', '2020', 'Asisten', '[\"Pemrograman Berorientasi Objek\"]', NULL, '', '[\"Java\",\"C++\"]', '', '2026-01-17 01:11:02', '2026-01-17 01:11:02'),
+(23, 'Widyas, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\",\"MySQL\"]', '', '2026-01-17 01:12:49', '2026-01-17 01:12:49'),
+(24, 'Ayu Ashari Ramadhan, S.Kom', '2020', 'Asisten', '[\"Desain Grafis\"]', NULL, '', '[\"UI/UX Design\"]', '', '2026-01-17 01:13:56', '2026-01-17 01:13:56'),
+(25, 'Muhammad Dhiya Ulhaq, S.Kom', '2020', 'Asisten', '[\"Desain Grafis\"]', NULL, '', '[\"UI/UX Design\"]', '', '2026-01-17 01:14:37', '2026-01-17 01:14:37'),
+(26, 'Muh. Syawal, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\"]', '', '2026-01-17 01:15:30', '2026-01-17 01:15:30'),
+(27, 'Taufik Baharsyah, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Internet of Things (IoT)\",\"Arduino\"]', '', '2026-01-17 01:16:49', '2026-01-17 01:16:49'),
+(28, 'Muhammad Trisnandar, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\",\"Algoritma & Pemrograman\"]', NULL, '', '[\"Internet of Things (IoT)\",\"C++\"]', '', '2026-01-17 01:18:17', '2026-01-17 01:18:17'),
+(29, 'Yudha Islami Sulistya, S.Kom', '2020', 'Asisten', '[\"Elektronika Dasar\"]', NULL, '', '[\"Arduino\",\"Internet of Things (IoT)\"]', '', '2026-01-17 01:19:14', '2026-01-17 01:19:14'),
+(30, 'Nurul A\'ayunnisa, S.Kom', '2020', 'Asisten', '[\"Algoritma & Pemrograman\"]', NULL, '', '[\"C++\"]', '', '2026-01-17 01:20:00', '2026-01-17 01:20:00'),
+(31, 'Ericha Apriliyani, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"MySQL\",\"Database Management\"]', '', '2026-01-17 01:20:45', '2026-01-17 01:20:45'),
+(32, 'Kasmira, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"MySQL\",\"Database Management\"]', '', '2026-01-17 01:21:35', '2026-01-17 01:21:35'),
+(33, 'M. Ikraam Ar Razaaq, S.Kom', '2020', 'Asisten', '[\"Basis Data\"]', NULL, '', '[\"Database Management\",\"MySQL\"]', '', '2026-01-17 01:22:38', '2026-01-17 01:22:38'),
+(34, 'Andi Muchlisa, S.Kom', '2020', '', '[\"Pemrograman Web\"]', NULL, '', '[\"Web Development\",\"MySQL\",\"Tailwind CSS\",\"Javascript\"]', '', '2026-01-17 01:23:38', '2026-01-17 01:23:38'),
+(35, 'Naufal Abiyyu Supriadi, S.Kom', '2021', 'Asisten', '[\"Microcontroller\",\"Algoritma & Pemrograman\",\"Pengantar Teknologi Informasi\",\"Pemrograman Web\",\"Elektronika Dasar\",\"Jaringan Komputer\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_naufal-abiyyu-supriadi-s-kom_1768631335_337.png', '', '[\"Arduino\",\"Internet of Things (IoT)\",\"C++\"]', '', '2026-01-17 14:28:55', '2026-01-17 14:43:14'),
+(36, 'Nasrullah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Pengantar Teknologi Informasi\",\"Struktur Data\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_nasrullah-s-kom_1768631585_930.png', '', '[\"Laravel\",\"PHP\",\"Web Development\",\"MySQL\",\"Database Management\",\"Data Science\",\"Machine Learning\",\"Artificial Intelligence\"]', '', '2026-01-17 14:33:05', '2026-01-17 14:40:37'),
+(37, 'Furqon Fatahillah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pengatar Teknologi Informasi\",\"Pemrograman Berorientasi Objek\",\"Pemrograman Web\",\"Design Grafis\",\"Multemedia System\",\"Pemrograman Mobile\"]', 'alumni/alumni_furqon-fatahillah-s-kom_1768631762_255.png', '', '[\"Web Development\",\"PHP\",\"Tailwind CSS\",\"Laravel\",\"Javascript\"]', '', '2026-01-17 14:36:02', '2026-01-17 14:42:14'),
+(38, 'Nurul Azmi, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Struktur Data\",\"Pengantar Teknologi Informasi\",\"Basis Data\",\"Sistem dan Teknologi Informasi\",\"Elektronika Dasar\",\"Jaringan Komputer\"]', 'alumni/alumni_nurul-azmi-s-kom_1768631991_953.png', '', '[\"Database Management\",\"Cisco\",\"C++\"]', '', '2026-01-17 14:39:51', '2026-01-17 14:39:51'),
+(39, 'Ahmad Rendi, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Microcontroller\",\"Struktur Data\",\"Pemrograman Web\",\"Pemrograman Berorientasi Objek\"]', 'alumni/alumni_ahmad-rendi-s-kom_1768632508_800.png', '', '[\"Java\",\"c++\",\"Web Development\",\"Android Studio\"]', '', '2026-01-17 14:48:28', '2026-01-17 14:48:28'),
+(40, 'As\'syahrin Nanda, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Pengantar Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_as-syahrin-nanda-s-kom_1768632688_557.png', '', '[\"Web Development\",\"Laravel\",\"PHP\",\"Tailwind CSS\",\"Javascript\",\"Database Management\",\"MySQL\"]', '', '2026-01-17 14:51:28', '2026-01-17 14:51:44'),
+(41, 'Annisa Pratama Putri, S.Kom', '2021', 'Asisten', '[\"Pengenalan Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_annisa-pratama-putri-s-kom_1768632945_437.png', '', '[\"C++\",\"MySQL\"]', '', '2026-01-17 14:55:45', '2026-01-17 14:55:45'),
+(42, 'Nirmala, S.Kom', '2021', '', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Aplikasi Akuntansi\",\"Pemrograman Berorientasi Objek\",\"Pemrograman Web\"]', 'alumni/alumni_nirmala-s-kom_1768633199_598.png', '', '[\"C++\",\"MySQL\",\"Laravel\",\"PHP\",\"Javascript\",\"Bootstrap\"]', '', '2026-01-17 14:59:59', '2026-01-17 14:59:59'),
+(43, 'Athar Fathana Rakasyah, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Web\",\"Struktur Data\"]', 'alumni/alumni_athar-fathana-rakasyah-s-kom_1768633408_284.png', '', '[\"MySQL\",\"C++\",\"Javascript\",\"PHP\",\"Laravel\",\"Bootstrap\",\"Database Management\"]', '', '2026-01-17 15:02:49', '2026-01-17 15:03:28'),
+(44, 'Muhammad Dani Arya Putra, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pengenalan Teknologi Informasi\",\"Aplikasi Akuntansi\",\"Sistem Operasi\",\"Pemrograman Berorientasi Objek\",\"Multimedia System\",\"Pemrograman Mobile\"]', 'alumni/alumni_muhammad-dani-arya-putra-s-kom_1768633687_530.png', '', '[\"Android Studio\",\"C++\",\"java\",\"Mobile Development\"]', '', '2026-01-17 15:08:07', '2026-01-17 15:08:07'),
+(45, 'Muhammad Akbar, S.Kom', '2021', 'Asisten', '[\"Algoritma & Pemrograman\",\"Basis Data\",\"Pemrograman Mobile\",\"Pengantar Teknologi Informasi\",\"Struktur Data\",\"Sistem Operasi\"]', 'alumni/alumni_muhammad-akbar-s-kom_1768633975_214.png', '', '[\"Web Development\",\"PHP\",\"Laravel\",\"Bootstrap\",\"MySQL\",\"Database Management\",\"Mobile Development\",\"Tailwind CSS\",\"React\"]', '', '2026-01-17 15:12:55', '2026-01-17 15:12:55'),
+(46, 'Imran Afdillah Dahlan, S.Kom', '2021', 'Asisten', '[\"Jaringan Komputer\",\"Basis Data\",\"Pengantar Teknologi Informasi\",\"Sistem dan Teknologi Informasi\",\"Struktur Data\"]', 'alumni/alumni_imran-afdillah-dahlan-s-kom_1768634238_596.png', '', '[\"Network Engineer\",\"Cisco\"]', '', '2026-01-17 15:17:18', '2026-01-17 15:17:18');
 
 -- --------------------------------------------------------
 
@@ -96,15 +95,14 @@ CREATE TABLE `asisten` (
   `email` varchar(100) DEFAULT NULL,
   `foto` varchar(255) DEFAULT NULL,
   `statusAktif` varchar(20) DEFAULT 'Asisten',
-  `isKoordinator` tinyint(1) DEFAULT 0,
-  `urutanTampilan` int(11) DEFAULT 0
+  `isKoordinator` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `asisten`
 --
 
-INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `lab`, `spesialisasi`, `bio`, `skills`, `email`, `foto`, `statusAktif`, `isKoordinator`, `urutanTampilan`) VALUES
+INSERT INTO `asisten` (`idAsisten`, `nama`, `jurusan`, `jabatan`, `kategori`, `lab`, `spesialisasi`, `bio`, `skills`, `email`, `foto`, `statusAktif`, `isKoordinator`)) VALUES
 (13, 'Adam Adnan', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Koordinator Laboratorium', '', 'adamadnan.iclabs@umi.ac.id', 'asisten/asisten_adam-adnan_1768638132_989.jpg', 'Asisten', 0, 0),
 (14, 'Dewi Ernita Rahma', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Struktur Data, Algoritma Pemrograman', '', 'dewiernitarahma.iclabs@umi.ac.id', 'asisten/asisten_dewi-ernita-rahma_1768638255_157.png', 'Asisten', 0, 0),
 (15, 'Farid Wadji Mufti', 'Teknik Informatika', NULL, NULL, NULL, NULL, 'Asisten Basisdata, Microcontroller', '', 'faridwajdimufli.iclabs@umi.ac.id', 'asisten/asisten_farid-wadji-mufti_1768638322_317.jpg', 'Asisten', 0, 0),
@@ -151,23 +149,20 @@ CREATE TABLE `format_penulisan` (
   `file` varchar(255) DEFAULT NULL,
   `kategori` enum('pedoman','unduhan') DEFAULT 'unduhan',
   `link_external` varchar(255) DEFAULT NULL,
-  `tanggal_update` date DEFAULT NULL,
-  `icon` varchar(50) DEFAULT 'ri-file-info-line',
-  `warna` varchar(30) DEFAULT 'icon-blue',
-  `urutan` int(11) DEFAULT 0
+  `tanggal_update` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `format_penulisan`
 --
 
-INSERT INTO `format_penulisan` (`id_format`, `judul`, `deskripsi`, `file`, `kategori`, `link_external`, `tanggal_update`, `icon`, `warna`, `urutan`) VALUES
-(11, 'Lembar Kerja & Margin', 'Kertas: A4 (21,0 x 29,7 cm), 70 gram.\r\nMargin: Kiri 4cm, Atas 4cm, Kanan 3cm, Bawah 3cm.\r\nWajib menggunakan Watermark logo ICLabs.', NULL, 'pedoman', '', '2026-01-07', 'ri-article-line', 'icon-blue', 3),
-(12, 'Teknik Penulisan', 'Wajib tulis tangan dengan pulpen warna HITAM.\r\nSetiap soal dari modul wajib ditulis ulang.\r\nJawaban ditulis tepat di bawah soal terkait.\r\nGambar harus jelas dan pas di dalam margin.', NULL, 'pedoman', '', '2026-01-07', 'ri-pencil-line', 'icon-pink', 2),
-(14, 'Buku Panduan Lengkap', '', '1767861278_18d2a6ba.pdf', 'unduhan', 'https://drive.google.com/file/d/1a3_E6rvW_4pDJkSTVTApltDkZSnnFCez/view?usp=sharing', '2026-01-08', '', 'icon-blue', 1),
-(15, 'Watermark ICLabs', '', '1767861288_8bccc44f.png', 'unduhan', 'https://drive.google.com/file/d/1aO9zL2nn06jKxTwYEeX2v0QzazE-z4Pv/view?usp=sharing', '2026-01-08', '', 'icon-blue', 2),
-(16, 'Logo Resmi UMI', '', '1767861296_2998a0c1.png', 'unduhan', 'https://drive.google.com/file/d/1CiX5QyzBXMCJFplUeMDYDMmE2tBZJm4D/view?usp=sharing', '2026-01-08', '', 'icon-blue', 3),
-(17, 'Kelengkapan Sampul', 'Judul: Kapital, Bold, Font 14 (Tengah Atas).\r\nLogo UMI ukuran 5x6 cm (300 dpi).\r\nData: Nama, Stambuk, Frekuensi, Dosen, & Asisten.', NULL, 'pedoman', '', '2026-01-17', 'ri-file-list-3-line', 'icon-red', 1);
+INSERT INTO `format_penulisan` (`id_format`, `judul`, `deskripsi`, `file`, `kategori`, `link_external`, `tanggal_update`) VALUES
+(11, 'Lembar Kerja & Margin', 'Kertas: A4 (21,0 x 29,7 cm), 70 gram.\r\nMargin: Kiri 4cm, Atas 4cm, Kanan 3cm, Bawah 3cm.\r\nWajib menggunakan Watermark logo ICLabs.', NULL, 'pedoman', '', '2026-01-07'),
+(12, 'Teknik Penulisan', 'Wajib tulis tangan dengan pulpen warna HITAM.\r\nSetiap soal dari modul wajib ditulis ulang.\r\nJawaban ditulis tepat di bawah soal terkait.\r\nGambar harus jelas dan pas di dalam margin.', NULL, 'pedoman', '', '2026-01-07'),
+(14, 'Buku Panduan Lengkap', '', '1767861278_18d2a6ba.pdf', 'unduhan', 'https://drive.google.com/file/d/1a3_E6rvW_4pDJkSTVTApltDkZSnnFCez/view?usp=sharing', '2026-01-08'),
+(15, 'Watermark ICLabs', '', '1767861288_8bccc44f.png', 'unduhan', 'https://drive.google.com/file/d/1aO9zL2nn06jKxTwYEeX2v0QzazE-z4Pv/view?usp=sharing', '2026-01-08'),
+(16, 'Logo Resmi UMI', '', '1767861296_2998a0c1.png', 'unduhan', 'https://drive.google.com/file/d/1CiX5QyzBXMCJFplUeMDYDMmE2tBZJm4D/view?usp=sharing', '2026-01-08'),
+(17, 'Kelengkapan Sampul', 'Judul: Kapital, Bold, Font 14 (Tengah Atas).\r\nLogo UMI ukuran 5x6 cm (300 dpi).\r\nData: Nama, Stambuk, Frekuensi, Dosen, & Asisten.', NULL, 'pedoman', '', '2026-01-17');
 
 -- --------------------------------------------------------
 
@@ -552,10 +547,8 @@ CREATE TABLE `peraturan_lab` (
   `judul` varchar(150) NOT NULL,
   `deskripsi` text NOT NULL,
   `gambar` varchar(255) DEFAULT NULL,
-  `urutan` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `kategori` varchar(100) DEFAULT 'umum',
   `display_format` varchar(20) DEFAULT 'list' COMMENT 'Format tampilan: list atau plain'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -563,10 +556,10 @@ CREATE TABLE `peraturan_lab` (
 -- Dumping data untuk tabel `peraturan_lab`
 --
 
-INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`, `kategori`, `display_format`) VALUES
-(2, 'Kehadiran & Akademik', 'Mahasiswa wajib mengikuti pertemuan di laboratorium minimal 10 kali pertemuan atau 75% dari total 14 kali pertemuan.\r\n\r\nMahasiswa yang tidak memenuhi syarat kehadiran minimal 10 kali pertemuan tidak diperkenankan mengikuti UAS.\r\n\r\nPelaksanaan praktikum di laboratorium dibagi berdasarkan kurikulum yang berlaku dengan durasi waktu yang berbeda.\r\n\r\nPenggunaan fasilitas Laboratorium menyesuaikan dengan kapasitas ruang Laboratorium.', NULL, 2, '2025-12-18 23:53:18', '2026-01-17 00:46:21', 'Kehadiran & Akademik', 'list'),
-(3, 'Durasi & Toleransi Waktu', 'Setiap sesi praktikum untuk Mata Kuliah Kurikulum 2025 berlangsung selama 200 menit.\r\n\r\nSetiap sesi praktikum untuk Mata Kuliah Kurikulum 2021 berlangsung selama 150 menit.\r\n\r\nPraktikum harus dimulai sesuai jadwal yang telah ditentukan.\r\n\r\nToleransi keterlambatan bagi praktikan adalah maksimal 5 menit pada semua sesi.\r\n\r\nKhusus hari Jumat sesi siang setelah Salat Jumat, toleransi keterlambatan maksimal adalah 10 menit.', NULL, 3, '2025-12-18 23:53:18', '2026-01-17 00:46:51', 'kehadiran-akademik', 'list'),
-(11, 'Larangan Umum & Etika', 'Praktikan diwajibkan bersikap tenang, tertib, dan sopan selama berada dalam ruangan.\r\n\r\nPraktikan dilarang mengganggu praktikan lain yang sedang melaksanakan praktikum.\r\n\r\nDilarang merokok, membawa makanan, minuman, senjata tajam, dan senjata api ke dalam ruangan praktikum.\r\n\r\nHandphone tidak diperbolehkan dibawa ke meja praktikum dan wajib diatur dalam mode senyap.\r\n\r\nFlashdisk atau media penyimpanan eksternal dilarang dibawa ke meja praktikum tanpa seizin Dosen atau Asisten.\r\n\r\nDilarang membawa, mengambil, serta memindahkan perangkat praktikum tanpa instruksi dari pengawas.', NULL, 0, '2026-01-16 15:29:20', '2026-01-17 00:47:08', 'Larangan Umum', 'list');
+INSERT INTO `peraturan_lab` (`id`, `judul`, `deskripsi`, `gambar`, `created_at`, `updated_at`, `display_format`) VALUES
+(2, 'Kehadiran & Akademik', 'Mahasiswa wajib mengikuti pertemuan di laboratorium minimal 10 kali pertemuan atau 75% dari total 14 kali pertemuan.\r\n\r\nMahasiswa yang tidak memenuhi syarat kehadiran minimal 10 kali pertemuan tidak diperkenankan mengikuti UAS.\r\n\r\nPelaksanaan praktikum di laboratorium dibagi berdasarkan kurikulum yang berlaku dengan durasi waktu yang berbeda.\r\n\r\nPenggunaan fasilitas Laboratorium menyesuaikan dengan kapasitas ruang Laboratorium.', NULL, '2025-12-18 23:53:18', '2026-01-17 00:46:21', 'list'),
+(3, 'Durasi & Toleransi Waktu', 'Setiap sesi praktikum untuk Mata Kuliah Kurikulum 2025 berlangsung selama 200 menit.\r\n\r\nSetiap sesi praktikum untuk Mata Kuliah Kurikulum 2021 berlangsung selama 150 menit.\r\n\r\nPraktikum harus dimulai sesuai jadwal yang telah ditentukan.\r\n\r\nToleransi keterlambatan bagi praktikan adalah maksimal 5 menit pada semua sesi.\r\n\r\nKhusus hari Jumat sesi siang setelah Salat Jumat, toleransi keterlambatan maksimal adalah 10 menit.', NULL, '2025-12-18 23:53:18', '2026-01-17 00:46:51', 'list'),
+(11, 'Larangan Umum & Etika', 'Praktikan diwajibkan bersikap tenang, tertib, dan sopan selama berada dalam ruangan.\r\n\r\nPraktikan dilarang mengganggu praktikan lain yang sedang melaksanakan praktikum.\r\n\r\nDilarang merokok, membawa makanan, minuman, senjata tajam, dan senjata api ke dalam ruangan praktikum.\r\n\r\nHandphone tidak diperbolehkan dibawa ke meja praktikum dan wajib diatur dalam mode senyap.\r\n\r\nFlashdisk atau media penyimpanan eksternal dilarang dibawa ke meja praktikum tanpa seizin Dosen atau Asisten.\r\n\r\nDilarang membawa, mengambil, serta memindahkan perangkat praktikum tanpa instruksi dari pengawas.', NULL, '2026-01-16 15:29:20', '2026-01-17 00:47:08', 'list');
 
 -- --------------------------------------------------------
 
@@ -579,7 +572,6 @@ CREATE TABLE `sanksi_lab` (
   `judul` varchar(150) NOT NULL,
   `deskripsi` text NOT NULL,
   `gambar` varchar(255) DEFAULT NULL,
-  `urutan` int(11) DEFAULT 0,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `display_format` varchar(20) DEFAULT 'list' COMMENT 'Format tampilan: list atau plain'
@@ -589,10 +581,10 @@ CREATE TABLE `sanksi_lab` (
 -- Dumping data untuk tabel `sanksi_lab`
 --
 
-INSERT INTO `sanksi_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `created_at`, `updated_at`, `display_format`) VALUES
-(2, 'Merusak Fasilitas', 'Praktikan merusak peralatan praktikum (Personal Computer) secara sengaja, maka praktikan bertanggung jawab untuk mengganti kerusakan tersebut.', NULL, 0, '2025-12-15 10:11:55', '2026-01-10 13:22:35', 'plain'),
-(12, 'Melanggar Aturan', 'Praktikan tidak mematuhi dan mentaati aturan praktikum maka tidak\r\ndiperkenankan mengikuti praktikum.', NULL, 2, '2026-01-10 14:01:35', '2026-01-17 00:50:56', 'plain'),
-(13, 'Sanksi lain', 'Pelanggaran point lainnya dikenakan sanksi teguran, dikeluarkan/dicoret namanya dalam kegiatan praktikum (mengulang mata kuliah sesuai dengan semester berjalan) sampai sanksi akademik.', NULL, 3, '2026-01-10 14:03:55', '2026-01-10 14:03:55', 'plain');
+INSERT INTO `sanksi_lab` (`id`, `judul`, `deskripsi`, `gambar`, `created_at`, `updated_at`, `display_format`) VALUES
+(2, 'Merusak Fasilitas', 'Praktikan merusak peralatan praktikum (Personal Computer) secara sengaja, maka praktikan bertanggung jawab untuk mengganti kerusakan tersebut.', NULL, '2025-12-15 10:11:55', '2026-01-10 13:22:35', 'plain'),
+(12, 'Melanggar Aturan', 'Praktikan tidak mematuhi dan mentaati aturan praktikum maka tidak\r\ndiperkenankan mengikuti praktikum.', NULL, '2026-01-10 14:01:35', '2026-01-17 00:50:56', 'plain'),
+(13, 'Sanksi lain', 'Pelanggaran point lainnya dikenakan sanksi teguran, dikeluarkan/dicoret namanya dalam kegiatan praktikum (mengulang mata kuliah sesuai dengan semester berjalan) sampai sanksi akademik.', NULL, '2026-01-10 14:03:55', '2026-01-10 14:03:55', 'plain');
 
 -- --------------------------------------------------------
 
@@ -603,11 +595,8 @@ INSERT INTO `sanksi_lab` (`id`, `judul`, `deskripsi`, `gambar`, `urutan`, `creat
 CREATE TABLE `sop` (
   `id_sop` int(11) NOT NULL,
   `judul` varchar(255) NOT NULL,
-  `icon` varchar(50) DEFAULT 'ri-file-text-line',
-  `warna` varchar(50) DEFAULT 'icon-blue',
   `file` varchar(255) NOT NULL,
   `deskripsi` text DEFAULT NULL,
-  `urutan` int(11) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -616,12 +605,12 @@ CREATE TABLE `sop` (
 -- Dumping data untuk tabel `sop`
 --
 
-INSERT INTO `sop` (`id_sop`, `judul`, `icon`, `warna`, `file`, `deskripsi`, `urutan`, `created_at`, `updated_at`) VALUES
-(2, 'Pemutakhiran Data Aset Laboratorium', 'ri-file-list-3-line', 'icon-blue', 'pemutakhiran_data_aset_laboratorium_1768642542.pdf', 'Prosedur standar untuk memperbarui data inventaris dan aset laboratorium secara berkala setiap semester.', 0, '2026-01-10 07:28:36', '2026-01-17 09:35:42'),
-(3, 'Penanganan Barang Rusak', 'ri-tools-line', 'icon-blue', 'penanganan_barang_rusak_1768642660.pdf', 'Tata cara pelaporan, pengecekan, dan tindak lanjut perbaikan atau penggantian perangkat laboratorium yang mengalami kerusakan.', 0, '2026-01-10 07:29:30', '2026-01-17 09:37:40'),
-(4, 'Pengembalian Barang ke Fakultas', 'ri-share-forward-box-line', 'icon-blue', 'pengembalian_barang_ke_fakultas_1768642622.pdf', 'Alur administrasi pengembalian aset atau peminjaman barang inventaris kembali ke pihak Fakultas Ilmu Komputer.', 0, '2026-01-10 07:30:02', '2026-01-17 09:37:02'),
-(5, 'Pemeliharaan Perangkat Laboratorium', 'ri-computer-line', 'icon-blue', 'pemeliharaan_perangkat_laboratorium_1768642596.pdf', 'Jadwal dan standar perawatan rutin (maintenance) untuk PC, jaringan, dan kelistrikan di dalam laboratorium.', 0, '2026-01-10 07:30:35', '2026-01-17 09:36:36'),
-(6, 'Pemutakhiran Modul Praktikum', 'ri-book-open-line', 'icon-blue', 'pemutakhiran_modul_praktikum_1768642469.pdf', 'Mekanisme revisi dan update materi modul praktikum agar sesuai dengan perkembangan teknologi terbaru.', 0, '2026-01-10 07:31:54', '2026-01-17 09:34:29');
+INSERT INTO `sop` (`id_sop`, `judul`, `file`, `deskripsi`, `created_at`, `updated_at`) VALUES
+(2, 'Pemutakhiran Data Aset Laboratorium', 'pemutakhiran_data_aset_laboratorium_1768642542.pdf', 'Prosedur standar untuk memperbarui data inventaris dan aset laboratorium secara berkala setiap semester.', '2026-01-10 07:28:36', '2026-01-17 09:35:42'),
+(3, 'Penanganan Barang Rusak', 'penanganan_barang_rusak_1768642660.pdf', 'Tata cara pelaporan, pengecekan, dan tindak lanjut perbaikan atau penggantian perangkat laboratorium yang mengalami kerusakan.', '2026-01-10 07:29:30', '2026-01-17 09:37:40'),
+(4, 'Pengembalian Barang ke Fakultas', 'pengembalian_barang_ke_fakultas_1768642622.pdf', 'Alur administrasi pengembalian aset atau peminjaman barang inventaris kembali ke pihak Fakultas Ilmu Komputer.', '2026-01-10 07:30:02', '2026-01-17 09:37:02'),
+(5, 'Pemeliharaan Perangkat Laboratorium', 'pemeliharaan_perangkat_laboratorium_1768642596.pdf', 'Jadwal dan standar perawatan rutin (maintenance) untuk PC, jaringan, dan kelistrikan di dalam laboratorium.', '2026-01-10 07:30:35', '2026-01-17 09:36:36'),
+(6, 'Pemutakhiran Modul Praktikum', 'pemutakhiran_modul_praktikum_1768642469.pdf', 'Mekanisme revisi dan update materi modul praktikum agar sesuai dengan perkembangan teknologi terbaru.', '2026-01-10 07:31:54', '2026-01-17 09:34:29');
 
 -- --------------------------------------------------------
 

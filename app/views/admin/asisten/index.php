@@ -78,33 +78,19 @@
                                 <input type="email" id="inputEmail" name="email" placeholder="email@umi.ac.id" required 
                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                             </div>
-                            <div class="md:col-span-2">
+                            <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">Jurusan</label>
                                 <select id="inputJurusan" name="jurusan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                                     <option value="Teknik Informatika">Teknik Informatika</option>
                                     <option value="Sistem Informasi">Sistem Informasi</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Section PENGATURAN -->
-                    <div class="bg-amber-50/30 p-4 rounded-xl border border-amber-100/50 space-y-4">
-                        <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-2">
-                            <i class="fas fa-user-cog"></i> Status & Tampilan
-                        </h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">Status Asisten</label>
-                                <select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                                <select id="inputStatus" name="statusAktif" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                                     <option value="Asisten">Asisten Aktif</option>
                                     <option value="CA">Calon Asisten</option>
                                 </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Urutan Tampilan</label>
-                                <input type="number" id="inputUrutanTampilan" name="urutanTampilan" placeholder="0" min="0" value="0" 
-                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white">
                             </div>
                         </div>
                     </div>
@@ -493,7 +479,6 @@ function populateFormData(d) {
     document.getElementById('inputEmail').value = d.email;
     document.getElementById('inputJurusan').value = d.jurusan || 'Teknik Informatika';
     document.getElementById('inputBio').value = d.bio || '';
-    document.getElementById('inputUrutanTampilan').value = d.urutanTampilan || '0';
     let status = d.statusAktif;
     if (status == '1') status = 'Asisten';
     if (status == '0') status = 'Tidak Aktif';
