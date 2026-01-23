@@ -72,7 +72,7 @@
             'riset'        => 'fasilitas.css',
             'laboratorium' => 'fasilitas.css',
             'denah'        => 'fasilitas.css',
-            'sop'          => 'sumberdaya.css',
+            'sop'          => 'fasilitas.css',
             'alumni'       => 'alumni.css',
             'contact'      => 'contact.css',
             'apps'         => 'apps.css'
@@ -122,7 +122,7 @@
                 <li class="dropdown">
                     <a href="javascript:void(0);" class="dropbtn">Sumber Daya ▾</a>
                     <div class="dropdown-content">
-                        <a href="<?= PUBLIC_URL ?>/kepala">Kepala Lab</a>
+                        <a href="<?= PUBLIC_URL ?>/kepala">Pimpinan</a>
                         <a href="<?= PUBLIC_URL ?>/asisten">Asisten</a>
                     </div>
                 </li>
