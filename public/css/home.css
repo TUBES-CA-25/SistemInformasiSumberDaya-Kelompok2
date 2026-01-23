@@ -112,7 +112,7 @@
   flex: 1;
 }
 .hero-content h1 {
-  font-size: 3.8rem;
+  font-size: 3.6rem;
   color: #0f172a;
   line-height: 1.15;
   margin-bottom: 25px;
@@ -569,7 +569,9 @@
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 .staff-card-home:hover {
   transform: translateY(-10px);
@@ -755,7 +757,8 @@
   background: #ffffff;
   border-color: #2563eb;
   transform: translateY(-5px);
-  box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.25),
+  box-shadow:
+    0 15px 35px -5px rgba(37, 99, 235, 0.25),
     0 0 0 1px rgba(37, 99, 235, 0.1);
 }
 
@@ -825,7 +828,7 @@
    ======================================================= */
 @media (max-width: 1024px) {
   .hero-content h1 {
-    font-size: 3rem;
+    font-size: 2rem;
   }
   .hero-section .container {
     gap: 40px;

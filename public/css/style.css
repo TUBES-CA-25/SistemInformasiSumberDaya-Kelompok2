@@ -174,13 +174,7 @@ img {
   display: block;
 }
 
-/* --- SAAT DI-HOVER (MUNCUL) --- */
-.dropdown:hover .dropdown-content {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  top: 100%;
-}
+
 
 /* Styling Item di Dalam Dropdown */
 .dropdown-content a {
@@ -192,11 +186,18 @@ img {
   text-align: left; /* Desktop tetap rata kiri agar rapi */
 }
 
-/* Efek Hover pada Item Link (Desktop) */
+/* Efek Hover pada Item Link (Desktop)
 .dropdown-content a:hover {
   background: #eff6ff;
   color: #2563eb !important;
   padding-left: 28px;
+} */
+
+.dropdown-content.show {
+  opacity: 1;
+  visibility: visible;
+  max-height: 500px;
+  transform: translateY(0);
 }
 
 /* Panah kecil di atas dropdown (Desktop) */
@@ -246,24 +247,41 @@ img {
 @media screen and (max-width: 768px) {
   .menu-toggle {
     display: flex;
+    z-index: 10001;
   }
+
   .nav-links {
-    display: none;
+    display: flex;
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
     flex-direction: column;
     background: #fff;
-    padding: 20px;
+    padding:0 20px;
     border-top: 1px solid #eff6ff;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
     /* [PENTING] Pastikan text align center di container menu */
     text-align: center;
+
+    /* --- LOGIKA ANIMASI BERGULIR (SLIDE) --- */
+    max-height: 0;           /* Keadaan tertutup: tinggi 0 */
+    opacity: 0;              /* Keadaan tertutup: transparan */
+    overflow: hidden;        /* Sembunyikan konten yang meluap */
+    visibility: hidden;      /* Benar-benar sembunyikan agar tidak bisa diklik */
+    
+    /* Atur durasi dan gaya bergulir (Bezier membuat gerakan lebih alami) */
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.4s ease, 
+                padding 0.5s ease,
+                visibility 0.5s;
   }
+
   .nav-links.active {
-    display: flex;
-    animation: fadeIn 0.3s forwards;
+    max-height: 100vh;       /* Bergulir turun hingga tinggi maksimal */
+    opacity: 1;              /* Menjadi terlihat */
+    visibility: visible;     /* Aktifkan interaksi */
+    padding: 20px;
   }
 
   /* --- FIX DROPDOWN MOBILE (RATA TENGAH) --- */

@@ -174,11 +174,11 @@ if ($page == 'home')                               $pageCss = 'home.css';
 if (in_array($page, ['tatatertib', 'jadwal', 'jadwalupk',  'modul','formatpenulisan'])) {
     $pageCss = 'praktikum.css';
 }
-if (in_array($page, ['kepala', 'asisten', 'detail', 'sop'])) {
+if (in_array($page, ['kepala', 'asisten', 'detail'])) {
     $pageCss = 'sumberdaya.css';
 }
 // UPDATE: Tambahkan 'denah' agar memuat fasilitas.css
-if (in_array($page, ['laboratorium', 'riset', 'detail_fasilitas', 'denah'])) {
+if (in_array($page, ['laboratorium', 'riset', 'detail_fasilitas', 'denah', 'sop'])) {
     $pageCss = 'fasilitas.css';
 }
 if ($page == 'apps')                               $pageCss = 'apps.css';

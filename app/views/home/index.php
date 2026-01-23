@@ -36,9 +36,8 @@ function getHomeFotoUrl($row) {
 <section class="hero-section">
     <div class="container">
         <div class="hero-content reveal fade-left">
-            <h1>Sistem Informasi Sumber Daya Laboratorium</h1>
-            <p>Platform terintegrasi untuk manajemen praktikum, peminjaman fasilitas, dan pendataan asisten laboratorium Fakultas Ilmu Komputer secara efisien dan profesional.</p>
-            <div class="btn-group">
+        <h1>Selamat Datang di Portal Laboratorium FIKOM UMI</h1>
+<p>Siap untuk pengalaman praktikum yang lebih baik? Akses seluruh layanan laboratorium Fakultas Ilmu Komputer mulai dari jadwal hingga inventaris aset dengan lebih cepat dan mudah di sini.</p>        <div class="btn-group">
                 <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
                     Gabung Sekarang <i class="ri-arrow-right-line"></i>
                 </a>
