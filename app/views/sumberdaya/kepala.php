@@ -121,7 +121,7 @@ function getFotoUrl($row) {
 
         <?php if (!empty($laboran_list)) : ?>
             <div class="section-label">Pranata Laboratorium & Staff</div>
-            <div class="staff-grid">
+            <div class="pimpinan-wrapper">
                 
                 <?php foreach ($laboran_list as $row) : ?>
                     <?php $imgUrl = getFotoUrl($row); ?>

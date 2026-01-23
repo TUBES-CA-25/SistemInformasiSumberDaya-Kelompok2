@@ -112,7 +112,7 @@
                     <a href="javascript:void(0);" class="dropbtn">Praktikum ▾</a>
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/tatatertib">Tata Tertib</a>
-                        <a href="<?= PUBLIC_URL ?>/jadwal">Jadwal</a>
+                        <a href="<?= PUBLIC_URL ?>/jadwal">Jadwal Praktikum</a>
                         <a href="<?= PUBLIC_URL ?>/jadwalupk">Jadwal UPK</a>
                         <a href="<?= PUBLIC_URL ?>/modul">Modul Praktikum</a>
                         <a href="<?= PUBLIC_URL ?>/formatpenulisan">Format Penulisan</a>
