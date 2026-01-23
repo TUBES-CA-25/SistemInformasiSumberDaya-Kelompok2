@@ -186,11 +186,18 @@ img {
   text-align: left; /* Desktop tetap rata kiri agar rapi */
 }
 
-/* Efek Hover pada Item Link (Desktop) */
+/* Efek Hover pada Item Link (Desktop)
 .dropdown-content a:hover {
   background: #eff6ff;
   color: #2563eb !important;
   padding-left: 28px;
+} */
+
+.dropdown-content.show {
+  opacity: 1;
+  visibility: visible;
+  max-height: 500px;
+  transform: translateY(0);
 }
 
 /* Panah kecil di atas dropdown (Desktop) */
