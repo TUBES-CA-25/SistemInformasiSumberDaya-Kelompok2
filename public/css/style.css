@@ -174,8 +174,6 @@ img {
   display: block;
 }
 
-
-
 /* Styling Item di Dalam Dropdown */
 .dropdown-content a {
   color: #4a5568 !important;
@@ -186,13 +184,14 @@ img {
   text-align: left; /* Desktop tetap rata kiri agar rapi */
 }
 
-/* Efek Hover pada Item Link (Desktop)
+/* Style saat item dropdown di-hover */
 .dropdown-content a:hover {
   background: #eff6ff;
   color: #2563eb !important;
-  padding-left: 28px;
-} */
+  padding-left: 28px; /* Sedikit geser ke kanan saat hover */
+}
 
+/* Class .show ini dipanggil oleh JavaScript (Klik) */
 .dropdown-content.show {
   opacity: 1;
   visibility: visible;
@@ -213,6 +212,19 @@ img {
   border-top: 1px solid #eff6ff;
   border-left: 1px solid #eff6ff;
   z-index: -1;
+}
+
+/* =======================================================
+   [FIX: DESKTOP ONLY HOVER]
+   Memaksa menu terbuka saat hover hanya di layar Laptop/PC.
+   ======================================================= */
+@media (min-width: 992px) {
+  .dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto; /* Memastikan menu bisa diklik */
+  }
 }
 
 /* -------------------------------------------------------
@@ -258,50 +270,54 @@ img {
     width: 100%;
     flex-direction: column;
     background: #fff;
-    padding:0 20px;
+    padding: 0 20px;
     border-top: 1px solid #eff6ff;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    /* [PENTING] Pastikan text align center di container menu */
     text-align: center;
 
     /* --- LOGIKA ANIMASI BERGULIR (SLIDE) --- */
-    max-height: 0;           /* Keadaan tertutup: tinggi 0 */
-    opacity: 0;              /* Keadaan tertutup: transparan */
-    overflow: hidden;        /* Sembunyikan konten yang meluap */
-    visibility: hidden;      /* Benar-benar sembunyikan agar tidak bisa diklik */
-    
-    /* Atur durasi dan gaya bergulir (Bezier membuat gerakan lebih alami) */
-    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-                opacity 0.4s ease, 
-                padding 0.5s ease,
-                visibility 0.5s;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+
+    transition:
+      max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.4s ease,
+      padding 0.5s ease,
+      visibility 0.5s;
   }
 
   .nav-links.active {
-    max-height: 100vh;       /* Bergulir turun hingga tinggi maksimal */
-    opacity: 1;              /* Menjadi terlihat */
-    visibility: visible;     /* Aktifkan interaksi */
+    max-height: 100vh;
+    opacity: 1;
+    visibility: visible;
     padding: 20px;
   }
 
-  /* --- FIX DROPDOWN MOBILE (RATA TENGAH) --- */
+  /* --- FIX DROPDOWN MOBILE (ACCORDION STYLE) --- */
   .dropdown-content {
+    /* Reset style desktop */
     position: static;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
     box-shadow: none;
     border: none;
     background: transparent;
-
-    /* [UBAH] Hapus padding kiri agar tidak menjorok */
     padding-left: 0;
-
-    /* [UBAH] Paksa rata tengah */
     text-align: center;
-
-    display: none;
     transition: none;
+
+    /* Default Hidden di Mobile (Menunggu class .show dari JS) */
+    display: none;
+    opacity: 0;
+  }
+
+  /* Class ini DITAMBAHKAN oleh JS saat KLIK */
+  .dropdown-content.show {
+    display: block; /* Munculkan */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    animation: fadeInMobile 0.3s ease forwards;
   }
 
   .dropdown-content::before {
@@ -310,25 +326,22 @@ img {
 
   /* Item Link di Mobile */
   .dropdown-content a {
-    /* [UBAH] Reset padding agar simetris */
     padding: 10px 0;
-
-    /* [UBAH] Paksa text align center untuk itemnya juga */
     text-align: center;
-    color: #64748b !important; /* Warna agak beda dikit biar tau ini submenu */
+    color: #64748b !important;
   }
 
-  /* Hover di Mobile tidak perlu geser */
+  /* Hover Item di Mobile */
   .dropdown-content a:hover {
     padding-left: 0;
     background: transparent;
     color: #2563eb !important;
   }
 
-  .dropdown:hover .dropdown-content {
-    display: block;
-    animation: fadeInMobile 0.3s ease forwards;
-  }
+  /* [PENTING] HAPUS aturan .dropdown:hover disini 
+     agar menu tidak muncul sendiri saat di-scroll di HP.
+     Sepenuhnya mengandalkan JS Click.
+  */
 
   @keyframes fadeInMobile {
     from {
