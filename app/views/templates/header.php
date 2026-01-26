@@ -91,7 +91,7 @@
 </head>
 <body>
 
-    <nav class="navbar">
+<nav class="navbar">
         <div class="container">
             <div class="logo">
                 <a href="<?= PUBLIC_URL ?>/home" class="brand-logo">
@@ -109,7 +109,7 @@
                 <li><a href="<?= PUBLIC_URL ?>/home">Beranda</a></li>
                 
                 <li class="dropdown">
-                    <a href="javascript:void(0);" class="dropbtn" onclick="toggleDropdown(this, event)">Praktikum ▾</a>
+                    <a href="javascript:void(0);" class="dropbtn">Praktikum ▾</a>
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/tatatertib">Tata Tertib</a>
                         <a href="<?= PUBLIC_URL ?>/jadwal">Jadwal Praktikum</a>
@@ -120,7 +120,7 @@
                 </li>
                 
                 <li class="dropdown">
-                    <a href="javascript:void(0);" class="dropbtn" onclick="toggleDropdown(this, event)">Sumber Daya ▾</a>
+                    <a href="javascript:void(0);" class="dropbtn">Sumber Daya ▾</a>
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/kepala">Pimpinan</a>
                         <a href="<?= PUBLIC_URL ?>/asisten">Asisten</a>
@@ -128,7 +128,7 @@
                 </li>
                 
                 <li class="dropdown">
-                    <a href="javascript:void(0);" class="dropbtn" onclick="toggleDropdown(this, event)">Fasilitas ▾</a>
+                    <a href="javascript:void(0);" class="dropbtn">Fasilitas ▾</a>
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/laboratorium">Ruang Lab</a>
                         <a href="<?= PUBLIC_URL ?>/riset">Ruang Riset</a>
@@ -148,31 +148,5 @@
             </ul>
         </div>
     </nav>
-
-    <script>
-    function toggleDropdown(element, event) {
-        // Mencegah klik merambat ke window.onclick agar tidak terjadi konflik tutup-paksa
-        if (event) event.stopPropagation();
-
-        const dropdownContent = element.nextElementSibling;
-        
-        // 1. Tutup semua dropdown lain
-        document.querySelectorAll('.dropdown-content').forEach(content => {
-            if (content !== dropdownContent) {
-                content.classList.remove('show');
-            }
-        });
-
-        // 2. Toggle class show pada elemen yang diklik
-        dropdownContent.classList.toggle('show');
-    }
-
-    // Menutup dropdown jika pengguna mengklik di luar area dropdown
-    window.onclick = function(event) {
-        if (!event.target.closest('.dropdown')) {
-            document.querySelectorAll(".dropdown-content").forEach(d => d.classList.remove('show'));
-        }
-    }
-    </script>
     
     <main>
