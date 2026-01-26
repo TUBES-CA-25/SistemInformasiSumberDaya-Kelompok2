@@ -133,6 +133,34 @@
                         </div>
                     </div>
 
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Frekuensi</label>
+                            <input type="text" id="inputFrekuensi" name="frekuensi" placeholder="Contoh: TI_PW-1" 
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Dosen Pengampu</label>
+                            <input type="text" id="inputDosen" name="dosen" placeholder="Nama Dosen" 
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Asisten 1</label>
+                            <select id="inputAsisten1" name="idAsisten1" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+                                <option value="">-- Pilih Asisten 1 --</option>
+                                </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Asisten 2</label>
+                            <select id="inputAsisten2" name="idAsisten2" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+                                <option value="">-- Pilih Asisten 2 --</option>
+                                </select>
+                        </div>
+                    </div>
+
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Status Jadwal</label>
                         <div class="flex gap-4 mt-2">
@@ -431,11 +459,12 @@ function openFormModal(id = null, event = null) {
     document.getElementById('jadwalForm').reset();
     document.getElementById('inputId').value = '';
 
-    // Load Dropdown Options (MK & Lab)
+    // Load Dropdown Options (MK, Lab, Asisten)
     Promise.all([
         fetch(API_URL + '/matakuliah').then(r => r.json()),
-        fetch(API_URL + '/laboratorium').then(r => r.json())
-    ]).then(([mkData, labData]) => {
+        fetch(API_URL + '/laboratorium').then(r => r.json()),
+        fetch(API_URL + '/asisten').then(r => r.json()).catch(() => ({ data: [] }))
+    ]).then(([mkData, labData, asistenData]) => {
         // Isi Select MK
         const mkSelect = document.getElementById('inputMatakuliah');
         mkSelect.innerHTML = '<option value="">-- Pilih MK --</option>';
@@ -454,6 +483,22 @@ function openFormModal(id = null, event = null) {
             });
         }
 
+        // Filter Asisten 1 (statusAktif = 'Asisten')
+        const asisten1List = asistenData.data ? asistenData.data.filter(a => a.statusAktif === 'Asisten') : [];
+        const asisten1Select = document.getElementById('inputAsisten1');
+        asisten1Select.innerHTML = '<option value="">-- Pilih Asisten 1 --</option>';
+        asisten1List.forEach(a => {
+            asisten1Select.innerHTML += `<option value="${a.idAsisten}">${a.nama}</option>`;
+        });
+
+        // Filter Asisten 2 (statusAktif = 'CA')
+        const asisten2List = asistenData.data ? asistenData.data.filter(a => a.statusAktif === 'CA') : [];
+        const asisten2Select = document.getElementById('inputAsisten2');
+        asisten2Select.innerHTML = '<option value="">-- Pilih Asisten 2 --</option>';
+        asisten2List.forEach(a => {
+            asisten2Select.innerHTML += `<option value="${a.idAsisten}">${a.nama}</option>`;
+        })
+
         // Jika Mode Edit, Isi Data
         if (id) {
             document.getElementById('formModalTitle').innerHTML = '<i class="fas fa-edit text-blue-600"></i> Edit Jadwal';
@@ -468,6 +513,10 @@ function openFormModal(id = null, event = null) {
                 document.getElementById('inputKelas').value = data.kelas;
                 document.getElementById('inputMulai').value = data.waktuMulai;
                 document.getElementById('inputSelesai').value = data.waktuSelesai;
+                document.getElementById('inputFrekuensi').value = data.frekuensi || '';
+                document.getElementById('inputDosen').value = data.dosen || '';
+                document.getElementById('inputAsisten1').value = data.idAsisten1 || '';
+                document.getElementById('inputAsisten2').value = data.idAsisten2 || '';
                 
                 // Radio Status
                 const radios = document.getElementsByName('status');
