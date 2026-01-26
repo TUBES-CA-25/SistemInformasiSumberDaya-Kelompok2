@@ -49,17 +49,17 @@
                     <th class="px-6 py-4 font-semibold text-center w-8">
                         <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                     </th>
-                    <th class="px-6 py-4 font-semibold text-center w-12">No</th>
-                    <th class="px-6 py-4 font-semibold">Mata Kuliah & Dosen</th>
-                    <th class="px-6 py-4 font-semibold text-center">Prodi</th>
-                    <th class="px-6 py-4 font-semibold">Waktu & Tanggal</th>
-                    <th class="px-6 py-4 font-semibold text-center w-24">Kelas</th>
-                    <th class="px-6 py-4 font-semibold text-center w-32">Ruangan</th>
+                    <th class="px-6 py-4 font-semibold text-center w-10">No</th>
+                    <th class="px-6 py-4 font-semibold w-48">Mata Kuliah & Dosen</th>
+                    <th class="px-6 py-4 font-semibold text-center w-20">Prodi</th>
+                    <th class="px-6 py-4 font-semibold text-center w-40">Waktu & Tanggal</th>
+                    <th class="px-6 py-4 font-semibold text-center w-20">Kelas</th>
+                    <th class="px-6 py-4 font-semibold text-center w-24">Ruangan</th>
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
                 <tr>
-                    <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                         <div class="flex flex-col items-center gap-2">
                             <i class="fas fa-circle-notch fa-spin text-blue-500 text-2xl"></i>
                             <span class="font-medium">Memuat data...</span>
@@ -120,7 +120,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Frekuensi</label>
-                            <input type="text" id="inputFreq" name="frekuensi" placeholder="TI_SD-1" readonly class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500 outline-none transition-all" title="Otomatis terisi dari data mata kuliah">
+                            <input type="text" id="inputFreq" name="frekuensi" placeholder="Contoh: TI_SD-1, TI_BD-2" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                         </div>
                     </div>
                     <div class="flex justify-end gap-3 pt-6">
@@ -474,7 +474,7 @@ function renderTable(data) {
     if(selectAll) selectAll.checked = false;
 
     if(!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-20 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-20 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
         updateBulkActionsVisibility();
         return;
     }
@@ -491,28 +491,28 @@ function renderTable(data) {
                            class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
                 </td>
                 <td class="px-6 py-4 text-center text-gray-400 font-medium font-mono text-xs">${index + 1}</td>
-                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.id}, event)">
-                    <div class="flex flex-col">
-                        <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.mata_kuliah}</span>
-                        <span class="text-xs text-gray-500 flex items-center gap-1"><i class="fas fa-user-tie text-[10px]"></i> ${item.dosen}</span>
+                <td class="px-6 py-4 cursor-pointer w-48" onclick="openFormModal(${item.id}, event)">
+                    <div class="flex flex-col gap-1">
+                        <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors truncate" title="${item.mata_kuliah}">${item.mata_kuliah}</span>
+                        <span class="text-xs text-gray-500 flex items-center gap-1 truncate" title="${item.dosen}"><i class="fas fa-user-tie text-[10px] flex-shrink-0"></i> ${item.dosen}</span>
                     </div>
                 </td>
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
                     <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded border border-gray-200 uppercase tracking-tight">${item.prodi}</span>
                 </td>
-                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
-                    <div class="flex flex-col items-center">
-                        <span class="font-bold text-gray-700 text-sm">${tgl}</span>
-                        <span class="text-xs text-blue-600 flex items-center gap-1 font-medium">
-                            <i class="far fa-clock"></i> ${item.jam}
+                <td class="px-6 py-4 cursor-pointer w-40" onclick="openFormModal(${item.id}, event)">
+                    <div class="flex flex-col gap-1">
+                        <span class="font-bold text-gray-700 text-xs text-center">${tgl}</span>
+                        <span class="text-xs text-blue-600 flex items-center justify-center gap-1 font-medium">
+                            <i class="far fa-clock text-[10px]"></i> ${item.jam}
                         </span>
                     </div>
                 </td>
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
-                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-100">${item.kelas}</span>
+                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-100 whitespace-nowrap">${item.kelas}</span>
                 </td>
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
-                    <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold border border-emerald-100">
+                    <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold border border-emerald-100 whitespace-nowrap">
                         ${item.ruangan}
                     </span>
                 </td>
@@ -619,11 +619,17 @@ async function loadDropdownData() {
             });
         }
 
-        // Event listener untuk auto-fill frekuensi
+        // Event listener untuk auto-fill frekuensi (hanya saat form baru)
         mkSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const frekuensi = selectedOption.dataset.frekuensi || '';
-            document.getElementById('inputFreq').value = frekuensi;
+            const currentFreq = document.getElementById('inputFreq').value;
+            const id = document.getElementById('inputId').value;
+            
+            // Hanya isi frekuensi otomatis jika form baru (tidak edit) dan frekuensi masih kosong
+            if(!id && !currentFreq) {
+                document.getElementById('inputFreq').value = frekuensi;
+            }
         });
     } catch (err) {
         console.error("Error loading dropdown data:", err);
