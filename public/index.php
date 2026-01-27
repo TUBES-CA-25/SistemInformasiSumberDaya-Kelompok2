@@ -202,7 +202,6 @@ if (($segments[1] ?? '') === 'detail') {
     }
 }
 
-
 /* ===============================
    DIRECT VIEW
 =============================== */
@@ -213,12 +212,10 @@ $direct_views = [
     'jadwal'       => 'praktikum/jadwal.php',
     'tatatertib'   => 'praktikum/tatatertib.php',
     'formatpenulisan' => 'praktikum/format_penulisan.php',
-    'riset'        => 'fasilitas/riset.php',
-    'laboratorium' => 'fasilitas/laboratorium.php',
-    'detail_fasilitas' => 'fasilitas/detail.php',
+    // 'riset'        => 'fasilitas/riset.php', // Riset mungkin jalan karena View-nya masih pakai query manual
+    
+    // 'detail_fasilitas' => 'fasilitas/detail.php', // Ini juga sebaiknya dipindah ke MVC route jika pakai controller
     'kepala'       => 'sumberdaya/kepala.php',
-    // Opsi tambahan jika ingin view langsung tanpa controller (tapi disarankan via MVC route di bawah)
-    // 'denah'     => 'fasilitas/denah.php' 
 ];
 
 if (array_key_exists($page, $direct_views)) {
@@ -254,14 +251,13 @@ if (array_key_exists($page, $direct_views)) {
 
 $mvc_routes = [
     'contact'          => ['ContactController', 'index', []],
-    'iclabs-login'       => ['AuthController', 'login', []],
+    'iclabs-login'     => ['AuthController', 'login', []],
     'auth'             => ['AuthController', 'authenticate', []],
     'logout'           => ['AuthController', 'logout', []],
 
     'asisten'          => ['AsistenController', 'index', []],
     'jadwalupk'        => ['JadwalUpkController', 'index', []],
     'formatpenulisan'  => ['FormatPenulisanController', 'index', []],
-    'detail'           => ['AsistenController', 'detail', ['id' => $id]],
     'detail'           => ['AsistenController', 'detail', ['id' => $id]],
 
     'alumni'           => ['AlumniController', 'index', []],
@@ -271,11 +267,12 @@ $mvc_routes = [
     'detail_manajemen' => ['ManajemenController', 'kepalaDetail', ['id' => $id]],
 
     'modul'            => ['ModulController', 'index', []],
-
     'sop'              => ['SopController', 'index', []],
-    
-    // UPDATE: Menambahkan route untuk Denah
     'denah'            => ['LaboratoriumController', 'denah', []],
+
+    // ✅ TAMBAHKAN BARIS INI (PENTING!):
+    'laboratorium'     => ['LaboratoriumController', 'index', []], 
+    'riset'     => ['LaboratoriumController', 'riset', []], 
 ];
 
 if (array_key_exists($page, $mvc_routes)) {
