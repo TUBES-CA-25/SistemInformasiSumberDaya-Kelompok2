@@ -11,16 +11,38 @@ class AlumniController extends Controller {
     }
 
     /**
-     * Halaman publik alumni
+     * Halaman publik: Daftar Alumni
+     * [UPDATE] Menambahkan logika pengelompokan tahun (Year Grouping)
+     * agar View tidak perlu mikir (MVC Standard).
      */
     public function index($params = []) {
-        $data = $this->model->getAll();
-        // Sesuaikan dengan view legacy yang ada (alumni/alumni.php)
-        $this->view('alumni/alumni', ['alumni' => $data]);
+        // 1. Ambil data mentah
+        $raw_data = $this->model->getAll();
+        
+        // 2. LOGIC: Kelompokkan berdasarkan tahun angkatan
+        $alumni_by_year = [];
+        
+        if (!empty($raw_data) && is_array($raw_data)) {
+            foreach ($raw_data as $row) {
+                $year = $row['angkatan'] ?? 'Unknown';
+                $alumni_by_year[$year][] = $row;
+            }
+            // Sortir tahun terbaru di atas (Descending)
+            krsort($alumni_by_year);
+        }
+
+        // 3. Siapkan data untuk view
+        $data = [
+            'judul' => 'Daftar Alumni',
+            'alumni_by_year' => $alumni_by_year
+        ];
+
+        $this->view('alumni/alumni', $data);
     }
 
     /**
-     * Detail alumni publik
+     * Halaman publik: Detail Alumni
+     * [UPDATE] Menambahkan logic pembersihan string dan URL gambar
      */
     public function detail($params = []) {
         $id = $params['id'] ?? null;
@@ -28,28 +50,54 @@ class AlumniController extends Controller {
             $this->redirect('/alumni');
             return;
         }
-        // Ambil data alumni via model dan kirim ke view
+        
+        // Ambil data (gunakan getById atau getAlumniById sesuai model Anda)
         $alumniRow = $this->model->getById((int)$id, 'id');
+        
         if (!$alumniRow) {
             $this->redirect('/alumni');
             return;
         }
 
-        // Parsing keahlian menjadi array
-        $skills = !empty($alumniRow['keahlian']) ? array_map('trim', explode(',', $alumniRow['keahlian'])) : [];
+        // --- LOGIC PEMBERSIH DATA (CLEANING) ---
 
-        $alumni = [
-            'nama' => $alumniRow['nama'],
-            'angkatan' => $alumniRow['angkatan'],
-            'divisi' => $alumniRow['divisi'] ?? 'Asisten Lab',
-            'mata_kuliah' => $alumniRow['mata_kuliah'] ?? '-',
-            'foto' => $alumniRow['foto'],
-            'email' => $alumniRow['email'],
-            'testimoni' => $alumniRow['kesan_pesan'] ?? 'Tidak ada kesan pesan.',
-            'skills' => $skills
+        // A. Logic Gambar & Avatar
+        $dbFoto = $alumniRow['foto'] ?? '';
+        $namaEnc = urlencode($alumniRow['nama'] ?? '');
+        $imgUrl = '';
+
+        if (!empty($dbFoto)) {
+            // Cek link external vs lokal
+            if (strpos($dbFoto, 'http') === 0) {
+                $imgUrl = $dbFoto;
+            } else {
+                $imgUrl = PUBLIC_URL . '/assets/uploads/' . $dbFoto;
+            }
+        } else {
+            // Default Avatar
+            $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
+        }
+
+        // B. Logic Keahlian (Hapus karakter [], ", ' lalu jadikan Array)
+        $skillsRaw = $alumniRow['keahlian'] ?? '';
+        $cleanSkills = str_replace(['[', ']', '"', "'", '\\'], '', $skillsRaw);
+        $skillsList = array_filter(array_map('trim', explode(',', $cleanSkills)));
+
+        // C. Logic Mata Kuliah (Bersihkan lalu jadikan String rapi)
+        $matkulRaw = $alumniRow['mata_kuliah'] ?? '';
+        $cleanMk = str_replace(['[', ']', '"', "'", '\\'], '', $matkulRaw);
+        $matkulString = implode(', ', array_filter(array_map('trim', explode(',', $cleanMk))));
+
+        // Siapkan Data Matang
+        $data = [
+            'alumni'        => $alumniRow,
+            'img_url'       => $imgUrl,
+            'skills_list'   => $skillsList,
+            'matkul_string' => $matkulString,
+            'judul'         => 'Detail Alumni - ' . $alumniRow['nama']
         ];
 
-        $this->view('alumni/detail', ['alumni' => $alumni]);
+        $this->view('alumni/detail', $data);
     }
 
     /**

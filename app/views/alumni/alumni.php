@@ -1,24 +1,3 @@
-<?php
-/**
- * VIEW: ALUMNI ASISTEN LABORATORIUM
- * Menggunakan data yang dipassing dari controller melalui variabel `$alumni`.
- */
-
-$alumni_by_year = [];
-
-// Data alumni diharapkan dipassing oleh controller sebagai array associative
-$all_alumni = $alumni ?? [];
-
-if (!empty($all_alumni) && is_array($all_alumni)) {
-    foreach ($all_alumni as $row) {
-        $year = $row['angkatan'] ?? 'Unknown';
-        $alumni_by_year[$year][] = $row;
-    }
-    // [TAMBAHAN] Sortir tahun dari yang terbaru (Descending)
-    krsort($alumni_by_year);
-}
-?>
-
 <section class="alumni-section fade-up">
     <div class="container">
         
@@ -106,40 +85,4 @@ if (!empty($all_alumni) && is_array($all_alumni)) {
     </div>
 </section>
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const searchInput = document.getElementById('searchAlumni');
-    
-    if(searchInput) {
-        searchInput.addEventListener('keyup', function() {
-            let filter = this.value.toLowerCase();
-            let cards = document.querySelectorAll('.card-link');
-            let groups = document.querySelectorAll('.alumni-group');
-
-            cards.forEach(function(card) {
-                let name = card.querySelector('.staff-name').textContent.toLowerCase();
-                let yearText = card.closest('.alumni-group').querySelector('.section-label span').textContent.toLowerCase();
-                
-                // Cari berdasarkan Nama ATAU Angkatan
-                if (name.includes(filter) || yearText.includes(filter)) {
-                    card.style.display = ""; // Tampilkan
-                    card.classList.remove('hidden-by-search');
-                } else {
-                    card.style.display = "none"; // Sembunyikan
-                    card.classList.add('hidden-by-search');
-                }
-            });
-
-            // Sembunyikan grup tahun jika semua isinya tersembunyi
-            groups.forEach(function(group) {
-                let visibleCards = group.querySelectorAll('.card-link:not(.hidden-by-search)');
-                if(visibleCards.length === 0) {
-                    group.style.display = "none";
-                } else {
-                    group.style.display = "block";
-                }
-            });
-        });
-    }
-});
-</script>
+<script src="<?= PUBLIC_URL ?>/js/alumni.js"></script>
