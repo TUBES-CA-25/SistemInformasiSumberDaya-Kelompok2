@@ -69,9 +69,37 @@ class ManajemenController extends Controller {
         $this->success($data, 'Manajemen retrieved successfully');
     }
 
-    // Legacy index/show for backwards compatibility
-    public function index() {
-        return $this->apiIndex();
+    public function index($params = []) {
+        // 1. Ambil Semua Data dari Model
+        $all_data = $this->model->getAll(); // Pastikan method getAll() ada di ManajemenModel
+
+        $pimpinan_list = [];
+        $laboran_list  = [];
+
+        // 2. Logic Pemisahan Data & Proses Foto
+        if (!empty($all_data)) {
+            foreach ($all_data as $row) {
+                // Gunakan Helper::processPhotoUrl agar konsisten dengan Asisten & Detail
+                $row['foto_url'] = Helper::processPhotoUrl($row['foto'] ?? '', $row['nama'] ?? '');
+                
+                // Deteksi Pimpinan (Kepala Lab)
+                if (stripos(($row['jabatan'] ?? ''), 'Kepala') !== false) {
+                    $pimpinan_list[] = $row;
+                } else {
+                    $laboran_list[] = $row;
+                }
+            }
+        }
+
+        // 3. Kirim ke View
+        $data = [
+            'judul'    => 'Struktur Manajemen',
+            'pimpinan' => $pimpinan_list,
+            'laboran'  => $laboran_list
+        ];
+
+        // Pastikan nama file view sesuai lokasi Anda ('sumberdaya/kepala')
+        $this->view('sumberdaya/kepala', $data);
     }
 
     public function show($params) {

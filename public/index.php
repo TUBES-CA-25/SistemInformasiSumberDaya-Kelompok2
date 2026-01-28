@@ -210,7 +210,6 @@ $direct_views = [
     'apps'         => 'home/apps.php',
     'jadwal'       => 'praktikum/jadwal.php',
     'formatpenulisan' => 'praktikum/format_penulisan.php',
-    'kepala'       => 'sumberdaya/kepala.php',
 ];
 
 if (array_key_exists($page, $direct_views)) {
@@ -245,31 +244,35 @@ if (array_key_exists($page, $direct_views)) {
 =============================== */
 
 $mvc_routes = [
+    // --- AUTH & HOME ---
+    'home'             => ['HomeController', 'index', []],
     'contact'          => ['ContactController', 'index', []],
     'iclabs-login'     => ['AuthController', 'login', []],
     'auth'             => ['AuthController', 'authenticate', []],
     'logout'           => ['AuthController', 'logout', []],
 
+    // --- SUMBER DAYA & DETAIL (PERUBAHAN UTAMA DISINI) ---
+    'kepala'          => ['ManajemenController', 'index', []],
     'asisten'          => ['AsistenController', 'index', []],
+    'alumni'           => ['AlumniController', 'index', []],
+    'detail'           => ['DetailSumberDayaController', 'index', []],
+
+    // Jika ingin halaman detail alumni tetap terpisah:
+    'detail_alumni'    => ['AlumniController', 'detail', []], 
+
+    // --- MANAJEMEN LAINNYA ---
     'jadwalupk'        => ['JadwalUpkController', 'index', []],
     'formatpenulisan'  => ['FormatPenulisanController', 'index', []],
-    'detail'           => ['AsistenController', 'detail', ['id' => $id]],
-
-    'alumni'           => ['AlumniController', 'index', []],
-    'detail_alumni'    => ['AlumniController', 'detail', ['id' => $id]],
-
-    'detail_fasilitas' => ['LaboratoriumController', 'detail', ['id' => $id]],
-    'detail_manajemen' => ['ManajemenController', 'kepalaDetail', ['id' => $id]],
-
-    'modul'            => ['ModulController', 'index', []],
-    'sop'              => ['SopController', 'index', []],
+    
+    // --- LABORATORIUM & FASILITAS ---
+    'laboratorium'     => ['LaboratoriumController', 'index', []], 
+    'riset'            => ['LaboratoriumController', 'riset', []], 
+    'detail_fasilitas' => ['LaboratoriumController', 'detail', []],
     'denah'            => ['LaboratoriumController', 'denah', []],
 
-    'laboratorium'     => ['LaboratoriumController', 'index', []], 
-    'riset'     => ['LaboratoriumController', 'riset', []], 
-
-    'home' => ['HomeController', 'index', []],
-
+    // --- DOKUMEN & ATURAN ---
+    'modul'            => ['ModulController', 'index', []],
+    'sop'              => ['SopController', 'index', []],
     'tatatertib'       => ['PraktikumController', 'tatatertib', []],
     'peraturan'        => ['PraktikumController', 'tatatertib', []],
 ];
