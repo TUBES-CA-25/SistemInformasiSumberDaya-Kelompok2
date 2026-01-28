@@ -207,14 +207,10 @@ if (($segments[1] ?? '') === 'detail') {
 =============================== */
 
 $direct_views = [
-    'home'         => 'home/index.php',
     'apps'         => 'home/apps.php',
     'jadwal'       => 'praktikum/jadwal.php',
     'tatatertib'   => 'praktikum/tatatertib.php',
     'formatpenulisan' => 'praktikum/format_penulisan.php',
-    // 'riset'        => 'fasilitas/riset.php', // Riset mungkin jalan karena View-nya masih pakai query manual
-    
-    // 'detail_fasilitas' => 'fasilitas/detail.php', // Ini juga sebaiknya dipindah ke MVC route jika pakai controller
     'kepala'       => 'sumberdaya/kepala.php',
 ];
 
@@ -270,9 +266,10 @@ $mvc_routes = [
     'sop'              => ['SopController', 'index', []],
     'denah'            => ['LaboratoriumController', 'denah', []],
 
-    // ✅ TAMBAHKAN BARIS INI (PENTING!):
     'laboratorium'     => ['LaboratoriumController', 'index', []], 
     'riset'     => ['LaboratoriumController', 'riset', []], 
+
+    'home' => ['HomeController', 'index', []],
 ];
 
 if (array_key_exists($page, $mvc_routes)) {
