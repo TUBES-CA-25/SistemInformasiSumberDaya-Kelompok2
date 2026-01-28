@@ -30,12 +30,12 @@
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
-                    <th class="px-6 py-4 font-semibold text-center w-16">No</th>
-                    <th class="px-6 py-4 font-semibold text-center w-28">Gambar</th>
-                    <th class="px-6 py-4 font-semibold">Nama Laboratorium</th>
-                    <th class="px-6 py-4 font-semibold text-center w-32">Jenis</th>
-                    <th class="px-6 py-4 font-semibold text-center w-32">Kapasitas</th>
-                    <th class="px-6 py-4 font-semibold text-center w-40">Aksi</th>
+                    <th class="px-6 py-4 font-semibold text-center w-12">No</th>
+                    <th class="px-6 py-4 font-semibold text-center w-24">Gambar</th>
+                    <th class="px-6 py-4 font-semibold w-48">Nama Laboratorium</th>
+                    <th class="px-6 py-4 font-semibold text-center w-28">Jenis</th>
+                    <th class="px-6 py-4 font-semibold text-center w-28">Kapasitas</th>
+                    <th class="px-6 py-4 font-semibold text-center w-36">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
@@ -438,19 +438,18 @@ function renderTable(data) {
         row.className = 'hover:bg-blue-50 transition-colors group border-b border-gray-100 cursor-pointer';
         row.dataset.id = item.idLaboratorium;
         row.innerHTML = `
-            <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
-            <td class="px-6 py-4 text-center">
+            <td class="px-6 py-4 text-center font-medium text-gray-500 w-12">${index + 1}</td>
+            <td class="px-6 py-4 text-center w-24">
                 <img src="${placeholderImg}" data-src="${firstImg}" class="w-16 h-12 object-cover rounded-lg border border-gray-200 mx-auto shadow-sm group-hover:scale-105 transition-transform">
             </td>
-            <td class="px-6 py-4">
-                <span class="font-bold text-gray-800 text-sm block">${item.nama}</span>
-                <span class="text-xs text-gray-400 truncate block max-w-[200px]">${item.deskripsi ? item.deskripsi.substring(0, 50) + '...' : ''}</span>
+            <td class="px-6 py-4 w-48">
+                <span class="font-bold text-gray-800 text-sm truncate block" title="${item.nama}">${item.nama}</span>
             </td>
             <td class="px-6 py-4 text-center">
                 <span class="${badgeColor} px-2.5 py-1 rounded-full text-xs font-semibold border">${item.jenis}</span>
             </td>
             <td class="px-6 py-4 text-center">
-                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold"><i class="fas fa-desktop mr-1"></i> ${item.jumlahPc}</span>
+                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-xs font-bold"><i class="fas fa-users mr-1"></i> ${item.kapasitas || 0}</span>
             </td>
             <td class="px-6 py-4">
                 <div class="flex justify-center items-center gap-2">
