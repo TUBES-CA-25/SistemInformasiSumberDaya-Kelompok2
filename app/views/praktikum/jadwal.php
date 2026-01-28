@@ -15,7 +15,7 @@
             <br>
 
             <div class="day-selector-wrapper">
-                <select id="day-select" class="custom-select" onchange="updateDashboard()">
+                <select id="day-select" class="custom-select" onchange="renderJadwalDashboard()">
                     <option value="Senin">Senin</option>
                     <option value="Selasa">Selasa</option>
                     <option value="Rabu">Rabu</option>

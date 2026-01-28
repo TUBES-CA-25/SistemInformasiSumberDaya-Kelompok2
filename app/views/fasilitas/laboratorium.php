@@ -83,4 +83,4 @@ $lab_list = $data['laboratorium'] ?? [];
     </div>
 </section>
 
-<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/assets/js/fasilitas.js"></script>
+<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/js/fasilitas.js"></script>

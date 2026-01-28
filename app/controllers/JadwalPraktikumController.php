@@ -476,8 +476,19 @@ class JadwalPraktikumController extends Controller {
 
     // Public method untuk halaman jadwal praktikum publik
     public function index() {
+        // 1. Tentukan hari ini (untuk default tampilan awal)
+        $hari_inggris = date('l');
+        $map_hari = [
+            'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu', 'Sunday' => 'Minggu'
+        ];
+        $hari_ini = $map_hari[$hari_inggris] ?? 'Senin';
+
+        // 2. Ambil SEMUA data (jangan difilter di sini)
         $data['judul'] = 'Jadwal Praktikum';
-        $data['jadwal'] = $this->model->getAll();
+        $data['hari_ini'] = $hari_ini; // Kirim info hari ini ke view
+        $data['jadwal'] = $this->model->getAll(); // Pastikan model pakai getAll()
+
         $this->view('praktikum/jadwal', $data);
     }
 
