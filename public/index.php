@@ -209,7 +209,6 @@ if (($segments[1] ?? '') === 'detail') {
 $direct_views = [
     'apps'         => 'home/apps.php',
     'jadwal'       => 'praktikum/jadwal.php',
-    'tatatertib'   => 'praktikum/tatatertib.php',
     'formatpenulisan' => 'praktikum/format_penulisan.php',
     'kepala'       => 'sumberdaya/kepala.php',
 ];
@@ -270,6 +269,9 @@ $mvc_routes = [
     'riset'     => ['LaboratoriumController', 'riset', []], 
 
     'home' => ['HomeController', 'index', []],
+
+    'tatatertib'       => ['PraktikumController', 'tatatertib', []],
+    'peraturan'        => ['PraktikumController', 'tatatertib', []],
 ];
 
 if (array_key_exists($page, $mvc_routes)) {
