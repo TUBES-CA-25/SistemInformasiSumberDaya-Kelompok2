@@ -203,43 +203,6 @@ if (($segments[1] ?? '') === 'detail') {
 }
 
 /* ===============================
-   DIRECT VIEW
-=============================== */
-
-$direct_views = [
-    'apps'         => 'home/apps.php',
-    'jadwal'       => 'praktikum/jadwal.php',
-    'formatpenulisan' => 'praktikum/format_penulisan.php',
-];
-
-if (array_key_exists($page, $direct_views)) {
-    if ($page === 'formatpenulisan') {
-        require_once CONTROLLER_PATH . '/FormatPenulisanController.php';
-        $ctl = new FormatPenulisanController();
-        $ctl->index();
-        exit;
-    }
-
-    if ($page === 'kepala' && file_exists(CONTROLLER_PATH . '/ManajemenController.php')) {
-        require_once CONTROLLER_PATH . '/ManajemenController.php';
-        $ctl = new ManajemenController();
-        $ctl->kepalaIndex();
-        exit;
-    }
-
-    if (file_exists(VIEW_PATH . '/templates/header.php')) require_once VIEW_PATH . '/templates/header.php';
-    $viewFile = VIEW_PATH . '/' . $direct_views[$page];
-    if (file_exists($viewFile)) {
-        require_once $viewFile;
-    } else {
-        echo "<div style='padding:50px; text-align:center;'><h3>Halaman Tidak Ditemukan</h3></div>";
-    }
-    if (file_exists(VIEW_PATH . '/templates/footer.php')) require_once VIEW_PATH . '/templates/footer.php';
-    exit;
-}
-
-
-/* ===============================
    MVC ROUTES
 =============================== */
 
@@ -247,6 +210,7 @@ $mvc_routes = [
     // --- AUTH & HOME ---
     'home'             => ['HomeController', 'index', []],
     'contact'          => ['ContactController', 'index', []],
+    'apps'             => ['HomeController', 'apps', []],
     'iclabs-login'     => ['AuthController', 'login', []],
     'auth'             => ['AuthController', 'authenticate', []],
     'logout'           => ['AuthController', 'logout', []],
@@ -261,6 +225,7 @@ $mvc_routes = [
     'detail_alumni'    => ['AlumniController', 'detail', []], 
 
     // --- MANAJEMEN LAINNYA ---
+    'jadwal'           => ['JadwalPraktikumController', 'index', []],
     'jadwalupk'        => ['JadwalUpkController', 'index', []],
     'formatpenulisan'  => ['FormatPenulisanController', 'index', []],
     

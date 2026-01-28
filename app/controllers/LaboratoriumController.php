@@ -40,25 +40,33 @@ class LaboratoriumController extends Controller {
         $this->success($data, 'Laboratorium retrieved successfully');
     }
 
-    // Admin view methods (TIDAK DIUBAH - Agar Admin Tetap Jalan)
+    // Admin view methods (TIDAK DIUBAH)
     public function adminIndex($params = []) {
         $data = $this->model->getAll();
         $this->view('admin/laboratorium/index', ['laboratorium' => $data]);
     }
 
+    /**
+     * [FIXED] Method Detail
+     * Menambahkan pengecekan $_GET['id'] agar kompatibel dengan routing ?page=...&id=...
+     */
     public function detail($params = []) {
-        $id = $params['id'] ?? null;
+        // PERBAIKAN DI SINI:
+        // Cek ID dari $params (jika lewat path) ATAU dari $_GET (jika lewat query string)
+        $id = $params['id'] ?? $_GET['id'] ?? null;
         
         if (!$id) {
-            $this->redirect('/laboratorium');
+            // Jika ID tidak ada, kembalikan ke list dengan format URL yang benar
+            $this->redirect('index.php?page=laboratorium'); 
             return;
         }
         
-        // 1. Ambil Detail Laboratorium (Ini sudah benar ada 'idLaboratorium')
+        // 1. Ambil Detail Laboratorium
         $lab = $this->model->getById($id, 'idLaboratorium');
         
         if (!$lab) {
-            $this->view('fasilitas/detail', ['laboratorium' => null]);
+            // Jika lab tidak ketemu di DB
+            $this->redirect('index.php?page=laboratorium');
             return;
         }
 
@@ -99,9 +107,6 @@ class LaboratoriumController extends Controller {
         $initials = 'KL';
 
         if (!empty($lab['idKordinatorAsisten'])) {
-            // --- PERBAIKAN DI SINI (TAMBAHKAN 'idAsisten') ---
-            // Sebelumnya: $this->asistenModel->getById($lab['idKordinatorAsisten']); -> ERROR karena cari 'id'
-            // Sekarang: Kita paksa cari 'idAsisten'
             $asisten = $this->asistenModel->getById($lab['idKordinatorAsisten'], 'idAsisten'); 
             
             if ($asisten) {
@@ -141,11 +146,11 @@ class LaboratoriumController extends Controller {
         $softwareList = !empty($lab['software']) ? array_map('trim', explode(',', $lab['software'])) : [];
         $pendukungList = !empty($lab['fasilitas_pendukung']) ? array_map('trim', explode(',', $lab['fasilitas_pendukung'])) : [];
 
-        // 5. Link Kembali
-        $backLink = PUBLIC_URL . '/laboratorium';
+        // 5. Link Kembali (Disesuaikan dengan format query string)
+        $backLink = 'index.php?page=laboratorium';
         $jenis = isset($lab['jenis']) ? strtolower($lab['jenis']) : '';
         if (strpos($jenis, 'riset') !== false || strpos($jenis, 'research') !== false) {
-            $backLink = PUBLIC_URL . '/riset';
+            $backLink = 'index.php?page=riset';
         }
 
         // 6. Kirim Data
@@ -188,41 +193,27 @@ class LaboratoriumController extends Controller {
     }
 
     // --- WEB VIEW METHODS (PUBLIC) ---
-    // [UPDATED] Menggunakan logika filter yang aman & handling gambar
     public function index() {
-        // 1. Ambil SEMUA data mentah dari Model
-        // Model boleh pakai MySQLi/PDO, Controller terima array
         $raw_data = $this->model->getAll();
         
         $lab_list = [];
         if (!empty($raw_data)) {
             foreach ($raw_data as $row) {
-                // --- FILTER JENIS (ANTI SPASI & CASE INSENSITIVE) ---
-                // Trim: Membuang spasi di depan/belakang database (jika ada)
                 $jenisDb = trim($row['jenis'] ?? '');
-
-                // Logic: Loloskan jika mengandung kata "Lab" (Contoh: "Laboratorium", "Lab Komputer")
-                // stripos: Mencari string tanpa peduli huruf besar/kecil
                 if (stripos($jenisDb, 'Lab') !== false) {
                     
-                    // --- LOGIC GAMBAR ---
                     $imgSrc = null;
                     if (!empty($row['gambar'])) {
-                        // Cek fisik file di server menggunakan ROOT_PROJECT
                         $filePath = ROOT_PROJECT . '/public/assets/uploads/' . $row['gambar'];
-                        
                         if (file_exists($filePath)) {
-                            // Tentukan Base URL (Gunakan PUBLIC_URL atau ASSETS_URL)
                             $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
                             $imgSrc = $baseUrl . '/assets/uploads/' . $row['gambar'];
                         }
                     }
 
-                    // --- LOGIC DESKRIPSI ---
                     $descRaw = $row['deskripsi'] ?? '';
                     $shortDesc = strlen($descRaw) > 150 ? substr($descRaw, 0, 150) . '...' : $descRaw;
 
-                    // --- INJEKSI DATA KE VIEW ---
                     $row['img_src'] = $imgSrc;
                     $row['short_desc'] = $shortDesc;
                     
@@ -231,30 +222,23 @@ class LaboratoriumController extends Controller {
             }
         }
 
-        // 2. Kirim ke View dengan key 'laboratorium'
         $data = [
             'judul' => 'Fasilitas Laboratorium',
             'laboratorium' => $lab_list 
         ];
 
-        // 3. Load View
         $this->view('fasilitas/laboratorium', $data);
     }
 
-    // --- METHOD KHUSUS HALAMAN RISET ---
     public function riset() {
-        // 1. Ambil Semua Data
         $raw_data = $this->model->getAll();
         
         $riset_list = [];
         if (!empty($raw_data)) {
             foreach ($raw_data as $row) {
-                // 2. Filter Jenis: 'Riset' (Anti Spasi & Case Insensitive)
                 $jenisDb = trim($row['jenis'] ?? '');
-                
                 if (strcasecmp($jenisDb, 'Riset') === 0 || stripos($jenisDb, 'Riset') !== false) {
                     
-                    // --- LOGIC GAMBAR ---
                     $imgSrc = null;
                     if (!empty($row['gambar'])) {
                         $filePath = ROOT_PROJECT . '/public/assets/uploads/' . $row['gambar'];
@@ -264,33 +248,29 @@ class LaboratoriumController extends Controller {
                         }
                     }
 
-                    // --- LOGIC DESKRIPSI ---
                     $descRaw = $row['deskripsi'] ?? '';
                     $shortDesc = strlen($descRaw) > 120 ? substr($descRaw, 0, 120) . '...' : $descRaw;
 
-                    // --- LOGIC STYLE/WARNA (Dipindah dari View ke Controller) ---
                     $n = strtolower($row['nama'] ?? '');
-                    $style = ['bg' => '#f8fafc', 'icon' => 'ri-flask-line', 'color' => '#64748b', 'badge_bg' => '#f1f5f9', 'badge_text' => '#475569']; // Default Abu
+                    $style = ['bg' => '#f8fafc', 'icon' => 'ri-flask-line', 'color' => '#64748b', 'badge_bg' => '#f1f5f9', 'badge_text' => '#475569'];
 
                     if (strpos($n, 'ai') !== false || strpos($n, 'intelligence') !== false) {
-                        $style = ['bg' => '#eff6ff', 'icon' => 'ri-brain-line', 'color' => '#2563eb', 'badge_bg' => '#dbeafe', 'badge_text' => '#1e40af']; // Biru
+                        $style = ['bg' => '#eff6ff', 'icon' => 'ri-brain-line', 'color' => '#2563eb', 'badge_bg' => '#dbeafe', 'badge_text' => '#1e40af'];
                     } elseif (strpos($n, 'iot') !== false || strpos($n, 'network') !== false || strpos($n, 'jaringan') !== false) {
-                        $style = ['bg' => '#f0fdf4', 'icon' => 'ri-wifi-line', 'color' => '#16a34a', 'badge_bg' => '#dcfce7', 'badge_text' => '#16a34a']; // Hijau
+                        $style = ['bg' => '#f0fdf4', 'icon' => 'ri-wifi-line', 'color' => '#16a34a', 'badge_bg' => '#dcfce7', 'badge_text' => '#16a34a'];
                     } elseif (strpos($n, 'mobile') !== false || strpos($n, 'app') !== false) {
-                        $style = ['bg' => '#fff7ed', 'icon' => 'ri-smartphone-line', 'color' => '#ea580c', 'badge_bg' => '#ffedd5', 'badge_text' => '#9a3412']; // Orange
+                        $style = ['bg' => '#fff7ed', 'icon' => 'ri-smartphone-line', 'color' => '#ea580c', 'badge_bg' => '#ffedd5', 'badge_text' => '#9a3412'];
                     }
 
-                    // Masukkan data matang ke array
                     $row['img_src_final'] = $imgSrc;
                     $row['deskripsi_final'] = $shortDesc;
-                    $row['style_final'] = $style; // Style  dikirim dari sini
+                    $row['style_final'] = $style;
                     
                     $riset_list[] = $row;
                 }
             }
         }
 
-        // 3. Kirim ke View dengan key 'riset'
         $data = [
             'judul' => 'Pusat Riset & Inovasi',
             'riset' => $riset_list 
@@ -298,8 +278,6 @@ class LaboratoriumController extends Controller {
 
         $this->view('fasilitas/riset', $data);
     }
-
-    
 
     public function denah() {
         $data['judul'] = 'Denah Lokasi & Tata Letak';
@@ -318,7 +296,7 @@ class LaboratoriumController extends Controller {
         $this->success($data, 'Laboratorium retrieved successfully');
     }
 
-    // Store, Update, Delete methods (TIDAK DIUBAH)
+    // Store, Update, Delete methods (TIDAK DIUBAH - Tetap sama seperti sebelumnya)
     public function store() {
         try {
             $input = [
@@ -490,7 +468,6 @@ class LaboratoriumController extends Controller {
             $this->error('Laboratorium tidak ditemukan', null, 404);
         }
 
-        // Cek apakah lab masih digunakan di jadwal praktikum
         $db = new Database();
         $mysqli = method_exists($db, 'getConnection') ? $db->getConnection() : $db->getPdo();
         

@@ -55,5 +55,13 @@ class HomeController extends Controller {
 
         $this->view('home/index', $data);
     }
+
+    // [BARU] Method untuk Halaman Apps
+    public function apps() {
+        $data['judul'] = 'IC-Labs Apps'; // Judul halaman
+        // Memanggil view yang ada di app/views/home/apps.php
+        $this->view('home/apps', $data); 
+    }
+    
 }
 ?>
