@@ -11,67 +11,160 @@ class AsistenController extends Controller {
     }
 
     /**
-     * Halaman publik asisten
+     * Halaman Publik: Daftar Asisten
+     * [UPDATE] Logika pemisahan data & URL Foto dipindah ke sini (MVC Pattern).
      */
     public function index($params = []) {
-        $data = $this->model->getAll();
-        $this->view('sumberdaya/asisten', ['asisten' => $data]);
+        // 1. Ambil SEMUA data mentah dari Model
+        // (Pastikan model mengambil semua data tanpa filter WHERE statusAktif)
+        $all_data = $this->model->getAll(); 
+        
+        // 2. Siapkan Wadah
+        $koordinator_list = [];
+        $asisten_list     = [];
+        $ca_list          = [];
+        $alumni_list      = [];
+
+        // 3. Logic: Filter Data & Proses Foto
+        if (!empty($all_data)) {
+            foreach ($all_data as $row) {
+                // A. Proses URL Foto di Controller (Bukan di View)
+                $row['foto_url'] = $this->processPhotoUrl($row);
+                
+                // B. Normalisasi Status
+                $status = strtolower($row['statusAktif'] ?? ''); 
+                $isCoord = $row['isKoordinator'] ?? 0;
+
+                // C. Pengelompokan
+                if ($isCoord == 1) {
+                    $koordinator_list[] = $row;
+                }
+                elseif ($status == 'ca' || strpos($status, 'calon') !== false) {
+                    $ca_list[] = $row;
+                }
+                elseif ($status == 'alumni') {
+                    $alumni_list[] = $row;
+                }
+                // Default: Masukkan ke Asisten Praktikum jika bukan kategori di atas
+                else {
+                    $asisten_list[] = $row;
+                }
+            }
+        }
+
+        // 4. Kirim Data Matang ke View
+        $data = [
+            'judul'       => 'Asisten Laboratorium',
+            'koordinator' => $koordinator_list,
+            'asisten'     => $asisten_list,
+            'ca'          => $ca_list,
+            'alumni'      => $alumni_list
+        ];
+
+        $this->view('sumberdaya/asisten', $data);
     }
 
     /**
-     * Halaman detail asisten
+     * Halaman Publik: Detail Asisten
      */
     public function detail($params = []) {
         $id = $params['id'] ?? null;
-        $this->view('sumberdaya/detail', ['id' => $id]);
+        if (!$id) { $this->redirect('/asisten'); return; }
+
+        $asisten = $this->model->getById($id);
+        
+        if (!$asisten) { $this->redirect('/asisten'); return; }
+
+        // Proses Foto & Skills
+        $asisten['foto_url'] = $this->processPhotoUrl($asisten);
+        
+        $skillsRaw = $asisten['skills'] ?? '[]';
+        $skillsList = json_decode($skillsRaw, true);
+        if (!is_array($skillsList)) {
+            $skillsList = array_map('trim', explode(',', str_replace(['[', ']', '"'], '', $skillsRaw)));
+        }
+        $asisten['skills_list'] = array_filter($skillsList);
+
+        $this->view('sumberdaya/detail', ['id' => $id, 'asisten' => $asisten]);
     }
 
     /**
-     * Halaman admin asisten
+     * HELPER PRIVATE: Memproses URL Foto
+     * Logika: UI Avatar -> External URL -> Local Upload -> Legacy Image -> Default
      */
+    private function processPhotoUrl($row) {
+        $fotoName = $row['foto'] ?? '';
+        $namaEnc = urlencode($row['nama'] ?? 'User');
+        
+        // Default Avatar
+        $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=eff6ff&color=2563eb&size=256&bold=true";
+
+        if (!empty($fotoName) && strpos($fotoName, 'ui-avatars') === false) {
+            if (strpos($fotoName, 'http') !== false) {
+                // Jika URL eksternal
+                $imgUrl = $fotoName;
+            } else {
+                // Cek Folder Uploads (Structure baru)
+                $path1 = ROOT_PROJECT . '/public/assets/uploads/' . $fotoName;
+                // Cek Folder Images (Legacy structure)
+                $path2 = ROOT_PROJECT . '/public/images/asisten/' . $fotoName;
+
+                if (file_exists($path1)) {
+                    $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
+                    $imgUrl = $baseUrl . '/assets/uploads/' . $fotoName;
+                } elseif (file_exists($path2)) {
+                    $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
+                    $imgUrl = $baseUrl . '/images/asisten/' . $fotoName;
+                }
+            }
+        }
+        return $imgUrl;
+    }
+
+    // =========================================================================
+    // ADMIN FUNCTIONS (Sama seperti sebelumnya)
+    // =========================================================================
+
     public function adminIndex($params = []) {
-        $data = $this->model->getAll();
+        $data = $this->model->getAllForAdmin(); 
         $this->view('admin/asisten/index', ['asisten' => $data]);
     }
 
-    /**
-     * Form create admin
-     */
     public function create($params = []) {
         $this->view('admin/asisten/form', ['asisten' => null, 'action' => 'create']);
     }
 
-    /**
-     * Form edit admin
-     */
     public function edit($params = []) {
         $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->redirect('/admin/asisten');
-            return;
-        }
+        if (!$id) { $this->redirect('/admin/asisten'); return; }
         
-        $asisten = $this->model->getById($id, 'idAsisten');
+        $asisten = $this->model->getById($id);
         if (!$asisten) {
             $this->setFlash('error', 'Data asisten tidak ditemukan');
             $this->redirect('/admin/asisten');
             return;
         }
         
+        // Decode skills for form
+        $skillsRaw = $asisten['skills'] ?? '[]';
+        $skillsArr = json_decode($skillsRaw, true);
+        if(!is_array($skillsArr)) {
+             $skillsArr = array_map('trim', explode(',', str_replace(['[', ']', '"'], '', $skillsRaw)));
+        }
+        $asisten['skills_array'] = $skillsArr;
+        
         $this->view('admin/asisten/form', ['asisten' => $asisten, 'action' => 'edit']);
     }
 
-    /**
-     * Pilih koordinator
-     */
     public function pilihKoordinator($params = []) {
-        $data = $this->model->getAll();
+        $data = $this->model->getAllForAdmin();
         $this->view('admin/asisten/pilih-koordinator', ['asisten' => $data]);
     }
 
-    /**
-     * API endpoints
-     */
+    // =========================================================================
+    // API & CRUD OPERATIONS
+    // =========================================================================
+
     public function apiIndex() {
         $data = $this->model->getAll();
         $this->success($data, 'Data Asisten retrieved successfully');
@@ -79,82 +172,61 @@ class AsistenController extends Controller {
 
     public function apiShow($params) {
         $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID asisten tidak ditemukan', null, 400);
-        }
+        if (!$id) $this->error('ID asisten tidak ditemukan', null, 400);
 
-        $data = $this->model->getById($id, 'idAsisten');
-        if (!$data) {
-            $this->error('Asisten tidak ditemukan', null, 404);
-        }
+        $data = $this->model->getById($id);
+        if (!$data) $this->error('Asisten tidak ditemukan', null, 404);
         
+        $data['foto_url'] = $this->processPhotoUrl($data);
         $this->success($data, 'Asisten retrieved successfully');
     }
 
     public function store() {
         try {
-            // Check if this is a file upload (multipart/form-data)
-            if (isset($_FILES['foto'])) {
-                $input = [
-                    'nama' => $_POST['nama'] ?? '',
-                    'email' => $_POST['email'] ?? '',
-                    'jurusan' => $_POST['jurusan'] ?? '',
-                    'bio' => $_POST['bio'] ?? '',
-                    'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
-                    'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
-                    'isKoordinator' => $_POST['isKoordinator'] ?? '0'
-                ];
+            $input = [
+                'nama' => $_POST['nama'] ?? '',
+                'email' => $_POST['email'] ?? '',
+                'jurusan' => $_POST['jurusan'] ?? '',
+                'bio' => $_POST['bio'] ?? '',
+                'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
+                'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
+                'isKoordinator' => $_POST['isKoordinator'] ?? '0'
+            ];
 
-                // Jika skills dikirim sebagai string dipisah koma, ubah ke JSON array
-                if (!empty($input['skills']) && !is_array($input['skills']) && $input['skills'][0] !== '[') {
-                    $skillsArray = array_map('trim', explode(',', $input['skills']));
-                    $input['skills'] = json_encode($skillsArray);
-                } elseif (is_array($input['skills'])) {
-                    $input['skills'] = json_encode($input['skills']);
-                }
+            if (empty($input['nama']) || empty($input['email'])) {
+                $this->error('Field Nama dan Email wajib diisi', null, 400);
+                return;
+            }
 
-                $required = ['nama', 'email'];
-                $missing = $this->validateRequired($input, $required);
-                if (!empty($missing)) {
-                    $this->error('Field required: ' . implode(', ', $missing), null, 400);
-                    return;
-                }
+            // Normalisasi JSON Skills
+            if (!empty($input['skills']) && !is_array($input['skills']) && $input['skills'][0] !== '[') {
+                $skillsArray = array_map('trim', explode(',', $input['skills']));
+                $input['skills'] = json_encode($skillsArray);
+            } elseif (is_array($input['skills'])) {
+                $input['skills'] = json_encode($input['skills']);
+            }
 
-                // Process file upload
+            // Handle File Upload via Helper
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
                 $subFolder = 'asisten/';
                 $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+                
+                $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+                $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
+                
+                if (!in_array($ext, $allowedExts)) {
+                    $this->error('Format file tidak didukung', null, 400);
+                    return;
                 }
                 
-                $file = $_FILES['foto'];
-                if ($file['error'] === UPLOAD_ERR_OK) {
-                    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-                    $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
-                    
-                    if (!in_array($ext, $allowedExts)) {
-                        $this->error('Format file tidak didukung. Gunakan: jpg, jpeg, png, gif', null, 400);
-                        return;
-                    }
-                    
-                    $filename = Helper::generateFilename('asisten', $input['nama'], $ext);
-                    $destination = $uploadDir . $filename;
-                    
-                    if (move_uploaded_file($file['tmp_name'], $destination)) {
-                        $input['foto'] = $subFolder . $filename;
-                    } else {
-                        $this->error('Gagal mengupload file', null, 500);
-                        return;
-                    }
-                }
-            } else {
-                // Regular JSON input
-                $input = $this->getJson();
-                $required = ['nama', 'email'];
-                $missing = $this->validateRequired($input, $required);
+                $filename = Helper::generateFilename('asisten', $input['nama'], $ext);
+                $destination = $uploadDir . $filename;
                 
-                if (!empty($missing)) {
-                    $this->error('Field required: ' . implode(', ', $missing), null, 400);
+                if (move_uploaded_file($_FILES['foto']['tmp_name'], $destination)) {
+                    $input['foto'] = $subFolder . $filename;
+                } else {
+                    $this->error('Gagal mengupload file', null, 500);
                     return;
                 }
             }
@@ -166,6 +238,7 @@ class AsistenController extends Controller {
                 $this->error('Gagal menambahkan asisten', null, 500);
             }
         } catch (Exception $e) {
+            error_log('Asisten store error: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage(), null, 500);
         }
     }
@@ -173,75 +246,63 @@ class AsistenController extends Controller {
     public function update($params) {
         try {
             $id = $params['id'] ?? null;
-            if (!$id) {
-                $this->error('ID asisten tidak ditemukan', null, 400);
+            if (!$id) { $this->error('ID asisten tidak ditemukan', null, 400); return; }
+
+            $asisten = $this->model->getById($id);
+            if (!$asisten) { $this->error('Asisten tidak ditemukan', null, 404); return; }
+
+            $input = [
+                'nama' => $_POST['nama'] ?? '',
+                'email' => $_POST['email'] ?? '',
+                'jurusan' => $_POST['jurusan'] ?? '',
+                'bio' => $_POST['bio'] ?? '',
+                'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
+                'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
+                'isKoordinator' => $_POST['isKoordinator'] ?? '0'
+            ];
+
+            if (empty($input['nama']) || empty($input['email'])) {
+                $this->error('Field Nama dan Email wajib diisi', null, 400);
                 return;
             }
 
-            $asisten = $this->model->getById($id, 'idAsisten');
-            if (!$asisten) {
-                $this->error('Asisten tidak ditemukan', null, 404);
-                return;
+            if (!empty($input['skills']) && !is_array($input['skills']) && $input['skills'][0] !== '[') {
+                $skillsArray = array_map('trim', explode(',', $input['skills']));
+                $input['skills'] = json_encode($skillsArray);
+            } elseif (is_array($input['skills'])) {
+                $input['skills'] = json_encode($input['skills']);
             }
 
-            // Check if this is a file upload (multipart/form-data)
-            if (isset($_FILES['foto'])) {
-                $input = [
-                    'nama' => $_POST['nama'] ?? '',
-                    'email' => $_POST['email'] ?? '',
-                    'jurusan' => $_POST['jurusan'] ?? '',
-                    'bio' => $_POST['bio'] ?? '',
-                    'skills' => isset($_POST['skills']) ? $_POST['skills'] : '[]',
-                    'statusAktif' => $_POST['statusAktif'] ?? 'Asisten',
-                    'isKoordinator' => $_POST['isKoordinator'] ?? '0'
-                ];
-
-                // Jika skills dikirim sebagai string dipisah koma, ubah ke JSON array
-                if (!empty($input['skills']) && !is_array($input['skills']) && $input['skills'][0] !== '[') {
-                    $skillsArray = array_map('trim', explode(',', $input['skills']));
-                    $input['skills'] = json_encode($skillsArray);
-                } elseif (is_array($input['skills'])) {
-                    $input['skills'] = json_encode($input['skills']);
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $subFolder = 'asisten/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+                
+                $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+                $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
+                
+                if (!in_array($ext, $allowedExts)) {
+                    $this->error('Format file tidak didukung', null, 400);
+                    return;
                 }
-
-                // Process file upload if new file provided
-                $file = $_FILES['foto'];
-                if ($file['error'] === UPLOAD_ERR_OK) {
-                    $subFolder = 'asisten/';
-                    $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
-                    if (!is_dir($uploadDir)) {
-                        mkdir($uploadDir, 0777, true);
-                    }
-                    
-                    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-                    $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
-                    
-                    if (!in_array($ext, $allowedExts)) {
-                        $this->error('Format file tidak didukung. Gunakan: jpg, jpeg, png, gif', null, 400);
-                        return;
-                    }
-                    
-                    // Delete old file if exists (Robust path handling)
-                    if (!empty($asisten['foto'])) {
-                        $oldFilePath = dirname(__DIR__, 2) . '/public/assets/uploads/' . $asisten['foto'];
-                        if (file_exists($oldFilePath)) {
-                            @unlink($oldFilePath);
-                        }
-                    }
-                    
-                    $filename = Helper::generateFilename('asisten', $input['nama'], $ext);
-                    $destination = $uploadDir . $filename;
-                    
-                    if (move_uploaded_file($file['tmp_name'], $destination)) {
-                        $input['foto'] = $subFolder . $filename;
-                    } else {
-                        $this->error('Gagal mengupload file', null, 500);
-                        return;
+                
+                // Hapus foto lama
+                if (!empty($asisten['foto'])) {
+                    $oldFilePath = dirname(__DIR__, 2) . '/public/assets/uploads/' . $asisten['foto'];
+                    if (file_exists($oldFilePath) && is_file($oldFilePath)) {
+                        @unlink($oldFilePath);
                     }
                 }
-            } else {
-                // Regular JSON input
-                $input = $this->getJson();
+                
+                $filename = Helper::generateFilename('asisten', $input['nama'], $ext);
+                $destination = $uploadDir . $filename;
+                
+                if (move_uploaded_file($_FILES['foto']['tmp_name'], $destination)) {
+                    $input['foto'] = $subFolder . $filename;
+                } else {
+                    $this->error('Gagal mengupload file', null, 500);
+                    return;
+                }
             }
 
             $result = $this->model->update($id, $input, 'idAsisten');
@@ -251,28 +312,22 @@ class AsistenController extends Controller {
                 $this->error('Gagal mengupdate asisten', null, 500);
             }
         } catch (Exception $e) {
+            error_log('Asisten update error: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage(), null, 500);
         }
     }
 
     public function delete($params) {
         $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID asisten tidak ditemukan', null, 400);
-            return;
-        }
+        if (!$id) { $this->error('ID tidak ditemukan', null, 400); return; }
 
-        $asisten = $this->model->getById($id, 'idAsisten');
-        if (!$asisten) {
-            $this->error('Asisten tidak ditemukan', null, 404);
-            return;
-        }
+        $asisten = $this->model->getById($id);
+        if (!$asisten) { $this->error('Asisten tidak ditemukan', null, 404); return; }
 
-        // Delete foto file if exists
         if (!empty($asisten['foto'])) {
             $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
             $fotoPath = $uploadDir . $asisten['foto'];
-            if (file_exists($fotoPath)) {
+            if (file_exists($fotoPath) && is_file($fotoPath)) {
                 unlink($fotoPath);
             }
         }
@@ -285,27 +340,12 @@ class AsistenController extends Controller {
         }
     }
 
-    /**
-     * Set koordinator - unset all, then set selected one
-     */
     public function setKoordinator($params) {
         try {
             $id = $params['id'] ?? null;
-            if (!$id) {
-                $this->error('ID asisten tidak ditemukan', null, 400);
-                return;
-            }
+            if (!$id) { $this->error('ID tidak ditemukan', null, 400); return; }
 
-            $asisten = $this->model->getById($id, 'idAsisten');
-            if (!$asisten) {
-                $this->error('Asisten tidak ditemukan', null, 404);
-                return;
-            }
-
-            // Step 1: Reset semua koordinator
             $this->model->resetAllKoordinator();
-
-            // Step 2: Set asisten yang dipilih menjadi koordinator
             $result = $this->model->update($id, ['isKoordinator' => 1], 'idAsisten');
             
             if ($result) {
@@ -314,7 +354,9 @@ class AsistenController extends Controller {
                 $this->error('Gagal mengupdate koordinator', null, 500);
             }
         } catch (Exception $e) {
+            error_log('Set Koordinator error: ' . $e->getMessage());
             $this->error('Error: ' . $e->getMessage(), null, 500);
         }
     }
 }
+?>
