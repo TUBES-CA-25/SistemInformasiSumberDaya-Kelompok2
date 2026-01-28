@@ -24,49 +24,52 @@
                     </div>
                     
                     <div class="staff-grid">
-                        <?php foreach ($alumni_list as $row) : ?>
-                            <?php 
-                                // ==========================================
-                                // LOGIKA GAMBAR (DISEDERHANAKAN)
-                                // ==========================================
-                                $fotoName = $row['foto'] ?? '';
-                                $namaEnc = urlencode($row['nama']);
+    <?php foreach ($alumni_list as $row) : ?>
+        <?php 
+            // ==========================================
+            // 1. FIX ID: Cek apakah pakai 'idAlumni' atau 'id'
+            // ==========================================
+            $idAlumni = $row['idAlumni'] ?? $row['id'] ?? 0;
 
-                                // 1. Default Avatar (Abu-abu Elegan)
-                                $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
+            // ==========================================
+            // 2. LOGIKA GAMBAR
+            // ==========================================
+            $fotoName = $row['foto'] ?? '';
+            $namaEnc = urlencode($row['nama']);
 
-                                // 2. Cek Database
-                                if (!empty($fotoName)) {
-                                    // Pastikan ASSETS_URL terdefinisi, jika tidak kosongkan
-                                    $baseUrl = defined('ASSETS_URL') ? ASSETS_URL : '';
-                                    
-                                    // Asumsi: Database menyimpan 'alumni/file.jpg'
-                                    // Kita arahkan langsung ke folder uploads
-                                    $imgUrl = $baseUrl . '/assets/uploads/' . $fotoName;
-                                }
+            // Default Avatar
+            $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
 
-                                // Data Text
-                                $divisi = $row['divisi'] ?? 'Asisten Lab';
-                            ?>
+            // Cek Database / File
+            if (!empty($fotoName)) {
+                // Gunakan Helper atau path manual yang aman
+                $path = ROOT_PROJECT . '/public/assets/uploads/' . $fotoName;
+                if (file_exists($path)) {
+                    $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : '';
+                    $imgUrl = $baseUrl . '/assets/uploads/' . $fotoName;
+                }
+            }
 
-                            <a href="index.php?page=detail_alumni&id=<?= $row['id'] ?>" class="card-link">
-                                <div class="staff-card">
-                                    <div class="staff-photo-box">
-                                        <img src="<?= $imgUrl ?>" 
-                                             alt="<?= htmlspecialchars($row['nama']) ?>" 
-                                             loading="lazy"
-                                             onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?= $namaEnc ?>&background=f1f5f9&color=475569&size=512&bold=true';">
-                                    </div>
-                                    
-                                    <div class="staff-content">
-                                        <div class="staff-name"><?= htmlspecialchars($row['nama']) ?></div>
-                                        <span class="staff-role"><?= htmlspecialchars($divisi) ?></span>
-                                    </div>
-                                </div>
-                            </a>
+            $divisi = $row['divisi'] ?? 'Asisten Lab';
+        ?>
 
-                        <?php endforeach; ?>
-                    </div>
+        <a href="<?= PUBLIC_URL ?>/index.php?page=detail_alumni&id=<?= $idAlumni ?>" class="card-link">
+            <div class="staff-card">
+                <div class="staff-photo-box">
+                    <img src="<?= $imgUrl ?>" 
+                         alt="<?= htmlspecialchars($row['nama']) ?>" 
+                         loading="lazy">
+                </div>
+                
+                <div class="staff-content">
+                    <div class="staff-name"><?= htmlspecialchars($row['nama']) ?></div>
+                    <span class="staff-role"><?= htmlspecialchars($divisi) ?></span>
+                </div>
+            </div>
+        </a>
+
+    <?php endforeach; ?>
+</div>
                 </div>
             <?php endforeach; ?>
 

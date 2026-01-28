@@ -45,17 +45,20 @@ class AlumniController extends Controller {
      * [UPDATE] Menambahkan logic pembersihan string dan URL gambar
      */
     public function detail($params = []) {
-        $id = $params['id'] ?? null;
+        // PERBAIKAN DI SINI:
+        // Cek ID dari $params (API/Pretty URL) ATAU dari $_GET (Query String)
+        $id = $params['id'] ?? $_GET['id'] ?? null;
+        
         if (!$id) {
-            $this->redirect('/alumni');
+            $this->redirect('index.php?page=alumni');
             return;
         }
         
-        // Ambil data (gunakan getById atau getAlumniById sesuai model Anda)
-        $alumniRow = $this->model->getById((int)$id, 'id');
+        // Ambil data
+        $alumniRow = $this->model->getById((int)$id, 'id'); // Pastikan kolom ID benar ('id' atau 'idAlumni')
         
         if (!$alumniRow) {
-            $this->redirect('/alumni');
+            $this->redirect('index.php?page=alumni');
             return;
         }
 
@@ -71,7 +74,9 @@ class AlumniController extends Controller {
             if (strpos($dbFoto, 'http') === 0) {
                 $imgUrl = $dbFoto;
             } else {
-                $imgUrl = PUBLIC_URL . '/assets/uploads/' . $dbFoto;
+                // Gunakan konstanta PUBLIC_URL jika ada
+                $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : '';
+                $imgUrl = $baseUrl . '/assets/uploads/' . $dbFoto;
             }
         } else {
             // Default Avatar
