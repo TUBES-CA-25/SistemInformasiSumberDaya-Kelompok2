@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="<?= ASSETS_URL ?>/css/praktikum.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
@@ -7,7 +6,9 @@
         
         <header class="page-header">
             <span class="header-badge">Jadwal Ujian Praktikum</span>
-            <h1 id="header-day">Memuat Hari...</h1>
+            
+            <h1 id="upk-header-day">Memuat Hari...</h1>
+            
             <p>Informasi real-time lokasi laboratorium, waktu ujian, dan dosen pengampu mata kuliah.</p>
             
             <div id="live-clock" class="live-clock-badge">
@@ -16,28 +17,35 @@
         </header>
 
         <div id="lab-tables-container">
-            <?php if (empty($data['jadwal'])): ?>
+            <?php 
+            // Cek data dari Controller (Support data raw atau grouped)
+            $jadwal = $data['jadwal'] ?? [];
+            $grouped = $data['jadwal_grouped'] ?? [];
+
+            // Jika controller belum grouping, kita group di sini (Fallback)
+            if (empty($grouped) && !empty($jadwal)) {
+                foreach($jadwal as $row) {
+                    $grouped[$row['ruangan']][] = $row;
+                }
+                ksort($grouped);
+            }
+            ?>
+
+            <?php if (empty($grouped) && empty($jadwal)): ?>
                 <div class="empty-schedule">
                     <i class="far fa-calendar-times"></i>
                     <h3>Belum Ada Jadwal</h3>
                     <p>Jadwal UPK belum dirilis oleh admin.</p>
                 </div>
-            <?php else: 
-                // Grouping Data
-                $grouped = [];
-                foreach($data['jadwal'] as $row) {
-                    $grouped[$row['ruangan']][] = $row;
-                }
-                ksort($grouped);
-
-                foreach($grouped as $ruangan => $items):
-            ?>
+            <?php else: ?>
+                
+                <?php foreach($grouped as $ruangan => $items): ?>
                 <div class="schedule-wrapper">
                     <div class="lab-header">
                         <div class="lab-icon">
                             <i class="fas fa-door-open"></i>
                         </div>
-                        <h2 class="lab-title"><?= $ruangan ?></h2>
+                        <h2 class="lab-title"><?= htmlspecialchars($ruangan) ?></h2>
                     </div>
                     
                     <div class="table-responsive">
@@ -59,20 +67,20 @@
                                 <tr>
                                     <td>
                                         <div class="schedule-date"><?= $tgl ?></div>
-                                        <div class="schedule-time"><?= $item['jam'] ?></div>
+                                        <div class="schedule-time"><?= htmlspecialchars($item['jam']) ?></div>
                                     </td>
                                     <td>
-                                        <span class="schedule-matkul"><?= $item['mata_kuliah'] ?></span>
-                                        <span class="badge-prodi"><?= $item['prodi'] ?></span>
+                                        <span class="schedule-matkul"><?= htmlspecialchars($item['mata_kuliah']) ?></span>
+                                        <span class="badge-prodi"><?= htmlspecialchars($item['prodi']) ?></span>
                                     </td>
                                     <td>
-                                        <span class="schedule-kelas">Kelas <?= $item['kelas'] ?></span>
-                                        <span class="schedule-freq"><?= $item['frekuensi'] ?></span>
+                                        <span class="schedule-kelas">Kelas <?= htmlspecialchars($item['kelas']) ?></span>
+                                        <span class="schedule-freq"><?= htmlspecialchars($item['frekuensi']) ?></span>
                                     </td>
                                     <td>
                                         <div class="dosen-info">
                                             <i class="fas fa-user-tie"></i>
-                                            <span class="dosen-name"><?= $item['dosen'] ?></span>
+                                            <span class="dosen-name"><?= htmlspecialchars($item['dosen']) ?></span>
                                         </div>
                                     </td>
                                     <td>
@@ -90,23 +98,11 @@
                         </table>
                     </div>
                 </div>
-            <?php endforeach; endif; ?>
+                <?php endforeach; ?>
+
+            <?php endif; ?>
         </div>
     </div>
 </section>
 
-<script>
-function startClock() {
-    const clockElement = document.getElementById('live-clock');
-    const dayDisplay = document.getElementById('header-day');
-    const hariIndo = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    const bulanIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-
-    setInterval(() => {
-        const now = new Date();
-        clockElement.innerText = now.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':');
-        dayDisplay.innerText = "Jadwal " + hariIndo[now.getDay()] + ", " + now.getDate() + " " + bulanIndo[now.getMonth()];
-    }, 1000);
-}
-startClock();
-</script>
+<script src="<?= PUBLIC_URL ?>/js/praktikum.js"></script>

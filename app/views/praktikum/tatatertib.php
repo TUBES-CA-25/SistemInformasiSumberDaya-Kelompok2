@@ -1,32 +1,8 @@
 <?php
-/**
- * VIEW: TATA TERTIB & SANKSI (FINAL FIXED - NO ERROR)
- * Menggunakan tabel: peraturan_lab & sanksi_lab
- */
-
-global $pdo;
-
-// ==========================================
-// 1. AMBIL DATA DARI DATABASE
-// ==========================================
-
-// A. Data Peraturan (Tabel: peraturan_lab)
-$rules_data = [];
-try {
-    $stmt = $pdo->query("SELECT * FROM peraturan_lab ORDER BY urutan ASC");
-    $rules_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $rules_data = [];
-}
-
-// B. Data Sanksi (Tabel: sanksi_lab)
-$sanksi_data = [];
-try {
-    $stmt = $pdo->query("SELECT * FROM sanksi_lab ORDER BY urutan ASC");
-    $sanksi_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $sanksi_data = [];
-}
+// AMBIL DATA DARI CONTROLLER
+// Data sudah diproses di PraktikumController::tatatertib()
+$rules_data = $data['rules'] ?? [];
+$sanksi_data = $data['sanksi'] ?? [];
 ?>
 
 <section class="rules-section">
@@ -34,7 +10,6 @@ try {
         
         <header class="page-header">
             <span class="header-badge">Pedoman & Aturan <?= date('Y') ?></span>
-            
             <h1>Tata Tertib & Sanksi</h1>
             <p>Pedoman standar operasional dan kedisiplinan bagi seluruh praktikan di lingkungan Laboratorium Terpadu FIKOM UMI.</p>
         </header>
@@ -42,7 +17,7 @@ try {
        <div class="rules-grid" style="margin-bottom: 30px;">
             <article class="rule-card">
                 <div class="rule-img-box" style="height: 500px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
-                    <img src="<?= ASSETS_URL ?>/assets/uploads/Pria.jpg" alt="Standar Pakaian Pria" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    <img src="<?= PUBLIC_URL ?>/assets/uploads/Pria.jpg" alt="Standar Pakaian Pria" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
                 <h3>Standar Pakaian Pria</h3>
                 <ul class="rule-list">
@@ -54,7 +29,7 @@ try {
 
             <article class="rule-card">
                 <div class="rule-img-box" style="height: 500px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
-                    <img src="<?= ASSETS_URL ?>/assets/uploads/Wanita.jpg" alt="Standar Pakaian Wanita" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                     <img src="<?= PUBLIC_URL ?>/assets/uploads/Wanita.jpg" alt="Standar Pakaian Wanita" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
                 <h3>Standar Pakaian Wanita</h3>
                 <ul class="rule-list">
@@ -71,14 +46,12 @@ try {
                 <div class="video-badge">
                     <i class="ri-movie-line"></i> Wajib Disimak
                 </div>
-                
                 <div class="video-title-box">
                     <h2>
                         <span class="video-play-icon"><i class="ri-play-fill"></i></span>
                         Video Panduan & Keselamatan
                     </h2>
                 </div>
-                
                 <p class="video-desc">
                     Pelajari prosedur keselamatan, penggunaan alat, dan tata tertib laboratorium melalui video panduan resmi berikut ini.
                 </p>
@@ -99,17 +72,11 @@ try {
 
         <div class="rules-grid">
             <?php if (!empty($rules_data)) : ?>
-                <?php foreach ($rules_data as $index => $row) : ?>
-                    <?php 
-                        // FIX: Cek apakah kolom 'gambar' ada dan tidak kosong
-                        $hasImage = !empty($row['gambar']);
-                        $imageUrl = $hasImage ? ASSETS_URL . '/assets/uploads/' . $row['gambar'] : '';
-                    ?>
-
+                <?php foreach ($rules_data as $row) : ?>
                     <article class="rule-card">
-                        <?php if ($hasImage) : ?>
+                        <?php if (!empty($row['img_url'])) : ?>
                             <div class="rule-img-box">
-                                <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($row['judul']) ?>" loading="lazy">
+                                <img src="<?= $row['img_url'] ?>" alt="<?= htmlspecialchars($row['judul']) ?>" loading="lazy">
                             </div>
                         <?php else : ?>
                             <div class="rule-icon icon-red">
@@ -120,12 +87,11 @@ try {
                         <h3><?= htmlspecialchars($row['judul']) ?></h3>
                         
                         <?php 
-                            // Render based on display_format
                             $format = $row['display_format'] ?? 'list';
                             $deskripsi = $row['deskripsi'];
                             
                             if ($format === 'list') {
-                                // Split by line breaks and render as list items
+                                // Pecah baris baru menjadi list item
                                 $items = array_filter(array_map('trim', explode("\n", $deskripsi)));
                                 if (!empty($items)) {
                                     echo '<ul class="rule-list">';
@@ -137,7 +103,7 @@ try {
                                     echo '<ul class="rule-list"><li><i class="ri-prohibited-line" style="color: #dc2626;"></i><span>' . htmlspecialchars($deskripsi) . '</span></li></ul>';
                                 }
                             } else {
-                                // Plain text format
+                                // Tampilan paragraf biasa
                                 echo '<p style="color: #475569; line-height: 1.6;">' . nl2br(htmlspecialchars($deskripsi)) . '</p>';
                             }
                         ?>
@@ -160,28 +126,10 @@ try {
             <div class="sanksi-grid">
                 <?php if (!empty($sanksi_data)) : ?>
                     <?php foreach ($sanksi_data as $row) : ?>
-                        <?php
-                            // 1. Ambil nama file dari DB
-                            $gambarDB = $row['gambar'] ?? '';
-                            $sanksiImgUrl = '';
-
-                            // 2. Cek apakah file fisik BENAR-BENAR ADA di folder
-                            if (!empty($gambarDB)) {
-                                // Definisikan path fisik komputer (bukan URL)
-                                $pathFisik = defined('ROOT_PROJECT') 
-                                    ? ROOT_PROJECT . '/public/assets/uploads/' . $gambarDB 
-                                    : dirname(__DIR__, 3) . '/public/assets/uploads/' . $gambarDB;
-
-                                if (file_exists($pathFisik)) {
-                                    $sanksiImgUrl = ASSETS_URL . '/assets/uploads/' . $gambarDB;
-                                }
-                            }
-                        ?>
-                        
                         <div class="sanksi-item">
                             <div class="sanksi-icon-box">
-                                <?php if (!empty($sanksiImgUrl)): ?>
-                                    <img src="<?= $sanksiImgUrl ?>" alt="Sanksi" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                                <?php if (!empty($row['img_url'])): ?>
+                                    <img src="<?= $row['img_url'] ?>" alt="Sanksi" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                                 <?php else : ?>
                                     <i class="ri-alarm-warning-fill" style="font-size: 2rem;"></i>
                                 <?php endif; ?>
@@ -191,12 +139,10 @@ try {
                                 <h4><?= htmlspecialchars($row['judul']) ?></h4>
                                 
                                 <?php 
-                                    // Render based on display_format
                                     $format = $row['display_format'] ?? 'list';
                                     $deskripsi = $row['deskripsi'];
                                     
                                     if ($format === 'list') {
-                                        // Split by line breaks and render as list items
                                         $items = array_filter(array_map('trim', explode("\n", $deskripsi)));
                                         if (!empty($items)) {
                                             echo '<ul style="list-style: disc; margin-left: 20px; color: #475569;">';
@@ -208,13 +154,11 @@ try {
                                             echo '<p>' . htmlspecialchars($deskripsi) . '</p>';
                                         }
                                     } else {
-                                        // Plain text format
                                         echo '<p style="color: #475569; line-height: 1.6;">' . nl2br(htmlspecialchars($deskripsi)) . '</p>';
                                     }
                                 ?>
                             </div>
                         </div>
-
                     <?php endforeach; ?>
                 <?php else : ?>
                     <div class="sanksi-item" style="grid-column: 1/-1; justify-content: center;">

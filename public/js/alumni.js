@@ -3,46 +3,63 @@
  * Fitur pencarian real-time untuk halaman alumni
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    
-    const searchInput = document.getElementById('searchAlumni');
-    const cards = document.querySelectorAll('.card-link');
-    const yearGroups = document.querySelectorAll('.alumni-group');
+document.addEventListener("DOMContentLoaded", function () {
+  const searchInput = document.getElementById("searchAlumni");
+  const cards = document.querySelectorAll(".card-link");
+  const yearGroups = document.querySelectorAll(".alumni-group");
 
-    if (searchInput) {
-        searchInput.addEventListener('keyup', function(e) {
-            const term = e.target.value.toLowerCase();
+  if (searchInput) {
+    searchInput.addEventListener("keyup", function (e) {
+      const term = e.target.value.toLowerCase();
 
-            cards.forEach(card => {
-                const nameEl = card.querySelector('.staff-name');
-                const roleEl = card.querySelector('.staff-role');
-                const metaEls = card.querySelectorAll('.meta-item');
-                
-                let textContent = '';
-                if (nameEl) textContent += nameEl.textContent.toLowerCase();
-                if (roleEl) textContent += roleEl.textContent.toLowerCase();
-                metaEls.forEach(meta => textContent += meta.textContent.toLowerCase());
+      cards.forEach((card) => {
+        // 1. Ambil data dari dalam kartu (Nama, Role, Meta)
+        const nameEl = card.querySelector(".staff-name");
+        const roleEl = card.querySelector(".staff-role");
+        const metaEls = card.querySelectorAll(".meta-item");
 
-                if (textContent.includes(term)) {
-                    card.style.display = '';
-                    card.classList.remove('hidden-by-search');
-                } else {
-                    card.style.display = 'none';
-                    card.classList.add('hidden-by-search');
-                }
-            });
+        // 2. Ambil data TAHUN dari Header Grup (Parent Element)
+        // Ini logika tambahan dari script PHP sebelumnya
+        const group = card.closest(".alumni-group");
+        const yearLabel = group
+          ? group.querySelector(".section-label span")
+          : null;
 
-            // Opsional: Sembunyikan Header Tahun jika semua anak-anaknya tersembunyi
-            yearGroups.forEach(group => {
-                const allCards = group.querySelectorAll('.card-link');
-                const hiddenCards = group.querySelectorAll('.card-link.hidden-by-search');
-                
-                if (allCards.length === hiddenCards.length) {
-                    group.style.display = 'none';
-                } else {
-                    group.style.display = 'block';
-                }
-            });
-        });
-    }
+        // 3. Gabungkan semua teks untuk pencarian
+        let textContent = "";
+
+        if (nameEl) textContent += nameEl.textContent.toLowerCase() + " ";
+        if (roleEl) textContent += roleEl.textContent.toLowerCase() + " ";
+        if (yearLabel) textContent += yearLabel.textContent.toLowerCase() + " "; // Tambahkan Tahun ke pencarian
+
+        metaEls.forEach(
+          (meta) => (textContent += meta.textContent.toLowerCase() + " "),
+        );
+
+        // 4. Cek Pencarian
+        if (textContent.includes(term)) {
+          card.style.display = "";
+          card.classList.remove("hidden-by-search");
+        } else {
+          card.style.display = "none";
+          card.classList.add("hidden-by-search");
+        }
+      });
+
+      // 5. Sembunyikan Header Tahun jika semua alumni di dalamnya tersembunyi
+      yearGroups.forEach((group) => {
+        const allCards = group.querySelectorAll(".card-link");
+        const hiddenCards = group.querySelectorAll(
+          ".card-link.hidden-by-search",
+        );
+
+        // Jika jumlah semua kartu == jumlah kartu yang disembunyikan, maka sembunyikan grup
+        if (allCards.length > 0 && allCards.length === hiddenCards.length) {
+          group.style.display = "none";
+        } else {
+          group.style.display = "block";
+        }
+      });
+    });
+  }
 });

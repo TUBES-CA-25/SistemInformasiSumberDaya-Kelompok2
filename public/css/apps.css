@@ -2,148 +2,315 @@
    1. STYLE TOMBOL NAVBAR (POJOK KANAN)
    ========================================= */
 .btn-nav-apps {
-  background-color: #2563eb; /* Biru Utama */
+  background-color: #2563eb;
   color: #fff !important;
   padding: 10px 24px;
-  border-radius: 8px;
+  border-radius: 12px; /* Lebih bulat dikit biar modern */
   font-weight: 600;
+  font-size: 0.95rem;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+  gap: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  border: 1px solid transparent;
 }
 
 .btn-nav-apps:hover {
   background-color: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
 .btn-nav-apps i {
-  font-size: 1.1rem;
-  font-weight: normal;
+  font-size: 1.2rem;
 }
 
 /* =========================================
-   2. STYLE HALAMAN APPS (GRID LAYOUT)
+   2. STYLE HALAMAN APPS (LAYOUT UTAMA)
    ========================================= */
 .apps-section {
-  padding: 120px 0 80px 0;
-  min-height: 100vh;
+  padding: 80px 0;
   background-color: #f8fafc;
-  font-family: "Inter", sans-serif;
+  min-height: 100vh;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
-/* Container Grid */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* =========================================
+   3. STYLE HEADER
+   ========================================= */
+.page-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 60px auto;
+  padding-top: 10px;
+  border-bottom: none;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 24px;
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+}
+
+.page-header h1 {
+  font-size: 3.5rem;
+  color: #0f172a;
+  margin: 0 0 20px 0;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1.1;
+}
+
+.page-header p {
+  color: #475569;
+  margin: 0 auto;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* =========================================
+   4. GRID SYSTEM & CARDS (PREMIUM LOOK)
+   ========================================= */
+
 .apps-grid {
   display: grid;
-  /* Grid Responsif: Otomatis menyesuaikan jumlah kolom */
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* Minmax 280px agar aman di tablet kecil */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
-  margin-top: 50px;
 }
 
-/* Kartu Aplikasi */
 .app-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 30px;
+  border-radius: 24px; /* Sudut lebih lembut */
+  padding: 32px;
   text-decoration: none;
   color: #0f172a;
   display: flex;
   align-items: center;
-  gap: 20px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 24px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efek membal halus */
   position: relative;
   overflow: hidden;
+  height: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
 }
 
 .app-card:hover {
-  border-color: #bfdbfe;
-  transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: #3b82f6;
+  transform: translateY(-8px);
+  /* Shadow berwarna biru halus saat hover */
+  box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.15);
 }
 
-/* Icon Box (Kotak Ikon) */
+/* Icon Box dengan Gradient */
 .app-icon-box {
-  width: 60px;
-  height: 60px;
-  border-radius: 16px;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
+  font-size: 1.75rem;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
 }
 
-/* Warna-warni Ikon */
+.app-card:hover .app-icon-box {
+  transform: scale(1.1) rotate(5deg); /* Animasi icon saat hover */
+}
+
+/* Warna Gradient Modern */
 .color-blue {
-  background: #eff6ff;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
   color: #2563eb;
 }
 .color-green {
-  background: #f0fdf4;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
   color: #16a34a;
 }
 .color-purple {
-  background: #faf5ff;
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
   color: #9333ea;
 }
 .color-orange {
-  background: #fff7ed;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
   color: #ea580c;
 }
 .color-red {
-  background: #fef2f2;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
   color: #dc2626;
 }
 .color-cyan {
-  background: #ecfeff;
+  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
   color: #0891b2;
 }
 .color-yellow {
-  background: #fefce8;
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
   color: #ca8a04;
+}
+.color-pink {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  color: #db2777;
+}
+.color-indigo {
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  color: #4338ca;
 }
 
 /* Konten Teks */
+.app-content {
+  flex: 1;
+}
+
 .app-content h3 {
-  margin: 0 0 5px 0;
-  font-size: 1.15rem;
+  margin: 0 0 6px 0;
+  font-size: 1.2rem;
   font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.5px;
 }
 
 .app-content p {
   margin: 0;
   font-size: 0.9rem;
   color: #64748b;
-  line-height: 1.4;
+  line-height: 1.5;
+  font-weight: 500;
 }
 
 /* Panah Hover */
 .app-arrow {
   margin-left: auto;
   color: #cbd5e1;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .app-card:hover .app-arrow {
   color: #2563eb;
+  background-color: #eff6ff;
   transform: translateX(5px);
 }
 
-/* Responsive Mobile */
+/* =========================================
+   STYLE MAINTENANCE MODE (STRIPED PATTERN)
+   ========================================= */
+
+.app-card.maintenance {
+  /* Pattern Garis-garis */
+  background-image: repeating-linear-gradient(
+    45deg,
+    #f8fafc,
+    #f8fafc 10px,
+    #f1f5f9 10px,
+    #f1f5f9 20px
+  );
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 1; /* Jangan di opacity full card, biar teks tetap terbaca */
+}
+
+/* Ubah konten jadi agak transparan/grayscale */
+.app-card.maintenance .app-content,
+.app-card.maintenance .app-icon-box {
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+.app-card.maintenance:hover {
+  transform: none; /* Matikan efek naik */
+  border-color: #cbd5e1;
+  box-shadow: none;
+}
+
+/* Badge Maintenance */
+.maintenance-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.app-card.maintenance .app-arrow {
+  display: none;
+}
+
+/* =========================================
+   5. RESPONSIVE MOBILE
+   ========================================= */
 @media (max-width: 768px) {
-  .btn-nav-apps {
-    width: 100%;
-    justify-content: center;
-    margin-top: 10px;
+  .apps-section {
+    padding-top: 120px;
+    background-size: 20px 20px; /* Dot lebih kecil di HP */
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .page-header p {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+
+  .app-card {
+    flex-direction: column; /* Stack vertikal di HP biar rapi */
+    align-items: flex-start;
+    text-align: left;
+    gap: 16px;
+    padding: 24px;
+  }
+
+  .app-icon-box {
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+
+  .app-arrow {
+    position: absolute;
+    top: 24px;
+    right: 24px;
   }
 
   .apps-grid {
-    grid-template-columns: 1fr; /* 1 kolom di HP */
+    gap: 20px;
   }
 }

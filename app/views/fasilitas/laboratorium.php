@@ -1,30 +1,7 @@
 <?php
-/**
- * VIEW: LABORATORIUM PENGAJARAN
- * Filter: jenis = 'Laboratorium'
- */
-
-$lab_list = [];
-
-if (!empty($data['laboratorium'])) {
-    $lab_list = $data['laboratorium'];
-} else {
-    global $pdo;
-    try {
-        if ($pdo instanceof PDO) {
-            // FILTER: Hanya ambil yang jenisnya 'Laboratorium'
-            $stmt = $pdo->query("SELECT * FROM laboratorium WHERE jenis = 'Laboratorium' ORDER BY idLaboratorium ASC");
-            $lab_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-    } catch (Throwable $e) { $lab_list = []; }
-}
-
-function getLabImg($row) {
-    if (!empty($row['gambar']) && file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $row['gambar'])) {
-        return ASSETS_URL . '/assets/uploads/' . $row['gambar'];
-    }
-    return null;
-}
+// 1. Ambil data yang dikirim Controller
+// Menggunakan null coalescing operator (??) untuk keamanan jika data kosong
+$lab_list = $data['laboratorium'] ?? [];
 ?>
 
 <section class="fasilitas-section">
@@ -40,17 +17,27 @@ function getLabImg($row) {
             
             <?php if (!empty($lab_list)) : ?>
                 <?php foreach ($lab_list as $row) : ?>
-                    <?php 
-                        $imgSrc = getLabImg($row); 
-                        $descRaw = $row['deskripsi'] ?? ''; 
-                        $deskripsi = strlen($descRaw) > 150 ? substr($descRaw, 0, 150) . '...' : $descRaw;
+                    <?php
+                        // --- PENYESUAIAN VARIABLE (FIX ERROR) ---
+                        // Kita cek semua kemungkinan nama variable agar tidak error lagi
+                        
+                        // 1. Cek Gambar (img_src atau img_src_final atau gambar mentah)
+                        $finalImage = $row['img_src'] ?? $row['img_src_final'] ?? null;
+                        
+                        // 2. Cek Deskripsi (short_desc atau deskripsi_final atau deskripsi mentah)
+                        $finalDesc = $row['short_desc'] ?? $row['deskripsi_final'] ?? $row['deskripsi'] ?? '';
                     ?>
 
-                    <a href="<?= PUBLIC_URL ?>/detail_fasilitas/<?= $row['idLaboratorium'] ?>" class="facility-row" data-id="<?= $row['idLaboratorium'] ?>" data-link>
+                    <a href="<?= PUBLIC_URL ?>/index.php?page=detail_fasilitas&id=<?= $row['idLaboratorium'] ?>"
+                       class="facility-row" 
+                       data-id="<?= $row['idLaboratorium'] ?>">
+                        
                         <div class="facility-img-side">
-                            <?php if ($imgSrc) : ?>
-                                <img src="<?= $imgSrc ?>" alt="<?= htmlspecialchars($row['nama']) ?>" 
-                                     style="width:100%; height:100%; object-fit:cover;" loading="lazy">
+                            <?php if (!empty($finalImage)) : ?>
+                                <img src="<?= $finalImage ?>" 
+                                     alt="<?= htmlspecialchars($row['nama']) ?>" 
+                                     style="width:100%; height:100%; object-fit:cover;" 
+                                     loading="lazy">
                             <?php else : ?>
                                 <div class="img-overlay-placeholder">
                                     <i class="ri-computer-line"></i>
@@ -66,7 +53,8 @@ function getLabImg($row) {
                             </div>
 
                             <h3><?= htmlspecialchars($row['nama']) ?></h3>
-                            <p><?= htmlspecialchars($deskripsi) ?></p>
+                            
+                            <p><?= htmlspecialchars($finalDesc) ?></p>
                             
                             <div class="mini-specs">
                                 <?php if (!empty($row['processor'])) : ?>
@@ -83,9 +71,10 @@ function getLabImg($row) {
                     </a>
 
                 <?php endforeach; ?>
+            
             <?php else : ?>
                 <div style="text-align:center; padding:50px; color:#94a3b8; width:100%;">
-                    <i class="ri-computer-line" style="font-size:3rem;"></i>
+                    <i class="ri-computer-line" style="font-size:3rem; margin-bottom:15px; display:block;"></i>
                     <p>Data laboratorium belum tersedia.</p>
                 </div>
             <?php endif; ?>
@@ -94,4 +83,4 @@ function getLabImg($row) {
     </div>
 </section>
 
-<script src="<?= ASSETS_URL ?>/js/fasilitas.js"></script>
+<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/js/fasilitas.js"></script>

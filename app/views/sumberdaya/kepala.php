@@ -1,65 +1,11 @@
 <?php
 /**
- * VIEW: KEPALA LAB & MANAJEMEN
- * Fix: Link mengarah ke detail_asisten dengan parameter type=manajemen
+ * VIEW: KEPALA LAB & MANAJEMEN (MVC Clean Version)
+ * Data dikirim dari ManajemenController::index()
  */
 
-$pimpinan_list = [];
-$laboran_list  = [];
-$all_data      = [];
-
-// 1. Ambil Data (Controller / Fallback)
-if (!empty($data['manajemen'])) {
-    $all_data = $data['manajemen'];
-} else {
-    global $pdo;
-    try {
-        if ($pdo instanceof PDO) {
-            $stmt = $pdo->query("SELECT * FROM manajemen ORDER BY idManajemen ASC");
-            $all_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-    } catch (Throwable $e) {
-        $all_data = [];
-    }
-}
-
-// 2. Kelompokkan Data
-foreach ($all_data as $row) {
-    $jabatan = $row['jabatan'] ?? '';
-    // Deteksi Pimpinan (Kepala Lab)
-    if (stripos($jabatan, 'Kepala') !== false) {
-        $pimpinan_list[] = $row;
-    } else {
-        $laboran_list[] = $row;
-    }
-}
-
-// 3. Helper Foto (Diperbarui agar sinkron dengan detail)
-function getFotoUrl($row) {
-    $fotoName = $row['foto'] ?? '';
-    $namaEnc  = urlencode($row['nama']);
-    
-    // Default Avatar
-    $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=eff6ff&color=2563eb&size=512&bold=true";
-
-    if (empty($fotoName)) return $imgUrl;
-    if (strpos($fotoName, 'http') === 0) return $fotoName;
-
-    // Cek Folder Uploads (Prioritas)
-    if (file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $fotoName)) {
-        return ASSETS_URL . '/assets/uploads/' . $fotoName;
-    }
-    // Cek Folder Manajemen (Legacy)
-    if (file_exists(ROOT_PROJECT . '/public/images/manajemen/' . $fotoName)) {
-        return ASSETS_URL . '/images/manajemen/' . $fotoName;
-    }
-    // Cek Folder Asisten (Fallback)
-    if (file_exists(ROOT_PROJECT . '/public/images/asisten/' . $fotoName)) {
-        return ASSETS_URL . '/images/asisten/' . $fotoName;
-    }
-
-    return $imgUrl;
-}
+$pimpinan_list = $data['pimpinan'] ?? [];
+$laboran_list  = $data['laboran'] ?? [];
 ?>
 
 <section class="sumberdaya-section fade-up">
@@ -80,24 +26,23 @@ function getFotoUrl($row) {
             <div class="section-label">Kepala Laboratorium</div>
             
             <div class="pimpinan-wrapper">
-                
                 <?php foreach ($pimpinan_list as $row) : ?>
-                    <?php $imgUrl = getFotoUrl($row); ?>
-
-                    <a href="index.php?page=detail&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
+                    <a href="<?= PUBLIC_URL ?>/index.php?page=detail&type=manajemen&id=<?= $row['idManajemen'] ?>" class="card-link">
                         
                         <div class="staff-card">
                             <div class="staff-photo-box">
-                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
                             </div>
 
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
-                                <?php if (!empty($row['nidn'])) : ?>
+                                
+                                <?php if (!empty($row['nidn']) && $row['nidn'] !== '-') : ?>
                                     <span class="staff-nidn" style="display: block; font-size: 0.75rem; color: #64748b; margin-top: -2px; margin-bottom: 4px; font-weight: 500;">
                                         NIDN: <?= htmlspecialchars($row['nidn']) ?>
                                     </span>
                                 <?php endif; ?>
+                                
                                 <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
 
                                 <div class="staff-footer">
@@ -115,30 +60,28 @@ function getFotoUrl($row) {
                         </div>
                     </a>
                 <?php endforeach; ?>
-                
             </div>
         <?php endif; ?>
 
         <?php if (!empty($laboran_list)) : ?>
             <div class="section-label">Pranata Laboratorium & Staff</div>
-            <div class="pimpinan-wrapper">
-                
-                <?php foreach ($laboran_list as $row) : ?>
-                    <?php $imgUrl = getFotoUrl($row); ?>
-
-                    <a href="index.php?page=detail&id=<?= $row['idManajemen'] ?>&type=manajemen" class="card-link">
+            
+            <div class="pimpinan-wrapper"> <?php foreach ($laboran_list as $row) : ?>
+                    <a href="<?= PUBLIC_URL ?>/index.php?page=detail&type=manajemen&id=<?= $row['idManajemen'] ?>" class="card-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
-                                <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
                             </div>
 
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
-                                <?php if (!empty($row['nidn'])) : ?>
+                                
+                                <?php if (!empty($row['nidn']) && $row['nidn'] !== '-') : ?>
                                     <span class="staff-nidn" style="display: block; font-size: 0.75rem; color: #64748b; margin-top: -2px; margin-bottom: 4px; font-weight: 500;">
                                         NIDN: <?= htmlspecialchars($row['nidn']) ?>
                                     </span>
                                 <?php endif; ?>
+                                
                                 <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
 
                                 <div class="staff-footer">
@@ -162,6 +105,7 @@ function getFotoUrl($row) {
         <?php if (empty($pimpinan_list) && empty($laboran_list)) : ?>
             <div class="empty-state-wrapper">
                 <div class="empty-icon"><i class="ri-folder-unknow-line"></i></div>
+                <h3 class="empty-title">Data Kosong</h3>
                 <p>Data manajemen belum tersedia saat ini.</p>
             </div>
         <?php endif; ?>
