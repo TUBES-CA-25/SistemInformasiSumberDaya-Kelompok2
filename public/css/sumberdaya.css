@@ -22,7 +22,11 @@
   padding-bottom: 80px;
   background-color: var(--bg-light);
   min-height: 100vh;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .container {
@@ -40,17 +44,21 @@
   margin: 0 auto 50px auto;
 }
 
+.badge-pill,
 .header-badge {
-  display: inline-block;
-  background-color: #e0e7ff;
-  color: #3730a3;
-  padding: 10px 24px;
-  border-radius: 50px;
-  font-weight: 800;
-  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 15px;
+  letter-spacing: 1.5px;
+  margin-bottom: 24px;
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
 }
 
 .page-header h1 {
@@ -191,7 +199,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 20px;
-  align-self: flex-start; /* KUNCI FIX BADGE MEMANJANG */
+  align-self: flex-start;
   border: 1px solid #bfdbfe;
 }
 
@@ -211,23 +219,22 @@
   margin-bottom: 0;
 }
 
-/* --- Staff Grid & Card --- */
+/* --- Staff Grid --- */
 .staff-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 30px;
   margin-top: 20px;
-  align-items: start;
 }
 
-.card-link {
+.staff-grid .card-link {
+  width: 280px;
+  max-width: 100%;
   text-decoration: none;
-  color: inherit;
-  display: block;
-  height: 100%;
-  width: 100%;
 }
 
+/* --- Card Style --- */
 .staff-card {
   background: var(--card-bg);
   border: 2px solid var(--border);
@@ -317,13 +324,38 @@
   font-weight: 500;
 }
 
+/* --- Wrapper Khusus Kepala Lab --- */
+.pimpinan-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+.pimpinan-wrapper .card-link {
+  max-width: 280px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .pimpinan-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .pimpinan-wrapper .card-link {
+    max-width: 320px;
+    width: 100%;
+  }
+}
+
 .meta-item i {
   color: #94a3b8;
   font-size: 1.1rem;
 }
 
-/* Badge Fix (Absolute) */
-.badge-ca,
+/* Badge Fix (Absolute for Cards) */
+.badge-ca-card,
 .badge-alumni {
   position: absolute;
   top: 10px;
@@ -336,7 +368,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   letter-spacing: 0.5px;
 }
-.badge-ca {
+.badge-ca-card {
   background: #f59e0b;
   color: white;
 }
@@ -392,14 +424,11 @@
   justify-content: flex-start;
 }
 
-/* --- DETAIL BADGE (DIPERBAIKI) --- */
-/* FIX: Mencegah badge memanjang ke kanan */
-/* --- DETAIL BADGE (FIX FINAL) --- */
+/* --- DETAIL BADGES (FINAL) --- */
 .category-badge {
   display: inline-block;
-  width: fit-content;        /* <--- TAMBAHKAN INI (Wajib) */
-  align-self: flex-start;    /* <--- Pastikan ini tetap ada */
-  
+  width: fit-content;
+  align-self: flex-start;
   padding: 8px 20px;
   border-radius: 50px;
   font-size: 0.85rem;
@@ -409,7 +438,10 @@
   margin-bottom: 20px;
 }
 
-.badge-pimpinan {
+/* Warna-warna Badge sesuai Controller */
+.badge-pimpinan,
+.badge-kepala,
+.badge-coord {
   background: #eff6ff;
   color: #2563eb;
   border: 1px solid #bfdbfe;
@@ -421,6 +453,19 @@
   border: 1px solid #e2e8f0;
 }
 
+.badge-asisten {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.badge-ca {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fcd34d;
+}
+
+/* Typography & Layout */
 .profile-name {
   margin-bottom: 10px;
   font-size: 2.8rem;
@@ -462,7 +507,7 @@
   margin-top: 35px;
 }
 
-/* 5. Buttons */
+/* Buttons */
 .btn-back {
   text-decoration: none;
   color: var(--text-gray);
@@ -513,6 +558,21 @@
   background: var(--primary-dark);
   transform: translateY(-3px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Disabled Button */
+.btn-disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
 }
 
 /* Empty State */
@@ -583,7 +643,7 @@
     font-size: 2rem;
   }
   .exec-badge {
-    align-self: center; /* Center badge on mobile */
+    align-self: center;
   }
 
   /* Detail Profile */
@@ -612,7 +672,6 @@
   }
 }
 
-/* MOBILE PHONE FIX (1 Baris 2 Nama & Ukuran Konsisten) */
 @media (max-width: 600px) {
   .container {
     padding: 0 16px;
@@ -621,6 +680,10 @@
   .staff-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+  }
+
+  .staff-grid .card-link {
+    width: 46%;
   }
 
   .staff-card {

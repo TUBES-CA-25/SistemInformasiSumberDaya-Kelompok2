@@ -3,141 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - SISDA</title>
+    <title>Login Admin - IC-LABS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: monospace;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        /* Animasi Masuk */
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .login-box {
-            background: white;
-            padding: 40px;
-            border: 2px solid black;
-            width: 300px;
-            box-shadow: 10px 10px 0px black;
+        .animate-enter { animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* Floating Labels untuk Input */
+        .floating-input:focus ~ label,
+        .floating-input:not(:placeholder-shown) ~ label {
+            top: -10px;
+            left: 10px;
+            font-size: 0.75rem;
+            color: #2563eb;
+            background-color: white;
+            padding: 0 8px;
+            font-weight: 600;
         }
-        h2 {
-            text-align: center;
-            margin-top: 0;
-            border-bottom: 2px solid black;
-            padding-bottom: 10px;
+
+        /* 3D Tilt Effect Wrapper */
+        .tilt-wrapper {
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
-        .form-group {
-            margin-bottom: 15px;
+        .tilt-card {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+
+        /* Glassmorphism Premium */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                0 20px 40px -6px rgba(0, 0, 0, 0.1),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
         }
-        input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid black;
-            font-family: inherit;
+
+        /* Background Pattern */
+        .bg-grid-slate {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(226, 232, 240, 0.5) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(226, 232, 240, 0.5) 1px, transparent 1px);
         }
-        button {
-            width: 100%;
-            padding: 10px;
-            background: black;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
-            margin-top: 10px;
+
+        /* UPDATED: Animasi Melayang Lebih Halus (Levitate) */
+        @keyframes float-smooth {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); } /* Naik pelan */
+            100% { transform: translateY(0px); }
         }
-        button:hover {
-            opacity: 0.8;
-        }
-        .alert {
-            border: 2px solid;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 0.9em;
-            font-weight: normal;
-            line-height: 1.4;
-        }
-        .alert.error {
-            background-color: #ffeaea;
-            border-color: #d32f2f;
-            color: #b71c1c;
-        }
-        .alert.success {
-            background-color: #e8f5e8;
-            border-color: #4caf50;
-            color: #2e7d32;
-        }
-        .form-info {
-            background-color: #f0f8ff;
-            border: 1px solid #2196f3;
-            padding: 12px;
-            margin-top: 20px;
-            font-size: 0.8em;
-            text-align: center;
-            color: #1976d2;
+        .animate-levitate { 
+            animation: float-smooth 6s ease-in-out infinite; 
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 overflow-hidden h-screen w-full text-slate-800">
 
-<div class="login-box">
-    <h2>ADMIN LOGIN</h2>
-    
-    <?php 
-    $flashError = $_SESSION['flash']['error'] ?? null;
-    if ($flashError): 
-        unset($_SESSION['flash']['error']);
-    ?>
-        <div class="alert error">
-            <?= $flashError; ?>
-        </div>
-    <?php endif; ?>
-    
-    <?php 
-    $flashSuccess = $_SESSION['flash']['success'] ?? null;
-    if ($flashSuccess): 
-        unset($_SESSION['flash']['success']);
-    ?>
-        <div class="alert success">
-            <?= $flashSuccess; ?>
-        </div>
-    <?php endif; ?>
+    <div class="flex h-full w-full relative">
+        
+        <div class="hidden lg:flex w-[55%] h-full bg-blue-900 relative items-center justify-center overflow-hidden">
+            
+            <div class="absolute inset-0 z-0">
+                <img src="<?php echo ASSETS_URL; ?>/images/gedung-fikom-umi.jpg" 
+                     alt="Gedung" class="w-full h-full object-cover opacity-60">
+                <div class="absolute inset-0 bg-gradient-to-tr from-blue-900 via-blue-900/80 to-indigo-900/60 mix-blend-multiply"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+            </div>
 
-    <form action="<?= PUBLIC_URL ?>/auth" method="POST">
-        <div class="form-group">
-            <label>USERNAME</label>
-            <input type="text" name="username" required autofocus autocomplete="off" 
-                   placeholder="Masukkan username admin"
-                   value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">
+            <canvas id="particle-canvas" class="z-10 absolute inset-0"></canvas>
+
+            <div class="relative z-20 text-center px-12 -translate-y-10">
+                
+                <div class="inline-flex items-center justify-center w-28 h-28 rounded-3xl bg-white/10 backdrop-blur-md mb-8 border border-white/20 shadow-[0_0_40px_rgba(59,130,246,0.3)] p-5 animate-levitate">
+                    <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.png" 
+                         alt="Logo" class="w-full h-full object-contain drop-shadow-lg">
+                </div>
+                
+                <h1 class="text-7xl font-extrabold mb-4 tracking-tight text-white drop-shadow-xl animate-enter">
+                    IC-LABS
+                </h1>
+
+                <p class="text-blue-100/90 text-lg font-light max-w-md mx-auto leading-relaxed animate-enter" style="animation-delay: 0.2s">
+                    Sistem Informasi Sumber Daya Laboratorium<br>Terintegrasi & Real-time.
+                </p>
+            </div>
+
+            <div class="absolute top-0 bottom-0 right-[-1px] w-48 h-[110%] -mt-[5%] z-30 pointer-events-none">
+                <svg class="h-full w-full" preserveAspectRatio="none" viewBox="0 0 100 100" fill="currentColor">
+                    <path d="M 100 0 C 60 20 40 60 100 100 Z" fill="#93c5fd" opacity="0.2" transform="translate(-15, 0)"></path>
+                    <path d="M 100 0 C 50 40 20 80 100 100 Z" fill="#60a5fa" opacity="0.3" transform="translate(-8, 0)"></path>
+                    <path d="M 100 0 C 30 30 10 70 100 100 Z" class="text-slate-50"></path>
+                </svg>
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label>PASSWORD</label>
-            <input type="password" name="password" required
-                   placeholder="Masukkan password">
+
+        <div class="w-full lg:w-[45%] h-full bg-slate-50 relative flex items-center justify-center p-6 tilt-wrapper">
+            
+            <div class="absolute inset-0 bg-grid-slate z-0"></div>
+            
+            <div class="absolute top-1/4 right-1/4 w-72 h-72 bg-blue-300/30 rounded-full mix-blend-multiply filter blur-[80px] animate-pulse"></div>
+            <div class="absolute bottom-1/4 left-1/4 w-72 h-72 bg-indigo-300/30 rounded-full mix-blend-multiply filter blur-[80px] animate-pulse" style="animation-delay: 2s"></div>
+
+            <div id="login-card" class="w-full max-w-[420px] relative z-40 tilt-card animate-enter" style="animation-delay: 0.3s">
+                
+                <div class="glass-card rounded-[2rem] p-8 sm:p-10 relative overflow-hidden group">
+                    
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Login Admin</h2>
+                        <p class="text-slate-500 mt-2 text-sm">Masuk untuk mengelola inventaris lab.</p>
+                    </div>
+
+                    <?php if (isset($_SESSION['flash']['error'])): ?>
+                        <div class="flex items-center p-4 mb-6 text-sm text-red-600 bg-red-50/80 rounded-2xl border border-red-200 shadow-sm backdrop-blur-sm">
+                            <i class="fas fa-circle-exclamation mr-3 text-lg"></i>
+                            <?= $_SESSION['flash']['error']; unset($_SESSION['flash']['error']); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['flash']['success'])): ?>
+                        <div class="flex items-center p-4 mb-6 text-sm text-emerald-600 bg-emerald-50/80 rounded-2xl border border-emerald-200 shadow-sm backdrop-blur-sm">
+                            <i class="fas fa-check-circle mr-3 text-lg"></i>
+                            <?= $_SESSION['flash']['success']; unset($_SESSION['flash']['success']); ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="<?= PUBLIC_URL ?>/auth" method="POST" class="space-y-6">
+                        
+                        <div class="relative group">
+                            <input type="text" name="username" id="username" class="floating-input block px-4 py-4 w-full text-sm text-slate-900 bg-white/60 rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer placeholder-transparent shadow-sm transition-all" placeholder=" " required />
+                            <label for="username" class="absolute text-sm text-slate-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-3 cursor-text pointer-events-none">
+                                <i class="fas fa-user mr-1"></i> Username
+                            </label>
+                        </div>
+
+                        <div class="relative group">
+                            <input type="password" name="password" id="password" class="floating-input block px-4 py-4 w-full text-sm text-slate-900 bg-white/60 rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer placeholder-transparent shadow-sm transition-all" placeholder=" " required />
+                            <label for="password" class="absolute text-sm text-slate-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-3 cursor-text pointer-events-none">
+                                <i class="fas fa-lock mr-1"></i> Password
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-lg shadow-blue-600/30 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+                            <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[120%] group-hover:translate-x-[120%] transition-transform duration-700 ease-in-out"></div>
+                            <span class="flex items-center gap-2">
+                                LOGIN SEKARANG <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        </button>
+                    </form>
+
+                    <div class="mt-8 text-center pt-6 border-t border-slate-200/50">
+                        <a href="<?= rtrim(PUBLIC_URL, '/') . '/home' ?>" class="inline-flex items-center text-sm font-medium text-slate-400 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i> Kembali ke Halaman Utama
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <button type="submit">LOGIN →</button>
-    </form>
-    
-    <div class="form-info">
-        <strong>📝 Kredensial Default:</strong><br>
-        Username: <code>admin</code><br>
-        Password: <code>admin123</code>
     </div>
-    
-    <div style="text-align:center; margin-top:20px; font-size:12px;">
-        <a href="<?= rtrim(PUBLIC_URL, '/') . '/home' ?>" style="color:black;">&larr; Kembali ke Home</a>
-    </div>
-</div>
+
+<script src="<?= PUBLIC_URL ?>/js/login.js"></script>
 
 </body>
 </html>
-    }

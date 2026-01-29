@@ -3,6 +3,9 @@
  * API Entry Point with Proper HTTP Method Routing
  */
 
+// Start session for authenticated requests
+session_start();
+
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -60,13 +63,13 @@ error_log("API Debug - Parsed path: $path");
 // Route mapping dengan HTTP METHOD
 $routes = [
     'GET' => [
+        '/sop' => ['controller' => 'SopController', 'method' => 'getJson'],
             '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'apiIndex'],
             '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'apiShow'],
-            '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'apiIndex'],
-            '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'apiShow'],
+            '/sanksi-lab' => ['controller' => 'SanksiController', 'method' => 'apiIndex'],
+            '/sanksi-lab/{id}' => ['controller' => 'SanksiController', 'method' => 'apiShow'],
             '/alumni' => ['controller' => 'AlumniController', 'method' => 'apiIndex'],
             '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'apiShow'],
-        '/health' => ['controller' => 'HealthController', 'method' => 'check'],
         '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'apiIndex'],
         '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'apiShow'],
         '/asisten' => ['controller' => 'AsistenController', 'method' => 'apiIndex'],
@@ -81,6 +84,8 @@ $routes = [
         '/jadwal-praktikum/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiShow'],
         '/jadwal-praktikum/template' => ['controller' => 'JadwalPraktikumController', 'method' => 'downloadTemplate'],
         '/jadwal-praktikum/csv-template' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'downloadCSVTemplate'],
+        '/jadwal-upk' => ['controller' => 'JadwalUpkController', 'method' => 'apiIndex'],
+        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'apiShow'],
         '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'apiIndex'],
         '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'apiShow'],
         '/informasi/tipe/{type}' => ['controller' => 'InformasiLabController', 'method' => 'byType'],
@@ -90,17 +95,25 @@ $routes = [
         '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'apiShow'],
         '/kontak' => ['controller' => 'KontakController', 'method' => 'getLatest'],
         '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'show'],
+        '/user' => ['controller' => 'UserController', 'method' => 'apiIndex'],
+        '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiShow'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'index'],
         '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'show'],
+        '/formatpenulisan' => ['controller' => 'FormatPenulisanController', 'method' => 'apiIndex'],
+        '/formatpenulisan/{id}' => ['controller' => 'FormatPenulisanController', 'method' => 'apiShow'],
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'index'],
         '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'show'],
+        '/modul' => ['controller' => 'ModulController', 'method' => 'getJson'],
+        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'getById'], 
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'index'],
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],            '/dashboard/stats' => ['controller' => 'DashboardController', 'method' => 'stats'],    ],
     'POST' => [
+        '/sop' => ['controller' => 'SopController', 'method' => 'store'],
+        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'update'],
             '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'store'],
             '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'], // For file upload
-            '/sanksi-lab' => ['controller' => 'SanksiLabController', 'method' => 'store'],
-            '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'update'], // For file upload
+            '/sanksi-lab' => ['controller' => 'SanksiController', 'method' => 'store'],
+            '/sanksi-lab/{id}' => ['controller' => 'SanksiController', 'method' => 'update'], // For file upload
             '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
             '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'], // For file upload
             '/alumni' => ['controller' => 'AlumniController', 'method' => 'store'],
@@ -111,25 +124,36 @@ $routes = [
         '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'], // For file upload
         '/asisten/{id}/koordinator' => ['controller' => 'AsistenController', 'method' => 'setKoordinator'], // Set koordinator
         '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'store'],
-        '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'store'],
+        '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'create'],
+        '/jadwal/delete-multiple' => ['controller' => 'JadwalPraktikumController', 'method' => 'deleteMultiple'],
         '/jadwal-praktikum/upload' => ['controller' => 'JadwalPraktikumController', 'method' => 'uploadExcel'],
         '/jadwal-praktikum/upload-csv' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'uploadCSV'],
+        '/jadwal-upk' => ['controller' => 'JadwalUpkController', 'method' => 'store'],
+        '/jadwal-upk/delete-multiple' => ['controller' => 'JadwalUpkController', 'method' => 'deleteMultiple'],
+        '/jadwal-upk/upload' => ['controller' => 'JadwalUpkController', 'method' => 'upload'],
+        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'update'],
         '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'store'],
         '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'store'],
         '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'store'],
         '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'update'], // For file upload
+        '/formatpenulisan' => ['controller' => 'FormatPenulisanController', 'method' => 'store'],
+        '/formatpenulisan/{id}' => ['controller' => 'FormatPenulisanController', 'method' => 'update'],
+        '/user' => ['controller' => 'UserController', 'method' => 'apiStore'],
         '/kontak' => ['controller' => 'KontakController', 'method' => 'store'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'store'],
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
+        '/modul' => ['controller' => 'ModulController', 'method' => 'store'],
+        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'update'],
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'store'],
     ],
     'PUT' => [
+        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'update'],
             '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'],
         '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'update'],
         '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'],
         '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'update'],
         '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'],
-        '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'update'],
+        '/sanksi-lab/{id}' => ['controller' => 'SanksiController', 'method' => 'update'],
         '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'update'],
         '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'update'],
         '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'update'],
@@ -139,23 +163,32 @@ $routes = [
         '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'update'],
         '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'],
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'update'],
+        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'update'],
+        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'update'],
+        '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiUpdate'],
     ],
     'DELETE' => [
-            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'delete'],
-        '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'delete'],
-        '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'delete'],
-        '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'delete'],
-        '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'delete'],
-        '/sanksi-lab/{id}' => ['controller' => 'SanksiLabController', 'method' => 'delete'],
-        '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'delete'],
-        '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'delete'],
-        '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'delete'],
-        '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'delete'],
-        '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'delete'],
-        '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'delete'],
+        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'delete'],
+
+        '/laboratorium/image/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'deleteImage'],
+        '/laboratorium/{id}'       => ['controller' => 'LaboratoriumController', 'method' => 'delete'],
+        '/asisten/{id}'            => ['controller' => 'AsistenController', 'method' => 'delete'],
+        '/matakuliah/{id}'         => ['controller' => 'MatakuliahController', 'method' => 'delete'],
+        '/peraturan-lab/{id}'      => ['controller' => 'PeraturanLabController', 'method' => 'delete'],
+        '/sanksi-lab/{id}'         => ['controller' => 'SanksiController', 'method' => 'delete'],
+        '/alumni/{id}'             => ['controller' => 'AlumniController', 'method' => 'delete'],
+        '/jadwal/{id}'             => ['controller' => 'JadwalPraktikumController', 'method' => 'delete'],
+        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'delete'],
+        '/informasi/{id}'          => ['controller' => 'InformasiLabController', 'method' => 'delete'],
+        '/visi-misi/{id}'          => ['controller' => 'VisMisiController', 'method' => 'delete'],
+        '/manajemen/{id}'          => ['controller' => 'ManajemenController', 'method' => 'delete'],
+        '/kontak/{id}'             => ['controller' => 'KontakController', 'method' => 'delete'],
+        '/formatpenulisan/{id}'    => ['controller' => 'FormatPenulisanController', 'method' => 'delete'],
         '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'delete'],
-        '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'delete'],
-        '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'delete'],
+        '/tata-tertib/{id}'        => ['controller' => 'TataTerbibController', 'method' => 'delete'],
+        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'delete'],
+        '/integrasi-web/{id}'      => ['controller' => 'IntegrsiWebController', 'method' => 'delete'],
+        '/user/{id}'               => ['controller' => 'UserController', 'method' => 'apiDelete'],
     ],
 ];
 

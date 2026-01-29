@@ -1,22 +1,3 @@
-<?php
-/**
- * VIEW: ALUMNI ASISTEN LABORATORIUM
- * Menggunakan data yang dipassing dari controller melalui variabel `$alumni`.
- */
-
-$alumni_by_year = [];
-
-// Data alumni diharapkan dipassing oleh controller sebagai array associative
-$all_alumni = $alumni ?? [];
-
-if (!empty($all_alumni) && is_array($all_alumni)) {
-    foreach ($all_alumni as $row) {
-        $year = $row['angkatan'] ?? 'Unknown';
-        $alumni_by_year[$year][] = $row;
-    }
-}
-?>
-
 <section class="alumni-section fade-up">
     <div class="container">
         
@@ -26,7 +7,7 @@ if (!empty($all_alumni) && is_array($all_alumni)) {
             <p>Daftar lulusan yang telah berkontribusi dan kini berkarya di berbagai industri.</p>
 
             <div class="search-container">
-                <input type="text" id="searchAlumni" placeholder="Cari nama, pekerjaan, atau perusahaan..." class="search-input">
+                <input type="text" id="searchAlumni" placeholder="Cari nama atau angkatan..." class="search-input">
                 <div class="search-icon-box">
                     <i class="ri-search-line"></i>
                 </div>
@@ -38,74 +19,57 @@ if (!empty($all_alumni) && is_array($all_alumni)) {
             <?php foreach ($alumni_by_year as $year => $alumni_list) : ?>
                 <div class="alumni-group">
                     
-                    <div class="section-label" style="margin-top:50px; margin-bottom:18px;">
+                    <div class="section-label">
                         <span>Angkatan <?= htmlspecialchars($year) ?></span>
                     </div>
                     
                     <div class="staff-grid">
-                        <?php foreach ($alumni_list as $row) : ?>
-                            <?php 
-                                // LOGIKA GAMBAR PINTAR (UI Avatars)
-                                $fotoName = $row['foto'] ?? '';
-                                $namaEnc = urlencode($row['nama']);
+    <?php foreach ($alumni_list as $row) : ?>
+        <?php 
+            // ==========================================
+            // 1. FIX ID: Cek apakah pakai 'idAlumni' atau 'id'
+            // ==========================================
+            $idAlumni = $row['idAlumni'] ?? $row['id'] ?? 0;
 
-                                // 1. Settingan Default Kita (Abu-abu Elegan & Bold)
-                                $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=256&bold=true";
+            // ==========================================
+            // 2. LOGIKA GAMBAR
+            // ==========================================
+            $fotoName = $row['foto'] ?? '';
+            $namaEnc = urlencode($row['nama']);
 
-                                // 2. Cek File Fisik / URL di Database
-                                if (!empty($fotoName)) {
-                                    // Abaikan jika link adalah ui-avatars agar tetap pakai style abu-abu kita
-                                    if (strpos($fotoName, 'ui-avatars.com') !== false) {
-                                        // keep default
-                                    } elseif (strpos($fotoName, 'http') !== false) {
-                                        // external URL seperti LinkedIn/Google
-                                        $imgUrl = $fotoName;
-                                    } else {
-                                        // Cek dua lokasi potensial: images/alumni dan assets/uploads
-                                        $path1 = ROOT_PROJECT . '/public/images/alumni/' . $fotoName;
-                                        $path2 = ROOT_PROJECT . '/public/assets/uploads/' . $fotoName;
+            // Default Avatar
+            $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
 
-                                        if (file_exists($path2)) {
-                                            $imgUrl = ASSETS_URL . '/assets/uploads/' . $fotoName;
-                                        } elseif (file_exists($path1)) {
-                                            $imgUrl = ASSETS_URL . '/images/alumni/' . $fotoName;
-                                        }
-                                    }
-                                }
+            // Cek Database / File
+            if (!empty($fotoName)) {
+                // Gunakan Helper atau path manual yang aman
+                $path = ROOT_PROJECT . '/public/assets/uploads/' . $fotoName;
+                if (file_exists($path)) {
+                    $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : '';
+                    $imgUrl = $baseUrl . '/assets/uploads/' . $fotoName;
+                }
+            }
 
-                                // Data Text
-                                $pekerjaan = $row['pekerjaan'] ?? 'Alumni';
-                                $perusahaan = $row['perusahaan'] ?? '-';
-                                $divisi = $row['divisi'] ?? 'Asisten Lab';
-                            ?>
+            $divisi = $row['divisi'] ?? 'Asisten Lab';
+        ?>
 
-                            <a href="index.php?page=detail_alumni&id=<?= $row['id'] ?>" class="card-link">
-                                <div class="staff-card">
-                                    <div class="staff-photo-box">
-                                        <img src="<?= $imgUrl ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
-                                    </div>
-                                    
-                                    <div class="staff-content">
-                                        <div class="staff-name"><?= htmlspecialchars($row['nama']) ?></div>
-                                        <span class="staff-role"><?= htmlspecialchars($pekerjaan) ?></span>
-                                        
-                                        <div class="staff-footer">
-                                            <?php if($perusahaan !== '-'): ?>
-                                                <div class="meta-item">
-                                                    <i class="ri-building-line"></i> <?= htmlspecialchars($perusahaan) ?>
-                                                </div>
-                                            <?php endif; ?>
-                                            
-                                            <div class="meta-item">
-                                                <i class="ri-briefcase-line"></i> <?= htmlspecialchars($divisi) ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
+        <a href="<?= PUBLIC_URL ?>/index.php?page=detail_alumni&id=<?= $idAlumni ?>" class="card-link">
+            <div class="staff-card">
+                <div class="staff-photo-box">
+                    <img src="<?= $imgUrl ?>" 
+                         alt="<?= htmlspecialchars($row['nama']) ?>" 
+                         loading="lazy">
+                </div>
+                
+                <div class="staff-content">
+                    <div class="staff-name"><?= htmlspecialchars($row['nama']) ?></div>
+                    <span class="staff-role"><?= htmlspecialchars($divisi) ?></span>
+                </div>
+            </div>
+        </a>
 
-                        <?php endforeach; ?>
-                    </div>
+    <?php endforeach; ?>
+</div>
                 </div>
             <?php endforeach; ?>
 
@@ -124,4 +88,4 @@ if (!empty($all_alumni) && is_array($all_alumni)) {
     </div>
 </section>
 
-<script src="<?= ASSETS_URL ?>/js/alumni.js"></script>
+<script src="<?= PUBLIC_URL ?>/js/alumni.js"></script>

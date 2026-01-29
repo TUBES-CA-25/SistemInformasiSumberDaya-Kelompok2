@@ -21,6 +21,7 @@ define('DB_NAME', $_ENV['DB_DATABASE'] ?? 'sistem_manajemen_sumber_daya');
 // Application Settings
 define('APP_NAME', $_ENV['APP_NAME'] ?? 'Sistem Management Sumber Daya');
 define('APP_ENV', $_ENV['APP_ENV'] ?? 'development'); 
+date_default_timezone_set('Asia/Makassar');
 
 // --- DETEKSI URL OTOMATIS (CORE LOGIC) ---
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
@@ -49,8 +50,8 @@ if (!defined('PUBLIC_URL')) {
 }
 
 if (!defined('BASE_URL')) {
-    // Base URL naik satu tingkat dari Public URL
-    define('BASE_URL', dirname(PUBLIC_URL));
+    // Base URL menunjuk ke folder public (untuk akses assets)
+    define('BASE_URL', PUBLIC_URL);
 }
 
 if (!defined('ASSETS_URL')) {
@@ -75,7 +76,6 @@ if (APP_ENV === 'development' || in_array($_SERVER['REMOTE_ADDR'] ?? '', $whitel
 
 // Session & Timezone
 if (session_status() === PHP_SESSION_NONE) {
-    ini_set('session.gc_maxlifetime', 1440);
     session_start();
 }
 date_default_timezone_set('Asia/Jakarta');

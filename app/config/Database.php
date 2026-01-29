@@ -76,6 +76,12 @@ class Database {
         return $this->mysqli;
     }
 
+    public function getConnection()
+    {
+        // Cukup panggil fungsi connect() yang sudah ada
+        return $this->connect();
+    }
+
     // >>>> tambahan ini <<<<
     public function getPdo()
     {

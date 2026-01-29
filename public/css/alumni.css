@@ -1,5 +1,5 @@
 /* =======================================================
-   STYLE: ALUMNI (FINAL 3x4 RATIO VERSION)
+   STYLE: ALUMNI (FINAL COMPACT VERSION)
    ======================================================= */
 
 /* --- 1. GLOBAL SETTINGS --- */
@@ -16,17 +16,21 @@
 }
 
 .alumni-section {
-  padding-top: 100px;
-  padding-bottom: 80px;
+  padding-top: 80px; /* Sedikit dikurangi */
+  padding-bottom: 60px;
   background-color: var(--bg-light);
   min-height: 100vh;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
 }
 
 /* =======================================================
@@ -36,36 +40,40 @@
 .page-header {
   text-align: center;
   max-width: 800px;
-  margin: 0 auto 50px auto;
+  margin: 0 auto 40px auto; /* Jarak bawah dikurangi */
 }
 
+.badge-pill,
 .header-badge {
-  display: inline-block;
-  background-color: #e0e7ff;
-  color: #3730a3;
-  padding: 10px 24px;
-  border-radius: 50px;
-  font-weight: 800;
-  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 15px;
+  letter-spacing: 1.5px;
+  margin-bottom: 24px;
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
 }
 
 .page-header h1 {
-  font-size: 3.5rem;
+  font-size: 3rem; /* Font size sedikit diperkecil */
   font-weight: 900;
   color: var(--text-dark);
   letter-spacing: -2px;
   line-height: 1.1;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   margin-top: 0;
 }
 
 .page-header p {
   color: var(--text-gray);
-  font-size: 1.25rem;
-  line-height: 1.6;
+  font-size: 1.15rem;
+  line-height: 1.5;
   margin: 0 auto;
   font-weight: 500;
   max-width: 600px;
@@ -73,7 +81,7 @@
 
 /* --- Search Bar --- */
 .search-container {
-  margin-top: 35px;
+  margin-top: 30px;
   position: relative;
   max-width: 500px;
   margin-left: auto;
@@ -82,13 +90,13 @@
 
 .search-input {
   width: 100%;
-  padding: 16px 24px;
+  padding: 14px 20px;
   padding-right: 50px;
   border-radius: 50px;
   border: 1px solid #cbd5e1;
   background: white;
   outline: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
 }
@@ -104,7 +112,7 @@
   top: 50%;
   transform: translateY(-50%);
   color: #94a3b8;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   pointer-events: none;
 }
 
@@ -117,7 +125,7 @@
     padding: 0 15px;
   }
   .alumni-section {
-    padding-top: 100px;
+    padding-top: 80px;
   }
 }
 
@@ -126,30 +134,27 @@
    ======================================================= */
 
 .alumni-group {
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
 
-/* Divider Tahun */
-.year-divider {
+.section-label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+  margin-top: 30px; /* Jarak atas dikurangi */
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-bottom: 30px;
+  gap: 15px;
 }
 
-.year-divider h2 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  white-space: nowrap;
-}
-
-.year-line {
-  height: 2px;
-  background: linear-gradient(90deg, #e2e8f0 0%, rgba(226, 232, 240, 0) 100%);
-  flex-grow: 1;
+.section-label::after {
+  content: "";
+  flex: 1;
+  height: 1px; /* Garis lebih tipis */
+  background: #e2e8f0;
   border-radius: 2px;
 }
 
@@ -157,7 +162,7 @@
 .staff-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  gap: 25px; /* Gap antar card dikurangi */
   align-items: start;
 }
 
@@ -172,8 +177,8 @@
 /* --- Card Styling --- */
 .staff-card {
   background: var(--card-bg);
-  border: 2px solid var(--border);
-  border-radius: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px; /* Radius sedikit dikurangi */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
   display: flex;
@@ -186,13 +191,13 @@
 .staff-card:hover {
   border-color: #94a3b8;
   box-shadow: var(--shadow-md);
-  transform: translateY(-8px);
+  transform: translateY(-5px); /* Efek naik sedikit dikurangi */
 }
 
-/* FOTO: Menggunakan Aspect Ratio 3:4 */
+/* FOTO LIST VIEW */
 .staff-photo-box {
   width: 100%;
-  aspect-ratio: 3 / 4; /* KUNCI: Rasio 3x4 */
+  aspect-ratio: 3 / 4;
   background: #f1f5f9;
   border-bottom: 1px solid var(--border);
   position: relative;
@@ -205,35 +210,18 @@
 .staff-photo-box img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Agar foto full memenuhi kotak */
+  object-fit: cover;
   object-position: top center;
   transition: transform 0.5s ease;
   display: block;
 }
 
 .staff-card:hover .staff-photo-box img {
-  transform: scale(1.05);
-}
-
-.staff-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 3rem;
-  font-weight: 800;
-  color: #cbd5e1;
-  background: #f8fafc;
-  user-select: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
+  transform: scale(1.03); /* Zoom sedikit dikurangi */
 }
 
 .staff-content {
-  padding: 24px;
+  padding: 20px; /* Padding dalam card dikurangi */
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -242,44 +230,30 @@
 }
 
 .staff-name {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-dark);
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   line-height: 1.3;
 }
 
 .staff-role {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--primary);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   display: block;
 }
 
 .staff-footer {
   margin-top: auto;
-  padding-top: 15px;
-  border-top: 2px solid #f1f5f9;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.85rem;
-  color: var(--text-gray);
-  font-weight: 500;
-}
-
-.meta-item i {
-  font-size: 1.1rem;
-  color: #94a3b8;
+  gap: 8px;
 }
 
 .hidden-by-search {
@@ -287,42 +261,50 @@
 }
 
 /* =======================================================
-   4. DETAIL PAGE
+   4. DETAIL PAGE (COMPACT VERSION)
    ======================================================= */
 
 .detail-nav {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .btn-back {
   text-decoration: none;
-  color: var(--text-gray);
+  color: #64748b;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  font-size: 0.9rem;
   transition: color 0.2s;
 }
 .btn-back:hover {
-  color: var(--primary);
+  color: #2563eb;
 }
 
+/* --- WRAPPER UTAMA --- */
 .profile-wrapper {
   display: flex;
-  background: var(--card-bg);
-  border: 2px solid var(--border);
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  margin-top: 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px -5px rgba(0, 0, 0, 0.08);
+  margin-top: 15px;
+  align-items: stretch;
+  overflow: visible;
+  padding: 0;
 }
 
+/* --- BAGIAN FOTO (TIDAK DIUBAH - TETAP 400PX) --- */
 .profile-image {
   flex: 0 0 400px;
-  background: #f1f5f9;
-  aspect-ratio: 3 / 4; /* Detail Foto juga 3x4 */
-  position: relative;
-  border-right: 2px solid var(--border);
+  background: #f8fafc;
+  aspect-ratio: 3 / 4;
+  position: sticky;
+  top: 100px;
+  border-right: 1px solid #e2e8f0;
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
   overflow: hidden;
 }
 
@@ -331,279 +313,268 @@
   height: 100%;
   object-fit: cover;
   object-position: top center;
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: block;
 }
 
+/* --- BAGIAN KONTEN (Lebih Rapat) --- */
 .profile-content {
-  padding: 50px;
+  padding: 35px; /* Padding dikurangi signifikan dari 50px */
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
+/* Badges */
 .alumni-badges {
-  margin-bottom: 15px;
+  margin-bottom: 15px; /* Jarak bawah dikurangi */
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.category-badge,
+.divisi-badge {
+  padding: 5px 14px; /* Padding badge diperkecil */
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .category-badge {
-  background: #e0f2fe;
-  color: #0369a1;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: inline-block;
-  margin-right: 10px;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
 }
 
 .divisi-badge {
-  background: #f1f5f9;
-  color: var(--text-gray);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: inline-block;
-}
-
-.profile-name {
-  margin-bottom: 5px;
-  font-size: 2.5rem;
-  line-height: 1.2;
-  color: var(--text-dark);
-  font-weight: 900;
-}
-
-.specialization-box {
-  margin: 20px 0;
-}
-.member-specialization {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-dark);
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-.member-specialization i {
-  color: var(--primary);
-  font-size: 1.3rem;
-}
-.company-name {
-  color: var(--text-gray);
-  font-weight: 400;
-  margin-left: 5px;
-}
-
-.section-title {
-  color: var(--text-dark);
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 10px;
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-.section-title.mt-30 {
-  margin-top: 35px;
-}
-
-.profile-bio {
-  color: #475569;
-  line-height: 1.7;
-  font-size: 1.05rem;
-}
-.alumni-quote {
-  font-style: italic;
   background: #f8fafc;
-  padding: 20px;
-  border-radius: 12px;
-  border-left: 4px solid #cbd5e1;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
 }
 
+/* Typography Nama */
+.profile-name {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 2.4rem; /* Font size nama sedikit diperkecil */
+  line-height: 1.1;
+  color: #0f172a;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+/* Info Tambahan (Mata Kuliah) */
+.meta-info-box {
+  margin-bottom: 25px;
+  padding: 15px; /* Padding box diperkecil */
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+}
+
+.meta-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.meta-value {
+  font-size: 0.95rem;
+  color: #334155;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Section Titles (Global) */
+.section-title {
+  color: #94a3b8;
+  margin-bottom: 10px;
+  font-size: 0.85rem; /* Font judul diperkecil */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- [MODIFIKASI COMPACT] Judul Section Kompetensi --- */
+.section-title.mt-30 {
+  margin-top: 25px; /* Jarak atas JAUH dikurangi */
+  font-size: 1rem; /* Font size diperkecil */
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9; /* Garis lebih tipis */
+}
+
+/* Kesan Pesan (Quote Style Compact) */
+.profile-bio.alumni-quote {
+  font-style: italic;
+  background: #fff;
+  color: #475569;
+  padding: 0 0 0 15px; /* Padding kiri dikurangi */
+  border-left: 3px solid #cbd5e1; /* Garis lebih tipis */
+  line-height: 1.5; /* Jarak antar baris dirapatkan */
+  font-size: 0.95rem; /* Font size diperkecil */
+  margin-bottom: 5px;
+}
+
+/* --- [MODIFIKASI COMPACT] Skills Container --- */
 .skills-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 40px;
-}
-.skill-tag {
-  background: white;
-  border: 1px solid #cbd5e1;
-  color: #334155;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  gap: 8px; /* Gap antar skill dikurangi */
+  margin-bottom: 15px;
 }
 
+/* --- [MODIFIKASI COMPACT] Tombol Kompetensi --- */
+.skill-tag {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  padding: 6px 16px; /* Padding tombol diperkecil */
+  border-radius: 6px;
+  font-size: 0.85rem; /* Font size tombol diperkecil */
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Contact Buttons */
 .contact-wrapper {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
   margin-top: auto;
-  padding-top: 30px;
+  padding-top: 25px; /* Jarak atas dikurangi */
 }
 
 .btn-contact {
-  padding: 12px 24px;
-  border-radius: 12px;
+  padding: 10px 20px; /* Padding tombol diperkecil */
+  border-radius: 8px;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  transition: transform 0.2s, box-shadow 0.2s;
-  font-size: 0.95rem;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   border: none;
-  background: var(--text-dark);
+  background: #0f172a;
   color: white;
+  transition: all 0.2s ease;
 }
+
 .btn-contact:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15);
 }
 
-.btn-linkedin {
-  background-color: #0077b5 !important;
-  color: white !important;
-}
-.btn-portfolio {
-  background-color: #ea4c89 !important;
-  color: white !important;
+.btn-disabled {
+  background: #cbd5e1 !important;
+  color: #94a3b8 !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* Empty State */
+/* --- EMPTY STATE --- */
 .empty-state-wrapper {
   text-align: center;
-  padding: 100px 0;
+  padding: 80px 0;
 }
 .empty-icon {
-  font-size: 4rem;
+  font-size: 3.5rem;
   color: #cbd5e1;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 .empty-title {
-  color: var(--text-dark);
+  color: #0f172a;
   margin-bottom: 10px;
   font-weight: 800;
+  font-size: 1.5rem;
 }
 .empty-desc {
-  color: var(--text-gray);
-  margin-bottom: 30px;
-}
-.btn-primary-pill {
-  background: var(--primary);
-  color: white;
-  padding: 12px 30px;
-  border-radius: 50px;
-  font-weight: 600;
-  display: inline-block;
-  text-decoration: none;
+  color: #64748b;
+  margin-bottom: 25px;
 }
 
-/* -------------------------------------------------------
-   6. RESPONSIVE (MOBILE)
-   ------------------------------------------------------- */
-
+/* --- RESPONSIVE MOBILE --- */
 @media (max-width: 900px) {
   .profile-wrapper {
     flex-direction: column;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    margin-top: 0;
   }
+
   .profile-image {
-    flex: auto;
     width: 100%;
-    aspect-ratio: 3 / 4; /* Tetap 3x4 di mobile */
-    border-right: none;
-    border-bottom: 2px solid var(--border);
+    max-width: 400px;
+    margin: 0 auto 20px auto;
+    aspect-ratio: 3/4;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    position: static;
   }
+
   .profile-content {
-    padding: 30px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 25px; /* Padding mobile juga dirapatkan */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   }
-  .page-header h1 {
-    font-size: 2.5rem;
-  }
-  .staff-grid {
-    grid-template-columns: repeat(2, 1fr);
+
+  .profile-name {
+    font-size: 1.8rem;
   }
 }
+
+/* -------------------------------------------------------
+   6. RESPONSIVE (GRID MOBILE ADJUSTMENTS)
+   ------------------------------------------------------- */
 
 @media (max-width: 1100px) {
   .staff-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .staff-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Section label style copied from sumberdaya.css for consistent headings */
-.section-label {
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 18px;
-  margin-top: 36px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-.section-label::after {
-  content: "";
-  flex: 1;
-  height: 2px;
-  background: #e2e8f0;
-  border-radius: 2px;
-}
-
-/* Mobile View Adjustments */
 @media (max-width: 600px) {
   .staff-grid {
-    grid-template-columns: repeat(2, 1fr); /* Tetap 2 kolom di HP */
-    gap: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
-  
   .container {
     padding: 0 16px;
-  }
-
-  .staff-photo-box {
-    width: 100%;
-    aspect-ratio: 3 / 4; /* Paksa 3x4 */
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .staff-photo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Jangan contain, tapi cover biar full */
-    object-position: top center;
-    transform: none; 
-  }
-
-  .staff-card:hover .staff-photo-box img {
-    transform: none;
-  }
-  
-  .staff-content {
-      padding: 12px;
   }
 }
 
 @media (max-width: 420px) {
-    /* Untuk HP sangat kecil, baru jadi 1 kolom biar ga terlalu gepeng */
-    .staff-grid {
-        grid-template-columns: 1fr; 
-        gap: 15px;
-    }
+  .staff-grid {
+    grid-template-columns: 1fr;
+  }
 }

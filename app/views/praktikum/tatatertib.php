@@ -1,102 +1,170 @@
+<?php
+// AMBIL DATA DARI CONTROLLER
+// Data sudah diproses di PraktikumController::tatatertib()
+$rules_data = $data['rules'] ?? [];
+$sanksi_data = $data['sanksi'] ?? [];
+?>
+
 <section class="rules-section">
     <div class="container">
         
         <header class="page-header">
-            <span class="header-badge">Pedoman & Aturan 2025</span>
-            
+            <span class="header-badge">Pedoman & Aturan <?= date('Y') ?></span>
             <h1>Tata Tertib & Sanksi</h1>
             <p>Pedoman standar operasional dan kedisiplinan bagi seluruh praktikan di lingkungan Laboratorium Terpadu FIKOM UMI.</p>
         </header>
 
-        <div class="rules-grid">
-            
+       <div class="rules-grid" style="margin-bottom: 30px;">
             <article class="rule-card">
-                <div class="rule-icon icon-blue">
-                    <i class="ri-history-line"></i>
+                <div class="rule-img-box" style="height: 500px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
+                    <img src="<?= PUBLIC_URL ?>/assets/uploads/Pria.jpg" alt="Standar Pakaian Pria" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
-                <h3>Kehadiran & Akademik</h3>
+                <h3>Standar Pakaian Pria</h3>
                 <ul class="rule-list">
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Seluruh praktikan wajib sehat dengan suhu tubuh di bawah 37°C.
-                    </li>
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Toleransi keterlambatan kehadiran maksimal 5 menit.
-                    </li>
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Maksimal ketidakhadiran (alfa) sebanyak 4 kali per semester.
-                    </li>
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Melebihi batas alfa wajib mengulang mata kuliah semester berjalan.
-                    </li>
+                    <li><i class="ri-checkbox-circle-fill" style="color: #2563eb;"></i> <span>Berpakaian rapi memakai kemeja putih polos</span></li>
+                    <li><i class="ri-checkbox-circle-fill" style="color: #2563eb;"></i> <span>Menggunakan celana kain berwarna hitam bukan dari bahan jeans atau semi jeans</span></li>
+                    <li><i class="ri-checkbox-circle-fill" style="color: #2563eb;"></i> <span>Rambut rapi dan tidak panjang</span></li>
                 </ul>
             </article>
 
             <article class="rule-card">
-                <div class="rule-icon icon-pink">
-                    <i class="ri-shirt-line"></i>
+                <div class="rule-img-box" style="height: 500px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
+                     <img src="<?= PUBLIC_URL ?>/assets/uploads/Wanita.jpg" alt="Standar Pakaian Wanita" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
-                <h3>Standar Pakaian</h3>
+                <h3>Standar Pakaian Wanita</h3>
                 <ul class="rule-list">
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Pria: Kemeja putih polos, celana kain hitam, rambut rapi.
-                    </li>
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Wanita: Tunik putih polos, jilbab segitiga hitam, rok panjang hitam.
-                    </li>
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Dilarang keras menggunakan bahan jeans, semi-jeans, atau ketat.
-                    </li>
-                </ul>
-            </article>
-
-            <article class="rule-card">
-                <div class="rule-icon icon-red">
-                    <i class="ri-spam-3-line"></i>
-                </div>
-                <h3>Larangan Umum</h3>
-                <ul class="rule-list">
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Dilarang merokok, makan, minum, atau membawa senjata.
-                    </li>
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Handphone wajib mode senyap dan tidak diletakkan di meja.
-                    </li>
-                    <li>
-                        <i class="ri-checkbox-circle-fill"></i>
-                        Dilarang memindahkan perangkat atau pakai flashdisk tanpa izin.
-                    </li>
+                    <li><i class="ri-checkbox-circle-fill" style="color: #2563eb;"></i> <span>Berpakaian rapi memakai kemeja tunik putih polos (tidak transparan)</span></li>
+                    <li><i class="ri-checkbox-circle-fill" style="color: #2563eb;"></i> <span>Memakai Jilbab Segitiga Hitam (bukan pasmina) dan menutupi dada</span></li>
+                    <li><i class="ri-checkbox-circle-fill" style="color: #2563eb;"></i> <span>Menggunakan Rok Panjang berwarna hitam yang menutupi mata kaki, tidak terbelah, tidak span, dan bukan bahan jeans/semi jeans</span></li>
+                    <li><i class="ri-checkbox-circle-fill" style="color: #2563eb;"></i> <span>Memakai kaos kaki dengan tinggi minimal 10 cm di atas mata kaki</span></li>
                 </ul>
             </article>
         </div>
 
+        <div style="margin-bottom: 80px;">
+            <div class="video-header-wrapper">
+                <div class="video-badge">
+                    <i class="ri-movie-line"></i> Wajib Disimak
+                </div>
+                <div class="video-title-box">
+                    <h2>
+                        <span class="video-play-icon"><i class="ri-play-fill"></i></span>
+                        Video Panduan & Keselamatan
+                    </h2>
+                </div>
+                <p class="video-desc">
+                    Pelajari prosedur keselamatan, penggunaan alat, dan tata tertib laboratorium melalui video panduan resmi berikut ini.
+                </p>
+            </div>
+            
+            <div style="width: 100%; max-width: 900px; margin: 0 auto; background: #000; border-radius: 24px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); border: 4px solid #ffffff;">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe 
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;"
+                        src="https://www.youtube.com/embed/OLLK4sF2XyM?rel=0&modestbranding=1" 
+                        title="Video Panduan Lab FIKOM UMI" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="rules-grid">
+            <?php if (!empty($rules_data)) : ?>
+                <?php foreach ($rules_data as $row) : ?>
+                    <article class="rule-card">
+                        <?php if (!empty($row['img_url'])) : ?>
+                            <div class="rule-img-box">
+                                <img src="<?= $row['img_url'] ?>" alt="<?= htmlspecialchars($row['judul']) ?>" loading="lazy">
+                            </div>
+                        <?php else : ?>
+                            <div class="rule-icon icon-red">
+                                <i class="ri-error-warning-line"></i>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <h3><?= htmlspecialchars($row['judul']) ?></h3>
+                        
+                        <?php 
+                            $format = $row['display_format'] ?? 'list';
+                            $deskripsi = $row['deskripsi'];
+                            
+                            if ($format === 'list') {
+                                // Pecah baris baru menjadi list item
+                                $items = array_filter(array_map('trim', explode("\n", $deskripsi)));
+                                if (!empty($items)) {
+                                    echo '<ul class="rule-list">';
+                                    foreach ($items as $item) {
+                                        echo '<li><i class="ri-prohibited-line" style="color: #dc2626;"></i><span>' . htmlspecialchars($item) . '</span></li>';
+                                    }
+                                    echo '</ul>';
+                                } else {
+                                    echo '<ul class="rule-list"><li><i class="ri-prohibited-line" style="color: #dc2626;"></i><span>' . htmlspecialchars($deskripsi) . '</span></li></ul>';
+                                }
+                            } else {
+                                // Tampilan paragraf biasa
+                                echo '<p style="color: #475569; line-height: 1.6;">' . nl2br(htmlspecialchars($deskripsi)) . '</p>';
+                            }
+                        ?>
+                    </article>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                    <i class="ri-file-list-3-line" style="font-size: 3rem; color: #cbd5e1;"></i>
+                    <p style="color: #64748b; margin-top: 10px;">Data peraturan umum belum ditambahkan di database.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+
         <div class="sanksi-container">
             <div class="sanksi-title">
-                <i class="ri-scales-fill"></i>
+                <i class="ri-alarm-warning-fill"></i>
                 <h2>Ketentuan Sanksi Pelanggaran</h2>
             </div>
 
             <div class="sanksi-grid">
-                <div class="sanksi-item">
-                    <h4>Tanggung Jawab Kerusakan</h4>
-                    <p>Praktikan yang sengaja merusak Personal Computer (PC) wajib bertanggung jawab mengganti kerusakan tersebut sepenuhnya.</p>
-                </div>
-                <div class="sanksi-item">
-                    <h4>Diskualifikasi Praktikum</h4>
-                    <p>Praktikan yang tidak mematuhi tata tertib tidak diperkenankan mengikuti kegiatan praktikum pada hari tersebut.</p>
-                </div>
-                <div class="sanksi-item">
-                    <h4>Sanksi Akademik</h4>
-                    <p>Pelanggaran berat dapat dikenakan sanksi teguran tertulis, pencoretan nama, hingga sanksi akademik universitas.</p>
-                </div>
+                <?php if (!empty($sanksi_data)) : ?>
+                    <?php foreach ($sanksi_data as $row) : ?>
+                        <div class="sanksi-item">
+                            <div class="sanksi-icon-box">
+                                <?php if (!empty($row['img_url'])): ?>
+                                    <img src="<?= $row['img_url'] ?>" alt="Sanksi" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                                <?php else : ?>
+                                    <i class="ri-alarm-warning-fill" style="font-size: 2rem;"></i>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="sanksi-content">
+                                <h4><?= htmlspecialchars($row['judul']) ?></h4>
+                                
+                                <?php 
+                                    $format = $row['display_format'] ?? 'list';
+                                    $deskripsi = $row['deskripsi'];
+                                    
+                                    if ($format === 'list') {
+                                        $items = array_filter(array_map('trim', explode("\n", $deskripsi)));
+                                        if (!empty($items)) {
+                                            echo '<ul style="list-style: disc; margin-left: 20px; color: #475569;">';
+                                            foreach ($items as $item) {
+                                                echo '<li style="margin-bottom: 6px;">' . htmlspecialchars($item) . '</li>';
+                                            }
+                                            echo '</ul>';
+                                        } else {
+                                            echo '<p>' . htmlspecialchars($deskripsi) . '</p>';
+                                        }
+                                    } else {
+                                        echo '<p style="color: #475569; line-height: 1.6;">' . nl2br(htmlspecialchars($deskripsi)) . '</p>';
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <div class="sanksi-item" style="grid-column: 1/-1; justify-content: center;">
+                        <p>Data sanksi belum tersedia di database.</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         

@@ -1,512 +1,593 @@
 <?php
+// Proteksi awal: Bersihkan semua buffer karakter sampah
+while (ob_get_level()) { ob_end_clean(); } 
+
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/JadwalPraktikumModel.php';
-require_once __DIR__ . '/../models/MatakuliahModel.php';
-require_once __DIR__ . '/../models/LaboratoriumModel.php';
-
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class JadwalPraktikumController extends Controller {
     private $model;
-    private $matakuliahModel;
-    private $laboratoriumModel;
 
     public function __construct() {
         $this->model = new \JadwalPraktikumModel();
-        $this->matakuliahModel = new \MatakuliahModel();
-        $this->laboratoriumModel = new \LaboratoriumModel();
-    }
-
-    /**
-     * Halaman publik jadwal
-     */
-    public function index($params = []) {
-        $data = $this->model->getAll();
-        $this->view('praktikum/jadwal', ['jadwal' => $data]);
-    }
-
-    /**
-     * Halaman admin jadwal
-     */
-    public function adminIndex($params = []) {
-        $data = $this->model->getAll();
-        $this->view('admin/jadwal/index', ['jadwal' => $data]);
-    }
-
-    /**
-     * Form create admin
-     */
-    public function create($params = []) {
-        $matakuliah = $this->matakuliahModel->getAll();
-        $laboratorium = $this->laboratoriumModel->getAll();
-        $this->view('admin/jadwal/form', [
-            'jadwal' => null, 
-            'action' => 'create',
-            'matakuliah' => $matakuliah,
-            'laboratorium' => $laboratorium
-        ]);
-    }
-
-    /**
-     * Form edit admin
-     */
-    public function edit($params = []) {
-        $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->redirect('/admin/jadwal');
-            return;
-        }
-        
-        $jadwal = $this->model->getById($id, 'idJadwal');
-        if (!$jadwal) {
-            $this->setFlash('error', 'Data jadwal tidak ditemukan');
-            $this->redirect('/admin/jadwal');
-            return;
-        }
-        
-        $matakuliah = $this->matakuliahModel->getAll();
-        $laboratorium = $this->laboratoriumModel->getAll();
-        $this->view('admin/jadwal/form', [
-            'jadwal' => $jadwal, 
-            'action' => 'edit',
-            'matakuliah' => $matakuliah,
-            'laboratorium' => $laboratorium
-        ]);
-    }
-
-    /**
-     * Upload form
-     */
-    public function uploadForm($params = []) {
-        $this->view('admin/jadwal/upload');
-    }
-
-    /**
-     * CSV Upload form
-     */
-    public function csvUploadForm($params = []) {
-        $this->view('admin/jadwal/csv-upload');
-    }
-
-    /**
-     * API endpoints
-     */
-    public function apiIndex() {
-        $data = $this->model->getAll();
-        $this->success($data, 'Data Jadwal Praktikum retrieved successfully');
-    }
-
-    public function apiShow($params) {
-        $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID jadwal tidak ditemukan', null, 400);
-        }
-
-        $data = $this->model->getById($id, 'idJadwal');
-        if (!$data) {
-            $this->error('Jadwal tidak ditemukan', null, 404);
-        }
-
-        $this->success($data, 'Jadwal retrieved successfully');
-    }
-
-    public function store() {
-        $input = $this->getJson();
-        $required = ['idMatakuliah', 'idLaboratorium'];
-        $missing = $this->validateRequired($input, $required);
-
-        if (!empty($missing)) {
-            $this->error('Field required: ' . implode(', ', $missing), null, 400);
-        }
-
-        $result = $this->model->insert($input);
-        if ($result) {
-            $this->success(['id' => $this->model->getLastInsertId()], 'Jadwal created successfully', 201);
-        }
-        $this->error('Failed to create jadwal', null, 500);
-    }
-
-    public function update($params) {
-        $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID jadwal tidak ditemukan', null, 400);
-        }
-
-        $existing = $this->model->getById($id, 'idJadwal');
-        if (!$existing) {
-            $this->error('Jadwal tidak ditemukan', null, 404);
-        }
-
-        $input = $this->getJson();
-        $result = $this->model->update($id, $input, 'idJadwal');
-        
-        if ($result) {
-            $this->success([], 'Jadwal updated successfully');
-        }
-        $this->error('Failed to update jadwal', null, 500);
-    }
-
-    public function delete($params) {
-        $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID jadwal tidak ditemukan', null, 400);
-        }
-
-        $existing = $this->model->getById($id, 'idJadwal');
-        if (!$existing) {
-            $this->error('Jadwal tidak ditemukan', null, 404);
-        }
-
-        $result = $this->model->delete($id, 'idJadwal');
-        
-        if ($result) {
-            $this->success([], 'Jadwal deleted successfully');
-        }
-        $this->error('Failed to delete jadwal', null, 500);
     }
 
     public function uploadExcel() {
-        // Enable error reporting for debugging
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
+        // Bersihkan semua output buffer
+        while (ob_get_level()) { ob_end_clean(); }
         
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        
+        // Set error handler untuk catch PHP errors
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr
+            ]));
+        });
+
         try {
-            // Log the start of upload process
-            error_log("Upload Excel method called");
-            
-            // Check if file was uploaded
-            if (!isset($_FILES['excel_file'])) {
-                error_log("No file uploaded - _FILES not set");
-                $this->error('Tidak ada file yang dikirim', null, 400);
-                return;
-            }
+            if (!isset($_FILES['excel_file'])) throw new Exception("File tidak ditemukan.");
 
-            $uploadError = $_FILES['excel_file']['error'];
-            if ($uploadError !== UPLOAD_ERR_OK) {
-                $errorMessages = [
-                    UPLOAD_ERR_INI_SIZE => 'File terlalu besar (melebihi upload_max_filesize)',
-                    UPLOAD_ERR_FORM_SIZE => 'File terlalu besar (melebihi MAX_FILE_SIZE)',
-                    UPLOAD_ERR_PARTIAL => 'File hanya terupload sebagian',
-                    UPLOAD_ERR_NO_FILE => 'Tidak ada file yang dipilih',
-                    UPLOAD_ERR_NO_TMP_DIR => 'Direktori temporary tidak ditemukan',
-                    UPLOAD_ERR_CANT_WRITE => 'Gagal menulis file ke disk',
-                    UPLOAD_ERR_EXTENSION => 'Upload dihentikan oleh ekstensi PHP'
-                ];
-                
-                $errorMsg = $errorMessages[$uploadError] ?? 'Error upload tidak diketahui';
-                error_log("Upload error: $uploadError - $errorMsg");
-                $this->error($errorMsg, null, 400);
-                return;
-            }
-
-            $uploadedFile = $_FILES['excel_file']['tmp_name'];
-            $fileName = $_FILES['excel_file']['name'];
-            $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-
-            error_log("Processing file: $fileName (extension: $fileExtension)");
-
-            // Validate file type
-            if (!in_array(strtolower($fileExtension), ['xlsx', 'xls'])) {
-                error_log("Invalid file extension: $fileExtension");
-                $this->error('File harus berformat Excel (.xlsx atau .xls)', null, 400);
-                return;
-            }
-
-            // Validate file exists and is readable
-            if (!file_exists($uploadedFile) || !is_readable($uploadedFile)) {
-                error_log("File not readable: $uploadedFile");
-                $this->error('File tidak dapat dibaca', null, 400);
-                return;
-            }
-
-            error_log("Loading spreadsheet...");
-            // Load spreadsheet
-            $spreadsheet = IOFactory::load($uploadedFile);
+            $spreadsheet = IOFactory::load($_FILES['excel_file']['tmp_name']);
             $worksheet = $spreadsheet->getActiveSheet();
-            error_log("Spreadsheet loaded successfully");
-            
-            $data = [];
-            $errors = [];
-            $successCount = 0;
-            $skipCount = 0;
+            $success = 0;
+            $duplicate = 0;
+            $invalidLab = 0;
 
-            // Get all mata kuliah and laboratorium for reference
-            $matakuliahs = $this->matakuliahModel->getAll();
-            $laboratoriums = $this->laboratoriumModel->getAll();
-
-            // Create mapping arrays for easier lookup
-            $matakuliahMap = [];
-            foreach ($matakuliahs as $mk) {
-                $matakuliahMap[strtolower($mk['namaMatakuliah'])] = $mk['idMatakuliah'];
-                $matakuliahMap[strtolower($mk['kodeMatakuliah'] ?? '')] = $mk['idMatakuliah'];
-            }
-
-            $laboratoriumMap = [];
-            foreach ($laboratoriums as $lab) {
-                $laboratoriumMap[strtolower($lab['nama'])] = $lab['idLaboratorium'];
-            }
-
-            // Process each row (skip header row)
-            $rowIndex = 1;
             foreach ($worksheet->getRowIterator(2) as $row) {
-                $rowIndex++;
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
+                $rowData = [];
+                foreach ($cellIterator as $cell) { $rowData[] = $cell->getFormattedValue(); }
 
+                if (empty(array_filter($rowData))) continue;
+
+                // MAPPING BERDASARKAN FILE EXCEL ANDA (Jadwal Lab.xlsx)
+                $dosenNama = trim($rowData[2] ?? '');  // Kolom C (Dosen)
+                $mkNama    = trim($rowData[3] ?? '');  // Kolom D (Mata Kuliah)
+                $kelas     = trim($rowData[5] ?? '');  // Kolom F (Kelas)
+                $freq      = trim($rowData[6] ?? '');  // Kolom G (Frekuensi)
+                $labNama   = trim($rowData[7] ?? '');  // Kolom H (Ruangan)
+                $hari      = trim($rowData[8] ?? '');  // Kolom I (Hari)
+                $jamFull   = str_replace('.', ':', trim($rowData[9] ?? '')); // Kolom J (Jam)
+                $asisten1  = trim($rowData[11] ?? ''); // Kolom L (Asisten 1)
+                $asisten2  = trim($rowData[12] ?? ''); // Kolom M (Asisten 2)
+
+                // Split jam (Contoh: 07:00 - 09:30)
+                $parts = explode('-', $jamFull);
+                $start = trim($parts[0] ?? '00:00');
+                $end   = isset($parts[1]) ? trim($parts[1]) : $start;
+
+                // ANTI-0 IMPOR: Cari atau buat otomatis data master
+                $idMK = $this->findOrCreateMaster('matakuliah', 'namaMatakuliah', $mkNama);
+                $idLab = $this->findExistingMaster('laboratorium', 'nama', $labNama);
+
+                if (!$idLab) {
+                    // Skip jika lab tidak ada di database
+                    $invalidLab++;
+                    continue;
+                }
+
+                if ($idMK && $idLab) {
+                    // CEK DUPLIKASI sebelum insert
+                    if ($this->model->checkDuplicate($idMK, $kelas, ucfirst(strtolower($hari)), $start, $end, $idLab)) {
+                        // Data sudah ada, skip
+                        $duplicate++;
+                        continue;
+                    }
+
+                    $this->model->insert([
+                        'idMatakuliah'   => $idMK,
+                        'kelas'          => $kelas,
+                        'idLaboratorium' => $idLab,
+                        'hari'           => ucfirst(strtolower($hari)),
+                        'waktuMulai'     => $start,
+                        'waktuSelesai'   => $end,
+                        'dosen'          => $dosenNama,
+                        'asisten1'       => $asisten1,
+                        'asisten2'       => $asisten2,
+                        'frekuensi'      => $freq,
+                        'status'         => 'Aktif'
+                    ]);
+                    $success++;
+                }
+            }
+            
+            $message = "Berhasil mengimpor $success data.";
+            if ($duplicate > 0) {
+                $message .= " ($duplicate data duplikat dilewati)";
+            }
+            if ($invalidLab > 0) {
+                $message .= " ($invalidLab baris dilewati karena lab tidak terdaftar)";
+            }
+            echo json_encode(['status' => 'success', 'code' => 201, 'message' => $message]);
+        } catch (Exception $e) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
+        } finally {
+            restore_error_handler();
+        }
+        exit;
+    }
+
+    private function findOrCreateMaster($table, $column, $name) {
+        if (empty($name)) return null;
+        $db = $this->model->db;
+        $stmt = $db->prepare("SELECT * FROM $table WHERE LCASE(TRIM($column)) = LCASE(TRIM(?)) LIMIT 1");
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        
+        if ($res) return $res[array_key_first($res)];
+        
+        // Buat baru jika tidak ditemukan (Menghindari gagal impor karena data master kosong)
+        $db->query("INSERT INTO $table ($column) VALUES ('".addslashes($name)."')");
+        return $db->insert_id;
+    }
+
+    private function findExistingMaster($table, $column, $name) {
+        if (empty($name)) return null;
+        $db = $this->model->db;
+        $stmt = $db->prepare("SELECT * FROM $table WHERE LCASE(TRIM($column)) = LCASE(TRIM(?)) LIMIT 1");
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        
+        // Hanya return ID jika lab sudah ada (tidak auto-create)
+        return $res ? $res[array_key_first($res)] : null;
+    }
+
+    public function apiIndex() {
+        // Bersihkan semua output buffer sebelumnya
+        while (ob_get_level()) { ob_end_clean(); }
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        header('Pragma: no-cache');
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        
+        // Set error handler untuk catch PHP errors
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr . ' on line ' . $errline
+            ]));
+        });
+        
+        // Set exception handler
+        set_exception_handler(function($exception) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine()
+            ]));
+        });
+        
+        try {
+            // Check database connection
+            if (!$this->model->db || !$this->model->db->ping()) {
+                throw new Exception('Database connection failed');
+            }
+            
+            $data = $this->model->getAll();
+            if ($data === false) {
+                throw new Exception('Database query failed: ' . $this->model->db->error);
+            }
+            
+            if (!is_array($data)) {
+                throw new Exception('Invalid data format from database');
+            }
+            
+            // Output JSON
+            echo json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'data' => $data
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+            
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => $e->getMessage()
+            ]);
+        } finally {
+            // Restore handlers
+            restore_error_handler();
+            restore_exception_handler();
+        }
+        exit;
+    }
+
+    public function show($params = []) {
+        while (ob_get_level()) { ob_end_clean(); }
+        header('Content-Type: application/json; charset=utf-8');
+        
+        try {
+            $id = $params['id'] ?? null;
+            if (!$id) {
+                throw new Exception('ID jadwal tidak ditemukan');
+            }
+
+            $jadwal = $this->model->getById($id);
+            if (!$jadwal) {
+                throw new Exception('Jadwal tidak ditemukan');
+            }
+
+            echo json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'data' => $jadwal
+            ]);
+        } catch (Exception $e) {
+            http_response_code(404);
+            echo json_encode([
+                'status' => 'error',
+                'code' => 404,
+                'message' => $e->getMessage()
+            ]);
+        }
+        exit;
+    }
+
+
+    public function delete($params = []) {
+        // Bersihkan semua output buffer
+        while (ob_get_level()) { ob_end_clean(); }
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        
+        // Set error handler untuk catch PHP errors
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr
+            ]));
+        });
+
+        try {
+            $id = $params['id'] ?? null;
+            if (!$id) {
+                throw new Exception('ID jadwal tidak ditemukan');
+            }
+
+            // Cek apakah jadwal ada
+            $jadwal = $this->model->getById($id);
+            if (!$jadwal) {
+                throw new Exception('Jadwal tidak ditemukan');
+            }
+
+            // Delete jadwal
+            $result = $this->model->delete($id);
+            if ($result) {
+                echo json_encode(['status' => 'success', 'code' => 200, 'message' => 'Jadwal berhasil dihapus']);
+            } else {
+                throw new Exception('Gagal menghapus jadwal dari database');
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
+        } finally {
+            restore_error_handler();
+        }
+        exit;
+    }
+
+    public function deleteMultiple($params = []) {
+        while (ob_get_level()) { ob_end_clean(); }
+        header('Content-Type: application/json; charset=utf-8');
+        try {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $ids = $input['ids'] ?? [];
+            if (empty($ids)) throw new Exception('Tidak ada data yang dipilih');
+
+            if ($this->model->deleteMultiple($ids)) {
+                echo json_encode(['status' => 'success', 'code' => 200, 'message' => count($ids) . ' jadwal berhasil dihapus']);
+            } else {
+                throw new Exception('Gagal menghapus data');
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
+        }
+        exit;
+    }
+
+    public function create($params = []) {
+        // Bersihkan semua output buffer
+        while (ob_get_level()) { ob_end_clean(); }
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr
+            ]));
+        });
+
+        try {
+            $input = json_decode(file_get_contents('php://input'), true);
+            
+            // Validasi input - pastikan input bukan null
+            if (!$input || !is_array($input)) {
+                throw new Exception('Data tidak valid atau format JSON salah');
+            }
+            
+            // Validasi required fields
+            $required = ['idMatakuliah', 'idLaboratorium', 'hari', 'kelas', 'waktuMulai', 'waktuSelesai'];
+            foreach ($required as $field) {
+                if (empty($input[$field])) {
+                    throw new Exception("Field '{$field}' wajib diisi");
+                }
+            }
+
+            $data = [
+                'idMatakuliah' => (int)$input['idMatakuliah'],
+                'kelas' => trim($input['kelas']),
+                'idLaboratorium' => (int)$input['idLaboratorium'],
+                'hari' => trim($input['hari']),
+                'waktuMulai' => trim($input['waktuMulai']),
+                'waktuSelesai' => trim($input['waktuSelesai']),
+                'dosen' => trim($input['dosen'] ?? ''),
+                'asisten1' => trim($input['asisten1'] ?? ''),
+                'asisten2' => trim($input['asisten2'] ?? ''),
+                'frekuensi' => trim($input['frekuensi'] ?? '1'),
+                'status' => trim($input['status'] ?? 'Aktif')
+            ];
+
+            // Cek duplikasi
+            if ($this->model->checkDuplicate($data['idMatakuliah'], $data['kelas'], $data['hari'], 
+                                             $data['waktuMulai'], $data['waktuSelesai'], $data['idLaboratorium'])) {
+                throw new Exception('Jadwal dengan kombinasi MK, Kelas, Hari, Jam, dan Lab sudah ada');
+            }
+
+            if ($this->model->insert($data)) {
+                http_response_code(201);
+                echo json_encode([
+                    'status' => 'success',
+                    'code' => 201,
+                    'message' => 'Jadwal berhasil ditambahkan'
+                ], JSON_UNESCAPED_UNICODE);
+            } else {
+                throw new Exception('Gagal menyimpan ke database: ' . $this->model->db->error);
+            }
+        } catch (Exception $e) {
+            http_response_code(400);
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => $e->getMessage()
+            ], JSON_UNESCAPED_UNICODE);
+        } finally {
+            restore_error_handler();
+        }
+        exit;
+    }
+
+    public function update($params = []) {
+        // Bersihkan semua output buffer
+        while (ob_get_level()) { ob_end_clean(); }
+        
+        // Set header response JSON yang ketat
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        
+        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+            http_response_code(500);
+            die(json_encode([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'PHP Error: ' . $errstr
+            ]));
+        });
+
+        try {
+            $id = $params['id'] ?? null;
+            if (!$id) throw new Exception('ID jadwal tidak ditemukan');
+
+            $input = json_decode(file_get_contents('php://input'), true);
+            
+            // Validasi input - pastikan input bukan null
+            if (!$input || !is_array($input)) {
+                throw new Exception('Data tidak valid atau format JSON salah');
+            }
+            
+            // Validasi required fields
+            $required = ['idMatakuliah', 'idLaboratorium', 'hari', 'kelas', 'waktuMulai', 'waktuSelesai'];
+            foreach ($required as $field) {
+                if (empty($input[$field])) {
+                    throw new Exception("Field '{$field}' wajib diisi");
+                }
+            }
+
+            $data = [
+                'idMatakuliah' => (int)$input['idMatakuliah'],
+                'kelas' => trim($input['kelas']),
+                'idLaboratorium' => (int)$input['idLaboratorium'],
+                'hari' => trim($input['hari']),
+                'waktuMulai' => trim($input['waktuMulai']),
+                'waktuSelesai' => trim($input['waktuSelesai']),
+                'dosen' => trim($input['dosen'] ?? ''),
+                'asisten1' => trim($input['asisten1'] ?? ''),
+                'asisten2' => trim($input['asisten2'] ?? ''),
+                'frekuensi' => trim($input['frekuensi'] ?? '1'),
+                'status' => trim($input['status'] ?? 'Aktif')
+            ];
+
+            // Update query
+            $query = "UPDATE jadwalpraktikum SET 
+                      idMatakuliah = ?, kelas = ?, idLaboratorium = ?, 
+                      hari = ?, waktuMulai = ?, waktuSelesai = ?, 
+                      dosen = ?, asisten1 = ?, asisten2 = ?, 
+                      frekuensi = ?, status = ?
+                      WHERE idJadwal = ?";
+            
+            $stmt = $this->model->db->prepare($query);
+            $stmt->bind_param("isisissssssi",
+                $data['idMatakuliah'], $data['kelas'], $data['idLaboratorium'],
+                $data['hari'], $data['waktuMulai'], $data['waktuSelesai'],
+                $data['dosen'], $data['asisten1'], $data['asisten2'],
+                $data['frekuensi'], $data['status'], $id
+            );
+
+            if ($stmt->execute()) {
+                echo json_encode([
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Jadwal berhasil diperbarui'
+                ], JSON_UNESCAPED_UNICODE);
+            } else {
+                throw new Exception('Gagal update database: ' . $this->model->db->error);
+            }
+        } catch (Exception $e) {
+            http_response_code(400);
+            echo json_encode([
+                'status' => 'error',
+                'code' => 400,
+                'message' => $e->getMessage()
+            ], JSON_UNESCAPED_UNICODE);
+        } finally {
+            restore_error_handler();
+        }
+        exit;
+    }
+
+    // Public method untuk halaman jadwal praktikum publik
+    public function index() {
+        // 1. Tentukan hari ini (untuk default tampilan awal)
+        $hari_inggris = date('l');
+        $map_hari = [
+            'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu', 'Sunday' => 'Minggu'
+        ];
+        $hari_ini = $map_hari[$hari_inggris] ?? 'Senin';
+
+        // 2. Ambil SEMUA data (jangan difilter di sini)
+        $data['judul'] = 'Jadwal Praktikum';
+        $data['hari_ini'] = $hari_ini; // Kirim info hari ini ke view
+        $data['jadwal'] = $this->model->getAll(); // Pastikan model pakai getAll()
+
+        $this->view('praktikum/jadwal', $data);
+    }
+
+    // Admin method untuk dashboard jadwal praktikum
+    public function adminIndex() {
+        $data['judul'] = 'Kelola Jadwal Praktikum';
+        $data['jadwal'] = $this->model->getAll();
+        $this->view('admin/jadwal/index', $data);
+    }
+
+    // Form untuk upload jadwal
+    public function uploadForm() {
+        $data['judul'] = 'Upload Jadwal Praktikum';
+        $this->view('admin/jadwal/upload', $data);
+    }
+
+    // Form untuk edit jadwal
+    public function edit($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal');
+            exit;
+        }
+        $data['judul'] = 'Edit Jadwal Praktikum';
+        $data['jadwal'] = $this->model->getById($id);
+        $this->view('admin/jadwal/edit', $data);
+    }
+
+    // Store jadwal baru (form submission)
+    public function store() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal');
+            exit;
+        }
+        
+        $data = [
+            'idMatakuliah' => $_POST['idMatakuliah'] ?? null,
+            'kelas' => $_POST['kelas'] ?? null,
+            'idLaboratorium' => $_POST['idLaboratorium'] ?? null,
+            'hari' => $_POST['hari'] ?? null,
+            'waktuMulai' => $_POST['waktuMulai'] ?? null,
+            'waktuSelesai' => $_POST['waktuSelesai'] ?? null,
+            'dosen' => $_POST['dosen'] ?? null,
+            'asisten1' => $_POST['asisten1'] ?? null,
+            'asisten2' => $_POST['asisten2'] ?? null,
+            'frekuensi' => $_POST['frekuensi'] ?? null,
+            'status' => 'Aktif'
+        ];
+        
+        if ($this->model->insert($data)) {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal');
+        } else {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal?error=Gagal menyimpan data');
+        }
+        exit;
+    }
+
+    // Process upload jadwal
+    public function uploadProcess() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_FILES['file'])) {
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal/upload');
+            exit;
+        }
+
+        try {
+            $file = $_FILES['file'];
+            $spreadsheet = IOFactory::load($file['tmp_name']);
+            $worksheet = $spreadsheet->getActiveSheet();
+
+            foreach ($worksheet->getRowIterator(2) as $row) {
+                $cellIterator = $row->getCellIterator();
+                $cellIterator->setIterateOnlyExistingCells(false);
                 $rowData = [];
                 foreach ($cellIterator as $cell) {
                     $rowData[] = $cell->getFormattedValue();
                 }
 
-                // Skip empty rows
-                if (empty(array_filter($rowData))) {
-                    $skipCount++;
-                    continue;
-                }
+                if (empty(array_filter($rowData))) continue;
 
-                // Expected columns: Matakuliah, Laboratorium, Hari, Waktu Mulai, Waktu Selesai, Kelas, Status
-                if (count($rowData) < 7) {
-                    $errors[] = "Baris $rowIndex: Data tidak lengkap (minimal 7 kolom diperlukan)";
-                    continue;
-                }
-
-                $matakuliah = trim($rowData[0]);
-                $laboratorium = trim($rowData[1]);
-                $hari = trim($rowData[2]);
-                $waktuMulai = trim($rowData[3]);
-                $waktuSelesai = trim($rowData[4]);
-                $kelas = trim($rowData[5]);
-                $status = trim($rowData[6]);
-
-                // Validate and get IDs
-                $idMatakuliah = $matakuliahMap[strtolower($matakuliah)] ?? null;
-                $idLaboratorium = $laboratoriumMap[strtolower($laboratorium)] ?? null;
-
-                if (!$idMatakuliah) {
-                    $errors[] = "Baris $rowIndex: Mata kuliah '$matakuliah' tidak ditemukan";
-                    continue;
-                }
-
-                if (!$idLaboratorium) {
-                    $errors[] = "Baris $rowIndex: Laboratorium '$laboratorium' tidak ditemukan";
-                    continue;
-                }
-
-                // Validate time format
-                if (!$this->isValidTime($waktuMulai)) {
-                    $errors[] = "Baris $rowIndex: Format waktu mulai tidak valid '$waktuMulai' (gunakan format HH:MM)";
-                    continue;
-                }
-
-                if (!$this->isValidTime($waktuSelesai)) {
-                    $errors[] = "Baris $rowIndex: Format waktu selesai tidak valid '$waktuSelesai' (gunakan format HH:MM)";
-                    continue;
-                }
-
-                // Validate day
-                $validDays = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
-                if (!in_array(strtolower($hari), $validDays)) {
-                    $errors[] = "Baris $rowIndex: Hari tidak valid '$hari'";
-                    continue;
-                }
-
-                // Prepare data for insertion
-                $jadwalData = [
-                    'idMatakuliah' => $idMatakuliah,
-                    'idLaboratorium' => $idLaboratorium,
-                    'hari' => ucfirst(strtolower($hari)),
-                    'waktuMulai' => $waktuMulai,
-                    'waktuSelesai' => $waktuSelesai,
-                    'kelas' => $kelas,
-                    'status' => $status ?: 'Aktif'
+                $data = [
+                    'idMatakuliah' => $rowData[0] ?? null,
+                    'kelas' => $rowData[1] ?? null,
+                    'idLaboratorium' => $rowData[2] ?? null,
+                    'hari' => $rowData[3] ?? null,
+                    'waktuMulai' => $rowData[4] ?? null,
+                    'waktuSelesai' => $rowData[5] ?? null,
+                    'dosen' => $rowData[6] ?? null,
+                    'asisten1' => $rowData[7] ?? null,
+                    'asisten2' => $rowData[8] ?? null,
+                    'frekuensi' => $rowData[9] ?? null,
+                    'status' => 'Aktif'
                 ];
-
-                // Check for duplicate
-                if ($this->isDuplicateSchedule($jadwalData)) {
-                    $errors[] = "Baris $rowIndex: Jadwal sudah ada untuk {$matakuliah} di {$laboratorium} pada {$hari} {$waktuMulai}-{$waktuSelesai}";
-                    continue;
-                }
-
-                // Insert data
-                $result = $this->model->insert($jadwalData);
-                if ($result) {
-                    $successCount++;
-                } else {
-                    $errors[] = "Baris $rowIndex: Gagal menyimpan data";
-                }
+                $this->model->insert($data);
             }
-
-            // Prepare response
-            $response = [
-                'total_processed' => $rowIndex - 1,
-                'success_count' => $successCount,
-                'skip_count' => $skipCount,
-                'error_count' => count($errors),
-                'errors' => $errors
-            ];
-
-            if ($successCount > 0) {
-                $this->success($response, "Berhasil mengimpor $successCount jadwal praktikum");
-            } else {
-                $this->error('Tidak ada data yang berhasil diimpor', $response, 400);
-            }
-
+            
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal');
         } catch (Exception $e) {
-            error_log("Exception in uploadExcel: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
-            $this->error('Error memproses file Excel: ' . $e->getMessage(), null, 500);
+            header('Location: ' . PUBLIC_URL . '/admin/jadwal/upload?error=' . urlencode($e->getMessage()));
         }
-    }
-
-    private function isValidTime($time) {
-        return preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $time);
-    }
-
-    private function isDuplicateSchedule($data) {
-        $query = "SELECT COUNT(*) as count FROM jadwalpraktikum 
-                  WHERE idMatakuliah = ? AND idLaboratorium = ? AND hari = ? 
-                  AND waktuMulai = ? AND waktuSelesai = ? AND kelas = ?";
-        
-        $result = $this->model->db->prepare($query);
-        $result->bind_param("iissss", 
-            $data['idMatakuliah'], 
-            $data['idLaboratorium'], 
-            $data['hari'], 
-            $data['waktuMulai'], 
-            $data['waktuSelesai'], 
-            $data['kelas']
-        );
-        $result->execute();
-        $count = $result->get_result()->fetch_assoc()['count'];
-        
-        return $count > 0;
-    }
-
-    public function downloadTemplate() {
-        try {
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-
-            // Set headers
-            $headers = [
-                'A1' => 'Mata Kuliah',
-                'B1' => 'Laboratorium', 
-                'C1' => 'Hari',
-                'D1' => 'Waktu Mulai',
-                'E1' => 'Waktu Selesai',
-                'F1' => 'Kelas',
-                'G1' => 'Status'
-            ];
-
-            foreach ($headers as $cell => $header) {
-                $sheet->setCellValue($cell, $header);
-            }
-
-            // Add sample data with REAL database values
-            $sheet->setCellValue('A2', 'Microcontroller');
-            $sheet->setCellValue('B2', 'Microcontroller');
-            $sheet->setCellValue('C2', 'Senin');
-            $sheet->setCellValue('D2', '08:00');
-            $sheet->setCellValue('E2', '10:00');
-            $sheet->setCellValue('F2', 'A');
-            $sheet->setCellValue('G2', 'Aktif');
-
-            $sheet->setCellValue('A3', 'Struktur Data');
-            $sheet->setCellValue('B3', 'Data Science');
-            $sheet->setCellValue('C3', 'Selasa');
-            $sheet->setCellValue('D3', '10:00');
-            $sheet->setCellValue('E3', '12:00');
-            $sheet->setCellValue('F3', 'B');
-            $sheet->setCellValue('G3', 'Aktif');
-
-            // Style headers
-            $headerRange = 'A1:G1';
-            $sheet->getStyle($headerRange)->getFont()->setBold(true);
-            $sheet->getStyle($headerRange)->getFill()
-                  ->setFillType(Fill::FILL_SOLID)
-                  ->getStartColor()->setARGB('FFCCCCCC');
-
-            // Auto-size columns
-            foreach (range('A', 'G') as $col) {
-                $sheet->getColumnDimension($col)->setAutoSize(true);
-            }
-
-            // Add instructions in separate sheet with DATABASE VALUES
-            $instructionSheet = $spreadsheet->createSheet();
-            $instructionSheet->setTitle('Petunjuk');
-            
-            $instructions = [
-                'A1' => 'PETUNJUK PENGGUNAAN TEMPLATE JADWAL PRAKTIKUM',
-                'A3' => '1. Mata Kuliah: Nama mata kuliah yang sudah terdaftar di sistem',
-                'A4' => '2. Laboratorium: Nama laboratorium yang sudah terdaftar di sistem', 
-                'A5' => '3. Hari: Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, atau Minggu',
-                'A6' => '4. Waktu Mulai: Format HH:MM (contoh: 08:00)',
-                'A7' => '5. Waktu Selesai: Format HH:MM (contoh: 10:00)',
-                'A8' => '6. Kelas: Kelas praktikum (contoh: A, B, C)',
-                'A9' => '7. Status: Aktif atau Nonaktif',
-                'A11' => 'DAFTAR MATA KULIAH YANG TERDAFTAR:',
-                'A13' => 'DAFTAR LABORATORIUM YANG TERDAFTAR:',
-            ];
-
-            foreach ($instructions as $cell => $instruction) {
-                $instructionSheet->setCellValue($cell, $instruction);
-            }
-
-            // Add list of available mata kuliah
-            $matakuliahs = $this->matakuliahModel->getAll();
-            $row = 12;
-            foreach ($matakuliahs as $mk) {
-                $instructionSheet->setCellValue('A' . $row, '- ' . $mk['namaMatakuliah']);
-                $row++;
-            }
-
-            // Add list of available laboratorium
-            $row = 14;
-            $laboratoriums = $this->laboratoriumModel->getAll();
-            foreach ($laboratoriums as $lab) {
-                $instructionSheet->setCellValue('A' . $row, '- ' . $lab['nama']);
-                $row++;
-            }
-
-            $row += 2;
-            $instructionSheet->setCellValue('A' . $row, 'CATATAN:');
-            $row++;
-            $instructionSheet->setCellValue('A' . $row, '- Pastikan nama mata kuliah dan laboratorium PERSIS seperti daftar di atas');
-            $row++;
-            $instructionSheet->setCellValue('A' . $row, '- Jangan mengubah nama kolom di baris pertama');
-            $row++;
-            $instructionSheet->setCellValue('A' . $row, '- Hapus baris contoh (baris 2 dan 3) sebelum mengupload');
-            $row++;
-            $instructionSheet->setCellValue('A' . $row, '- File harus berformat .xlsx atau .xls');
-
-            $instructionSheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
-            $instructionSheet->getStyle('A11')->getFont()->setBold(true);
-            $instructionSheet->getStyle('A13')->getFont()->setBold(true);
-            $instructionSheet->getStyle('A' . ($row - 4))->getFont()->setBold(true);
-            
-            foreach (range('A', 'A') as $col) {
-                $instructionSheet->getColumnDimension($col)->setAutoSize(true);
-            }
-
-            // Set active sheet back to first sheet
-            $spreadsheet->setActiveSheetIndex(0);
-
-            // Output file
-            $writer = new Xlsx($spreadsheet);
-            
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="template_jadwal_praktikum.xlsx"');
-            header('Cache-Control: max-age=0');
-            
-            $writer->save('php://output');
-            exit;
-
-        } catch (Exception $e) {
-            $this->error('Error membuat template: ' . $e->getMessage(), null, 500);
-        }
+        exit;
     }
 }
-?>

@@ -32,11 +32,18 @@ class Controller {
             }
         }
         
-        // Tentukan layout berdasarkan route
+        // Tentukan layout berdasarkan route - multiple detection methods
         $route = $_GET['route'] ?? '';
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '';
         $routePath = ltrim($route, '/');
-        // Robust admin detection: by route or by view path prefix
-        $isAdmin = (strpos($routePath, 'admin/') === 0) || ($routePath === 'admin') || (strpos($view, 'admin/') === 0);
+        
+        // Robust admin detection: check route param, REQUEST_URI, or view path
+        $isAdmin = (strpos($routePath, 'admin/') === 0) || 
+                   ($routePath === 'admin') || 
+                   (strpos($requestUri, '/admin') !== false) ||
+                   (strpos($requestUri, '/dashboard') !== false) ||
+                   (strpos($view, 'admin/') === 0);
+        
         $isApi = strpos($routePath, 'api/') === 0;
         
         if ($isApi) {
@@ -87,6 +94,9 @@ class Controller {
      * Return JSON response
      */
     protected function response($data, $status = 200) {
+        // Hapus output buffer jika ada (menghindari warning yang merusak JSON)
+        if (ob_get_length()) ob_clean();
+        
         header('Content-Type: application/json');
         http_response_code($status);
         echo json_encode($data);
@@ -99,6 +109,7 @@ class Controller {
     protected function success($data = null, $message = 'Success', $status = 200) {
         $this->response([
             'status' => 'success',
+            'code' => $status,
             'message' => $message,
             'data' => $data
         ], $status);
@@ -110,6 +121,7 @@ class Controller {
     protected function error($message = 'Error', $data = null, $status = 400) {
         $this->response([
             'status' => 'error',
+            'code' => $status,
             'message' => $message,
             'data' => $data
         ], $status);

@@ -1,99 +1,25 @@
 <?php
 /**
- * VIEW: DETAIL FASILITAS (FIXED SLIDER & CONTACT)
+ * VIEW: DETAIL FASILITAS (MVC Pure Version)
+ * Data sudah disiapkan lengkap oleh LaboratoriumController::detail()
  */
 
-global $pdo;
-$lab = null;
-$gallery = [];
-$id_lab = 0;
-
-// 1. LOGIKA ID
-if (isset($data['id'])) {
-    $id_lab = $data['id'];
-} elseif (isset($_GET['id'])) {
-    $id_lab = $_GET['id'];
-} else {
-    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    $segments = explode('/', trim($path, '/'));
-    $lastSegment = end($segments);
-    if (is_numeric($lastSegment)) $id_lab = $lastSegment;
-}
-
-// 2. QUERY DATABASE (UPDATE: JOIN KE TABEL ASISTEN UNTUK EMAIL)
-if ($id_lab > 0) {
-    try {
-        // Gunakan LEFT JOIN untuk mengambil email dari tabel asisten
-        $query = "SELECT l.*, a.email as email_koordinator, a.nama as nama_asisten 
-                  FROM laboratorium l 
-                  LEFT JOIN asisten a ON l.idKordinatorAsisten = a.idAsisten 
-                  WHERE l.idLaboratorium = ?";
-        
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$id_lab]);
-        $lab = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($lab) {
-            // Ambil Galeri Gambar
-            $stmtImg = $pdo->prepare("SELECT namaGambar, deskripsiGambar FROM laboratorium_gambar WHERE idLaboratorium = ? ORDER BY isUtama DESC, urutan ASC");
-            $stmtImg->execute([$id_lab]);
-            $extraImages = $stmtImg->fetchAll(PDO::FETCH_ASSOC);
-
-            // Susun Gallery
-            if (!empty($lab['gambar']) && file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $lab['gambar'])) {
-                $gallery[] = [
-                    'src' => ASSETS_URL . '/assets/uploads/' . $lab['gambar'],
-                    'desc' => 'Foto Utama'
-                ];
-            }
-            foreach ($extraImages as $img) {
-                if (!empty($img['namaGambar']) && file_exists(ROOT_PROJECT . '/public/assets/uploads/' . $img['namaGambar'])) {
-                    if (empty($lab['gambar']) || $lab['gambar'] !== $img['namaGambar']) {
-                        $gallery[] = [
-                            'src' => ASSETS_URL . '/assets/uploads/' . $img['namaGambar'],
-                            'desc' => $img['deskripsiGambar'] ?? ''
-                        ];
-                    }
-                }
-            }
-        }
-    } catch (Exception $e) {}
-}
-
-// 3. DATA PROCESSING
-if ($lab) {
-    $hardwareData = [
-        'Processor' => $lab['processor'],
-        'RAM'       => $lab['ram'],
-        'Storage'   => $lab['storage'],
-        'GPU'       => $lab['gpu'],
-        'Monitor'   => $lab['monitor'],
-        'Jumlah PC' => $lab['jumlahPc'] ? $lab['jumlahPc'] . ' Unit' : null,
-    ];
-    $hardwareData = array_filter($hardwareData, fn($value) => !empty($value));
-    $softwareList  = !empty($lab['software']) ? array_map('trim', explode(',', $lab['software'])) : [];
-    $pendukungList = !empty($lab['fasilitas_pendukung']) ? array_map('trim', explode(',', $lab['fasilitas_pendukung'])) : [];
-    
-    // Nama Koordinator: Prioritas dari kolom manual di tabel lab, kalau kosong ambil dari tabel asisten
-    $coordName = !empty($lab['koordinator_nama']) ? $lab['koordinator_nama'] : ($lab['nama_asisten'] ?? 'Koordinator Lab');
-    
-    // Email: Ambil dari hasil join
-    $coordEmail = $lab['email_koordinator'] ?? null;
-
-    // Inisial untuk Avatar
-    $initials = '';
-    foreach (explode(' ', $coordName) as $part) {
-        if (ctype_alpha($part[0])) $initials .= strtoupper($part[0]);
-        if (strlen($initials) >= 2) break;
-    }
-}
+// 1. Ekstrak Data dari Controller
+$lab         = $data['laboratorium'] ?? null;
+$gallery     = $data['gallery'] ?? [];
+$hardwareData = $data['hardware'] ?? [];
+$softwareList = $data['software'] ?? [];
+$pendukungList = $data['pendukung'] ?? [];
+$backLink    = $data['back_link'] ?? (PUBLIC_URL . '/laboratorium');
+$coord       = $data['koordinator'] ?? ['nama' => 'N/A', 'initials' => 'NA'];
 ?>
 
 <section class="fasilitas-section">
     <div class="container">
         
         <?php if ($lab) : ?>
-            <a href="<?= PUBLIC_URL ?>/laboratorium" class="btn-back">
+            
+            <a href="<?= $backLink ?>" class="btn-back">
                 <i class="ri-arrow-left-line"></i> Kembali ke Daftar Fasilitas
             </a>
 
@@ -130,13 +56,13 @@ if ($lab) {
             </div>
 
             <div class="main-info-header">
-                <span class="badge-type"><?= htmlspecialchars($lab['jenis']) ?></span>
+                <span class="badge-type"><?= htmlspecialchars($lab['jenis'] ?? 'Fasilitas') ?></span>
                 <h1 class="main-title"><?= htmlspecialchars($lab['nama']) ?></h1>
                 
                 <div class="meta-info-row">
                     <div class="meta-item-detail">
                         <i class="ri-group-fill"></i>
-                        <span>Kapasitas: <b><?= $lab['kapasitas'] ?> Orang</b></span>
+                        <span>Kapasitas: <b><?= htmlspecialchars($lab['kapasitas'] ?? '-') ?> Orang</b></span>
                     </div>
                     <?php if(!empty($lab['lokasi'])): ?>
                     <div class="meta-item-detail">
@@ -196,21 +122,20 @@ if ($lab) {
                         <span class="coord-label-top">PENANGGUNG JAWAB</span>
                         
                         <div class="coord-photo-frame">
-                            <?php if(!empty($lab['koordinator_foto']) && file_exists(ROOT_PROJECT.'/public/assets/uploads/'.$lab['koordinator_foto'])): ?>
-                                <img src="<?= ASSETS_URL ?>/assets/uploads/<?= $lab['koordinator_foto'] ?>" 
-                                     class="coord-img-circle" alt="Foto Koordinator">
+                            <?php if (!empty($coord['foto'])): ?>
+                                <img src="<?= $coord['foto'] ?>" class="coord-img-circle" alt="Foto Koordinator" loading="lazy">
                             <?php else: ?>
-                                <div class="coord-avatar-circle"><?= $initials ?></div>
+                                <div class="coord-avatar-circle"><?= htmlspecialchars($coord['initials']) ?></div>
                             <?php endif; ?>
                         </div>
                         
                         <div class="coord-name-large">
-                            <?= htmlspecialchars($coordName) ?>
+                            <?= htmlspecialchars($coord['nama']) ?>
                         </div>
-                        <span class="coord-role-badge">Koordinator / Kepala Lab</span>
+                        <span class="coord-role-badge">Koordinator</span>
 
-                        <?php if ($coordEmail): ?>
-                            <a href="mailto:<?= htmlspecialchars($coordEmail) ?>" class="coord-contact-btn">
+                        <?php if (!empty($coord['email'])): ?>
+                            <a href="mailto:<?= htmlspecialchars($coord['email']) ?>" class="coord-contact-btn">
                                 <i class="ri-mail-send-line"></i> Hubungi Email
                             </a>
                         <?php else: ?>
@@ -227,6 +152,7 @@ if ($lab) {
             <div class="error-container">
                 <i class="ri-file-search-line error-icon"></i>
                 <h2 style="color: #0f172a; margin-bottom: 10px;">Data Tidak Ditemukan</h2>
+                <p>Maaf, detail fasilitas yang Anda cari tidak tersedia.</p>
                 <a href="<?= PUBLIC_URL ?>/laboratorium" class="btn-back" style="justify-content: center; margin-top: 30px;">
                     <i class="ri-arrow-left-line"></i> Kembali ke Daftar
                 </a>
@@ -236,4 +162,4 @@ if ($lab) {
     </div>
 </section>
 
-<script src="<?= ASSETS_URL ?>/js/fasilitas.js"></script>
+<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/js/fasilitas.js"></script>

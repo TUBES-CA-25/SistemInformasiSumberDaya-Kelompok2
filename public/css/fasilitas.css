@@ -6,7 +6,11 @@
   padding: 80px 0;
   background-color: #f8fafc;
   min-height: 100vh;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 }
 
 .container {
@@ -23,17 +27,21 @@
   border-bottom: none;
 }
 
+.badge-pill,
 .header-badge {
-  display: inline-block;
-  background-color: #e0e7ff;
-  color: #3730a3;
-  padding: 10px 24px;
-  border-radius: 50px;
-  font-weight: 800;
-  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
+  letter-spacing: 1.5px;
+  margin-bottom: 24px;
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
 }
 
 .page-header h1 {
@@ -88,6 +96,7 @@
   text-decoration: none;
   color: inherit;
   min-height: 220px;
+  will-change: transform;
 }
 
 .facility-row:hover {
@@ -536,6 +545,435 @@
   border-color: #2563eb;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+/* =========================================
+   DENAH LOKASI (FLOOR PLAN) STYLES
+   ========================================= */
+
+/* --- 1. Header Halaman --- */
+.denah-header {
+  text-align: center;
+  margin-bottom: 50px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.denah-header h1 {
+  margin-top: 15px;
+  color: #0f172a;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.denah-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+/* --- 2. Layout & Card (MODIFIKASI: TAMPILAN ATAS-BAWAH) --- */
+.denah-layout {
+  display: flex;
+  flex-direction: column; /* Menyusun vertikal (Atas-Bawah) */
+  gap: 40px;
+  justify-content: center;
+  align-items: center; /* Posisi tengah */
+  width: 100%;
+}
+
+.denah-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  /* Agar lebar kartu penuh tapi tetap rapi */
+  width: 100%;
+  max-width: 1000px;
+}
+
+.denah-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+/* Judul di dalam Card */
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.card-title i {
+  font-size: 1.5rem;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.card-title h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* --- 3. Wrapper Gambar Peta --- */
+.image-wrapper {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+/* Efek Zoom halus saat hover gambar peta */
+.denah-card:hover .image-wrapper img {
+  transform: scale(1.02);
+}
+
+/* --- 4. HTML LEGEND STYLES --- */
+
+/* Grid Utama: Membagi menjadi Kiri dan Kanan */
+.legend-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 Kolom Seimbang */
+  gap: 40px;
+  margin-top: 10px;
+}
+
+/* Kolom di dalam Grid */
+.legend-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Jarak antar item */
+}
+
+/* Item Legenda */
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.95rem;
+  padding: 2px 0;
+}
+
+/* Kotak Warna (Box) */
+.box {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Kode Ruangan (L1, R1, dll) */
+.code {
+  font-weight: 800;
+  color: #0f172a;
+  font-family: "JetBrains Mono", monospace;
+  width: 30px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Deskripsi Ruangan */
+.desc {
+  color: #334155;
+  font-weight: 500;
+  line-height: 1.4;
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+/* Spacer Kecil */
+.gap-small {
+  height: 15px;
+}
+
+/* --- WARNA LEGEND --- */
+.blue {
+  background-color: #8ab6c9;
+  border-color: #7aa3b6;
+}
+.grey {
+  background-color: #a7a9ac;
+  border-color: #909295;
+}
+.orange {
+  background-color: #e69138;
+  border-color: #d08232;
+}
+.dark-grey {
+  background-color: #666666;
+  border-color: #555555;
+}
+.yellow {
+  background-color: #fff200;
+  border-color: #e6da00;
+}
+.white {
+  background-color: #ffffff;
+  border: 1px solid #94a3b8;
+}
+
+/* Icon Tangga */
+.stairs-icon {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  position: relative;
+  box-shadow: none;
+}
+.stairs-icon::before {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  background: #666;
+  box-shadow:
+    8px -8px 0 #666,
+    16px -16px 0 #666;
+}
+
+/* --- 5. Layout Sizing (RESET UNTUK TAMPILAN VERTIKAL) --- */
+.map-box {
+  flex: none; /* Tidak pakai flex ratio */
+  width: 100%;
+  min-width: 0;
+}
+
+.legend-box {
+  flex: none;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Catatan di bawah Legenda */
+.denah-note {
+  margin-top: 30px;
+  padding: 15px 20px;
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.denah-note strong {
+  color: #b45309;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Fix Layout (Jaga-jaga agar footer tidak naik) */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main {
+  flex: 1;
+}
+
+/* --- Desain Card SOP --- */
+.sop-wrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.sop-header-row {
+  background: #f8fafc;
+  padding: 20px 30px;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sop-header-title {
+  font-weight: 800;
+  color: #475569;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sop-item {
+  display: flex;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
+  gap: 20px;
+}
+
+.sop-item:last-child {
+  border-bottom: none;
+}
+
+.sop-item:hover {
+  background-color: #f0f9ff; /* Warna biru sangat muda saat hover */
+  transform: translateX(5px);
+  border-left: 4px solid #2563eb;
+}
+
+/* Nomor Urut */
+.sop-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #94a3b8;
+  min-width: 30px;
+}
+
+/* Icon Dokumen */
+.sop-icon {
+  width: 45px;
+  height: 45px;
+  background: #eff6ff;
+  color: #2563eb;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+/* Teks Judul & Deskripsi */
+.sop-info {
+  flex: 1;
+}
+
+.sop-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.sop-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Tombol Aksi */
+.btn-sop-action {
+  padding: 10px 20px;
+  background: #fff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.btn-sop-action:hover {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.search-container {
+  margin-top: 35px;
+  position: relative;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 24px;
+  padding-right: 50px;
+  border-radius: 50px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.search-icon-compact {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1.3rem;
+  pointer-events: none;
+}
+
+/* Responsif Mobile */
+@media (max-width: 600px) {
+  .sop-item {
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+  .sop-number {
+    display: none; /* Sembunyikan nomor di HP biar bersih */
+  }
+  .sop-info {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .btn-sop-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* --- 6. Responsif --- */
+@media (max-width: 768px) {
+  /* Di HP, grid legend jadi 1 kolom agar teks tidak sempit */
+  .legend-grid-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .denah-header h1 {
+    font-size: 2rem;
+  }
 }
 
 /* =========================================

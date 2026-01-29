@@ -1,6 +1,7 @@
 <?php
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/AlumniModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class AlumniController extends Controller {
     private $model;
@@ -10,49 +11,98 @@ class AlumniController extends Controller {
     }
 
     /**
-     * Halaman publik alumni
+     * Halaman publik: Daftar Alumni
+     * [UPDATE] Menambahkan logika pengelompokan tahun (Year Grouping)
+     * agar View tidak perlu mikir (MVC Standard).
      */
     public function index($params = []) {
-        $data = $this->model->getAll();
-        // Sesuaikan dengan view legacy yang ada (alumni/alumni.php)
-        $this->view('alumni/alumni', ['alumni' => $data]);
+        // 1. Ambil data mentah
+        $raw_data = $this->model->getAll();
+        
+        // 2. LOGIC: Kelompokkan berdasarkan tahun angkatan
+        $alumni_by_year = [];
+        
+        if (!empty($raw_data) && is_array($raw_data)) {
+            foreach ($raw_data as $row) {
+                $year = $row['angkatan'] ?? 'Unknown';
+                $alumni_by_year[$year][] = $row;
+            }
+            // Sortir tahun terbaru di atas (Descending)
+            krsort($alumni_by_year);
+        }
+
+        // 3. Siapkan data untuk view
+        $data = [
+            'judul' => 'Daftar Alumni',
+            'alumni_by_year' => $alumni_by_year
+        ];
+
+        $this->view('alumni/alumni', $data);
     }
 
     /**
-     * Detail alumni publik
+     * Halaman publik: Detail Alumni
+     * [UPDATE] Menambahkan logic pembersihan string dan URL gambar
      */
     public function detail($params = []) {
-        $id = $params['id'] ?? null;
+        // PERBAIKAN DI SINI:
+        // Cek ID dari $params (API/Pretty URL) ATAU dari $_GET (Query String)
+        $id = $params['id'] ?? $_GET['id'] ?? null;
+        
         if (!$id) {
-            $this->redirect('/alumni');
+            $this->redirect('index.php?page=alumni');
             return;
         }
-        // Ambil data alumni via model dan kirim ke view
-        $alumniRow = $this->model->getById((int)$id, 'id');
+        
+        // Ambil data
+        $alumniRow = $this->model->getById((int)$id, 'id'); // Pastikan kolom ID benar ('id' atau 'idAlumni')
+        
         if (!$alumniRow) {
-            $this->redirect('/alumni');
+            $this->redirect('index.php?page=alumni');
             return;
         }
 
-        // Parsing keahlian menjadi array
-        $skills = !empty($alumniRow['keahlian']) ? array_map('trim', explode(',', $alumniRow['keahlian'])) : [];
+        // --- LOGIC PEMBERSIH DATA (CLEANING) ---
 
-        $alumni = [
-            'nama' => $alumniRow['nama'],
-            'angkatan' => $alumniRow['angkatan'],
-            'divisi' => $alumniRow['divisi'] ?? 'Asisten Lab',
-            'pekerjaan' => $alumniRow['pekerjaan'] ?? 'Belum terisi',
-            'perusahaan' => $alumniRow['perusahaan'] ?? '-',
-            'foto' => $alumniRow['foto'],
-            'email' => $alumniRow['email'],
-            'linkedin' => $alumniRow['linkedin'],
-            'portfolio' => $alumniRow['portfolio'],
-            'tahun_lulus' => $alumniRow['tahun_lulus'],
-            'testimoni' => $alumniRow['kesan_pesan'] ?? 'Tidak ada kesan pesan.',
-            'skills' => $skills
+        // A. Logic Gambar & Avatar
+        $dbFoto = $alumniRow['foto'] ?? '';
+        $namaEnc = urlencode($alumniRow['nama'] ?? '');
+        $imgUrl = '';
+
+        if (!empty($dbFoto)) {
+            // Cek link external vs lokal
+            if (strpos($dbFoto, 'http') === 0) {
+                $imgUrl = $dbFoto;
+            } else {
+                // Gunakan konstanta PUBLIC_URL jika ada
+                $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : '';
+                $imgUrl = $baseUrl . '/assets/uploads/' . $dbFoto;
+            }
+        } else {
+            // Default Avatar
+            $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
+        }
+
+        // B. Logic Keahlian (Hapus karakter [], ", ' lalu jadikan Array)
+        $skillsRaw = $alumniRow['keahlian'] ?? '';
+        $cleanSkills = str_replace(['[', ']', '"', "'", '\\'], '', $skillsRaw);
+        $skillsList = array_filter(array_map('trim', explode(',', $cleanSkills)));
+
+        // C. Logic Mata Kuliah (Bersihkan lalu jadikan String rapi)
+        $matkulRaw = $alumniRow['mata_kuliah'] ?? '';
+        $cleanMk = str_replace(['[', ']', '"', "'", '\\'], '', $matkulRaw);
+        $matkulString = implode(', ', array_filter(array_map('trim', explode(',', $cleanMk))));
+
+        // Siapkan Data Matang
+        $data = [
+            'alumni'        => $alumniRow,
+            'img_url'       => $imgUrl,
+            'skills_list'   => $skillsList,
+            'matkul_string' => $matkulString,
+            'judul'         => 'Detail Alumni - ' . $alumniRow['nama']
         ];
 
-        $this->view('alumni/detail', ['alumni' => $alumni]);
+        $this->view('alumni/detail', $data);
     }
 
     /**
@@ -113,13 +163,9 @@ class AlumniController extends Controller {
                 'nama' => $_POST['nama'] ?? '',
                 'angkatan' => $_POST['angkatan'] ?? '',
                 'divisi' => $_POST['divisi'] ?? '',
-                'pekerjaan' => $_POST['pekerjaan'] ?? '',
-                'perusahaan' => $_POST['perusahaan'] ?? '',
+                'mata_kuliah' => $_POST['mata_kuliah'] ?? '',
                 'kesan_pesan' => $_POST['kesan_pesan'] ?? '',
-                'tahun_lulus' => $_POST['tahun_lulus'] ?? '',
                 'keahlian' => $_POST['keahlian'] ?? '',
-                'linkedin' => $_POST['linkedin'] ?? '',
-                'portfolio' => $_POST['portfolio'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
             
@@ -131,7 +177,8 @@ class AlumniController extends Controller {
             
             // Handle file upload jika ada
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'alumni/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
@@ -142,11 +189,11 @@ class AlumniController extends Controller {
                     return;
                 }
                 
-                $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                $filename = Helper::generateFilename('alumni', $input['nama'], $ext);
                 $target = $uploadDir . $filename;
                 
                 if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
-                    $input['foto'] = $filename;
+                    $input['foto'] = $subFolder . $filename;
                 } else {
                     $this->error('Gagal mengupload file', null, 500);
                     return;
@@ -185,13 +232,9 @@ class AlumniController extends Controller {
                 'nama' => $_POST['nama'] ?? '',
                 'angkatan' => $_POST['angkatan'] ?? '',
                 'divisi' => $_POST['divisi'] ?? '',
-                'pekerjaan' => $_POST['pekerjaan'] ?? '',
-                'perusahaan' => $_POST['perusahaan'] ?? '',
+                'mata_kuliah' => $_POST['mata_kuliah'] ?? '',
                 'kesan_pesan' => $_POST['kesan_pesan'] ?? '',
-                'tahun_lulus' => $_POST['tahun_lulus'] ?? '',
                 'keahlian' => $_POST['keahlian'] ?? '',
-                'linkedin' => $_POST['linkedin'] ?? '',
-                'portfolio' => $_POST['portfolio'] ?? '',
                 'email' => $_POST['email'] ?? ''
             ];
             
@@ -203,7 +246,8 @@ class AlumniController extends Controller {
             
             // Handle file upload jika ada file baru
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                $subFolder = 'alumni/';
+                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
                 if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
                 
                 $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
@@ -216,17 +260,20 @@ class AlumniController extends Controller {
                 
                 // Delete old file if exists
                 if (!empty($alumni['foto'])) {
-                    $oldFile = $uploadDir . $alumni['foto'];
-                    if (file_exists($oldFile)) {
-                        unlink($oldFile);
+                    $oldFilePath = $alumni['foto'];
+                    $baseUploadPath = dirname(__DIR__, 2) . '/public/assets/uploads/';
+                    $fullOldPath = $baseUploadPath . $oldFilePath;
+                    
+                    if (file_exists($fullOldPath) && is_file($fullOldPath)) {
+                        @unlink($fullOldPath);
                     }
                 }
                 
-                $filename = 'alumni_' . time() . '_' . rand(1000,9999) . '.' . $ext;
+                $filename = Helper::generateFilename('alumni', $input['nama'], $ext);
                 $target = $uploadDir . $filename;
                 
                 if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
-                    $input['foto'] = $filename;
+                    $input['foto'] = $subFolder . $filename;
                 } else {
                     $this->error('Gagal mengupload file', null, 500);
                     return;
@@ -253,4 +300,3 @@ class AlumniController extends Controller {
         $this->error('Failed to delete alumni', null, 500);
     }
 }
-?>

@@ -10,90 +10,86 @@ class AuthController extends Controller {
     }
 
     public function login() {
-        // [UPDATE] Cek status juga, jangan cuma user_id.
-        // Ini agar sinkron dengan aturan satpam di index.php
-        if (isset($_SESSION['status']) && $_SESSION['status'] == 'login') {
+        // Cek status login - HANYA redirect jika SEMUA session lengkap
+        if (isset($_SESSION['status']) && $_SESSION['status'] == 'login' &&
+            isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
             $this->redirect(PUBLIC_URL . '/admin');
             return;
         }
         
-        // [PENTING] Bersihkan sesi "setengah matang" (punya ID tapi tidak status)
-        // Ini yang sering bikin browser bingung dan loading terus
-        if (isset($_SESSION['user_id'])) {
-            session_unset();
-            session_destroy();
-            session_start();
-        }
+        // Bersihkan sesi yang tidak lengkap atau error
+        session_unset();
+        session_destroy();
+        session_start();
         
         $this->partial('auth/login');
     }
 
     public function authenticate() {
-        $username = $_POST['username'] ?? '';
-        $password = $_POST['password'] ?? '';
+        // Gunakan trim untuk menghapus spasi tidak sengaja di awal/akhir
+        $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+        $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
-        // Validasi input kosong
-        if (empty($username) && empty($password)) {
-            $this->setFlash('error', '⚠️ Username dan Password tidak boleh kosong!');
-            $this->redirect(PUBLIC_URL . '/login');
-            return;
-        }
-        
-        if (empty($username)) {
-            $this->setFlash('error', '⚠️ Username tidak boleh kosong!');
-            $this->redirect(PUBLIC_URL . '/login');
-            return;
-        }
-        
-        if (empty($password)) {
-            $this->setFlash('error', '⚠️ Password tidak boleh kosong!');
-            $this->redirect(PUBLIC_URL . '/login');
+        // 1. Validasi Input Kosong
+        if (empty($username) || empty($password)) {
+            $this->setFlash('error', 'Username dan Password wajib diisi.');
+            $this->redirect(PUBLIC_URL . '/iclabs-login');
             return;
         }
 
-        // Cari user berdasarkan username
+        // 2. Cari User
         $user = $this->userModel->getByUsername($username);
 
-        if (!$user) {
-            // Username tidak ditemukan
-            $this->setFlash('error', '❌ Username "<strong>' . htmlspecialchars($username) . '</strong>" tidak terdaftar dalam sistem!<br><small style="color: #666;">💡 Pastikan username yang Anda masukkan benar.</small>');
-            $this->redirect(PUBLIC_URL . '/login');
-            return;
-        }
-        
-        if (!password_verify($password, $user['password'])) {
-            // Password salah (username benar tapi password salah)
-            $this->setFlash('error', '❌ Password salah untuk user "<strong>' . htmlspecialchars($username) . '</strong>"!<br><small style="color: #666;">💡 Username benar, tapi password yang Anda masukkan salah.</small>');
-            $this->redirect(PUBLIC_URL . '/login');
+        // 3. Verifikasi Kredensial
+        // Menggunakan satu pesan error untuk keamanan (mencegah User Enumeration)
+        // Jika username tidak ketemu ATAU password salah, pesannya sama.
+        if (!$user || !password_verify($password, $user['password'])) {
+            
+            // OPSI 1: Pesan Aman (Disarankan untuk Production)
+            $this->setFlash('error', 'Username atau Password yang Anda masukkan salah.');
+            
+            /* // OPSI 2: Pesan Spesifik (Hanya pakai ini jika diminta dosen/klien spesifik)
+            if (!$user) {
+                $this->setFlash('error', 'Username tidak terdaftar dalam sistem.');
+            } else {
+                $this->setFlash('error', 'Password yang Anda masukkan tidak sesuai.');
+            }
+            */
+
+            $this->redirect(PUBLIC_URL . '/iclabs-login');
             return;
         }
 
-        // Login sukses
+        // 4. Login Sukses
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
-        
         $_SESSION['status'] = "login";
+        
         // Update last login
         $this->userModel->updateLastLogin($user['id']);
         
-        // Success message
-        $this->setFlash('success', '✅ Login berhasil! Selamat datang, <strong>' . $user['username'] . '</strong>!');
+        // Pesan Sukses yang Bersih
+        $this->setFlash('success', 'Selamat datang kembali, ' . htmlspecialchars($user['username']) . '.');
 
         $this->redirect(PUBLIC_URL . '/admin');
     }
 
     public function logout() {
+        // Ambil username sebelum destroy untuk pesan perpisahan
         $username = $_SESSION['username'] ?? 'User';
         
-        // Clear session
+        // Hapus semua data sesi
+        session_unset();
         session_destroy();
         
-        // Start new session untuk flash message
+        // Mulai sesi baru hanya untuk flash message
         session_start();
-        $_SESSION['flash']['success'] = '👋 <strong>' . $username . '</strong> telah logout. Terima kasih!<br><small style="color: #666;">💡 Login kembali jika diperlukan.</small>';
         
-        header('Location: ' . PUBLIC_URL . '/login');
+        // Pesan Logout yang Elegan
+        $this->setFlash('success', 'Anda telah berhasil logout dari sistem.');
+        
+        header('Location: ' . PUBLIC_URL . '/iclabs-login');
         exit;
     }
 }
