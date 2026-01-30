@@ -56,7 +56,6 @@ $coord       = $data['koordinator'] ?? ['nama' => 'N/A', 'initials' => 'NA'];
             </div>
 
             <div class="main-info-header">
-                <span class="badge-type"><?= htmlspecialchars($lab['jenis'] ?? 'Fasilitas') ?></span>
                 <h1 class="main-title"><?= htmlspecialchars($lab['nama']) ?></h1>
                 
                 <div class="meta-info-row">
