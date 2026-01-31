@@ -27,7 +27,8 @@ define('SMTP_PORT', 587);
 
 // Application Settings
 define('APP_NAME', $_ENV['APP_NAME'] ?? 'Sistem Management Sumber Daya');
-define('APP_ENV', $_ENV['APP_ENV'] ?? 'development'); 
+define('APP_ENV', $_ENV['APP_ENV'] ?? 'development');
+define('DEBUG_MODE', APP_ENV === 'development');
 date_default_timezone_set('Asia/Makassar');
 
 // --- DETEKSI URL OTOMATIS (CORE LOGIC) ---
