@@ -202,14 +202,26 @@ class LaboratoriumController extends Controller {
                 $jenisDb = trim($row['jenis'] ?? '');
                 if (stripos($jenisDb, 'Lab') !== false) {
                     
+                    // --- [FIX] LOGIC PENYELAMAT GAMBAR ---
+                    $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
                     $imgSrc = null;
+
+                    // Cek 1: Apakah ada gambar utama di database?
                     if (!empty($row['gambar'])) {
-                        $filePath = ROOT_PROJECT . '/public/assets/uploads/' . $row['gambar'];
-                        if (file_exists($filePath)) {
-                            $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
-                            $imgSrc = $baseUrl . '/assets/uploads/' . $row['gambar'];
+                        $imgSrc = $baseUrl . '/assets/uploads/' . $row['gambar'];
+                    }
+
+                    // Cek 2: Jika gambar utama KOSONG (misal baru dihapus), CARI DARI GALERI!
+                    if (empty($imgSrc)) {
+                        // Panggil model gambar untuk cari foto apapun milik lab ini
+                        $fotoCadangan = $this->gambarModel->getByLaboratorium($row['idLaboratorium']);
+                        
+                        // Jika ketemu foto lain, ambil yang pertama
+                        if (!empty($fotoCadangan) && isset($fotoCadangan[0]['namaGambar'])) {
+                            $imgSrc = $baseUrl . '/assets/uploads/' . $fotoCadangan[0]['namaGambar'];
                         }
                     }
+                    // ------------------------------------
 
                     $descRaw = $row['deskripsi'] ?? '';
                     $shortDesc = strlen($descRaw) > 150 ? substr($descRaw, 0, 150) . '...' : $descRaw;
@@ -239,14 +251,24 @@ class LaboratoriumController extends Controller {
                 $jenisDb = trim($row['jenis'] ?? '');
                 if (strcasecmp($jenisDb, 'Riset') === 0 || stripos($jenisDb, 'Riset') !== false) {
                     
+                    // --- [FIX] LOGIC PENYELAMAT GAMBAR ---
+                    $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
                     $imgSrc = null;
+
+                    // Cek 1: Apakah ada gambar utama?
                     if (!empty($row['gambar'])) {
-                        $filePath = ROOT_PROJECT . '/public/assets/uploads/' . $row['gambar'];
-                        if (file_exists($filePath)) {
-                            $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
-                            $imgSrc = $baseUrl . '/assets/uploads/' . $row['gambar'];
+                        $imgSrc = $baseUrl . '/assets/uploads/' . $row['gambar'];
+                    }
+
+                    // Cek 2: Jika KOSONG, cari "adiknya" di galeri
+                    if (empty($imgSrc)) {
+                        $fotoCadangan = $this->gambarModel->getByLaboratorium($row['idLaboratorium']);
+                        
+                        if (!empty($fotoCadangan) && isset($fotoCadangan[0]['namaGambar'])) {
+                            $imgSrc = $baseUrl . '/assets/uploads/' . $fotoCadangan[0]['namaGambar'];
                         }
                     }
+                    // ------------------------------------
 
                     $descRaw = $row['deskripsi'] ?? '';
                     $shortDesc = strlen($descRaw) > 120 ? substr($descRaw, 0, 120) . '...' : $descRaw;
@@ -254,6 +276,7 @@ class LaboratoriumController extends Controller {
                     $n = strtolower($row['nama'] ?? '');
                     $style = ['bg' => '#f8fafc', 'icon' => 'ri-flask-line', 'color' => '#64748b', 'badge_bg' => '#f1f5f9', 'badge_text' => '#475569'];
 
+                    // (Bagian styling icon tetap sama...)
                     if (strpos($n, 'ai') !== false || strpos($n, 'intelligence') !== false) {
                         $style = ['bg' => '#eff6ff', 'icon' => 'ri-brain-line', 'color' => '#2563eb', 'badge_bg' => '#dbeafe', 'badge_text' => '#1e40af'];
                     } elseif (strpos($n, 'iot') !== false || strpos($n, 'network') !== false || strpos($n, 'jaringan') !== false) {
@@ -496,7 +519,7 @@ class LaboratoriumController extends Controller {
         $this->error('Failed to delete laboratorium', null, 500);
     }
 
-    public function deleteImage($params) {
+public function deleteImage($params) {
         $id = $params['id'] ?? null;
         if (!$id) {
             $this->error('ID gambar tidak ditemukan', null, 400);
@@ -504,28 +527,57 @@ class LaboratoriumController extends Controller {
         }
 
         try {
-            $gambar = $this->gambarModel->getById($id, 'idGambar');
-            if (!$gambar) {
+            // 1. Ambil data gambar yang mau dihapus
+            $gambarToDelete = $this->gambarModel->getById($id, 'idGambar');
+            if (!$gambarToDelete) {
                 $this->error('Data gambar tidak ditemukan', null, 404);
                 return;
             }
 
-            $filename = $gambar['namaGambar'];
+            $labId = $gambarToDelete['idLaboratorium'];
+            $filename = $gambarToDelete['namaGambar'];
+            
+            // 2. Hapus File Fisik
             $rootUploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/';
             $filePath = $rootUploadDir . $filename;
             
             if (file_exists($filePath)) {
                 @unlink($filePath);
-            } else {
-                $baseName = basename($filename);
-                if (file_exists($rootUploadDir . $baseName)) {
-                    @unlink($rootUploadDir . $baseName);
-                }
             }
 
+            // 3. Hapus Record dari Tabel Galeri
             $result = $this->gambarModel->deleteImage($id);
+
             if ($result) {
-                $this->success(['id' => $id], 'Gambar berhasil dihapus');
+                // --- [LOGIC BARU: AUTO-REPLACE THUMBNAIL] ---
+                
+                // Ambil data Laboratorium Induk
+                $labInduk = $this->model->getById($labId, 'idLaboratorium');
+
+                // Cek: Apakah foto yang barusan dihapus adalah Foto Utama (Thumbnail)?
+                if ($labInduk && $labInduk['gambar'] === $filename) {
+                    
+                    // Cari "Adik-adiknya" (Foto sisa di galeri)
+                    $sisaFoto = $this->gambarModel->getByLaboratorium($labId);
+                    
+                    if (!empty($sisaFoto)) {
+                        // AMBIL FOTO PERTAMA DARI SISA YANG ADA
+                        $fotoPengganti = $sisaFoto[0]['namaGambar'];
+                        
+                        // Update Tabel Induk dengan foto baru
+                        $this->model->update($labId, ['gambar' => $fotoPengganti], 'idLaboratorium');
+                        
+                        // Opsional: Set foto pengganti jadi "isUtama = 1" di tabel gambar
+                        // $this->gambarModel->update($sisaFoto[0]['idGambar'], ['isUtama' => 1]);
+                        
+                    } else {
+                        // Jika tidak ada sisa foto sama sekali, kosongkan thumbnail
+                        $this->model->update($labId, ['gambar' => null], 'idLaboratorium');
+                    }
+                }
+                // ---------------------------------------------
+
+                $this->success(['id' => $id], 'Gambar berhasil dihapus dan thumbnail diperbarui');
             } else {
                 $this->error('Gagal menghapus record gambar', null, 500);
             }
