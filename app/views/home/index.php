@@ -236,6 +236,11 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia"></div></div>
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
+           
+            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia"></div></div>
+            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
         </div>
     </div>
 </section>

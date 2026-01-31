@@ -723,8 +723,8 @@
 
 .slide-track {
   display: flex;
-  width: calc(250px * 12);
-  animation: scrollPartner 40s linear infinite;
+  width: calc(250px * 8);
+  animation: scrollPartner 20s linear infinite;
 }
 .partner-slide {
   height: 100px;
@@ -783,7 +783,7 @@
     transform: translateX(0);
   }
   100% {
-    transform: translateX(calc(-250px * 6));
+    transform: translateX(calc(-250px * 4));
   }
 }
 .partner-section .slider:hover .slide-track {
@@ -891,16 +891,19 @@
     width: 180px;
     min-width: 180px;
   }
+
   .slide-track {
-    width: calc(180px * 12);
+    width: calc(180px * 8);
     animation: scrollPartnerMobile 20s linear infinite;
   }
+
   @keyframes scrollPartnerMobile {
     0% {
       transform: translateX(0);
     }
     100% {
-      transform: translateX(calc(-180px * 6));
+      /* Geser sejauh 4 item versi mobile */
+      transform: translateX(calc(-180px * 4));
     }
   }
   .stats-section {
