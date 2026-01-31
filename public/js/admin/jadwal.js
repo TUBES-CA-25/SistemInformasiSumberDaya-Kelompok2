@@ -121,6 +121,15 @@ function renderTable(data) {
                         </span>
                     </div>
                 </td>
+                
+                <!-- Kolom Asisten -->
+                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
+                    <div class="flex flex-col gap-2">
+                        ${renderAsistenBadge(item.namaAsisten1, item.fotoAsisten1, 1)}
+                        ${renderAsistenBadge(item.namaAsisten2, item.fotoAsisten2, 2)}
+                    </div>
+                </td>
+
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-bold border border-gray-200">${item.kelas || "-"}</span>
                 </td>
@@ -131,8 +140,31 @@ function renderTable(data) {
   });
   tbody.innerHTML = rowsHtml;
 
-  // Panggil update visibility setelah DOM terupdate
   updateBulkActionsVisibility();
+}
+
+// --- HELPER RENDER ---
+function renderAsistenBadge(nama, foto, num) {
+  if (!nama) return `<span class="text-xs text-gray-400 italic">- Kosong -</span>`;
+
+  // Resolve URL Foto
+  let imgUrl = getFotoUrl(nama, foto);
+
+  // Warna badge beda untuk asisten 1 vs 2
+  const colorClass = num === 1 ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-purple-50 text-purple-700 border-purple-100';
+
+  return `
+    <div class="flex items-center gap-2 ${colorClass} px-2 py-1.5 rounded-lg border max-w-fit">
+        <img src="${imgUrl}" alt="${nama}" class="w-6 h-6 rounded-full object-cover border border-white shadow-sm bg-white">
+        <span class="text-xs font-semibold truncate max-w-[120px] pb-0.5" title="${nama}">${nama}</span>
+    </div>`;
+}
+
+function getFotoUrl(nama, foto) {
+  if (foto && foto.includes('http')) return foto;
+  if (foto) return `${BASE_URL}/assets/uploads/${foto}`;
+  // Default Avatar
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=random&color=fff&size=64`;
 }
 
 // --- BULK ACTION HELPERS ---

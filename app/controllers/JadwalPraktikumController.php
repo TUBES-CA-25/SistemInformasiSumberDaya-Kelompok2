@@ -74,6 +74,10 @@ class JadwalPraktikumController extends Controller {
                     continue;
                 }
 
+                // Mapping Asisten: Cari ID berdasarkan Nama (jika string)
+                $idAsisten1 = $this->findAsistenIdByName($asisten1);
+                $idAsisten2 = $this->findAsistenIdByName($asisten2);
+
                 if ($idMK && $idLab) {
                     // CEK DUPLIKASI sebelum insert
                     if ($this->model->checkDuplicate($idMK, $kelas, ucfirst(strtolower($hari)), $start, $end, $idLab)) {
@@ -90,8 +94,8 @@ class JadwalPraktikumController extends Controller {
                         'waktuMulai'     => $start,
                         'waktuSelesai'   => $end,
                         'dosen'          => $dosenNama,
-                        'asisten1'       => $asisten1,
-                        'asisten2'       => $asisten2,
+                        'asisten1'       => $idAsisten1, // Simpan ID
+                        'asisten2'       => $idAsisten2, // Simpan ID
                         'frekuensi'      => $freq,
                         'status'         => 'Aktif'
                     ]);
@@ -126,7 +130,7 @@ class JadwalPraktikumController extends Controller {
         
         if ($res) return $res[array_key_first($res)];
         
-        // Buat baru jika tidak ditemukan (Menghindari gagal impor karena data master kosong)
+        // Buat baru jika tidak ditemukan
         $db->query("INSERT INTO $table ($column) VALUES ('".addslashes($name)."')");
         return $db->insert_id;
     }
@@ -138,9 +142,56 @@ class JadwalPraktikumController extends Controller {
         $stmt->bind_param("s", $name);
         $stmt->execute();
         $res = $stmt->get_result()->fetch_assoc();
-        
-        // Hanya return ID jika lab sudah ada (tidak auto-create)
         return $res ? $res[array_key_first($res)] : null;
+    }
+    
+    // Helper Cari ID Asisten by Nama (Smart Search)
+    private function findAsistenIdByName($name) {
+        if (empty($name) || is_numeric($name)) return $name; 
+        
+        $db = $this->model->db;
+        $cleanName = trim($name);
+
+        // 1. Cek Exact Match (Case Insensitive)
+        $stmt = $db->prepare("SELECT idAsisten, nama FROM asisten WHERE LCASE(TRIM(nama)) = LCASE(?) LIMIT 1");
+        $stmt->bind_param("s", $cleanName);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        if ($res) return $res['idAsisten'];
+        
+        // 2. Cek Partial Match (LIKE %nama%) - Untuk kasus "Tazkirah" vs "tazkirah" atau beda spasi
+        $likeName = "%" . $cleanName . "%";
+        $stmt = $db->prepare("SELECT idAsisten, nama FROM asisten WHERE nama LIKE ? LIMIT 1");
+        $stmt->bind_param("s", $likeName);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        if ($res) return $res['idAsisten'];
+
+        // 3. Cek Reverse Match untuk Gelar (Misal DB: "Berlian Septiani", Excel: "Berlian Septiani, S.Kom")
+        // Ambil kata pertama saja sebagai kunci pencarian dasar
+        $parts = explode(' ', $cleanName);
+        if (count($parts) >= 1) {
+            $firstName = $parts[0];
+            if (strlen($firstName) > 3) { // Minimal 3 huruf untuk menghindari salah match nama pendek
+                 $likeFirst = $firstName . "%";
+                 $stmt = $db->prepare("SELECT idAsisten, nama FROM asisten WHERE nama LIKE ? LIMIT 5");
+                 $stmt->bind_param("s", $likeFirst);
+                 $stmt->execute();
+                 $result = $stmt->get_result();
+                 
+                 // Loop hasil pencarian (misal ketemu 3 Berlian), cari yang paling mirip
+                 while ($row = $result->fetch_assoc()) {
+                     // Cek kemiripan string menggunakan similar_text atau strpos
+                     if (stripos($cleanName, $row['nama']) !== false || stripos($row['nama'], $cleanName) !== false) {
+                         return $row['idAsisten'];
+                     }
+                 }
+            }
+        }
+        
+        // Jika tetap tidak ketemu, log errornya biar ketahuan
+        error_log("Gagal menemukan ID Asisten untuk nama: " . $name);
+        return null;
     }
 
     public function apiIndex() {
@@ -445,7 +496,8 @@ class JadwalPraktikumController extends Controller {
                       WHERE idJadwal = ?";
             
             $stmt = $this->model->db->prepare($query);
-            $stmt->bind_param("isissssssssi",
+            // i=idMK, s=kelas, i=idLab, s=hari, s=mulai, s=selesai, s=dosen, i=asisten1, i=asisten2, s=freq, s=status, i=id
+            $stmt->bind_param("isissssiissi",
                 $data['idMatakuliah'], $data['kelas'], $data['idLaboratorium'],
                 $data['hari'], $data['waktuMulai'], $data['waktuSelesai'],
                 $data['dosen'], $data['asisten1'], $data['asisten2'],
