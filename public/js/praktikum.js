@@ -178,10 +178,10 @@ function renderJadwalDashboard() {
 
       const kelasFreq = `<b>${item.kelas || "-"}</b> <span style="color:#94a3b8">/</span> ${item.frekuensi || "-"}`;
       const asistenDisplay =
-        item.asisten1 || item.asisten2
+        item.namaAsisten1 || item.namaAsisten2
           ? `<div class="asisten-cell">
-               ${item.asisten1 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.asisten1}</div>` : ""}
-               ${item.asisten2 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.asisten2}</div>` : ""}
+               ${item.namaAsisten1 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.namaAsisten1}</div>` : ""}
+               ${item.namaAsisten2 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.namaAsisten2}</div>` : ""}
              </div>`
           : '<span style="color:#cbd5e1">-</span>';
 

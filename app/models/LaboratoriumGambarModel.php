@@ -23,12 +23,12 @@ class LaboratoriumGambarModel extends Model
     /**
      * Insert a new image record
      */
-    public function insertImage($idLaboratorium, $namaGambar, $deskripsiGambar = null, $isUtama = 0, $urutan = 0)
+    public function insertImage($idLaboratorium, $namaGambar, $isUtama = 0, $urutan = 0)
     {
-        $sql = "INSERT INTO {$this->table} (idLaboratorium, namaGambar, deskripsiGambar, isUtama, urutan, created_at) 
-                VALUES (?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO {$this->table} (idLaboratorium, namaGambar, isUtama, urutan, created_at) 
+                VALUES (?, ?, ?, ?, NOW())";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param('issii', $idLaboratorium, $namaGambar, $deskripsiGambar, $isUtama, $urutan);
+        $stmt->bind_param('isii', $idLaboratorium, $namaGambar, $isUtama, $urutan);
         return $stmt->execute();
     }
 
