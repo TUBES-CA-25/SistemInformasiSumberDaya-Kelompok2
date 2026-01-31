@@ -74,19 +74,5 @@ class PraktikumController extends Controller {
         // Pastikan file view ada di folder: app/views/praktikum/tatatertib.php
         $this->view('praktikum/tatatertib', $data);
     }
-
-    // ==========================================================
-    // HALAMAN LAIN (PLACEHOLDER)
-    // ==========================================================
-    
-    // public function jadwal() {
-    //     // Nanti diisi logika untuk jadwal
-    //     $this->view('praktikum/jadwal');
-    // }
-
-    // public function modul() {
-    //     // Nanti diisi logika untuk modul
-    //     $this->view('praktikum/modul');
-    // }
 }
 ?>

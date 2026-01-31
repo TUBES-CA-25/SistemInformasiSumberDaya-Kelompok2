@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <section class="contact-section">
     <div class="container">
         
@@ -34,28 +36,28 @@
             </div>
 
             <div class="contact-form-card">
-                <form action="#" method="POST">
+                <form id="contactForm">
                     <div class="form-group">
                         <label>Nama Lengkap</label>
-                        <input type="text" placeholder="Masukkan nama Anda..." required>
+                        <input type="text" name="nama" placeholder="Masukkan nama Anda..." required class="w-full px-4 py-2 border rounded-lg">
                     </div>
                     
                     <div class="form-group">
-                        <label>Email Mahasiswa / Umum</label>
-                        <input type="email" placeholder="example@domain.com" required>
+                        <label>Email</label>
+                        <input type="email" name="email" placeholder="example@domain.com" required class="w-full px-4 py-2 border rounded-lg">
                     </div>
 
                     <div class="form-group">
                         <label>Subjek</label>
-                        <input type="text" placeholder="Tujuan pesan..." required>
+                        <input type="text" name="subjek" placeholder="Tujuan pesan..." required class="w-full px-4 py-2 border rounded-lg">
                     </div>
 
                     <div class="form-group">
                         <label>Pesan Anda</label>
-                        <textarea rows="5" placeholder="Tuliskan pesan secara detail..."></textarea>
+                        <textarea name="pesan" rows="5" placeholder="Tuliskan pesan..." required class="w-full px-4 py-2 border rounded-lg"></textarea>
                     </div>
 
-                    <button type="submit" class="btn-submit">
+                    <button type="submit" id="btnKirim" class="btn-submit w-full bg-blue-600 text-white py-2 rounded-lg mt-4">
                         Kirim Pesan <i class="ri-send-plane-fill"></i>
                     </button>
                 </form>
@@ -81,3 +83,5 @@
 
     </div>
 </section>
+
+<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/js/kontak.js"></script>

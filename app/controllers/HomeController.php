@@ -58,8 +58,7 @@ class HomeController extends Controller {
 
     // [BARU] Method untuk Halaman Apps
     public function apps() {
-        $data['judul'] = 'IC-Labs Apps'; // Judul halaman
-        // Memanggil view yang ada di app/views/home/apps.php
+        $data['judul'] = 'IC-Labs Apps'; 
         $this->view('home/apps', $data); 
     }
     

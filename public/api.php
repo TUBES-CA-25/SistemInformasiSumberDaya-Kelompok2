@@ -18,6 +18,12 @@ define('CONTROLLER_PATH', APP_PATH . '/controllers');
 define('MODEL_PATH', APP_PATH . '/models');
 define('VIEW_PATH', APP_PATH . '/views');
 
+if (file_exists(BASE_PATH . '/vendor/autoload.php')) {
+    require_once BASE_PATH . '/vendor/autoload.php';
+} else {
+    error_log("Composer autoload tidak ditemukan!");
+}
+
 // Include configuration
 require_once APP_PATH . '/config/config.php';
 require_once APP_PATH . '/config/Database.php';
@@ -108,6 +114,7 @@ $routes = [
         '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'index'],
         '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],            '/dashboard/stats' => ['controller' => 'DashboardController', 'method' => 'stats'],    ],
     'POST' => [
+        '/kontak' => ['controller' => 'KontakController', 'method' => 'send'],
         '/sop' => ['controller' => 'SopController', 'method' => 'store'],
         '/sop/{id}' => ['controller' => 'SopController', 'method' => 'update'],
             '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'store'],
@@ -139,7 +146,6 @@ $routes = [
         '/formatpenulisan' => ['controller' => 'FormatPenulisanController', 'method' => 'store'],
         '/formatpenulisan/{id}' => ['controller' => 'FormatPenulisanController', 'method' => 'update'],
         '/user' => ['controller' => 'UserController', 'method' => 'apiStore'],
-        '/kontak' => ['controller' => 'KontakController', 'method' => 'store'],
         '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'store'],
         '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
         '/modul' => ['controller' => 'ModulController', 'method' => 'store'],
