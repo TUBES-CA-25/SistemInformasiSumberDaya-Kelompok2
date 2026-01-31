@@ -49,11 +49,11 @@ $sanksi_data = $data['sanksi'] ?? [];
                 <div class="video-title-box">
                     <h2>
                         <span class="video-play-icon"><i class="ri-play-fill"></i></span>
-                        Video Panduan & Keselamatan
+                        Video Panduan Laboratorium FIKOM UMI
                     </h2>
                 </div>
                 <p class="video-desc">
-                    Pelajari prosedur keselamatan, penggunaan alat, dan tata tertib laboratorium melalui video panduan resmi berikut ini.
+                    Pelajari tata tertib laboratorium melalui video panduan resmi berikut ini.
                 </p>
             </div>
             
