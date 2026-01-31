@@ -75,20 +75,7 @@ class PeraturanLabController extends Controller {
                 $input['display_format'] = 'list';
             }
             
-            // Optional: handle file upload for gambar
-            if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
-                $subFolder = 'peraturan/';
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
-                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-                
-                $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-                $filename = Helper::generateFilename('peraturan', $input['judul'], $ext);
-                $target = $uploadDir . $filename;
-                
-                if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                    $input['gambar'] = $subFolder . $filename;
-                }
-            }
+
             
             error_log('PERATURAN STORE - FINAL INPUT: ' . json_encode($input));
             $result = $this->model->insert($input);
@@ -140,36 +127,7 @@ class PeraturanLabController extends Controller {
         
         error_log('PERATURAN UPDATE - Final input: ' . json_encode($input));
         
-        // Optional: handle file upload for gambar
-        if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
-            $subFolder = 'peraturan/';
-            $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-            
-            // Hapus gambar lama jika ada
-            if (isset($oldData['gambar']) && !empty($oldData['gambar'])) {
-                $oldFile = basename($oldData['gambar']);
-                $oldImagePath = $uploadDir . $oldFile;
-                $legacyPath_sub = dirname(__DIR__, 2) . '/storage/uploads/peraturan/' . $oldFile;
-                $legacyPath_root = dirname(__DIR__, 2) . '/storage/uploads/' . $oldFile;
-                
-                if (file_exists($oldImagePath)) {
-                    @unlink($oldImagePath);
-                } elseif (file_exists($legacyPath_sub)) {
-                    @unlink($legacyPath_sub);
-                } elseif (file_exists($legacyPath_root)) {
-                    @unlink($legacyPath_root);
-                }
-            }
-            
-            $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-            $filename = Helper::generateFilename('peraturan', $judul, $ext);
-            $target = $uploadDir . $filename;
-            
-            if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
-                $input['gambar'] = $subFolder . $filename;
-            }
-        }
+
         $result = $this->model->update($id, $input);
         if ($result) $this->success([], 'Peraturan lab updated');
         $this->error('Failed to update peraturan lab', null, 500);
@@ -180,18 +138,7 @@ class PeraturanLabController extends Controller {
         if (!$id) $this->error('ID tidak ditemukan', null, 400);
         
         $oldData = $this->model->getById($id);
-        if ($oldData && !empty($oldData['gambar'])) {
-            $oldFile = basename($oldData['gambar']);
-            $paths = [
-                dirname(__DIR__, 2) . '/storage/uploads/peraturan/' . $oldFile,
-                dirname(__DIR__, 2) . '/storage/uploads/' . $oldFile
-            ];
-            foreach ($paths as $path) {
-                if (file_exists($path)) {
-                    @unlink($path);
-                }
-            }
-        }
+
         
         $result = $this->model->delete($id);
         if ($result) $this->success([], 'Peraturan lab deleted');

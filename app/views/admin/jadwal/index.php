@@ -492,7 +492,7 @@ function openFormModal(id = null, event = null) {
         });
 
         // Filter Asisten 2 (statusAktif = 'CA')
-        const asisten2List = asistenData.data ? asistenData.data.filter(a => a.statusAktif === 'CA') : [];
+        const asisten2List = asistenData.data ? asistenData.data.filter(a => a.statusAktif === 'CA' || a.statusAktif === 'Asisten') : [];
         const asisten2Select = document.getElementById('inputAsisten2');
         asisten2Select.innerHTML = '<option value="">-- Pilih Asisten 2 --</option>';
         asisten2List.forEach(a => {
@@ -511,12 +511,35 @@ function openFormModal(id = null, event = null) {
                 document.getElementById('inputLab').value = data.idLaboratorium;
                 document.getElementById('inputHari').value = data.hari;
                 document.getElementById('inputKelas').value = data.kelas;
-                document.getElementById('inputMulai').value = data.waktuMulai;
-                document.getElementById('inputSelesai').value = data.waktuSelesai;
+                document.getElementById('inputMulai').value = data.waktuMulai ? data.waktuMulai.substring(0, 5) : '';
+                document.getElementById('inputSelesai').value = data.waktuSelesai ? data.waktuSelesai.substring(0, 5) : '';
                 document.getElementById('inputFrekuensi').value = data.frekuensi || '';
                 document.getElementById('inputDosen').value = data.dosen || '';
-                document.getElementById('inputAsisten1').value = data.idAsisten1 || '';
-                document.getElementById('inputAsisten2').value = data.idAsisten2 || '';
+                // Set Select values safely (Handle ID or Name mismatch)
+                const setSelectValue = (id, value) => {
+                    const select = document.getElementById(id);
+                    if(!select || !value) return;
+
+                    // 1. Try direct assignment (for ID)
+                    select.value = value;
+                    
+                    // 2. Retry with string cast
+                    if(!select.value) select.value = String(value);
+
+                    // 3. Fallback: Find by Option Text (for Legacy Names)
+                    if(!select.value) {
+                       const searchText = String(value).trim().toLowerCase();
+                       for (let i = 0; i < select.options.length; i++) {
+                           if (select.options[i].text.trim().toLowerCase() === searchText) {
+                               select.value = select.options[i].value;
+                               break;
+                           }
+                       }
+                    }
+                };
+
+                setSelectValue('inputAsisten1', data.asisten1);
+                setSelectValue('inputAsisten2', data.asisten2);
                 
                 // Radio Status
                 const radios = document.getElementsByName('status');

@@ -5,11 +5,15 @@ class JadwalPraktikumModel extends Model {
     protected $table = 'jadwalpraktikum';
 
     public function getAll() {
-        // LEFT JOIN memastikan data tampil meskipun asisten belum diisi di database
-        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab 
+        // LEFT JOIN dengan tabel asisten berdasarkan ID (setelah migrasi database)
+        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
+                  COALESCE(a1.nama, j.asisten1) as namaAsisten1, 
+                  COALESCE(a2.nama, j.asisten2) as namaAsisten2
                   FROM jadwalpraktikum j
                   LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
+                  LEFT JOIN asisten a1 ON j.asisten1 = a1.idAsisten
+                  LEFT JOIN asisten a2 ON j.asisten2 = a2.idAsisten
                   ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'), j.waktuMulai ASC";
         
         $result = $this->db->query($query);
@@ -91,10 +95,14 @@ class JadwalPraktikumModel extends Model {
      * Get jadwal by ID
      */
     public function getById($id, $idColumn = 'idJadwal') {
-        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab 
+        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
+                  COALESCE(a1.nama, j.asisten1) as namaAsisten1, 
+                  COALESCE(a2.nama, j.asisten2) as namaAsisten2
                   FROM jadwalpraktikum j
                   LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
+                  LEFT JOIN asisten a1 ON j.asisten1 = a1.idAsisten
+                  LEFT JOIN asisten a2 ON j.asisten2 = a2.idAsisten
                   WHERE j.{$idColumn} = ? LIMIT 1";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("i", $id);

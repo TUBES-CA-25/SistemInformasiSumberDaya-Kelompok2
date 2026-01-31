@@ -351,8 +351,8 @@ class JadwalPraktikumController extends Controller {
                 'waktuMulai' => trim($input['waktuMulai']),
                 'waktuSelesai' => trim($input['waktuSelesai']),
                 'dosen' => trim($input['dosen'] ?? ''),
-                'asisten1' => trim($input['asisten1'] ?? ''),
-                'asisten2' => trim($input['asisten2'] ?? ''),
+                'asisten1' => trim($input['idAsisten1'] ?? $input['asisten1'] ?? ''),
+                'asisten2' => trim($input['idAsisten2'] ?? $input['asisten2'] ?? ''),
                 'frekuensi' => trim($input['frekuensi'] ?? '1'),
                 'status' => trim($input['status'] ?? 'Aktif')
             ];
@@ -430,8 +430,8 @@ class JadwalPraktikumController extends Controller {
                 'waktuMulai' => trim($input['waktuMulai']),
                 'waktuSelesai' => trim($input['waktuSelesai']),
                 'dosen' => trim($input['dosen'] ?? ''),
-                'asisten1' => trim($input['asisten1'] ?? ''),
-                'asisten2' => trim($input['asisten2'] ?? ''),
+                'asisten1' => trim($input['idAsisten1'] ?? $input['asisten1'] ?? ''),
+                'asisten2' => trim($input['idAsisten2'] ?? $input['asisten2'] ?? ''),
                 'frekuensi' => trim($input['frekuensi'] ?? '1'),
                 'status' => trim($input['status'] ?? 'Aktif')
             ];
@@ -445,7 +445,7 @@ class JadwalPraktikumController extends Controller {
                       WHERE idJadwal = ?";
             
             $stmt = $this->model->db->prepare($query);
-            $stmt->bind_param("isisissssssi",
+            $stmt->bind_param("isissssssssi",
                 $data['idMatakuliah'], $data['kelas'], $data['idLaboratorium'],
                 $data['hari'], $data['waktuMulai'], $data['waktuSelesai'],
                 $data['dosen'], $data['asisten1'], $data['asisten2'],
@@ -532,8 +532,8 @@ class JadwalPraktikumController extends Controller {
             'waktuMulai' => $_POST['waktuMulai'] ?? null,
             'waktuSelesai' => $_POST['waktuSelesai'] ?? null,
             'dosen' => $_POST['dosen'] ?? null,
-            'asisten1' => $_POST['asisten1'] ?? null,
-            'asisten2' => $_POST['asisten2'] ?? null,
+            'asisten1' => $_POST['idAsisten1'] ?? $_POST['asisten1'] ?? null,
+            'asisten2' => $_POST['idAsisten2'] ?? $_POST['asisten2'] ?? null,
             'frekuensi' => $_POST['frekuensi'] ?? null,
             'status' => 'Aktif'
         ];
