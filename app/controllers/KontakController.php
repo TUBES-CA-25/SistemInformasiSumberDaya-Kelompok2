@@ -1,6 +1,7 @@
 <?php
 
-// PENTING: Panggil Namespace Library
+// PENTING: Namespace Library PHPMailer
+// (Pastikan folder 'vendor' sudah ada di project agar ini berfungsi)
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -9,71 +10,84 @@ class KontakController extends Controller {
 
     public function send($params) {
         
-        // 1. Ambil Data
+        // 1. Ambil Data dari Form
         $nama    = $_POST['nama'] ?? '';
         $email   = $_POST['email'] ?? '';
         $subjek  = $_POST['subjek'] ?? '';
         $pesan   = $_POST['pesan'] ?? '';
 
-        // Validasi input
+        // 2. Validasi Input
         if (empty($nama) || empty($email) || empty($pesan)) {
             http_response_code(400);
             echo json_encode(['status' => 'error', 'message' => 'Semua kolom wajib diisi']);
             exit;
         }
 
-        // 2. Inisialisasi PHPMailer
-        $mail = new PHPMailer(true); // true = aktifkan exception agar error terlihat
+        // 3. Inisialisasi PHPMailer
+        // 'true' artinya kita mengaktifkan Exception agar error bisa ditangkap catch
+        $mail = new PHPMailer(true); 
 
         try {
-            // --- KONFIGURASI SERVER (GMAIL) ---
+            // --- KONFIGURASI SERVER (Mengambil dari config.php) ---
+            // Ini membuat kode aman karena password tidak tertulis disini
             $mail->isSMTP();                                            
-            $mail->Host       = 'smtp.gmail.com';                     
+            $mail->Host       = SMTP_HOST;                     
             $mail->SMTPAuth   = true;                                   
-            
-            // GANTI DENGAN EMAIL KAMU
-            $mail->Username   = 'nahwakakaa@gmail.com';                 
-            
-            // GANTI DENGAN APP PASSWORD (16 DIGIT) - JANGAN PASSWORD LOGIN BIASA!
-            $mail->Password   = 'pzwx lfbx shzm jwoo';                               
-            
+            $mail->Username   = SMTP_USER;                 
+            $mail->Password   = SMTP_PASS;                               
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            
-            $mail->Port       = 587;                                    
+            $mail->Port       = SMTP_PORT;                                    
 
             // --- PENGIRIM & PENERIMA ---
-            // Pengirim di-set email kamu (karena SMTP Gmail melarang spoofing email orang lain)
-            $mail->setFrom('email.kamu@gmail.com', 'Admin Website');
             
-            // Penerima: Kirim ke email kamu sendiri untuk dicek
-            $mail->addAddress('email.kamu@gmail.com');     
+            // PENTING UNTUK HOSTING: 
+            // Email Pengirim (setFrom) HARUS SAMA dengan SMTP_USER.
+            // Jika beda, server hosting sering menolak (dianggap spamming).
+            $mail->setFrom(SMTP_USER, 'Sistem Informasi Sumber Daya');
             
-            // Reply-To: Agar kalau kamu klik "Balas", masuknya ke email si Pengunjung
+            // Penerima: Kirim notifikasi ke email Admin (Anda sendiri)
+            $mail->addAddress(SMTP_USER);     
+            
+            // Reply-To: Ini kuncinya!
+            // Saat Admin klik "Reply" di Gmail, tujuannya langsung ke email Pengunjung.
             $mail->addReplyTo($email, $nama);
 
             // --- KONTEN EMAIL ---
             $mail->isHTML(true);                                  
-            $mail->Subject = "Pesan Website: " . $subjek;
+            $mail->Subject = "Pesan Baru: " . $subjek;
+            
+            // Styling HTML sederhana agar email terlihat rapi
             $mail->Body    = "
-                <h3>Pesan Baru dari Pengunjung</h3>
-                <hr>
-                <p><b>Nama:</b> $nama</p>
-                <p><b>Email:</b> $email</p>
-                <p><b>Subjek:</b> $subjek</p>
-                <br>
-                <div style='background: #f3f4f6; padding: 15px; border-radius: 5px;'>
-                    <b>Isi Pesan:</b><br>
-                    $pesan
+                <div style='font-family: Arial, sans-serif; line-height: 1.6;'>
+                    <h3 style='color: #2563eb;'>Pesan Baru dari Website</h3>
+                    <hr>
+                    <p><b>Nama Pengunjung:</b> $nama</p>
+                    <p><b>Email Pengunjung:</b> $email</p>
+                    <p><b>Subjek:</b> $subjek</p>
+                    <br>
+                    <div style='background: #f3f4f6; padding: 15px; border-radius: 5px; border-left: 4px solid #2563eb;'>
+                        <b>Isi Pesan:</b><br>
+                        " . nl2br(htmlspecialchars($pesan)) . "
+                    </div>
+                    <br>
+                    <small style='color: #888;'>Email ini dikirim otomatis oleh sistem.</small>
                 </div>
             ";
+            
+            // Versi teks biasa untuk email client tua
             $mail->AltBody = "Nama: $nama\nEmail: $email\nPesan: $pesan";
 
             // Kirim!
             $mail->send();
 
+            // Respon Sukses ke Javascript
             header('Content-Type: application/json');
             echo json_encode(['status' => 'success', 'message' => 'Pesan BERHASIL dikirim ke email admin!']);
 
         } catch (Exception $e) {
+            // Respon Gagal (Error Handler)
+            // Di Hosting, error detail ($mail->ErrorInfo) sebaiknya dicatat di log saja, 
+            // tapi untuk sekarang kita tampilkan agar Anda tahu jika ada masalah.
             http_response_code(500);
             echo json_encode([
                 'status' => 'error', 

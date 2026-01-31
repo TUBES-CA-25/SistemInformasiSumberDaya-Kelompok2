@@ -18,6 +18,13 @@ define('DB_USER', $_ENV['DB_USERNAME'] ?? 'root');
 define('DB_PASS', $_ENV['DB_PASSWORD'] ?? '');
 define('DB_NAME', $_ENV['DB_DATABASE'] ?? 'sistem_manajemen_sumber_daya');
 
+// --- EMAIL (SMTP GMAIL) ---
+
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_USER', 'nahwakakaa@gmail.com');
+define('SMTP_PASS', 'pzwx lfbx shzm jwoo'); 
+define('SMTP_PORT', 587);
+
 // Application Settings
 define('APP_NAME', $_ENV['APP_NAME'] ?? 'Sistem Management Sumber Daya');
 define('APP_ENV', $_ENV['APP_ENV'] ?? 'development'); 
