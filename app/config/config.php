@@ -86,4 +86,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 date_default_timezone_set('Asia/Jakarta');
+
+// Error Log Path
+$logPath = dirname(__DIR__, 2) . '/storage/logs/error.log';
+
+ini_set('log_errors', 1);
+ini_set('error_log', $logPath);
+
+if (defined('DEBUG_MODE') && DEBUG_MODE === true) {
+    ini_set('display_errors', 1);
+} else {
+    ini_set('display_errors', 0);
+}
 ?>
+
