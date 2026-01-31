@@ -94,8 +94,8 @@ class JadwalPraktikumController extends Controller {
                         'waktuMulai'     => $start,
                         'waktuSelesai'   => $end,
                         'dosen'          => $dosenNama,
-                        'asisten1'       => $idAsisten1, // Simpan ID
-                        'asisten2'       => $idAsisten2, // Simpan ID
+                        'asisten1'       => !empty($idAsisten1) ? (int)$idAsisten1 : null,
+                        'asisten2'       => !empty($idAsisten2) ? (int)$idAsisten2 : null,
                         'frekuensi'      => $freq,
                         'status'         => 'Aktif'
                     ]);
@@ -402,8 +402,8 @@ class JadwalPraktikumController extends Controller {
                 'waktuMulai' => trim($input['waktuMulai']),
                 'waktuSelesai' => trim($input['waktuSelesai']),
                 'dosen' => trim($input['dosen'] ?? ''),
-                'asisten1' => trim($input['idAsisten1'] ?? $input['asisten1'] ?? ''),
-                'asisten2' => trim($input['idAsisten2'] ?? $input['asisten2'] ?? ''),
+                'asisten1' => (!empty($input['idAsisten1']) && is_numeric($input['idAsisten1'])) ? (int)$input['idAsisten1'] : ((!empty($input['asisten1']) && is_numeric($input['asisten1'])) ? (int)$input['asisten1'] : null),
+                'asisten2' => (!empty($input['idAsisten2']) && is_numeric($input['idAsisten2'])) ? (int)$input['idAsisten2'] : ((!empty($input['asisten2']) && is_numeric($input['asisten2'])) ? (int)$input['asisten2'] : null),
                 'frekuensi' => trim($input['frekuensi'] ?? '1'),
                 'status' => trim($input['status'] ?? 'Aktif')
             ];
@@ -481,8 +481,8 @@ class JadwalPraktikumController extends Controller {
                 'waktuMulai' => trim($input['waktuMulai']),
                 'waktuSelesai' => trim($input['waktuSelesai']),
                 'dosen' => trim($input['dosen'] ?? ''),
-                'asisten1' => trim($input['idAsisten1'] ?? $input['asisten1'] ?? ''),
-                'asisten2' => trim($input['idAsisten2'] ?? $input['asisten2'] ?? ''),
+                'asisten1' => (!empty($input['idAsisten1']) && is_numeric($input['idAsisten1'])) ? (int)$input['idAsisten1'] : ((!empty($input['asisten1']) && is_numeric($input['asisten1'])) ? (int)$input['asisten1'] : null),
+                'asisten2' => (!empty($input['idAsisten2']) && is_numeric($input['idAsisten2'])) ? (int)$input['idAsisten2'] : ((!empty($input['asisten2']) && is_numeric($input['asisten2'])) ? (int)$input['asisten2'] : null),
                 'frekuensi' => trim($input['frekuensi'] ?? '1'),
                 'status' => trim($input['status'] ?? 'Aktif')
             ];
