@@ -204,7 +204,7 @@ $laboran_list = $data['laboran'] ?? [];
                 <div class="card-icon"><i class="ri-user-add-line"></i></div>
                 <h3>Rekrutmen Asisten</h3>
                 <p>Informasi seleksi, syarat, dan ketentuan bagi calon asisten laboratorium.</p>
-                <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login">Lihat Detail <i class="ri-arrow-right-line"></i></a>
+                <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="link-arrow">Lihat Detail <i class="ri-arrow-right-line"></i></a>
             </div>
 
             <div class="info-card reveal fade-up" style="transition-delay: 0.2s;">
