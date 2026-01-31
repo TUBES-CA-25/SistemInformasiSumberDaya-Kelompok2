@@ -155,8 +155,7 @@ function renderAsistenBadge(nama, foto, num) {
 
   return `
     <div class="flex items-center gap-2 ${colorClass} px-2 py-1.5 rounded-lg border max-w-fit">
-        <img src="${imgUrl}" alt="${nama}" class="w-6 h-6 rounded-full object-cover border border-white shadow-sm bg-white">
-        <span class="text-xs font-semibold truncate max-w-[120px] pb-0.5" title="${nama}">${nama}</span>
+        <span class="text-xs font-semibold truncate max-w-[150px]" title="${nama}">${nama}</span>
     </div>`;
 }
 
