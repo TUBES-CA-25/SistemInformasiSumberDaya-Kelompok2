@@ -53,6 +53,7 @@
                     <th class="px-6 py-4 font-semibold">Mata Kuliah</th>
                     <th class="px-6 py-4 font-semibold">Laboratorium</th>
                     <th class="px-6 py-4 font-semibold min-w-[160px]">Hari & Waktu</th>
+                    <th class="px-6 py-4 font-semibold min-w-[200px]">Asisten</th>
                     <th class="px-6 py-4 font-semibold text-center w-24">Kelas</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Status</th>
                 </tr>

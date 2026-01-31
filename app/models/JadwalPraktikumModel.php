@@ -5,11 +5,18 @@ class JadwalPraktikumModel extends Model {
     protected $table = 'jadwalpraktikum';
 
     public function getAll() {
-        // LEFT JOIN memastikan data tampil meskipun asisten belum diisi di database
-        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab 
+        // LEFT JOIN dengan tabel asisten berdasarkan ID
+        // Menambahkan foto (url) dan ID asli untuk frontend
+        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
+                  COALESCE(a1.nama, j.asisten1) as namaAsisten1, 
+                  COALESCE(a2.nama, j.asisten2) as namaAsisten2,
+                  a1.foto as fotoAsisten1, a2.foto as fotoAsisten2,
+                  a1.idAsisten as idAsisten1, a2.idAsisten as idAsisten2
                   FROM jadwalpraktikum j
                   LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
+                  LEFT JOIN asisten a1 ON j.asisten1 = a1.idAsisten
+                  LEFT JOIN asisten a2 ON j.asisten2 = a2.idAsisten
                   ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'), j.waktuMulai ASC";
         
         $result = $this->db->query($query);
@@ -37,7 +44,8 @@ class JadwalPraktikumModel extends Model {
                   (idMatakuliah, kelas, idLaboratorium, hari, waktuMulai, waktuSelesai, dosen, asisten1, asisten2, frekuensi, status) 
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param("isissssssss", 
+        // i=MK, s=Kls, i=Lab, s=Hari, s=Mulai, s=Selesai, s=Dosen, i=Ast1, i=Ast2, s=Freq, s=Status
+        $stmt->bind_param("isissssiiss", 
             $data['idMatakuliah'], $data['kelas'], $data['idLaboratorium'], 
             $data['hari'], $data['waktuMulai'], $data['waktuSelesai'], 
             $data['dosen'], $data['asisten1'], $data['asisten2'], 
@@ -91,10 +99,16 @@ class JadwalPraktikumModel extends Model {
      * Get jadwal by ID
      */
     public function getById($id, $idColumn = 'idJadwal') {
-        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab 
+        $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
+                  COALESCE(a1.nama, j.asisten1) as namaAsisten1, 
+                  COALESCE(a2.nama, j.asisten2) as namaAsisten2,
+                  a1.foto as fotoAsisten1, a2.foto as fotoAsisten2,
+                  a1.idAsisten as idAsisten1, a2.idAsisten as idAsisten2
                   FROM jadwalpraktikum j
                   LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
+                  LEFT JOIN asisten a1 ON j.asisten1 = a1.idAsisten
+                  LEFT JOIN asisten a2 ON j.asisten2 = a2.idAsisten
                   WHERE j.{$idColumn} = ? LIMIT 1";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("i", $id);

@@ -360,7 +360,7 @@ class LaboratoriumController extends Controller {
                 if (!empty($uploadedImages)) {
                     foreach ($uploadedImages as $index => $image) {
                         $isUtama = ($index === 0) ? 1 : 0;
-                        $this->gambarModel->insertImage($lastId, $image['filename'], $image['description'], $isUtama, $index);
+                        $this->gambarModel->insertImage($lastId, $image['filename'], $isUtama, $index);
                     }
                 }
                 $this->success(['id' => $lastId], 'Laboratorium berhasil ditambahkan', 201);
@@ -444,7 +444,7 @@ class LaboratoriumController extends Controller {
                 if (!empty($uploadedImages)) {
                     foreach ($uploadedImages as $index => $image) {
                         $isUtama = ($index === 0) ? 1 : 0;
-                        $this->gambarModel->insertImage($id, $image['filename'], $image['description'], $isUtama, $index);
+                        $this->gambarModel->insertImage($id, $image['filename'], $isUtama, $index);
                     }
                 }
                 $this->success([], 'Laboratorium berhasil diupdate', 200);
