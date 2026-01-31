@@ -268,9 +268,9 @@ function openFormModal(id = null, event = null) {
       asisten1Select.innerHTML += `<option value="${a.idAsisten}">${a.nama}</option>`;
     });
 
-    // Filter Asisten 2 (statusAktif = 'CA')
+    // Filter Asisten 2 (statusAktif = 'CA' atau 'Asisten')
     const asisten2List = asistenData.data
-      ? asistenData.data.filter((a) => a.statusAktif === "CA")
+      ? asistenData.data.filter((a) => a.statusAktif === "CA" || a.statusAktif === "Asisten")
       : [];
     const asisten2Select = document.getElementById("inputAsisten2");
     asisten2Select.innerHTML =
