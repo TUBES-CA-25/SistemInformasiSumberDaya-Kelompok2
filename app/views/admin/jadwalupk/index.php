@@ -43,7 +43,7 @@
     </div>
 
     <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
+        <table class="w-full text-left border-collapse" style="table-layout: fixed;">
             <thead>
                 <tr class="bg-gray-800 text-white text-sm uppercase tracking-wider">
                     <th class="px-6 py-4 font-semibold text-center w-8">
@@ -54,12 +54,13 @@
                     <th class="px-6 py-4 font-semibold text-center w-20">Prodi</th>
                     <th class="px-6 py-4 font-semibold text-center w-40">Waktu & Tanggal</th>
                     <th class="px-6 py-4 font-semibold text-center w-20">Kelas</th>
-                    <th class="px-6 py-4 font-semibold text-center w-24">Ruangan</th>
+                    <th class="px-6 py-4 font-semibold text-center w-24">Frekuensi</th>
+                    <th class="px-6 py-4 font-semibold text-center w-28">Ruangan</th>
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
                 <tr>
-                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                    <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                         <div class="flex flex-col items-center gap-2">
                             <i class="fas fa-circle-notch fa-spin text-blue-500 text-2xl"></i>
                             <span class="font-medium">Memuat data...</span>

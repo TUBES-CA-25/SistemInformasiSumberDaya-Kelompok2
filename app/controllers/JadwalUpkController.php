@@ -72,14 +72,14 @@ class JadwalUpkController extends Controller {
                         if (empty(array_filter($rowData))) continue;
 
                         $dataImport[] = [
-                            'prodi'       => trim($rowData[1] ?? ''),
-                            'tanggal'     => date('Y-m-d', strtotime(trim($rowData[2] ?? ''))),
+                            'mata_kuliah' => trim($rowData[0] ?? ''),
+                            'dosen'       => trim($rowData[1] ?? ''),
+                            'prodi'       => trim($rowData[2] ?? ''),
                             'jam'         => trim($rowData[3] ?? ''),
-                            'mata_kuliah' => trim($rowData[4] ?? ''),
-                            'dosen'       => trim($rowData[5] ?? ''),
+                            'tanggal'     => date('Y-m-d', strtotime(trim($rowData[4] ?? ''))),
+                            'kelas'       => trim($rowData[5] ?? ''),
                             'frekuensi'   => trim($rowData[6] ?? ''),
-                            'kelas'       => trim($rowData[7] ?? ''),
-                            'ruangan'     => trim($rowData[8] ?? '')
+                            'ruangan'     => trim($rowData[7] ?? '')
                         ];
                     }
 
@@ -147,6 +147,13 @@ class JadwalUpkController extends Controller {
 
     public function apiIndex() {
         $data = $this->model('JadwalUpkModel')->getAll();
+        
+        // DEBUG: Log struktur data pertama untuk lihat mapping kolom
+        if (!empty($data)) {
+            error_log("DEBUG JadwalUpk - First row keys: " . json_encode(array_keys($data[0])));
+            error_log("DEBUG JadwalUpk - First row data: " . json_encode($data[0]));
+        }
+        
         echo json_encode([
             'status' => 'success',
             'data' => $data
