@@ -160,10 +160,26 @@ function renderJadwalDashboard() {
       const start = item.waktuMulai.substring(0, 5);
       const end = item.waktuSelesai.substring(0, 5);
 
-      let statusBadge = "status-label badge-scheduled";
+      // --- [PERBAIKAN STATUS] ---
+      let statusBadge = "status-label badge-scheduled"; // Default abu-abu
       let statusText = "TERJADWAL";
+      let rowStyle = ""; // Style tambahan untuk baris tabel
 
-      if (isToday) {
+      // 1. Cek Status Database Dulu (Nonaktif / Dibatalkan)
+      // Pastikan API mengirim field 'status'. Jika tidak ada, anggap 'Aktif'.
+      const statusDb = item.status ? item.status.toLowerCase() : "aktif";
+
+      if (
+        statusDb === "nonaktif" ||
+        statusDb === "0" ||
+        statusDb === "dibatalkan"
+      ) {
+        statusText = "DIBATALKAN";
+        statusBadge = "status-label badge-canceled"; // Perlu CSS baru untuk warna merah
+        rowStyle = "opacity: 0.6; background-color: #fef2f2;"; // Efek transparan & agak merah
+      }
+      // 2. Jika Aktif, baru cek jam
+      else if (isToday) {
         if (jamSekarang >= start && jamSekarang < end) {
           statusText = "BERLANGSUNG";
           statusBadge = "status-label badge-ongoing";
@@ -186,13 +202,19 @@ function renderJadwalDashboard() {
           : '<span style="color:#cbd5e1">-</span>';
 
       finalHtml += `
-            <tr>
+            <tr style="${rowStyle}">
                 <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.95rem;">${start} - ${end}</td>
                 <td style="color: #0f172a; font-weight: 700;">${item.namaMatakuliah}</td>
                 <td class="text-nowrap">${kelasFreq}</td>
                 <td><div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-chalkboard-teacher" style="color:#64748b;"></i><span style="font-weight:500;">${item.dosen}</span></div></td>
                 <td>${asistenDisplay}</td>
-                <td style="text-align:center;"><span class="${statusBadge}">${statusText}</span></td>
+                <td style="text-align:center;">
+                    ${
+                      statusText === "DIBATALKAN"
+                        ? `<span style="background-color:#ef4444; color:white; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold;">${statusText}</span>`
+                        : `<span class="${statusBadge}">${statusText}</span>`
+                    }
+                </td>
             </tr>`;
     });
     finalHtml += `</tbody></table></div></div>`;

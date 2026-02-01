@@ -283,6 +283,15 @@ async function loadJadwal() {
     const result = await response.json();
     if (result.status === "success") {
       allJadwalData = result.data;
+      console.log("DEBUG - Data dari API:", allJadwalData);
+      if (allJadwalData.length > 0) {
+        console.log("DEBUG - Keys dari data pertama:", Object.keys(allJadwalData[0]));
+        console.table([allJadwalData[0]]); // Print dengan table format
+        console.log("DEBUG - Data pertama (detail):");
+        for (let key in allJadwalData[0]) {
+          console.log(`  ${key}: ${allJadwalData[0][key]}`);
+        }
+      }
       renderTable(allJadwalData);
     } else {
       // Handle jika data kosong dari backend
@@ -306,13 +315,14 @@ function renderTable(data) {
   if (selectAll) selectAll.checked = false;
 
   if (!data || data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-20 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-20 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
     updateBulkActionsVisibility();
     return;
   }
 
   let rowsHtml = "";
   data.forEach((item, index) => {
+    // Format tanggal dengan benar dari kolom tanggal
     let tgl = "-";
     if (item.tanggal) {
       tgl = new Date(item.tanggal).toLocaleDateString("id-ID", {
@@ -338,7 +348,7 @@ function renderTable(data) {
                     </div>
                 </td>
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
-                    <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded border border-gray-200 uppercase tracking-tight">${item.prodi || "-"}</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded border border-gray-200 uppercase tracking-tight">${item.prodi || "TI"}</span>
                 </td>
                 <td class="px-6 py-4 cursor-pointer w-40" onclick="openFormModal(${item.id}, event)">
                     <div class="flex flex-col gap-1">
@@ -352,7 +362,12 @@ function renderTable(data) {
                     <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold border border-blue-100 whitespace-nowrap">${item.kelas || "-"}</span>
                 </td>
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
-                    <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold border border-emerald-100 whitespace-nowrap">
+                    <span class="bg-amber-50 text-amber-700 px-2 py-1 rounded text-xs font-bold border border-amber-100 whitespace-nowrap">
+                        ${item.frekuensi || "-"}
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                    <span class="bg-purple-50 text-purple-700 px-2 py-1 rounded text-xs font-bold border border-purple-100 whitespace-nowrap">
                         ${item.ruangan || "-"}
                     </span>
                 </td>
@@ -501,4 +516,3 @@ async function loadDropdownData() {
     console.error("Error loading dropdown data:", err);
   }
 }
-ç

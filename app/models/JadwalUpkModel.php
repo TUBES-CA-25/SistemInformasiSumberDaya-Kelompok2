@@ -9,7 +9,20 @@ class JadwalUpkModel {
     }
 
     public function getAll() {
-        $stmt = $this->db->prepare("SELECT * FROM $this->table ORDER BY tanggal ASC, jam ASC");
+        // Gunakan alias untuk memastikan mapping kolom yang benar
+        $sql = "SELECT 
+                    id,
+                    prodi,
+                    mata_kuliah,
+                    dosen,
+                    tanggal,
+                    jam,
+                    kelas,
+                    ruangan,
+                    frekuensi
+                FROM $this->table 
+                ORDER BY tanggal ASC, jam ASC";
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -20,7 +33,7 @@ class JadwalUpkModel {
     }
 
     public function getById($id) {
-        $stmt = $this->db->prepare("SELECT * FROM $this->table WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT id, prodi, mata_kuliah, dosen, tanggal, jam, kelas, ruangan, frekuensi FROM $this->table WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
