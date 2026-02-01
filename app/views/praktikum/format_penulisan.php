@@ -16,7 +16,7 @@
         <div id="unduhan-section" class="downloads-section" style="display: none;">
             <header class="section-header" style="text-align: center; margin-bottom: 2rem;">
                 <span class="badge-pill" style="margin-bottom: 15px; background: #ecfdf5; color: #059669; border-color: #a7f3d0;">
-                    <i class="fas fa-cloud-download-alt" style="margin-right: 5px;"></i> Resources
+                    <i class="fas fa-cloud-download-alt" style="margin-right: 5px;"></i> Unduhan Berkas
                 </span>
                 <h2>Pusat Unduhan Berkas</h2>
                 <p style="color: #64748b; max-width: 600px; margin: 0 auto;">
