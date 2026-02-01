@@ -1,48 +1,60 @@
 <?php
 /**
- * DATABASE CONNECTION (HYBRID VERSION)
- * 1. Bagian Atas: PDO (Kode asli Anda, tidak ada yang dikurangi).
- * 2. Bagian Bawah: Class Database (Tambahan agar Model.php teman Anda tidak error).
+ * Database Connection Configuration
+ * 
+ * File ini menangani koneksi database menggunakan PDO (PHP Data Objects)
+ * Mendukung PDO global dan Database wrapper class untuk kompatibilitas
  */
 
 require_once __DIR__ . '/config.php';
 
-// =================================================================
-// BAGIAN 1: KODE ASLI ANDA (PDO)
-// Variabel global $pdo ini tetap bisa Anda pakai di file lain.
-// =================================================================
+// ============================================
+// SECTION 1: PDO CONNECTION
+// ============================================
+// Membuat koneksi database global menggunakan PDO
+// PDO lebih aman dan mendukung prepared statements
+
 try {
-    // 1. Siapkan DSN (Data Source Name)
+    // Persiapkan DSN (Data Source Name)
+    // Format: mysql:host=localhost;dbname=nama_database;charset=utf8mb4
     $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
 
-    // 2. Opsi Konfigurasi PDO
+    // Opsi konfigurasi PDO untuk keamanan dan konsistensi
     $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Error akan mematikan script (bagus untuk debugging)
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,     // Data otomatis jadi array asosiatif
-        PDO::ATTR_EMULATE_PREPARES   => false,                // Keamanan (mencegah SQL Injection)
+        // ERRMODE_EXCEPTION: Error ditangani sebagai exception untuk debugging lebih baik
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        
+        // FETCH_ASSOC: Data query otomatis dikembalikan sebagai array asosiatif
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        
+        // Emulate prepares FALSE: Gunakan prepared statements native untuk keamanan SQL Injection
+        PDO::ATTR_EMULATE_PREPARES => false,
     ];
 
-    // 3. Buat Object PDO (Variabel Global $pdo)
-    // Variabel inilah yang akan dipanggil di asisten.php, home.php, dll.
+    // Buat instance PDO global
+    // Variabel $pdo ini dapat diakses di seluruh aplikasi
     $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
 
 } catch (PDOException $e) {
-    // 4. Tangani Error Koneksi
+    // Tangani error koneksi database
     if (defined('APP_ENV') && APP_ENV === 'development') {
+        // Tampilkan detail error untuk development
         die("Koneksi Database Gagal: " . $e->getMessage());
     } else {
-        // Pesan ramah user untuk mode production
+        // Tampilkan pesan ramah untuk production
         die("Maaf, sistem sedang mengalami gangguan koneksi database.");
     }
 }
 
+// ============================================
+// SECTION 2: DATABASE WRAPPER CLASS
+// ============================================
+// Class Database untuk kompatibilitas dengan Model.php
+// Menyediakan interface yang fleksibel untuk akses database
 
-// =================================================================
-// BAGIAN 2: TAMBAHAN UNTUK TEMAN ANDA (CLASS DATABASE WRAPPER)
-// Wajib ditambahkan karena Model.php memanggil "new Database()"
-// =================================================================
 class Database {
 
+    // -------- Properties --------
     private $host = DB_HOST;
     private $user = DB_USER;
     private $pass = DB_PASS;
@@ -51,17 +63,32 @@ class Database {
     private $mysqli;
     private $pdo;
 
+    // -------- Constructor --------
+    /**
+     * Inisialisasi Database class
+     * Mengambil koneksi PDO global untuk konsistensi
+     */
     public function __construct()
     {
-        // gunakan PDO global agar view tetap jalan
         global $pdo;
         $this->pdo = $pdo;
     }
 
+    // -------- Methods --------
+    /**
+     * Buat koneksi MySQLi
+     * 
+     * @return mysqli
+     * @throws Exception
+     */
     public function connect()
     {
-        if ($this->mysqli) return $this->mysqli;
+        // Return jika koneksi sudah ada
+        if ($this->mysqli) {
+            return $this->mysqli;
+        }
 
+        // Buat instance MySQLi baru
         $this->mysqli = new mysqli(
             $this->host,
             $this->user,
@@ -69,6 +96,7 @@ class Database {
             $this->dbname
         );
 
+        // Cek error koneksi
         if ($this->mysqli->connect_error) {
             throw new Exception("Connection failed: " . $this->mysqli->connect_error);
         }
@@ -76,13 +104,21 @@ class Database {
         return $this->mysqli;
     }
 
+    /**
+     * Dapatkan koneksi database
+     * 
+     * @return mysqli
+     */
     public function getConnection()
     {
-        // Cukup panggil fungsi connect() yang sudah ada
         return $this->connect();
     }
 
-    // >>>> tambahan ini <<<<
+    /**
+     * Dapatkan koneksi PDO
+     * 
+     * @return PDO
+     */
     public function getPdo()
     {
         return $this->pdo;
