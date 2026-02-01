@@ -75,7 +75,9 @@ if (!defined('API_URL')) {
 $whitelist = ['127.0.0.1', '::1', 'localhost'];
 
 // Debug Mode
-define('DEBUG_MODE', APP_ENV === 'development');
+if (!defined('DEBUG_MODE')) {
+    define('DEBUG_MODE', APP_ENV === 'development');
+}
 
 if (APP_ENV === 'development' || in_array($_SERVER['REMOTE_ADDR'] ?? '', $whitelist)) {
     ini_set('display_errors', 1);
