@@ -42,6 +42,37 @@ class LaboratoriumModel extends Model {
         return null;
     }
 
+    /**
+     * Ambil data laboratorium yang aktif (status = 'Aktif')
+     */
+    public function getAktif() {
+        $query = "SELECT * FROM " . $this->table . " WHERE status = 'Aktif' ORDER BY idLaboratorium ASC";
+        $result = $this->db->query($query);
+        
+        if ($result) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return [];
+    }
+
+    /**
+     * Ambil data laboratorium berdasarkan tipe/jenis
+     */
+    public function getInformasiByTipe($type) {
+        $query = "SELECT * FROM " . $this->table . " WHERE tipe = ? OR jenis = ? ORDER BY idLaboratorium ASC";
+        $stmt = $this->db->prepare($query);
+        
+        if ($stmt) {
+            // "ss" artinya string, string
+            $stmt->bind_param("ss", $type, $type);
+            $stmt->execute();
+            
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return [];
+    }
+
     // Method insert/update/delete biasanya mewarisi dari Model.php utama
     // Jika Model.php utama pakai MySQLi, maka method insert bawaan akan aman.
 }

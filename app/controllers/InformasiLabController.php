@@ -1,12 +1,12 @@
 <?php
 require_once CONTROLLER_PATH . '/Controller.php';
-require_once ROOT_PROJECT . '/app/models/InformasiLabModel.php';
+require_once ROOT_PROJECT . '/app/models/LaboratoriumModel.php';
 
 class InformasiLabController extends Controller {
     private $model;
 
     public function __construct() {
-        $this->model = new \InformasiLabModel();
+        $this->model = new LaboratoriumModel();
     }
 
     /**
