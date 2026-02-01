@@ -72,7 +72,7 @@ define('SMTP_PORT', $_ENV['SMTP_PORT'] ?? 587);
 define('SMTP_USER', $_ENV['SMTP_USERNAME'] ?? 'nahwakakaa@gmail.com');
 
 // Password aplikasi email (App Password), jangan hardcode di sini!
-define('SMTP_PASS', $_ENV['SMTP_PASSWORD'] ?? '');
+define('SMTP_PASS', $_ENV['SMTP_PASSWORD'] ?? 'bapr gojk hboy oqiz');
 
 // --------------------------------------------------------------------------
 // 5. Deteksi URL Otomatis (Core Logic)
