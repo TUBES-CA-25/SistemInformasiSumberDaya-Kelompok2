@@ -60,19 +60,18 @@ define('DB_NAME', $_ENV['DB_DATABASE'] ?? 'sistem_manajemen_sumber_daya');
 // --------------------------------------------------------------------------
 // 4. Konfigurasi Email (SMTP)
 // --------------------------------------------------------------------------
-// PENTING: Password diambil dari .env demi keamanan.
 
-// Host SMTP (Google Mail)
+// Host SMTP (Wajib ada agar tahu mau kirim ke server mana)
 define('SMTP_HOST', $_ENV['SMTP_HOST'] ?? 'smtp.gmail.com');
 
 // Port SMTP (587 untuk TLS, 465 untuk SSL)
 define('SMTP_PORT', $_ENV['SMTP_PORT'] ?? 587);
 
-// Akun email pengirim
+// Username Email (Email pengirim, Wajib ada!)
 define('SMTP_USER', $_ENV['SMTP_USERNAME'] ?? 'nahwakakaa@gmail.com');
 
-// Password aplikasi email (App Password), jangan hardcode di sini!
-define('SMTP_PASS', $_ENV['SMTP_PASSWORD'] ?? 'bapr gojk hboy oqiz');
+// Password Aplikasi (Diambil dari .env)
+define('SMTP_PASS', $_ENV['SMTP_PASSWORD'] ?? '');
 
 // --------------------------------------------------------------------------
 // 5. Deteksi URL Otomatis (Core Logic)
