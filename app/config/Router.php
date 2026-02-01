@@ -247,6 +247,14 @@ class Router {
         $this->put('/api/jadwal/{id}', 'JadwalPraktikumController', 'update');
         $this->delete('/api/jadwal/{id}', 'JadwalPraktikumController', 'delete');
 
+        // Jadwal UPK Routes
+        $this->get('/api/jadwal-upk', 'JadwalUpkController', 'apiIndex');
+        $this->get('/api/jadwal-upk/{id}', 'JadwalUpkController', 'apiShow');
+        $this->post('/api/jadwal-upk', 'JadwalUpkController', 'store');
+        $this->post('/api/jadwal-upk/delete-multiple', 'JadwalUpkController', 'deleteMultiple');
+        $this->put('/api/jadwal-upk/{id}', 'JadwalUpkController', 'update');
+        $this->delete('/api/jadwal-upk/{id}', 'JadwalUpkController', 'delete');
+
         // Informasi Lab Routes
         $this->get('/api/informasi', 'InformasiLabController', 'index');
         $this->get('/api/informasi/{id}', 'InformasiLabController', 'show');
