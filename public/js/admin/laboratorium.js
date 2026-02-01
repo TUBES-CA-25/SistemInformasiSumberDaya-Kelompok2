@@ -414,6 +414,7 @@ function openDetailModal(id) {
     document.getElementById("dRam").innerText = data.ram || "-";
     document.getElementById("dGpu").innerText = data.gpu || "-";
     document.getElementById("dStorage").innerText = data.storage || "-";
+    document.getElementById("dMonitor").innerText = data.monitor || "-";
     document.getElementById("dSoftware").innerText = data.software || "-";
     document.getElementById("dFasilitas").innerText =
       data.fasilitas_pendukung || data.fasilitas || "-";
