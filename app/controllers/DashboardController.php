@@ -105,7 +105,7 @@ class DashboardController extends Controller {
 
             // LANGKAH 2: Inisialisasi model-model untuk statistik
             $asistenModel = new AsistenModel();
-            $labModel = new LaboratoriumModel();
+            $labModel = new FasilitasModel();
             $alumniModel = new AlumniModel();
             
             // LANGKAH 3: Ambil koneksi database untuk query jadwal

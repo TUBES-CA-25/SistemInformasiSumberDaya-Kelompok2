@@ -135,10 +135,8 @@ class Router {
         $this->get('/asisten', 'AsistenController', 'index');
         $this->get('/asisten/{id}', 'AsistenController', 'detail');
         $this->get('/jadwal', 'JadwalPraktikumController', 'index');
-        $this->get('/fasilitas', 'FasilitasController', 'index');
-        $this->get('/fasilitas/{id}', 'FasilitasController', 'detail');
-        $this->get('/laboratorium', 'FasilitasController', 'index'); // Legacy alias
-        $this->get('/laboratorium/{id}', 'FasilitasController', 'detail'); // Legacy alias
+        $this->get('/laboratorium', 'FasilitasController', 'index');
+        $this->get('/laboratorium/{id}', 'FasilitasController', 'detail');
         $this->get('/praktikum', 'PraktikumController', 'index');
         $this->get('/praktikum/sanksi', 'SanksiController', 'index');
         $this->get('/praktikum/formatpenulisan', 'FormatPenulisanController', 'index');
@@ -210,25 +208,17 @@ class Router {
         $this->delete('/admin/sop/{id}', 'SopController', 'delete');
         $this->get('/admin/sop/data', 'SopController', 'getJson');
 
-        // -------- ADMIN: FASILITAS --------
-        $this->get('/admin/fasilitas', 'FasilitasController', 'adminIndex');
-        $this->get('/admin/fasilitas/create', 'FasilitasController', 'create');
-        $this->post('/admin/fasilitas', 'FasilitasController', 'store');
-        $this->get('/admin/fasilitas/{id}/edit', 'FasilitasController', 'edit');
-        $this->put('/admin/fasilitas/{id}', 'FasilitasController', 'update');
-        $this->delete('/admin/fasilitas/{id}', 'FasilitasController', 'delete');
-        $this->delete('/admin/fasilitas/image/{id}', 'FasilitasController', 'deleteImage');
-        $this->get('/admin/fasilitas/{id}/detail', 'FasilitasController', 'adminDetail');
-        
-        // Legacy aliases for backward compatibility
-        $this->get('/admin/laboratorium', 'FasilitasController', 'adminIndex');
-        $this->get('/admin/laboratorium/create', 'FasilitasController', 'create');
-        $this->post('/admin/laboratorium', 'FasilitasController', 'store');
-        $this->get('/admin/laboratorium/{id}/edit', 'FasilitasController', 'edit');
-        $this->put('/admin/laboratorium/{id}', 'FasilitasController', 'update');
-        $this->delete('/admin/laboratorium/{id}', 'FasilitasController', 'delete');
-        $this->delete('/admin/laboratorium/image/{id}', 'FasilitasController', 'deleteImage');
-        
+        // -------- ADMIN: LABORATORIUM --------
+        $this->get('/admin/laboratorium', 'LaboratoriumController', 'adminIndex');
+        $this->get('/admin/laboratorium/create', 'LaboratoriumController', 'create');
+        $this->post('/admin/laboratorium', 'LaboratoriumController', 'store');
+        $this->get('/admin/laboratorium/{id}', 'LaboratoriumController', 'detail');
+        $this->get('/admin/laboratorium/{id}/edit', 'LaboratoriumController', 'edit');
+        $this->put('/admin/laboratorium/{id}', 'LaboratoriumController', 'update');
+        $this->delete('/admin/laboratorium/{id}', 'LaboratoriumController', 'delete');
+        $this->delete('/admin/laboratorium/image/{id}', 'LaboratoriumController', 'deleteImage');
+
+        // -------- ADMIN: FASILITAS LABORATORIUM --------
         $this->get('/admin/informasi-lab', 'FasilitasController', 'adminIndex');
         $this->get('/admin/informasi-lab/create', 'FasilitasController', 'create');
         $this->post('/admin/informasi-lab', 'FasilitasController', 'store');
@@ -236,7 +226,6 @@ class Router {
         $this->put('/admin/informasi-lab/{id}', 'FasilitasController', 'update');
         $this->delete('/admin/informasi-lab/{id}', 'FasilitasController', 'delete');
         $this->get('/admin/informasi-lab/{id}/detail', 'FasilitasController', 'adminDetail');
-
 
         // -------- ADMIN: MATAKULIAH --------
         $this->get('/admin/matakuliah', 'MatakuliahController', 'adminIndex');
@@ -293,11 +282,11 @@ class Router {
         $this->delete('/api/sanksi-lab/{id}', 'SanksiController', 'delete');
 
         // -------- API: LABORATORIUM --------
-        $this->get('/api/laboratorium', 'FasilitasController', 'apiIndex');
-        $this->get('/api/laboratorium/{id}', 'FasilitasController', 'apiShow');
-        $this->post('/api/laboratorium', 'FasilitasController', 'store');
-        $this->put('/api/laboratorium/{id}', 'FasilitasController', 'update');
-        $this->delete('/api/laboratorium/{id}', 'FasilitasController', 'delete');
+        $this->get('/api/laboratorium', 'LaboratoriumController', 'index');
+        $this->get('/api/laboratorium/{id}', 'LaboratoriumController', 'show');
+        $this->post('/api/laboratorium', 'LaboratoriumController', 'store');
+        $this->put('/api/laboratorium/{id}', 'LaboratoriumController', 'update');
+        $this->delete('/api/laboratorium/{id}', 'LaboratoriumController', 'delete');
 
         // -------- API: ASISTEN --------
         $this->get('/api/asisten', 'AsistenController', 'apiIndex');

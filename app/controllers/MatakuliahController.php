@@ -1,65 +1,119 @@
 <?php
+
+/**
+ * MatakuliahController
+ * * Mengelola semua operasi terkait data Matakuliah, baik untuk tampilan Admin 
+ * maupun kebutuhan integrasi API (JSON).
+ * * @package App\Controllers
+ */
+
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/MatakuliahModel.php';
 
-class MatakuliahController extends Controller {
+class MatakuliahController extends Controller 
+{
+    /** @var MatakuliahModel $model Instance Model Matakuliah */
     private $model;
 
-    public function __construct() {
+    /**
+     * Inisialisasi dependensi Model Matakuliah
+     */
+    public function __construct() 
+    {
         $this->model = new MatakuliahModel();
     }
 
+    // =========================================================================
+    // ADMIN VIEW METHODS (Menampilkan Halaman HTML)
+    // =========================================================================
+
     /**
-     * Halaman admin matakuliah
+     * Menampilkan daftar matakuliah di Dashboard Admin.
+     * * @return void
      */
-    public function adminIndex($params = []) {
-        $data = $this->model->getAll();
-        $this->view('admin/matakuliah/index', ['matakuliah' => $data]);
+    public function adminIndex(): void 
+    {
+        $data = [
+            'judul'      => 'Kelola Matakuliah',
+            'matakuliah' => $this->model->getAll()
+        ];
+        $this->view('admin/matakuliah/index', $data);
     }
 
     /**
-     * Form create admin
+     * Menampilkan form untuk menambah matakuliah baru.
+     * * @return void
      */
-    public function create($params = []) {
-        $this->view('admin/matakuliah/form', ['matakuliah' => null, 'action' => 'create']);
+    public function create(): void 
+    {
+        $data = [
+            'judul'      => 'Tambah Matakuliah',
+            'matakuliah' => null,
+            'action'     => 'create'
+        ];
+        $this->view('admin/matakuliah/form', $data);
     }
 
     /**
-     * Form edit admin
+     * Menampilkan form untuk mengedit matakuliah yang sudah ada.
+     * * @param array $params Parameter dari URL (seperti ['id' => 1])
+     * @return void
      */
-    public function edit($params = []) {
+    public function edit(array $params = []): void 
+    {
         $id = $params['id'] ?? null;
+        
         if (!$id) {
             $this->redirect('/admin/matakuliah');
             return;
         }
-        
+
         $matakuliah = $this->model->getById($id, 'idMatakuliah');
+
         if (!$matakuliah) {
-            $this->setFlash('error', 'Data matakuliah tidak ditemukan');
+            $this->setFlash('error', 'Data matakuliah tidak ditemukan.');
             $this->redirect('/admin/matakuliah');
             return;
         }
-        
-        $this->view('admin/matakuliah/form', ['matakuliah' => $matakuliah, 'action' => 'edit']);
+
+        $data = [
+            'judul'      => 'Edit Matakuliah',
+            'matakuliah' => $matakuliah,
+            'action'     => 'edit'
+        ];
+        $this->view('admin/matakuliah/form', $data);
     }
 
+    // =========================================================================
+    // API ENDPOINTS (Menangani Request Data JSON)
+    // =========================================================================
+
     /**
-     * API endpoints
+     * API: Mengambil semua data matakuliah.
+     * * @return void
      */
-    public function apiIndex() {
+    public function apiIndex(): void 
+    {
         $data = $this->model->getAll();
         $this->success($data, 'Data Matakuliah retrieved successfully');
     }
 
-    public function apiShow($params) {
+    /**
+     * API: Mengambil detail satu matakuliah berdasarkan ID.
+     * * @param array $params
+     * @return void
+     */
+    public function apiShow(array $params): void 
+    {
         $id = $params['id'] ?? null;
+        
         if (!$id) {
-            $this->error('ID matakuliah tidak ditemukan', null, 400);
+            $this->error('ID matakuliah diperlukan', null, 400);
             return;
         }
 
         $data = $this->model->getById($id, 'idMatakuliah');
+        
         if (!$data) {
             $this->error('Matakuliah tidak ditemukan', null, 404);
             return;
@@ -68,83 +122,108 @@ class MatakuliahController extends Controller {
         $this->success($data, 'Matakuliah retrieved successfully');
     }
 
-    // Legacy index/show for backwards compatibility
-    public function index() {
-        return $this->apiIndex();
-    }
-
-    public function show($params) {
-        return $this->apiShow($params);
-    }
-
-    public function store() {
-        $input = $this->getJson();
+    /**
+     * Menyimpan matakuliah baru ke database (Proses POST).
+     * * @return void
+     */
+    public function store(): void 
+    {
+        $input = $this->getJson(); // Mengambil data input (biasanya JSON AJAX)
+        
+        // 1. Validasi Input Wajib
         $required = ['kodeMatakuliah', 'namaMatakuliah'];
         $missing = $this->validateRequired($input, $required);
 
         if (!empty($missing)) {
-            $this->error('Field required: ' . implode(', ', $missing), null, 400);
+            $this->error('Data tidak lengkap: ' . implode(', ', $missing), null, 400);
+            return;
         }
 
+        // 2. Cek Duplikasi Kode Matakuliah
         $existing = $this->model->getMatakuliahByKode($input['kodeMatakuliah']);
         if ($existing) {
-            $this->error('Kode matakuliah sudah terdaftar', null, 400);
+            $this->error('Kode matakuliah "' . $input['kodeMatakuliah'] . '" sudah terdaftar', null, 400);
+            return;
         }
 
-        $result = $this->model->insert($input);
-        if ($result) {
-            $this->success(['id' => $this->model->getLastInsertId()], 'Matakuliah created successfully', 201);
+        // 3. Proses Simpan
+        if ($this->model->insert($input)) {
+            $this->success(
+                ['id' => $this->model->getLastInsertId()], 
+                'Matakuliah berhasil ditambahkan', 
+                201
+            );
+        } else {
+            $this->error('Gagal menyimpan matakuliah', null, 500);
         }
-        $this->error('Failed to create matakuliah', null, 500);
     }
 
-    public function update($params) {
+    /**
+     * Memperbarui data matakuliah yang sudah ada (Proses PUT/POST).
+     * * @param array $params
+     * @return void
+     */
+    public function update(array $params): void 
+    {
         $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID matakuliah tidak ditemukan', null, 400);
-        }
-
-        $existing = $this->model->getById($id, 'idMatakuliah');
-        if (!$existing) {
-            $this->error('Matakuliah tidak ditemukan', null, 404);
+        
+        if (!$id || !$this->model->getById($id, 'idMatakuliah')) {
+            $this->error('Matakuliah tidak ditemukan atau ID tidak valid', null, 404);
+            return;
         }
 
         $input = $this->getJson();
-        $result = $this->model->update($id, $input, 'idMatakuliah');
         
-        if ($result) {
+        if ($this->model->update($id, $input, 'idMatakuliah')) {
             $this->success([], 'Matakuliah updated successfully');
+        } else {
+            $this->error('Terjadi kesalahan saat memperbarui data', null, 500);
         }
-        $this->error('Failed to update matakuliah', null, 500);
     }
 
-    public function delete($params) {
+    /**
+     * Menghapus data matakuliah.
+     * * @param array $params
+     * @return void
+     */
+    public function delete(array $params): void 
+    {
         $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID matakuliah tidak ditemukan', null, 400);
-        }
 
-        $existing = $this->model->getById($id, 'idMatakuliah');
-        if (!$existing) {
+        if (!$id || !$this->model->getById($id, 'idMatakuliah')) {
             $this->error('Matakuliah tidak ditemukan', null, 404);
+            return;
         }
 
-        $result = $this->model->delete($id, 'idMatakuliah');
-        
-        if ($result) {
+        if ($this->model->delete($id, 'idMatakuliah')) {
             $this->success([], 'Matakuliah deleted successfully');
+        } else {
+            $this->error('Gagal menghapus matakuliah', null, 500);
         }
-        $this->error('Failed to delete matakuliah', null, 500);
     }
 
-    public function asisten($params) {
+    /**
+     * Mengambil daftar asisten yang mengampu matakuliah tertentu.
+     * * @param array $params
+     * @return void
+     */
+    public function asisten(array $params): void 
+    {
         $id = $params['id'] ?? null;
+        
         if (!$id) {
-            $this->error('ID matakuliah tidak ditemukan', null, 400);
+            $this->error('ID matakuliah diperlukan', null, 400);
+            return;
         }
 
         $data = $this->model->getMatakuliahWithAsisten($id);
         $this->success($data, 'Asisten matakuliah retrieved successfully');
     }
+
+    // =========================================================================
+    // ALIAS METHODS (Backwards Compatibility)
+    // =========================================================================
+
+    public function index() { return $this->apiIndex(); }
+    public function show($params) { return $this->apiShow($params); }
 }
-?>

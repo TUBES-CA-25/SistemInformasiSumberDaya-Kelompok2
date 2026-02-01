@@ -1,66 +1,101 @@
 <?php
+
+/**
+ * AsistenModel
+ * * Model ini menangani seluruh logika interaksi database untuk tabel 'asisten'.
+ * Mewarisi fungsi dasar dari parent class Model.
+ * * @package App\Models
+ */
+
 require_once __DIR__ . '/Model.php';
 
 class AsistenModel extends Model {
+    
+    /** @var string Nama tabel di database */
     protected $table = 'asisten';
     
-    // Penting: Definisikan Primary Key agar method parent (update/delete) bekerja dengan benar
+    /** @var string Kolom Primary Key untuk referensi CRUD parent */
     protected $primaryKey = 'idAsisten';
 
     /**
-     * Ambil SEMUA data asisten tanpa filter
-     * Urutan: Koordinator paling atas, sisanya urut Abjad
+     * Ambil SEMUA data asisten.
+     * * Logika pengurutan:
+     * 1. Koordinator muncul di baris paling atas (isKoordinator DESC).
+     * 2. Sisanya diurutkan berdasarkan abjad nama (nama ASC).
+     * * @return array Array asosiatif dari semua asisten atau array kosong.
      */
-    public function getAll() {
+    public function getAll() : array {
         $query = "SELECT * FROM " . $this->table . " ORDER BY isKoordinator DESC, nama ASC";
         
         $result = $this->db->query($query);
         
-        // Return array kosong jika query gagal atau tabel kosong
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     /**
-     * Ambil data Alumni
-     * Saat ini dikembalikan array kosong [] agar aman (sesuai request sebelumnya),
-     * karena data di database Anda statusnya masih "Asisten" semua.
+     * Ambil data khusus untuk Alumni.
+     * * @note Saat ini mengembalikan array kosong sesuai kebijakan bisnis sementara,
+     * namun telah disediakan placeholder query jika status 'Alumni' diaktifkan.
+     * * @return array
      */
     public function getAlumni() {
-        // Jika nanti ingin mengaktifkan alumni, gunakan query ini:
-        // $query = "SELECT * FROM " . $this->table . " WHERE statusAktif = 'Alumni' ORDER BY nama ASC";
-        // return $this->db->query($query)->fetch_all(MYSQLI_ASSOC);
-        
+        /** * Placeholder Query:
+         * $query = "SELECT * FROM " . $this->table . " WHERE statusAktif = 'Alumni' ORDER BY nama ASC";
+         * return $this->db->query($query)->fetch_all(MYSQLI_ASSOC);
+         */
         return [];
     }
     
     /**
-     * Ambil satu data berdasarkan ID
-     * Parameter $col ditambahkan agar kompatibel dengan panggilan Controller ($id, 'idAsisten')
+     * Ambil data satu asisten berdasarkan ID unik.
+     * * Menggunakan Prepared Statement untuk mencegah SQL Injection.
+     * * @param int|string $id ID asisten yang dicari.
+     * @param string $col Nama kolom identitas (default: idAsisten).
+     * @return array|null Data asisten dalam bentuk array asosiatif atau null.
      */
-    public function getById($id, $col = 'idAsisten') {
+    public function getById($id, $col = 'idAsisten') : ?array {
+        // Normalisasi parameter untuk keamanan
         $id = (int)$id;
-        // Pastikan query menggunakan idAsisten
-        $query = "SELECT * FROM " . $this->table . " WHERE idAsisten = $id";
+        $column = $this->db->real_escape_string($col);
+
+        $query = "SELECT * FROM " . $this->table . " WHERE $column = ?";
         
-        $result = $this->db->query($query);
-        return $result ? $result->fetch_assoc() : null;
+        $stmt = $this->db->prepare($query);
+        
+        if ($stmt) {
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_assoc();
+        }
+
+        return null;
     }
 
     /**
-     * Fungsi Wrapper untuk Admin (Sama dengan getAll)
+     * Alias untuk kebutuhan administratif.
+     * * @return array
      */
     public function getAllForAdmin() {
         return $this->getAll();
     }
     
     /**
-     * Reset status koordinator semua asisten menjadi 0
-     * Digunakan sebelum menset koordinator baru
+     * Reset status koordinator.
+     * * Mengatur kolom 'isKoordinator' menjadi 0 untuk semua baris asisten.
+     * Digunakan sebagai langkah awal sebelum menetapkan koordinator baru.
+     * * 
+     * * @return bool True jika berhasil, False jika gagal.
      */
     public function resetAllKoordinator() {
         $query = "UPDATE " . $this->table . " SET isKoordinator = 0";
+        
         $stmt = $this->db->prepare($query);
-        return $stmt->execute();
+        
+        if ($stmt) {
+            return $stmt->execute();
+        }
+
+        return false;
     }
 }
-?>

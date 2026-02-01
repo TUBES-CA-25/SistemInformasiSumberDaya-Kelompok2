@@ -1,95 +1,149 @@
 <?php
+
+/**
+ * ModulController
+ * * Controller ini menangani manajemen modul praktikum, termasuk tampilan publik
+ * untuk mahasiswa dan fungsionalitas CRUD (Create, Read, Update, Delete) 
+ * berbasis AJAX untuk kebutuhan administrasi.
+ * * @package App\Controllers
+ */
 class ModulController extends Controller {
-    
+
     /**
-     * Admin Index - Kelola Modul Praktikum
+     * Tampilan Dashboard Admin Modul.
+     * Digunakan untuk merender halaman manajemen modul di sisi admin.
+     * * @return void
      */
-    public function adminIndex() {
+    public function adminIndex(): void {
         $data['judul'] = 'Kelola Modul Praktikum';
         $this->view('admin/modul/index', $data);
     }
 
-    public function index() {
+    /**
+     * Entry Point Utama (Routing Logic).
+     * Mengatur alur berdasarkan HTTP Method dan jenis request (Ajax/Regular).
+     * * @return void
+     */
+    public function index(): void {
         $method = $_SERVER['REQUEST_METHOD'];
-        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+        // Deteksi apakah request dikirim melalui AJAX
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+                  strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 
-        // 1. Tampilkan Halaman View (untuk Pengguna Publik)
-        if ($method === 'GET' && !$isAjax) {
-            require_once '../app/models/ModulModel.php';
-            $model = new ModulModel();
-            
-            $data['modul_ti'] = $model->getByJurusan('TI');
-            $data['modul_si'] = $model->getByJurusan('SI');
-            
-            // URUTAN YANG BENAR: Header -> Konten -> Footer
-           
-            $this->view('praktikum/modul', $data); 
-          
+        // 1. Handling GET Request (Tampilan Publik atau Data JSON)
+        if ($method === 'GET') {
+            if ($isAjax) {
+                $this->getJson(); // Jika AJAX, kirim data JSON
+            } else {
+                $this->renderPublicView(); // Jika regular, tampilkan halaman modul
+            }
         } 
-        // 2. AJAX GET (Data JSON untuk Admin)
-        else if ($method === 'GET' && $isAjax) {
-            $this->getJson();
-        } 
-        // 3. POST (Simpan atau Update via Method Spoofing)
+        
+        // 2. Handling POST Request (Simpan atau Update)
         else if ($method === 'POST') {
+            // Cek 'Method Spoofing' untuk menangani update pada form multipart
             if (isset($_POST['_method']) && $_POST['_method'] === 'PUT') {
                 $this->update();
             } else {
                 $this->store();
             }
         } 
-        // 4. DELETE
+        
+        // 3. Handling DELETE Request
         else if ($method === 'DELETE') {
             $this->delete();
         }
     }
 
-    public function getJson() {
-        if (ob_get_length()) ob_clean(); // Hapus output liar (seperti spasi atau error php)
+    /**
+     * Merender halaman tampilan modul praktikum untuk mahasiswa.
+     * Memisahkan data berdasarkan jurusan (TI dan SI).
+     * * @return void
+     */
+    private function renderPublicView(): void {
+        require_once '../app/models/ModulModel.php';
+        $model = new ModulModel();
+        
+        $data['modul_ti'] = $model->getByJurusan('TI');
+        $data['modul_si'] = $model->getByJurusan('SI');
+        
+        $this->view('praktikum/modul', $data);
+    }
+
+    /**
+     * Mengambil seluruh data modul dalam format JSON.
+     * Digunakan oleh DataTables atau frontend admin.
+     * * @return void
+     */
+    public function getJson(): void {
+        $this->cleanBuffer();
+        
         require_once '../app/models/ModulModel.php';
         $model = new ModulModel();
         
         header('Content-Type: application/json');
         echo json_encode([
             'status' => 'success', 
-            'data' => $model->getAllModul()
+            'data'   => $model->getAllModul()
         ]);
         exit;
     }
 
-    public function store() {
-        if (ob_get_length()) ob_clean(); // Cegah error "Unexpected token <"
+    /**
+     * Menyimpan data modul baru ke database dan mengunggah file.
+     * * @return void
+     */
+    public function store(): void {
+        $this->cleanBuffer();
         header('Content-Type: application/json');
         
         require_once '../app/models/ModulModel.php';
         $model = new ModulModel();
         
-        // Pastikan name di HTML adalah 'file'
-        if ($model->tambahModul($_POST, $_FILES['file']) > 0) {
-            echo json_encode(['status' => 'success', 'message' => 'Berhasil']);
+        // Cek apakah file diunggah
+        $file = $_FILES['file'] ?? null;
+
+        if ($model->tambahModul($_POST, $file) > 0) {
+            echo json_encode(['status' => 'success', 'message' => 'Modul berhasil ditambahkan']);
         } else {
             http_response_code(500);
-            echo json_encode(['status' => 'error', 'message' => 'Gagal simpan database atau upload file']);
+            echo json_encode(['status' => 'error', 'message' => 'Gagal menyimpan data atau upload file']);
         }
         exit;
     }
 
-    public function update() {
-        if (ob_get_length()) ob_clean();
+    /**
+     * Memperbarui data modul yang sudah ada.
+     * * @return void
+     */
+    public function update(): void {
+        $this->cleanBuffer();
         header('Content-Type: application/json');
         
         require_once '../app/models/ModulModel.php';
         $model = new ModulModel();
         
-        if ($model->updateModul($_POST, $_FILES['file'] ?? ['error' => 4]) > 0) {
-            echo json_encode(['status' => 'success', 'message' => 'Berhasil diupdate']);
+        // Jika file tidak diganti, kirim array error default PHP (error 4 = No File)
+        $file = $_FILES['file'] ?? ['error' => 4];
+        
+        if ($model->updateModul($_POST, $file) > 0) {
+            echo json_encode(['status' => 'success', 'message' => 'Modul berhasil diperbarui']);
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Gagal update']);
+            // Kode ini juga dijalankan jika user menekan simpan tanpa mengubah data apapun
+            echo json_encode(['status' => 'error', 'message' => 'Tidak ada data yang diubah atau gagal update']);
         }
         exit;
     }
 
-    public function delete() {
+    /**
+     * Menghapus data modul berdasarkan ID yang diambil dari URL.
+     * * @return void
+     */
+    public function delete(): void {
+        $this->cleanBuffer();
+        header('Content-Type: application/json');
+
+        // Ekstraksi ID dari segment terakhir URL
         $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $segments = explode('/', rtrim($url, '/'));
         $id = end($segments);
@@ -97,12 +151,23 @@ class ModulController extends Controller {
         require_once '../app/models/ModulModel.php';
         $model = new ModulModel();
         
-        header('Content-Type: application/json');
         if ($model->deleteModul($id) > 0) {
-            echo json_encode(['status' => 'success']);
+            echo json_encode(['status' => 'success', 'message' => 'Modul berhasil dihapus']);
         } else {
-            echo json_encode(['status' => 'error']);
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Gagal menghapus modul']);
         }
         exit;
+    }
+
+    /**
+     * Helper: Membersihkan output buffer.
+     * Mencegah adanya whitespace atau teks liar yang merusak format JSON.
+     * * @return void
+     */
+    private function cleanBuffer(): void {
+        if (ob_get_length()) {
+            ob_clean();
+        }
     }
 }

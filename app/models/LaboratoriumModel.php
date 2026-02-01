@@ -1,48 +1,52 @@
 <?php
+
+/**
+ * LaboratoriumModel
+ * * Menangani interaksi database untuk tabel 'laboratorium'.
+ * Kelas ini meng-override method getById agar kompatibel dengan kelas Model induk.
+ */
+
 require_once __DIR__ . '/Model.php';
 
 class LaboratoriumModel extends Model {
-    // Pastikan nama tabel kecil sesuai screenshot phpMyAdmin Anda
-    protected $table = 'laboratorium'; 
+    
+    /** @var string Nama tabel di database */
+    protected $table = 'laboratorium';
 
     /**
-     * Mengambil SEMUA data.
-     * Menggunakan Syntax MySQLi (untuk Admin) tapi return Array (untuk Public).
+     * Get All - Ambil semua data laboratorium
+     * * @return array Array asosiatif berisi semua data laboratorium
      */
-    public function getAll() {
-        $query = "SELECT * FROM " . $this->table . " ORDER BY idLaboratorium ASC";
-        
-        // Gunakan $this->db->query (MySQLi Style)
+    public function getAll(): array {
+        $query = "SELECT * FROM {$this->table} ORDER BY idLaboratorium ASC";
         $result = $this->db->query($query);
         
-        if ($result) {
-            // fetch_all(MYSQLI_ASSOC) menghasilkan Array Asosiatif
-            // Ini sama persis strukturnya dengan PDO::FETCH_ASSOC
-            return $result->fetch_all(MYSQLI_ASSOC);
-        }
-        return [];
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     /**
-     * Ambil berdasarkan ID.
-     * Menggunakan Prepared Statement MySQLi.
+     * Get By ID - Ambil data berdasarkan ID unik
+     * * [FIXED] Parameter disesuaikan agar kompatibel dengan Model::getById($id, $idColumn)
+     * * @param int|string $id Nilai ID yang dicari
+     * @param string $idColumn Nama kolom primary key (Default: idLaboratorium)
+     * @return array|null Data laboratorium atau null jika tidak ditemukan
      */
-    public function getById($id, $col = 'idLaboratorium') {
-        $query = "SELECT * FROM " . $this->table . " WHERE $col = ?";
+    public function getById($id, $idColumn = 'idLaboratorium'): ?array {
+        // Gunakan Prepared Statement untuk keamanan SQL Injection
+        $query = "SELECT * FROM {$this->table} WHERE {$idColumn} = ?";
         $stmt = $this->db->prepare($query);
         
         if ($stmt) {
-            // "i" artinya integer. MySQLi butuh definisi tipe data.
+            // "i" = integer, asumsi ID laboratorium selalu angka
             $stmt->bind_param("i", $id);
             $stmt->execute();
             
             $result = $stmt->get_result();
-            return $result->fetch_assoc();
+            $data = $result->fetch_assoc();
+            
+            return $data ?: null;
         }
+        
         return null;
     }
-
-    // Method insert/update/delete biasanya mewarisi dari Model.php utama
-    // Jika Model.php utama pakai MySQLi, maka method insert bawaan akan aman.
 }
-?>

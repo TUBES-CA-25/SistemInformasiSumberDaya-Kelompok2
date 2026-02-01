@@ -1,161 +1,197 @@
 <?php
 
+/**
+ * SopController
+ * * Mengelola Standar Operasional Prosedur (SOP) Laboratorium.
+ * Menangani tampilan publik untuk mahasiswa dan fungsi CRUD berbasis AJAX untuk Admin.
+ * * @package App\Controllers
+ */
 class SopController extends Controller {
-    
+
     /**
-     * Admin Index - Kelola SOP Laboratorium
+     * Admin Index - Menampilkan halaman utama manajemen SOP.
      */
-    public function adminIndex() {
+    public function adminIndex(): void {
         $data['judul'] = 'Kelola SOP Laboratorium';
         $this->view('admin/sop/index', $data);
     }
-    
-    // Ini fungsi "Router" di dalam Controller
-    // Karena index.php mengarahkan semua '/sop' ke sini, kita harus pilah requestnya.
-    public function index() {
+
+    /**
+     * Entry Point Utama (Orchestrator).
+     * Mengarahkan request berdasarkan HTTP Method dan tipe request (AJAX/Regular).
+     */
+    public function index(): void {
         $method = $_SERVER['REQUEST_METHOD'];
-        
-        // 1. Jika Request-nya GET biasa -> Tampilkan Halaman View
-        if ($method === 'GET' && empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-            $data['judul'] = 'SOP & Prosedur Laboratorium';
-            $data['active_page'] = 'sop';
-            
-            // Load Model Manual
-            require_once ROOT_PROJECT . '/app/models/SopModel.php';
-            $sopModel = new SopModel();
-            $data['sop_list'] = $sopModel->getAllSop();
-            
-            $this->view('fasilitas/sop', $data); 
-        }
-        
-        // 2. Jika Request-nya AJAX (untuk Data Table Admin)
-        else if ($method === 'GET') {
-            $this->getJson();
-        }
-        
-        // 3. Jika Request-nya POST (Simpan Data)
-        else if ($method === 'POST') {
-            // Cek apakah ini Update (PUT via POST) atau Create
-            if (isset($_POST['_method']) && $_POST['_method'] === 'PUT') {
-                $this->update();
-            } else {
-                $this->store();
-            }
-        }
-        
-        // 4. Jika Request-nya DELETE
-        else if ($method === 'DELETE') {
-            $this->delete();
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+                  strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+        switch ($method) {
+            case 'GET':
+                $isAjax ? $this->getJson() : $this->renderPublicView();
+                break;
+
+            case 'POST':
+                if (isset($_POST['_method']) && $_POST['_method'] === 'PUT') {
+                    $this->update();
+                } else {
+                    $this->store();
+                }
+                break;
+
+            case 'DELETE':
+                $this->delete();
+                break;
+
+            default:
+                // Menggunakan helper sendResponse sebagai pengganti handleError
+                $this->sendResponse("Method $method tidak diizinkan", 405, 'error');
+                break;
         }
     }
 
-    // --- API Methods ---
-
-    public function getJson() {
-        require_once ROOT_PROJECT . '/app/models/SopModel.php';
-        $sopModel = new SopModel();
-        $data = $sopModel->getAllSop();
+    /**
+     * Merender halaman tampilan daftar SOP untuk pengguna publik.
+     */
+    private function renderPublicView(): void {
+        $model = $this->loadModel();
+        $data = [
+            'judul'       => 'SOP & Prosedur Laboratorium',
+            'active_page' => 'sop',
+            'sop_list'    => $model->getAllSop()
+        ];
         
+        $this->view('fasilitas/sop', $data);
+    }
+
+    /**
+     * Mengambil seluruh data SOP dalam format JSON untuk DataTables.
+     */
+    public function getJson(): void {
+        $this->prepareJsonResponse();
+        $model = $this->loadModel();
+        $data = $model->getAllSop();
+
         echo json_encode([
             'status' => 'success',
-            'code' => 200,
-            'data' => $data
+            'code'   => 200,
+            'data'   => $data
         ]);
         exit;
     }
 
-    public function store() {
-        // Mulai output buffering untuk menangkap output yang tidak terduga
-        ob_start();
-        
-        // Set JSON header terlebih dahulu
-        header('Content-Type: application/json; charset=utf-8');
-        
+    /**
+     * Menyimpan data SOP baru beserta unggahan file PDF.
+     */
+    public function store(): void {
+        $this->prepareJsonResponse();
+
         try {
-            require_once ROOT_PROJECT . '/app/models/SopModel.php';
-            $sopModel = new SopModel();
-            
-            // Debug log
-            error_log('Store POST Data: ' . json_encode($_POST));
-            error_log('Store FILE Data: ' . json_encode($_FILES));
-            
-            // Validasi input
-            if (empty($_POST['judul'])) {
-                throw new Exception('Judul SOP harus diisi');
-            }
-            
+            $model = $this->loadModel();
+
+            $this->validateInput($_POST, ['judul']);
             if (empty($_FILES['file']['name'])) {
-                throw new Exception('File PDF harus diupload');
+                throw new Exception('File PDF wajib diunggah');
             }
+
+            $result = $model->tambahDataSop($_POST, $_FILES['file']);
             
-            $result = $sopModel->tambahDataSop($_POST, $_FILES['file']);
             if ($result > 0) {
-                ob_end_clean(); // Hapus output buffer apapun
-                http_response_code(200);
-                echo json_encode(['status' => 'success', 'code' => 200, 'message' => 'Berhasil ditambahkan']);
+                $this->sendResponse('Berhasil ditambahkan');
             } else {
-                throw new Exception('Gagal menyimpan data SOP ke database');
+                throw new Exception('Gagal menyimpan data ke database');
             }
         } catch (Exception $e) {
-            ob_end_clean(); // Hapus output buffer apapun
-            error_log('SOP Store Error: ' . $e->getMessage());
-            http_response_code(500);
-            echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
+            $this->sendResponse($e->getMessage(), 500, 'error');
         }
-        exit;
     }
 
-    public function update() {
-        // Mulai output buffering untuk menangkap output yang tidak terduga
-        ob_start();
-        
-        // Set JSON header terlebih dahulu
-        header('Content-Type: application/json; charset=utf-8');
-        
+    /**
+     * Memperbarui data SOP yang sudah ada.
+     */
+    public function update(): void {
+        $this->prepareJsonResponse();
+
         try {
-            require_once ROOT_PROJECT . '/app/models/SopModel.php';
-            $sopModel = new SopModel();
-            
-            if (empty($_POST['id_sop'])) {
-                throw new Exception('ID SOP tidak valid');
-            }
-            
-            if (empty($_POST['judul'])) {
-                throw new Exception('Judul SOP harus diisi');
-            }
-            
-            $result = $sopModel->updateDataSop($_POST, $_FILES['file'] ?? ['error' => 4]);
+            $model = $this->loadModel();
+
+            $this->validateInput($_POST, ['id_sop', 'judul']);
+
+            $file = $_FILES['file'] ?? ['error' => 4];
+            $result = $model->updateDataSop($_POST, $file);
+
             if ($result) {
-                ob_end_clean(); // Hapus output buffer apapun
-                http_response_code(200);
-                echo json_encode(['status' => 'success', 'code' => 200, 'message' => 'Berhasil diupdate']);
+                $this->sendResponse('Berhasil diupdate');
             } else {
-                throw new Exception('Gagal mengupdate data SOP');
+                throw new Exception('Gagal memperbarui data atau tidak ada perubahan');
             }
         } catch (Exception $e) {
-            ob_end_clean(); // Hapus output buffer apapun
-            error_log('SOP Update Error: ' . $e->getMessage());
-            http_response_code(500);
-            echo json_encode(['status' => 'error', 'code' => 500, 'message' => $e->getMessage()]);
+            $this->sendResponse($e->getMessage(), 500, 'error');
         }
-        exit;
     }
 
-    public function delete() {
-        // Ambil ID dari URL
-        // Asumsi URL: /sop/123
+    /**
+     * Menghapus data SOP berdasarkan ID yang diekstrak dari URL.
+     */
+    public function delete(): void {
+        $this->prepareJsonResponse();
+        
         $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $segments = explode('/', rtrim($url, '/'));
         $id = end($segments);
 
-        require_once ROOT_PROJECT . '/app/models/SopModel.php';
-        $sopModel = new SopModel();
+        $model = $this->loadModel();
 
-        if ($sopModel->deleteSop($id) > 0) {
-            echo json_encode(['status' => 'success', 'code' => 200]);
+        if ($model->deleteSop($id) > 0) {
+            $this->sendResponse('Data berhasil dihapus');
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Gagal menghapus']);
+            $this->sendResponse('Gagal menghapus data', 500, 'error');
         }
+    }
+
+    // =========================================================================
+    // PRIVATE HELPER METHODS
+    // =========================================================================
+
+    /**
+     * Memuat file model SOP secara dinamis.
+     * @return object SopModel instance
+     */
+    private function loadModel(): object {
+        require_once ROOT_PROJECT . '/app/models/SopModel.php';
+        return new SopModel();
+    }
+
+    /**
+     * Menyiapkan header dan membersihkan buffer untuk respon JSON.
+     */
+    private function prepareJsonResponse(): void {
+        if (ob_get_length()) ob_clean();
+        header('Content-Type: application/json; charset=utf-8');
+    }
+
+    /**
+     * Mengirimkan respon JSON standar dan menghentikan eksekusi.
+     * Menggantikan fungsi handleError yang sebelumnya hilang.
+     */
+    private function sendResponse(string $message, int $code = 200, string $status = 'success'): void {
+        if (ob_get_length()) ob_clean(); // Proteksi tambahan agar JSON bersih
+        http_response_code($code);
+        echo json_encode([
+            'status'  => $status,
+            'code'    => $code,
+            'message' => $message
+        ]);
         exit;
+    }
+
+    /**
+     * Validasi sederhana untuk field yang wajib diisi.
+     */
+    private function validateInput(array $data, array $fields): void {
+        foreach ($fields as $field) {
+            if (empty($data[$field])) {
+                throw new Exception("Field " . ucwords(str_replace('_', ' ', $field)) . " wajib diisi");
+            }
+        }
     }
 }

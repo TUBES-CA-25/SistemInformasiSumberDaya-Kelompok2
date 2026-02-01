@@ -1,291 +1,103 @@
 <?php
-require_once CONTROLLER_PATH . '/Controller.php';
-require_once ROOT_PROJECT . '/app/models/ManajemenModel.php';
-require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
+require_once CONTROLLER_PATH . '/Controller.php';
+require_once ROOT_PROJECT . '/app/services/ManajemenService.php';
+
+/**
+ * ManajemenController - Web & API Orchestrator
+ * Menangani permintaan user dan mengembalikan tampilan atau data JSON.
+ */
 class ManajemenController extends Controller {
-    private $model;
+    private $service;
 
     public function __construct() {
-        $this->model = new ManajemenModel();
+        $this->service = new ManajemenService();
     }
 
     /**
-     * Halaman admin manajemen
+     * Tampilan Publik: Struktur Organisasi
      */
-    public function adminIndex($params = []) {
-        $data = $this->model->getAll();
+    public function index() {
+        $data = $this->service->getPublicStructure();
+        $data['judul'] = 'Struktur Manajemen';
+        $this->view('sumberdaya/kepala', $data);
+    }
+
+    /**
+     * Dashboard Admin: List Manajemen
+     */
+    public function adminIndex() {
+        $data = $this->service->getAll();
         $this->view('admin/manajemen/index', ['manajemen' => $data]);
     }
 
     /**
-     * Form create admin
+     * Admin: Proses Simpan Data (POST)
      */
-    public function create($params = []) {
-        $this->view('admin/manajemen/form', ['manajemen' => null, 'action' => 'create']);
-    }
-
-    /**
-     * Form edit admin
-     */
-    public function edit($params = []) {
-        $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->redirect('/admin/manajemen');
-            return;
-        }
-        
-        $manajemen = $this->model->getById($id, 'idManajemen');
-        if (!$manajemen) {
-            $this->setFlash('error', 'Data manajemen tidak ditemukan');
-            $this->redirect('/admin/manajemen');
-            return;
-        }
-        
-        $this->view('admin/manajemen/form', ['manajemen' => $manajemen, 'action' => 'edit']);
-    }
-
-    /**
-     * API endpoints
-     */
-    public function apiIndex() {
-        $data = $this->model->getAll();
-        $this->success($data, 'Data Manajemen retrieved successfully');
-    }
-
-    public function apiShow($params) {
-        $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID manajemen tidak ditemukan', null, 400);
-            return;
-        }
-
-        $data = $this->model->getById($id, 'idManajemen');
-        if (!$data) {
-            $this->error('Manajemen tidak ditemukan', null, 404);
-            return;
-        }
-
-        $this->success($data, 'Manajemen retrieved successfully');
-    }
-
-    public function index($params = []) {
-        // 1. Ambil Semua Data dari Model
-        $all_data = $this->model->getAll(); // Pastikan method getAll() ada di ManajemenModel
-
-        $pimpinan_list = [];
-        $laboran_list  = [];
-
-        // 2. Logic Pemisahan Data & Proses Foto
-        if (!empty($all_data)) {
-            foreach ($all_data as $row) {
-                // Gunakan Helper::processPhotoUrl agar konsisten dengan Asisten & Detail
-                $row['foto_url'] = Helper::processPhotoUrl($row['foto'] ?? '', $row['nama'] ?? '');
-                
-                // Deteksi Pimpinan (Kepala Lab)
-                if (stripos(($row['jabatan'] ?? ''), 'Kepala') !== false) {
-                    $pimpinan_list[] = $row;
-                } else {
-                    $laboran_list[] = $row;
-                }
-            }
-        }
-
-        // 3. Kirim ke View
-        $data = [
-            'judul'    => 'Struktur Manajemen',
-            'pimpinan' => $pimpinan_list,
-            'laboran'  => $laboran_list
-        ];
-
-        // Pastikan nama file view sesuai lokasi Anda ('sumberdaya/kepala')
-        $this->view('sumberdaya/kepala', $data);
-    }
-
-    public function show($params) {
-        return $this->apiShow($params);
-    }
-
     public function store() {
         try {
-            // Check if multipart/form-data (file upload)
-            if (isset($_FILES['foto'])) {
-                $input = [
-                    'nama' => $_POST['nama'] ?? '',
-                    'email' => $_POST['email'] ?? '',
-                    'nidn' => $_POST['nidn'] ?? null,
-                    'jabatan' => $_POST['jabatan'] ?? '',
-                    'tentang' => $_POST['tentang'] ?? ''
-                ];
-
-                $required = ['nama', 'email', 'jabatan'];
-                $missing = $this->validateRequired($input, $required);
-                if (!empty($missing)) {
-                    $this->error('Field required: ' . implode(', ', $missing), null, 400);
-                }
-
-                // Process file upload (store in public assets so images are web-accessible)
-                $subFolder = 'manajemen/';
-                $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
-                
-                $file = $_FILES['foto'];
-                if ($file['error'] === UPLOAD_ERR_OK) {
-                    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-                    $filename = Helper::generateFilename('manajemen', $input['nama'], $ext);
-                    $target = $uploadDir . $filename;
-                    if (move_uploaded_file($file['tmp_name'], $target)) {
-                        $input['foto'] = $subFolder . $filename;
-                    } else {
-                        $input['foto'] = '';
-                    }
-                } else {
-                    $input['foto'] = '';
-                }
-
-                $result = $this->model->insert($input);
-                if ($result) {
-                    $this->success(['id' => $this->model->getLastInsertId()], 'Manajemen created successfully', 201);
-                }
-                $this->error('Failed to create manajemen', null, 500);
-            } else {
-                // Fallback: JSON atau POST tanpa file
-                $input = $this->getJson() ?? $_POST;
-                $required = ['nama', 'email', 'jabatan'];
-                $missing = $this->validateRequired($input, $required);
-                if (!empty($missing)) {
-                    $this->error('Field required: ' . implode(', ', $missing), null, 400);
-                }
-                $result = $this->model->insert($input);
-                if ($result) {
-                    $this->success(['id' => $this->model->getLastInsertId()], 'Manajemen created successfully', 201);
-                }
-                $this->error('Failed to create manajemen', null, 500);
+            $input = $_POST ?: ($this->getJson() ?? []);
+            $required = ['nama', 'email', 'jabatan'];
+            
+            if ($missing = $this->validateRequired($input, $required)) {
+                $this->error('Field required: ' . implode(', ', $missing), null, 400);
             }
+
+            $file = $_FILES['foto'] ?? null;
+            if ($this->service->storeManajemen($input, $file)) {
+                $this->success(null, 'Manajemen created successfully', 201);
+            }
+            $this->error('Failed to create manajemen');
         } catch (\Exception $e) {
-            error_log('ERROR in ManajemenController::store - ' . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage(), null, 500);
+            $this->error($e->getMessage(), null, 500);
         }
     }
 
+    /**
+     * Admin: Proses Update Data (PUT/POST)
+     */
     public function update($params) {
         try {
             $id = $params['id'] ?? null;
-            if (!$id) {
-                $this->error('ID manajemen tidak ditemukan', null, 400);
-            }
+            $existing = $this->service->getById($id);
+            if (!$existing) $this->error('Data tidak ditemukan', null, 404);
 
-            $existing = $this->model->getById($id, 'idManajemen');
-            if (!$existing) {
-                $this->error('Manajemen tidak ditemukan', null, 404);
-            }
+            $input = $_POST ?: ($this->getJson() ?? []);
+            $file = $_FILES['foto'] ?? null;
 
-            // Check if multipart/form-data (file upload)
-            if (isset($_FILES['foto'])) {
-                $input = [
-                    'nama' => $_POST['nama'] ?? $existing['nama'],
-                    'email' => $_POST['email'] ?? $existing['email'],
-                    'nidn' => $_POST['nidn'] ?? $existing['nidn'],
-                    'jabatan' => $_POST['jabatan'] ?? $existing['jabatan'],
-                    'tentang' => $_POST['tentang'] ?? $existing['tentang'] ?? ''
-                ];
-            } else {
-                $input = $_POST;
-                if (empty($input)) {
-                    $input = $this->getJson() ?? [];
-                }
-                if (empty($input['nama'])) $input['nama'] = $existing['nama'];
-                if (empty($input['email'])) $input['email'] = $existing['email'] ?? '';
-                if (empty($input['jabatan'])) $input['jabatan'] = $existing['jabatan'];
+            if ($this->service->updateManajemen($id, $input, $existing, $file)) {
+                $this->success(null, 'Manajemen updated successfully');
             }
-
-            // Handle file upload
-            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-                $subFolder = 'manajemen/';
-                $baseUploadPath = dirname(__DIR__, 2) . '/public/assets/uploads/';
-                $uploadDir = $baseUploadPath . $subFolder;
-                
-                if (!is_dir($uploadDir)) {
-                    @mkdir($uploadDir, 0777, true);
-                }
-                
-                // Delete old foto if exists
-                if (isset($existing['foto']) && !empty($existing['foto'])) {
-                    $oldFilePath = $existing['foto'];
-                    // Cek di root atau subfolder
-                    $fullOldPath = $baseUploadPath . $oldFilePath;
-                    if (file_exists($fullOldPath) && is_file($fullOldPath)) {
-                        @unlink($fullOldPath);
-                    }
-                }
-                
-                // Upload new foto
-                $file = $_FILES['foto'];
-                $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-                $filename = Helper::generateFilename('manajemen', $input['nama'], $ext);
-                $target = $uploadDir . $filename;
-                
-                if (move_uploaded_file($file['tmp_name'], $target)) {
-                    $input['foto'] = $subFolder . $filename;
-                } else {
-                    $this->error('Gagal upload foto ke ' . $subFolder, null, 500);
-                    return;
-                }
-            }
-
-            $result = $this->model->update($id, $input, 'idManajemen');
-            
-            if ($result) {
-                $this->success([], 'Manajemen updated successfully');
-            }
-            $this->error('Failed to update manajemen', null, 500);
+            $this->error('Failed to update manajemen');
         } catch (\Exception $e) {
-            error_log('ERROR in ManajemenController::update - ' . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage(), null, 500);
+            $this->error($e->getMessage(), null, 500);
         }
     }
 
+    /**
+     * Admin: Proses Hapus Data
+     */
     public function delete($params) {
         $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID manajemen tidak ditemukan', null, 400);
+        if ($this->service->delete($id)) {
+            $this->success(null, 'Manajemen deleted successfully');
         }
-
-        $existing = $this->model->getById($id, 'idManajemen');
-        if (!$existing) {
-            $this->error('Manajemen tidak ditemukan', null, 404);
-        }
-
-        $result = $this->model->delete($id, 'idManajemen');
-        
-        if ($result) {
-            $this->success([], 'Manajemen deleted successfully');
-        }
-        $this->error('Failed to delete manajemen', null, 500);
+        $this->error('Failed to delete data');
     }
 
     /**
-     * Public Display Methods (from KepalaLabController)
+     * Form Renderers
      */
-    
-    /**
-     * Halaman publik daftar kepala lab
-     */
-    public function kepalaIndex($params = []) {
-        $all = $this->model->getAll();
-        $data = ['manajemen' => $all];
-        $this->view('sumberdaya/kepala', $data);
+    public function create() {
+        $this->view('admin/manajemen/form', ['manajemen' => null, 'action' => 'create']);
     }
-    
-    /**
-     * Detail profil pimpinan/laboran (legacy view, MVC route)
-     */
-    public function kepalaDetail($params = []) {
-        if (!empty($params['id'])) {
-            $_GET['id'] = $params['id'];
+
+    public function edit($params) {
+        $id = $params['id'] ?? null;
+        if ($data = $this->service->getById($id)) {
+            $this->view('admin/manajemen/form', ['manajemen' => $data, 'action' => 'edit']);
+        } else {
+            $this->redirect('/admin/manajemen');
         }
-        $this->view('sumberdaya/detail-asisten');
     }
 }
