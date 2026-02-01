@@ -28,10 +28,7 @@ $matkulString = $data['matkul_string'] ?? '';
                 <div class="profile-content">
                     
                     <div class="alumni-badges">
-                        <span class="category-badge">Angkatan <?= htmlspecialchars($alumni['angkatan'] ?? '-'); ?></span>
-                        <span class="divisi-badge">
-                            Ex-Divisi <?= htmlspecialchars($alumni['divisi'] ?? 'Asisten Lab'); ?>
-                        </span>
+                        <span class="category-badge">Asisten Angkatan <?= htmlspecialchars($alumni['angkatan'] ?? '-'); ?></span>
                     </div>
 
                     <h1 class="profile-name">

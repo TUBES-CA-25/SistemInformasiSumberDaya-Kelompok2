@@ -37,26 +37,20 @@
             $curPage = $aliases[$curPage];
         }
 
-        // --- PERBAIKAN DISINI ---
-        // Jika halaman terdeteksi sebagai 'index.php', 'public', atau kosong, set jadi 'home'
         if ($curPage === 'index.php' || $curPage === 'public' || empty($curPage)) {
             $curPage = 'home';
         }
 
-        // 2. LOGIKA SMART MAPPING (Memperbaiki Detail dari Card)
-        // Kita paksa curPage menjadi kategori utama jika mengandung kata kunci tertentu
         if (strpos($curPage, 'detail') !== false || strpos($curPage, 'asisten') !== false) {
             if (strpos($curPage, 'alumni') !== false) {
                 $curPage = 'alumni'; 
             } elseif (strpos($curPage, 'fasilitas') !== false || strpos($curPage, 'laboratorium') !== false) {
                 $curPage = 'fasilitas';
             } else {
-                // Default untuk detail asisten atau manajemen lab
                 $curPage = 'sumberdaya'; 
             }
         }
 
-        // 3. Mapping CSS yang Sesuai dengan Nama File di Folder CSS Anda
         $cssMap = [
             'home'         => 'home.css',
             'tatatertib'   => 'praktikum.css',
@@ -79,7 +73,6 @@
             
         ];
 
-        // 4. Load CSS
         if (array_key_exists($curPage, $cssMap)) {
             echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssMap[$curPage] . '">';
         }

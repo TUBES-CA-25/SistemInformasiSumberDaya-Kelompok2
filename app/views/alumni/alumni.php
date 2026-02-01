@@ -26,23 +26,14 @@
                     <div class="staff-grid">
     <?php foreach ($alumni_list as $row) : ?>
         <?php 
-            // ==========================================
-            // 1. FIX ID: Cek apakah pakai 'idAlumni' atau 'id'
-            // ==========================================
             $idAlumni = $row['idAlumni'] ?? $row['id'] ?? 0;
 
-            // ==========================================
-            // 2. LOGIKA GAMBAR
-            // ==========================================
             $fotoName = $row['foto'] ?? '';
             $namaEnc = urlencode($row['nama']);
 
-            // Default Avatar
             $imgUrl = "https://ui-avatars.com/api/?name={$namaEnc}&background=f1f5f9&color=475569&size=512&bold=true";
 
-            // Cek Database / File
             if (!empty($fotoName)) {
-                // Gunakan Helper atau path manual yang aman
                 $path = ROOT_PROJECT . '/public/assets/uploads/' . $fotoName;
                 if (file_exists($path)) {
                     $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : '';
