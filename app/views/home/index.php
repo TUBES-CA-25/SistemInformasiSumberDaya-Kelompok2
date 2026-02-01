@@ -35,7 +35,7 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="vm-card reveal fade-up" style="transition-delay: 0.1s;">
                 <div class="vm-icon-box"><i class="ri-focus-2-line"></i></div>
                 <div class="vm-content">
-                    <h3>Visi Laboratorium</h3>
+                    <h3>Visi</h3>
                     <p>"Menjadikan laboratorium sebagai pusat kegiatan belajar dan interaksi yang dapat menghasilkan informasi dan karya baru secara ilmiah dibidang teknologi informasi."</p>
                 </div>
             </div>
@@ -43,10 +43,10 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="vm-card reveal fade-up" style="transition-delay: 0.2s;">
                 <div class="vm-icon-box"><i class="ri-list-settings-line"></i></div>
                 <div class="vm-content">
-                    <h3>Misi Utama</h3>
+                    <h3>Misi</h3>
                     <ul class="professional-list">
-                        <li><i class="ri-checkbox-circle-line"></i> Menjadi pusat kegiatan belajar dan pelatihan...</li>
-                        <li><i class="ri-checkbox-circle-line"></i> Ikut aktif dalam menyelesaikan permasalahan...</li>
+                        <li><i class="ri-checkbox-circle-line"></i> Menjadi pusat kegiatan belajar dan pelatihan</li>
+                        <li><i class="ri-checkbox-circle-line"></i> Ikut aktif dalam menyelesaikan permasalahan</li>
                     </ul>
                 </div>
             </div>
