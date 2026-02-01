@@ -254,7 +254,8 @@
                                 <li class="flex justify-between border-b border-blue-200/50 pb-1"><span>CPU:</span> <span id="dProcessor" class="font-medium">-</span></li>
                                 <li class="flex justify-between border-b border-blue-200/50 pb-1"><span>RAM:</span> <span id="dRam" class="font-medium">-</span></li>
                                 <li class="flex justify-between border-b border-blue-200/50 pb-1"><span>GPU:</span> <span id="dGpu" class="font-medium">-</span></li>
-                                <li class="flex justify-between"><span>Storage:</span> <span id="dStorage" class="font-medium">-</span></li>
+                                <li class="flex justify-between border-b border-blue-200/50 pb-1"><span>Storage:</span> <span id="dStorage" class="font-medium">-</span></li>
+                                <li class="flex justify-between"><span>Monitor:</span> <span id="dMonitor" class="font-medium">-</span></li>
                             </ul>
                         </div>
                         
