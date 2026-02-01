@@ -81,7 +81,7 @@ class DetailSumberDayaController extends Controller {
             $skillsList = array_map('trim', explode(',', str_replace(['[', ']', '"'], '', $skillsRaw)));
         }
         $skillsList = array_filter($skillsList);
-        if (empty($skillsList)) { $skillsList = ['Teaching', 'Mentoring']; }
+        if (empty($skillsList)) { $skillsList = ["-"]; }
 
         // 3. Return Format Standar View
         return [

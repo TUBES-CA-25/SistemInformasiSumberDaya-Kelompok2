@@ -166,27 +166,6 @@ if (isset($segments[1]) && $segments[1] !== '') {
 
 
 /* ===============================
-   CSS MAPPING
-=============================== */
-
-$pageCss = 'style.css'; 
-if ($page == 'home')                               $pageCss = 'home.css';
-if (in_array($page, ['tatatertib', 'jadwal', 'jadwalupk',  'modul','formatpenulisan'])) {
-    $pageCss = 'praktikum.css';
-}
-if (in_array($page, ['kepala', 'asisten', 'detail'])) {
-    $pageCss = 'sumberdaya.css';
-}
-// UPDATE: Tambahkan 'denah' agar memuat fasilitas.css
-if (in_array($page, ['laboratorium', 'riset', 'detail_fasilitas', 'denah', 'sop'])) {
-    $pageCss = 'fasilitas.css';
-}
-if ($page == 'apps')                               $pageCss = 'apps.css';
-if ($page == 'contact')                            $pageCss = 'contact.css';
-if (in_array($page, ['alumni', 'detail_alumni']))  $pageCss = 'alumni.css';
-
-
-/* ===============================
    ROUTE DETAIL
 =============================== */
 
