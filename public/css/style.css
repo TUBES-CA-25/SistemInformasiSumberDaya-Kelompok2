@@ -218,7 +218,7 @@ img {
    [FIX: DESKTOP ONLY HOVER]
    Memaksa menu terbuka saat hover hanya di layar Laptop/PC.
    ======================================================= */
-@media (min-width: 992px) {
+@media (min-width: 1025px) {
   .dropdown:hover .dropdown-content {
     opacity: 1;
     visibility: visible;
@@ -228,7 +228,7 @@ img {
 }
 
 /* -------------------------------------------------------
-   4. MOBILE MENU & DROPDOWN FIX
+   4. MOBILE MENU & DROPDOWN FIX (TABLET & MOBILE)
    ------------------------------------------------------- */
 .menu-toggle {
   display: none;
@@ -256,12 +256,16 @@ img {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-@media screen and (max-width: 768px) {
+/* UPDATE: Mengaktifkan Mobile Menu pada layar 1024px ke bawah (Tablet)
+   agar menu desktop tidak berantakan di iPad/Tablet 
+*/
+@media screen and (max-width: 1024px) {
   .menu-toggle {
     display: flex;
     z-index: 10001;
   }
 
+  /* --- Reset Navigasi Desktop ke Mobile --- */
   .nav-links {
     display: flex;
     position: absolute;
@@ -295,13 +299,32 @@ img {
     padding: 20px;
   }
 
+  /* Perbaikan Jarak Antar Menu di Mobile */
+  .nav-links li {
+    width: 100%;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+
+  .nav-links a {
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+  }
+
   /* --- FIX DROPDOWN MOBILE (ACCORDION STYLE) --- */
   .dropdown-content {
     /* Reset style desktop */
     position: static;
     box-shadow: none;
     border: none;
-    background: transparent;
+    background: #f8fbff; /* Sedikit beda warna biar kontras */
+    border-radius: 8px;
+    margin-top: 5px;
     padding-left: 0;
     text-align: center;
     transition: none;
@@ -326,9 +349,10 @@ img {
 
   /* Item Link di Mobile */
   .dropdown-content a {
-    padding: 10px 0;
+    padding: 12px 0;
     text-align: center;
     color: #64748b !important;
+    font-size: 0.95rem;
   }
 
   /* Hover Item di Mobile */
@@ -337,11 +361,6 @@ img {
     background: transparent;
     color: #2563eb !important;
   }
-
-  /* [PENTING] HAPUS aturan .dropdown:hover disini 
-     agar menu tidak muncul sendiri saat di-scroll di HP.
-     Sepenuhnya mengandalkan JS Click.
-  */
 
   @keyframes fadeInMobile {
     from {
@@ -358,11 +377,13 @@ img {
   .logo-img {
     height: 60px;
   }
+
+  /* Tombol Apps Full Width */
   .btn-nav-apps {
     width: 100%;
     justify-content: center;
     margin-left: 0;
-    margin-top: 10px;
+    margin-top: 15px;
   }
 }
 

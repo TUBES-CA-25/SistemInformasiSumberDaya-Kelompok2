@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     toggle.addEventListener("click", function (e) {
       // Logika ini hanya berjalan di layar Mobile/Tablet (lebar < 992px)
       // Di Desktop, biarkan CSS :hover yang bekerja.
-      if (window.innerWidth <= 992) {
+      if (window.innerWidth <= 1024) {
         e.preventDefault(); // Mencegah link pindah halaman
         e.stopPropagation(); // Mencegah event naik ke atas
 
