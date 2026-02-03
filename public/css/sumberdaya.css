@@ -601,7 +601,7 @@
 }
 
 /* -------------------------------------------------------
-   6. Responsive Breakpoints
+   6. Responsive Breakpoints (Updated)
    ------------------------------------------------------- */
 @media (max-width: 1100px) {
   .staff-grid {
@@ -621,10 +621,10 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Exec Card (Mobile Stack) */
+  /* Exec Card (Tablet Stack) */
   .exec-card {
     flex-direction: column;
-    max-width: 400px;
+    max-width: 400px; /* Default Tablet */
   }
 
   .exec-photo {
@@ -672,11 +672,39 @@
   }
 }
 
+/* --- MOBILE SPECIFIC (UPDATE DISINI) --- */
 @media (max-width: 600px) {
   .container {
     padding: 0 16px;
   }
 
+  /* 1. KARTU KOORDINATOR (Diperkecil) */
+  .exec-card {
+    max-width: 280px; /* Perkecil lebar agar tidak penuh layar */
+    margin-bottom: 30px;
+    border-radius: 16px;
+  }
+
+  .exec-info {
+    padding: 20px 15px; /* Padding lebih rapat */
+  }
+
+  .exec-info h3 {
+    font-size: 1.5rem; /* Font nama dikecilkan */
+    margin-bottom: 8px;
+  }
+
+  .exec-role {
+    font-size: 0.9rem; /* Font jabatan dikecilkan */
+  }
+
+  .exec-badge {
+    font-size: 0.7rem;
+    padding: 4px 12px;
+    margin-bottom: 15px;
+  }
+
+  /* 2. STAFF GRID */
   .staff-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
