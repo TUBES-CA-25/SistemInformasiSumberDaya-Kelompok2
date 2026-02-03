@@ -76,10 +76,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // --- 1. LOAD DATA ---
 function loadLaboratorium() {
-  fetch(API_URL + "/laboratorium")
+  fetch("/api/fasilitas")
     .then((res) => res.json())
     .then((res) => {
-      if ((res.status === "success" || res.code === 200) && res.data) {
+      if ((res.status === true || res.status === "success" || res.code === 200) && res.data) {
         allLabData = res.data;
         renderTable(allLabData);
       } else {
@@ -94,7 +94,7 @@ function loadLaboratorium() {
 }
 
 function loadAsistenOptions() {
-  fetch(API_URL + "/asisten")
+  fetch("/api/asisten")
     .then((res) => res.json())
     .then((res) => {
       if (res.data) {
@@ -315,7 +315,7 @@ document.getElementById("labForm").addEventListener("submit", function (e) {
 
   const formData = new FormData(this);
   const id = document.getElementById("inputId").value;
-  const url = id ? API_URL + "/laboratorium/" + id : API_URL + "/laboratorium";
+  const url = id ? "/api/fasilitas/" + id : "/api/fasilitas";
 
   fetch(url, {
     method: "POST",
@@ -499,7 +499,7 @@ function hapusLaboratorium(id, event) {
   if (event) event.stopPropagation();
   confirmDelete(() => {
     showLoading("Menghapus data...");
-    fetch(API_URL + "/laboratorium/" + id, { method: "DELETE" })
+    fetch("/api/fasilitas/" + id, { method: "DELETE" })
       .then((res) => res.json())
       .then(() => {
         hideLoading();
@@ -526,7 +526,7 @@ function hapusGambar(idGambar, btnEl) {
   }).then((result) => {
     if (result.isConfirmed) {
       showLoading("Menghapus gambar...");
-      const deleteUrl = API_URL + "/laboratorium/image/" + idGambar;
+      const deleteUrl = "/api/fasilitas/image/" + idGambar;
       console.log("Deleting image:", deleteUrl);
 
       fetch(deleteUrl, {

@@ -17,11 +17,11 @@ function loadManajemen() {
   const tbody = document.getElementById("tableBody");
   tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-circle-notch fa-spin text-2xl mb-2"></i><p>Memuat data...</p></td></tr>`;
 
-  fetch(API_URL + "/manajemen")
+  fetch("/api/manajemen")
     .then((res) => res.json())
     .then((response) => {
       if (
-        (response.status === "success" || response.code === 200) &&
+        (response.status === true || response.status === "success" || response.code === 200) &&
         response.data
       ) {
         allManajemenData = response.data;
@@ -266,7 +266,7 @@ function hapusManajemen(id, event) {
 
   confirmDelete(() => {
     showLoading("Menghapus data...");
-    fetch(API_URL + "/manajemen/" + id, { method: "DELETE" })
+    fetch("/api/manajemen/" + id, { method: "DELETE" })
       .then((res) => res.json())
       .then((res) => {
         hideLoading();

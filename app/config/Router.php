@@ -93,6 +93,11 @@ class Router {
         $this->get('/api/jadwal', 'JadwalPraktikumController', 'apiIndex');
         $this->get('/api/peraturan', 'PeraturanLabController', 'apiIndex');
         $this->get('/api/sanksi', 'SanksiController', 'apiIndex');
+        $this->get('/api/asisten', 'AsistenController', 'apiIndex');
+        $this->get('/api/alumni', 'AlumniController', 'apiIndex');
+        $this->get('/api/manajemen', 'ManajemenController', 'apiIndex');
+        $this->get('/api/fasilitas', 'FasilitasController', 'apiIndex');
+        $this->get('/api/matakuliah', 'MatakuliahController', 'apiIndex');
 
         // -------- AUTH & ADMIN --------
         $this->get('/iclabs-login', 'AuthController', 'login');
@@ -101,9 +106,16 @@ class Router {
         $this->get('/logout', 'AuthController', 'logout');
 
         $this->get('/admin', 'DashboardController', 'index');
+        $this->get('/admin/dashboard/stats', 'DashboardController', 'stats');
         $this->get('/admin/informasi-lab', 'FasilitasController', 'adminIndex');
         $this->get('/admin/informasi-lab/{id}/detail', 'FasilitasController', 'adminDetail');
         $this->get('/admin/informasi-lab/{id}/edit', 'FasilitasController', 'edit');
+        $this->get('/admin/asisten', 'AsistenController', 'adminIndex');
+        $this->get('/admin/alumni', 'AlumniController', 'adminIndex');
+        $this->get('/admin/manajemen', 'ManajemenController', 'adminIndex');
+        $this->get('/admin/fasilitas', 'FasilitasController', 'adminIndex');
+        $this->get('/admin/matakuliah', 'MatakuliahController', 'adminIndex');
+        
     }
 
     public function dispatch(): void

@@ -473,7 +473,7 @@ async function loadDropdownData() {
 
     // Load Laboratorium
     // PERBAIKAN: Gunakan window.API_URL
-    const labRes = await fetch(`${window.API_URL}/laboratorium`);
+    const labRes = await fetch(`${window.API_URL}/fasilitas`);
     const labData = await labRes.json();
     const labSelect = document.getElementById("inputRuangan");
     if (labData.status === "success" && Array.isArray(labData.data)) {

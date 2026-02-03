@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function loadDashboardStats() {
   // Panggil API yang baru kita buat
-  fetch(API_URL + "/dashboard/stats")
+  fetch(API_URL + "/api/dashboard/stats")
     .then((res) => res.json())
     .then((res) => {
       if (res.status === "success" || res.code === 200) {

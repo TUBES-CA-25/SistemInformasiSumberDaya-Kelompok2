@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // --- 1. LOAD DATA ---
 function loadMatakuliah() {
-  fetch(API_URL + "/matakuliah")
+  fetch("/api/matakuliah")
     .then((res) => res.json())
     .then((res) => {
       if ((res.status === "success" || res.code === 200) && res.data) {
@@ -134,7 +134,7 @@ document.getElementById("matkulForm").addEventListener("submit", function (e) {
   const msg = document.getElementById("formMessage");
 
   const id = document.getElementById("inputId").value;
-  const url = id ? API_URL + "/matakuliah/" + id : API_URL + "/matakuliah";
+  const url = id ? "/api/matakuliah/" + id : "/api/matakuliah";
   const method = id ? "PUT" : "POST";
 
   const formData = new FormData(this);
@@ -186,7 +186,7 @@ function hapusMatakuliah(id, event) {
   if (event) event.stopPropagation();
   confirmDelete(() => {
     showLoading("Menghapus data...");
-    fetch(API_URL + "/matakuliah/" + id, { method: "DELETE" })
+    fetch("/api/matakuliah/" + id, { method: "DELETE" })
       .then((res) => res.json())
       .then(() => {
         hideLoading();

@@ -234,7 +234,7 @@ function openFormModal(id = null, event = null) {
   // Load Dropdown Options (MK, Lab, Asisten)
   Promise.all([
     fetch(API_URL + "/matakuliah").then((r) => r.json()),
-    fetch(API_URL + "/laboratorium").then((r) => r.json()),
+    fetch(API_URL + "/fasilitas").then((r) => r.json()),
     fetch(API_URL + "/asisten")
       .then((r) => r.json())
       .catch(() => ({ data: [] })),

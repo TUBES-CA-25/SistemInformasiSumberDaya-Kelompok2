@@ -15,6 +15,7 @@ define('BASE_PATH', dirname(dirname(__FILE__)));
 define('APP_PATH', BASE_PATH . '/app');
 define('ROOT_PROJECT', BASE_PATH);
 define('CONTROLLER_PATH', APP_PATH . '/controllers');
+define('VIEW_PATH', APP_PATH . '/views');
 
 // 3. Autoloading & Core Files
 if (file_exists(BASE_PATH . '/vendor/autoload.php')) {
@@ -61,8 +62,8 @@ $apiRoutes = [
         '/api/sanksi-lab/{id}'              => ['controller' => 'SanksiController', 'action' => 'apiShow'],
         '/api/alumni'                       => ['controller' => 'AlumniController', 'action' => 'apiIndex'],
         '/api/alumni/{id}'                  => ['controller' => 'AlumniController', 'action' => 'apiShow'],
-        '/api/laboratorium'                 => ['controller' => 'FasilitasController', 'action' => 'apiIndex'],
-        '/api/laboratorium/{id}'            => ['controller' => 'FasilitasController', 'action' => 'detail'],
+        '/api/fasilitas'                 => ['controller' => 'FasilitasController', 'action' => 'apiIndex'],
+        '/api/fasilitas/{id}'            => ['controller' => 'FasilitasController', 'action' => 'detail'],
         '/api/asisten'                      => ['controller' => 'AsistenController', 'action' => 'apiIndex'],
         '/api/asisten/{id}'                 => ['controller' => 'AsistenController', 'action' => 'apiShow'],
         '/api/asisten/{id}/matakuliah'      => ['controller' => 'AsistenController', 'action' => 'matakuliah'],
@@ -84,7 +85,7 @@ $apiRoutes = [
         '/api/sop'                          => ['controller' => 'SopController', 'action' => 'store'],
         '/api/peraturan-lab'                => ['controller' => 'PeraturanLabController', 'action' => 'store'],
         '/api/sanksi-lab'                   => ['controller' => 'SanksiController', 'action' => 'store'],
-        '/api/laboratorium'                 => ['controller' => 'FasilitasController', 'action' => 'store'],
+        '/api/fasilitas'                    => ['controller' => 'FasilitasController', 'action' => 'store'],
         '/api/asisten'                      => ['controller' => 'AsistenController', 'action' => 'store'],
         '/api/asisten/{id}/koordinator'     => ['controller' => 'AsistenController', 'action' => 'setKoordinator'],
         '/api/jadwal'                       => ['controller' => 'JadwalPraktikumController', 'action' => 'create'],
@@ -95,14 +96,14 @@ $apiRoutes = [
     ],
     'PUT' => [
         '/api/sop/{id}'                     => ['controller' => 'SopController', 'action' => 'update'],
-        '/api/laboratorium/{id}'            => ['controller' => 'FasilitasController', 'action' => 'update'],
+        '/api/fasilitas/{id}'            => ['controller' => 'FasilitasController', 'action' => 'update'],
         '/api/asisten/{id}'                 => ['controller' => 'AsistenController', 'action' => 'update'],
         '/api/jadwal/{id}'                  => ['controller' => 'JadwalPraktikumController', 'action' => 'update'],
     ],
     'DELETE' => [
         '/api/sop/{id}'                     => ['controller' => 'SopController', 'action' => 'delete'],
-        '/api/laboratorium/{id}'            => ['controller' => 'FasilitasController', 'action' => 'delete'],
-        '/api/laboratorium/image/{id}'      => ['controller' => 'FasilitasController', 'action' => 'deleteImage'],
+        '/api/fasilitas/{id}'               => ['controller' => 'FasilitasController', 'action' => 'delete'],
+        '/api/fasilitas/image/{id}'         => ['controller' => 'FasilitasController', 'action' => 'deleteImage'],
         '/api/asisten/{id}'                 => ['controller' => 'AsistenController', 'action' => 'delete'],
     ]
 ];

@@ -126,4 +126,81 @@ class ManajemenController extends Controller {
             'judul' => 'Detail Pimpinan - ' . $dataDetail['nama']
         ]);
     }
+
+    /**
+     * API endpoint untuk mengambil data manajemen dalam format JSON.
+     * * Digunakan oleh admin/manajemen.js untuk menampilkan data di tabel.
+     * * @return void Mengirimkan JSON response dengan data manajemen
+     */
+    public function apiIndex() {
+        // Bersihkan output buffer agar JSON tidak rusak oleh warning/HTML
+        if (ob_get_level()) ob_end_clean();
+
+        try {
+            header('Content-Type: application/json');
+            $data = $this->service->getAll(); // Ambil semua data manajemen
+
+            echo json_encode([
+                'status' => true,
+                'message' => 'Data manajemen berhasil diambil',
+                'data' => $data
+            ]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => false,
+                'message' => 'Gagal mengambil data manajemen: ' . $e->getMessage(),
+                'data' => null
+            ]);
+            exit;
+        }
+    }
+
+    /**
+     * API endpoint untuk mengambil detail satu data manajemen.
+     * * @param array $params Parameter route yang berisi 'id'
+     * @return void Mengirimkan JSON response dengan data manajemen
+     */
+    public function apiShow($params = []) {
+        if (ob_get_level()) ob_end_clean();
+
+        try {
+            header('Content-Type: application/json');
+            $id = $params['id'] ?? null;
+            
+            if (!$id) {
+                echo json_encode([
+                    'status' => false,
+                    'message' => 'ID tidak ditemukan',
+                    'data' => null
+                ]);
+                exit;
+            }
+
+            $data = $this->service->getById($id);
+            
+            if (!$data) {
+                echo json_encode([
+                    'status' => false,
+                    'message' => 'Data manajemen tidak ditemukan',
+                    'data' => null
+                ]);
+                exit;
+            }
+
+            echo json_encode([
+                'status' => true,
+                'message' => 'Data manajemen berhasil diambil',
+                'data' => $data
+            ]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => false,
+                'message' => 'Gagal mengambil data manajemen: ' . $e->getMessage(),
+                'data' => null
+            ]);
+            exit;
+        }
+    }
 }

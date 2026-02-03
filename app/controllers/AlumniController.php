@@ -46,6 +46,16 @@ class AlumniController extends Controller
     }
 
     /**
+     * Menampilkan daftar alumni di halaman admin.
+     * * Method ini untuk admin panel management alumni.
+     * * @return void Mengirimkan data ke view 'admin/alumni/index'
+     */
+    public function adminIndex()
+    {
+        $this->view('admin/alumni/index', ['judul' => 'Manajemen Data Alumni']);
+    }
+
+    /**
      * Menampilkan detail profil satu alumni.
      * * Method ini menerima ID alumni, meminta data yang sudah diformat
      * (foto, keahlian, matkul) dari Service, dan menampilkannya.
@@ -132,5 +142,34 @@ class AlumniController extends Controller
         return $result 
             ? $this->success([], 'Data alumni berhasil dihapus') 
             : $this->error('Gagal menghapus data dari database');
+    }
+
+    /**
+     * API endpoint untuk mengambil data alumni dalam format JSON.
+     * * Digunakan oleh admin/alumni.js untuk menampilkan data di tabel.
+     * * @return void Mengirimkan JSON response dengan data alumni
+     */
+    public function apiIndex() {
+        // Bersihkan output buffer agar JSON tidak rusak oleh warning/HTML
+        if (ob_get_level()) ob_end_clean();
+
+        try {
+            header('Content-Type: application/json');
+            $data = $this->model->getAll(); // Ambil semua data alumni
+
+            echo json_encode([
+                'status' => true,
+                'message' => 'Data alumni berhasil diambil',
+                'data' => $data
+            ]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => false,
+                'message' => 'Gagal mengambil data alumni: ' . $e->getMessage(),
+                'data' => null
+            ]);
+            exit;
+        }
     }
 }

@@ -116,6 +116,41 @@ class FasilitasController extends Controller {
     // =========================================================================
 
     /**
+     * API: Mengambil semua data fasilitas dalam format JSON.
+     * Digunakan oleh tabel admin atau komponen front-end yang menggunakan AJAX.
+     */
+    public function apiIndex(): void {
+        // 1. Bersihkan output buffer untuk memastikan tidak ada spasi/teks liar yang merusak JSON
+        if (ob_get_level()) ob_end_clean();
+
+        // 2. Set header sebagai JSON
+        header('Content-Type: application/json');
+
+        try {
+            // 3. Ambil data dari model
+            // Anda bisa menggunakan $this->model->getAll() 
+            // atau $this->service->getFasilitasWithThumbnails() jika ingin data yang lebih lengkap
+            $labs = $this->model->getAll();
+
+            // 4. Kirim response sukses
+            echo json_encode([
+                'status'  => true,
+                'message' => 'Data fasilitas berhasil dimuat',
+                'data'    => $labs
+            ]);
+        } catch (Exception $e) {
+            // 5. Kirim response error jika terjadi kegagalan sistem
+            http_response_code(500);
+            echo json_encode([
+                'status'  => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+                'data'    => []
+            ]);
+        }
+        exit;
+    }
+    
+    /**
      * Admin: Daftar Fasilitas untuk tabel manajemen admin.
      */
     public function adminIndex(): void {

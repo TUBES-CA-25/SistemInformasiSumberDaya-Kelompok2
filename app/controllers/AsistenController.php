@@ -46,6 +46,46 @@ class AsistenController extends Controller {
     }
 
     /**
+     * Admin: Halaman Manajemen Asisten (Tabel CRUD)
+     * Route: /admin/asisten
+     */
+    public function adminIndex(): void {
+        // Admin view sudah ter-handle oleh admin/templates/header.php
+        // Method ini hanya perlu di-define agar Router recognize route /admin/asisten
+        // Actual view rendering di-handle oleh header.php auto-routing ke admin/asisten/index.php
+        $this->view('admin/asisten/index', [
+            'judul' => 'Manajemen Data Asisten'
+        ]);
+    }
+
+    /**
+     * Admin: tampilan tabel data asisten
+     */
+
+    public function apiIndex() {
+        // Bersihkan output buffer agar JSON tidak rusak oleh warning/HTML
+        if (ob_get_level()) ob_end_clean();
+
+        try {
+            header('Content-Type: application/json');
+            $data = $this->model->getAll(); // Ambil semua data asisten
+
+            echo json_encode([
+                'status' => true,
+                'message' => 'Data asisten berhasil diambil',
+                'data' => $data
+            ]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+            exit;
+        }
+    }
+
+    /**
      * Admin: Simpan Asisten Baru (POST)
      */
     public function store() {

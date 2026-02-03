@@ -286,4 +286,4 @@
     </div>
 </div>
 
-<script src="<?= PUBLIC_URL ?>/js/admin/laboratorium.js"></script>
+<script src="<?= PUBLIC_URL ?>/js/admin/fasilitas.js"></script>

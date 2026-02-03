@@ -20,10 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadAlumni() {
-  fetch(API_URL + "/alumni")
+  fetch("/api/alumni")
     .then((res) => res.json())
     .then((res) => {
-      if ((res.status === "success" || res.code === 200) && res.data) {
+      if ((res.status === true || res.status === "success" || res.code === 200) && res.data) {
         allAlumniData = res.data;
         renderTable(allAlumniData);
       } else {
@@ -80,7 +80,7 @@ function openDetailModal(id) {
   document.getElementById("detailModal").classList.remove("hidden");
   document.body.style.overflow = "hidden";
   document.getElementById("dNama").innerText = "Memuat...";
-  fetch(API_URL + "/alumni/" + id)
+  fetch("/api/alumni/" + id)
     .then((res) => res.json())
     .then((res) => {
       if ((res.status === "success" || res.code === 200) && res.data) {
@@ -135,7 +135,7 @@ function openFormModal(id = null, event = null) {
     document.getElementById("btnSave").innerHTML =
       '<i class="fas fa-save"></i> Update Data';
     // Isi Form untuk Edit
-    fetch(API_URL + "/alumni/" + id)
+    fetch("/api/alumni/" + id)
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
@@ -237,7 +237,7 @@ document.getElementById("alumniForm").addEventListener("submit", function (e) {
 
   const formData = new FormData(this);
   const id = document.getElementById("inputId").value;
-  const url = id ? API_URL + "/alumni/" + id : API_URL + "/alumni";
+  const url = id ? "/api/alumni/" + id : "/api/alumni";
 
   fetch(url, { method: "POST", body: formData })
     .then((res) => res.json())
@@ -281,7 +281,7 @@ function hapusAlumni(id, event) {
   if (event) event.stopPropagation();
   confirmDelete(() => {
     showLoading("Menghapus data...");
-    fetch(API_URL + "/alumni/" + id, { method: "DELETE" })
+    fetch("/api/alumni/" + id, { method: "DELETE" })
       .then((res) => res.json())
       .then(() => {
         hideLoading();
