@@ -62,7 +62,7 @@ class AlumniController extends Controller
 
         if (!$formattedData) {
             // Jika ID tidak valid atau data tidak ditemukan
-            $this->redirect('index.php?page=alumni');
+            $this->redirect('/alumni');
             return;
         }
 

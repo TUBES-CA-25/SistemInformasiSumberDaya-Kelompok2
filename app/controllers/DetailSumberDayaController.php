@@ -7,6 +7,7 @@
  * * @package App\Controllers
  */
 
+require_once ROOT_PROJECT . '/app/models/AsistenModel.php';
 require_once ROOT_PROJECT . '/app/services/DetailSumberDayaService.php';
 
 class DetailSumberDayaController extends Controller {

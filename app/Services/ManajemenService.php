@@ -4,6 +4,8 @@
  * ManajemenService - Business Logic Layer
  * Menangani logika bisnis untuk data Manajemen (Kepala Lab & Laboran).
  */
+
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 class ManajemenService {
     private $model;
     private $uploadPath;

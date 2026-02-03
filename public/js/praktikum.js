@@ -263,8 +263,8 @@ function initUpkPage() {
 
 function initFormatPenulisanPage() {
   const pedomanContainer = document.getElementById("pedoman-container");
-  const apiUrl = (window.BASE_URL || "") + "/api.php/formatpenulisan";
-
+    // Gunakan API_URL jika tersedia; jika tidak, fallback ke BASE_URL + /api.php
+    const apiUrl = (window.API_URL || ((window.BASE_URL || "") + "/api.php")) + "/api/formatpenulisan";
   async function loadFormatContent() {
     try {
       const response = await fetch(apiUrl);

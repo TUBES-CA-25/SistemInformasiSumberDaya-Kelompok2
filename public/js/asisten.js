@@ -67,7 +67,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const type = detailLink.getAttribute("data-type");
 
         if (id && type) {
-          window.location.href = `index.php?page=detail&id=${id}&type=${type}`;
+          const base = window.PUBLIC_URL || '';
+          if (type === 'asisten') {
+            window.location.href = `${base}/asisten/${id}`;
+          } else if (type === 'manajemen') {
+            window.location.href = `${base}/kepala/${id}`;
+          } else if (type === 'alumni') {
+            window.location.href = `${base}/alumni/${id}`;
+          } else {
+            // Fallback ke query string lama jika tipe tidak dikenali
+            window.location.href = `${base}/index.php?page=detail&id=${id}&type=${type}`;
+          }
         }
       }
     },

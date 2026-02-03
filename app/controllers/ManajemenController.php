@@ -2,6 +2,8 @@
 
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/services/ManajemenService.php';
+require_once ROOT_PROJECT . '/app/models/ManajemenModel.php';
+require_once ROOT_PROJECT . '/app/services/DetailSumberDayaService.php';
 
 /**
  * ManajemenController - Web & API Orchestrator
@@ -99,5 +101,29 @@ class ManajemenController extends Controller {
         } else {
             $this->redirect('/admin/manajemen');
         }
+    }
+
+    /**
+     * Halaman Publik: Detail Kepala / Manajemen (clean route /kepala/{id})
+     */
+    public function detail($params = []) {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->redirect('/kepala');
+            return;
+        }
+
+        $detailService = new DetailSumberDayaService();
+        $dataDetail = $detailService->getFormattedManajemen((int)$id);
+
+        if (!$dataDetail) {
+            $this->redirect('/kepala');
+            return;
+        }
+
+        $this->view('sumberdaya/detail', [
+            'dataDetail' => $dataDetail,
+            'judul' => 'Detail Pimpinan - ' . $dataDetail['nama']
+        ]);
     }
 }

@@ -1,19 +1,23 @@
 <?php
 
+// Pastikan Model dan Service dimuat dengan path absolut
 require_once ROOT_PROJECT . '/app/models/JadwalPraktikumModel.php';
 require_once ROOT_PROJECT . '/app/Services/JadwalPraktikumService.php';
-use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /**
- * JadwalPraktikumController - Pengendali Alur Jadwal Praktikum
- * * Bertanggung jawab menerima input dari user (Web/API) dan memberikan output.
- * Logika pemrosesan data didelegasikan ke JadwalPraktikumService.
+ * Karena index.php sudah memuat Controller.php secara global, 
+ * kita tidak perlu require_once CORE_PATH . '/Controller.php' lagi di sini.
+ * Ini mencegah error "Failed to open stream" jika path CORE_PATH berubah.
  */
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 class JadwalPraktikumController extends Controller {
     private $model;
     private $service;
 
     public function __construct() {
+        // Pastikan kelas induk sudah terdeteksi
         $this->model = new JadwalPraktikumModel();
         $this->service = new JadwalPraktikumService();
     }

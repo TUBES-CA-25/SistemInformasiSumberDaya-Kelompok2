@@ -1,274 +1,114 @@
 <?php
 /**
- * API Entry Point with Proper HTTP Method Routing
+ * API Entry Point
+ * * Menggunakan Centralized Routing melalui class Router.
+ * Menghilangkan redundansi logika regex dan manual dispatching.
  */
 
-// Start session for authenticated requests
+// 1. Inisialisasi Environment
 session_start();
-
-// Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Define paths
+// 2. Definisi Path Konstanta
 define('BASE_PATH', dirname(dirname(__FILE__)));
 define('APP_PATH', BASE_PATH . '/app');
 define('ROOT_PROJECT', BASE_PATH);
 define('CONTROLLER_PATH', APP_PATH . '/controllers');
-define('MODEL_PATH', APP_PATH . '/models');
-define('VIEW_PATH', APP_PATH . '/views');
 
+// 3. Autoloading & Core Files
 if (file_exists(BASE_PATH . '/vendor/autoload.php')) {
     require_once BASE_PATH . '/vendor/autoload.php';
-} else {
-    error_log("Composer autoload tidak ditemukan!");
 }
 
-// Include configuration
+// Include core system files
 require_once APP_PATH . '/config/config.php';
 require_once APP_PATH . '/config/Database.php';
 require_once APP_PATH . '/helpers/Helper.php';
+require_once APP_PATH . '/config/Router.php';
 
-// Header CORS
+// Pastikan kelas Controller (base) dimuat agar controller API dapat di-extend
+if (file_exists(CONTROLLER_PATH . '/Controller.php')) {
+    require_once CONTROLLER_PATH . '/Controller.php';
+}
+
+// 4. Header CORS & JSON Content Type
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
-// Handle preflight
+// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
-// Parse request
-$method = $_SERVER['REQUEST_METHOD'];
-$request_uri = $_SERVER['REQUEST_URI'];
+// 5. Inisialisasi Router
+$router = new Router();
 
-// Get the correct script name dynamically
-$script_name = $_SERVER['SCRIPT_NAME'];
-
-// Debug logging (remove in production)
-error_log("API Debug - Method: $method, URI: $request_uri, Script: $script_name");
-
-// Remove base path from URI
-if (strpos($request_uri, $script_name) === 0) {
-    $path = substr($request_uri, strlen($script_name));
-} else {
-    $path = parse_url($request_uri, PHP_URL_PATH);
-    $path = preg_replace('#.*/public/api\.php#', '', $path);
-}
-
-// Clean path - decode URL and remove whitespace
-$path = urldecode($path);
-$path = '/' . trim($path, '/ ');
-
-// Debug logging
-error_log("API Debug - Parsed path: $path");
-
-// Route mapping dengan HTTP METHOD
-$routes = [
+/**
+ * 6. Definisi API Routes
+ * Seluruh endpoint API didaftarkan di sini menggunakan prefix /api.
+ * Key 'method' pada array lama disesuaikan menjadi 'action' agar sinkron dengan Router.
+ */
+$apiRoutes = [
     'GET' => [
-        '/sop' => ['controller' => 'SopController', 'method' => 'getJson'],
-            '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'apiIndex'],
-            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'apiShow'],
-            '/sanksi-lab' => ['controller' => 'SanksiController', 'method' => 'apiIndex'],
-            '/sanksi-lab/{id}' => ['controller' => 'SanksiController', 'method' => 'apiShow'],
-            '/alumni' => ['controller' => 'AlumniController', 'method' => 'apiIndex'],
-            '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'apiShow'],
-        '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'apiIndex'],
-        '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'apiShow'],
-        '/asisten' => ['controller' => 'AsistenController', 'method' => 'apiIndex'],
-        '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'apiShow'],
-        '/asisten/{id}/matakuliah' => ['controller' => 'AsistenController', 'method' => 'matakuliah'],
-        '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'apiIndex'],
-        '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'apiShow'],
-        '/matakuliah/{id}/asisten' => ['controller' => 'MatakuliahController', 'method' => 'asisten'],
-        '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiIndex'],
-        '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiShow'],
-        '/jadwal-praktikum' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiIndex'],
-        '/jadwal-praktikum/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'apiShow'],
-        '/jadwal-praktikum/template' => ['controller' => 'JadwalPraktikumController', 'method' => 'downloadTemplate'],
-        '/jadwal-praktikum/csv-template' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'downloadCSVTemplate'],
-        '/jadwal-upk' => ['controller' => 'JadwalUpkController', 'method' => 'apiIndex'],
-        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'apiShow'],
-        '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'apiIndex'],
-        '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'apiShow'],
-        '/informasi/tipe/{type}' => ['controller' => 'InformasiLabController', 'method' => 'byType'],
-        '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'getLatest'],
-        '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'show'],
-        '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'apiIndex'],
-        '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'apiShow'],
-        '/kontak' => ['controller' => 'KontakController', 'method' => 'getLatest'],
-        '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'show'],
-        '/user' => ['controller' => 'UserController', 'method' => 'apiIndex'],
-        '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiShow'],
-        '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'index'],
-        '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'show'],
-        '/formatpenulisan' => ['controller' => 'FormatPenulisanController', 'method' => 'apiIndex'],
-        '/formatpenulisan/{id}' => ['controller' => 'FormatPenulisanController', 'method' => 'apiShow'],
-        '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'index'],
-        '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'show'],
-        '/modul' => ['controller' => 'ModulController', 'method' => 'getJson'],
-        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'getById'], 
-        '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'index'],
-        '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'show'],            '/dashboard/stats' => ['controller' => 'DashboardController', 'method' => 'stats'],    ],
+        '/api/sop'                          => ['controller' => 'SopController', 'action' => 'getJson'],
+        '/api/peraturan-lab'                => ['controller' => 'PeraturanLabController', 'action' => 'apiIndex'],
+        '/api/peraturan-lab/{id}'           => ['controller' => 'PeraturanLabController', 'action' => 'apiShow'],
+        '/api/sanksi-lab'                   => ['controller' => 'SanksiController', 'action' => 'apiIndex'],
+        '/api/sanksi-lab/{id}'              => ['controller' => 'SanksiController', 'action' => 'apiShow'],
+        '/api/alumni'                       => ['controller' => 'AlumniController', 'action' => 'apiIndex'],
+        '/api/alumni/{id}'                  => ['controller' => 'AlumniController', 'action' => 'apiShow'],
+        '/api/laboratorium'                 => ['controller' => 'FasilitasController', 'action' => 'apiIndex'],
+        '/api/laboratorium/{id}'            => ['controller' => 'FasilitasController', 'action' => 'detail'],
+        '/api/asisten'                      => ['controller' => 'AsistenController', 'action' => 'apiIndex'],
+        '/api/asisten/{id}'                 => ['controller' => 'AsistenController', 'action' => 'apiShow'],
+        '/api/asisten/{id}/matakuliah'      => ['controller' => 'AsistenController', 'action' => 'matakuliah'],
+        '/api/matakuliah'                   => ['controller' => 'MatakuliahController', 'action' => 'apiIndex'],
+        '/api/matakuliah/{id}'              => ['controller' => 'MatakuliahController', 'action' => 'apiShow'],
+        '/api/matakuliah/{id}/asisten'      => ['controller' => 'MatakuliahController', 'action' => 'asisten'],
+        '/api/jadwal'                       => ['controller' => 'JadwalPraktikumController', 'action' => 'apiIndex'],
+        '/api/jadwal/{id}'                  => ['controller' => 'JadwalPraktikumController', 'action' => 'apiShow'],
+        '/api/informasi'                    => ['controller' => 'FasilitasController', 'action' => 'apiIndex'],
+        '/api/informasi/{id}'               => ['controller' => 'FasilitasController', 'action' => 'detail'],
+        '/api/manajemen'                    => ['controller' => 'ManajemenController', 'action' => 'apiIndex'],
+        '/api/manajemen/{id}'               => ['controller' => 'ManajemenController', 'action' => 'apiShow'],
+        '/api/formatpenulisan'              => ['controller' => 'FormatPenulisanController', 'action' => 'apiIndex'],
+        '/api/formatpenulisan/{id}'         => ['controller' => 'FormatPenulisanController', 'action' => 'apiShow'],
+        '/api/modul'                        => ['controller' => 'ModulController', 'action' => 'getJson'],
+        '/api/dashboard/stats'              => ['controller' => 'DashboardController', 'action' => 'stats'],
+    ],
     'POST' => [
-        '/kontak' => ['controller' => 'KontakController', 'method' => 'send'],
-        '/sop' => ['controller' => 'SopController', 'method' => 'store'],
-        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'update'],
-            '/peraturan-lab' => ['controller' => 'PeraturanLabController', 'method' => 'store'],
-            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'], // For file upload
-            '/sanksi-lab' => ['controller' => 'SanksiController', 'method' => 'store'],
-            '/sanksi-lab/{id}' => ['controller' => 'SanksiController', 'method' => 'update'], // For file upload
-            '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
-            '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'], // For file upload
-            '/alumni' => ['controller' => 'AlumniController', 'method' => 'store'],
-            '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'update'], // For file upload
-        '/laboratorium' => ['controller' => 'LaboratoriumController', 'method' => 'store'],
-        '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'update'], // For file upload
-        '/asisten' => ['controller' => 'AsistenController', 'method' => 'store'],
-        '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'], // For file upload
-        '/asisten/{id}/koordinator' => ['controller' => 'AsistenController', 'method' => 'setKoordinator'], // Set koordinator
-        '/matakuliah' => ['controller' => 'MatakuliahController', 'method' => 'store'],
-        '/jadwal' => ['controller' => 'JadwalPraktikumController', 'method' => 'create'],
-        '/jadwal/delete-multiple' => ['controller' => 'JadwalPraktikumController', 'method' => 'deleteMultiple'],
-        '/jadwal-praktikum/upload' => ['controller' => 'JadwalPraktikumController', 'method' => 'uploadExcel'],
-        '/jadwal-praktikum/upload-csv' => ['controller' => 'JadwalPraktikumUploadAlternativeController', 'method' => 'uploadCSV'],
-        '/jadwal-upk' => ['controller' => 'JadwalUpkController', 'method' => 'store'],
-        '/jadwal-upk/delete-multiple' => ['controller' => 'JadwalUpkController', 'method' => 'deleteMultiple'],
-        '/jadwal-upk/upload' => ['controller' => 'JadwalUpkController', 'method' => 'upload'],
-        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'update'],
-        '/informasi' => ['controller' => 'InformasiLabController', 'method' => 'store'],
-        '/visi-misi' => ['controller' => 'VisMisiController', 'method' => 'store'],
-        '/manajemen' => ['controller' => 'ManajemenController', 'method' => 'store'],
-        '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'update'], // For file upload
-        '/formatpenulisan' => ['controller' => 'FormatPenulisanController', 'method' => 'store'],
-        '/formatpenulisan/{id}' => ['controller' => 'FormatPenulisanController', 'method' => 'update'],
-        '/user' => ['controller' => 'UserController', 'method' => 'apiStore'],
-        '/asisten-matakuliah' => ['controller' => 'AsistenMatakuliahController', 'method' => 'store'],
-        '/tata-tertib' => ['controller' => 'TataTerbibController', 'method' => 'store'],
-        '/modul' => ['controller' => 'ModulController', 'method' => 'store'],
-        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'update'],
-        '/integrasi-web' => ['controller' => 'IntegrsiWebController', 'method' => 'store'],
+        '/api/sop'                          => ['controller' => 'SopController', 'action' => 'store'],
+        '/api/peraturan-lab'                => ['controller' => 'PeraturanLabController', 'action' => 'store'],
+        '/api/sanksi-lab'                   => ['controller' => 'SanksiController', 'action' => 'store'],
+        '/api/laboratorium'                 => ['controller' => 'FasilitasController', 'action' => 'store'],
+        '/api/asisten'                      => ['controller' => 'AsistenController', 'action' => 'store'],
+        '/api/asisten/{id}/koordinator'     => ['controller' => 'AsistenController', 'action' => 'setKoordinator'],
+        '/api/jadwal'                       => ['controller' => 'JadwalPraktikumController', 'action' => 'create'],
+        '/api/jadwal/delete-multiple'       => ['controller' => 'JadwalPraktikumController', 'action' => 'deleteMultiple'],
+        '/api/informasi'                    => ['controller' => 'FasilitasController', 'action' => 'store'],
+        '/api/manajemen'                    => ['controller' => 'ManajemenController', 'action' => 'store'],
+        '/api/formatpenulisan'              => ['controller' => 'FormatPenulisanController', 'action' => 'store'],
     ],
     'PUT' => [
-        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'update'],
-            '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'],
-        '/laboratorium/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'update'],
-        '/asisten/{id}' => ['controller' => 'AsistenController', 'method' => 'update'],
-        '/matakuliah/{id}' => ['controller' => 'MatakuliahController', 'method' => 'update'],
-        '/peraturan-lab/{id}' => ['controller' => 'PeraturanLabController', 'method' => 'update'],
-        '/sanksi-lab/{id}' => ['controller' => 'SanksiController', 'method' => 'update'],
-        '/alumni/{id}' => ['controller' => 'AlumniController', 'method' => 'update'],
-        '/jadwal/{id}' => ['controller' => 'JadwalPraktikumController', 'method' => 'update'],
-        '/informasi/{id}' => ['controller' => 'InformasiLabController', 'method' => 'update'],
-        '/visi-misi/{id}' => ['controller' => 'VisMisiController', 'method' => 'update'],
-        '/manajemen/{id}' => ['controller' => 'ManajemenController', 'method' => 'update'],
-        '/kontak/{id}' => ['controller' => 'KontakController', 'method' => 'update'],
-        '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'update'],
-        '/tata-tertib/{id}' => ['controller' => 'TataTerbibController', 'method' => 'update'],
-        '/integrasi-web/{id}' => ['controller' => 'IntegrsiWebController', 'method' => 'update'],
-        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'update'],
-        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'update'],
-        '/user/{id}' => ['controller' => 'UserController', 'method' => 'apiUpdate'],
+        '/api/sop/{id}'                     => ['controller' => 'SopController', 'action' => 'update'],
+        '/api/laboratorium/{id}'            => ['controller' => 'FasilitasController', 'action' => 'update'],
+        '/api/asisten/{id}'                 => ['controller' => 'AsistenController', 'action' => 'update'],
+        '/api/jadwal/{id}'                  => ['controller' => 'JadwalPraktikumController', 'action' => 'update'],
     ],
     'DELETE' => [
-        '/sop/{id}' => ['controller' => 'SopController', 'method' => 'delete'],
-
-        '/laboratorium/image/{id}' => ['controller' => 'LaboratoriumController', 'method' => 'deleteImage'],
-        '/laboratorium/{id}'       => ['controller' => 'LaboratoriumController', 'method' => 'delete'],
-        '/asisten/{id}'            => ['controller' => 'AsistenController', 'method' => 'delete'],
-        '/matakuliah/{id}'         => ['controller' => 'MatakuliahController', 'method' => 'delete'],
-        '/peraturan-lab/{id}'      => ['controller' => 'PeraturanLabController', 'method' => 'delete'],
-        '/sanksi-lab/{id}'         => ['controller' => 'SanksiController', 'method' => 'delete'],
-        '/alumni/{id}'             => ['controller' => 'AlumniController', 'method' => 'delete'],
-        '/jadwal/{id}'             => ['controller' => 'JadwalPraktikumController', 'method' => 'delete'],
-        '/jadwal-upk/{id}' => ['controller' => 'JadwalUpkController', 'method' => 'delete'],
-        '/informasi/{id}'          => ['controller' => 'InformasiLabController', 'method' => 'delete'],
-        '/visi-misi/{id}'          => ['controller' => 'VisMisiController', 'method' => 'delete'],
-        '/manajemen/{id}'          => ['controller' => 'ManajemenController', 'method' => 'delete'],
-        '/kontak/{id}'             => ['controller' => 'KontakController', 'method' => 'delete'],
-        '/formatpenulisan/{id}'    => ['controller' => 'FormatPenulisanController', 'method' => 'delete'],
-        '/asisten-matakuliah/{id}' => ['controller' => 'AsistenMatakuliahController', 'method' => 'delete'],
-        '/tata-tertib/{id}'        => ['controller' => 'TataTerbibController', 'method' => 'delete'],
-        '/modul/{id}' => ['controller' => 'ModulController', 'method' => 'delete'],
-        '/integrasi-web/{id}'      => ['controller' => 'IntegrsiWebController', 'method' => 'delete'],
-        '/user/{id}'               => ['controller' => 'UserController', 'method' => 'apiDelete'],
-    ],
+        '/api/sop/{id}'                     => ['controller' => 'SopController', 'action' => 'delete'],
+        '/api/laboratorium/{id}'            => ['controller' => 'FasilitasController', 'action' => 'delete'],
+        '/api/laboratorium/image/{id}'      => ['controller' => 'FasilitasController', 'action' => 'deleteImage'],
+        '/api/asisten/{id}'                 => ['controller' => 'AsistenController', 'action' => 'delete'],
+    ]
 ];
 
-// Match route
-$matched = false;
-$params = [];
-$controller_class = null;
-$action_method = null;
+// 7. Daftarkan Routes ke Router
+$router->addRoutes($apiRoutes);
 
-if (isset($routes[$method])) {
-    foreach ($routes[$method] as $route => $handler) {
-        $pattern = preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '([a-zA-Z0-9_-]+)', $route);
-        $pattern = str_replace('/', '\/', $pattern);
-        
-        if (preg_match('/^' . $pattern . '$/', $path, $matches)) {
-            $matched = true;
-            $controller_class = $handler['controller']; // Remove namespace
-            $action_method = $handler['method'];
-            
-            // Extract parameters
-            if (count($matches) > 1) {
-                preg_match_all('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', $route, $param_names);
-                for ($i = 0; $i < count($param_names[1]); $i++) {
-                    $params[$param_names[1][$i]] = $matches[$i + 1];
-                }
-            }
-            break;
-        }
-    }
-}
-
-if (!$matched) {
-    error_log("API Debug - Route not found. Method: $method, Path: $path");
-    error_log("API Debug - Available routes for $method: " . print_r($routes[$method] ?? [], true));
-    http_response_code(404);
-    echo json_encode([
-        'error' => 'Route not found', 
-        'method' => $method, 
-        'path' => $path,
-        'available_routes' => array_keys($routes[$method] ?? [])
-    ]);
-    exit;
-}
-
-// Load and execute controller
-if (!class_exists($controller_class)) {
-    require_once APP_PATH . '/controllers/Controller.php';
-    $controller_file = APP_PATH . '/controllers/' . basename(str_replace('App\\Controllers\\', '', $controller_class)) . '.php';
-    error_log("API Debug - Loading controller file: $controller_file");
-    if (file_exists($controller_file)) {
-        require_once $controller_file;
-    } else {
-        error_log("API Debug - Controller file not found: $controller_file");
-    }
-}
-
-if (!class_exists($controller_class)) {
-    error_log("API Debug - Controller class not found: $controller_class");
-    http_response_code(500);
-    echo json_encode(['error' => 'Controller not found: ' . $controller_class]);
-    exit;
-}
-
-error_log("API Debug - Creating controller instance: $controller_class");
-$controller = new $controller_class();
-
-if (!method_exists($controller, $action_method)) {
-    error_log("API Debug - Method not found: $action_method in $controller_class");
-    http_response_code(500);
-    echo json_encode(['error' => 'Method not found: ' . $action_method]);
-    exit;
-}
-
-error_log("API Debug - Executing method: $action_method with params: " . print_r($params, true));
-// Execute action
-$controller->$action_method($params);
-?>
+// 8. Jalankan Router
+$router->dispatch();

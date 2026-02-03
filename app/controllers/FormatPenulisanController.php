@@ -1,6 +1,7 @@
 <?php
 
 require_once ROOT_PROJECT . '/app/services/FormatPenulisanService.php';
+require_once ROOT_PROJECT . '/app/models/FormatPenulisanModel.php';
 
 /**
  * FormatPenulisanController - Orchestrator Manajemen Format Penulisan

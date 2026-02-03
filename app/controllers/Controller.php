@@ -15,6 +15,8 @@
  * semua utility methods yang tersedia.
  */
 
+
+
 class Controller {
     // =========================================================================
     // BAGIAN 1: PROPERTI

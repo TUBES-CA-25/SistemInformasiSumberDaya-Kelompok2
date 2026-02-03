@@ -28,7 +28,7 @@ $lab_list = $data['laboratorium'] ?? [];
                         $finalDesc = $row['short_desc'] ?? $row['deskripsi_final'] ?? $row['deskripsi'] ?? '';
                     ?>
 
-                    <a href="<?= PUBLIC_URL ?>/index.php?page=detail_fasilitas&id=<?= $row['idLaboratorium'] ?>"
+                    <a href="<?= PUBLIC_URL ?>/laboratorium/<?= $row['idLaboratorium'] ?>"
                        class="facility-row" 
                        data-id="<?= $row['idLaboratorium'] ?>">
                         

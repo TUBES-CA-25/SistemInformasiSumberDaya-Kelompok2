@@ -67,17 +67,15 @@ class PraktikumController extends Controller {
             return [];
         }
 
-        // Tentukan Base URL aplikasi
-        $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
+        $baseUrl = defined('PUBLIC_URL') ? rtrim(PUBLIC_URL, '/') : '';
 
         foreach ($dataset as &$row) {
             $imgName = $row['gambar'] ?? '';
-            $row['img_url'] = ''; // Inisialisasi default
+            $row['img_url'] = ''; // Default jika gambar tidak ada
 
             if (!empty($imgName)) {
                 $physicalPath = ROOT_PROJECT . '/public/assets/uploads/' . $imgName;
                 
-                // Pastikan file benar-benar ada di storage server
                 if (file_exists($physicalPath)) {
                     $row['img_url'] = $baseUrl . '/assets/uploads/' . $imgName;
                 }

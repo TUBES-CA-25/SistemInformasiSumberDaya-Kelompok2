@@ -8,6 +8,8 @@
  */
 
 require_once ROOT_PROJECT . '/app/services/AsistenService.php';
+require_once ROOT_PROJECT . '/app/models/AsistenModel.php';
+require_once ROOT_PROJECT . '/app/services/DetailSumberDayaService.php';
 
 class AsistenController extends Controller {
     private $service;
@@ -31,11 +33,16 @@ class AsistenController extends Controller {
      */
     public function detail($params = []) {
         $id = $params['id'] ?? null;
-        $asisten = $this->service->getFormattedDetail($id);
 
-        if (!$asisten) return $this->redirect('/asisten');
+        // Gunakan DetailSumberDayaService agar struktur data konsisten dengan view
+        $detailService = new DetailSumberDayaService();
+        $dataDetail = $detailService->getFormattedAsisten((int)$id);
 
-        $this->view('sumberdaya/detail', ['id' => $id, 'asisten' => $asisten]);
+        if (!$dataDetail) {
+            return $this->redirect('/asisten');
+        }
+
+        $this->view('sumberdaya/detail', ['dataDetail' => $dataDetail]);
     }
 
     /**

@@ -2,26 +2,72 @@
 
 /**
  * PeraturanLabController
- * * Mengelola aturan dan tata tertib laboratorium. 
- * Menyediakan fungsionalitas untuk antarmuka Admin (HTML) dan integrasi sistem (API JSON).
- * * @package App\Controllers
+ * Diperbarui untuk menggabungkan data Peraturan dan Sanksi dalam satu tampilan publik.
  */
 
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/PeraturanLabModel.php';
+// 1. Import Model Sanksi
+require_once ROOT_PROJECT . '/app/models/SanksiLabModel.php'; 
 require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 
 class PeraturanLabController extends Controller 
 {
-    /** @var PeraturanLabModel Instance model untuk akses database */
     private $model;
+    private $sanksiModel; // Properti untuk model sanksi
 
-    /**
-     * Inisialisasi dependensi controller.
-     */
     public function __construct() 
     {
         $this->model = new \PeraturanLabModel();
+        // 2. Inisialisasi Model Sanksi
+        $this->sanksiModel = new \SanksiLabModel(); 
+    }
+
+    // =========================================================================
+    // WEB METHODS (MENAMPILKAN HALAMAN HTML)
+    // =========================================================================
+
+    /**
+     * Menampilkan halaman publik Tata Tertib & Sanksi.
+     */
+    public function index(): void 
+    {
+        // 3. Ambil data mentah dari kedua model
+        $rules_raw = $this->model->getAll();
+        $sanksi_raw = $this->sanksiModel->getAll();
+        
+        // 4. Proses URL Gambar agar tidak pecah (menggunakan helper processMediaUrls)
+        $rules_data = $this->processMediaUrls($rules_raw);
+        $sanksi_data = $this->processMediaUrls($sanksi_raw);
+
+        // 5. Kirim ke View dengan data lengkap
+        $this->view('praktikum/tatatertib', [
+            'judul'  => 'Tata Tertib & Sanksi - Laboratorium FIKOM',
+            'rules'  => $rules_data,
+            'sanksi' => $sanksi_data // Data sanksi sekarang terisi
+        ]);
+    }
+
+    /**
+     * Helper untuk memproses URL Gambar (Pastikan kolom di DB bernama 'gambar')
+     */
+    private function processMediaUrls(array $dataset): array {
+        if (empty($dataset)) return [];
+        
+        $baseUrl = defined('PUBLIC_URL') ? rtrim(PUBLIC_URL, '/') : '';
+
+        foreach ($dataset as &$row) {
+            $imgName = $row['gambar'] ?? '';
+            $row['img_url'] = ''; 
+
+            if (!empty($imgName)) {
+                $physicalPath = ROOT_PROJECT . '/public/assets/uploads/' . $imgName;
+                if (file_exists($physicalPath)) {
+                    $row['img_url'] = $baseUrl . '/assets/uploads/' . $imgName;
+                }
+            }
+        }
+        return $dataset;
     }
 
     // =========================================================================
@@ -29,8 +75,7 @@ class PeraturanLabController extends Controller
     // =========================================================================
 
     /**
-     * API: Mengambil semua daftar peraturan laboratorium.
-     * * @return void Mengirimkan JSON response ke klien.
+     * API: Digunakan oleh AJAX atau sistem eksternal.
      */
     public function apiIndex(): void 
     {
@@ -38,52 +83,19 @@ class PeraturanLabController extends Controller
         $this->success($data, 'Data peraturan lab retrieved successfully');
     }
 
-    /**
-     * API: Mengambil detail satu peraturan berdasarkan ID.
-     * * @param array $params Parameter rute yang mengandung ['id' => value].
-     * @return void
-     */
-    public function apiShow(array $params): void 
-    {
-        $id = $params['id'] ?? null;
-        
-        if (!$id) {
-            $this->error('ID tidak ditemukan', null, 400);
-            return;
-        }
-
-        $data = $this->model->getById($id);
-        
-        if (!$data) {
-            $this->error('Data tidak ditemukan', null, 404);
-            return;
-        }
-
-        $this->success($data, 'Peraturan lab retrieved successfully');
-    }
-
-    /**
-     * Alias untuk API Index demi kompatibilitas rute lama.
-     */
-    public function index() { return $this->apiIndex(); }
-
-    /**
-     * Alias untuk API Show demi kompatibilitas rute lama.
-     */
-    public function show($params) { return $this->apiShow($params); }
-
-
     // =========================================================================
-    // ADMIN VIEW METHODS (RENDERING HALAMAN)
+    // ADMIN VIEW METHODS
     // =========================================================================
 
-    /**
-     * Menampilkan halaman daftar peraturan di dashboard admin.
-     */
     public function adminIndex(): void 
     {
-        $this->view('admin/peraturan_sanksi/index');
+        // Mengambil data untuk tabel admin
+        $data = $this->model->getAll();
+        $this->view('admin/peraturan_sanksi/index', [
+            'peraturan' => $data
+        ]);
     }
+
 
     /**
      * Menampilkan form pembuatan peraturan baru.

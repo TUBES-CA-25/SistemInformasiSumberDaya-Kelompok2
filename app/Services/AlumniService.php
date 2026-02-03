@@ -7,6 +7,9 @@
  * dan transformasi format dari Controller agar kode lebih modular dan reusable.
  * * @package App\Services
  */
+
+require_once ROOT_PROJECT . '/app/models/AlumniModel.php';
+require_once ROOT_PROJECT . '/app/helpers/Helper.php';
 class AlumniService
 {
     /**

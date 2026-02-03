@@ -6,6 +6,9 @@
  * format yang siap dikonsumsi oleh View Detail, baik untuk Asisten maupun Manajemen.
  * * @package App\Services
  */
+require_once ROOT_PROJECT . '/app/models/ManajemenModel.php';
+require_once ROOT_PROJECT . '/app/models/AsistenModel.php';
+
 class DetailSumberDayaService {
     private $asistenModel;
     private $manajemenModel;

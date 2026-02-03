@@ -27,7 +27,7 @@ $laboran_list  = $data['laboran'] ?? [];
             
             <div class="pimpinan-wrapper">
                 <?php foreach ($pimpinan_list as $row) : ?>
-                    <a href="<?= PUBLIC_URL ?>/index.php?page=detail&type=manajemen&id=<?= $row['idManajemen'] ?>" class="card-link">
+                    <a href="<?= PUBLIC_URL ?>/kepala/<?= $row['idManajemen'] ?>" class="card-link">
                         
                         <div class="staff-card">
                             <div class="staff-photo-box">
@@ -67,7 +67,7 @@ $laboran_list  = $data['laboran'] ?? [];
             <div class="section-label">Pranata Laboratorium & Staff</div>
             
             <div class="pimpinan-wrapper"> <?php foreach ($laboran_list as $row) : ?>
-                    <a href="<?= PUBLIC_URL ?>/index.php?page=detail&type=manajemen&id=<?= $row['idManajemen'] ?>" class="card-link">
+                    <a href="<?= PUBLIC_URL ?>/kepala/<?= $row['idManajemen'] ?>" class="card-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
                                 <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">

@@ -22,7 +22,7 @@ require_once CONTROLLER_PATH . '/Controller.php';
 
 // Load Model untuk statistik
 require_once __DIR__ . '/../models/AsistenModel.php';
-require_once __DIR__ . '/../models/LaboratoriumModel.php';
+require_once __DIR__ . '/../models/FasilitasModel.php';
 require_once __DIR__ . '/../models/AlumniModel.php';
 
 // Load Database Wrapper untuk query jadwal

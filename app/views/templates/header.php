@@ -88,6 +88,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     
     <base href="<?= rtrim(PUBLIC_URL, '/') ?>/">
+    <script>window.PUBLIC_URL = "<?= rtrim(PUBLIC_URL, '/') ?>";</script>
 </head>
 <body>
 

@@ -38,7 +38,8 @@
 
 <script>
     // Definisikan URL API dari PHP agar bisa dibaca oleh file JS eksternal
-    window.API_JADWAL_URL = "<?= API_URL ?>/jadwal";
+    // Gunakan path API lengkap (dengan prefix /api) agar router API mengenali endpoint
+    window.API_JADWAL_URL = "<?= API_URL ?>/api/jadwal";
 </script>
 
 <script src="<?= PUBLIC_URL ?>/js/praktikum.js"></script>

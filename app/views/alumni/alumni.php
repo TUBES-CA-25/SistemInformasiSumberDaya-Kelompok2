@@ -53,7 +53,7 @@
             $divisi = $row['divisi'] ?? 'Asisten Lab';
         ?>
 
-        <a href="<?= PUBLIC_URL ?>/index.php?page=detail_alumni&id=<?= $idAlumni ?>" class="card-link">
+        <a href="<?= PUBLIC_URL ?>/alumni/<?= $idAlumni ?>" class="card-link">
             <div class="staff-card">
                 <div class="staff-photo-box">
                     <img src="<?= $imgUrl ?>" 
