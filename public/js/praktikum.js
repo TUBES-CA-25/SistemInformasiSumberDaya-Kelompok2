@@ -45,7 +45,6 @@ function updateTime(element) {
     .replace(/\./g, ":");
 }
 
-// Helper: Format Tanggal (2025-10-20 -> 20 Oktober 2025)
 function formatDateIndo(dateStr) {
   if (!dateStr) return "-";
   const d = new Date(dateStr);
@@ -53,20 +52,36 @@ function formatDateIndo(dateStr) {
   return `${d.getDate()} ${bulanIndo[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-// Helper: Get Date Today (YYYY-MM-DD)
-function getTodayDate() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+// [UPDATE] Helper: Deteksi Prodi dari String Frekuensi atau Kelas
+function detectProdi(row) {
+  // 1. Cek dari field 'prodi' jika ada
+  if (row.prodi) return row.prodi;
+
+  // 2. Cek dari String Frekuensi (Priority: TI_SD-7 -> TI)
+  if (row.frekuensi) {
+    const f = row.frekuensi.toUpperCase();
+    // Cek prefix TI atau SI di awal string frekuensi
+    if (f.startsWith("TI") || f.includes("TI_")) return "TI";
+    if (f.startsWith("SI") || f.includes("SI_")) return "SI";
+  }
+
+  // 3. Fallback: Cek dari Nama Kelas (Misal: "TI-A" -> "TI")
+  if (row.kelas) {
+    const k = row.kelas.toUpperCase();
+    if (k.includes("TI") || k.includes("INFORMATIKA")) return "TI";
+    if (k.includes("SI") || k.includes("SISTEM")) return "SI";
+  }
+
+  return "Lainnya";
 }
 
 /* ==========================================================================
-   PART A: LOGIKA JADWAL REGULER (TIDAK BERUBAH)
+   PART A: LOGIKA JADWAL REGULER
    ========================================================================== */
 let globalJadwalData = [];
+// Tambahkan 'prodi' ke state filter
 const activeFilters = {
+  prodi: new Set(),
   hari: new Set(),
   jam: new Set(),
   kelas: new Set(),
@@ -110,7 +125,9 @@ function handleError(containerId, err) {
 }
 
 function initFilterDropdowns() {
+  // [UPDATE] Gunakan detectProdi di config 'prodi'
   const configs = [
+    { id: "prodi", val: (r) => detectProdi(r) }, // Deteksi TI/SI
     { id: "hari", key: "hari" },
     {
       id: "jam",
@@ -138,6 +155,9 @@ function renderFilteredSchedule() {
   if (!container) return;
 
   const filtered = globalJadwalData.filter((row) => {
+    // Filter Prodi
+    if (!checkFilter(activeFilters.prodi, detectProdi(row))) return false;
+
     if (!checkFilter(activeFilters.hari, row.hari)) return false;
     const jam = `${row.waktuMulai.substring(0, 5)} - ${row.waktuSelesai.substring(0, 5)}`;
     if (!checkFilter(activeFilters.jam, jam)) return false;
@@ -156,9 +176,11 @@ function renderFilteredSchedule() {
 }
 
 /* ==========================================================================
-   PART B: LOGIKA JADWAL UPK (SESUAI REQUEST)
+   PART B: LOGIKA JADWAL UPK
    ========================================================================== */
+let globalUpkData = [];
 const activeUpkFilters = {
+  prodi: new Set(),
   tanggal: new Set(),
   ruang: new Set(),
   kelas: new Set(),
@@ -167,18 +189,28 @@ const activeUpkFilters = {
 };
 
 function initUpkPage() {
-  // Mengambil data UPK yang di-inject dari PHP (window.UPK_DATA)
   const data = window.UPK_DATA || [];
+  globalUpkData = data;
 
-  // Render awal (semua data)
+  if (data.length === 0) {
+    document.getElementById("upk-tables-container").innerHTML = `
+            <div class="empty-schedule">
+                <i class="far fa-calendar-times" style="font-size:3rem; margin-bottom:15px; color:#cbd5e1;"></i>
+                <h3 style="color:#64748b;">Belum Ada Jadwal</h3>
+                <p style="color:#94a3b8;">Jadwal UPK belum dirilis oleh admin.</p>
+            </div>`;
+    return;
+  }
+
   initUpkFilterDropdowns(data);
   renderUpkFilteredSchedule(data);
   setupUpkFilterUI(data);
 }
 
 function initUpkFilterDropdowns(data) {
-  // Mapping Data UPK
+  // [UPDATE] Gunakan detectProdi di config 'prodi'
   const configs = [
+    { id: "prodi", val: (r) => detectProdi(r) }, // Deteksi TI/SI
     { id: "tanggal", key: "tanggal" },
     { id: "ruang", key: "ruangan" },
     { id: "matkul", key: "mata_kuliah" },
@@ -200,8 +232,10 @@ function renderUpkFilteredSchedule(rawData) {
   const container = document.getElementById("upk-tables-container");
   if (!container) return;
 
-  // 1. Filtering
   const filtered = rawData.filter((row) => {
+    // Filter Prodi
+    if (!checkFilter(activeUpkFilters.prodi, detectProdi(row))) return false;
+
     if (!checkFilter(activeUpkFilters.tanggal, row.tanggal)) return false;
     if (!checkFilter(activeUpkFilters.ruang, row.ruangan)) return false;
     if (!checkFilter(activeUpkFilters.matkul, row.mata_kuliah)) return false;
@@ -210,18 +244,16 @@ function renderUpkFilteredSchedule(rawData) {
     return true;
   });
 
-  // 2. Empty State
   if (filtered.length === 0) {
     container.innerHTML = `
             <div class="empty-schedule" style="text-align:center; padding:40px; border: 2px dashed #e2e8f0; border-radius:16px;">
-                <i class="far fa-calendar-times" style="font-size:3rem; color:#cbd5e1; margin-bottom:15px;"></i>
-                <h3 style="color:#64748b;">Belum Ada Jadwal</h3>
-                <p style="color:#94a3b8;">Tidak ada data yang cocok dengan filter yang dipilih.</p>
+                <i class="fas fa-search" style="font-size:2.5rem; color:#cbd5e1; margin-bottom:15px;"></i>
+                <h3 style="color:#64748b; font-size:1.2rem;">Tidak Ditemukan</h3>
+                <p style="color:#94a3b8;">Tidak ada data yang cocok dengan filter.</p>
             </div>`;
     return;
   }
 
-  // 3. Grouping by Ruangan
   const groups = {};
   filtered.forEach((item) => {
     const r = item.ruangan || "Ruangan Belum Ditentukan";
@@ -229,14 +261,14 @@ function renderUpkFilteredSchedule(rawData) {
     groups[r].push(item);
   });
 
-  // 4. Rendering HTML
   const sortedRuangan = Object.keys(groups).sort();
   let finalHtml = "";
-  const today = getTodayDate(); // YYYY-MM-DD
+
+  const now = new Date();
+  const today = now.toISOString().split("T")[0];
 
   sortedRuangan.forEach((ruang) => {
     const items = groups[ruang];
-    // Sort items by tanggal & jam
     items.sort((a, b) => (a.tanggal + a.jam).localeCompare(b.tanggal + b.jam));
 
     finalHtml += `
@@ -261,7 +293,6 @@ function renderUpkFilteredSchedule(rawData) {
     items.forEach((item) => {
       const formattedDate = formatDateIndo(item.tanggal);
 
-      // Logic Status Badge
       let statusHtml = "";
       if (item.tanggal === today) {
         statusHtml = '<span class="status-label badge-ongoing">HARI INI</span>';
@@ -303,12 +334,86 @@ function renderUpkFilteredSchedule(rawData) {
   container.innerHTML = finalHtml;
 }
 
+/* ==========================================================================
+   UI HANDLERS (JADWAL & UPK)
+   ========================================================================== */
+
+function setupFilterUI() {
+  const filterHeader = document.querySelector(".filter-card .filter-header");
+  const filterGrid = document.querySelector(".filter-grid");
+
+  if (filterHeader && filterGrid && !filterGrid.id.includes("upk")) {
+    filterHeader.addEventListener("click", () => {
+      if (window.innerWidth <= 900) {
+        filterGrid.classList.toggle("active");
+        filterHeader.classList.toggle("active");
+      }
+    });
+  }
+
+  const resetBtn = document.getElementById("btn-reset-filter");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      Object.values(activeFilters).forEach((s) => s.clear());
+      document
+        .querySelectorAll('.filter-grid input[type="checkbox"]')
+        .forEach((c) => (c.checked = false));
+
+      const map = {
+        prodi: "Prodi",
+        hari: "Hari",
+        jam: "Jam",
+        kelas: "Kelas",
+        matkul: "Mata Kuliah",
+        dosen: "Dosen",
+        asisten: "Asisten",
+        status: "Status",
+      };
+      Object.keys(activeFilters).forEach((id) => {
+        const btn = document.querySelector(`#dd-${id} .adv-drop-btn`);
+        if (btn) {
+          btn.classList.remove("active");
+          btn.innerHTML = `${map[id]} <i class="fas fa-chevron-down"></i>`;
+        }
+      });
+
+      resetBtn.style.display = "none";
+      renderFilteredSchedule();
+    });
+  }
+}
+
+function updateFilterButton(id) {
+  const btn = document.querySelector(`#dd-${id} .adv-drop-btn`);
+  const count = activeFilters[id].size;
+  const labelMap = {
+    prodi: "Prodi",
+    hari: "Hari",
+    jam: "Jam",
+    kelas: "Kelas",
+    matkul: "Mata Kuliah",
+    dosen: "Dosen",
+    asisten: "Asisten",
+    status: "Status",
+  };
+
+  if (count > 0) {
+    btn.classList.add("active");
+    btn.innerHTML = `${labelMap[id]} <span style="background:#2563eb; color:#fff; padding:1px 6px; border-radius:10px; font-size:0.7rem; margin-left:5px;">${count}</span> <i class="fas fa-filter" style="font-size:0.8rem;"></i>`;
+  } else {
+    btn.classList.remove("active");
+    btn.innerHTML = `${labelMap[id]} <i class="fas fa-chevron-down"></i>`;
+  }
+  const hasAny = Object.values(activeFilters).some((s) => s.size > 0);
+  const resetBtn = document.getElementById("btn-reset-filter");
+  if (resetBtn) resetBtn.style.display = hasAny ? "inline-flex" : "none";
+}
+
 function setupUpkFilterUI(data) {
   const filterHeader = document.querySelector(".filter-card .filter-header");
   const filterGrid = document.getElementById("upk-filter-grid");
-  const resetBtn = document.getElementById("btn-reset-upk");
 
-  // Mobile Toggle
   if (filterHeader && filterGrid) {
     filterHeader.addEventListener("click", () => {
       if (window.innerWidth <= 900) {
@@ -318,7 +423,7 @@ function setupUpkFilterUI(data) {
     });
   }
 
-  // Reset Button
+  const resetBtn = document.getElementById("btn-reset-upk");
   if (resetBtn) {
     resetBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -327,8 +432,8 @@ function setupUpkFilterUI(data) {
         .querySelectorAll('#upk-filter-grid input[type="checkbox"]')
         .forEach((c) => (c.checked = false));
 
-      // Reset Button Text
       const labelMap = {
+        prodi: "Prodi",
         tanggal: "Tanggal",
         ruang: "Ruangan",
         kelas: "Kelas",
@@ -352,6 +457,7 @@ function updateUpkFilterButton(id) {
   const btn = document.querySelector(`#dd-upk-${id} .adv-drop-btn`);
   const count = activeUpkFilters[id].size;
   const labelMap = {
+    prodi: "Prodi",
     tanggal: "Tanggal",
     ruang: "Ruangan",
     kelas: "Kelas",
@@ -373,9 +479,8 @@ function updateUpkFilterButton(id) {
 }
 
 /* ==========================================================================
-   SHARED HELPER FUNCTIONS (CORE LOGIC)
+   SHARED HELPERS (CORE)
    ========================================================================== */
-
 function populateDropdowns(
   data,
   configs,
@@ -400,14 +505,7 @@ function populateDropdowns(
       }
     });
 
-    // Sorting
-    let items = Array.from(uniqueSet);
-    if (cfg.id === "hari" || cfg.id === "tanggal") {
-      items.sort();
-    } else {
-      items.sort();
-    }
-
+    let items = Array.from(uniqueSet).sort();
     const container = document.querySelector(
       `#${idPrefix}${cfg.id} .adv-drop-content`,
     );
@@ -424,23 +522,20 @@ function populateDropdowns(
       })
       .join("");
 
-    // Event Listener
     container.querySelectorAll("input").forEach((cb) => {
       cb.addEventListener("change", (e) => {
         const cat = e.target.dataset.cat;
         const val = e.target.value;
         if (e.target.checked) filterState[cat].add(val);
         else filterState[cat].delete(val);
-
         updateBtnCallback(cat);
         renderCallback();
       });
     });
 
-    // Initial button update
+    // Init update
     updateBtnCallback(cfg.id);
   });
-
   setupDropdownToggle();
 }
 
@@ -448,7 +543,6 @@ function setupDropdownToggle() {
   document.querySelectorAll(".adv-drop-btn").forEach((btn) => {
     const newBtn = btn.cloneNode(true);
     btn.parentNode.replaceChild(newBtn, btn);
-
     newBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       const content = newBtn.nextElementSibling;
@@ -458,18 +552,18 @@ function setupDropdownToggle() {
       content.classList.toggle("show");
     });
   });
-
-  document.removeEventListener("click", closeAllDropdowns);
-  document.addEventListener("click", closeAllDropdowns);
+  document.addEventListener("click", () =>
+    document.querySelectorAll(".adv-drop-content").classList.remove("show"),
+  );
+  document
+    .querySelectorAll(".adv-drop-content")
+    .forEach((d) => d.addEventListener("click", (e) => e.stopPropagation()));
 }
 
-function closeAllDropdowns() {
-  document.querySelectorAll(".adv-drop-content").classList.remove("show");
+function checkFilter(set, val) {
+  if (set.size === 0) return true;
+  return set.has(val);
 }
-
-document.addEventListener("click", (e) => {
-  if (e.target.closest(".adv-drop-content")) e.stopPropagation();
-});
 
 function renderTableGeneric(container, data, type = "hari") {
   if (data.length === 0) {
@@ -569,80 +663,6 @@ function renderTableGeneric(container, data, type = "hari") {
   container.innerHTML = finalHtml;
 }
 
-function checkFilter(filterSet, value) {
-  if (filterSet.size === 0) return true;
-  return filterSet.has(value);
-}
-
-function setupFilterUI() {
-  const filterHeader = document.querySelector(".filter-card .filter-header");
-  const filterGrid = document.querySelector(".filter-grid");
-
-  if (filterHeader && filterGrid && !filterGrid.id.includes("upk")) {
-    filterHeader.addEventListener("click", () => {
-      if (window.innerWidth <= 900) {
-        filterGrid.classList.toggle("active");
-        filterHeader.classList.toggle("active");
-      }
-    });
-  }
-
-  const resetBtn = document.getElementById("btn-reset-filter");
-  if (resetBtn) {
-    resetBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      Object.values(activeFilters).forEach((s) => s.clear());
-      document
-        .querySelectorAll('.filter-grid input[type="checkbox"]')
-        .forEach((c) => (c.checked = false));
-
-      const map = {
-        hari: "Hari",
-        jam: "Jam",
-        kelas: "Kelas",
-        matkul: "Mata Kuliah",
-        dosen: "Dosen",
-        asisten: "Asisten",
-        status: "Status",
-      };
-      Object.keys(activeFilters).forEach((id) => {
-        const btn = document.querySelector(`#dd-${id} .adv-drop-btn`);
-        if (btn) {
-          btn.classList.remove("active");
-          btn.innerHTML = `${map[id]} <i class="fas fa-chevron-down"></i>`;
-        }
-      });
-
-      resetBtn.style.display = "none";
-      renderFilteredSchedule();
-    });
-  }
-}
-
-function updateFilterButton(id) {
-  const btn = document.querySelector(`#dd-${id} .adv-drop-btn`);
-  const count = activeFilters[id].size;
-  const labelMap = {
-    hari: "Hari",
-    jam: "Jam",
-    kelas: "Kelas",
-    matkul: "Mata Kuliah",
-    dosen: "Dosen",
-    asisten: "Asisten",
-    status: "Status",
-  };
-  if (count > 0) {
-    btn.classList.add("active");
-    btn.innerHTML = `${labelMap[id]} <span style="background:#2563eb; color:#fff; padding:1px 6px; border-radius:10px; font-size:0.7rem; margin-left:5px;">${count}</span> <i class="fas fa-filter" style="font-size:0.8rem;"></i>`;
-  } else {
-    btn.classList.remove("active");
-    btn.innerHTML = `${labelMap[id]} <i class="fas fa-chevron-down"></i>`;
-  }
-  const hasAny = Object.values(activeFilters).some((s) => s.size > 0);
-  const resetBtn = document.getElementById("btn-reset-filter");
-  if (resetBtn) resetBtn.style.display = hasAny ? "inline-flex" : "none";
-}
-
 /* ==========================================================================
    FORMAT PENULISAN (MODUL)
    ========================================================================== */
@@ -725,21 +745,15 @@ function initFormatPenulisanPage() {
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
   startClock();
-
-  // 1. Cek Halaman Jadwal Reguler
   if (
     document.getElementById("lab-tables-container") &&
     document.getElementById("dd-hari")
   ) {
     initJadwalPage();
   }
-
-  // 2. Cek Halaman UPK
   if (document.getElementById("upk-tables-container")) {
     initUpkPage();
   }
-
-  // 3. Cek Halaman Format Penulisan
   if (document.getElementById("pedoman-container")) {
     initFormatPenulisanPage();
   }

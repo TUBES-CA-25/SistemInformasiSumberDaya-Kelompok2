@@ -23,6 +23,10 @@
                     <button class="adv-drop-btn">Tanggal <i class="fas fa-chevron-down"></i></button>
                     <div class="adv-drop-content"></div>
                 </div>
+                <div class="adv-dropdown" id="dd-upk-prodi">
+                    <button class="adv-drop-btn">Prodi <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
                 <div class="adv-dropdown" id="dd-upk-ruang">
                     <button class="adv-drop-btn">Ruangan <i class="fas fa-chevron-down"></i></button>
                     <div class="adv-drop-content"></div>

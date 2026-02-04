@@ -23,6 +23,10 @@
                     <button class="adv-drop-btn">Hari <i class="fas fa-chevron-down"></i></button>
                     <div class="adv-drop-content"></div>
                 </div>
+                <div class="adv-dropdown" id="dd-prodi">
+                    <button class="adv-drop-btn">Prodi <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
                 <div class="adv-dropdown" id="dd-jam">
                     <button class="adv-drop-btn">Jam <i class="fas fa-chevron-down"></i></button>
                     <div class="adv-drop-content"></div>
