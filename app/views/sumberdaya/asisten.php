@@ -59,7 +59,7 @@ $alumni_list      = $data['alumni'] ?? [];
             <?php endforeach; ?>
         <?php endif; ?>
 
-        <div class="section-label">
+        <div class="section-label mt-40">
             <span>Asisten Praktikum</span>
         </div>
 
@@ -108,7 +108,7 @@ $alumni_list      = $data['alumni'] ?? [];
                 <?php foreach ($ca_list as $row) : ?>
                     <a href="javascript:void(0)" data-id="<?= $row['idAsisten'] ?>" data-type="asisten" class="card-link asisten-detail-link">
                         <div class="staff-card">
-                                <div class="staff-photo-box">
+                            <div class="staff-photo-box">
                                 <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="asisten-photo" loading="lazy">
                             </div>
                             <div class="staff-content">
