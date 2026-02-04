@@ -1,5 +1,5 @@
 /**
- * PRAKTIKUM SHARED SCRIPT - HYBRID INTERACTION & PRODI DETECT
+ * PRAKTIKUM SHARED SCRIPT - HYBRID INTERACTION, PRODI DETECT, & SMART STATUS
  * File: public/assets/js/praktikum.js
  */
 
@@ -76,6 +76,76 @@ function detectProdi(row) {
   return "Lainnya";
 }
 
+// [UPDATE PENTING] Helper: Hitung Status Real-time yang Lebih Cerdas
+function getLiveStatus(row) {
+  // 1. Cek Status DB (Prioritas Utama)
+  const dbStatus = (row.status || "Aktif").toLowerCase();
+  if (["nonaktif", "0", "dibatalkan", "libur"].includes(dbStatus))
+    return "Dibatalkan";
+
+  // 2. Siapkan Waktu Sekarang
+  const now = new Date();
+  const currentHour =
+    now.getHours().toString().padStart(2, "0") +
+    ":" +
+    now.getMinutes().toString().padStart(2, "0");
+
+  // 3. LOGIKA UNTUK JADWAL UPK (Berdasarkan Tanggal Spesifik YYYY-MM-DD)
+  if (row.tanggal) {
+    const todayDate = now.toISOString().split("T")[0];
+
+    if (row.tanggal < todayDate) return "Selesai";
+    if (row.tanggal > todayDate) return "Akan Datang";
+
+    // Jika Tanggalnya HARI INI, Cek Jam
+    if (row.waktuMulai && row.waktuSelesai) {
+      const start = row.waktuMulai.substring(0, 5);
+      const end = row.waktuSelesai.substring(0, 5);
+
+      if (currentHour >= start && currentHour < end) return "Berlangsung";
+      if (currentHour >= end) return "Selesai";
+      return "Akan Datang"; // Belum mulai jamnya
+    }
+  }
+
+  // 4. LOGIKA UNTUK JADWAL REGULER (Berdasarkan Hari Senin-Sabtu)
+  if (row.hari) {
+    // Map Hari ke Angka (Senin=1 ... Minggu=7)
+    const dayMap = {
+      senin: 1,
+      selasa: 2,
+      rabu: 3,
+      kamis: 4,
+      jumat: 5,
+      sabtu: 6,
+      minggu: 7,
+    };
+
+    const rowDayIndex = dayMap[row.hari.toLowerCase()];
+    let todayIndex = now.getDay();
+    if (todayIndex === 0) todayIndex = 7; // Jadikan Minggu = 7 agar urut
+
+    // Jika data hari tidak valid, skip
+    if (!rowDayIndex) return "Akan Datang";
+
+    // Logika Mingguan:
+    if (rowDayIndex < todayIndex) return "Selesai"; // Hari sudah lewat minggu ini
+    if (rowDayIndex > todayIndex) return "Akan Datang"; // Hari belum tiba minggu ini
+
+    // Jika HARI INI sama dengan Hari Jadwal, Cek Jam
+    if (row.waktuMulai && row.waktuSelesai) {
+      const start = row.waktuMulai.substring(0, 5);
+      const end = row.waktuSelesai.substring(0, 5);
+
+      if (currentHour >= start && currentHour < end) return "Berlangsung";
+      if (currentHour >= end) return "Selesai";
+      return "Akan Datang"; // Belum mulai jamnya
+    }
+  }
+
+  return "Akan Datang"; // Default fallback
+}
+
 /* ==========================================================================
    PART A: LOGIKA JADWAL REGULER
    ========================================================================== */
@@ -98,6 +168,8 @@ function initJadwalPage() {
     .then((res) => res.json())
     .then((res) => {
       globalJadwalData = res.data || [];
+
+      // Auto Select Hari Ini (Kecuali Minggu -> Senin)
       const now = new Date();
       const hariIni = hariIndo[now.getDay()];
       if (hariIni !== "Minggu") activeFilters.hari.add(hariIni);
@@ -137,7 +209,7 @@ function initFilterDropdowns() {
     { id: "matkul", key: "namaMatakuliah" },
     { id: "dosen", key: "dosen" },
     { id: "asisten", val: (r) => [r.namaAsisten1, r.namaAsisten2] },
-    { id: "status", val: (r) => r.status || "Aktif" },
+    { id: "status", val: (r) => getLiveStatus(r) },
   ];
   populateDropdowns(
     globalJadwalData,
@@ -161,7 +233,10 @@ function renderFilteredSchedule() {
     if (!checkFilter(activeFilters.kelas, row.kelas)) return false;
     if (!checkFilter(activeFilters.matkul, row.namaMatakuliah)) return false;
     if (!checkFilter(activeFilters.dosen, row.dosen)) return false;
-    if (!checkFilter(activeFilters.status, row.status || "Aktif")) return false;
+
+    // Filter Status menggunakan logika getLiveStatus
+    if (!checkFilter(activeFilters.status, getLiveStatus(row))) return false;
+
     if (activeFilters.asisten.size > 0) {
       const rowAst = [row.namaAsisten1, row.namaAsisten2];
       if (!rowAst.some((a) => a && activeFilters.asisten.has(a))) return false;
@@ -183,6 +258,7 @@ const activeUpkFilters = {
   kelas: new Set(),
   matkul: new Set(),
   dosen: new Set(),
+  status: new Set(),
 };
 
 function initUpkPage() {
@@ -212,6 +288,7 @@ function initUpkFilterDropdowns(data) {
     { id: "matkul", key: "mata_kuliah" },
     { id: "kelas", key: "kelas" },
     { id: "dosen", key: "dosen" },
+    { id: "status", val: (r) => getLiveStatus(r) },
   ];
 
   populateDropdowns(
@@ -235,6 +312,7 @@ function renderUpkFilteredSchedule(rawData) {
     if (!checkFilter(activeUpkFilters.matkul, row.mata_kuliah)) return false;
     if (!checkFilter(activeUpkFilters.kelas, row.kelas)) return false;
     if (!checkFilter(activeUpkFilters.dosen, row.dosen)) return false;
+    if (!checkFilter(activeUpkFilters.status, getLiveStatus(row))) return false;
     return true;
   });
 
@@ -257,7 +335,6 @@ function renderUpkFilteredSchedule(rawData) {
 
   const sortedRuangan = Object.keys(groups).sort();
   let finalHtml = "";
-  const today = getTodayDate();
 
   sortedRuangan.forEach((ruang) => {
     const items = groups[ruang];
@@ -286,13 +363,21 @@ function renderUpkFilteredSchedule(rawData) {
       const formattedDate = formatDateIndo(item.tanggal);
       const prodiCode = detectProdi(item);
 
-      let statusHtml = "";
-      if (item.tanggal === today) {
-        statusHtml = '<span class="status-label badge-ongoing">HARI INI</span>';
-      } else if (item.tanggal < today) {
-        statusHtml = '<span class="status-label badge-finished">SELESAI</span>';
+      // Badge Status Real-time
+      const statusStr = getLiveStatus(item);
+      let statusBadge = "";
+
+      if (statusStr === "Dibatalkan") {
+        statusBadge =
+          '<span class="status-label badge-canceled" style="background:#fee2e2; color:#ef4444;">DIBATALKAN</span>';
+      } else if (statusStr === "Berlangsung") {
+        statusBadge =
+          '<span class="status-label badge-ongoing">BERLANGSUNG</span>';
+      } else if (statusStr === "Selesai") {
+        statusBadge =
+          '<span class="status-label badge-finished">SELESAI</span>';
       } else {
-        statusHtml =
+        statusBadge =
           '<span class="status-label badge-upcoming">AKAN DATANG</span>';
       }
 
@@ -317,7 +402,7 @@ function renderUpkFilteredSchedule(rawData) {
                         </div>
                     </td>
                     <td class="text-center">
-                        ${statusHtml}
+                        ${statusBadge}
                     </td>
                 </tr>`;
     });
@@ -328,7 +413,7 @@ function renderUpkFilteredSchedule(rawData) {
 }
 
 /* ==========================================================================
-   UI HANDLERS (JADWAL & UPK)
+   UI HANDLERS
    ========================================================================== */
 
 function setupFilterUI() {
@@ -432,6 +517,7 @@ function setupUpkFilterUI(data) {
         kelas: "Kelas",
         matkul: "Mata Kuliah",
         dosen: "Dosen",
+        status: "Status",
       };
       Object.keys(activeUpkFilters).forEach((id) => {
         const btn = document.querySelector(`#dd-upk-${id} .adv-drop-btn`);
@@ -456,6 +542,7 @@ function updateUpkFilterButton(id) {
     kelas: "Kelas",
     matkul: "Mata Kuliah",
     dosen: "Dosen",
+    status: "Status",
   };
 
   if (count > 0) {
@@ -472,7 +559,7 @@ function updateUpkFilterButton(id) {
 }
 
 /* ==========================================================================
-   SHARED HELPERS (CORE) & HYBRID DROPDOWN TOGGLE
+   SHARED HELPERS & HYBRID TOGGLE
    ========================================================================== */
 
 function populateDropdowns(
@@ -487,8 +574,13 @@ function populateDropdowns(
     const uniqueSet = new Set();
     data.forEach((row) => {
       let val;
-      if (cfg.val) val = cfg.val(row);
-      else val = row[cfg.key];
+      if (typeof cfg.val === "function") {
+        val = cfg.val(row);
+      } else if (cfg.val) {
+        val = cfg.val;
+      } else {
+        val = row[cfg.key];
+      }
 
       if (Array.isArray(val)) {
         val.forEach((v) => {
@@ -499,8 +591,29 @@ function populateDropdowns(
       }
     });
 
-    let items = Array.from(uniqueSet).sort();
-    if (cfg.id === "hari" || cfg.id === "tanggal") items.sort();
+    let items = Array.from(uniqueSet);
+    if (cfg.id === "hari") {
+      const order = {
+        Senin: 1,
+        Selasa: 2,
+        Rabu: 3,
+        Kamis: 4,
+        Jumat: 5,
+        Sabtu: 6,
+        Minggu: 7,
+      };
+      items.sort((a, b) => (order[a] || 99) - (order[b] || 99));
+    } else if (cfg.id === "status") {
+      const order = {
+        Berlangsung: 1,
+        "Akan Datang": 2,
+        Selesai: 3,
+        Dibatalkan: 4,
+      };
+      items.sort((a, b) => (order[a] || 99) - (order[b] || 99));
+    } else {
+      items.sort();
+    }
 
     const container = document.querySelector(
       `#${idPrefix}${cfg.id} .adv-drop-content`,
@@ -534,13 +647,7 @@ function populateDropdowns(
   setupDropdownToggle();
 }
 
-/**
- * [UPDATE] Hybrid Toggle:
- * - Hover untuk Desktop (> 900px)
- * - Click untuk Mobile/Tablet (<= 900px)
- */
 function setupDropdownToggle() {
-  // Listener Global untuk menutup dropdown saat klik luar
   document.removeEventListener("click", closeAllDropdowns);
   document.addEventListener("click", closeAllDropdowns);
 
@@ -552,35 +659,30 @@ function setupDropdownToggle() {
 
     if (!btn || !content) return;
 
-    // Reset listener tombol (agar tidak duplikat)
     const newBtn = btn.cloneNode(true);
     btn.parentNode.replaceChild(newBtn, btn);
 
-    // --- A. DESKTOP LOGIC (HOVER) ---
     dropdown.addEventListener("mouseenter", () => {
       if (window.innerWidth > 900) {
-        closeAllDropdowns(null, content); // Optional: tutup yang lain
+        closeAllDropdowns(null, content);
         content.classList.add("show");
       }
     });
-
     dropdown.addEventListener("mouseleave", () => {
       if (window.innerWidth > 900) {
         content.classList.remove("show");
       }
     });
 
-    // --- B. MOBILE LOGIC (CLICK) ---
     newBtn.addEventListener("click", (e) => {
       if (window.innerWidth <= 900) {
-        e.stopPropagation(); // Cegah bubbling
+        e.stopPropagation();
         const isOpen = content.classList.contains("show");
-        closeAllDropdowns(); // Tutup yang lain
+        closeAllDropdowns();
         if (!isOpen) content.classList.add("show");
       }
     });
 
-    // Mencegah klik di dalam konten menutup dropdown (Mobile)
     content.addEventListener("click", (e) => e.stopPropagation());
   });
 }
@@ -609,12 +711,6 @@ function renderTableGeneric(container, data, type = "hari") {
 
   const labs = [...new Set(data.map((item) => item.namaLab))].sort();
   let finalHtml = "";
-  const now = new Date();
-  const jamSekarang =
-    now.getHours().toString().padStart(2, "0") +
-    ":" +
-    now.getMinutes().toString().padStart(2, "0");
-  const hariIniReal = hariIndo[now.getDay()];
 
   labs.forEach((lab) => {
     const jadwalLab = data.filter((item) => item.namaLab === lab);
@@ -645,26 +741,22 @@ function renderTableGeneric(container, data, type = "hari") {
       const start = item.waktuMulai.substring(0, 5);
       const end = item.waktuSelesai.substring(0, 5);
 
-      let statusBadge = "status-label badge-scheduled";
-      let statusText = "TERJADWAL";
-      let rowStyle = "";
-      const statusDb = item.status ? item.status.toLowerCase() : "aktif";
+      // Badge Status Real-time
+      const statusStr = getLiveStatus(item);
+      let statusBadge = "";
 
-      if (["nonaktif", "0", "dibatalkan"].includes(statusDb)) {
-        statusText = "DIBATALKAN";
-        statusBadge = "status-label badge-canceled";
-        rowStyle = "opacity: 0.6; background-color: #fef2f2;";
-      } else if (item.hari === hariIniReal) {
-        if (jamSekarang >= start && jamSekarang < end) {
-          statusText = "BERLANGSUNG";
-          statusBadge = "status-label badge-ongoing";
-        } else if (jamSekarang < start) {
-          statusText = "AKAN DATANG";
-          statusBadge = "status-label badge-upcoming";
-        } else {
-          statusText = "SELESAI";
-          statusBadge = "status-label badge-finished";
-        }
+      if (statusStr === "Dibatalkan") {
+        statusBadge =
+          '<span class="status-label badge-canceled" style="background:#fee2e2; color:#ef4444;">DIBATALKAN</span>';
+      } else if (statusStr === "Berlangsung") {
+        statusBadge =
+          '<span class="status-label badge-ongoing">BERLANGSUNG</span>';
+      } else if (statusStr === "Selesai") {
+        statusBadge =
+          '<span class="status-label badge-finished">SELESAI</span>';
+      } else {
+        statusBadge =
+          '<span class="status-label badge-upcoming">AKAN DATANG</span>';
       }
 
       const kelasFreq = `<b>${item.kelas || "-"}</b> <span style="color:#94a3b8">/</span> ${item.frekuensi || "-"}`;
@@ -679,7 +771,7 @@ function renderTableGeneric(container, data, type = "hari") {
       const prodiCode = detectProdi(item);
 
       finalHtml += `
-                <tr style="${rowStyle}">
+                <tr>
                     <td style="font-weight:600; font-size:0.9rem;">${item.hari}</td>
                     <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem;">${start} - ${end}</td>
                     <td style="color: #0f172a; font-weight: 700;">
@@ -689,9 +781,7 @@ function renderTableGeneric(container, data, type = "hari") {
                     <td class="text-nowrap">${kelasFreq}</td>
                     <td><div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-chalkboard-teacher" style="color:#64748b;"></i><span style="font-weight:500;">${item.dosen}</span></div></td>
                     <td>${asistenDisplay}</td>
-                    <td style="text-align:center;">
-                        ${statusText === "DIBATALKAN" ? `<span style="background-color:#ef4444; color:white; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold;">${statusText}</span>` : `<span class="${statusBadge}">${statusText}</span>`}
-                    </td>
+                    <td style="text-align:center;">${statusBadge}</td>
                 </tr>`;
     });
     finalHtml += `</tbody></table></div></div>`;
