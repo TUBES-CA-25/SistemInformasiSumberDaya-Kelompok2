@@ -94,8 +94,97 @@
                             fill="transparent">
                         </path>
 
+                        <path d="M1163.64 469.35H1385.23V596.564H1163.64V469.35Z" 
+                            transform="translate(5, 0)"
+                            class="room-poly" 
+                            data-id="PR1" 
+                            fill="transparent">
+                        </path>
+                        <path d="M1383.73 469.35H1671V594.676H1383.73V469.35Z" 
+                            transform="translate(10, 0)"
+                            class="room-poly" 
+                            data-id="PR2" 
+                            fill="transparent">
+                        </path>
+                        <path d="M176.887 132.5V56.1321H328.637V115H231V132.5H176.887Z" 
+                            transform="translate(-14, -6)"
+                            class="room-poly" 
+                            data-id="PR3" 
+                            fill="transparent">
+                        </path>
+                        <path d="M232 228H177V362H232V228Z" 
+                            transform="translate(-14, 0)"
+                            class="room-poly" 
+                            data-id="LR" 
+                            fill="transparent">
+                        </path>
+                        <path d="M325 573.154H530.674V560H786V628.312H629.405V683H446.647V628.123L325 627.555V573.154Z" 
+                            transform="translate(-10, 0)"
+                            class="room-poly" 
+                            data-id="AR" 
+                            fill="transparent">
+                        </path> 
+                        <path d="M1088.52 190.008L1188.75 189.253V146.22H1247.45V239.837H1088.52V190.008Z" 
+                            transform="translate(8, -5)"
+                            class="room-poly" 
+                            data-id="WH" 
+                            fill="transparent">
+                        </path>
+                        <path d="M528.957 478H784V560H528L528.957 478Z" 
+                            transform="translate(-7, -1)"
+                            class="room-poly"
+                            data-id="SI" 
+                            fill="transparent">
+                        </path>
+                        <path d="M232 133H177V230H232V133Z" 
+                            transform="translate(-14, -6)"
+                            class="room-poly" 
+                            data-id="SR" 
+                            fill="transparent">
+                        </path>
+                        <path d="M657.471 362H783V480H657L657.471 362Z" 
+                            transform="translate(-7, -5)"
+                            class="room-poly" 
+                            data-id="HN" 
+                            fill="transparent">
+                        </path>
+                        <path d="M531.471 362H657V480H531L531.471 362Z" 
+                            transform="translate(-8, -5)"
+                            class="room-poly" 
+                            data-id="HB" 
+                            fill="transparent">
+                        </path>
+                        <path d="M1090 58V632H779V58H1090Z" 
+                            transform="translate(0, -7)"
+                            class="room-poly" 
+                            data-id="WS" 
+                            fill="transparent">
+                        </path>
+                        <path d="M1249.33 144.71H1383.72V238.327H1249.33V144.71Z" 
+                            transform="translate(5, -5)"
+                            class="room-poly" 
+                            data-id="TL1" 
+                            fill="transparent">
+                        </path>
+                        <path d="M1250.46 870.998H1384.85V951.403H1250.46V870.998Z" 
+                            transform="translate(7, 5)"
+                            class="room-poly" 
+                            data-id="TL2" 
+                            fill="transparent">
+                        </path>
+                        <path d="M1089 145H1190V191H1089V145Z" 
+                            transform="translate(4, -5)"
+                            class="room-poly" 
+                            data-id="ST1" 
+                            fill="transparent">
+                        </path> 
+                        <path d="M1088 870H1252V951H1088V870Z" 
+                            transform="translate(5, 6)"
+                            class="room-poly" 
+                            data-id="ST2" 
+                            fill="transparent">
+                        </path>
                     </svg>
-
                     </div>
             </div>
 
