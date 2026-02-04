@@ -5,27 +5,50 @@
     <div class="container">
         <header class="page-header">
             <span class="header-badge">Jadwal Praktikum 2025</span>
-            <h1 id="header-day">Memuat Jadwal...</h1>
+            <h1 id="header-title">Jadwal Praktikum</h1>
             <p>Informasi real-time penggunaan ruangan laboratorium, asisten bertugas, dan status praktikum.</p>
-            
-            <div id="live-clock" class="live-clock-badge">
-                00:00:00
-            </div>
-
-            <br>
-
-            <div class="day-selector-wrapper">
-                <select id="day-select" class="custom-select" onchange="renderJadwalDashboard()">
-                    <option value="Senin">Senin</option>
-                    <option value="Selasa">Selasa</option>
-                    <option value="Rabu">Rabu</option>
-                    <option value="Kamis">Kamis</option>
-                    <option value="Jumat">Jumat</option>
-                    <option value="Sabtu">Sabtu</option>
-                </select>
-                <i class="fas fa-chevron-down select-icon"></i>
-            </div>
+            <div id="live-clock" class="live-clock-badge">00:00:00</div>
         </header>
+
+        <div class="filter-card">
+            <div class="filter-header">
+                <h3><i class="fas fa-filter"></i> Filter Pencarian</h3>
+                <button id="btn-reset-filter" class="btn-reset" style="display:none;">
+                    <i class="fas fa-sync-alt"></i> Reset
+                </button>
+            </div>
+            
+            <div class="filter-grid">
+                <div class="adv-dropdown" id="dd-hari">
+                    <button class="adv-drop-btn">Hari <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
+                <div class="adv-dropdown" id="dd-jam">
+                    <button class="adv-drop-btn">Jam <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
+                <div class="adv-dropdown" id="dd-kelas">
+                    <button class="adv-drop-btn">Kelas <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
+                <div class="adv-dropdown" id="dd-matkul">
+                    <button class="adv-drop-btn">Mata Kuliah <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
+                <div class="adv-dropdown" id="dd-dosen">
+                    <button class="adv-drop-btn">Dosen <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
+                <div class="adv-dropdown" id="dd-asisten">
+                    <button class="adv-drop-btn">Asisten <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
+                <div class="adv-dropdown" id="dd-status">
+                    <button class="adv-drop-btn">Status <i class="fas fa-chevron-down"></i></button>
+                    <div class="adv-drop-content"></div>
+                </div>
+            </div>
+        </div>
 
         <div id="lab-tables-container">
             <div style="text-align: center; padding: 50px; color: #64748b;">
@@ -37,7 +60,7 @@
 </section>
 
 <script>
-    // Definisikan URL API dari PHP agar bisa dibaca oleh file JS eksternal
+    // URL API SAMA SEPERTI KODE LAMA
     window.API_JADWAL_URL = "<?= API_URL ?>/jadwal";
 </script>
 
