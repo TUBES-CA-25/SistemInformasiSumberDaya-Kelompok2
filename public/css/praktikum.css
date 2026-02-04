@@ -275,8 +275,11 @@
 /* ========================================================
    RESPONSIVE FILTER (HP & TABLET FIX)
    ======================================================== */
+/* ========================================================
+   RESPONSIVE FILTER (HP & TABLET FIX - SMOOTH ANIMATION)
+   ======================================================== */
 @media (max-width: 900px) {
-  /* Toggle Header: Judul Jadi Tombol */
+  /* Toggle Header */
   .filter-header {
     margin-bottom: 0;
     border-bottom: none;
@@ -284,6 +287,8 @@
     padding-bottom: 0;
     display: flex;
     justify-content: flex-start;
+    /* Tambahkan transition untuk border/margin jika perlu */
+    transition: all 0.3s ease;
   }
 
   .filter-header h3 {
@@ -305,7 +310,7 @@
     font-weight: 900;
     font-size: 0.9rem;
     color: #64748b;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .filter-header.active::after {
@@ -313,31 +318,57 @@
     color: #2563eb;
   }
 
-  /* Grid Filter: Default Sembunyi */
+  /* GRID FILTER CONTAINER 
+     Menggunakan max-height untuk animasi slide, bukan display:none
+  */
   .filter-grid {
-    display: none;
-    grid-template-columns: 1fr; /* 1 Kolom ke bawah */
-    gap: 8px; /* Jarak antar dropdown rapat (8px) */
-    margin-top: 0;
+    display: grid; /* Selalu dirender sebagai grid */
+    grid-template-columns: 1fr;
+    gap: 8px;
+
+    /* STATE TERTUTUP (DEFAULT) */
+    max-height: 0;
     opacity: 0;
+    margin-top: 0;
+    padding: 0; /* Hapus padding agar benar-benar rapat */
+    transform: translateY(-10px); /* Efek geser sedikit ke atas */
+    pointer-events: none; /* Agar tidak bisa diklik saat tertutup */
+
+    /* PENTING: Visibility hidden agar screen reader/tab focus mengabaikannya saat tutup */
+    visibility: hidden;
+
+    /* Definisi Transisi Halus */
+    transition:
+      max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s ease,
+      margin-top 0.3s ease,
+      transform 0.3s ease,
+      visibility 0.3s;
   }
 
-  /* Grid Filter: Aktif (Muncul) */
+  /* STATE TERBUKA (AKTIF) */
   .filter-grid.active {
-    display: grid;
-    margin-top: 15px;
+    max-height: 1000px; /* Angka besar aman untuk menampung konten */
     opacity: 1;
-    animation: slideDown 0.3s ease-out;
+    margin-top: 15px;
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+
+    /* Overflow Visible diperlukan agar dropdown (absolute) 
+       bisa melayang keluar dari kotak filter grid 
+    */
+    overflow: visible;
   }
 
-  /* [FIX PENTING] Kembalikan ke Absolute agar tidak makan tempat (Hantu Gap Hilang) */
+  /* Dropdown Content */
   .adv-drop-content {
     position: absolute;
     min-width: 100%;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     border: 1px solid #e2e8f0;
     top: 105%;
-    z-index: 9999; /* Pastikan di atas elemen lain */
+    z-index: 9999;
   }
 }
 

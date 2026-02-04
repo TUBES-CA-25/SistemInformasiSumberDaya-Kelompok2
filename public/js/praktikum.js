@@ -1,5 +1,5 @@
 /**
- * PRAKTIKUM SHARED SCRIPT - MULTI FILTER VERSION (JADWAL & UPK)
+ * PRAKTIKUM SHARED SCRIPT - HYBRID INTERACTION & PRODI DETECT
  * File: public/assets/js/praktikum.js
  */
 
@@ -52,26 +52,27 @@ function formatDateIndo(dateStr) {
   return `${d.getDate()} ${bulanIndo[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-// [UPDATE] Helper: Deteksi Prodi dari String Frekuensi atau Kelas
-function detectProdi(row) {
-  // 1. Cek dari field 'prodi' jika ada
-  if (row.prodi) return row.prodi;
+function getTodayDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
-  // 2. Cek dari String Frekuensi (Priority: TI_SD-7 -> TI)
+// Helper: Deteksi Prodi dari String Frekuensi atau Kelas
+function detectProdi(row) {
+  if (row.prodi) return row.prodi;
   if (row.frekuensi) {
     const f = row.frekuensi.toUpperCase();
-    // Cek prefix TI atau SI di awal string frekuensi
     if (f.startsWith("TI") || f.includes("TI_")) return "TI";
     if (f.startsWith("SI") || f.includes("SI_")) return "SI";
   }
-
-  // 3. Fallback: Cek dari Nama Kelas (Misal: "TI-A" -> "TI")
   if (row.kelas) {
     const k = row.kelas.toUpperCase();
     if (k.includes("TI") || k.includes("INFORMATIKA")) return "TI";
     if (k.includes("SI") || k.includes("SISTEM")) return "SI";
   }
-
   return "Lainnya";
 }
 
@@ -79,7 +80,6 @@ function detectProdi(row) {
    PART A: LOGIKA JADWAL REGULER
    ========================================================================== */
 let globalJadwalData = [];
-// Tambahkan 'prodi' ke state filter
 const activeFilters = {
   prodi: new Set(),
   hari: new Set(),
@@ -125,9 +125,8 @@ function handleError(containerId, err) {
 }
 
 function initFilterDropdowns() {
-  // [UPDATE] Gunakan detectProdi di config 'prodi'
   const configs = [
-    { id: "prodi", val: (r) => detectProdi(r) }, // Deteksi TI/SI
+    { id: "prodi", val: (r) => detectProdi(r) },
     { id: "hari", key: "hari" },
     {
       id: "jam",
@@ -155,9 +154,7 @@ function renderFilteredSchedule() {
   if (!container) return;
 
   const filtered = globalJadwalData.filter((row) => {
-    // Filter Prodi
     if (!checkFilter(activeFilters.prodi, detectProdi(row))) return false;
-
     if (!checkFilter(activeFilters.hari, row.hari)) return false;
     const jam = `${row.waktuMulai.substring(0, 5)} - ${row.waktuSelesai.substring(0, 5)}`;
     if (!checkFilter(activeFilters.jam, jam)) return false;
@@ -208,9 +205,8 @@ function initUpkPage() {
 }
 
 function initUpkFilterDropdowns(data) {
-  // [UPDATE] Gunakan detectProdi di config 'prodi'
   const configs = [
-    { id: "prodi", val: (r) => detectProdi(r) }, // Deteksi TI/SI
+    { id: "prodi", val: (r) => detectProdi(r) },
     { id: "tanggal", key: "tanggal" },
     { id: "ruang", key: "ruangan" },
     { id: "matkul", key: "mata_kuliah" },
@@ -233,9 +229,7 @@ function renderUpkFilteredSchedule(rawData) {
   if (!container) return;
 
   const filtered = rawData.filter((row) => {
-    // Filter Prodi
     if (!checkFilter(activeUpkFilters.prodi, detectProdi(row))) return false;
-
     if (!checkFilter(activeUpkFilters.tanggal, row.tanggal)) return false;
     if (!checkFilter(activeUpkFilters.ruang, row.ruangan)) return false;
     if (!checkFilter(activeUpkFilters.matkul, row.mata_kuliah)) return false;
@@ -263,9 +257,7 @@ function renderUpkFilteredSchedule(rawData) {
 
   const sortedRuangan = Object.keys(groups).sort();
   let finalHtml = "";
-
-  const now = new Date();
-  const today = now.toISOString().split("T")[0];
+  const today = getTodayDate();
 
   sortedRuangan.forEach((ruang) => {
     const items = groups[ruang];
@@ -292,6 +284,7 @@ function renderUpkFilteredSchedule(rawData) {
 
     items.forEach((item) => {
       const formattedDate = formatDateIndo(item.tanggal);
+      const prodiCode = detectProdi(item);
 
       let statusHtml = "";
       if (item.tanggal === today) {
@@ -311,7 +304,7 @@ function renderUpkFilteredSchedule(rawData) {
                     </td>
                     <td>
                         <span class="schedule-matkul">${item.mata_kuliah}</span>
-                        ${item.prodi ? `<span class="badge-prodi">${item.prodi}</span>` : ""}
+                        <span class="badge-prodi">${prodiCode}</span>
                     </td>
                     <td>
                         <span class="schedule-kelas">Kelas ${item.kelas}</span>
@@ -479,8 +472,9 @@ function updateUpkFilterButton(id) {
 }
 
 /* ==========================================================================
-   SHARED HELPERS (CORE)
+   SHARED HELPERS (CORE) & HYBRID DROPDOWN TOGGLE
    ========================================================================== */
+
 function populateDropdowns(
   data,
   configs,
@@ -506,6 +500,8 @@ function populateDropdowns(
     });
 
     let items = Array.from(uniqueSet).sort();
+    if (cfg.id === "hari" || cfg.id === "tanggal") items.sort();
+
     const container = document.querySelector(
       `#${idPrefix}${cfg.id} .adv-drop-content`,
     );
@@ -533,31 +529,66 @@ function populateDropdowns(
       });
     });
 
-    // Init update
     updateBtnCallback(cfg.id);
   });
   setupDropdownToggle();
 }
 
+/**
+ * [UPDATE] Hybrid Toggle:
+ * - Hover untuk Desktop (> 900px)
+ * - Click untuk Mobile/Tablet (<= 900px)
+ */
 function setupDropdownToggle() {
-  document.querySelectorAll(".adv-drop-btn").forEach((btn) => {
+  // Listener Global untuk menutup dropdown saat klik luar
+  document.removeEventListener("click", closeAllDropdowns);
+  document.addEventListener("click", closeAllDropdowns);
+
+  const dropdowns = document.querySelectorAll(".adv-dropdown");
+
+  dropdowns.forEach((dropdown) => {
+    const btn = dropdown.querySelector(".adv-drop-btn");
+    const content = dropdown.querySelector(".adv-drop-content");
+
+    if (!btn || !content) return;
+
+    // Reset listener tombol (agar tidak duplikat)
     const newBtn = btn.cloneNode(true);
     btn.parentNode.replaceChild(newBtn, btn);
-    newBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const content = newBtn.nextElementSibling;
-      document.querySelectorAll(".adv-drop-content").forEach((d) => {
-        if (d !== content) d.classList.remove("show");
-      });
-      content.classList.toggle("show");
+
+    // --- A. DESKTOP LOGIC (HOVER) ---
+    dropdown.addEventListener("mouseenter", () => {
+      if (window.innerWidth > 900) {
+        closeAllDropdowns(null, content); // Optional: tutup yang lain
+        content.classList.add("show");
+      }
     });
+
+    dropdown.addEventListener("mouseleave", () => {
+      if (window.innerWidth > 900) {
+        content.classList.remove("show");
+      }
+    });
+
+    // --- B. MOBILE LOGIC (CLICK) ---
+    newBtn.addEventListener("click", (e) => {
+      if (window.innerWidth <= 900) {
+        e.stopPropagation(); // Cegah bubbling
+        const isOpen = content.classList.contains("show");
+        closeAllDropdowns(); // Tutup yang lain
+        if (!isOpen) content.classList.add("show");
+      }
+    });
+
+    // Mencegah klik di dalam konten menutup dropdown (Mobile)
+    content.addEventListener("click", (e) => e.stopPropagation());
   });
-  document.addEventListener("click", () =>
-    document.querySelectorAll(".adv-drop-content").classList.remove("show"),
-  );
-  document
-    .querySelectorAll(".adv-drop-content")
-    .forEach((d) => d.addEventListener("click", (e) => e.stopPropagation()));
+}
+
+function closeAllDropdowns(e, except = null) {
+  document.querySelectorAll(".adv-drop-content").forEach((d) => {
+    if (d !== except) d.classList.remove("show");
+  });
 }
 
 function checkFilter(set, val) {
@@ -645,11 +676,16 @@ function renderTableGeneric(container, data, type = "hari") {
                    </div>`
           : '<span style="color:#cbd5e1">-</span>';
 
+      const prodiCode = detectProdi(item);
+
       finalHtml += `
                 <tr style="${rowStyle}">
                     <td style="font-weight:600; font-size:0.9rem;">${item.hari}</td>
                     <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem;">${start} - ${end}</td>
-                    <td style="color: #0f172a; font-weight: 700;">${item.namaMatakuliah}</td>
+                    <td style="color: #0f172a; font-weight: 700;">
+                        ${item.namaMatakuliah}
+                        <span class="badge-prodi">${prodiCode}</span>
+                    </td>
                     <td class="text-nowrap">${kelasFreq}</td>
                     <td><div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-chalkboard-teacher" style="color:#64748b;"></i><span style="font-weight:500;">${item.dosen}</span></div></td>
                     <td>${asistenDisplay}</td>
