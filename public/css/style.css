@@ -218,7 +218,8 @@ img {
    [FIX: DESKTOP ONLY HOVER]
    Memaksa menu terbuka saat hover hanya di layar Laptop/PC.
    ======================================================= */
-@media (min-width: 1025px) {
+/* DIUBAH: Dari 1025px menjadi 992px agar sinkron dengan mobile breakpoint */
+@media (min-width: 992px) {
   .dropdown:hover .dropdown-content {
     opacity: 1;
     visibility: visible;
@@ -256,10 +257,11 @@ img {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-/* UPDATE: Mengaktifkan Mobile Menu pada layar 1024px ke bawah (Tablet)
-   agar menu desktop tidak berantakan di iPad/Tablet 
+/* UPDATE: Mengaktifkan Mobile Menu pada layar 991px ke bawah (Tablet Portrait & Mobile)
+   Laptop (biasanya > 1000px) akan tetap pakai menu Desktop.
+   DIUBAH: Dari 1024px menjadi 991px
 */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 991px) {
   .menu-toggle {
     display: flex;
     z-index: 10001;
