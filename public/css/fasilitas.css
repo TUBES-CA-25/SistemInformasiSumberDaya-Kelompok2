@@ -1032,3 +1032,108 @@ main {
     width: 100%;
   }
 }
+
+/* Container pembungkus agar tumpukan presisi */
+.interactive-map-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%; /* Agar responsif */
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Gambar Dasar */
+.map-base {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* SVG Overlay */
+.map-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* Di atas gambar */
+}
+
+/* Style Bentuk Ruangan (Polygon) */
+.room-poly {
+  fill: transparent; /* Transparan normalnya */
+  stroke: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Efek Hover Ruangan */
+.room-poly:hover {
+  fill: rgba(37, 99, 235, 0.4); /* Biru Transparan */
+  stroke: #2563eb;
+  stroke-width: 2px;
+}
+
+/* --- TOOLTIP STYLE --- */
+.room-tooltip {
+  position: fixed; /* Fixed agar mengikuti mouse viewport */
+  top: 0;
+  left: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 280px;
+  padding: 0;
+  overflow: hidden;
+  z-index: 100;
+
+  /* State Awal: Hidden */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none; /* Agar tidak mengganggu mouse */
+  transform: scale(0.95);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.room-tooltip.show {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1); /* Animasi membesar sedikit saat muncul */
+}
+
+.tooltip-img img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.tooltip-content {
+  padding: 15px;
+}
+
+.tooltip-content h4 {
+  margin: 0 0 5px 0;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.tooltip-content p {
+  margin: 0 0 10px 0;
+  color: #64748b;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: #dcfce7;
+  color: #166534;
+}
