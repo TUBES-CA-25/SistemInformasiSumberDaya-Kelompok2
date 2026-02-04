@@ -10,7 +10,18 @@
             <div id="live-clock" class="live-clock-badge">00:00:00</div>
         </header>
 
-        <div class="filter-card">
+        <div class="search-filter-container">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="keyword-search" class="search-input" placeholder="Cari Jadwal UPK, Dosen, atau Ruangan...">
+            </div>
+            <button class="btn-filter-toggle" id="toggle-filter-btn">
+                <i class="fas fa-sliders-h"></i>
+                <span>Filter Pencarian</span>
+            </button>
+        </div>
+
+        <div class="filter-card" id="filter-card">
             <div class="filter-header">
                 <h3><i class="fas fa-filter"></i> Filter Pencarian</h3>
                 <button id="btn-reset-upk" class="btn-reset" style="display:none;">

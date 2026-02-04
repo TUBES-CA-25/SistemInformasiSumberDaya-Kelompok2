@@ -1,5 +1,5 @@
 /**
- * PRAKTIKUM SHARED SCRIPT - HYBRID INTERACTION, PRODI DETECT, & SMART STATUS
+ * PRAKTIKUM SHARED SCRIPT - SEARCH, FILTER, HYBRID UI & SMART STATUS
  * File: public/assets/js/praktikum.js
  */
 
@@ -76,41 +76,37 @@ function detectProdi(row) {
   return "Lainnya";
 }
 
-// [UPDATE PENTING] Helper: Hitung Status Real-time yang Lebih Cerdas
+// [UPDATE] Helper: Status Real-time yang Lebih Akurat
 function getLiveStatus(row) {
-  // 1. Cek Status DB (Prioritas Utama)
+  // 1. Cek Status Database (Prioritas)
   const dbStatus = (row.status || "Aktif").toLowerCase();
   if (["nonaktif", "0", "dibatalkan", "libur"].includes(dbStatus))
     return "Dibatalkan";
 
-  // 2. Siapkan Waktu Sekarang
   const now = new Date();
   const currentHour =
     now.getHours().toString().padStart(2, "0") +
     ":" +
     now.getMinutes().toString().padStart(2, "0");
 
-  // 3. LOGIKA UNTUK JADWAL UPK (Berdasarkan Tanggal Spesifik YYYY-MM-DD)
+  // 2. Logika UPK (Berdasarkan Tanggal Spesifik)
   if (row.tanggal) {
-    const todayDate = now.toISOString().split("T")[0];
-
+    const todayDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
     if (row.tanggal < todayDate) return "Selesai";
     if (row.tanggal > todayDate) return "Akan Datang";
 
-    // Jika Tanggalnya HARI INI, Cek Jam
+    // Jika Hari Ini, Cek Jam
     if (row.waktuMulai && row.waktuSelesai) {
       const start = row.waktuMulai.substring(0, 5);
       const end = row.waktuSelesai.substring(0, 5);
-
       if (currentHour >= start && currentHour < end) return "Berlangsung";
       if (currentHour >= end) return "Selesai";
-      return "Akan Datang"; // Belum mulai jamnya
+      return "Akan Datang";
     }
   }
 
-  // 4. LOGIKA UNTUK JADWAL REGULER (Berdasarkan Hari Senin-Sabtu)
+  // 3. Logika Reguler (Berdasarkan Hari Senin-Sabtu)
   if (row.hari) {
-    // Map Hari ke Angka (Senin=1 ... Minggu=7)
     const dayMap = {
       senin: 1,
       selasa: 2,
@@ -120,31 +116,49 @@ function getLiveStatus(row) {
       sabtu: 6,
       minggu: 7,
     };
+    const rowDayClean = row.hari.trim().toLowerCase();
+    const rowDayIndex = dayMap[rowDayClean];
 
-    const rowDayIndex = dayMap[row.hari.toLowerCase()];
-    let todayIndex = now.getDay();
-    if (todayIndex === 0) todayIndex = 7; // Jadikan Minggu = 7 agar urut
-
-    // Jika data hari tidak valid, skip
+    // Jika data hari tidak valid, anggap akan datang
     if (!rowDayIndex) return "Akan Datang";
 
-    // Logika Mingguan:
-    if (rowDayIndex < todayIndex) return "Selesai"; // Hari sudah lewat minggu ini
-    if (rowDayIndex > todayIndex) return "Akan Datang"; // Hari belum tiba minggu ini
+    let todayIndex = now.getDay();
+    if (todayIndex === 0) todayIndex = 7; // Minggu jadi 7 agar urut
 
-    // Jika HARI INI sama dengan Hari Jadwal, Cek Jam
+    // Logika Mingguan
+    if (rowDayIndex < todayIndex) return "Selesai"; // Hari lewat minggu ini
+    if (rowDayIndex > todayIndex) return "Akan Datang"; // Hari belum tiba
+
+    // Jika Hari Ini, Cek Jam
     if (row.waktuMulai && row.waktuSelesai) {
       const start = row.waktuMulai.substring(0, 5);
       const end = row.waktuSelesai.substring(0, 5);
-
       if (currentHour >= start && currentHour < end) return "Berlangsung";
       if (currentHour >= end) return "Selesai";
-      return "Akan Datang"; // Belum mulai jamnya
+      return "Akan Datang";
     }
   }
 
-  return "Akan Datang"; // Default fallback
+  return "Akan Datang"; // Default Fallback
 }
+
+// Helper: Generate HTML Badge Status
+function getStatusBadgeHtml(statusStr) {
+  if (statusStr === "Dibatalkan") {
+    return '<span class="status-label badge-canceled" style="background:#fee2e2; color:#ef4444;">DIBATALKAN</span>';
+  } else if (statusStr === "Berlangsung") {
+    return '<span class="status-label badge-ongoing">BERLANGSUNG</span>';
+  } else if (statusStr === "Selesai") {
+    return '<span class="status-label badge-finished">SELESAI</span>';
+  } else {
+    return '<span class="status-label badge-upcoming">AKAN DATANG</span>';
+  }
+}
+
+/* ==========================================================================
+   GLOBAL SEARCH STATE
+   ========================================================================== */
+let globalSearchKeyword = "";
 
 /* ==========================================================================
    PART A: LOGIKA JADWAL REGULER
@@ -168,15 +182,16 @@ function initJadwalPage() {
     .then((res) => res.json())
     .then((res) => {
       globalJadwalData = res.data || [];
-
-      // Auto Select Hari Ini (Kecuali Minggu -> Senin)
       const now = new Date();
       const hariIni = hariIndo[now.getDay()];
+
+      // Auto Select Hari Ini (Hanya jika belum ada pencarian)
       if (hariIni !== "Minggu") activeFilters.hari.add(hariIni);
       else activeFilters.hari.add("Senin");
 
       initFilterDropdowns();
       renderFilteredSchedule();
+      setupSearchListener(renderFilteredSchedule); // Init Search
     })
     .catch((err) => handleError("lab-tables-container", err));
 
@@ -209,6 +224,7 @@ function initFilterDropdowns() {
     { id: "matkul", key: "namaMatakuliah" },
     { id: "dosen", key: "dosen" },
     { id: "asisten", val: (r) => [r.namaAsisten1, r.namaAsisten2] },
+    // [UPDATE] Gunakan getLiveStatus agar dropdown status dinamis
     { id: "status", val: (r) => getLiveStatus(r) },
   ];
   populateDropdowns(
@@ -226,6 +242,14 @@ function renderFilteredSchedule() {
   if (!container) return;
 
   const filtered = globalJadwalData.filter((row) => {
+    // 1. Cek Keyword Pencarian (Search Bar)
+    if (globalSearchKeyword) {
+      const searchStr =
+        `${row.namaMatakuliah} ${row.dosen} ${row.kelas} ${row.namaAsisten1} ${row.namaAsisten2} ${row.namaLab}`.toLowerCase();
+      if (!searchStr.includes(globalSearchKeyword)) return false;
+    }
+
+    // 2. Cek Filter Dropdown
     if (!checkFilter(activeFilters.prodi, detectProdi(row))) return false;
     if (!checkFilter(activeFilters.hari, row.hari)) return false;
     const jam = `${row.waktuMulai.substring(0, 5)} - ${row.waktuSelesai.substring(0, 5)}`;
@@ -234,7 +258,7 @@ function renderFilteredSchedule() {
     if (!checkFilter(activeFilters.matkul, row.namaMatakuliah)) return false;
     if (!checkFilter(activeFilters.dosen, row.dosen)) return false;
 
-    // Filter Status menggunakan logika getLiveStatus
+    // [UPDATE] Filter menggunakan Status Real-time
     if (!checkFilter(activeFilters.status, getLiveStatus(row))) return false;
 
     if (activeFilters.asisten.size > 0) {
@@ -278,6 +302,7 @@ function initUpkPage() {
   initUpkFilterDropdowns(data);
   renderUpkFilteredSchedule(data);
   setupUpkFilterUI(data);
+  setupSearchListener(() => renderUpkFilteredSchedule(data)); // Init Search UPK
 }
 
 function initUpkFilterDropdowns(data) {
@@ -288,6 +313,7 @@ function initUpkFilterDropdowns(data) {
     { id: "matkul", key: "mata_kuliah" },
     { id: "kelas", key: "kelas" },
     { id: "dosen", key: "dosen" },
+    // [UPDATE] Status Real-time untuk UPK
     { id: "status", val: (r) => getLiveStatus(r) },
   ];
 
@@ -306,12 +332,21 @@ function renderUpkFilteredSchedule(rawData) {
   if (!container) return;
 
   const filtered = rawData.filter((row) => {
+    // 1. Cek Keyword Pencarian
+    if (globalSearchKeyword) {
+      const searchStr =
+        `${row.mata_kuliah} ${row.dosen} ${row.kelas} ${row.ruangan}`.toLowerCase();
+      if (!searchStr.includes(globalSearchKeyword)) return false;
+    }
+
+    // 2. Cek Filter
     if (!checkFilter(activeUpkFilters.prodi, detectProdi(row))) return false;
     if (!checkFilter(activeUpkFilters.tanggal, row.tanggal)) return false;
     if (!checkFilter(activeUpkFilters.ruang, row.ruangan)) return false;
     if (!checkFilter(activeUpkFilters.matkul, row.mata_kuliah)) return false;
     if (!checkFilter(activeUpkFilters.kelas, row.kelas)) return false;
     if (!checkFilter(activeUpkFilters.dosen, row.dosen)) return false;
+    // [UPDATE] Filter Status Real-time
     if (!checkFilter(activeUpkFilters.status, getLiveStatus(row))) return false;
     return true;
   });
@@ -321,7 +356,7 @@ function renderUpkFilteredSchedule(rawData) {
             <div class="empty-schedule" style="text-align:center; padding:40px; border: 2px dashed #e2e8f0; border-radius:16px;">
                 <i class="fas fa-search" style="font-size:2.5rem; color:#cbd5e1; margin-bottom:15px;"></i>
                 <h3 style="color:#64748b; font-size:1.2rem;">Tidak Ditemukan</h3>
-                <p style="color:#94a3b8;">Tidak ada data yang cocok dengan filter.</p>
+                <p style="color:#94a3b8;">Tidak ada data yang cocok dengan "${globalSearchKeyword || "filter"}"</p>
             </div>`;
     return;
   }
@@ -362,24 +397,8 @@ function renderUpkFilteredSchedule(rawData) {
     items.forEach((item) => {
       const formattedDate = formatDateIndo(item.tanggal);
       const prodiCode = detectProdi(item);
-
-      // Badge Status Real-time
       const statusStr = getLiveStatus(item);
-      let statusBadge = "";
-
-      if (statusStr === "Dibatalkan") {
-        statusBadge =
-          '<span class="status-label badge-canceled" style="background:#fee2e2; color:#ef4444;">DIBATALKAN</span>';
-      } else if (statusStr === "Berlangsung") {
-        statusBadge =
-          '<span class="status-label badge-ongoing">BERLANGSUNG</span>';
-      } else if (statusStr === "Selesai") {
-        statusBadge =
-          '<span class="status-label badge-finished">SELESAI</span>';
-      } else {
-        statusBadge =
-          '<span class="status-label badge-upcoming">AKAN DATANG</span>';
-      }
+      let statusBadge = getStatusBadgeHtml(statusStr);
 
       finalHtml += `
                 <tr>
@@ -401,9 +420,7 @@ function renderUpkFilteredSchedule(rawData) {
                             <span class="dosen-name">${item.dosen}</span>
                         </div>
                     </td>
-                    <td class="text-center">
-                        ${statusBadge}
-                    </td>
+                    <td class="text-center">${statusBadge}</td>
                 </tr>`;
     });
     finalHtml += `</tbody></table></div></div>`;
@@ -413,22 +430,39 @@ function renderUpkFilteredSchedule(rawData) {
 }
 
 /* ==========================================================================
-   UI HANDLERS
+   UI HANDLERS & SEARCH LISTENER
    ========================================================================== */
 
-function setupFilterUI() {
-  const filterHeader = document.querySelector(".filter-card .filter-header");
-  const filterGrid = document.querySelector(".filter-grid");
+function setupSearchListener(renderCallback) {
+  const searchInput = document.getElementById("keyword-search");
+  const toggleBtn = document.getElementById("toggle-filter-btn");
+  const filterCard = document.getElementById("filter-card");
 
-  if (filterHeader && filterGrid && !filterGrid.id.includes("upk")) {
-    filterHeader.addEventListener("click", () => {
-      if (window.innerWidth <= 900) {
-        filterGrid.classList.toggle("active");
-        filterHeader.classList.toggle("active");
-      }
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      globalSearchKeyword = e.target.value.toLowerCase().trim();
+      renderCallback();
     });
   }
 
+  if (toggleBtn && filterCard) {
+    toggleBtn.addEventListener("click", () => {
+      filterCard.classList.toggle("show");
+      toggleBtn.classList.toggle("active");
+
+      const icon = toggleBtn.querySelector("i");
+      if (filterCard.classList.contains("show")) {
+        icon.classList.remove("fa-sliders-h");
+        icon.classList.add("fa-times");
+      } else {
+        icon.classList.remove("fa-times");
+        icon.classList.add("fa-sliders-h");
+      }
+    });
+  }
+}
+
+function setupFilterUI() {
   const resetBtn = document.getElementById("btn-reset-filter");
   if (resetBtn) {
     resetBtn.addEventListener("click", (e) => {
@@ -489,18 +523,6 @@ function updateFilterButton(id) {
 }
 
 function setupUpkFilterUI(data) {
-  const filterHeader = document.querySelector(".filter-card .filter-header");
-  const filterGrid = document.getElementById("upk-filter-grid");
-
-  if (filterHeader && filterGrid) {
-    filterHeader.addEventListener("click", () => {
-      if (window.innerWidth <= 900) {
-        filterGrid.classList.toggle("active");
-        filterHeader.classList.toggle("active");
-      }
-    });
-  }
-
   const resetBtn = document.getElementById("btn-reset-upk");
   if (resetBtn) {
     resetBtn.addEventListener("click", (e) => {
@@ -740,25 +762,8 @@ function renderTableGeneric(container, data, type = "hari") {
     jadwalLab.forEach((item) => {
       const start = item.waktuMulai.substring(0, 5);
       const end = item.waktuSelesai.substring(0, 5);
-
-      // Badge Status Real-time
       const statusStr = getLiveStatus(item);
-      let statusBadge = "";
-
-      if (statusStr === "Dibatalkan") {
-        statusBadge =
-          '<span class="status-label badge-canceled" style="background:#fee2e2; color:#ef4444;">DIBATALKAN</span>';
-      } else if (statusStr === "Berlangsung") {
-        statusBadge =
-          '<span class="status-label badge-ongoing">BERLANGSUNG</span>';
-      } else if (statusStr === "Selesai") {
-        statusBadge =
-          '<span class="status-label badge-finished">SELESAI</span>';
-      } else {
-        statusBadge =
-          '<span class="status-label badge-upcoming">AKAN DATANG</span>';
-      }
-
+      const statusBadge = getStatusBadgeHtml(statusStr);
       const kelasFreq = `<b>${item.kelas || "-"}</b> <span style="color:#94a3b8">/</span> ${item.frekuensi || "-"}`;
       const asistenDisplay =
         item.namaAsisten1 || item.namaAsisten2
@@ -767,7 +772,6 @@ function renderTableGeneric(container, data, type = "hari") {
                      ${item.namaAsisten2 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.namaAsisten2}</div>` : ""}
                    </div>`
           : '<span style="color:#cbd5e1">-</span>';
-
       const prodiCode = detectProdi(item);
 
       finalHtml += `

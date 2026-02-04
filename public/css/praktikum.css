@@ -80,19 +80,72 @@
 }
 
 /* ========================================================
-   ADVANCED FILTER STYLES (FINAL COMPACT FIX)
+   ADVANCED FILTER STYLES (LAPTOP/DESKTOP FIX)
    ======================================================== */
 
-.filter-card {
+#filter-card {
+  /* --- STATE TERTUTUP (DEFAULT) --- */
+  /* Pastikan display block agar transisi berjalan, bukan none */
+  display: block;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
   border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 30px;
+  /* Shadow opsional, bisa dihilangkan saat tutup jika mau */
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.02),
     0 10px 15px -3px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
+
+  /* Hilangkan dimensi agar benar-benar 'hilang' secara visual */
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border: 0px solid transparent; /* Hilangkan border saat tutup */
+
+  /* Sembunyikan konten yang meluap saat animasi berjalan */
+  overflow: hidden;
+
+  /* Efek geser sedikit ke atas saat hilang */
+  transform: translateY(-10px);
+
+  /* DEFINISI TRANSISI: Semua properti berubah perlahan */
+  transition:
+    max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s ease,
+    margin 0.4s ease,
+    padding 0.4s ease,
+    border 0.4s ease,
+    transform 0.4s ease,
+    overflow 0s linear 0.5s; /* Delay overflow hidden saat tutup */
+}
+
+#filter-card.show {
+  /* --- STATE TERBUKA --- */
+
+  /* Beri ketinggian maksimal yang cukup besar */
+  max-height: 500px; /* Cukup besar untuk menampung konten */
+  opacity: 1;
+
+  /* Kembalikan spasi dan dekorasi */
+  margin-bottom: 30px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  transform: translateY(0);
+
+  /* PENTING: Ubah overflow ke visible agar dropdown di dalamnya
+     bisa melayang keluar kotak filter saat dibuka. 
+     Delay transisi ini agar overflow baru visible SETELAH animasi buka selesai. */
+  overflow: visible;
+
+  transition:
+    max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s ease,
+    margin 0.4s ease,
+    padding 0.4s ease,
+    border 0.4s ease,
+    transform 0.4s ease,
+    overflow 0s linear 0.5s; /* Delay overflow visible saat buka */
 }
 
 /* Header Filter */
@@ -145,19 +198,15 @@
   border-color: #fda4af;
 }
 
-/* Grid Filter */
+/* Grid Filter - SINGLE ROW ON LAPTOP */
 .filter-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  /* Memaksa 8 kolom dalam 1 baris untuk tampilan desktop/laptop */
+  grid-template-columns: repeat(8, 1fr);
   gap: 10px; /* Jarak antar tombol filter */
 
-  transition:
-    max-height 0.4s ease-out,
-    opacity 0.4s ease-out,
-    margin-top 0.3s ease;
+  /* Tidak perlu transisi di sini karena sudah dihandle parent #filter-card */
   overflow: visible;
-  max-height: 1000px;
-  opacity: 1;
 }
 
 /* Dropdown Container Relative */
@@ -181,6 +230,9 @@
   justify-content: space-between;
   align-items: center;
   transition: all 0.2s ease;
+  white-space: nowrap; /* Mencegah teks turun baris */
+  overflow: hidden; /* Mencegah teks keluar */
+  text-overflow: ellipsis; /* Tambah ... jika teks kepanjangan */
 }
 
 .adv-drop-btn:hover {
@@ -200,8 +252,8 @@
   position: absolute; /* Wajib Absolute agar melayang */
   top: 110%;
   left: 0;
-  width: 100%;
-  min-width: 200px;
+  width: 100%; /* Sesuai lebar parent */
+  min-width: 180px; /* Minimal lebar agar konten terbaca */
   max-height: 250px;
   overflow-y: auto;
   background: #ffffff;
@@ -273,102 +325,87 @@
 }
 
 /* ========================================================
-   RESPONSIVE FILTER (HP & TABLET FIX)
+   RESPONSIVE FILTER (HP & TABLET - TOGGLE MODE RESTORED)
    ======================================================== */
-/* ========================================================
-   RESPONSIVE FILTER (HP & TABLET FIX - SMOOTH ANIMATION)
-   ======================================================== */
+@media (max-width: 1024px) {
+  /* Tablet Landscape: mungkin butuh 2 baris jika 8 kolom terlalu sempit */
+  .filter-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
-  /* Toggle Header */
+  /* 1. Container Search & Filter */
+  .search-filter-container {
+    gap: 8px; /* Jarak lebih rapat di HP */
+  }
+
+  /* 2. Tampilkan Tombol Toggle Kembali */
+  .btn-filter-toggle {
+    display: flex !important; /* Wajib muncul */
+    padding: 0 14px;
+    justify-content: center;
+  }
+
+  /* Opsional: Di layar sangat kecil (HP), sembunyikan teks "Filter Pencarian", sisakan Icon saja agar rapi */
+  @media (max-width: 500px) {
+    .btn-filter-toggle span {
+      display: none;
+    }
+    .btn-filter-toggle i {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+  }
+
+  /* 3. Filter Card: KEMBALI KE MODE ACCORDION (Animasi Buka-Tutup) */
+  #filter-card {
+    /* Gunakan properti transisi yang sama untuk konsistensi */
+    transition:
+      max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.4s ease,
+      margin 0.4s ease,
+      padding 0.4s ease,
+      border 0.4s ease;
+  }
+
+  /* 4. Grid Filter: 1 Kolom di Mobile */
+  .filter-grid {
+    grid-template-columns: 1fr; /* Stack ke bawah */
+    gap: 12px;
+  }
+
+  /* 5. Header Internal Filter (Opsional: Sembunyikan jika dirasa duplikat dengan tombol luar) */
   .filter-header {
-    margin-bottom: 0;
-    border-bottom: none;
-    cursor: pointer;
-    padding-bottom: 0;
-    display: flex;
-    justify-content: flex-start;
-    /* Tambahkan transition untuk border/margin jika perlu */
-    transition: all 0.3s ease;
+    display: flex; /* Tetap tampilkan untuk tombol Reset */
+    margin-bottom: 15px;
   }
 
+  /* Sembunyikan judul 'Filter Pencarian' di dalam card karena sudah ada di tombol luar */
   .filter-header h3 {
-    flex-grow: 1;
-    font-size: 1rem;
+    display: none;
   }
 
+  /* Tombol Reset dipindah ke kanan full */
   .btn-reset {
     margin-left: auto;
-    margin-right: 10px;
-    padding: 4px 8px;
-    font-size: 0.7rem;
+    width: 100%; /* Tombol reset full width di HP agar mudah ditekan */
+    justify-content: center;
+    padding: 8px;
   }
 
-  /* Icon Chevron */
-  .filter-header::after {
-    content: "\f078";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    font-size: 0.9rem;
-    color: #64748b;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .filter-header.active::after {
-    transform: rotate(180deg);
-    color: #2563eb;
-  }
-
-  /* GRID FILTER CONTAINER 
-     Menggunakan max-height untuk animasi slide, bukan display:none
-  */
-  .filter-grid {
-    display: grid; /* Selalu dirender sebagai grid */
-    grid-template-columns: 1fr;
-    gap: 8px;
-
-    /* STATE TERTUTUP (DEFAULT) */
-    max-height: 0;
-    opacity: 0;
-    margin-top: 0;
-    padding: 0; /* Hapus padding agar benar-benar rapat */
-    transform: translateY(-10px); /* Efek geser sedikit ke atas */
-    pointer-events: none; /* Agar tidak bisa diklik saat tertutup */
-
-    /* PENTING: Visibility hidden agar screen reader/tab focus mengabaikannya saat tutup */
-    visibility: hidden;
-
-    /* Definisi Transisi Halus */
-    transition:
-      max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.3s ease,
-      margin-top 0.3s ease,
-      transform 0.3s ease,
-      visibility 0.3s;
-  }
-
-  /* STATE TERBUKA (AKTIF) */
-  .filter-grid.active {
-    max-height: 1000px; /* Angka besar aman untuk menampung konten */
-    opacity: 1;
-    margin-top: 15px;
-    transform: translateY(0);
-    pointer-events: auto;
-    visibility: visible;
-
-    /* Overflow Visible diperlukan agar dropdown (absolute) 
-       bisa melayang keluar dari kotak filter grid 
-    */
-    overflow: visible;
-  }
-
-  /* Dropdown Content */
+  /* 6. Dropdown Menu (Popup) */
   .adv-drop-content {
-    position: absolute;
-    min-width: 100%;
+    position: absolute; /* Tetap melayang (floating) */
+    width: 100%;
+    z-index: 100;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e2e8f0;
-    top: 105%;
-    z-index: 9999;
+  }
+
+  /* Style tombol dropdown agar pas di jari */
+  .adv-drop-btn {
+    height: 44px;
+    font-size: 0.9rem;
   }
 }
 
@@ -1202,4 +1239,113 @@
   transform: translateY(-50%);
   color: #64748b;
   pointer-events: none;
+}
+
+/* ========================================================
+   SEARCH & FILTER BAR STYLES
+   ======================================================== */
+.search-filter-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: stretch;
+}
+
+/* Search Box Wrapper */
+.search-box {
+  position: relative;
+  flex-grow: 1;
+}
+
+.search-box i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 15px 12px 45px; /* Padding kiri untuk icon */
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  color: #1e293b;
+  background: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Tombol Toggle Filter */
+.btn-filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.btn-filter-toggle:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.btn-filter-toggle.active {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.btn-filter-toggle i {
+  font-size: 1rem;
+}
+
+/* Modifikasi Filter Card agar bisa di-toggle */
+.filter-card {
+  /* Default tertutup/hidden atau bisa juga terbuka tergantung selera */
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.filter-card.show {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .btn-filter-toggle span {
+    display: none; /* Sembunyikan teks "Filter" di HP kecil, sisakan icon */
+  }
+  .btn-filter-toggle {
+    padding: 0 15px;
+  }
 }
