@@ -1,5 +1,5 @@
 /**
- * PRAKTIKUM SHARED SCRIPT - MULTI FILTER VERSION
+ * PRAKTIKUM SHARED SCRIPT - MULTI FILTER VERSION (JADWAL & UPK)
  * File: public/assets/js/praktikum.js
  */
 
@@ -45,7 +45,26 @@ function updateTime(element) {
     .replace(/\./g, ":");
 }
 
-/* ================= JADWAL PAGE LOGIC (MODIFIED) ================= */
+// Helper: Format Tanggal (2025-10-20 -> 20 Oktober 2025)
+function formatDateIndo(dateStr) {
+  if (!dateStr) return "-";
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  return `${d.getDate()} ${bulanIndo[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+// Helper: Get Date Today (YYYY-MM-DD)
+function getTodayDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+/* ==========================================================================
+   PART A: LOGIKA JADWAL REGULER (TIDAK BERUBAH)
+   ========================================================================== */
 let globalJadwalData = [];
 const activeFilters = {
   hari: new Set(),
@@ -58,48 +77,39 @@ const activeFilters = {
 };
 
 function initJadwalPage() {
-  // 1. Fetch Data Menggunakan Cara Kode Lama
   if (typeof API_JADWAL_URL === "undefined") return;
 
   fetch(API_JADWAL_URL)
     .then((res) => res.json())
     .then((res) => {
-      // Simpan data di variabel global
-      globalJadwalData = res.data;
-
-      // Set Default Filter ke Hari Ini (Jika data ada)
+      globalJadwalData = res.data || [];
       const now = new Date();
       const hariIni = hariIndo[now.getDay()];
-      if (hariIni !== "Minggu") {
-        activeFilters.hari.add(hariIni);
-      } else {
-        activeFilters.hari.add("Senin");
-      }
+      if (hariIni !== "Minggu") activeFilters.hari.add(hariIni);
+      else activeFilters.hari.add("Senin");
 
-      // Inisialisasi Opsi Filter & Render Awal
       initFilterDropdowns();
       renderFilteredSchedule();
     })
-    .catch((err) => {
-      console.error(err);
-      const container = document.getElementById("lab-tables-container");
-      if (container) {
-        container.innerHTML = `
-                    <div class="empty-schedule" style="border-color:#fca5a5; text-align:center; padding:30px;">
-                        <i class="fas fa-exclamation-circle" style="color:#ef4444; font-size:2rem;"></i>
-                        <h3 style="margin-top:10px;">Gagal Memuat Data</h3>
-                        <p>Terjadi kesalahan saat menghubungi server API.</p>
-                    </div>`;
-      }
-    });
+    .catch((err) => handleError("lab-tables-container", err));
 
-  // Event Listener untuk Tombol Reset & Dropdown UI
   setupFilterUI();
 }
 
-// === FUNGSI LOGIKA FILTER ===
+function handleError(containerId, err) {
+  console.error(err);
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.innerHTML = `
+            <div class="empty-schedule" style="border-color:#fca5a5; text-align:center; padding:30px;">
+                <i class="fas fa-exclamation-circle" style="color:#ef4444; font-size:2rem;"></i>
+                <h3 style="margin-top:10px;">Gagal Memuat Data</h3>
+                <p>Terjadi kesalahan saat menghubungi server.</p>
+            </div>`;
+  }
+}
+
 function initFilterDropdowns() {
-  // Definisi Mapping Data
   const configs = [
     { id: "hari", key: "hari" },
     {
@@ -113,10 +123,270 @@ function initFilterDropdowns() {
     { id: "asisten", val: (r) => [r.namaAsisten1, r.namaAsisten2] },
     { id: "status", val: (r) => r.status || "Aktif" },
   ];
+  populateDropdowns(
+    globalJadwalData,
+    configs,
+    activeFilters,
+    "dd-",
+    renderFilteredSchedule,
+    updateFilterButton,
+  );
+}
 
+function renderFilteredSchedule() {
+  const container = document.getElementById("lab-tables-container");
+  if (!container) return;
+
+  const filtered = globalJadwalData.filter((row) => {
+    if (!checkFilter(activeFilters.hari, row.hari)) return false;
+    const jam = `${row.waktuMulai.substring(0, 5)} - ${row.waktuSelesai.substring(0, 5)}`;
+    if (!checkFilter(activeFilters.jam, jam)) return false;
+    if (!checkFilter(activeFilters.kelas, row.kelas)) return false;
+    if (!checkFilter(activeFilters.matkul, row.namaMatakuliah)) return false;
+    if (!checkFilter(activeFilters.dosen, row.dosen)) return false;
+    if (!checkFilter(activeFilters.status, row.status || "Aktif")) return false;
+    if (activeFilters.asisten.size > 0) {
+      const rowAst = [row.namaAsisten1, row.namaAsisten2];
+      if (!rowAst.some((a) => a && activeFilters.asisten.has(a))) return false;
+    }
+    return true;
+  });
+
+  renderTableGeneric(container, filtered, "hari");
+}
+
+/* ==========================================================================
+   PART B: LOGIKA JADWAL UPK (SESUAI REQUEST)
+   ========================================================================== */
+const activeUpkFilters = {
+  tanggal: new Set(),
+  ruang: new Set(),
+  kelas: new Set(),
+  matkul: new Set(),
+  dosen: new Set(),
+};
+
+function initUpkPage() {
+  // Mengambil data UPK yang di-inject dari PHP (window.UPK_DATA)
+  const data = window.UPK_DATA || [];
+
+  // Render awal (semua data)
+  initUpkFilterDropdowns(data);
+  renderUpkFilteredSchedule(data);
+  setupUpkFilterUI(data);
+}
+
+function initUpkFilterDropdowns(data) {
+  // Mapping Data UPK
+  const configs = [
+    { id: "tanggal", key: "tanggal" },
+    { id: "ruang", key: "ruangan" },
+    { id: "matkul", key: "mata_kuliah" },
+    { id: "kelas", key: "kelas" },
+    { id: "dosen", key: "dosen" },
+  ];
+
+  populateDropdowns(
+    data,
+    configs,
+    activeUpkFilters,
+    "dd-upk-",
+    () => renderUpkFilteredSchedule(data),
+    updateUpkFilterButton,
+  );
+}
+
+function renderUpkFilteredSchedule(rawData) {
+  const container = document.getElementById("upk-tables-container");
+  if (!container) return;
+
+  // 1. Filtering
+  const filtered = rawData.filter((row) => {
+    if (!checkFilter(activeUpkFilters.tanggal, row.tanggal)) return false;
+    if (!checkFilter(activeUpkFilters.ruang, row.ruangan)) return false;
+    if (!checkFilter(activeUpkFilters.matkul, row.mata_kuliah)) return false;
+    if (!checkFilter(activeUpkFilters.kelas, row.kelas)) return false;
+    if (!checkFilter(activeUpkFilters.dosen, row.dosen)) return false;
+    return true;
+  });
+
+  // 2. Empty State
+  if (filtered.length === 0) {
+    container.innerHTML = `
+            <div class="empty-schedule" style="text-align:center; padding:40px; border: 2px dashed #e2e8f0; border-radius:16px;">
+                <i class="far fa-calendar-times" style="font-size:3rem; color:#cbd5e1; margin-bottom:15px;"></i>
+                <h3 style="color:#64748b;">Belum Ada Jadwal</h3>
+                <p style="color:#94a3b8;">Tidak ada data yang cocok dengan filter yang dipilih.</p>
+            </div>`;
+    return;
+  }
+
+  // 3. Grouping by Ruangan
+  const groups = {};
+  filtered.forEach((item) => {
+    const r = item.ruangan || "Ruangan Belum Ditentukan";
+    if (!groups[r]) groups[r] = [];
+    groups[r].push(item);
+  });
+
+  // 4. Rendering HTML
+  const sortedRuangan = Object.keys(groups).sort();
+  let finalHtml = "";
+  const today = getTodayDate(); // YYYY-MM-DD
+
+  sortedRuangan.forEach((ruang) => {
+    const items = groups[ruang];
+    // Sort items by tanggal & jam
+    items.sort((a, b) => (a.tanggal + a.jam).localeCompare(b.tanggal + b.jam));
+
+    finalHtml += `
+        <div class="schedule-wrapper" style="margin-bottom: 40px;">
+            <div class="lab-header">
+                <div class="lab-icon"><i class="fas fa-door-open"></i></div>
+                <h2 class="lab-title">${ruang}</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="table-schedule">
+                    <thead>
+                        <tr>
+                            <th width="20%">Waktu & Tanggal</th>
+                            <th width="30%">Mata Kuliah</th>
+                            <th width="15%">Kelas / Freq</th>
+                            <th width="20%">Dosen Pengampu</th>
+                            <th width="15%" class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+    items.forEach((item) => {
+      const formattedDate = formatDateIndo(item.tanggal);
+
+      // Logic Status Badge
+      let statusHtml = "";
+      if (item.tanggal === today) {
+        statusHtml = '<span class="status-label badge-ongoing">HARI INI</span>';
+      } else if (item.tanggal < today) {
+        statusHtml = '<span class="status-label badge-finished">SELESAI</span>';
+      } else {
+        statusHtml =
+          '<span class="status-label badge-upcoming">AKAN DATANG</span>';
+      }
+
+      finalHtml += `
+                <tr>
+                    <td>
+                        <div class="schedule-date" style="margin-bottom:4px;">${formattedDate}</div>
+                        <div class="schedule-time">${item.jam}</div>
+                    </td>
+                    <td>
+                        <span class="schedule-matkul">${item.mata_kuliah}</span>
+                        ${item.prodi ? `<span class="badge-prodi">${item.prodi}</span>` : ""}
+                    </td>
+                    <td>
+                        <span class="schedule-kelas">Kelas ${item.kelas}</span>
+                        <span class="schedule-freq" style="display:block; font-size:0.8rem; color:#94a3b8;">Freq: ${item.frekuensi}</span>
+                    </td>
+                    <td>
+                        <div class="dosen-info">
+                            <i class="fas fa-user-tie" style="color:#64748b;"></i>
+                            <span class="dosen-name">${item.dosen}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        ${statusHtml}
+                    </td>
+                </tr>`;
+    });
+    finalHtml += `</tbody></table></div></div>`;
+  });
+
+  container.innerHTML = finalHtml;
+}
+
+function setupUpkFilterUI(data) {
+  const filterHeader = document.querySelector(".filter-card .filter-header");
+  const filterGrid = document.getElementById("upk-filter-grid");
+  const resetBtn = document.getElementById("btn-reset-upk");
+
+  // Mobile Toggle
+  if (filterHeader && filterGrid) {
+    filterHeader.addEventListener("click", () => {
+      if (window.innerWidth <= 900) {
+        filterGrid.classList.toggle("active");
+        filterHeader.classList.toggle("active");
+      }
+    });
+  }
+
+  // Reset Button
+  if (resetBtn) {
+    resetBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      Object.values(activeUpkFilters).forEach((s) => s.clear());
+      document
+        .querySelectorAll('#upk-filter-grid input[type="checkbox"]')
+        .forEach((c) => (c.checked = false));
+
+      // Reset Button Text
+      const labelMap = {
+        tanggal: "Tanggal",
+        ruang: "Ruangan",
+        kelas: "Kelas",
+        matkul: "Mata Kuliah",
+        dosen: "Dosen",
+      };
+      Object.keys(activeUpkFilters).forEach((id) => {
+        const btn = document.querySelector(`#dd-upk-${id} .adv-drop-btn`);
+        if (btn) {
+          btn.classList.remove("active");
+          btn.innerHTML = `${labelMap[id]} <i class="fas fa-chevron-down"></i>`;
+        }
+      });
+      resetBtn.style.display = "none";
+      renderUpkFilteredSchedule(data);
+    });
+  }
+}
+
+function updateUpkFilterButton(id) {
+  const btn = document.querySelector(`#dd-upk-${id} .adv-drop-btn`);
+  const count = activeUpkFilters[id].size;
+  const labelMap = {
+    tanggal: "Tanggal",
+    ruang: "Ruangan",
+    kelas: "Kelas",
+    matkul: "Mata Kuliah",
+    dosen: "Dosen",
+  };
+
+  if (count > 0) {
+    btn.classList.add("active");
+    btn.innerHTML = `${labelMap[id]} <span style="background:#2563eb; color:#fff; padding:1px 6px; border-radius:10px; font-size:0.7rem; margin-left:5px;">${count}</span> <i class="fas fa-filter" style="font-size:0.8rem;"></i>`;
+  } else {
+    btn.classList.remove("active");
+    btn.innerHTML = `${labelMap[id]} <i class="fas fa-chevron-down"></i>`;
+  }
+
+  const hasAny = Object.values(activeUpkFilters).some((s) => s.size > 0);
+  const resetBtn = document.getElementById("btn-reset-upk");
+  if (resetBtn) resetBtn.style.display = hasAny ? "inline-flex" : "none";
+}
+
+/* ==========================================================================
+   SHARED HELPER FUNCTIONS (CORE LOGIC)
+   ========================================================================== */
+
+function populateDropdowns(
+  data,
+  configs,
+  filterState,
+  idPrefix,
+  renderCallback,
+  updateBtnCallback,
+) {
   configs.forEach((cfg) => {
     const uniqueSet = new Set();
-    globalJadwalData.forEach((row) => {
+    data.forEach((row) => {
       let val;
       if (cfg.val) val = cfg.val(row);
       else val = row[cfg.key];
@@ -132,89 +402,56 @@ function initFilterDropdowns() {
 
     // Sorting
     let items = Array.from(uniqueSet);
-    if (cfg.id === "hari") {
-      const order = {
-        Senin: 1,
-        Selasa: 2,
-        Rabu: 3,
-        Kamis: 4,
-        Jumat: 5,
-        Sabtu: 6,
-      };
-      items.sort((a, b) => (order[a] || 99) - (order[b] || 99));
+    if (cfg.id === "hari" || cfg.id === "tanggal") {
+      items.sort();
     } else {
       items.sort();
     }
 
-    renderDropdownOptions(cfg.id, items);
-  });
+    const container = document.querySelector(
+      `#${idPrefix}${cfg.id} .adv-drop-content`,
+    );
+    if (!container) return;
 
-  // Update UI tombol filter (terutama Hari yg default terpilih)
-  Object.keys(activeFilters).forEach((key) => updateFilterButton(key));
-}
+    container.innerHTML = items
+      .map((item) => {
+        const isChecked = filterState[cfg.id].has(item) ? "checked" : "";
+        return `
+            <label class="filter-option">
+                <input type="checkbox" value="${item}" data-cat="${cfg.id}" ${isChecked}>
+                <span>${item}</span>
+            </label>`;
+      })
+      .join("");
 
-function renderDropdownOptions(id, items) {
-  const container = document.querySelector(`#dd-${id} .adv-drop-content`);
-  if (!container) return;
+    // Event Listener
+    container.querySelectorAll("input").forEach((cb) => {
+      cb.addEventListener("change", (e) => {
+        const cat = e.target.dataset.cat;
+        const val = e.target.value;
+        if (e.target.checked) filterState[cat].add(val);
+        else filterState[cat].delete(val);
 
-  container.innerHTML = items
-    .map((item) => {
-      // Cek apakah item ini sedang aktif (misal Hari Ini)
-      const isChecked = activeFilters[id].has(item) ? "checked" : "";
-      return `
-        <label class="filter-option">
-            <input type="checkbox" value="${item}" data-cat="${id}" ${isChecked}>
-            <span>${item}</span>
-        </label>`;
-    })
-    .join("");
-
-  // Event Listener Checkbox Change
-  container.querySelectorAll("input").forEach((cb) => {
-    cb.addEventListener("change", (e) => {
-      const cat = e.target.dataset.cat;
-      const val = e.target.value;
-      if (e.target.checked) activeFilters[cat].add(val);
-      else activeFilters[cat].delete(val);
-
-      updateFilterButton(cat);
-      renderFilteredSchedule(); // Re-render saat filter berubah
+        updateBtnCallback(cat);
+        renderCallback();
+      });
     });
+
+    // Initial button update
+    updateBtnCallback(cfg.id);
   });
+
+  setupDropdownToggle();
 }
 
-function updateFilterButton(id) {
-  const btn = document.querySelector(`#dd-${id} .adv-drop-btn`);
-  const count = activeFilters[id].size;
-  const labelMap = {
-    hari: "Hari",
-    jam: "Jam",
-    kelas: "Kelas",
-    matkul: "Mata Kuliah",
-    dosen: "Dosen",
-    asisten: "Asisten",
-    status: "Status",
-  };
-
-  if (count > 0) {
-    btn.classList.add("active");
-    btn.innerHTML = `${labelMap[id]} <span style="background:#2563eb; color:#fff; padding:1px 6px; border-radius:10px; font-size:0.7rem; margin-left:5px;">${count}</span> <i class="fas fa-filter" style="font-size:0.8rem;"></i>`;
-  } else {
-    btn.classList.remove("active");
-    btn.innerHTML = `${labelMap[id]} <i class="fas fa-chevron-down"></i>`;
-  }
-
-  const hasAny = Object.values(activeFilters).some((s) => s.size > 0);
-  const resetBtn = document.getElementById("btn-reset-filter");
-  if (resetBtn) resetBtn.style.display = hasAny ? "inline-flex" : "none"; // Ubah display ke inline-flex agar rapi
-}
-
-function setupFilterUI() {
-  // Toggle Dropdown
+function setupDropdownToggle() {
   document.querySelectorAll(".adv-drop-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+
+    newBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const content = btn.nextElementSibling;
+      const content = newBtn.nextElementSibling;
       document.querySelectorAll(".adv-drop-content").forEach((d) => {
         if (d !== content) d.classList.remove("show");
       });
@@ -222,98 +459,20 @@ function setupFilterUI() {
     });
   });
 
-  document.addEventListener("click", () => {
-    document.querySelectorAll(".adv-drop-content").classList.remove("show");
-  });
-
-  document
-    .querySelectorAll(".adv-drop-content")
-    .forEach((d) => d.addEventListener("click", (e) => e.stopPropagation()));
-
-  // Reset Button Logic (DIPERBAIKI)
-  const resetBtn = document.getElementById("btn-reset-filter");
-  if (resetBtn) {
-    resetBtn.addEventListener("click", (e) => {
-      // [PENTING] Mencegah klik tembus ke Header (Accordion)
-      e.stopPropagation();
-
-      // Logika Reset yang sudah ada
-      Object.values(activeFilters).forEach((s) => s.clear());
-      document
-        .querySelectorAll('input[type="checkbox"]')
-        .forEach((c) => (c.checked = false));
-
-      // Update UI Button (Reset Teks Tombol)
-      // Kita perlu definisikan ulang labelMap di sini atau ambil dari luar
-      const labelMap = {
-        hari: "Hari",
-        jam: "Jam",
-        kelas: "Kelas",
-        matkul: "Mata Kuliah",
-        dosen: "Dosen",
-        asisten: "Asisten",
-        status: "Status",
-      };
-
-      Object.keys(activeFilters).forEach((id) => {
-        const btn = document.querySelector(`#dd-${id} .adv-drop-btn`);
-        if (btn) {
-          btn.classList.remove("active");
-          btn.innerHTML = `${labelMap[id]} <i class="fas fa-chevron-down"></i>`;
-        }
-      });
-
-      // Sembunyikan tombol reset sendiri
-      resetBtn.style.display = "none";
-
-      // Jalankan filter ulang (menampilkan semua data)
-      renderFilteredSchedule();
-    });
-  }
+  document.removeEventListener("click", closeAllDropdowns);
+  document.addEventListener("click", closeAllDropdowns);
 }
 
-// === FUNGSI RENDER (MIRIP KODE LAMA TAPI FILTERED) ===
-function renderFilteredSchedule() {
-  const container = document.getElementById("lab-tables-container");
-  if (!container) return;
+function closeAllDropdowns() {
+  document.querySelectorAll(".adv-drop-content").classList.remove("show");
+}
 
-  // 1. Filter Data
-  const filteredData = globalJadwalData.filter((row) => {
-    // Cek Hari
-    if (activeFilters.hari.size > 0 && !activeFilters.hari.has(row.hari))
-      return false;
-    // Cek Jam
-    const jam = `${row.waktuMulai.substring(0, 5)} - ${row.waktuSelesai.substring(0, 5)}`;
-    if (activeFilters.jam.size > 0 && !activeFilters.jam.has(jam)) return false;
-    // Cek Kelas
-    if (activeFilters.kelas.size > 0 && !activeFilters.kelas.has(row.kelas))
-      return false;
-    // Cek Matkul
-    if (
-      activeFilters.matkul.size > 0 &&
-      !activeFilters.matkul.has(row.namaMatakuliah)
-    )
-      return false;
-    // Cek Dosen
-    if (activeFilters.dosen.size > 0 && !activeFilters.dosen.has(row.dosen))
-      return false;
-    // Cek Status
-    const st = row.status || "Aktif";
-    if (activeFilters.status.size > 0 && !activeFilters.status.has(st))
-      return false;
-    // Cek Asisten (Array logic)
-    if (activeFilters.asisten.size > 0) {
-      const rowAsisten = [row.namaAsisten1, row.namaAsisten2];
-      const hasMatch = rowAsisten.some(
-        (a) => a && activeFilters.asisten.has(a),
-      );
-      if (!hasMatch) return false;
-    }
-    return true;
-  });
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".adv-drop-content")) e.stopPropagation();
+});
 
-  // 2. Cek Jika Kosong
-  if (filteredData.length === 0) {
+function renderTableGeneric(container, data, type = "hari") {
+  if (data.length === 0) {
     container.innerHTML = `
             <div class="empty-schedule" style="text-align:center; padding:40px; border: 2px dashed #e2e8f0; border-radius:12px;">
                 <i class="far fa-calendar-times" style="font-size:3rem; color:#cbd5e1; margin-bottom:15px;"></i>
@@ -323,8 +482,7 @@ function renderFilteredSchedule() {
     return;
   }
 
-  // 3. Render Group by Lab (Sama seperti kode lama)
-  const labs = [...new Set(filteredData.map((item) => item.namaLab))].sort();
+  const labs = [...new Set(data.map((item) => item.namaLab))].sort();
   let finalHtml = "";
   const now = new Date();
   const jamSekarang =
@@ -334,7 +492,7 @@ function renderFilteredSchedule() {
   const hariIniReal = hariIndo[now.getDay()];
 
   labs.forEach((lab) => {
-    const jadwalLab = filteredData.filter((item) => item.namaLab === lab);
+    const jadwalLab = data.filter((item) => item.namaLab === lab);
     jadwalLab.sort((a, b) => a.waktuMulai.localeCompare(b.waktuMulai));
 
     finalHtml += `
@@ -347,13 +505,13 @@ function renderFilteredSchedule() {
                 <table class="table-schedule">
                     <thead>
                         <tr>
-                            <th class="text-nowrap" width="5%">Hari</th>
+                            <th class="text-nowrap" width="12%">${type === "upk" ? "Tanggal" : "Hari"}</th>
                             <th class="text-nowrap">Waktu</th>
                             <th width="25%">Mata Kuliah</th>
                             <th class="text-nowrap">Kls/Freq</th>
-                            <th width="20%">Dosen</th>
+                            <th width="20%">Dosen/Pengawas</th>
                             <th width="20%">Asisten</th>
-                            <th width="15%" class="text-center">Status</th>
+                            <th width="10%" class="text-center">Status</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -362,17 +520,12 @@ function renderFilteredSchedule() {
       const start = item.waktuMulai.substring(0, 5);
       const end = item.waktuSelesai.substring(0, 5);
 
-      // Logic Status Badge (Dari kode lama)
       let statusBadge = "status-label badge-scheduled";
       let statusText = "TERJADWAL";
       let rowStyle = "";
       const statusDb = item.status ? item.status.toLowerCase() : "aktif";
 
-      if (
-        statusDb === "nonaktif" ||
-        statusDb === "0" ||
-        statusDb === "dibatalkan"
-      ) {
+      if (["nonaktif", "0", "dibatalkan"].includes(statusDb)) {
         statusText = "DIBATALKAN";
         statusBadge = "status-label badge-canceled";
         rowStyle = "opacity: 0.6; background-color: #fef2f2;";
@@ -401,7 +554,7 @@ function renderFilteredSchedule() {
       finalHtml += `
                 <tr style="${rowStyle}">
                     <td style="font-weight:600; font-size:0.9rem;">${item.hari}</td>
-                    <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.95rem;">${start} - ${end}</td>
+                    <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.9rem;">${start} - ${end}</td>
                     <td style="color: #0f172a; font-weight: 700;">${item.namaMatakuliah}</td>
                     <td class="text-nowrap">${kelasFreq}</td>
                     <td><div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-chalkboard-teacher" style="color:#64748b;"></i><span style="font-weight:500;">${item.dosen}</span></div></td>
@@ -413,30 +566,86 @@ function renderFilteredSchedule() {
     });
     finalHtml += `</tbody></table></div></div>`;
   });
-
   container.innerHTML = finalHtml;
 }
 
-// ==========================================================================
-// UPK & FORMAT PENULISAN (TIDAK DIUBAH, HANYA DISALIN ULANG AGAR AMAN)
-// ==========================================================================
-
-function initUpkPage() {
-  const upkHeader = document.getElementById("upk-header-day");
-  if (!upkHeader) return;
-
-  function updateUpkHeader() {
-    const now = new Date();
-    const hari = hariIndo[now.getDay()];
-    const tanggal = now.getDate();
-    const bulan = bulanIndo[now.getMonth()];
-    const tahun = now.getFullYear();
-    upkHeader.innerText = `Jadwal ${hari}, ${tanggal} ${bulan} ${tahun}`;
-  }
-  updateUpkHeader();
-  setInterval(updateUpkHeader, 1000);
+function checkFilter(filterSet, value) {
+  if (filterSet.size === 0) return true;
+  return filterSet.has(value);
 }
 
+function setupFilterUI() {
+  const filterHeader = document.querySelector(".filter-card .filter-header");
+  const filterGrid = document.querySelector(".filter-grid");
+
+  if (filterHeader && filterGrid && !filterGrid.id.includes("upk")) {
+    filterHeader.addEventListener("click", () => {
+      if (window.innerWidth <= 900) {
+        filterGrid.classList.toggle("active");
+        filterHeader.classList.toggle("active");
+      }
+    });
+  }
+
+  const resetBtn = document.getElementById("btn-reset-filter");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      Object.values(activeFilters).forEach((s) => s.clear());
+      document
+        .querySelectorAll('.filter-grid input[type="checkbox"]')
+        .forEach((c) => (c.checked = false));
+
+      const map = {
+        hari: "Hari",
+        jam: "Jam",
+        kelas: "Kelas",
+        matkul: "Mata Kuliah",
+        dosen: "Dosen",
+        asisten: "Asisten",
+        status: "Status",
+      };
+      Object.keys(activeFilters).forEach((id) => {
+        const btn = document.querySelector(`#dd-${id} .adv-drop-btn`);
+        if (btn) {
+          btn.classList.remove("active");
+          btn.innerHTML = `${map[id]} <i class="fas fa-chevron-down"></i>`;
+        }
+      });
+
+      resetBtn.style.display = "none";
+      renderFilteredSchedule();
+    });
+  }
+}
+
+function updateFilterButton(id) {
+  const btn = document.querySelector(`#dd-${id} .adv-drop-btn`);
+  const count = activeFilters[id].size;
+  const labelMap = {
+    hari: "Hari",
+    jam: "Jam",
+    kelas: "Kelas",
+    matkul: "Mata Kuliah",
+    dosen: "Dosen",
+    asisten: "Asisten",
+    status: "Status",
+  };
+  if (count > 0) {
+    btn.classList.add("active");
+    btn.innerHTML = `${labelMap[id]} <span style="background:#2563eb; color:#fff; padding:1px 6px; border-radius:10px; font-size:0.7rem; margin-left:5px;">${count}</span> <i class="fas fa-filter" style="font-size:0.8rem;"></i>`;
+  } else {
+    btn.classList.remove("active");
+    btn.innerHTML = `${labelMap[id]} <i class="fas fa-chevron-down"></i>`;
+  }
+  const hasAny = Object.values(activeFilters).some((s) => s.size > 0);
+  const resetBtn = document.getElementById("btn-reset-filter");
+  if (resetBtn) resetBtn.style.display = hasAny ? "inline-flex" : "none";
+}
+
+/* ==========================================================================
+   FORMAT PENULISAN (MODUL)
+   ========================================================================== */
 function initFormatPenulisanPage() {
   const pedomanContainer = document.getElementById("pedoman-container");
   const apiUrl = (window.BASE_URL || "") + "/api.php/formatpenulisan";
@@ -458,11 +667,10 @@ function initFormatPenulisanPage() {
   function renderFormatContent(data) {
     const unduhanContainer = document.getElementById("unduhan-container");
     const unduhanSection = document.getElementById("unduhan-section");
-
-    // Render Pedoman
     const pedoman = data.filter(
       (item) => (item.kategori || "pedoman").toLowerCase() === "pedoman",
     );
+
     if (pedoman.length > 0) {
       pedomanContainer.innerHTML = pedoman
         .map(
@@ -485,7 +693,6 @@ function initFormatPenulisanPage() {
         .join("");
     }
 
-    // Render Unduhan
     const unduhan = data.filter(
       (item) => (item.kategori || "").toLowerCase() === "unduhan",
     );
@@ -513,28 +720,27 @@ function initFormatPenulisanPage() {
   loadFormatContent();
 }
 
-// MAIN EXECUTION
+/* ==========================================================================
+   MAIN EXECUTION
+   ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
   startClock();
+
+  // 1. Cek Halaman Jadwal Reguler
   if (
     document.getElementById("lab-tables-container") &&
     document.getElementById("dd-hari")
   ) {
     initJadwalPage();
   }
-  if (document.getElementById("upk-header-day")) initUpkPage();
-  if (document.getElementById("pedoman-container")) initFormatPenulisanPage();
 
-  const filterHeader = document.querySelector(".filter-header");
-  const filterGrid = document.querySelector(".filter-grid");
+  // 2. Cek Halaman UPK
+  if (document.getElementById("upk-tables-container")) {
+    initUpkPage();
+  }
 
-  if (filterHeader && filterGrid) {
-    filterHeader.addEventListener("click", () => {
-      // Hanya aktif di mode mobile/tablet (< 900px)
-      if (window.innerWidth <= 900) {
-        filterGrid.classList.toggle("active");
-        filterHeader.classList.toggle("active");
-      }
-    });
+  // 3. Cek Halaman Format Penulisan
+  if (document.getElementById("pedoman-container")) {
+    initFormatPenulisanPage();
   }
 });
