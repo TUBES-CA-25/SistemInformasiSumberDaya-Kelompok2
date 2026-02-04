@@ -1244,6 +1244,8 @@
 /* ========================================================
    SEARCH & FILTER BAR STYLES
    ======================================================== */
+
+/* Container Utama */
 .search-filter-container {
   display: flex;
   gap: 12px;
@@ -1251,38 +1253,54 @@
   align-items: stretch;
 }
 
-/* Search Box Wrapper */
+/* Wrapper Search Box (Wajib Relative untuk Icon Absolute) */
 .search-box {
   position: relative;
   flex-grow: 1;
 }
 
+/* Style Icon Kaca Pembesar */
 .search-box i {
   position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
-  font-size: 1rem;
+  left: 15px; /* Jarak dari sisi kiri */
+  top: 50%; /* Posisi tengah vertikal */
+  transform: translateY(-50%); /* Koreksi tengah vertikal */
+  color: #94a3b8; /* Warna abu-abu soft */
+  font-size: 1rem; /* Ukuran icon */
+  pointer-events: none; /* Agar klik pada icon tembus ke input */
+  z-index: 2;
 }
 
+/* Input Field Style */
 .search-input {
   width: 100%;
-  padding: 12px 15px 12px 45px; /* Padding kiri untuk icon */
+  padding: 12px 15px 12px 45px; /* PENTING: Padding kiri 45px agar teks tidak menimpa icon */
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  font-family: "Inter", sans-serif;
+  border-radius: 12px; /* Sudut membulat modern */
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 0.95rem;
-  color: #1e293b;
+  color: #1e293b; /* Warna teks gelap */
   background: #ffffff;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
+/* Efek saat Input Diklik/Fokus */
 .search-input:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: #2563eb; /* Border jadi biru */
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); /* Efek glow biru halus */
+  color: #0f172a;
+}
+
+/* Efek Placeholder */
+.search-input::placeholder {
+  color: #cbd5e1;
+  font-weight: 400;
 }
 
 /* Tombol Toggle Filter */

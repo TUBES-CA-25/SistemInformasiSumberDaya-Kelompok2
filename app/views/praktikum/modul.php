@@ -6,6 +6,13 @@
             <p>Daftar materi praktikum Teknik Informatika & Sistem Informasi untuk mendukung kegiatan belajar di Laboratorium.</p>
         </header>
 
+        <div class="search-filter-container" style="justify-content: center; margin-bottom: 40px;">
+            <div class="search-box" style="max-width: 600px; width: 100%;">
+                <i class="ri-search-line"></i>
+                <input type="text" id="modul-praktikum-search" class="search-input" placeholder="Cari Mata Kuliah atau Judul Modul...">
+            </div>
+        </div>
+
         <div class="modul-grid">
             
             <div class="modul-card">
@@ -20,7 +27,7 @@
                 </div>
                 
                 <div class="table-responsive">
-                    <table class="table-modul">
+                    <table class="table-modul" id="table-ti">
                         <thead>
                             <tr>
                                 <th class="text-center w-no">No</th>
@@ -31,7 +38,7 @@
                         </thead>
                         <tbody>
                             <?php if (empty($data['modul_ti'])) : ?>
-                                <tr>
+                                <tr class="no-data">
                                     <td colspan="4" class="empty-state">
                                         <div class="empty-content">
                                             <i class="ri-folder-open-line"></i>
@@ -40,7 +47,7 @@
                                     </td>
                                 </tr>
                             <?php else : $no = 1; foreach ($data['modul_ti'] as $m) : ?>
-                                <tr>
+                                <tr class="modul-item">
                                     <td class="text-center number-col"><?= $no++; ?></td>
                                     <td>
                                         <span class="matkul-name"><?= htmlspecialchars($m['nama_matakuliah']) ?></span>
@@ -55,6 +62,11 @@
                                     </td>
                                 </tr>
                             <?php endforeach; endif; ?>
+                            <tr class="not-found-msg" style="display: none;">
+                                <td colspan="4" style="text-align: center; padding: 20px; color: #94a3b8;">
+                                    Tidak ada modul yang cocok dengan pencarian Anda.
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -72,7 +84,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table-modul">
+                    <table class="table-modul" id="table-si">
                         <thead>
                             <tr>
                                 <th class="text-center w-no">No</th>
@@ -83,7 +95,7 @@
                         </thead>
                         <tbody>
                             <?php if (empty($data['modul_si'])) : ?>
-                                <tr>
+                                <tr class="no-data">
                                     <td colspan="4" class="empty-state">
                                         <div class="empty-content">
                                             <i class="ri-folder-open-line"></i>
@@ -92,7 +104,7 @@
                                     </td>
                                 </tr>
                             <?php else : $no = 1; foreach ($data['modul_si'] as $m) : ?>
-                                <tr>
+                                <tr class="modul-item">
                                     <td class="text-center number-col"><?= $no++; ?></td>
                                     <td>
                                         <span class="matkul-name"><?= htmlspecialchars($m['nama_matakuliah']) ?></span>
@@ -107,6 +119,11 @@
                                     </td>
                                 </tr>
                             <?php endforeach; endif; ?>
+                            <tr class="not-found-msg" style="display: none;">
+                                <td colspan="4" style="text-align: center; padding: 20px; color: #94a3b8;">
+                                    Tidak ada modul yang cocok dengan pencarian Anda.
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -115,3 +132,5 @@
         </div>
     </div>
 </section>
+
+<script src="<?= PUBLIC_URL ?>/js/praktikum.js"></script>

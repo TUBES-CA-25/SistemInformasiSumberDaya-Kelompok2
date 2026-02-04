@@ -794,33 +794,85 @@ function renderTableGeneric(container, data, type = "hari") {
 }
 
 /* ==========================================================================
-   FORMAT PENULISAN (MODUL)
+   FORMAT PENULISAN (MODUL) & PENCARIAN MODUL
    ========================================================================== */
+
+// Variabel Global untuk menyimpan data modul agar bisa difilter
+let globalModulData = [];
+
 function initFormatPenulisanPage() {
   const pedomanContainer = document.getElementById("pedoman-container");
+  // Gunakan endpoint yang sesuai
   const apiUrl = (window.BASE_URL || "") + "/api.php/formatpenulisan";
 
   async function loadFormatContent() {
     try {
       const response = await fetch(apiUrl);
       const result = await response.json();
+
       if (result.status === "success" || result.code === 200) {
-        renderFormatContent(result.data);
+        // 1. Simpan data ke variabel global
+        globalModulData = result.data;
+
+        // 2. Render awal (tampilkan semua)
+        renderFormatContent(globalModulData);
+
+        // 3. Aktifkan fitur pencarian
+        setupModulSearchListener();
       } else {
         pedomanContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px;"><p>Data tidak ditemukan.</p></div>`;
       }
     } catch (error) {
-      pedomanContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#ef4444;"><p>Gagal memuat data.</p></div>`;
+      console.error(error);
+      if (pedomanContainer) {
+        pedomanContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#ef4444;"><p>Gagal memuat data.</p></div>`;
+      }
     }
   }
 
-  function renderFormatContent(data) {
-    const unduhanContainer = document.getElementById("unduhan-container");
-    const unduhanSection = document.getElementById("unduhan-section");
-    const pedoman = data.filter(
-      (item) => (item.kategori || "pedoman").toLowerCase() === "pedoman",
-    );
+  loadFormatContent();
+}
 
+// [BARU] Setup Listener Pencarian Modul
+function setupModulSearchListener() {
+  const searchInput = document.getElementById("modul-search");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const keyword = e.target.value.toLowerCase().trim();
+
+      // Filter data berdasarkan Judul atau Deskripsi
+      const filteredData = globalModulData.filter((item) => {
+        const judul = (item.judul || "").toLowerCase();
+        const deskripsi = (item.deskripsi || "").toLowerCase();
+        return judul.includes(keyword) || deskripsi.includes(keyword);
+      });
+
+      // Render ulang dengan data hasil filter
+      renderFormatContent(filteredData);
+    });
+  }
+}
+
+function renderFormatContent(data) {
+  const pedomanContainer = document.getElementById("pedoman-container");
+  const unduhanContainer = document.getElementById("unduhan-container");
+  const unduhanSection = document.getElementById("unduhan-section");
+
+  // Jika data kosong hasil pencarian
+  if (data.length === 0) {
+    if (pedomanContainer)
+      pedomanContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:30px; color:#94a3b8;">Tidak ada pedoman yang cocok.</div>`;
+    if (unduhanContainer)
+      unduhanContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:30px; color:#94a3b8;">Tidak ada file yang cocok.</div>`;
+    return;
+  }
+
+  // A. Render Pedoman (Rules)
+  const pedoman = data.filter(
+    (item) => (item.kategori || "pedoman").toLowerCase() === "pedoman",
+  );
+  if (pedomanContainer) {
     if (pedoman.length > 0) {
       pedomanContainer.innerHTML = pedoman
         .map(
@@ -841,12 +893,17 @@ function initFormatPenulisanPage() {
                 </article>`,
         )
         .join("");
+    } else {
+      pedomanContainer.innerHTML = ""; // Kosongkan jika tidak ada hasil filter kategori ini
     }
+  }
 
-    const unduhan = data.filter(
-      (item) => (item.kategori || "").toLowerCase() === "unduhan",
-    );
-    if (unduhan.length > 0 && unduhanSection) {
+  // B. Render Unduhan (Files)
+  const unduhan = data.filter(
+    (item) => (item.kategori || "").toLowerCase() === "unduhan",
+  );
+  if (unduhanSection && unduhanContainer) {
+    if (unduhan.length > 0) {
       unduhanSection.style.display = "block";
       unduhanContainer.innerHTML = unduhan
         .map((item) => {
@@ -857,6 +914,9 @@ function initFormatPenulisanPage() {
                     <div class="file-icon-box"><i class="ri-file-text-line"></i></div>
                     <div class="download-content">
                         <h4>${item.judul}</h4>
+                        <div class="file-meta">
+                            <span><i class="ri-file-info-line"></i> Dokumen Pendukung</span>
+                        </div>
                         <div class="action-buttons">
                             ${item.file ? `<a href="${downloadPath}" target="_blank" download class="btn-download"><i class="ri-download-cloud-2-fill"></i> Unduh</a>` : ""}
                             ${item.link_external ? `<a href="${item.link_external}" target="_blank" class="btn-external"><i class="ri-external-link-line"></i> Link</a>` : ""}
@@ -865,25 +925,89 @@ function initFormatPenulisanPage() {
                 </div>`;
         })
         .join("");
+    } else {
+      // Jika pencarian tidak menemukan file unduhan, sembunyikan atau tampilkan pesan kosong
+      unduhanContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#cbd5e1;">Tidak ada file unduhan yang cocok.</div>`;
+      // Opsional: unduhanSection.style.display = "none";
     }
   }
-  loadFormatContent();
+}
+
+function initModulSearch() {
+  const searchInput = document.getElementById("modul-praktikum-search");
+
+  // Jika tidak ada elemen search (bukan halaman modul), hentikan
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", (e) => {
+    const keyword = e.target.value.toLowerCase().trim();
+
+    // Filter Tabel TI
+    filterStaticTable("table-ti", keyword);
+    // Filter Tabel SI
+    filterStaticTable("table-si", keyword);
+  });
+}
+
+function filterStaticTable(tableId, keyword) {
+  const table = document.getElementById(tableId);
+  if (!table) return;
+
+  const rows = table.querySelectorAll("tbody tr.modul-item");
+  const notFoundMsg = table.querySelector("tbody tr.not-found-msg");
+  let visibleCount = 0;
+
+  rows.forEach((row) => {
+    // Ambil teks dari kolom Mata Kuliah dan Judul
+    const matkul =
+      row.querySelector(".matkul-name")?.innerText.toLowerCase() || "";
+    const judul =
+      row.querySelector(".modul-title")?.innerText.toLowerCase() || "";
+
+    // Cek kecocokan
+    if (matkul.includes(keyword) || judul.includes(keyword)) {
+      row.style.display = ""; // Tampilkan
+      visibleCount++;
+    } else {
+      row.style.display = "none"; // Sembunyikan
+    }
+  });
+
+  // Tampilkan pesan "Tidak ditemukan" jika hasil 0
+  if (notFoundMsg) {
+    if (visibleCount === 0 && rows.length > 0) {
+      notFoundMsg.style.display = "table-row";
+    } else {
+      notFoundMsg.style.display = "none";
+    }
+  }
 }
 
 /* ==========================================================================
-   MAIN EXECUTION
+   MAIN EXECUTION (UPDATE BAGIAN INI)
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
   startClock();
+
+  // Init Halaman Jadwal
   if (
     document.getElementById("lab-tables-container") &&
     document.getElementById("dd-hari")
   ) {
     initJadwalPage();
   }
+
+  // Init Halaman UPK
   if (document.getElementById("upk-tables-container")) {
     initUpkPage();
   }
+
+  // Init Halaman Modul (Pencarian Static)
+  if (document.getElementById("modul-praktikum-search")) {
+    initModulSearch();
+  }
+
+  // Init Format Penulisan (Jika ada halaman lain yg pakai API)
   if (document.getElementById("pedoman-container")) {
     initFormatPenulisanPage();
   }
