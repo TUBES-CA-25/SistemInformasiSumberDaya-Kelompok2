@@ -175,6 +175,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // Logika agar tidak keluar layar (opsional, tahap lanjut)
       tooltip.style.left = e.clientX + offsetX + "px";
       tooltip.style.top = e.clientY + offsetY + "px";
+      if (window.innerWidth > 991) {
+        const offsetX = 15;
+        const offsetY = 15;
+
+        tooltip.style.left = e.clientX + offsetX + "px";
+        tooltip.style.top = e.clientY + offsetY + "px";
+      }
     });
 
     // 3. Mouse Keluar (Hide Tooltip)

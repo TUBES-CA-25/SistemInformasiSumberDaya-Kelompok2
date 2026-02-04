@@ -1137,3 +1137,77 @@ main {
   background: #dcfce7;
   color: #166534;
 }
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE STYLES (BOTTOM SHEET MODE)
+   ========================================================================== */
+
+@media screen and (max-width: 991px) {
+  /* 1. Ubah Tooltip menjadi Bottom Sheet */
+  .room-tooltip {
+    /* Reset posisi fixed/absolute */
+    top: auto !important; /* Abaikan posisi top dari JS */
+    left: 0 !important; /* Abaikan posisi left dari JS */
+    bottom: 0; /* Tempel di bawah */
+    right: 0;
+
+    /* Ukuran & Tampilan */
+    width: 100%; /* Lebar penuh */
+    max-width: 100%;
+    border-radius: 20px 20px 0 0; /* Lengkungan hanya di atas */
+    transform: translateY(110%); /* Sembunyi di bawah layar */
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+
+    /* Layout Flex untuk gambar dan teks bersampingan (Opsional) */
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: auto;
+    min-height: 120px;
+  }
+
+  /* Animasi Muncul dari Bawah */
+  .room-tooltip.show {
+    transform: translateY(0);
+  }
+
+  /* 2. Sesuaikan Gambar di dalam Bottom Sheet */
+  .tooltip-img {
+    width: 120px; /* Ukuran fix untuk gambar */
+    flex-shrink: 0;
+    height: auto;
+  }
+
+  .tooltip-img img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px 0 0 0; /* Sesuaikan lengkungan */
+  }
+
+  /* 3. Sesuaikan Konten Teks */
+  .tooltip-content {
+    padding: 15px;
+    flex-grow: 1;
+    overflow-y: auto; /* Scroll jika teks kepanjangan */
+  }
+
+  .tooltip-content h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+
+  .tooltip-content p {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Batasi teks deskripsi max 2 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* 4. Overlay Background (Opsional - Gelapkan layar belakang) */
+  /* Kita gunakan pseudo-element pada body atau container jika perlu, 
+       tapi untuk sekarang cukup tooltipnya saja yang muncul */
+}
