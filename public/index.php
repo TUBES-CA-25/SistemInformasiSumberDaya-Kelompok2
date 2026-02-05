@@ -1,9 +1,16 @@
 <?php
+/**
+ * SISTEM INFORMASI SUMBER DAYA - KELOMPOK 2
+ * Entry Point Utama (Bootstrap)
+ */
+
 session_start();
 
+// 1. ERROR REPORTING (Aktifkan saat development)
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+// 2. DEFINISI PATH ABSOLUT
 define('ROOT_PROJECT', dirname(__DIR__));
 define('APP_PATH',        ROOT_PROJECT . '/app');
 define('CONTROLLER_PATH', APP_PATH . '/controllers');
@@ -11,77 +18,68 @@ define('VIEW_PATH',       APP_PATH . '/views');
 define('CORE_PATH',       APP_PATH . '/core');
 define('CONFIG_PATH',     APP_PATH . '/config');
 
-require_once APP_PATH . '/config/config.php';
+// 3. LOAD CONFIG & HELPERS
+if (file_exists(APP_PATH . '/config/config.php')) {
+    require_once APP_PATH . '/config/config.php';
+}
+if (file_exists(APP_PATH . '/helpers/Helper.php')) {
+    require_once APP_PATH . '/helpers/Helper.php';
+}
 
-// --- DETEKSI URL PUBLIK ---
+// 4. DETEKSI URL PUBLIK (Base URL)
 if (!defined('PUBLIC_URL')) {
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8000';
-    
-    // Cek apakah kita pakai port 8000 (Built-in server)
-    if (strpos($host, ':8000') !== false) {
-        define('PUBLIC_URL', $scheme . '://' . $host);
-    } else {
-        // Jika pakai Apache (XAMPP), ambil folder projectnya
-        $script_dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
-        define('PUBLIC_URL', $scheme . '://' . $host . $script_dir);
-    }
+    $script_dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+    define('PUBLIC_URL', $scheme . '://' . $host . $script_dir);
 }
 
-// Pastikan koneksi Database tersedia
-$db = null;
-if (file_exists(CORE_PATH . '/Database.php')) {
-    require_once CORE_PATH . '/Database.php';
-    global $pdo;
-    $db = new Database();
-    $pdo = $db->getPdo();
-} elseif (file_exists(APP_PATH . '/config/Database.php')) {
-    require_once APP_PATH . '/config/Database.php';
-    global $pdo;
-    if (class_exists('Database')) {
-        $db = new Database();
-        if (!isset($pdo) && method_exists($db, 'getPdo')) {
-            $pdo = $db->getPdo();
-        }
-    }
+// 5. LOAD CORE COMPONENTS (Urutan sangat krusial agar tidak Class Not Found)
+
+// A. Muat Database Terlebih Dahulu
+
+$db_file = APP_PATH . '/config/Database.php';
+if (file_exists($db_file)) {
+    require_once $db_file;
+} else {
+    die("Fatal Error: Database.php tidak ditemukan di " . $db_file);
 }
 
-if (file_exists(CORE_PATH . '/Controller.php')) {
+// B. Muat Controller Induk (Mengecek folder controllers dan core)
+$induk_controller = CONTROLLER_PATH . '/Controller.php';
+if (file_exists($induk_controller)) {
+    require_once $induk_controller;
+} elseif (file_exists(CORE_PATH . '/Controller.php')) {
     require_once CORE_PATH . '/Controller.php';
-} elseif (file_exists(CONTROLLER_PATH . '/Controller.php')) {
-    require_once CONTROLLER_PATH . '/Controller.php';
+} else {
+    die("Fatal Error: Controller Induk tidak ditemukan di folder controllers maupun core.");
 }
 
+// C. Muat Router
+if (file_exists(CONFIG_PATH . '/Router.php')) {
+    require_once CONFIG_PATH . '/Router.php';
+} else {
+    die("Fatal Error: Router.php tidak ditemukan di " . CONFIG_PATH);
+}
+
+// 6. LOGIKA ROUTING & PROTEKSI ADMIN
+$router = new Router();
 $request_uri = $_SERVER['REQUEST_URI'] ?? '/';
 $uri_clean   = explode('?', $request_uri)[0];
 
-// Redirect root access to /home (kecuali admin)
-if (in_array($uri_clean, ['/', '', '/index.php'], true)) {
-    if (strpos($uri_clean, '/admin') === false && strpos($uri_clean, '/dashboard') === false) {
-        $hasRoutingQuery = !empty($_GET['page']) || !empty($_GET['route']) || !empty($_GET['id']);
-        if (!$hasRoutingQuery) {
-            header('Location: ' . PUBLIC_URL . '/home', true, 302);
-            exit;
-        }
-    }
-}
-
+// Cek apakah user mengakses area admin
 $isAdminArea = (strpos($uri_clean, '/admin') !== false) || (strpos($uri_clean, '/dashboard') !== false);
 
-/* ===============================
-   ROUTING ADMIN
-=============================== */
 if ($isAdminArea) {
-
     if (!isset($_SESSION['status']) || $_SESSION['status'] != "login") {
         header("Location: " . PUBLIC_URL . "/iclabs-login");
         exit;
     }
+}
 
-    // Load Router dan gunakan untuk dispatch admin requests
-    require_once CONFIG_PATH . '/Router.php';
-    $router = new Router();
-    $router->dispatch();
+// Redirect root '/' ke '/home'
+if (in_array($uri_clean, ['/', '', '/index.php'], true)) {
+    header('Location: ' . PUBLIC_URL . '/home', true, 302);
     exit;
 }
 
