@@ -1,190 +1,273 @@
+/**
+ * Jadwal UPK Admin Orchestrator
+ */
+
 let allJadwalData = [];
 
 // Helper untuk membuka modal
 window.openModal = function (id) {
-  const modal = document.getElementById(id);
-  if (modal) {
-    modal.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-  }
+    const modal = document.getElementById(id);
+    if (modal) {
+        modal.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+    }
 };
 
 // Helper untuk menutup modal
 window.closeModal = function (id) {
-  const modal = document.getElementById(id);
-  if (modal) {
-    modal.classList.add("hidden");
-    document.body.style.overflow = "auto";
-  }
+    const modal = document.getElementById(id);
+    if (modal) {
+        modal.classList.add("hidden");
+        document.body.style.overflow = "auto";
+    }
 };
 
 window.openUploadModal = function () {
-  openModal("uploadModal");
-  // Reset form states
-  const form = document.getElementById("uploadForm");
-  if (form) form.reset();
+    openModal("uploadModal");
+    const form = document.getElementById("uploadForm");
+    if (form) form.reset();
 
-  const fileInfo = document.getElementById("fileInfo");
-  if (fileInfo) fileInfo.classList.add("hidden");
+    const fileInfo = document.getElementById("fileInfo");
+    if (fileInfo) fileInfo.classList.add("hidden");
 
-  const prog = document.getElementById("uploadProgress");
-  if (prog) prog.classList.add("hidden");
+    const prog = document.getElementById("uploadProgress");
+    if (prog) prog.classList.add("hidden");
 
-  const msg = document.getElementById("uploadMessage");
-  if (msg) msg.classList.add("hidden");
+    const msg = document.getElementById("uploadMessage");
+    if (msg) msg.classList.add("hidden");
 };
 
-// Handler Upload File & Inisialisasi
+// Inisialisasi
 document.addEventListener("DOMContentLoaded", () => {
-  loadDropdownData();
-  loadJadwal();
+    // Pastikan BASE_URL tersedia
+    if (!window.BASE_URL) window.BASE_URL = window.location.origin;
+    window.API_URL = window.BASE_URL + "/api";
 
-  const uploadForm = document.getElementById("uploadForm");
-  if (uploadForm) {
-    uploadForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const fileInput = document.getElementById("fileExcel");
-      if (!fileInput.files.length) return;
+    loadDropdownData();
+    loadJadwal();
 
-      const formData = new FormData();
-      formData.append("excel_file", fileInput.files[0]);
+    // Handler Upload
+    const uploadForm = document.getElementById("uploadForm");
+    if (uploadForm) {
+        uploadForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const fileInput = document.getElementById("fileExcel");
+            if (!fileInput.files.length) return;
 
-      const btn = document.getElementById("btnUpload");
-      const progressDiv = document.getElementById("uploadProgress");
-      const progressBar = document.getElementById("progressBar");
-      const progressPercent = document.getElementById("progressPercent");
-      const msgDiv = document.getElementById("uploadMessage");
+            const formData = new FormData();
+            formData.append("excel_file", fileInput.files[0]);
 
-      btn.disabled = true;
-      btn.innerHTML =
-        '<i class="fas fa-circle-notch fa-spin"></i> Memproses...';
-      progressDiv.classList.remove("hidden");
-      msgDiv.classList.add("hidden");
+            const btn = document.getElementById("btnUpload");
+            const progressDiv = document.getElementById("uploadProgress");
+            const progressBar = document.getElementById("progressBar");
+            const progressPercent = document.getElementById("progressPercent");
+            const msgDiv = document.getElementById("uploadMessage");
 
-      try {
-        // Simulate progress
-        let progress = 0;
-        const interval = setInterval(() => {
-          if (progress < 90) {
-            progress += 10;
-            progressBar.style.width = progress + "%";
-            progressPercent.innerText = progress + "%";
-          }
-        }, 100);
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Memproses...';
+            progressDiv.classList.remove("hidden");
+            msgDiv.classList.add("hidden");
 
-        // PERBAIKAN: Gunakan window.API_URL
-        const response = await fetch(`${window.API_URL}/jadwal-upk/upload`, {
-          method: "POST",
-          body: formData,
+            try {
+                let progress = 0;
+                const interval = setInterval(() => {
+                    if (progress < 90) {
+                        progress += 10;
+                        progressBar.style.width = progress + "%";
+                        progressPercent.innerText = progress + "%";
+                    }
+                }, 100);
+
+                const response = await fetch(`${window.API_URL}/jadwal-upk/upload`, {
+                    method: "POST",
+                    body: formData,
+                });
+
+                clearInterval(interval);
+                const result = await response.json();
+
+                progressBar.style.width = "100%";
+                progressPercent.innerText = "100%";
+
+                if (result.status === "success" || result.status === true) {
+                    msgDiv.className = "mb-4 p-3 rounded-lg text-sm bg-emerald-50 text-emerald-800 border border-emerald-100";
+                    msgDiv.innerHTML = `<i class="fas fa-check-circle mr-1"></i> ${result.message}`;
+                    msgDiv.classList.remove("hidden");
+                    setTimeout(() => {
+                        closeModal("uploadModal");
+                        loadJadwal();
+                    }, 1500);
+                } else {
+                    throw new Error(result.message || "Gagal upload file");
+                }
+            } catch (err) {
+                msgDiv.className = "mb-4 p-3 rounded-lg text-sm bg-red-50 text-red-800 border border-red-100";
+                msgDiv.innerHTML = `<i class="fas fa-exclamation-circle mr-1"></i> ${err.message}`;
+                msgDiv.classList.remove("hidden");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-upload"></i> Upload & Proses';
+            }
         });
+    }
 
-        clearInterval(interval);
-        const result = await response.json();
-
-        progressBar.style.width = "100%";
-        progressPercent.innerText = "100%";
-
-        if (result.status === "success") {
-          msgDiv.className =
-            "mb-4 p-3 rounded-lg text-sm bg-emerald-50 text-emerald-800 border border-emerald-100";
-          msgDiv.innerHTML = `<i class="fas fa-check-circle mr-1"></i> ${result.message}`;
-          msgDiv.classList.remove("hidden");
-          setTimeout(() => {
-            closeModal("uploadModal");
-            loadJadwal();
-          }, 1500);
-        } else {
-          throw new Error(result.message);
-        }
-      } catch (err) {
-        msgDiv.className =
-          "mb-4 p-3 rounded-lg text-sm bg-red-50 text-red-800 border border-red-100";
-        msgDiv.innerHTML = `<i class="fas fa-exclamation-circle mr-1"></i> ${err.message}`;
-        msgDiv.classList.remove("hidden");
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-upload"></i> Upload & Proses';
-      }
-    });
-  }
-
-  const fileInput = document.getElementById("fileExcel");
-  if (fileInput) {
-    fileInput.addEventListener("change", function (e) {
-      const file = e.target.files[0];
-      const info = document.getElementById("fileInfo");
-      if (file) {
-        document.getElementById("fileNameDisplay").innerText = file.name;
-        document.getElementById("fileSizeDisplay").innerText =
-          (file.size / 1024 / 1024).toFixed(2) + " MB";
-        info.classList.remove("hidden");
-      } else {
-        info.classList.add("hidden");
-      }
-    });
-  }
-
-  // Search Handler
-  const searchInput = document.getElementById("searchInput");
-  if (searchInput) {
-    searchInput.addEventListener("keyup", (e) => {
-      const key = e.target.value.toLowerCase();
-      const filtered = allJadwalData.filter(
-        (i) =>
-          (i.mata_kuliah && i.mata_kuliah.toLowerCase().includes(key)) ||
-          (i.dosen && i.dosen.toLowerCase().includes(key)),
-      );
-      renderTable(filtered);
-    });
-  }
-
-  // Select All Handler
-  const selectAll = document.getElementById("selectAll");
-  if (selectAll) {
-    selectAll.addEventListener("change", function () {
-      const checks = document.querySelectorAll(".row-checkbox");
-      checks.forEach((c) => (c.checked = this.checked));
-      updateBulkActionsVisibility();
-    });
-  }
-
-  // Form Submit Handler
-  const jadwalForm = document.getElementById("jadwalForm");
-  if (jadwalForm) {
-    jadwalForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const id = document.getElementById("inputId").value;
-      const method = id ? "PUT" : "POST";
-
-      // PERBAIKAN: Gunakan window.API_URL
-      const url = id
-        ? `${window.API_URL}/jadwal-upk/${id}`
-        : `${window.API_URL}/jadwal-upk`;
-
-      // Convert FormData to JSON object for API
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-
-      try {
-        const response = await fetch(url, {
-          method: method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+    // Search Handler
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener("keyup", (e) => {
+            const key = e.target.value.toLowerCase();
+            const filtered = allJadwalData.filter(i => 
+                (i.mata_kuliah && i.mata_kuliah.toLowerCase().includes(key)) ||
+                (i.dosen && i.dosen.toLowerCase().includes(key))
+            );
+            renderTable(filtered);
         });
-        const res = await response.json();
-        if (res.status === "success" || res.code === 200) {
-          closeModal("formModal");
-          loadJadwal();
-          Swal.fire("Berhasil!", "Data telah disimpan.", "success");
-        } else {
-          Swal.fire("Gagal", res.message || "Gagal menyimpan data", "error");
-        }
-      } catch (err) {
-        Swal.fire("Error", "Gagal menghubungi server.", "error");
-      }
-    });
-  }
+    }
 });
+
+// --- LOAD DATA ---
+async function loadJadwal() {
+    const tbody = document.getElementById("tableBody");
+    try {
+        const response = await fetch(`${window.API_URL}/jadwal-upk`);
+        if (!response.ok) throw new Error("Endpoint API tidak ditemukan (404)");
+        
+        const result = await response.json();
+        if (result.status === "success" || result.status === true) {
+            allJadwalData = result.data;
+            renderTable(allJadwalData);
+        } else {
+            allJadwalData = [];
+            renderTable([]);
+        }
+    } catch (err) {
+        console.error("API Error:", err);
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-red-400 py-10 font-bold">Gagal sinkronisasi API: ${err.message}</td></tr>`;
+    }
+}
+
+async function loadDropdownData() {
+    try {
+        // Load Matakuliah
+        const mkRes = await fetch(`${window.API_URL}/matakuliah`);
+        const mkData = await mkRes.json();
+        const mkSelect = document.getElementById("inputMK");
+
+        if (mkData.status === true || mkData.status === "success") {
+            mkSelect.innerHTML = '<option value="">-- Pilih Mata Kuliah --</option>';
+            mkData.data.forEach(mk => {
+                const option = document.createElement("option");
+                option.value = mk.namaMatakuliah;
+                option.textContent = `${mk.kodeMatakuliah || ""} - ${mk.namaMatakuliah}`;
+                option.dataset.frekuensi = mk.frekuensi || "";
+                mkSelect.appendChild(option);
+            });
+        }
+
+        // Load Ruangan/Fasilitas
+        const labRes = await fetch(`${window.API_URL}/fasilitas`);
+        const labData = await labRes.json();
+        const labSelect = document.getElementById("inputRuangan");
+        
+        if (labData.status === true || labData.status === "success") {
+            labSelect.innerHTML = '<option value="">-- Pilih Ruangan --</option>';
+            labData.data.forEach(lab => {
+                const option = document.createElement("option");
+                option.value = lab.nama;
+                option.textContent = lab.nama;
+                labSelect.appendChild(option);
+            });
+        }
+    } catch (err) {
+        console.error("Error loading dropdown data:", err);
+    }
+}
+
+function renderTable(data) {
+    const tbody = document.getElementById("tableBody");
+    const totalData = document.getElementById("totalData");
+
+    if (totalData) totalData.innerText = `Total: ${data.length}`;
+
+    if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-20 text-center text-gray-500">Tidak ada data ditemukan</td></tr>`;
+        return;
+    }
+
+    let rowsHtml = "";
+    data.forEach((item, index) => {
+        let tgl = item.tanggal ? new Date(item.tanggal).toLocaleDateString("id-ID", {
+            day: "2-digit", month: "long", year: "numeric"
+        }) : "-";
+
+        rowsHtml += `
+            <tr class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100">
+                <td class="px-6 py-4 text-center">
+                    <input type="checkbox" value="${item.id}" class="row-checkbox rounded border-gray-300">
+                </td>
+                <td class="px-6 py-4 text-center text-gray-400 font-mono text-xs">${index + 1}</td>
+                <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.id}, event)">
+                    <div class="flex flex-col">
+                        <span class="font-bold text-gray-800 text-sm">${item.mata_kuliah || "-"}</span>
+                        <span class="text-xs text-gray-500"><i class="fas fa-user-tie mr-1"></i> ${item.dosen || "-"}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <span class="text-[10px] font-bold px-2 py-0.5 bg-gray-100 text-gray-600 rounded border border-gray-200 uppercase">${item.prodi || "-"}</span>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="flex flex-col text-center">
+                        <span class="font-bold text-gray-700 text-xs">${tgl}</span>
+                        <span class="text-xs text-blue-600 font-medium">${item.jam || "-"}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-bold">${item.kelas || "-"}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold border border-emerald-100">${item.ruangan || "-"}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <button onclick="hapusJadwal(${item.id}, event)" class="text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            </tr>`;
+    });
+    tbody.innerHTML = rowsHtml;
+}
+
+window.hapusJadwal = function (id, event = null) {
+    if (event) event.stopPropagation();
+    Swal.fire({
+        title: "Hapus data?",
+        text: "Data yang dihapus tidak bisa dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ef4444",
+        cancelButtonColor: "#64748b",
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`${window.API_URL}/jadwal-upk/${id}`, {
+                    method: "DELETE",
+                });
+                const res = await response.json();
+                if (res.status === "success" || res.status === true) {
+                    Swal.fire("Berhasil!", "Data telah dihapus.", "success");
+                    loadJadwal();
+                } else {
+                    Swal.fire("Gagal", res.message || "Gagal menghapus data.", "error");
+                }
+            } catch (err) {
+                console.error("Delete Error:", err);
+                Swal.fire("Error", "Gagal menghubungi server.", "error");
+            }
+        }
+    });
+};
+
+// ... fungsi openFormModal, openDetailModal tetap sama ...
 
 window.openDetailModal = function (id, event = null) {
   if (event) event.stopPropagation();
@@ -255,12 +338,11 @@ window.hapusJadwal = function (id, event = null) {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        // PERBAIKAN: Gunakan window.API_URL
         const response = await fetch(`${window.API_URL}/jadwal-upk/${id}`, {
           method: "DELETE",
         });
         const res = await response.json();
-        if (res.status === "success") {
+        if (res.status === "success" || res.status === true) {
           Swal.fire("Berhasil!", "Data telah dihapus.", "success");
           loadJadwal();
         } else {
@@ -277,15 +359,12 @@ window.hapusJadwal = function (id, event = null) {
 async function loadJadwal() {
   const tbody = document.getElementById("tableBody");
   try {
-    // PERBAIKAN: Gunakan window.API_URL (bukan PUBLIC_URL/api.php karena API_URL sudah include base path api)
-    // Jika API_URL anda "http://localhost/api.php", maka cukup panggil API_URL + "/jadwal-upk"
     const response = await fetch(`${window.API_URL}/jadwal-upk`);
     const result = await response.json();
-    if (result.status === "success") {
+    if (result.status === "success" || result.status === true) {
       allJadwalData = result.data;
       renderTable(allJadwalData);
     } else {
-      // Handle jika data kosong dari backend
       allJadwalData = [];
       renderTable([]);
     }
@@ -448,8 +527,7 @@ window.bulkDelete = function () {
 async function loadDropdownData() {
   try {
     // Load Matakuliah
-    // PERBAIKAN: Gunakan window.API_URL
-    const mkRes = await fetch(`${window.API_URL}/jadwal-praktikum`);
+    const mkRes = await fetch(`${window.API_URL}/matakuliah`);
     const mkData = await mkRes.json();
     const mkSelect = document.getElementById("inputMK");
     const mkMap = {}; // Store MK data for frekuensi lookup
@@ -472,7 +550,6 @@ async function loadDropdownData() {
     }
 
     // Load Laboratorium
-    // PERBAIKAN: Gunakan window.API_URL
     const labRes = await fetch(`${window.API_URL}/fasilitas`);
     const labData = await labRes.json();
     const labSelect = document.getElementById("inputRuangan");
@@ -501,4 +578,3 @@ async function loadDropdownData() {
     console.error("Error loading dropdown data:", err);
   }
 }
-ç

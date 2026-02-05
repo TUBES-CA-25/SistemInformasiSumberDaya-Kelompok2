@@ -98,4 +98,26 @@ class AsistenModel extends Model {
 
         return false;
     }
+
+    /**
+     * Ambil data berdasarkan kolom tertentu.
+     * * @param string $column Nama kolom
+     * @param mixed $value Nilai yang dicari
+     * @return array|null Data asisten atau null jika tidak ditemukan
+     */
+    public function getByColumn($column, $value) {
+        $column = $this->db->real_escape_string($column);
+        $query = "SELECT * FROM " . $this->table . " WHERE " . $column . " = ? LIMIT 1";
+        
+        $stmt = $this->db->prepare($query);
+        
+        if ($stmt) {
+            $stmt->bind_param("s", $value);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_assoc();
+        }
+
+        return null;
+    }
 }

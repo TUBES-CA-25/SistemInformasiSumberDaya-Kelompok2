@@ -60,6 +60,33 @@ class JadwalUpkController extends Controller
     }
 
     /**
+     * API endpoint untuk mengambil data jadwal UPK dalam format JSON.
+     * * @return void Mengirimkan JSON response dengan data jadwal UPK
+     */
+    public function apiIndex(): void 
+    {
+        $this->cleanBuffers();
+        header('Content-Type: application/json; charset=utf-8');
+        
+        try {
+            $data = $this->model->getAll();
+            echo json_encode([
+                'status' => true,
+                'message' => 'Data jadwal UPK berhasil diambil',
+                'data' => $data
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'status' => false,
+                'message' => 'Gagal mengambil data jadwal UPK: ' . $e->getMessage(),
+                'data' => null
+            ]);
+        }
+        exit;
+    }
+
+    /**
      * Endpoint Impor Data: Mengolah file Excel atau CSV
      * Menangani unggahan file, memvalidasi format, dan melakukan bulk insert.
      * Mendukung respon AJAX (JSON) maupun Redirect konvensional.

@@ -8,6 +8,10 @@ use PHPMailer\PHPMailer\Exception;
 
 class KontakController extends Controller {
 
+    public function index($params) {
+        $this->view('contact/index');
+    }
+
     public function send($params) {
         
         // 1. Ambil Data dari Form

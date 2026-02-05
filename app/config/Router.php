@@ -88,16 +88,23 @@ class Router {
         $this->get('/jadwalupk', 'JadwalUpkController', 'index');
         $this->get('/formatpenulisan', 'FormatPenulisanController', 'index');
         $this->get('/modul', 'ModulController', 'index');
+        $this->get('/contact', 'KontakController', 'index');
 
         // API ROUTES
         $this->get('/api/jadwal', 'JadwalPraktikumController', 'apiIndex');
         $this->get('/api/peraturan', 'PeraturanLabController', 'apiIndex');
         $this->get('/api/sanksi', 'SanksiController', 'apiIndex');
         $this->get('/api/asisten', 'AsistenController', 'apiIndex');
+        $this->get('/api/asisten/coordinator/current', 'AsistenController', 'getCoordinator');
+        $this->post('/api/asisten/coordinator/set', 'AsistenController', 'setCoordinator');
         $this->get('/api/alumni', 'AlumniController', 'apiIndex');
         $this->get('/api/manajemen', 'ManajemenController', 'apiIndex');
         $this->get('/api/fasilitas', 'FasilitasController', 'apiIndex');
         $this->get('/api/matakuliah', 'MatakuliahController', 'apiIndex');
+        $this->get('/api/jadwal-upk', 'JadwalUpkController', 'apiIndex');
+        $this->get('/api/peraturan-lab', 'PeraturanLabController', 'apiIndex');
+        $this->get('/api/sanksi-lab', 'SanksiController', 'apiIndex');
+        $this->get('/api/formatpenulisan', 'FormatPenulisanController', 'apiIndex');
 
         // -------- AUTH & ADMIN --------
         $this->get('/iclabs-login', 'AuthController', 'login');
@@ -115,7 +122,13 @@ class Router {
         $this->get('/admin/manajemen', 'ManajemenController', 'adminIndex');
         $this->get('/admin/fasilitas', 'FasilitasController', 'adminIndex');
         $this->get('/admin/matakuliah', 'MatakuliahController', 'adminIndex');
-        
+        $this->get('/admin/user', 'UserController', 'adminIndex');
+        $this->get('/admin/jadwal', 'JadwalPraktikumController', 'adminIndex');
+        $this->get('/admin/jadwalupk', 'JadwalUpkController', 'adminIndex');
+        $this->get('/admin/peraturan', 'PeraturanLabController', 'adminIndex');
+        $this->get('/admin/sop', 'SopController', 'adminIndex');
+        $this->get('/admin/modul', 'ModulController', 'adminIndex');
+        $this->get('/admin/formatpenulisan', 'FormatPenulisanController', 'adminIndex');
     }
 
     public function dispatch(): void

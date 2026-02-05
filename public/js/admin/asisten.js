@@ -75,6 +75,53 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    // Event listener untuk Koordinator Form
+    const koordinatorForm = document.getElementById("koordinatorForm");
+    if (koordinatorForm) {
+        koordinatorForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const selectedCoord = document.querySelector('input[name="koordinator"]:checked');
+            if (!selectedCoord) {
+                Swal.fire("Peringatan", "Silakan pilih asisten sebagai koordinator", "warning");
+                return;
+            }
+
+            const btnSave = document.getElementById("btnSaveCoord");
+            const originalText = btnSave.innerHTML;
+            btnSave.disabled = true;
+            btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+
+            try {
+                const response = await fetch(API_ENDPOINT + "/asisten/coordinator/set", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        idAsisten: selectedCoord.value
+                    })
+                });
+
+                const res = await response.json();
+
+                if (res.status === true || res.status === "success") {
+                    Swal.fire("Berhasil!", "Koordinator telah dipilih", "success");
+                    closeModal("koordinatorModal");
+                    loadAsisten();
+                } else {
+                    Swal.fire("Gagal", res.message || "Gagal menyimpan pilihan koordinator", "error");
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire("Error", "Gagal menghubungi server", "error");
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerHTML = originalText;
+            }
+        });
+    }
 });
 
 // --- 2. DATA LOADING & RENDERING ---
@@ -190,4 +237,232 @@ function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) modal.classList.add("hidden");
     document.body.style.overflow = "auto";
+}
+
+function openFormModal(id = null) {
+    const modal = document.getElementById("formModal");
+    if (!modal) return;
+    
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    
+    const titleEl = document.getElementById("formModalTitle");
+    const form = document.getElementById("asistenForm");
+    
+    if (form) form.reset();
+    
+    // Clear skills tags
+    const skillsTagContainer = document.getElementById("skillsTagContainer");
+    if (skillsTagContainer) {
+        const tags = skillsTagContainer.querySelectorAll(".skill-tag");
+        tags.forEach(tag => tag.remove());
+    }
+    
+    if (id) {
+        // Edit mode
+        if (titleEl) titleEl.innerHTML = '<i class="fas fa-edit text-blue-600 mr-2"></i> Edit Asisten';
+        const item = allAsistenData.find(a => a.idAsisten == id);
+        if (item) {
+            document.getElementById("inputIdAsisten").value = item.idAsisten || "";
+            document.getElementById("inputNama").value = item.nama || "";
+            document.getElementById("inputEmail").value = item.email || "";
+            document.getElementById("inputJurusan").value = item.jurusan || "";
+            document.getElementById("inputStatus").value = item.statusAktif || "Asisten";
+            document.getElementById("inputBio").value = item.bio || "";
+            
+            // Handle skills
+            if (item.skills) {
+                try {
+                    const skillsArray = typeof item.skills === 'string' ? JSON.parse(item.skills) : item.skills;
+                    document.getElementById("inputSkills").value = JSON.stringify(skillsArray);
+                    
+                    // Render skill tags
+                    if (Array.isArray(skillsArray)) {
+                        skillsArray.forEach(skill => {
+                            addSkillTag(skill);
+                        });
+                    }
+                } catch (e) {
+                    console.error("Error parsing skills:", e);
+                }
+            }
+            
+            // Show existing foto info if available
+            if (item.foto) {
+                const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
+                if (fotoPreviewInfo) {
+                    fotoPreviewInfo.classList.remove("hidden");
+                    fotoPreviewInfo.classList.add("flex");
+                }
+            } else {
+                const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
+                if (fotoPreviewInfo) {
+                    fotoPreviewInfo.classList.add("hidden");
+                }
+            }
+        }
+    } else {
+        // Add mode
+        if (titleEl) titleEl.innerHTML = '<i class="fas fa-plus text-blue-600 mr-2"></i> Tambah Asisten Baru';
+        document.getElementById("inputIdAsisten").value = "";
+        
+        // Hide foto preview info for new record
+        const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
+        if (fotoPreviewInfo) {
+            fotoPreviewInfo.classList.add("hidden");
+        }
+    }
+}
+
+function addSkillTag(skill) {
+    const container = document.getElementById("skillsTagContainer");
+    if (!container) return;
+    
+    const tagInput = container.querySelector("#tagInput");
+    
+    const tag = document.createElement("span");
+    tag.className = "skill-tag inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium border border-blue-200";
+    tag.innerHTML = `
+        ${skill}
+        <button type="button" onclick="this.parentElement.remove(); updateSkillsInput()" class="hover:text-blue-900 font-bold">×</button>
+    `;
+    
+    container.insertBefore(tag, tagInput);
+}
+
+function updateSkillsInput() {
+    const container = document.getElementById("skillsTagContainer");
+    const tags = container.querySelectorAll(".skill-tag");
+    const skills = [];
+    
+    tags.forEach(tag => {
+        const text = tag.textContent.trim().slice(0, -1); // Remove the × character
+        skills.push(text);
+    });
+    
+    document.getElementById("inputSkills").value = JSON.stringify(skills);
+}
+
+function openDetailModal(id) {
+    const modal = document.getElementById("detailModal");
+    if (!modal) return;
+    
+    const item = allAsistenData.find(a => a.idAsisten == id);
+    if (!item) return;
+    
+    document.getElementById("detailNama").innerText = item.nama || "-";
+    document.getElementById("detailEmail").innerText = item.email || "-";
+    document.getElementById("detailJurusan").innerText = item.jurusan || "-";
+    
+    let status = "Tidak Aktif";
+    if (item.isKoordinator == 1) {
+        status = "Koordinator";
+    } else if (item.statusAktif == "1" || item.statusAktif === "Asisten") {
+        status = "Asisten";
+    }
+    document.getElementById("detailStatus").innerText = status;
+    
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+function openKoordinatorModal() {
+    const modal = document.getElementById("koordinatorModal");
+    if (!modal) return;
+
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+
+    // Load daftar asisten untuk dipilih
+    loadKoordinatorList();
+    loadCurrentCoordinator();
+}
+
+async function loadCurrentCoordinator() {
+    try {
+        const response = await fetch(API_ENDPOINT + "/asisten/coordinator/current");
+        if (!response.ok) throw new Error("Failed to fetch current coordinator");
+        
+        const res = await response.json();
+        const coordNameEl = document.getElementById("currentCoordName");
+        
+        if (res.status === true && res.data) {
+            coordNameEl.innerText = res.data.nama || "Belum ditentukan";
+        } else {
+            coordNameEl.innerText = "Belum ditentukan";
+        }
+    } catch (err) {
+        console.error("Error loading current coordinator:", err);
+        document.getElementById("currentCoordName").innerText = "Belum ditentukan";
+    }
+}
+
+async function loadKoordinatorList() {
+    const coordList = document.getElementById("coordList");
+    if (!coordList) return;
+
+    coordList.innerHTML = '<div class="text-center py-4 text-gray-400">Memuat data...</div>';
+
+    try {
+        const response = await fetch(API_ENDPOINT + "/asisten");
+        if (!response.ok) throw new Error("Network response was not ok");
+        
+        const res = await response.json();
+
+        if (res.status === true && res.data && res.data.length > 0) {
+            const asistenList = res.data;
+            let html = '';
+
+            asistenList.forEach(asisten => {
+                html += `
+                    <label class="flex items-center p-3 bg-white hover:bg-gray-50 rounded-lg cursor-pointer border border-gray-100 hover:border-emerald-300 transition-all">
+                        <input type="radio" name="koordinator" value="${asisten.idAsisten}" class="w-4 h-4 text-emerald-600">
+                        <div class="ml-3">
+                            <p class="font-medium text-gray-900">${asisten.nama}</p>
+                            <p class="text-xs text-gray-500">${asisten.email}</p>
+                        </div>
+                    </label>
+                `;
+            });
+
+            coordList.innerHTML = html;
+        } else {
+            coordList.innerHTML = '<div class="text-center py-4 text-gray-400">Tidak ada asisten tersedia</div>';
+        }
+    } catch (err) {
+        console.error("Error loading coordinator list:", err);
+        coordList.innerHTML = '<div class="text-center py-4 text-red-500">Gagal memuat data</div>';
+    }
+}
+
+function hapusAsisten(id) {
+    Swal.fire({
+        title: "Hapus Asisten?",
+        text: "Data asisten akan dihapus secara permanen!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ef4444",
+        cancelButtonColor: "#64748b",
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(API_ENDPOINT + "/asisten/" + id, {
+                    method: "DELETE"
+                });
+                const res = await response.json();
+                
+                if (res.status === true || res.status === "success") {
+                    Swal.fire("Berhasil!", "Asisten telah dihapus.", "success");
+                    loadAsisten();
+                } else {
+                    Swal.fire("Gagal", res.message || "Gagal menghapus asisten", "error");
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire("Error", "Gagal menghubungi server", "error");
+            }
+        }
+    });
 }

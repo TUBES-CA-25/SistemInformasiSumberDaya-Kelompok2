@@ -160,4 +160,51 @@ class AsistenController extends Controller {
             ? $this->success(null, 'Koordinator diperbarui')
             : $this->error('Gagal memperbarui koordinator');
     }
+
+    /**
+     * API: Get Current Koordinator
+     */
+    public function getCoordinator() {
+        $coordinator = $this->model->getByColumn('isKoordinator', 1);
+        
+        if ($coordinator) {
+            return $this->success($coordinator, 'Koordinator ditemukan');
+        } else {
+            return $this->success(null, 'Belum ada koordinator');
+        }
+    }
+
+    /**
+     * API: Set Koordinator via JSON
+     */
+    public function setCoordinator() {
+        $input = $this->getJson() ?? [];
+        $idAsisten = $input['idAsisten'] ?? null;
+
+        if (!$idAsisten) {
+            return $this->error('ID Asisten tidak valid', null, 400);
+        }
+
+        // Verify asisten exists
+        $asisten = $this->model->getById($idAsisten);
+        if (!$asisten) {
+            return $this->error('Asisten tidak ditemukan', null, 404);
+        }
+
+        try {
+            // Reset all other koordinators
+            $this->model->resetAllKoordinator();
+            
+            // Set new coordinator
+            $updated = $this->model->update($idAsisten, ['isKoordinator' => 1], 'idAsisten');
+            
+            if ($updated) {
+                return $this->success(null, 'Koordinator berhasil dipilih');
+            } else {
+                return $this->error('Gagal menyimpan perubahan', null, 500);
+            }
+        } catch (Exception $e) {
+            return $this->error('Error: ' . $e->getMessage(), null, 500);
+        }
+    }
 }

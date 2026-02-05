@@ -23,7 +23,7 @@ class UserController extends Controller {
      * 2. Cek apakah user memiliki hak akses 'super_admin'.
      */
     public function __construct() {
-        parent::__construct(); // Memastikan constructor parent terpanggil jika ada
+        // parent::__construct(); // Memastikan constructor parent terpanggil jika ada
 
         // 1. Verifikasi Status Login
         if (!isset($_SESSION['status']) || $_SESSION['status'] != 'login') {
