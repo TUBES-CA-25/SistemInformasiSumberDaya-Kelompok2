@@ -32,9 +32,9 @@
     ?>
 
     <script>
-        const API_URL = '<?php echo API_URL; ?>';
-        const BASE_URL = '<?php echo BASE_URL; ?>';
-        const ASSETS_URL = '<?php echo ASSETS_URL; ?>';
+        window.API_URL = '<?php echo API_URL; ?>';
+        window.BASE_URL = '<?php echo BASE_URL; ?>';
+        window.ASSETS_URL = '<?php echo ASSETS_URL; ?>';
     </script>
 </head>
 <body class="bg-gray-100 font-sans text-gray-800 antialiased">

@@ -168,8 +168,6 @@ class PeraturanLabController extends Controller
             $input = [
                 'judul'          => !empty($_POST['judul']) ? trim($_POST['judul']) : $oldData['judul'],
                 'deskripsi'      => !empty($_POST['deskripsi']) ? trim($_POST['deskripsi']) : $oldData['deskripsi'],
-                'kategori'       => $_POST['kategori'] ?? ($oldData['kategori'] ?? 'Larangan Umum'),
-                'urutan'         => isset($_POST['urutan']) ? intval($_POST['urutan']) : ($oldData['urutan'] ?? 0),
                 'display_format' => $_POST['display_format'] ?? ($oldData['display_format'] ?? 'list')
             ];
 
@@ -233,9 +231,7 @@ class PeraturanLabController extends Controller
         return [
             'judul'          => $judul,
             'deskripsi'      => $deskripsi,
-            'display_format' => $source['display_format'] ?? 'list',
-            'kategori'       => $source['kategori'] ?? 'Larangan Umum',
-            'urutan'         => intval($source['urutan'] ?? 0)
+            'display_format' => $source['display_format'] ?? 'list'
         ];
     }
 }

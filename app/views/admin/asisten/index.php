@@ -219,10 +219,6 @@
         </div>
     </div>
 
-<script>
-    // Gunakan window agar menjadi property global yang bisa diakses asisten.js
-    window.BASE_URL = "<?= PUBLIC_URL ?>";
-    window.API_URL = "<?= PUBLIC_URL ?>";
-</script>
+
 
 <script src="<?= PUBLIC_URL ?>/js/admin/asisten.js?v=<?= time() ?>"></script>

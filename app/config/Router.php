@@ -14,6 +14,12 @@ class Router {
     public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        
+        // Support _method override for FormData PUT/DELETE requests
+        if ($this->method === 'POST' && isset($_POST['_method'])) {
+            $this->method = strtoupper($_POST['_method']);
+        }
+        
         $this->path = $this->getPath();
         
         // PERBAIKAN: Selalu muat rute bawaan saat objek dibuat
@@ -31,12 +37,18 @@ class Router {
             if (!$path) {
                 $uri = $_SERVER['REQUEST_URI'] ?? '/';
                 $uri = explode('?', $uri)[0];
-                $script_name = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+                $script_name = $_SERVER['SCRIPT_NAME'];
                 
-                if ($script_name !== '/' && $script_name !== '') {
-                    $path = str_replace($script_name, '', $uri);
+                // Jika URI dimulai dengan SCRIPT_NAME (misal /api.php/...), hapus bagian itu
+                if (strpos($uri, $script_name) === 0) {
+                    $path = substr($uri, strlen($script_name));
                 } else {
-                    $path = $uri;
+                    $script_dir = rtrim(dirname($script_name), '/\\');
+                    if ($script_dir !== '/' && $script_dir !== '') {
+                        $path = str_replace($script_dir, '', $uri);
+                    } else {
+                        $path = $uri;
+                    }
                 }
             }
 
@@ -88,23 +100,83 @@ class Router {
         $this->get('/jadwalupk', 'JadwalUpkController', 'index');
         $this->get('/formatpenulisan', 'FormatPenulisanController', 'index');
         $this->get('/modul', 'ModulController', 'index');
+        $this->post('/modul', 'ModulController', 'index');
+        $this->post('/modul/{id}', 'ModulController', 'index');
+        $this->put('/modul/{id}', 'ModulController', 'index');
+        $this->delete('/modul/{id}', 'ModulController', 'index');
         $this->get('/contact', 'KontakController', 'index');
 
         // API ROUTES
         $this->get('/api/jadwal', 'JadwalPraktikumController', 'apiIndex');
+        $this->get('/api/jadwal/{id}', 'JadwalPraktikumController', 'apiShow');
+        $this->post('/api/jadwal', 'JadwalPraktikumController', 'store');
+        $this->put('/api/jadwal/{id}', 'JadwalPraktikumController', 'update');
+        $this->delete('/api/jadwal/{id}', 'JadwalPraktikumController', 'delete');
+        $this->post('/api/jadwal/delete-multiple', 'JadwalPraktikumController', 'deleteMultiple');
+        $this->post('/api/jadwal-praktikum/upload', 'JadwalPraktikumController', 'uploadApi');
+        $this->get('/api/jadwal-praktikum/template', 'JadwalPraktikumController', 'downloadTemplate');
         $this->get('/api/peraturan', 'PeraturanLabController', 'apiIndex');
         $this->get('/api/sanksi', 'SanksiController', 'apiIndex');
-        $this->get('/api/asisten', 'AsistenController', 'apiIndex');
         $this->get('/api/asisten/coordinator/current', 'AsistenController', 'getCoordinator');
         $this->post('/api/asisten/coordinator/set', 'AsistenController', 'setCoordinator');
+        $this->put('/api/asisten/{id}', 'AsistenController', 'update');
+        $this->delete('/api/asisten/{id}', 'AsistenController', 'delete');
+        $this->get('/api/asisten/{id}', 'AsistenController', 'apiShow');
+        $this->post('/api/asisten', 'AsistenController', 'store');
+        $this->get('/api/asisten', 'AsistenController', 'apiIndex');
+        $this->get('/api/alumni/{id}', 'AlumniController', 'apiShow');
+        $this->put('/api/alumni/{id}', 'AlumniController', 'update');
+        $this->delete('/api/alumni/{id}', 'AlumniController', 'delete');
+        $this->post('/api/alumni', 'AlumniController', 'store');
         $this->get('/api/alumni', 'AlumniController', 'apiIndex');
         $this->get('/api/manajemen', 'ManajemenController', 'apiIndex');
+        $this->get('/api/manajemen/{id}', 'ManajemenController', 'apiShow');
+        $this->post('/api/manajemen', 'ManajemenController', 'store');
+        $this->put('/api/manajemen/{id}', 'ManajemenController', 'update');
+        $this->delete('/api/manajemen/{id}', 'ManajemenController', 'delete');
+
         $this->get('/api/fasilitas', 'FasilitasController', 'apiIndex');
+        $this->post('/api/fasilitas', 'FasilitasController', 'store');
+        $this->put('/api/fasilitas/{id}', 'FasilitasController', 'update');
+        $this->delete('/api/fasilitas/{id}', 'FasilitasController', 'delete');
+        $this->delete('/api/fasilitas/image/{id}', 'FasilitasController', 'deleteImage');
+
         $this->get('/api/matakuliah', 'MatakuliahController', 'apiIndex');
+        $this->get('/api/matakuliah/{id}', 'MatakuliahController', 'apiShow');
+        $this->post('/api/matakuliah', 'MatakuliahController', 'store');
+        $this->put('/api/matakuliah/{id}', 'MatakuliahController', 'update');
+        $this->delete('/api/matakuliah/{id}', 'MatakuliahController', 'delete');
+
+        $this->get('/api/modul', 'ModulController', 'getJson');
+        $this->post('/api/modul', 'ModulController', 'store');
+        $this->post('/api/modul/{id}', 'ModulController', 'update');
+        $this->put('/api/modul/{id}', 'ModulController', 'update');
+        $this->delete('/api/modul/{id}', 'ModulController', 'delete');
+
         $this->get('/api/jadwal-upk', 'JadwalUpkController', 'apiIndex');
+        $this->post('/api/jadwal-upk', 'JadwalUpkController', 'store');
+        $this->put('/api/jadwal-upk/{id}', 'JadwalUpkController', 'update');
+        $this->delete('/api/jadwal-upk/{id}', 'JadwalUpkController', 'delete');
+        $this->post('/api/jadwal-upk/delete-multiple', 'JadwalUpkController', 'deleteMultiple');
+        $this->post('/api/jadwal-upk/upload', 'JadwalUpkController', 'upload');
+
         $this->get('/api/peraturan-lab', 'PeraturanLabController', 'apiIndex');
+        $this->post('/api/peraturan-lab', 'PeraturanLabController', 'store');
+        $this->post('/api/peraturan-lab/{id}', 'PeraturanLabController', 'update');
+        $this->put('/api/peraturan-lab/{id}', 'PeraturanLabController', 'update');
+        $this->delete('/api/peraturan-lab/{id}', 'PeraturanLabController', 'delete');
+
         $this->get('/api/sanksi-lab', 'SanksiController', 'apiIndex');
+        $this->post('/api/sanksi-lab', 'SanksiController', 'store');
+        $this->post('/api/sanksi-lab/{id}', 'SanksiController', 'update');
+        $this->put('/api/sanksi-lab/{id}', 'SanksiController', 'update');
+        $this->delete('/api/sanksi-lab/{id}', 'SanksiController', 'delete');
+
         $this->get('/api/formatpenulisan', 'FormatPenulisanController', 'apiIndex');
+        $this->post('/api/formatpenulisan', 'FormatPenulisanController', 'store');
+        $this->post('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'update');
+        $this->put('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'update');
+        $this->delete('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'delete');
 
         // -------- AUTH & ADMIN --------
         $this->get('/iclabs-login', 'AuthController', 'login');
@@ -148,7 +220,8 @@ class Router {
 
     private function match($pattern, $path): bool
     {
-        $regex = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<$1>[a-zA-Z0-9_-]+)', $pattern);
+        // Convert {id} to regex pattern that matches digits, alphanumeric with underscores, hyphens
+        $regex = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<$1>[0-9a-zA-Z_-]+)', $pattern);
         $regex = '#^' . $regex . '$#';
         if (preg_match($regex, $path, $matches)) {
             foreach ($matches as $key => $value) {
@@ -184,7 +257,9 @@ class Router {
     private function notFound(): void
     {
         http_response_code(404);
-        if (strpos($this->path, '/api/') === 0) {
+        $isApi = (strpos($this->path, '/api/') === 0) || (strpos($_SERVER['SCRIPT_NAME'], 'api.php') !== false);
+        
+        if ($isApi) {
             header('Content-Type: application/json');
             echo json_encode(['status' => false, 'message' => 'API Route not found: ' . $this->path]);
         } else {
@@ -195,6 +270,8 @@ class Router {
 
     public function get($route, $ctl, $act) { $this->addRoute('GET', $route, $ctl, $act); }
     public function post($route, $ctl, $act) { $this->addRoute('POST', $route, $ctl, $act); }
+    public function put($route, $ctl, $act) { $this->addRoute('PUT', $route, $ctl, $act); }
+    public function delete($route, $ctl, $act) { $this->addRoute('DELETE', $route, $ctl, $act); }
 
     private function addRoute($method, $route, $ctl, $act) {
         $this->routes[strtoupper($method)]['/' . trim($route, '/')] = ['controller' => $ctl, 'action' => $act];

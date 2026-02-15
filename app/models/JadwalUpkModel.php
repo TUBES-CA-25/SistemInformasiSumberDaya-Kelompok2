@@ -131,7 +131,7 @@ class JadwalUpkModel {
             $this->db->beginTransaction();
 
             // Mengosongkan tabel sebelum impor baru (Reset data)
-            $this->db->exec("TRUNCATE TABLE {$this->table}");
+            $this->db->exec("DELETE FROM {$this->table}");
 
             $sql = "INSERT INTO {$this->table} (prodi, tanggal, jam, mata_kuliah, dosen, frekuensi, kelas, ruangan) 
                     VALUES (?,?,?,?,?,?,?,?)";
@@ -150,7 +150,9 @@ class JadwalUpkModel {
                 ]);
             }
             
-            $this->db->commit();
+            if ($this->db->inTransaction()) {
+                $this->db->commit();
+            }
             return true;
         } catch (Exception $e) {
             if ($this->db->inTransaction()) {
@@ -178,7 +180,7 @@ class JadwalUpkModel {
             $delimiter = (strpos($firstLine, ';') !== false) ? ';' : ',';
 
             $this->db->beginTransaction();
-            $this->db->exec("TRUNCATE TABLE {$this->table}");
+            $this->db->exec("DELETE FROM {$this->table}");
 
             $sql = "INSERT INTO {$this->table} (prodi, tanggal, jam, mata_kuliah, dosen, frekuensi, kelas, ruangan) 
                     VALUES (?,?,?,?,?,?,?,?)";
@@ -212,7 +214,9 @@ class JadwalUpkModel {
             }
 
             fclose($handle);
-            $this->db->commit();
+            if ($this->db->inTransaction()) {
+                $this->db->commit();
+            }
             return true;
         } catch (Exception $e) {
             if (isset($handle)) fclose($handle);

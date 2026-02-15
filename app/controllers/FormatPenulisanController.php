@@ -37,6 +37,16 @@ class FormatPenulisanController extends Controller {
     public function apiIndex(): void {
         $this->success($this->service->getAllFormat(), 'Data berhasil diambil');
     }
+    
+    public function apiShow($params): void {
+        $id = $params['id'] ?? null;
+        $data = $this->model->getById($id, 'id_format');
+        if ($data) {
+            $this->success($data, 'Data berhasil ditemukan');
+        } else {
+            $this->error('Data tidak ditemukan', null, 404);
+        }
+    }
 
     public function store(): void {
         try {

@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // --- 1. LOAD DATA ---
 function loadJadwal() {
-  fetch("/api/jadwal")
+  fetch(API_URL + "/jadwal")
     .then((res) => res.json())
     .then((res) => {
       if ((res.status === "success" || res.code === 200) && res.data) {
@@ -200,7 +200,7 @@ function bulkDelete() {
 
   confirmDelete(() => {
     showLoading(`Menghapus ${ids.length} data...`);
-    fetch("api/jadwal/delete-multiple", {
+    fetch(API_URL + "/jadwal/delete-multiple", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ids: ids }),
@@ -233,9 +233,9 @@ function openFormModal(id = null, event = null) {
 
   // Load Dropdown Options (MK, Lab, Asisten)
   Promise.all([
-    fetch("/api/matakuliah").then((r) => r.json()),
-    fetch("/api/fasilitas").then((r) => r.json()),
-    fetch("/api/asisten")
+    fetch(API_URL + "/matakuliah").then((r) => r.json()),
+    fetch(API_URL + "/fasilitas").then((r) => r.json()),
+    fetch(API_URL + "/asisten")
       .then((r) => r.json())
       .catch(() => ({ data: [] })),
   ]).then(([mkData, labData, asistenData]) => {
@@ -444,7 +444,7 @@ document
       }, 300);
 
       // Request ke API
-      const response = await fetch("/api/jadwal-praktikum/upload", {
+      const response = await fetch(API_URL + "/jadwal-praktikum/upload", {
         method: "POST",
         body: formData,
       });
@@ -514,7 +514,7 @@ function hapusJadwal(id, event) {
   if (event) event.stopPropagation();
   confirmDelete(() => {
     showLoading("Menghapus data...");
-    fetch("/api/jadwal/" + id, { method: "DELETE" })
+    fetch(API_URL + "/jadwal/" + id, { method: "DELETE" })
       .then((res) => res.json())
       .then(() => {
         hideLoading();

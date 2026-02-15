@@ -175,8 +175,8 @@
                                     <p class="text-xs text-gray-500">JPG, PNG (Max 2MB per file)</p>
                                 </div>
                                 <input type="file" id="inputGambar" name="gambar[]" accept="image/*" multiple class="hidden" />
-                            </label>
-                        </div>
+                            </div>
+                        </label>
                         
                         <div id="previewContainer" class="mt-3 grid grid-cols-3 sm:grid-cols-4 gap-3">
                             <div id="savedImagesContainer" class="contents"></div>
@@ -286,4 +286,8 @@
     </div>
 </div>
 
+<script>
+    window.API_URL = "<?= API_URL ?>";
+    window.PUBLIC_URL = "<?= PUBLIC_URL ?>";
+</script>
 <script src="<?= PUBLIC_URL ?>/js/admin/fasilitas.js"></script>

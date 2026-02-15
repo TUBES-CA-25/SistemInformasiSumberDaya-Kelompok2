@@ -2,6 +2,7 @@
 
 require_once ROOT_PROJECT . '/app/Services/FasilitasService.php';
 require_once ROOT_PROJECT . '/app/models/FasilitasModel.php';
+require_once ROOT_PROJECT . '/app/models/LaboratoriumGambarModel.php';
 
 /**
  * FasilitasController
@@ -30,8 +31,8 @@ class FasilitasController extends Controller {
      * Tampilan Publik: Daftar semua fasilitas (Lab & Riset).
      */
     public function index(): void {
-        // Mengambil data yang sudah diolah Service (termasuk thumbnail gambar utama)
-        $labs = $this->service->getFasilitasWithThumbnails();
+        // Hanya ambil fasilitas yang berjenis 'Laboratorium'
+        $labs = $this->service->getFasilitasByJenis('Laboratorium');
         
         $this->view('fasilitas/laboratorium', [
             'judul' => 'Fasilitas & Ruang Laboratorium',
@@ -128,18 +129,22 @@ class FasilitasController extends Controller {
 
         try {
             // 3. Ambil data dari model
-            // Anda bisa menggunakan $this->model->getAll() 
-            // atau $this->service->getFasilitasWithThumbnails() jika ingin data yang lebih lengkap
             $labs = $this->model->getAll();
+            
+            // 4. Sertakan galeri gambar untuk setiap lab (dibutuhkan untuk fitur edit/hapus gambar)
+            $gambarModel = new LaboratoriumGambarModel();
+            foreach ($labs as &$lab) {
+                $lab['images'] = $gambarModel->getByLaboratorium($lab['idLaboratorium']);
+            }
 
-            // 4. Kirim response sukses
+            // 5. Kirim response sukses
             echo json_encode([
                 'status'  => true,
                 'message' => 'Data fasilitas berhasil dimuat',
                 'data'    => $labs
             ]);
         } catch (Exception $e) {
-            // 5. Kirim response error jika terjadi kegagalan sistem
+            // 6. Kirim response error jika terjadi kegagalan sistem
             http_response_code(500);
             echo json_encode([
                 'status'  => false,
@@ -216,13 +221,42 @@ class FasilitasController extends Controller {
 
     public function store(): void {
         $input = $this->getJson() ?? $_POST;
+        unset($input['_method'], $input['idLaboratorium']);
+        
+        // Map form name to database column
+        if (isset($input['fasilitas'])) {
+            $input['fasilitas_pendukung'] = $input['fasilitas'];
+            unset($input['fasilitas']);
+        }
+
         if (empty($input['nama'])) {
             $this->error('Nama wajib diisi');
             return;
         }
 
+        // Handle main image if uploaded
+        if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
+            $uploadResult = $this->handleMultipleUploads($_FILES['gambar'], $input['nama']);
+            if ($uploadResult) {
+                $input['gambar'] = $uploadResult[0]; // Set first image as main
+            }
+        }
+
         if ($this->model->insert($input)) {
-            $this->success(['id' => $this->model->getLastInsertId()], 'Fasilitas berhasil ditambahkan', 201);
+            $newId = $this->model->getLastInsertId();
+            
+            // Save all uploaded images to gallery
+            if (isset($uploadResult) && !empty($uploadResult)) {
+                $gambarModel = new LaboratoriumGambarModel();
+                foreach ($uploadResult as $filename) {
+                    $gambarModel->insert([
+                        'idLaboratorium' => $newId,
+                        'namaGambar' => $filename
+                    ]);
+                }
+            }
+
+            $this->success(['id' => $newId], 'Fasilitas berhasil ditambahkan', 201);
         } else {
             $this->error('Gagal menyimpan ke database');
         }
@@ -231,12 +265,62 @@ class FasilitasController extends Controller {
     public function update(array $params = []): void {
         $id = $params['id'] ?? null;
         $input = $this->getJson() ?? $_POST;
+        unset($input['_method'], $input['idLaboratorium']);
+
+        // Map form name to database column
+        if (isset($input['fasilitas'])) {
+            $input['fasilitas_pendukung'] = $input['fasilitas'];
+            unset($input['fasilitas']);
+        }
+
+        // Handle multiple images if uploaded
+        if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
+            $uploadResult = $this->handleMultipleUploads($_FILES['gambar'], $input['nama'] ?? 'lab');
+            if ($uploadResult) {
+                // Save all uploaded images to gallery
+                $gambarModel = new LaboratoriumGambarModel();
+                foreach ($uploadResult as $filename) {
+                    $gambarModel->insert([
+                        'idLaboratorium' => $id,
+                        'namaGambar' => $filename
+                    ]);
+                }
+                
+                // If lab doesn't have a main image yet, set the first one as main
+                $existing = $this->model->getById($id, 'idLaboratorium');
+                if (empty($existing['gambar'])) {
+                    $input['gambar'] = $uploadResult[0];
+                }
+            }
+        }
 
         if ($this->model->update($id, $input, 'idLaboratorium')) {
             $this->success([], 'Fasilitas berhasil diperbarui');
         } else {
             $this->error('Gagal mengupdate data');
         }
+    }
+
+    /**
+     * Helper to handle multiple image uploads
+     */
+    private function handleMultipleUploads($files, $labName): array {
+        $uploadedFiles = [];
+        $uploadDir = ROOT_PROJECT . '/public/assets/uploads/';
+        
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+        foreach ($files['name'] as $key => $name) {
+            if ($files['error'][$key] === UPLOAD_ERR_OK) {
+                $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                $filename = 'lab_' . time() . '_' . $key . '.' . $ext;
+                
+                if (move_uploaded_file($files['tmp_name'][$key], $uploadDir . $filename)) {
+                    $uploadedFiles[] = $filename;
+                }
+            }
+        }
+        return $uploadedFiles;
     }
 
     public function delete(array $params): void {

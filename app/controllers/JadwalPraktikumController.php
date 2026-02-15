@@ -39,7 +39,8 @@ class JadwalPraktikumController extends Controller {
     /**
      * API: Get detail jadwal berdasarkan ID.
      */
-    public function show($params = []): void {
+    public function apiShow($params = []): void {
+        $this->cleanBuffers();
         $id = $params['id'] ?? null;
         if (!$id) {
             $this->error('ID tidak valid', null, 400);
@@ -100,23 +101,34 @@ class JadwalPraktikumController extends Controller {
      * Admin: Store/Create Jadwal baru.
      */
     public function store(): void {
-        $input = $_POST;
+        $this->cleanBuffers();
+        $input = $this->getJson() ?? $_POST;
         
-        // Validasi
-        if (empty($input['idMatakuliah']) || empty($input['idLaboratorium'])) {
-            $this->setFlash('error', 'Field wajib diisi');
-            $this->redirect('/admin/jadwal/create');
+        // Pemetaan field dari form ke kolom database
+        $data = [
+            'idMatakuliah'   => $input['idMatakuliah'] ?? null,
+            'idLaboratorium' => $input['idLaboratorium'] ?? null,
+            'hari'           => $input['hari'] ?? null,
+            'kelas'          => strtoupper($input['kelas'] ?? ''),
+            'waktuMulai'     => $input['waktuMulai'] ?? null,
+            'waktuSelesai'   => $input['waktuSelesai'] ?? null,
+            'frekuensi'      => $input['frekuensi'] ?? null,
+            'dosen'          => $input['dosen'] ?? null,
+            'asisten1'       => !empty($input['idAsisten1']) ? $input['idAsisten1'] : null,
+            'asisten2'       => !empty($input['idAsisten2']) ? $input['idAsisten2'] : null,
+            'status'         => $input['status'] ?? 'Aktif'
+        ];
+        
+        // Validasi minimal
+        if (empty($data['idMatakuliah']) || empty($data['idLaboratorium'])) {
+            $this->error('Mata kuliah dan Laboratorium wajib diisi');
             return;
         }
-
-        $input['status'] = $input['status'] ?? 'Aktif';
         
-        if ($this->model->insert($input)) {
-            $this->setFlash('success', 'Jadwal berhasil dibuat');
-            $this->redirect('/admin/jadwal');
+        if ($this->model->insert($data)) {
+            $this->success($this->model->getLastInsertId(), 'Jadwal berhasil ditambahkan', 201);
         } else {
-            $this->setFlash('error', 'Gagal membuat jadwal');
-            $this->redirect('/admin/jadwal/create');
+            $this->error('Gagal membuat jadwal');
         }
     }
 
@@ -124,15 +136,32 @@ class JadwalPraktikumController extends Controller {
      * Admin: Update Jadwal.
      */
     public function update($params = []): void {
+        $this->cleanBuffers();
         $id = $params['id'] ?? null;
         if (!$id) {
             $this->error('ID tidak valid', null, 400);
             return;
         }
 
-        $input = $_POST;
-        if ($this->model->update($id, $input)) {
-            $this->success([], 'Jadwal berhasil diupdate');
+        $input = $this->getJson() ?? $_POST;
+        
+        // Pemetaan field dari form ke kolom database
+        $data = [
+            'idMatakuliah'   => $input['idMatakuliah'] ?? null,
+            'idLaboratorium' => $input['idLaboratorium'] ?? null,
+            'hari'           => $input['hari'] ?? null,
+            'kelas'          => strtoupper($input['kelas'] ?? ''),
+            'waktuMulai'     => $input['waktuMulai'] ?? null,
+            'waktuSelesai'   => $input['waktuSelesai'] ?? null,
+            'frekuensi'      => $input['frekuensi'] ?? null,
+            'dosen'          => $input['dosen'] ?? null,
+            'asisten1'       => !empty($input['idAsisten1']) ? $input['idAsisten1'] : null,
+            'asisten2'       => !empty($input['idAsisten2']) ? $input['idAsisten2'] : null,
+            'status'         => $input['status'] ?? 'Aktif'
+        ];
+        
+        if ($this->model->update($id, $data, 'idJadwal')) {
+            $this->success([], 'Jadwal berhasil diperbarui');
         } else {
             $this->error('Gagal mengupdate jadwal');
         }
@@ -213,6 +242,91 @@ class JadwalPraktikumController extends Controller {
         }
 
         $this->redirect('/admin/jadwal');
+    }
+
+    /**
+     * Admin: Delete Jadwal.
+     */
+    public function delete($params = []): void {
+        $this->cleanBuffers();
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            $this->error('ID tidak valid', null, 400);
+            return;
+        }
+
+        if ($this->model->delete($id)) {
+            $this->success([], 'Jadwal berhasil dihapus');
+        } else {
+            $this->error('Gagal menghapus jadwal');
+        }
+    }
+
+    /**
+     * Admin: Delete Multiple Jadwal.
+     */
+    public function deleteMultiple(): void {
+        $this->cleanBuffers();
+        $data = $this->getJson();
+        $ids = $data['ids'] ?? [];
+
+        if (empty($ids)) {
+            $this->error('Tidak ada data yang dipilih', null, 400);
+            return;
+        }
+
+        if ($this->model->deleteMultiple($ids)) {
+            $this->success([], count($ids) . ' jadwal berhasil dihapus');
+        } else {
+            $this->error('Gagal menghapus beberapa data');
+        }
+    }
+
+    /**
+     * API: Handle Excel/CSV Upload
+     */
+    public function uploadApi(): void {
+        $this->cleanBuffers();
+        try {
+            $file = $_FILES['excel_file'] ?? null;
+            if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
+                throw new Exception('File upload gagal');
+            }
+
+            $stats = $this->service->importFromExcel($file['tmp_name']);
+            
+            $msg = "Berhasil impor {$stats['success']} data.";
+            if ($stats['duplicate'] > 0) $msg .= " ({$stats['duplicate']} duplikat diabaikan).";
+            if ($stats['invalid'] > 0) $msg .= " ({$stats['invalid']} lab tidak dikenal).";
+
+            $this->success($stats, $msg);
+        } catch (Exception $e) {
+            $this->error($e->getMessage());
+        }
+    }
+
+    /**
+     * API: Download Template Excel
+     */
+    public function downloadTemplate(): void {
+        $this->cleanBuffers();
+        $file = ROOT_PROJECT . '/public/assets/templates/template_jadwal.xlsx';
+        
+        if (!file_exists($file)) {
+            // Kita buat dummy download jika file belum ada, atau error
+            $this->error('Template file tidak ditemukan');
+            return;
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'.basename($file).'"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($file));
+        readfile($file);
+        exit;
     }
 
     /**

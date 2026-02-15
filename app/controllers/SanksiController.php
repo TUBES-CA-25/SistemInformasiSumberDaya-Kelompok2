@@ -123,7 +123,6 @@ class SanksiController extends Controller
             $input = [
                 'judul'          => !empty($_POST['judul']) ? trim($_POST['judul']) : $oldData['judul'],
                 'deskripsi'      => !empty($_POST['deskripsi']) ? trim($_POST['deskripsi']) : $oldData['deskripsi'],
-                'urutan'         => isset($_POST['urutan']) ? intval($_POST['urutan']) : ($oldData['urutan'] ?? 0),
                 'display_format' => $_POST['display_format'] ?? ($oldData['display_format'] ?? 'list')
             ];
 
@@ -187,8 +186,7 @@ class SanksiController extends Controller
         return [
             'judul'          => $judul,
             'deskripsi'      => $deskripsi,
-            'display_format' => $rawData['display_format'] ?? 'list',
-            'urutan'         => intval($rawData['urutan'] ?? 0)
+            'display_format' => $rawData['display_format'] ?? 'list'
         ];
     }
 }

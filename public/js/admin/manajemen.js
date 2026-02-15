@@ -74,14 +74,13 @@ function renderTable(data) {
                         <span class="text-xs text-blue-600 flex items-center gap-1.5 font-medium">
                             <i class="far fa-envelope text-[10px]"></i> ${escapeHtml(item.email || "-")}
                         </span>
-                        ${
-                          item.nidn
-                            ? `
+                        ${item.nidn
+        ? `
                         <span class="text-[10px] text-gray-500 flex items-center gap-1.5">
                             <i class="far fa-id-card text-[10px]"></i> ${escapeHtml(item.nidn)}
                         </span>`
-                            : ""
-                        }
+        : ""
+      }
                     </div>
                 </td>
                 <td class="px-6 py-4">
@@ -202,10 +201,10 @@ document
     const btn = document.getElementById("btnSave");
     const msg = document.getElementById("formMessage");
     const id = document.getElementById("inputId").value;
-    const url = id ? API_URL + "/manajemen/" + id : API_URL + "/manajemen";
+    const url = id ? "/api/manajemen/" + id : "/api/manajemen";
 
     const formData = new FormData(this);
-    if (id) formData.append("_method", "POST"); // Trik untuk update file di PHP
+    if (id) formData.append("_method", "PUT"); // Trik untuk update file di PHP
 
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';

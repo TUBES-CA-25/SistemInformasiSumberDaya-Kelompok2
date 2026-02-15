@@ -129,6 +129,7 @@ class MatakuliahController extends Controller
     public function store(): void 
     {
         $input = $this->getJson(); // Mengambil data input (biasanya JSON AJAX)
+        unset($input['_method'], $input['idMatakuliah']);
         
         // 1. Validasi Input Wajib
         $required = ['kodeMatakuliah', 'namaMatakuliah'];
@@ -173,6 +174,7 @@ class MatakuliahController extends Controller
         }
 
         $input = $this->getJson();
+        unset($input['_method'], $input['idMatakuliah']);
         
         if ($this->model->update($id, $input, 'idMatakuliah')) {
             $this->success([], 'Matakuliah updated successfully');

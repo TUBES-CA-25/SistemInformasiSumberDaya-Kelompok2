@@ -141,4 +141,8 @@
     </div>
 </div>
 
+<script>
+    window.API_URL = "<?= API_URL ?>";
+    window.PUBLIC_URL = "<?= PUBLIC_URL ?>";
+</script>
 <script src="<?= PUBLIC_URL ?>/js/admin/matakuliah.js"></script>

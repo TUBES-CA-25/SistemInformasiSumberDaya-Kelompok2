@@ -139,7 +139,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <form action="<?= PUBLIC_URL ?>/auth" method="POST" class="space-y-6">
+                    <form action="<?= PUBLIC_URL ?>/login" method="POST" class="space-y-6">
                         
                         <div class="relative group">
                             <input type="text" name="username" id="username" class="floating-input block px-4 py-4 w-full text-sm text-slate-900 bg-white/60 rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer placeholder-transparent shadow-sm transition-all" placeholder=" " required />

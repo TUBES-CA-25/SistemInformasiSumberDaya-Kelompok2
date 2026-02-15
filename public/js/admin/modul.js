@@ -1,7 +1,7 @@
 let allModul = [];
 
-// PERBAIKAN 1: Gunakan window.BASE_URL, bukan tag PHP
-const API_MODUL = window.BASE_URL + "/modul";
+// PERBAIKAN 1: Gunakan window.API_URL untuk konsistensi API
+const API_MODUL = window.API_URL + "/modul";
 
 document.addEventListener("DOMContentLoaded", function () {
   loadData();
@@ -58,14 +58,13 @@ function renderTable() {
             <td class="px-6 py-4 font-bold text-gray-800 text-sm">${escapeHtml(m.nama_matakuliah)}</td>
             <td class="px-6 py-4 text-gray-600 text-sm">${escapeHtml(m.judul)}</td>
             <td class="px-6 py-4">
-                ${
-                  m.file
-                    ? // PERBAIKAN 2: Gunakan Template Literal JS (${window.BASE_URL})
-                      `<a href="${window.BASE_URL}/assets/uploads/modul/${m.file}" target="_blank" class="flex items-center gap-2 text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 w-fit">
+                ${m.file
+          ? // PERBAIKAN 2: Gunakan Template Literal JS (${window.BASE_URL})
+          `<a href="${window.BASE_URL}/assets/uploads/modul/${m.file}" target="_blank" class="flex items-center gap-2 text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 w-fit">
                         <i class="fas fa-file-pdf"></i> Lihat PDF
                     </a>`
-                    : '<span class="text-gray-400 text-xs italic">Tidak ada file</span>'
-                }
+          : '<span class="text-gray-400 text-xs italic">Tidak ada file</span>'
+        }
             </td>
             <td class="px-6 py-4 text-center">
                 <div class="flex justify-center gap-2">

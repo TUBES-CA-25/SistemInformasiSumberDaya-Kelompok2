@@ -45,6 +45,8 @@ class ManajemenController extends Controller {
                 $this->error('Field required: ' . implode(', ', $missing), null, 400);
             }
 
+            unset($input['_method'], $input['idManajemen']);
+
             $file = $_FILES['foto'] ?? null;
             if ($this->service->storeManajemen($input, $file)) {
                 $this->success(null, 'Manajemen created successfully', 201);
@@ -66,6 +68,8 @@ class ManajemenController extends Controller {
 
             $input = $_POST ?: ($this->getJson() ?? []);
             $file = $_FILES['foto'] ?? null;
+
+            unset($input['_method'], $input['idManajemen']);
 
             if ($this->service->updateManajemen($id, $input, $existing, $file)) {
                 $this->success(null, 'Manajemen updated successfully');

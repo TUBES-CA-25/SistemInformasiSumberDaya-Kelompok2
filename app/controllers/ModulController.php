@@ -61,7 +61,7 @@ class ModulController extends Controller {
      * * @return void
      */
     private function renderPublicView(): void {
-        require_once '../app/models/ModulModel.php';
+        require_once ROOT_PROJECT . '/app/models/ModulModel.php';
         $model = new ModulModel();
         
         $data['modul_ti'] = $model->getByJurusan('TI');
@@ -78,7 +78,7 @@ class ModulController extends Controller {
     public function getJson(): void {
         $this->cleanBuffer();
         
-        require_once '../app/models/ModulModel.php';
+        require_once ROOT_PROJECT . '/app/models/ModulModel.php';
         $model = new ModulModel();
         
         header('Content-Type: application/json');
@@ -97,7 +97,7 @@ class ModulController extends Controller {
         $this->cleanBuffer();
         header('Content-Type: application/json');
         
-        require_once '../app/models/ModulModel.php';
+        require_once ROOT_PROJECT . '/app/models/ModulModel.php';
         $model = new ModulModel();
         
         // Cek apakah file diunggah
@@ -120,7 +120,7 @@ class ModulController extends Controller {
         $this->cleanBuffer();
         header('Content-Type: application/json');
         
-        require_once '../app/models/ModulModel.php';
+        require_once ROOT_PROJECT . '/app/models/ModulModel.php';
         $model = new ModulModel();
         
         // Jika file tidak diganti, kirim array error default PHP (error 4 = No File)
@@ -136,19 +136,23 @@ class ModulController extends Controller {
     }
 
     /**
-     * Menghapus data modul berdasarkan ID yang diambil dari URL.
-     * * @return void
+     * Menghapus data modul berdasarkan ID.
+     * * @param array $params Parameter dari router
+     * @return void
      */
-    public function delete(): void {
+    public function delete(array $params = []): void {
         $this->cleanBuffer();
         header('Content-Type: application/json');
 
-        // Ekstraksi ID dari segment terakhir URL
-        $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $segments = explode('/', rtrim($url, '/'));
-        $id = end($segments);
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            // Fallback jika tidak lewat router params
+            $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $segments = explode('/', rtrim($url, '/'));
+            $id = end($segments);
+        }
         
-        require_once '../app/models/ModulModel.php';
+        require_once ROOT_PROJECT . '/app/models/ModulModel.php';
         $model = new ModulModel();
         
         if ($model->deleteModul($id) > 0) {

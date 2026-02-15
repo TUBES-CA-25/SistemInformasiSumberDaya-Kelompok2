@@ -87,6 +87,74 @@ class JadwalUpkController extends Controller
     }
 
     /**
+     * API endpoint untuk mengambil detail satu jadwal UPK.
+     * @param array $params Parameter URL
+     */
+    public function apiShow(array $params): void
+    {
+        $this->cleanBuffers();
+        header('Content-Type: application/json');
+        $id = $params['id'] ?? null;
+        
+        if (!$id) {
+            echo json_encode(['status' => false, 'message' => 'ID tidak valid']);
+            exit;
+        }
+
+        $data = $this->model->getById((int)$id);
+        echo json_encode([
+            'status' => $data ? true : false,
+            'data' => $data,
+            'message' => $data ? 'Success' : 'Data tidak ditemukan'
+        ]);
+        exit;
+    }
+
+    /**
+     * Menyimpan jadwal UPK baru.
+     */
+    public function store(): void
+    {
+        $this->cleanBuffers();
+        header('Content-Type: application/json');
+        
+        $input = $this->getJson() ?? $_POST;
+        unset($input['_method'], $input['id']);
+
+        if ($this->model->create($input)) {
+            echo json_encode(['status' => 'success', 'message' => 'Jadwal UPK berhasil ditambahkan']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Gagal menyimpan data']);
+        }
+        exit;
+    }
+
+    /**
+     * Update jadwal UPK.
+     */
+    public function update(array $params): void
+    {
+        $this->cleanBuffers();
+        header('Content-Type: application/json');
+        $id = $params['id'] ?? null;
+        
+        if (!$id) {
+            echo json_encode(['status' => 'error', 'message' => 'ID tidak valid']);
+            exit;
+        }
+
+        $input = $this->getJson() ?? $_POST;
+        unset($input['_method'], $input['id']);
+
+        if ($this->model->update((int)$id, $input)) {
+            echo json_encode(['status' => 'success', 'message' => 'Jadwal UPK berhasil diperbarui']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui data']);
+        }
+        exit;
+    }
+
+    /**
      * Endpoint Impor Data: Mengolah file Excel atau CSV
      * Menangani unggahan file, memvalidasi format, dan melakukan bulk insert.
      * Mendukung respon AJAX (JSON) maupun Redirect konvensional.
@@ -95,11 +163,7 @@ class JadwalUpkController extends Controller
     public function upload(): void 
     {
         $this->cleanBuffers();
-        $isAjax = $this->isAjaxRequest();
-        
-        if ($isAjax) {
-            header('Content-Type: application/json; charset=utf-8');
-        }
+        header('Content-Type: application/json; charset=utf-8');
 
         // Mendeteksi kunci file dari berbagai kemungkinan input form
         $fileKey = $_FILES['excel_file'] ?? $_FILES['file_import'] ?? null;
@@ -125,14 +189,13 @@ class JadwalUpkController extends Controller
 
             // 3. Memberikan Respon Berdasarkan Hasil Akhir
             if ($isSuccess) {
-                $this->handleResponse($isAjax, "Impor data berhasil diproses.");
+                $this->success(null, "Impor data berhasil diproses.");
             } else {
                 throw new Exception("Gagal menyimpan data ke database.");
             }
 
         } catch (Exception $e) {
-            // Catch semua error dari Controller maupun Service
-            $this->handleResponse($isAjax, $e->getMessage(), 400);
+            $this->error($e->getMessage());
         }
     }
 
@@ -143,19 +206,43 @@ class JadwalUpkController extends Controller
      */
     public function delete($params): void 
     {
+        $this->cleanBuffers();
         $id = is_array($params) ? ($params['id'] ?? null) : $params;
-        $isAjax = $this->isAjaxRequest();
 
         if (!$id) {
-            $this->handleResponse($isAjax, "ID jadwal tidak ditemukan.", 400);
+            $this->error("ID jadwal tidak ditemukan.");
             return;
         }
 
-        if ($this->model->deleteJadwal($id)) {
-            $this->handleResponse($isAjax, "Data jadwal berhasil dihapus.");
+        if ($this->model->deleteJadwal((int)$id)) {
+            $this->success(null, "Data jadwal berhasil dihapus.");
         } else {
-            $this->handleResponse($isAjax, "Gagal menghapus data dari database.", 500);
+            $this->error("Gagal menghapus data dari database.", null, 500);
         }
+    }
+
+    /**
+     * Hapus multiple record.
+     */
+    public function deleteMultiple(): void
+    {
+        $this->cleanBuffers();
+        header('Content-Type: application/json');
+        
+        $data = $this->getJson();
+        $ids = $data['ids'] ?? [];
+
+        if (empty($ids)) {
+            echo json_encode(['status' => 'error', 'message' => 'Tidak ada data yang dipilih']);
+            exit;
+        }
+
+        if ($this->model->deleteMultiple($ids)) {
+            echo json_encode(['status' => 'success', 'message' => count($ids) . ' data telah dihapus']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Gagal menghapus data']);
+        }
+        exit;
     }
 
     // =========================================================================
@@ -168,14 +255,12 @@ class JadwalUpkController extends Controller
      */
     private function cleanBuffers(): void 
     {
-        while (ob_get_level()) { 
+        while (ob_get_level() > 0) { 
             ob_end_clean(); 
         }
     }
 
     /**
-     * Mendeteksi Jenis Request
-     * @return bool True jika request berasal dari AJAX atau endpoint API.
      */
     private function isAjaxRequest(): bool 
     {

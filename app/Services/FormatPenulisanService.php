@@ -31,13 +31,19 @@ class FormatPenulisanService {
             throw new Exception('Deskripsi wajib diisi untuk kategori Pedoman');
         }
 
+        // Validasi Kategori: File atau Link wajib jika kategori 'unduhan' (Terutama untuk data baru)
+        if (($input['kategori'] ?? '') === 'unduhan' && !$existing) {
+            $hasFile = isset($files['file']) && $files['file']['error'] === UPLOAD_ERR_OK;
+            $hasLink = !empty($input['link_external']);
+            if (!$hasFile && !$hasLink) {
+                throw new Exception('Pusat Unduhan wajib menyertakan File atau Tautan Eksternal');
+            }
+        }
+
         $data = [
             'judul' => $input['judul'],
             'kategori' => $input['kategori'],
-            'icon' => $input['icon'] ?? 'ri-file-text-line',
-            'warna' => $input['warna'] ?? '#3498db',
             'deskripsi' => $input['deskripsi'] ?? '',
-            'urutan' => $input['urutan'] ?? 0,
             'link_external' => $input['link_external'] ?? null,
             'tanggal_update' => date('Y-m-d')
         ];

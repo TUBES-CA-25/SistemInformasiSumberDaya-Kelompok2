@@ -86,50 +86,132 @@ class AsistenController extends Controller {
     }
 
     /**
+     * API endpoint untuk mendapatkan data satu asisten berdasarkan ID.
+     * Digunakan untuk pre-populate form pada edit modal.
+     * 
+     * @param array $params Parameter route yang berisi 'id'
+     * @return void JSON response dengan data asisten
+     */
+    public function apiShow($params = [])
+    {
+        if (ob_get_level()) ob_end_clean();
+        header('Content-Type: application/json');
+
+        $id = $params['id'] ?? null;
+
+        if (!$id) {
+            echo json_encode([
+                'status' => false,
+                'code' => 400,
+                'message' => 'ID asisten tidak diberikan',
+                'data' => null
+            ]);
+            exit;
+        }
+
+        try {
+            $asisten = $this->model->getById($id, 'id');
+
+            if (!$asisten) {
+                echo json_encode([
+                    'status' => false,
+                    'code' => 404,
+                    'message' => 'Data asisten tidak ditemukan',
+                    'data' => null
+                ]);
+                exit;
+            }
+
+            echo json_encode([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Data asisten berhasil diambil',
+                'data' => $asisten
+            ]);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode([
+                'status' => false,
+                'code' => 500,
+                'message' => 'Error: ' . $e->getMessage(),
+                'data' => null
+            ]);
+            exit;
+        }
+    }
+
+    /**
      * Admin: Simpan Asisten Baru (POST)
      */
     public function store() {
+        header('Content-Type: application/json');
+        
         $input = $_POST;
+        
+        // Remove non-database fields
+        unset($input['_method']);
 
         if (empty($input['nama']) || empty($input['email'])) {
             return $this->error('Nama dan Email wajib diisi', null, 400);
         }
 
-        // Proses Skills & Foto via Service
-        $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
+        try {
+            // Proses Skills & Foto via Service
+            $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
 
-        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
-            if ($photoPath) $input['foto'] = $photoPath;
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
+                if ($photoPath) $input['foto'] = $photoPath;
+            }
+
+            $inserted = $this->model->insert($input);
+            if ($inserted) {
+                return $this->success(['id' => $this->model->getLastInsertId()], 'Asisten berhasil ditambahkan', 201);
+            } else {
+                return $this->error('Gagal menyimpan ke database', null, 500);
+            }
+        } catch (Exception $e) {
+            return $this->error('Error: ' . $e->getMessage(), null, 500);
         }
-
-        return $this->model->insert($input)
-            ? $this->success(['id' => $this->model->getLastInsertId()], 'Berhasil ditambahkan', 201)
-            : $this->error('Gagal menyimpan ke database');
     }
 
     /**
      * Admin: Update Data Asisten (PUT/POST)
      */
     public function update($params) {
+        header('Content-Type: application/json');
+        
         $id = $params['id'] ?? null;
+        if (!$id) return $this->error('ID tidak valid', null, 400);
+
         $existing = $this->model->getById($id);
-        if (!$existing) return $this->error('Data tidak ditemukan', null, 404);
+        if (!$existing) return $this->error('Data asisten tidak ditemukan', null, 404);
 
-        $input = $_POST;
-        $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
-
-        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            // Hapus foto lama jika ada upload baru
-            if (!empty($existing['foto'])) $this->service->deletePhoto($existing['foto']);
+        try {
+            $input = $_POST;
             
-            $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
-            if ($photoPath) $input['foto'] = $photoPath;
-        }
+            // Remove non-database fields
+            unset($input['_method']);
+            
+            $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
 
-        return $this->model->update($id, $input, 'idAsisten')
-            ? $this->success(null, 'Update berhasil')
-            : $this->error('Gagal update database');
+            if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+                // Hapus foto lama jika ada upload baru
+                if (!empty($existing['foto'])) $this->service->deletePhoto($existing['foto']);
+                
+                $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
+                if ($photoPath) $input['foto'] = $photoPath;
+            }
+
+            $updated = $this->model->update($id, $input, 'idAsisten');
+            if ($updated) {
+                return $this->success(null, 'Asisten berhasil diperbarui');
+            } else {
+                return $this->error('Gagal memperbarui data', null, 500);
+            }
+        } catch (Exception $e) {
+            return $this->error('Error: ' . $e->getMessage(), null, 500);
+        }
     }
 
     /**
@@ -137,15 +219,23 @@ class AsistenController extends Controller {
      */
     public function delete($params) {
         $id = $params['id'] ?? null;
-        $asisten = $this->model->getById($id);
+        if (!$id) return $this->error('ID tidak valid', null, 400);
 
-        if ($asisten && !empty($asisten['foto'])) {
+        $asisten = $this->model->getById($id);
+        
+        if (!$asisten) return $this->error('Asisten tidak ditemukan', null, 404);
+
+        // Delete associated photo
+        if (!empty($asisten['foto'])) {
             $this->service->deletePhoto($asisten['foto']);
         }
 
-        return $this->model->delete($id, 'idAsisten')
-            ? $this->success(null, 'Berhasil dihapus')
-            : $this->error('Gagal menghapus');
+        // Delete from database
+        $deleted = $this->model->delete($id, 'idAsisten');
+        
+        return $deleted
+            ? $this->success(null, 'Asisten berhasil dihapus')
+            : $this->error('Gagal menghapus asisten', null, 500);
     }
 
     /**

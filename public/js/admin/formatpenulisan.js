@@ -44,7 +44,7 @@ function loadData() {
     })
     .catch((err) => {
       console.error(err);
-      tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-red-500">Gagal memuat data</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-red-500">Gagal memuat data</td></tr>`;
     });
 }
 
@@ -151,12 +151,10 @@ function openFormModal(id = null) {
         cf.classList.remove("hidden");
       }
 
-      updateIconPreview(data.icon);
       toggleFormFields(data.kategori || "pedoman");
     }
   } else {
     title.innerText = "Tambah Format Baru";
-    updateIconPreview("");
     toggleFormFields("pedoman");
   }
 }
@@ -174,14 +172,7 @@ function toggleFormFields(val) {
   }
 }
 
-function updateIconPreview(val) {
-  const preview = document.getElementById("previewIcon");
-  if (val && val.trim() !== "") {
-    preview.className = val;
-  } else {
-    preview.className = "ri-question-line";
-  }
-}
+
 
 document.getElementById("formatForm").addEventListener("submit", function (e) {
   e.preventDefault();
@@ -191,7 +182,24 @@ document.getElementById("formatForm").addEventListener("submit", function (e) {
     : API_URL + "/formatpenulisan";
 
   const formData = new FormData(this);
-  if (id) formData.append("_method", "PUT");
+  if (id) {
+    formData.append("_method", "PUT");
+  } else {
+    // Validasi untuk data baru
+    const kategori = document.getElementById("inputKategori").value;
+    if (kategori === "unduhan") {
+      const fileInput = document.getElementById("inputFile");
+      const linkInput = document.getElementById("inputLink").value;
+      if ((!fileInput.files || fileInput.files.length === 0) && !linkInput.trim()) {
+        if (typeof showError === "function") {
+          showError("Kategori Unduhan wajib menyertakan File atau Tautan!");
+        } else {
+          alert("Kategori Unduhan wajib menyertakan File atau Tautan!");
+        }
+        return;
+      }
+    }
+  }
 
   const btn = document.getElementById("btnSave");
   btn.disabled = true;

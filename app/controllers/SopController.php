@@ -101,7 +101,7 @@ class SopController extends Controller {
                 throw new Exception('Gagal menyimpan data ke database');
             }
         } catch (Exception $e) {
-            $this->sendResponse($e->getMessage(), 500, 'error');
+            $this->sendResponse($e->getMessage(), 400, 'error');
         }
     }
 
@@ -125,7 +125,7 @@ class SopController extends Controller {
                 throw new Exception('Gagal memperbarui data atau tidak ada perubahan');
             }
         } catch (Exception $e) {
-            $this->sendResponse($e->getMessage(), 500, 'error');
+            $this->sendResponse($e->getMessage(), 400, 'error');
         }
     }
 

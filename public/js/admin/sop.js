@@ -59,13 +59,12 @@ function renderTable() {
                     <div class="font-bold text-gray-800 text-sm">${escapeHtml(item.judul)}</div>
                 </td>
                 <td class="px-6 py-4">
-                    ${
-                      item.file
-                        ? `<a href="${PUBLIC_URL}/assets/uploads/pdf/${item.file}" target="_blank" class="flex items-center gap-2 text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 w-fit">
+                    ${item.file
+        ? `<a href="${PUBLIC_URL}/assets/uploads/pdf/${item.file}" target="_blank" class="flex items-center gap-2 text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 w-fit">
                             <i class="fas fa-file-pdf"></i> Lihat PDF
                         </a>`
-                        : '<span class="text-gray-400 text-xs italic">Tidak ada file</span>'
-                    }
+        : '<span class="text-gray-400 text-xs italic">Tidak ada file</span>'
+      }
                 </td>
                 <td class="px-6 py-4 text-xs text-gray-600 max-w-xs truncate">
                     ${escapeHtml(item.deskripsi || "-")}
@@ -121,7 +120,20 @@ document.getElementById("sopForm").addEventListener("submit", function (e) {
   const url = id ? ENDPOINT_SOP + "/" + id : ENDPOINT_SOP;
 
   const formData = new FormData(this);
-  if (id) formData.append("_method", "PUT");
+  if (id) {
+    formData.append("_method", "PUT");
+  } else {
+    // Validasi file wajib untuk data baru
+    const fileInput = document.getElementById("inputFile");
+    if (!fileInput.files || fileInput.files.length === 0) {
+      if (typeof showError === "function") {
+        showError("File PDF wajib diunggah untuk SOP baru!");
+      } else {
+        alert("File PDF wajib diunggah untuk SOP baru!");
+      }
+      return;
+    }
+  }
 
   const btn = document.getElementById("btnSave");
   const originalText = btn.innerHTML;

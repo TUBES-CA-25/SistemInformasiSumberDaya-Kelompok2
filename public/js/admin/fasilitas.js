@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // --- 1. LOAD DATA ---
 function loadLaboratorium() {
-  fetch("/api/fasilitas")
+  fetch(API_URL + "/fasilitas")
     .then((res) => res.json())
     .then((res) => {
       if ((res.status === true || res.status === "success" || res.code === 200) && res.data) {
@@ -283,15 +283,14 @@ function openFormModal(id = null, event = null) {
           div.innerHTML = `
                         <img src="${imgUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            ${
-                              idGambar
-                                ? `
+                            ${idGambar
+              ? `
                                 <button type="button" onclick="hapusGambar(${idGambar}, this)" class="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-110">
                                     <i class="fas fa-trash-alt text-xs"></i>
                                 </button>
                             `
-                                : ""
-                            }
+              : ""
+            }
                         </div>
                     `;
           savedContainer.appendChild(div);
@@ -315,7 +314,8 @@ document.getElementById("labForm").addEventListener("submit", function (e) {
 
   const formData = new FormData(this);
   const id = document.getElementById("inputId").value;
-  const url = id ? "/api/fasilitas/" + id : "/api/fasilitas";
+  if (id) formData.append("_method", "PUT");
+  const url = id ? API_URL + "/fasilitas/" + id : API_URL + "/fasilitas";
 
   fetch(url, {
     method: "POST",
@@ -499,7 +499,7 @@ function hapusLaboratorium(id, event) {
   if (event) event.stopPropagation();
   confirmDelete(() => {
     showLoading("Menghapus data...");
-    fetch("/api/fasilitas/" + id, { method: "DELETE" })
+    fetch(API_URL + "/fasilitas/" + id, { method: "DELETE" })
       .then((res) => res.json())
       .then(() => {
         hideLoading();
@@ -526,7 +526,7 @@ function hapusGambar(idGambar, btnEl) {
   }).then((result) => {
     if (result.isConfirmed) {
       showLoading("Menghapus gambar...");
-      const deleteUrl = "/api/fasilitas/image/" + idGambar;
+      const deleteUrl = API_URL + "/fasilitas/image/" + idGambar;
       console.log("Deleting image:", deleteUrl);
 
       fetch(deleteUrl, {

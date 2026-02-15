@@ -156,7 +156,7 @@ function openFormModal(tipe = "peraturan", id = null) {
   document.getElementById("oldTipe").value = "";
 
   // Default visibility
-  toggleTipeFields("peraturan");
+  // toggleTipeFields("peraturan"); // Removed as it is not defined and unnecessary
 
   if (id) {
     title.innerHTML = '<i class="fas fa-edit text-blue-600"></i> Edit Data';
@@ -173,9 +173,9 @@ function openFormModal(tipe = "peraturan", id = null) {
         data.display_format || "list";
 
       if (data._tipe === "peraturan") {
-        toggleTipeFields("peraturan");
+        // toggleTipeFields("peraturan");
       } else {
-        toggleTipeFields("sanksi");
+        // toggleTipeFields("sanksi");
       }
     }
   } else {
@@ -184,7 +184,7 @@ function openFormModal(tipe = "peraturan", id = null) {
     btnSave.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
     document.getElementById("inputTipe").value = tipe;
     document.getElementById("inputDisplayFormat").value = "list";
-    toggleTipeFields(tipe);
+    // toggleTipeFields(tipe);
   }
 }
 
@@ -369,9 +369,8 @@ function showDetail(tipe, id) {
                 </div>
             </div>
 
-            ${
-              data.gambar
-                ? `
+            ${data.gambar
+      ? `
             <div>
                 <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Lampiran Digital</h4>
                 <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
@@ -380,8 +379,8 @@ function showDetail(tipe, id) {
                          alt="Lampiran">
                 </div>
             </div>`
-                : ""
-            }
+      : ""
+    }
         </div>
     `;
 

@@ -125,8 +125,6 @@ function openFormModal(id = null, event = null) {
   document.getElementById("formModal").classList.remove("hidden");
   document.body.style.overflow = "hidden";
   document.getElementById("formMessage").classList.add("hidden");
-  document.getElementById("alumniForm").reset();
-  document.getElementById("inputId").value = "";
   document.getElementById("fotoPreviewInfo").classList.add("hidden");
 
   if (id) {
@@ -139,6 +137,8 @@ function openFormModal(id = null, event = null) {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
+          // Reset form AFTER data arrives, before populating
+          document.getElementById("alumniForm").reset();
           const d = res.data;
           document.getElementById("inputId").value = d.id;
           document.getElementById("inputNama").value = d.nama;
@@ -212,6 +212,10 @@ function openFormModal(id = null, event = null) {
     document.getElementById("btnSave").innerHTML =
       '<i class="fas fa-save"></i> Simpan Data';
 
+    // Reset form for new record
+    document.getElementById("alumniForm").reset();
+    document.getElementById("inputId").value = "";
+
     // Reset Keahlian Tags
     selectedKeahlian = [];
     const container = document.getElementById("keahlianTagContainer");
@@ -237,7 +241,15 @@ document.getElementById("alumniForm").addEventListener("submit", function (e) {
 
   const formData = new FormData(this);
   const id = document.getElementById("inputId").value;
+  
+  // Use PUT for update, POST for create, with _method override for FormData
+  const method = id ? "PUT" : "POST";
   const url = id ? "/api/alumni/" + id : "/api/alumni";
+  
+  // Add _method override for PUT requests via FormData
+  if (id) {
+    formData.append("_method", "PUT");
+  }
 
   fetch(url, { method: "POST", body: formData })
     .then((res) => res.json())

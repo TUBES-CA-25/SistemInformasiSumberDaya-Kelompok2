@@ -63,25 +63,7 @@ class JadwalPraktikumModel extends Model {
         return $res ? $res[array_key_first($res)] : null;
     }
 
-    /**
-     * Menambah jadwal praktikum baru.
-     * * @param array $data Data jadwal yang akan dimasukkan.
-     * @return bool True jika berhasil.
-     */
-    public function insert($data): bool {
-        $query = "INSERT INTO {$this->table} 
-                  (idMatakuliah, kelas, idLaboratorium, hari, waktuMulai, waktuSelesai, dosen, asisten1, asisten2, frekuensi, status) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("isissssiiss", 
-            $data['idMatakuliah'], $data['kelas'], $data['idLaboratorium'], 
-            $data['hari'], $data['waktuMulai'], $data['waktuSelesai'], 
-            $data['dosen'], $data['asisten1'], $data['asisten2'], 
-            $data['frekuensi'], $data['status']);
-            
-        return $stmt->execute();
-    }
+
 
     /**
      * Memeriksa apakah jadwal serupa sudah ada di database.
@@ -101,19 +83,7 @@ class JadwalPraktikumModel extends Model {
         return $stmt->get_result()->num_rows > 0;
     }
 
-    /**
-     * Menghapus jadwal berdasarkan ID.
-     * * @param int $id
-     * @param string $idColumn Nama kolom primary key.
-     * @return bool
-     */
-    public function delete($id, $idColumn = 'idJadwal'): bool {
-        $query = "DELETE FROM {$this->table} WHERE {$idColumn} = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("i", $id);
-        
-        return $stmt->execute();
-    }
+
 
     /**
      * Menghapus banyak jadwal sekaligus (Bulk Delete).

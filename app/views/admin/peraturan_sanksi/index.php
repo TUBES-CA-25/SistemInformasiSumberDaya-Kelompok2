@@ -120,7 +120,7 @@
                         <div class="grid grid-cols-1 gap-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tipe Data <span class="text-red-500">*</span></label>
-                                <select id="inputTipe" name="tipe" required onchange="toggleTipeFields(this.value)"
+                                <select id="inputTipe" name="tipe" required
                                         class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition-all outline-none bg-white">
                                     <option value="peraturan">Peraturan Lab</option>
                                     <option value="sanksi">Sanksi Pelanggaran</option>
