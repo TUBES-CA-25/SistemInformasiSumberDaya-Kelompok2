@@ -1,0 +1,46 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36" version="29.3.6">
+  <diagram name="Page-1" id="GbVVAei5k6mEhcIWDrFG">
+    <mxGraphModel dx="917" dy="949" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-7" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="515" width="300" x="275" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-8" edge="1" parent="AE4PljpbMJqcLgTTb2cG-7" source="AE4PljpbMJqcLgTTb2cG-1" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" target="AE4PljpbMJqcLgTTb2cG-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-1" parent="AE4PljpbMJqcLgTTb2cG-7" style="rounded=0;whiteSpace=wrap;html=1;" value="KOMUNIKASI DAN KINSULTASI" vertex="1">
+          <mxGeometry height="60" width="300" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-10" edge="1" parent="AE4PljpbMJqcLgTTb2cG-7" source="AE4PljpbMJqcLgTTb2cG-2" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" target="AE4PljpbMJqcLgTTb2cG-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-2" parent="AE4PljpbMJqcLgTTb2cG-7" style="rounded=0;whiteSpace=wrap;html=1;" value="1. IDENTIFIKASI RISIKO&lt;div&gt;(Apa yang bisa menghambat tujuan?)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="300" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-11" edge="1" parent="AE4PljpbMJqcLgTTb2cG-7" source="AE4PljpbMJqcLgTTb2cG-3" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" target="AE4PljpbMJqcLgTTb2cG-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-3" parent="AE4PljpbMJqcLgTTb2cG-7" style="rounded=0;whiteSpace=wrap;html=1;" value="2. ANALISIS RISIKO&lt;div&gt;(Likelihood x Impact)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="300" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-12" edge="1" parent="AE4PljpbMJqcLgTTb2cG-7" source="AE4PljpbMJqcLgTTb2cG-4" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" target="AE4PljpbMJqcLgTTb2cG-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-4" parent="AE4PljpbMJqcLgTTb2cG-7" style="rounded=0;whiteSpace=wrap;html=1;" value="3. EVALUASI RISIKO&lt;div&gt;(Prioritas: Low / Medium / High)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="300" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-13" edge="1" parent="AE4PljpbMJqcLgTTb2cG-7" source="AE4PljpbMJqcLgTTb2cG-5" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" target="AE4PljpbMJqcLgTTb2cG-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-5" parent="AE4PljpbMJqcLgTTb2cG-7" style="rounded=0;whiteSpace=wrap;html=1;" value="4. PERLAKUAN RISIKO&lt;div&gt;(Treat / Transfer / Tolerate / Terminate)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="300" y="365" as="geometry" />
+        </mxCell>
+        <mxCell id="AE4PljpbMJqcLgTTb2cG-6" parent="AE4PljpbMJqcLgTTb2cG-7" style="rounded=0;whiteSpace=wrap;html=1;" value="MONITOR DAN TINJAUAN" vertex="1">
+          <mxGeometry height="60" width="300" y="455" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
