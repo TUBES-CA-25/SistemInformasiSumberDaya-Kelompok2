@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadAlumni() {
-  fetch("/api/alumni")
+  fetch(API_URL + "/alumni")
     .then((res) => res.json())
     .then((res) => {
       if ((res.status === true || res.status === "success" || res.code === 200) && res.data) {
@@ -80,7 +80,7 @@ function openDetailModal(id) {
   document.getElementById("detailModal").classList.remove("hidden");
   document.body.style.overflow = "hidden";
   document.getElementById("dNama").innerText = "Memuat...";
-  fetch("/api/alumni/" + id)
+  fetch(API_URL + "/alumni/" + id)
     .then((res) => res.json())
     .then((res) => {
       if ((res.status === "success" || res.code === 200) && res.data) {
@@ -133,7 +133,7 @@ function openFormModal(id = null, event = null) {
     document.getElementById("btnSave").innerHTML =
       '<i class="fas fa-save"></i> Update Data';
     // Isi Form untuk Edit
-    fetch("/api/alumni/" + id)
+    fetch(API_URL + "/alumni/" + id)
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
@@ -244,7 +244,7 @@ document.getElementById("alumniForm").addEventListener("submit", function (e) {
   
   // Use PUT for update, POST for create, with _method override for FormData
   const method = id ? "PUT" : "POST";
-  const url = id ? "/api/alumni/" + id : "/api/alumni";
+  const url = id ? API_URL + "/alumni/" + id : API_URL + "/alumni";
   
   // Add _method override for PUT requests via FormData
   if (id) {
@@ -293,7 +293,7 @@ function hapusAlumni(id, event) {
   if (event) event.stopPropagation();
   confirmDelete(() => {
     showLoading("Menghapus data...");
-    fetch("/api/alumni/" + id, { method: "DELETE" })
+    fetch(API_URL + "/alumni/" + id, { method: "DELETE" })
       .then((res) => res.json())
       .then(() => {
         hideLoading();

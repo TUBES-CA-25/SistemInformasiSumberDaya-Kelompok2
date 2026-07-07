@@ -17,7 +17,7 @@ function loadManajemen() {
   const tbody = document.getElementById("tableBody");
   tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-circle-notch fa-spin text-2xl mb-2"></i><p>Memuat data...</p></td></tr>`;
 
-  fetch("/api/manajemen")
+  fetch(API_URL + "/manajemen")
     .then((res) => res.json())
     .then((response) => {
       if (
@@ -201,7 +201,7 @@ document
     const btn = document.getElementById("btnSave");
     const msg = document.getElementById("formMessage");
     const id = document.getElementById("inputId").value;
-    const url = id ? "/api/manajemen/" + id : "/api/manajemen";
+    const url = id ? API_URL + "/manajemen/" + id : API_URL + "/manajemen";
 
     const formData = new FormData(this);
     if (id) formData.append("_method", "PUT"); // Trik untuk update file di PHP
@@ -265,7 +265,7 @@ function hapusManajemen(id, event) {
 
   confirmDelete(() => {
     showLoading("Menghapus data...");
-    fetch("/api/manajemen/" + id, { method: "DELETE" })
+    fetch(API_URL + "/manajemen/" + id, { method: "DELETE" })
       .then((res) => res.json())
       .then((res) => {
         hideLoading();
