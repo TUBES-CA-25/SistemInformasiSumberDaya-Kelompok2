@@ -21,25 +21,32 @@ class JadwalUpkModel {
         $this->db = $database->getPdo();
     }
 
-    /**
-     * Mengambil semua jadwal ujian praktikum.
-     * * Data diurutkan secara kronologis berdasarkan tanggal dan jam.
-     * * @return array Kumpulan data jadwal dalam format associative array.
-     */
-    public function getAll(): array {
-        $stmt = $this->db->prepare("SELECT j.*, d.nama as namaDosen, COALESCE(d.nama, '') as dosen FROM {$this->table} j LEFT JOIN dosen d ON j.idDosen = d.idDosen ORDER BY j.tanggal ASC, j.jam ASC");
+    public function getAll() {
+        // Gunakan alias untuk memastikan mapping kolom yang benar
+        $sql = "SELECT 
+                    j.id,
+                    j.prodi,
+                    j.mata_kuliah,
+                    COALESCE(d.nama, '') as dosen,
+                    j.idDosen,
+                    j.tanggal,
+                    j.jam,
+                    j.kelas,
+                    j.ruangan,
+                    j.frekuensi
+                FROM {$this->table} j 
+                LEFT JOIN dosen d ON j.idDosen = d.idDosen
+                ORDER BY j.tanggal ASC, j.jam ASC";
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Mengambil detail satu jadwal berdasarkan ID.
-     * 
-     * @param int $id ID Jadwal.
-     * @return array|bool Data jadwal atau false jika tidak ditemukan.
-     */
-    public function getById(int $id) {
-        $stmt = $this->db->prepare("SELECT j.*, d.nama as namaDosen, COALESCE(d.nama, '') as dosen FROM {$this->table} j LEFT JOIN dosen d ON j.idDosen = d.idDosen WHERE j.id = ?");
+    public function getById($id) {
+        $stmt = $this->db->prepare("SELECT j.id, j.prodi, j.mata_kuliah, COALESCE(d.nama, '') as dosen, j.idDosen, j.tanggal, j.jam, j.kelas, j.ruangan, j.frekuensi 
+                                    FROM {$this->table} j 
+                                    LEFT JOIN dosen d ON j.idDosen = d.idDosen 
+                                    WHERE j.id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

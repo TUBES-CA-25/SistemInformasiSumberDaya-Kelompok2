@@ -81,10 +81,10 @@ class Database {
      * @return mysqli
      * @throws Exception
      */
-    public function connect()
+    public function connect(): mysqli
     {
         // Return jika koneksi sudah ada
-        if ($this->mysqli) {
+        if ($this->mysqli instanceof mysqli) {
             return $this->mysqli;
         }
 
@@ -109,7 +109,7 @@ class Database {
      * 
      * @return mysqli
      */
-    public function getConnection()
+    public function getConnection(): mysqli
     {
         return $this->connect();
     }
@@ -117,12 +117,11 @@ class Database {
     /**
      * Dapatkan koneksi PDO
      * 
-     * @return PDO
+     * @return PDO|null
      */
-    public function getPdo()
+    public function getPdo(): ?PDO
     {
         return $this->pdo;
     }
 }
-
 ?>
