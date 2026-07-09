@@ -27,36 +27,40 @@ class JadwalUpkModel {
      * * @return array Kumpulan data jadwal dalam format associative array.
      */
     public function getAll(): array {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} ORDER BY tanggal ASC, jam ASC");
+        $stmt = $this->db->prepare("SELECT j.*, d.nama as namaDosen, COALESCE(d.nama, '') as dosen FROM {$this->table} j LEFT JOIN dosen d ON j.idDosen = d.idDosen ORDER BY j.tanggal ASC, j.jam ASC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
      * Mengambil detail satu jadwal berdasarkan ID.
-     * * @param int $id ID Jadwal.
+     * 
+     * @param int $id ID Jadwal.
      * @return array|bool Data jadwal atau false jika tidak ditemukan.
      */
     public function getById(int $id) {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT j.*, d.nama as namaDosen, COALESCE(d.nama, '') as dosen FROM {$this->table} j LEFT JOIN dosen d ON j.idDosen = d.idDosen WHERE j.id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
      * Menambahkan data jadwal UPK baru.
-     * * @param array $data Data input dari form.
+     * 
+     * @param array $data Data input dari form.
      * @return bool Status keberhasilan eksekusi.
      */
     public function create(array $data): bool {
-        $sql = "INSERT INTO {$this->table} (prodi, mata_kuliah, dosen, tanggal, jam, kelas, ruangan, frekuensi) 
-                VALUES (:prodi, :mata_kuliah, :dosen, :tanggal, :jam, :kelas, :ruangan, :frekuensi)";
+        $sql = "INSERT INTO {$this->table} (prodi, mata_kuliah, idDosen, tanggal, jam, kelas, ruangan, frekuensi) 
+                VALUES (:prodi, :mata_kuliah, :idDosen, :tanggal, :jam, :kelas, :ruangan, :frekuensi)";
+        
+        $idDosen = !empty($data['idDosen']) ? $data['idDosen'] : (!empty($data['dosen']) ? $this->findOrCreateDosen($data['dosen']) : null);
         
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             'prodi'       => $data['prodi'],
             'mata_kuliah' => $data['mata_kuliah'],
-            'dosen'       => $data['dosen'],
+            'idDosen'     => $idDosen,
             'tanggal'     => $data['tanggal'],
             'jam'         => $data['jam'],
             'kelas'       => $data['kelas'],
@@ -67,23 +71,26 @@ class JadwalUpkModel {
 
     /**
      * Memperbarui data jadwal UPK yang sudah ada.
-     * * @param int $id ID Jadwal yang akan diubah.
+     * 
+     * @param int $id ID Jadwal yang akan diubah.
      * @param array $data Data pembaharuan.
      * @return bool Status keberhasilan.
      */
     public function update(int $id, array $data): bool {
         $sql = "UPDATE {$this->table} SET 
-                prodi = :prodi, mata_kuliah = :mata_kuliah, dosen = :dosen, 
+                prodi = :prodi, mata_kuliah = :mata_kuliah, idDosen = :idDosen, 
                 tanggal = :tanggal, jam = :jam, kelas = :kelas, 
                 ruangan = :ruangan, frekuensi = :frekuensi 
                 WHERE id = :id";
+        
+        $idDosen = !empty($data['idDosen']) ? $data['idDosen'] : (!empty($data['dosen']) ? $this->findOrCreateDosen($data['dosen']) : null);
         
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             'id'          => $id,
             'prodi'       => $data['prodi'],
             'mata_kuliah' => $data['mata_kuliah'],
-            'dosen'       => $data['dosen'],
+            'idDosen'     => $idDosen,
             'tanggal'     => $data['tanggal'],
             'jam'         => $data['jam'],
             'kelas'       => $data['kelas'],
@@ -133,17 +140,18 @@ class JadwalUpkModel {
             // Mengosongkan tabel sebelum impor baru (Reset data)
             $this->db->exec("DELETE FROM {$this->table}");
 
-            $sql = "INSERT INTO {$this->table} (prodi, tanggal, jam, mata_kuliah, dosen, frekuensi, kelas, ruangan) 
+            $sql = "INSERT INTO {$this->table} (prodi, tanggal, jam, mata_kuliah, idDosen, frekuensi, kelas, ruangan) 
                     VALUES (?,?,?,?,?,?,?,?)";
             $stmt = $this->db->prepare($sql);
 
             foreach ($dataList as $row) {
+                $idDosen = !empty($row['idDosen']) ? $row['idDosen'] : (!empty($row['dosen']) ? $this->findOrCreateDosen($row['dosen']) : null);
                 $stmt->execute([
                     $row['prodi']       ?? null,
                     $row['tanggal']     ?? null,
                     $row['jam']         ?? null,
                     $row['mata_kuliah'] ?? null,
-                    $row['dosen']       ?? null,
+                    $idDosen,
                     $row['frekuensi']   ?? '',
                     $row['kelas']       ?? '',
                     $row['ruangan']     ?? ''
@@ -182,7 +190,7 @@ class JadwalUpkModel {
             $this->db->beginTransaction();
             $this->db->exec("DELETE FROM {$this->table}");
 
-            $sql = "INSERT INTO {$this->table} (prodi, tanggal, jam, mata_kuliah, dosen, frekuensi, kelas, ruangan) 
+            $sql = "INSERT INTO {$this->table} (prodi, tanggal, jam, mata_kuliah, idDosen, frekuensi, kelas, ruangan) 
                     VALUES (?,?,?,?,?,?,?,?)";
             $stmt = $this->db->prepare($sql);
 
@@ -201,12 +209,15 @@ class JadwalUpkModel {
                 $tanggalRaw = trim($row[2] ?? '');
                 $tanggalDB  = !empty($tanggalRaw) ? date('Y-m-d', strtotime($tanggalRaw)) : null;
 
+                $dosenName = trim($row[5] ?? '');
+                $idDosen = !empty($dosenName) ? $this->findOrCreateDosen($dosenName) : null;
+
                 $stmt->execute([
                     trim($row[1] ?? ''), // Prodi
                     $tanggalDB,          // Tanggal (Formatted)
                     trim($row[3] ?? ''), // Jam
                     trim($row[4] ?? ''), // MK
-                    trim($row[5] ?? ''), // Dosen
+                    $idDosen,            // Dosen ID
                     trim($row[6] ?? ''), // Freq
                     trim($row[7] ?? ''), // Kelas
                     trim($row[8] ?? '')  // Ruangan
@@ -223,5 +234,22 @@ class JadwalUpkModel {
             if ($this->db->inTransaction()) $this->db->rollBack();
             return false;
         }
+    }
+
+    private function findOrCreateDosen($name) {
+        if (empty($name)) return null;
+        if (is_numeric($name)) return (int)$name;
+        
+        $name = trim($name);
+        $stmt = $this->db->prepare("SELECT idDosen FROM dosen WHERE LOWER(TRIM(nama)) = LOWER(TRIM(?)) LIMIT 1");
+        $stmt->execute([$name]);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($res) {
+            return (int)$res['idDosen'];
+        }
+        
+        $stmtInsert = $this->db->prepare("INSERT INTO dosen (nama) VALUES (?)");
+        $stmtInsert->execute([$name]);
+        return (int)$this->db->lastInsertId();
     }
 }

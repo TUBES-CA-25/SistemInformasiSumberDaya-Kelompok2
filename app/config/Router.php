@@ -147,6 +147,12 @@ class Router {
         $this->put('/api/matakuliah/{id}', 'MatakuliahController', 'update');
         $this->delete('/api/matakuliah/{id}', 'MatakuliahController', 'delete');
 
+        $this->get('/api/dosen', 'DosenController', 'apiIndex');
+        $this->get('/api/dosen/{id}', 'DosenController', 'apiShow');
+        $this->post('/api/dosen', 'DosenController', 'store');
+        $this->put('/api/dosen/{id}', 'DosenController', 'update');
+        $this->delete('/api/dosen/{id}', 'DosenController', 'delete');
+
         $this->get('/api/modul', 'ModulController', 'getJson');
         $this->post('/api/modul', 'ModulController', 'store');
         $this->post('/api/modul/{id}', 'ModulController', 'update');
@@ -194,6 +200,7 @@ class Router {
         $this->get('/admin/manajemen', 'ManajemenController', 'adminIndex');
         $this->get('/admin/fasilitas', 'FasilitasController', 'adminIndex');
         $this->get('/admin/matakuliah', 'MatakuliahController', 'adminIndex');
+        $this->get('/admin/dosen', 'DosenController', 'adminIndex');
         $this->get('/admin/user', 'UserController', 'adminIndex');
         $this->get('/admin/jadwal', 'JadwalPraktikumController', 'adminIndex');
         $this->get('/admin/jadwalupk', 'JadwalUpkController', 'adminIndex');

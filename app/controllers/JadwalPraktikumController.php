@@ -113,7 +113,7 @@ class JadwalPraktikumController extends Controller {
             'waktuMulai'     => $input['waktuMulai'] ?? null,
             'waktuSelesai'   => $input['waktuSelesai'] ?? null,
             'frekuensi'      => $input['frekuensi'] ?? null,
-            'dosen'          => $input['dosen'] ?? null,
+            'idDosen'        => !empty($input['idDosen']) ? $input['idDosen'] : null,
             'asisten1'       => !empty($input['idAsisten1']) ? $input['idAsisten1'] : null,
             'asisten2'       => !empty($input['idAsisten2']) ? $input['idAsisten2'] : null,
             'status'         => $input['status'] ?? 'Aktif'
@@ -154,7 +154,7 @@ class JadwalPraktikumController extends Controller {
             'waktuMulai'     => $input['waktuMulai'] ?? null,
             'waktuSelesai'   => $input['waktuSelesai'] ?? null,
             'frekuensi'      => $input['frekuensi'] ?? null,
-            'dosen'          => $input['dosen'] ?? null,
+            'idDosen'        => !empty($input['idDosen']) ? $input['idDosen'] : null,
             'asisten1'       => !empty($input['idAsisten1']) ? $input['idAsisten1'] : null,
             'asisten2'       => !empty($input['idAsisten2']) ? $input['idAsisten2'] : null,
             'status'         => $input['status'] ?? 'Aktif'

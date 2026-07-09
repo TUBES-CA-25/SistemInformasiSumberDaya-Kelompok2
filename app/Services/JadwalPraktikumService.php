@@ -74,7 +74,7 @@ class JadwalPraktikumService {
                 'hari'           => $data['hari'],
                 'waktuMulai'     => $start,
                 'waktuSelesai'   => $end,
-                'dosen'          => $data['dosen'],
+                'idDosen'        => $this->findOrCreateDosen($data['dosen']),
                 'asisten1'       => $this->findAsistenIdByName($data['asisten1']),
                 'asisten2'       => $this->findAsistenIdByName($data['asisten2']),
                 'frekuensi'      => $data['freq'],
@@ -138,5 +138,24 @@ class JadwalPraktikumService {
         $stmt->execute();
         $res = $stmt->get_result()->fetch_assoc();
         return $res ? $res[array_key_first($res)] : null;
+    }
+
+    private function findOrCreateDosen($name) {
+        if (empty($name)) return null;
+        if (is_numeric($name)) return (int)$name;
+        
+        $db = $this->model->db;
+        $name = trim($name);
+
+        // 1. Exact Match
+        $stmt = $db->prepare("SELECT idDosen FROM dosen WHERE LCASE(TRIM(nama)) = LCASE(?) LIMIT 1");
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_assoc();
+        if ($res) return (int)$res['idDosen'];
+
+        // 2. Insert new dosen if not found
+        $db->query("INSERT INTO dosen (nama) VALUES ('" . $db->real_escape_string($name) . "')");
+        return (int)$db->insert_id;
     }
 }

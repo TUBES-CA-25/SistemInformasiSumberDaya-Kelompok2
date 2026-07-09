@@ -109,7 +109,7 @@ function renderTable(data) {
                 <td class="px-6 py-4 cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <div class="flex flex-col">
                         <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.namaMatakuliah || "-"}</span>
-                        <span class="text-xs text-gray-400 font-mono mt-0.5">${item.kodeMatakuliah || "-"}</span>
+                        <span class="text-xs text-gray-400 font-mono mt-0.5">${item.kodeMatakuliah || "-"} | Dosen: ${item.namaDosen || "-"}</span>
                     </div>
                 </td>
                 <td class="px-6 py-4 text-gray-600 text-sm font-medium cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">${item.namaLab || "-"}</td>
@@ -231,14 +231,17 @@ function openFormModal(id = null, event = null) {
   document.getElementById("jadwalForm").reset();
   document.getElementById("inputId").value = "";
 
-  // Load Dropdown Options (MK, Lab, Asisten)
+  // Load Dropdown Options (MK, Lab, Asisten, Dosen)
   Promise.all([
     fetch(API_URL + "/matakuliah").then((r) => r.json()),
     fetch(API_URL + "/fasilitas").then((r) => r.json()),
     fetch(API_URL + "/asisten")
       .then((r) => r.json())
       .catch(() => ({ data: [] })),
-  ]).then(([mkData, labData, asistenData]) => {
+    fetch(API_URL + "/dosen")
+      .then((r) => r.json())
+      .catch(() => ({ data: [] })),
+  ]).then(([mkData, labData, asistenData, dosenData]) => {
     // Isi Select MK
     const mkSelect = document.getElementById("inputMatakuliah");
     mkSelect.innerHTML = '<option value="">-- Pilih MK --</option>';
@@ -254,6 +257,15 @@ function openFormModal(id = null, event = null) {
     if (labData.data) {
       labData.data.forEach((l) => {
         labSelect.innerHTML += `<option value="${l.idLaboratorium}">${l.nama}</option>`;
+      });
+    }
+
+    // Isi Select Dosen
+    const dosenSelect = document.getElementById("inputDosen");
+    dosenSelect.innerHTML = '<option value="">-- Pilih Dosen --</option>';
+    if (dosenData.data) {
+      dosenData.data.forEach((d) => {
+        dosenSelect.innerHTML += `<option value="${d.idDosen}">${d.nama}</option>`;
       });
     }
 
@@ -296,7 +308,7 @@ function openFormModal(id = null, event = null) {
         document.getElementById("inputMulai").value = data.waktuMulai;
         document.getElementById("inputSelesai").value = data.waktuSelesai;
         document.getElementById("inputFrekuensi").value = data.frekuensi || "";
-        document.getElementById("inputDosen").value = data.dosen || "";
+        document.getElementById("inputDosen").value = data.idDosen || "";
         document.getElementById("inputAsisten1").value = data.idAsisten1 || "";
         document.getElementById("inputAsisten2").value = data.idAsisten2 || "";
 

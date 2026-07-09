@@ -24,6 +24,7 @@ class JadwalPraktikumModel extends Model {
      */
     public function getAll(): array {
         $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
+                         COALESCE(d.nama, '') as dosen, d.nama as namaDosen, d.nip as nipDosen,
                          COALESCE(a1.nama, j.asisten1) as namaAsisten1, 
                          COALESCE(a2.nama, j.asisten2) as namaAsisten2,
                          a1.foto as fotoAsisten1, a2.foto as fotoAsisten2,
@@ -33,6 +34,7 @@ class JadwalPraktikumModel extends Model {
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
                   LEFT JOIN asisten a1 ON j.asisten1 = a1.idAsisten
                   LEFT JOIN asisten a2 ON j.asisten2 = a2.idAsisten
+                  LEFT JOIN dosen d ON j.idDosen = d.idDosen
                   ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'), 
                            j.waktuMulai ASC";
         
@@ -110,6 +112,7 @@ class JadwalPraktikumModel extends Model {
      */
     public function getById($id, $idColumn = 'idJadwal'): ?array {
         $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
+                         COALESCE(d.nama, '') as dosen, d.nama as namaDosen, d.nip as nipDosen,
                          COALESCE(a1.nama, j.asisten1) as namaAsisten1, 
                          COALESCE(a2.nama, j.asisten2) as namaAsisten2,
                          a1.foto as fotoAsisten1, a2.foto as fotoAsisten2,
@@ -119,6 +122,7 @@ class JadwalPraktikumModel extends Model {
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
                   LEFT JOIN asisten a1 ON j.asisten1 = a1.idAsisten
                   LEFT JOIN asisten a2 ON j.asisten2 = a2.idAsisten
+                  LEFT JOIN dosen d ON j.idDosen = d.idDosen
                   WHERE j.{$idColumn} = ? LIMIT 1";
                   
         $stmt = $this->db->prepare($query);

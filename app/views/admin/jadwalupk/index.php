@@ -98,7 +98,9 @@
                         </div>
                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Dosen Pengampu</label>
-                            <input type="text" id="inputDosen" name="dosen" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                            <select id="inputDosen" name="idDosen" required class="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                                <option value="">-- Pilih Dosen --</option>
+                            </select>
                         </div>
                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Tanggal</label>

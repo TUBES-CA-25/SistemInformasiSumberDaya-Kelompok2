@@ -188,7 +188,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const key = e.target.value.toLowerCase();
       const filtered = allJadwalData.filter(i =>
         (i.mata_kuliah && i.mata_kuliah.toLowerCase().includes(key)) ||
-        (i.dosen && i.dosen.toLowerCase().includes(key))
+        (i.dosen && i.dosen.toLowerCase().includes(key)) ||
+        (i.namaDosen && i.namaDosen.toLowerCase().includes(key))
       );
       renderTable(filtered);
     });
@@ -277,6 +278,23 @@ async function loadDropdownData() {
       }
     });
 
+    // Load Dosen
+    const dosenRes = await fetch(`${window.API_URL}/dosen`);
+    const dosenData = await dosenRes.json();
+    const dosenSelect = document.getElementById("inputDosen");
+
+    if (dosenData.status === "success" || dosenData.status === true) {
+      dosenSelect.innerHTML = '<option value="">-- Pilih Dosen --</option>';
+      if (Array.isArray(dosenData.data)) {
+        dosenData.data.forEach(d => {
+          const option = document.createElement("option");
+          option.value = d.idDosen;
+          option.textContent = d.nama;
+          dosenSelect.appendChild(option);
+        });
+      }
+    }
+
   } catch (err) {
     console.error("Error loading dropdown data:", err);
   }
@@ -322,7 +340,7 @@ function renderTable(data) {
                 <td class="px-6 py-4 cursor-pointer w-48" onclick="openFormModal(${item.id}, event)">
                     <div class="flex flex-col gap-1">
                         <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors truncate" title="${item.mata_kuliah || ""}">${item.mata_kuliah || "-"}</span>
-                        <span class="text-xs text-gray-500 flex items-center gap-1 truncate" title="${item.dosen || ""}"><i class="fas fa-user-tie text-[10px] flex-shrink-0"></i> ${item.dosen || "-"}</span>
+                        <span class="text-xs text-gray-500 flex items-center gap-1 truncate" title="${item.namaDosen || item.dosen || ""}"><i class="fas fa-user-tie text-[10px] flex-shrink-0"></i> ${item.namaDosen || item.dosen || "-"}</span>
                     </div>
                 </td>
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.id}, event)">
@@ -367,7 +385,7 @@ window.openFormModal = function (id = null, event = null) {
       document.getElementById("inputId").value = data.id;
       document.getElementById("inputProdi").value = data.prodi;
       document.getElementById("inputMK").value = data.mata_kuliah;
-      document.getElementById("inputDosen").value = data.dosen;
+      document.getElementById("inputDosen").value = data.idDosen || "";
       document.getElementById("inputTanggal").value = data.tanggal;
       document.getElementById("inputJam").value = data.jam;
       document.getElementById("inputRuangan").value = data.ruangan;
@@ -384,7 +402,7 @@ window.openDetailModal = function (id, event = null) {
   const data = allJadwalData.find((i) => i.id == id);
   if (data) {
     document.getElementById("detailMK").innerText = data.mata_kuliah || "-";
-    document.getElementById("detailDosen").innerText = data.dosen || "-";
+    document.getElementById("detailDosen").innerText = data.namaDosen || data.dosen || "-";
     document.getElementById("detailProdi").innerText = data.prodi || "-";
 
     let tgl = "-";
