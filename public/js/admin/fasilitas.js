@@ -34,6 +34,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const container = document.getElementById("newImagesContainer");
       container.innerHTML = "";
       if (this.files) {
+        const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+        for (let i = 0; i < this.files.length; i++) {
+          const file = this.files[i];
+          const fileExtension = file.name.split(".").pop().toLowerCase();
+          if (!allowedExtensions.includes(fileExtension)) {
+            showError("File yang diupload harus berupa gambar/foto (jpg, jpeg, png, gif, webp, svg)");
+            this.value = ""; // Clear file input
+            return;
+          }
+        }
         Array.from(this.files).forEach((file) => {
           const reader = new FileReader();
           reader.onload = function (e) {
@@ -309,6 +319,21 @@ document.getElementById("labForm").addEventListener("submit", function (e) {
   e.preventDefault();
   const btn = document.getElementById("btnSave");
   const msg = document.getElementById("formMessage");
+
+  // Client-side file extension validation
+  const fileInput = document.getElementById("inputGambar");
+  if (fileInput && fileInput.files && fileInput.files.length > 0) {
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+    for (let i = 0; i < fileInput.files.length; i++) {
+      const file = fileInput.files[i];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        showError("File yang diupload harus berupa gambar/foto (jpg, jpeg, png, gif, webp, svg)");
+        return;
+      }
+    }
+  }
+
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
 

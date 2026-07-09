@@ -5,6 +5,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Live Search
   document.getElementById("searchInput").addEventListener("keyup", filterData);
+
+  const fileInput = document.getElementById("inputFile");
+  if (fileInput) {
+    fileInput.addEventListener("change", function (e) {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        const allowedExtensions = ["pdf", "jpg", "jpeg", "png", "gif", "webp", "svg"];
+        if (!allowedExtensions.includes(fileExtension)) {
+          if (typeof showError === "function") {
+            showError("File yang diupload harus berupa format PDF (.pdf) atau Gambar (.jpg, .jpeg, .png, .gif, .webp, .svg)");
+          } else {
+            alert("File yang diupload harus berupa format PDF (.pdf) atau Gambar (.jpg, .jpeg, .png, .gif, .webp, .svg)");
+          }
+          this.value = ""; // Reset
+          return;
+        }
+      }
+    });
+  }
 });
 
 function filterData() {
@@ -176,6 +196,22 @@ function toggleFormFields(val) {
 
 document.getElementById("formatForm").addEventListener("submit", function (e) {
   e.preventDefault();
+
+  // Client-side file extension check
+  const fileInput = document.getElementById("inputFile");
+  if (fileInput && fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    const allowedExtensions = ["pdf", "jpg", "jpeg", "png", "gif", "webp", "svg"];
+    if (!allowedExtensions.includes(fileExtension)) {
+      if (typeof showError === "function") {
+        showError("File yang diupload harus berupa format PDF (.pdf) atau Gambar (.jpg, .jpeg, .png, .gif, .webp, .svg)");
+      } else {
+        alert("File yang diupload harus berupa format PDF (.pdf) atau Gambar (.jpg, .jpeg, .png, .gif, .webp, .svg)");
+      }
+      return;
+    }
+  }
   const id = document.getElementById("inputId").value;
   const url = id
     ? API_URL + "/formatpenulisan/" + id

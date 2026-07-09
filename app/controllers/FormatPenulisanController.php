@@ -59,6 +59,16 @@ class FormatPenulisanController extends Controller {
                 return;
             }
 
+            // Validasi format file
+            if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+                $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+                $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+                if (!in_array($ext, $allowed)) {
+                    $this->error('Format file tidak didukung. Hanya menerima file PDF atau Gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+                    return;
+                }
+            }
+
             $data = $this->service->prepareData($input, $_FILES);
             
             if ($this->model->insert($data)) {
@@ -80,6 +90,17 @@ class FormatPenulisanController extends Controller {
             }
 
             $input = !empty($_POST) ? $_POST : ($this->getJson() ?? []);
+
+            // Validasi format file
+            if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+                $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+                $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+                if (!in_array($ext, $allowed)) {
+                    $this->error('Format file tidak didukung. Hanya menerima file PDF atau Gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+                    return;
+                }
+            }
+
             $data = $this->service->prepareData($input, $_FILES, $existing);
 
             if ($this->model->update($id, $data, 'id_format')) {

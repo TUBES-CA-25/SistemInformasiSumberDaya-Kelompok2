@@ -89,6 +89,9 @@ class AlumniService
 
         // Ambil ekstensi dan buat nama file unik melalui Helper
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
+            return false;
+        }
         $filename = Helper::generateFilename('alumni', $name, $ext);
         
         // Pindahkan file dari temp ke folder tujuan

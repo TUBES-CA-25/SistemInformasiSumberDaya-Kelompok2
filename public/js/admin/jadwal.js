@@ -27,6 +27,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const fileInput = document.getElementById("fileExcel");
   if (fileInput) {
     fileInput.addEventListener("change", function (e) {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        const allowedExtensions = ["xlsx", "xls", "csv"];
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        if (!allowedExtensions.includes(fileExtension)) {
+          showError("File yang diupload harus berupa format Excel (.xlsx, .xls) atau CSV (.csv)");
+          this.value = ""; // Reset
+          document.getElementById("fileInfo").classList.add("hidden");
+          return;
+        }
+      }
+
       const fileName = e.target.files[0] ? e.target.files[0].name : "";
       const fileSize = e.target.files[0]
         ? (e.target.files[0].size / 1024 / 1024).toFixed(2)
@@ -424,6 +436,12 @@ document
     }
 
     const file = fileInputEl.files[0];
+    const allowedExtensions = ["xlsx", "xls", "csv"];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (!allowedExtensions.includes(fileExtension)) {
+      showError("File yang diupload harus berupa format Excel (.xlsx, .xls) atau CSV (.csv)");
+      return;
+    }
 
     // UI Elements
     const btn = document.getElementById("btnUpload");

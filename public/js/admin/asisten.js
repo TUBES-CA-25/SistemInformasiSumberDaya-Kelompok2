@@ -129,6 +129,18 @@ document.addEventListener("DOMContentLoaded", function () {
         asistenForm.addEventListener("submit", async function (e) {
             e.preventDefault();
 
+            // Client-side file extension validation
+            const fileInput = document.getElementById("inputFoto");
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+                const fileExtension = file.name.split(".").pop().toLowerCase();
+                if (!allowedExtensions.includes(fileExtension)) {
+                    Swal.fire("Gagal", "File yang diupload harus berupa gambar/foto (jpg, jpeg, png, gif, webp, svg)", "error");
+                    return;
+                }
+            }
+
             const idAsisten = document.getElementById("inputIdAsisten").value;
             const formData = new FormData(this);
 

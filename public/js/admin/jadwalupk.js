@@ -56,8 +56,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const fileInput = document.getElementById("fileExcel");
       if (!fileInput.files.length) return;
 
+      const file = fileInput.files[0];
+      const allowedExtensions = ["xlsx", "xls", "csv"];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Format File Salah',
+          text: 'File yang diupload harus berupa format Excel (.xlsx, .xls) atau CSV (.csv)'
+        });
+        return;
+      }
+
       const formData = new FormData();
-      formData.append("excel_file", fileInput.files[0]);
+      formData.append("excel_file", file);
 
       const btn = document.getElementById("btnUpload");
       const progressDiv = document.getElementById("uploadProgress");
@@ -132,6 +144,18 @@ document.addEventListener("DOMContentLoaded", () => {
       fileInput.addEventListener("change", function () {
         if (this.files && this.files.length > 0) {
           const file = this.files[0];
+          const allowedExtensions = ["xlsx", "xls", "csv"];
+          const fileExtension = file.name.split(".").pop().toLowerCase();
+          if (!allowedExtensions.includes(fileExtension)) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Format File Salah',
+              text: 'File yang diupload harus berupa format Excel (.xlsx, .xls) atau CSV (.csv)'
+            });
+            this.value = ""; // Reset
+            fileInfo.classList.add("hidden");
+            return;
+          }
           fileNameDisplay.innerText = file.name;
           fileSizeDisplay.innerText = (file.size / (1024 * 1024)).toFixed(2) + " MB";
           fileInfo.classList.remove("hidden");

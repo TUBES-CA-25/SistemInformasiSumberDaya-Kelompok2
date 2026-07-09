@@ -234,6 +234,20 @@ class FasilitasController extends Controller {
             return;
         }
 
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            foreach ($_FILES['gambar']['name'] as $key => $name) {
+                if ($_FILES['gambar']['error'][$key] === UPLOAD_ERR_OK) {
+                    $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                    if (!in_array($ext, $allowed)) {
+                        $this->error('Format file gambar tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+                        return;
+                    }
+                }
+            }
+        }
+
         // Handle main image if uploaded
         if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
             $uploadResult = $this->handleMultipleUploads($_FILES['gambar'], $input['nama']);
@@ -271,6 +285,20 @@ class FasilitasController extends Controller {
         if (isset($input['fasilitas'])) {
             $input['fasilitas_pendukung'] = $input['fasilitas'];
             unset($input['fasilitas']);
+        }
+
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            foreach ($_FILES['gambar']['name'] as $key => $name) {
+                if ($_FILES['gambar']['error'][$key] === UPLOAD_ERR_OK) {
+                    $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                    if (!in_array($ext, $allowed)) {
+                        $this->error('Format file gambar tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+                        return;
+                    }
+                }
+            }
         }
 
         // Handle multiple images if uploaded
@@ -313,6 +341,9 @@ class FasilitasController extends Controller {
         foreach ($files['name'] as $key => $name) {
             if ($files['error'][$key] === UPLOAD_ERR_OK) {
                 $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
+                    continue;
+                }
                 $filename = 'lab_' . time() . '_' . $key . '.' . $ext;
                 
                 if (move_uploaded_file($files['tmp_name'][$key], $uploadDir . $filename)) {

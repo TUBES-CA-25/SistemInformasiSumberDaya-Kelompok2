@@ -80,7 +80,7 @@ class AsistenService {
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) return false;
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) return false;
 
         $filename = Helper::generateFilename($folderName, $identifier, $ext);
         

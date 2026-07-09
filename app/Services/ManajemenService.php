@@ -71,6 +71,9 @@ class ManajemenService {
         if (!is_dir($this->uploadPath)) mkdir($this->uploadPath, 0777, true);
 
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
+            return '';
+        }
         $filename = Helper::generateFilename('manajemen', $name, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $this->uploadPath . $filename)) {

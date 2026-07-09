@@ -239,13 +239,27 @@ document.getElementById("alumniForm").addEventListener("submit", function (e) {
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
 
+  // Client-side file extension validation
+  const fileInput = document.getElementById("inputFoto");
+  if (fileInput && fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (!allowedExtensions.includes(fileExtension)) {
+      showError("File yang diupload harus berupa gambar/foto (jpg, jpeg, png, gif, webp, svg)");
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+      return;
+    }
+  }
+
   const formData = new FormData(this);
   const id = document.getElementById("inputId").value;
-  
+
   // Use PUT for update, POST for create, with _method override for FormData
   const method = id ? "PUT" : "POST";
   const url = id ? API_URL + "/alumni/" + id : API_URL + "/alumni";
-  
+
   // Add _method override for PUT requests via FormData
   if (id) {
     formData.append("_method", "PUT");

@@ -64,12 +64,18 @@ class FormatPenulisanService {
             mkdir($this->uploadPath, 0777, true);
         }
 
+        // Validasi Ekstensi File
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+        if (!in_array($ext, $allowed)) {
+            throw new Exception('Format file tidak didukung. Hanya menerima file PDF atau Gambar (jpg, jpeg, png, gif, webp, svg)');
+        }
+
         // Hapus file lama jika ada (untuk update)
         if ($oldFile && file_exists($this->uploadPath . $oldFile)) {
             @unlink($this->uploadPath . $oldFile);
         }
 
-        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
         $fileName = Helper::generateFilename('format', $judul, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $this->uploadPath . $fileName)) {

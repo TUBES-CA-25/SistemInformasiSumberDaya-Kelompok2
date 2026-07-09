@@ -102,6 +102,18 @@ class ModulController extends Controller {
         
         // Cek apakah file diunggah
         $file = $_FILES['file'] ?? null;
+        if (!$file || empty($file['name'])) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'File PDF wajib diunggah']);
+            exit;
+        }
+
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if ($ext !== 'pdf') {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Format file harus PDF.']);
+            exit;
+        }
 
         if ($model->tambahModul($_POST, $file) > 0) {
             echo json_encode(['status' => 'success', 'message' => 'Modul berhasil ditambahkan']);
@@ -125,6 +137,14 @@ class ModulController extends Controller {
         
         // Jika file tidak diganti, kirim array error default PHP (error 4 = No File)
         $file = $_FILES['file'] ?? ['error' => 4];
+        if (isset($file['name']) && !empty($file['name'])) {
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if ($ext !== 'pdf') {
+                http_response_code(400);
+                echo json_encode(['status' => 'error', 'message' => 'Format file harus PDF.']);
+                exit;
+            }
+        }
         
         if ($model->updateModul($_POST, $file) > 0) {
             echo json_encode(['status' => 'success', 'message' => 'Modul berhasil diperbarui']);

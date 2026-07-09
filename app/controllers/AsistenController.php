@@ -155,13 +155,26 @@ class AsistenController extends Controller {
             return $this->error('Nama dan Email wajib diisi', null, 400);
         }
 
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            if (!in_array($ext, $allowed)) {
+                return $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+            }
+        }
+
         try {
             // Proses Skills & Foto via Service
             $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
 
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
                 $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
-                if ($photoPath) $input['foto'] = $photoPath;
+                if ($photoPath) {
+                    $input['foto'] = $photoPath;
+                } else {
+                    return $this->error('Gagal mengupload foto asisten', null, 500);
+                }
             }
 
             $inserted = $this->model->insert($input);
@@ -187,6 +200,15 @@ class AsistenController extends Controller {
         $existing = $this->model->getById($id);
         if (!$existing) return $this->error('Data asisten tidak ditemukan', null, 404);
 
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            if (!in_array($ext, $allowed)) {
+                return $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+            }
+        }
+
         try {
             $input = $_POST;
             
@@ -200,7 +222,11 @@ class AsistenController extends Controller {
                 if (!empty($existing['foto'])) $this->service->deletePhoto($existing['foto']);
                 
                 $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
-                if ($photoPath) $input['foto'] = $photoPath;
+                if ($photoPath) {
+                    $input['foto'] = $photoPath;
+                } else {
+                    return $this->error('Gagal mengupload foto asisten', null, 500);
+                }
             }
 
             $updated = $this->model->update($id, $input, 'idAsisten');

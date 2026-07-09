@@ -200,6 +200,19 @@ document
     e.preventDefault();
     const btn = document.getElementById("btnSave");
     const msg = document.getElementById("formMessage");
+
+    // Client-side file extension validation
+    const fileInput = document.getElementById("inputFoto");
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        showError("File yang diupload harus berupa gambar/foto (jpg, jpeg, png, gif, webp, svg)");
+        return;
+      }
+    }
+
     const id = document.getElementById("inputId").value;
     const url = id ? API_URL + "/manajemen/" + id : API_URL + "/manajemen";
 

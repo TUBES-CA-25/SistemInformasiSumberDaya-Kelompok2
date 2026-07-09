@@ -48,6 +48,14 @@ class ManajemenController extends Controller {
             unset($input['_method'], $input['idManajemen']);
 
             $file = $_FILES['foto'] ?? null;
+            if ($file && $file['error'] === UPLOAD_ERR_OK) {
+                $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+                if (!in_array($ext, $allowed)) {
+                    $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+                }
+            }
+
             if ($this->service->storeManajemen($input, $file)) {
                 $this->success(null, 'Manajemen created successfully', 201);
             }
@@ -68,6 +76,14 @@ class ManajemenController extends Controller {
 
             $input = $_POST ?: ($this->getJson() ?? []);
             $file = $_FILES['foto'] ?? null;
+
+            if ($file && $file['error'] === UPLOAD_ERR_OK) {
+                $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+                if (!in_array($ext, $allowed)) {
+                    $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+                }
+            }
 
             unset($input['_method'], $input['idManajemen']);
 
