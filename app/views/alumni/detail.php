@@ -22,7 +22,8 @@ $matkulString = $data['matkul_string'] ?? '';
                 
                 <div class="profile-image">
                     <img src="<?= $imgUrl ?>" 
-                         alt="<?= htmlspecialchars($alumni['nama'] ?? 'Alumni') ?>">
+                         alt="<?= htmlspecialchars($alumni['nama'] ?? 'Alumni') ?>"
+                         loading="lazy">
                 </div>
                 
                 <div class="profile-content">

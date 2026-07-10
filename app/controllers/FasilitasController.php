@@ -333,6 +333,8 @@ class FasilitasController extends Controller {
      * Helper to handle multiple image uploads
      */
     private function handleMultipleUploads($files, $labName): array {
+        require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+
         $uploadedFiles = [];
         $uploadDir = ROOT_PROJECT . '/public/assets/uploads/';
         
@@ -347,6 +349,8 @@ class FasilitasController extends Controller {
                 $filename = 'lab_' . time() . '_' . $key . '.' . $ext;
                 
                 if (move_uploaded_file($files['tmp_name'][$key], $uploadDir . $filename)) {
+                    // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan
+                    ImageOptimizer::optimize($uploadDir . $filename);
                     $uploadedFiles[] = $filename;
                 }
             }

@@ -197,7 +197,7 @@
 /* FOTO LIST VIEW */
 .staff-photo-box {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   background: #f1f5f9;
   border-bottom: 1px solid var(--border);
   position: relative;
@@ -211,7 +211,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
+  object-position: center;
   transition: transform 0.5s ease;
   display: block;
 }

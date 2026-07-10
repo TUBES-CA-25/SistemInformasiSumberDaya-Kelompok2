@@ -73,6 +73,8 @@ class AsistenService {
      * @return string|false Path relatif file jika sukses
      */
     public function uploadPhoto($file, $identifier) {
+        require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+
         $folderName = 'asisten';
         $subFolder = $folderName . '/';
         $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
@@ -85,6 +87,8 @@ class AsistenService {
         $filename = Helper::generateFilename($folderName, $identifier, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) {
+            // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan
+            ImageOptimizer::optimize($uploadDir . $filename, 400, 400, true);
             return $subFolder . $filename;
         }
 

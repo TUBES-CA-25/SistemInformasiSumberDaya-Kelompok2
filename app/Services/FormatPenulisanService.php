@@ -79,6 +79,11 @@ class FormatPenulisanService {
         $fileName = Helper::generateFilename('format', $judul, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $this->uploadPath . $fileName)) {
+            // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan (skip PDF)
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+                ImageOptimizer::optimize($this->uploadPath . $fileName);
+            }
             return $fileName;
         }
         

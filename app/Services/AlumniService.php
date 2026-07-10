@@ -80,6 +80,8 @@ class AlumniService
      */
     public function uploadPhoto($file, $name)
     {
+        require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+
         $subFolder = 'alumni/';
         // Tentukan path absolut ke folder upload
         $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
@@ -96,6 +98,8 @@ class AlumniService
         
         // Pindahkan file dari temp ke folder tujuan
         if (move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) {
+            // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan
+            ImageOptimizer::optimize($uploadDir . $filename, 400, 400, true);
             return $subFolder . $filename;
         }
         return false;

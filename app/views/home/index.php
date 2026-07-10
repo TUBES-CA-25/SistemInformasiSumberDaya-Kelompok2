@@ -76,7 +76,7 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="slide">
                 <div class="slide-content-wrapper"> 
                     <div class="slide-image">
-                        <img src="<?= PUBLIC_URL ?>/images/Pusat-Kompetensi.jpg" alt="Pusat Kompetensi Digital">
+                        <img src="<?= PUBLIC_URL ?>/images/Pusat-Kompetensi.jpg" alt="Pusat Kompetensi Digital" loading="lazy">
                     </div>
                     <div class="slide-text">
                         <h2>Pusat Kompetensi</h2>
@@ -88,7 +88,7 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="slide">
                 <div class="slide-content-wrapper">
                     <div class="slide-image">
-                         <img src="<?= PUBLIC_URL ?>/images/Infrastruktur-Modern.jpg" alt="Infrastruktur Laboratorium Modern">
+                         <img src="<?= PUBLIC_URL ?>/images/Infrastruktur-Modern.jpg" alt="Infrastruktur Laboratorium Modern" loading="lazy">
                     </div>
                     <div class="slide-text">
                         <h2>Infrastruktur Modern</h2>
@@ -100,7 +100,7 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="slide">
                 <div class="slide-content-wrapper">
                     <div class="slide-image">
-                         <img src="<?= PUBLIC_URL ?>/images/RisetDanInovasi.png" alt="Riset dan Inovasi Laboratorium">
+                         <img src="<?= PUBLIC_URL ?>/images/RisetDanInovasi.png" alt="Riset dan Inovasi Laboratorium" loading="lazy">
                     </div>
                     <div class="slide-text">
                         <h2>Riset & Inovasi</h2>

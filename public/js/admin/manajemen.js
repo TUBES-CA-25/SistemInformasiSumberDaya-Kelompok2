@@ -66,6 +66,7 @@ function renderTable(data) {
                     <img src="${photoUrl}" 
                          class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm inline-block bg-gray-100"
                          alt="${item.nama}"
+                         loading="lazy"
                          onerror="this.onerror=null; this.src='${defaultAvatar}';">
                 </td>
                 <td class="px-6 py-4">

@@ -68,6 +68,8 @@ class ManajemenService {
      * Helper untuk menangani proses upload file fisik.
      */
     private function uploadFile($file, $name) {
+        require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+
         if (!is_dir($this->uploadPath)) mkdir($this->uploadPath, 0777, true);
 
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -77,6 +79,8 @@ class ManajemenService {
         $filename = Helper::generateFilename('manajemen', $name, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $this->uploadPath . $filename)) {
+            // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan
+            ImageOptimizer::optimize($this->uploadPath . $filename, 400, 400, true);
             return 'manajemen/' . $filename;
         }
         return '';

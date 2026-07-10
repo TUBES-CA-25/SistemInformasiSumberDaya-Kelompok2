@@ -54,7 +54,7 @@ function renderTable(data) {
       rowsHtml += `
                 <tr onclick="openDetailModal(${item.id})" class="hover:bg-blue-50 transition-colors duration-150 cursor-pointer group border-b border-gray-100">
                     <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
-                    <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"></div></td>
+                    <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md" loading="lazy"></div></td>
                     <td class="px-6 py-4">
                         <div class="flex flex-col">
                             <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.nama}</span>

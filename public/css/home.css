@@ -579,7 +579,7 @@
 }
 .staff-photo-box {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   background: #f1f5f9;
   border-bottom: 1px solid #e2e8f0;
   overflow: hidden;
@@ -588,7 +588,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
+  object-position: center;
   transition: transform 0.5s ease;
 }
 .staff-card-home:hover .staff-photo-box img {

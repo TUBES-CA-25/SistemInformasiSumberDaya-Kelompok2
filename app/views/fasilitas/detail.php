@@ -28,7 +28,7 @@ $coord       = $data['koordinator'] ?? ['nama' => 'N/A', 'initials' => 'NA'];
                     <div class="slider-track" id="sliderTrack">
                         <?php foreach ($gallery as $index => $img) : ?>
                             <div class="slide-item">
-                                <img src="<?= $img['src'] ?>" alt="Slide <?= $index + 1 ?>">
+                                <img src="<?= $img['src'] ?>" alt="Slide <?= $index + 1 ?>" loading="lazy">
                                 <?php if(!empty($img['desc'])): ?>
                                     <div class="slide-overlay"><?= htmlspecialchars($img['desc']) ?></div>
                                 <?php endif; ?>
