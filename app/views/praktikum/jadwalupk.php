@@ -1,5 +1,28 @@
+<?php 
+// Cek data dari Controller (Support data raw atau grouped)
+$jadwal = $data['jadwal'] ?? [];
+$grouped = $data['jadwal_grouped'] ?? [];
+
+// Jika controller belum grouping, kita group di sini (Fallback)
+if (empty($grouped) && !empty($jadwal)) {
+    foreach($jadwal as $row) {
+        $grouped[$row['ruangan']][] = $row;
+    }
+    ksort($grouped);
+}
+?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+    .hidden {
+        display: none !important;
+    }
+    .upk-search-wrapper input:focus {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+    }
+</style>
 
 <section class="praktikum-section">
     <div class="container">
@@ -14,22 +37,29 @@
             <div id="live-clock" class="live-clock-badge">
                 00:00:00
             </div>
+
+            <div class="filter-controls" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 25px;">
+                <!-- Lab/Ruangan -->
+                <div class="day-selector-wrapper" style="margin-top: 0;">
+                    <select id="upk-lab-select" class="custom-select" onchange="filterJadwalUpk()" style="min-width: 180px;">
+                        <option value="">Semua Lab</option>
+                        <?php foreach(array_keys($grouped) as $ruangan): ?>
+                            <option value="<?= htmlspecialchars($ruangan) ?>"><?= htmlspecialchars($ruangan) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <i class="fas fa-chevron-down select-icon"></i>
+                </div>
+
+                <!-- Pencarian -->
+                <div class="upk-search-wrapper" style="position: relative; display: inline-block;">
+                    <input type="text" id="upk-search-input" onkeyup="filterJadwalUpk()" placeholder="Cari matakuliah, dosen..." 
+                        style="padding: 12px 20px 12px 45px; border-radius: 12px; border: 2px solid #e2e8f0; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; outline: none; transition: all 0.3s; background: white; color: #0f172a; min-width: 280px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <i class="fas fa-search" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #64748b;"></i>
+                </div>
+            </div>
         </header>
 
         <div id="lab-tables-container">
-            <?php 
-            // Cek data dari Controller (Support data raw atau grouped)
-            $jadwal = $data['jadwal'] ?? [];
-            $grouped = $data['jadwal_grouped'] ?? [];
-
-            // Jika controller belum grouping, kita group di sini (Fallback)
-            if (empty($grouped) && !empty($jadwal)) {
-                foreach($jadwal as $row) {
-                    $grouped[$row['ruangan']][] = $row;
-                }
-                ksort($grouped);
-            }
-            ?>
 
             <?php if (empty($grouped) && empty($jadwal)): ?>
                 <div class="empty-schedule">
@@ -40,7 +70,7 @@
             <?php else: ?>
                 
                 <?php foreach($grouped as $ruangan => $items): ?>
-                <div class="schedule-wrapper">
+                <div class="schedule-wrapper" data-ruangan="<?= htmlspecialchars($ruangan) ?>">
                     <div class="lab-header">
                         <div class="lab-icon">
                             <i class="fas fa-door-open"></i>
@@ -64,7 +94,7 @@
                                     $tgl = date('d M Y', strtotime($item['tanggal']));
                                     $isToday = ($item['tanggal'] == date('Y-m-d'));
                                 ?>
-                                <tr>
+                                <tr data-ruangan="<?= htmlspecialchars($ruangan) ?>" data-matkul="<?= htmlspecialchars($item['mata_kuliah']) ?>" data-dosen="<?= htmlspecialchars($item['dosen']) ?>">
                                     <td>
                                         <div class="schedule-date"><?= $tgl ?></div>
                                         <div class="schedule-time"><?= htmlspecialchars($item['jam']) ?></div>
@@ -100,6 +130,11 @@
                 </div>
                 <?php endforeach; ?>
 
+                <div id="upk-empty-message" class="empty-schedule hidden">
+                    <i class="far fa-calendar-times"></i>
+                    <h3>Tidak Ada Hasil</h3>
+                    <p>Tidak ada jadwal UPK yang cocok dengan filter pencarian Anda.</p>
+                </div>
             <?php endif; ?>
         </div>
     </div>

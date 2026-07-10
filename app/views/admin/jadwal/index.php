@@ -25,6 +25,49 @@
     </div>
 </div>
 
+<!-- Filter Dashboard -->
+<div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 mb-6 flex flex-wrap gap-4 items-center animate__animated animate__fadeIn">
+    <div class="text-sm font-bold text-gray-700 flex items-center gap-2">
+        <i class="fas fa-filter text-blue-600"></i> Filter Data:
+    </div>
+    
+    <!-- Filter Hari -->
+    <div class="w-full sm:w-auto">
+        <select id="filterHari" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-700">
+            <option value="">Semua Hari</option>
+            <option value="Senin">Senin</option>
+            <option value="Selasa">Selasa</option>
+            <option value="Rabu">Rabu</option>
+            <option value="Kamis">Kamis</option>
+            <option value="Jumat">Jumat</option>
+            <option value="Sabtu">Sabtu</option>
+        </select>
+    </div>
+
+    <!-- Filter Lab -->
+    <div class="w-full sm:w-auto">
+        <select id="filterLab" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-700">
+            <option value="">Semua Lab</option>
+        </select>
+    </div>
+
+    <!-- Filter Prodi -->
+    <div class="w-full sm:w-auto">
+        <select id="filterProdi" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-700">
+            <option value="">Semua Prodi</option>
+            <option value="TI">Teknik Informatika (TI)</option>
+            <option value="SI">Sistem Informasi (SI)</option>
+        </select>
+    </div>
+
+    <!-- Filter Asisten -->
+    <div class="w-full sm:w-auto">
+        <select id="filterAsisten" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-700">
+            <option value="">Semua Asisten</option>
+        </select>
+    </div>
+</div>
+
 <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
         <div class="flex items-center gap-4">

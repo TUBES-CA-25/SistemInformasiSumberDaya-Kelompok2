@@ -253,6 +253,19 @@ document.getElementById("alumniForm").addEventListener("submit", function (e) {
     }
   }
 
+  // Client-side angkatan year validation
+  const angkatanInput = document.getElementById("inputAngkatan");
+  if (angkatanInput) {
+    const angkatan = parseInt(angkatanInput.value, 10);
+    const currentYear = new Date().getFullYear();
+    if (angkatan > currentYear) {
+      showError("Tahun angkatan tidak boleh melebihi tahun sekarang (" + currentYear + ")");
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+      return;
+    }
+  }
+
   const formData = new FormData(this);
   const id = document.getElementById("inputId").value;
 

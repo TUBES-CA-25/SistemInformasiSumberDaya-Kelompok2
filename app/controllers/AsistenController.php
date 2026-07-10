@@ -155,6 +155,10 @@ class AsistenController extends Controller {
             return $this->error('Nama dan Email wajib diisi', null, 400);
         }
 
+        if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL) || !preg_match('/@(?:[a-z0-9-]+\.)*umi\.ac\.id$/i', $input['email'])) {
+            return $this->error('Email harus menggunakan domain resmi UMI (contoh: 13020230100@student.umi.ac.id)', null, 400);
+        }
+
         // Validasi ekstensi foto sebelum memproses
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
             $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
@@ -214,6 +218,14 @@ class AsistenController extends Controller {
             
             // Remove non-database fields
             unset($input['_method']);
+
+            if (empty($input['nama']) || empty($input['email'])) {
+                return $this->error('Nama dan Email wajib diisi', null, 400);
+            }
+
+            if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL) || !preg_match('/@(?:[a-z0-9-]+\.)*umi\.ac\.id$/i', $input['email'])) {
+                return $this->error('Email harus menggunakan domain resmi UMI (contoh: 13020230100@student.umi.ac.id)', null, 400);
+            }
             
             $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
 

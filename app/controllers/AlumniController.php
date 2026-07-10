@@ -101,6 +101,12 @@ class AlumniController extends Controller
             $this->error('Nama dan angkatan wajib diisi', null, 400);
         }
 
+        $currentYear = (int)date('Y');
+        $angkatan = (int)$input['angkatan'];
+        if ($angkatan > $currentYear) {
+            $this->error('Tahun angkatan tidak boleh melebihi tahun sekarang (' . $currentYear . ')', null, 400);
+        }
+
         // Validasi ekstensi foto sebelum memproses
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
             $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
@@ -160,6 +166,12 @@ class AlumniController extends Controller
         // Validasi Sederhana
         if (empty($input['nama']) || empty($input['angkatan'])) {
             $this->error('Nama dan angkatan wajib diisi', null, 400);
+        }
+
+        $currentYear = (int)date('Y');
+        $angkatan = (int)$input['angkatan'];
+        if ($angkatan > $currentYear) {
+            $this->error('Tahun angkatan tidak boleh melebihi tahun sekarang (' . $currentYear . ')', null, 400);
         }
 
         // Validasi ekstensi foto sebelum memproses

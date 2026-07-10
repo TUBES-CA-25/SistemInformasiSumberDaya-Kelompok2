@@ -141,6 +141,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
 
+            // Client-side email validation for UMI domain
+            const emailInput = document.getElementById("inputEmail");
+            if (emailInput) {
+                const email = emailInput.value.trim();
+                const umiEmailPattern = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*umi\.ac\.id$/i;
+                if (!umiEmailPattern.test(email)) {
+                    Swal.fire("Gagal", "Email harus menggunakan domain resmi UMI (contoh: 130202302227@student.umi.ac.id)", "error");
+                    return;
+                }
+            }
+
             const idAsisten = document.getElementById("inputIdAsisten").value;
             const formData = new FormData(this);
 

@@ -10,16 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchInput = document.getElementById("searchInput");
   if (searchInput) {
     searchInput.addEventListener("keyup", function (e) {
-      const keyword = e.target.value.toLowerCase();
-      const filtered = allJadwalData.filter(
-        (item) =>
-          (item.namaMatakuliah &&
-            item.namaMatakuliah.toLowerCase().includes(keyword)) ||
-          (item.namaLab && item.namaLab.toLowerCase().includes(keyword)) ||
-          (item.hari && item.hari.toLowerCase().includes(keyword)) ||
-          (item.kelas && item.kelas.toLowerCase().includes(keyword)),
-      );
-      renderTable(filtered);
+      applyFilters();
     });
   }
 
@@ -66,8 +57,10 @@ function loadJadwal() {
     .then((res) => {
       if ((res.status === "success" || res.code === 200) && res.data) {
         allJadwalData = res.data;
+        populateAdminFilters();
         renderTable(allJadwalData);
       } else {
+        allJadwalData = [];
         renderTable([]);
       }
     })
@@ -76,6 +69,88 @@ function loadJadwal() {
       document.getElementById("tableBody").innerHTML =
         `<tr><td colspan="8" class="px-6 py-12 text-center text-red-500">Gagal memuat data: ${err.message}</td></tr>`;
     });
+}
+
+function populateAdminFilters() {
+  // Populate Lab filter
+  const filterLab = document.getElementById("filterLab");
+  if (filterLab) {
+    const currentVal = filterLab.value;
+    filterLab.innerHTML = '<option value="">Semua Lab</option>';
+    const labs = [...new Set(allJadwalData.map(item => item.namaLab))].filter(Boolean).sort();
+    labs.forEach(lab => {
+      const opt = document.createElement("option");
+      opt.value = lab;
+      opt.innerText = lab;
+      if (lab === currentVal) opt.selected = true;
+      filterLab.appendChild(opt);
+    });
+  }
+
+  // Populate Asisten filter
+  const filterAsisten = document.getElementById("filterAsisten");
+  if (filterAsisten) {
+    const currentVal = filterAsisten.value;
+    filterAsisten.innerHTML = '<option value="">Semua Asisten</option>';
+    const assistants = [];
+    allJadwalData.forEach(item => {
+      if (item.namaAsisten1) assistants.push(item.namaAsisten1);
+      if (item.namaAsisten2) assistants.push(item.namaAsisten2);
+    });
+    const uniqueAssistants = [...new Set(assistants)].filter(Boolean).sort();
+    uniqueAssistants.forEach(as => {
+      const opt = document.createElement("option");
+      opt.value = as;
+      opt.innerText = as;
+      if (as === currentVal) opt.selected = true;
+      filterAsisten.appendChild(opt);
+    });
+  }
+}
+
+window.applyFilters = function() {
+  const searchInput = document.getElementById("searchInput");
+  const keyword = searchInput ? searchInput.value.toLowerCase() : "";
+  
+  const filterHari = document.getElementById("filterHari") ? document.getElementById("filterHari").value : "";
+  const filterLab = document.getElementById("filterLab") ? document.getElementById("filterLab").value : "";
+  const filterProdi = document.getElementById("filterProdi") ? document.getElementById("filterProdi").value : "";
+  const filterAsisten = document.getElementById("filterAsisten") ? document.getElementById("filterAsisten").value : "";
+  
+  const filtered = allJadwalData.filter(item => {
+    // 1. Keyword search
+    const matchesKeyword = !keyword || 
+      (item.namaMatakuliah && item.namaMatakuliah.toLowerCase().includes(keyword)) ||
+      (item.namaLab && item.namaLab.toLowerCase().includes(keyword)) ||
+      (item.hari && item.hari.toLowerCase().includes(keyword)) ||
+      (item.kelas && item.kelas.toLowerCase().includes(keyword)) ||
+      (item.namaDosen && item.namaDosen.toLowerCase().includes(keyword)) ||
+      (item.namaAsisten1 && item.namaAsisten1.toLowerCase().includes(keyword)) ||
+      (item.namaAsisten2 && item.namaAsisten2.toLowerCase().includes(keyword));
+      
+    // 2. Day filter
+    const matchesHari = !filterHari || item.hari === filterHari;
+    
+    // 3. Lab filter
+    const matchesLab = !filterLab || item.namaLab === filterLab;
+    
+    // 4. Prodi filter
+    let matchesProdi = true;
+    if (filterProdi) {
+      if (filterProdi === "TI") {
+        matchesProdi = item.kodeMatakuliah && item.kodeMatakuliah.startsWith("TI");
+      } else if (filterProdi === "SI") {
+        matchesProdi = item.kodeMatakuliah && item.kodeMatakuliah.startsWith("SI");
+      }
+    }
+    
+    // 5. Assistant filter
+    const matchesAsisten = !filterAsisten || item.namaAsisten1 === filterAsisten || item.namaAsisten2 === filterAsisten;
+    
+    return matchesKeyword && matchesHari && matchesLab && matchesProdi && matchesAsisten;
+  });
+  
+  renderTable(filtered);
 }
 
 function renderTable(data) {
