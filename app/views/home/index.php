@@ -5,9 +5,11 @@ $laboran_list = $data['laboran'] ?? [];
 ?>
 
 <section class="hero-section">
+    <div class="hero-aurora"></div>
     <div class="container">
         <div class="hero-content reveal fade-left">
-            <h1>Selamat Datang di Portal Laboratorium FIKOM UMI</h1>
+            <span class="hero-eyebrow"><span class="eyebrow-dot"></span> Sistem Informasi Terintegrasi</span>
+            <h1>Selamat Datang di <span class="text-gradient">Portal Laboratorium</span> FIKOM UMI</h1>
             <p>Siap untuk pengalaman praktikum yang lebih baik? Akses seluruh layanan laboratorium Fakultas Ilmu Komputer mulai dari jadwal hingga inventaris aset dengan lebih cepat dan mudah di sini.</p>
             <div class="btn-group">
                 <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
@@ -16,7 +18,11 @@ $laboran_list = $data['laboran'] ?? [];
             </div>
         </div>
         <div class="hero-image reveal fade-right">
+            <div class="hero-glow-ring"></div>
             <img src="<?= PUBLIC_URL ?>/images/logo-iclabs.png" alt="Logo ICLabs" class="hero-logo-img">
+            <div class="hero-float-chip">
+                <span class="chip-dot"></span> Layanan Aktif 24/7
+            </div>
         </div>
     </div>
 </section>

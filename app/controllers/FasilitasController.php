@@ -349,8 +349,8 @@ class FasilitasController extends Controller {
                 $filename = 'lab_' . time() . '_' . $key . '.' . $ext;
                 
                 if (move_uploaded_file($files['tmp_name'][$key], $uploadDir . $filename)) {
-                    // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan
-                    ImageOptimizer::optimize($uploadDir . $filename);
+                    // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan (HD resolution)
+                    ImageOptimizer::optimize($uploadDir . $filename, 1920, 1080);
                     $uploadedFiles[] = $filename;
                 }
             }
@@ -392,6 +392,6 @@ class FasilitasController extends Controller {
     // =========================================================================
 
     private function getBackLink(string $jenis): string {
-        return (stripos($jenis, 'riset') !== false) ? 'index.php?page=riset' : 'index.php?page=laboratorium';
+        return (stripos($jenis, 'riset') !== false) ? PUBLIC_URL . '/riset' : PUBLIC_URL . '/laboratorium';
     }
 }
