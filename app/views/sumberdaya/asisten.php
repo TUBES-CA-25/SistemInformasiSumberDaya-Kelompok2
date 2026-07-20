@@ -30,7 +30,7 @@ $alumni_list      = $data['alumni'] ?? [];
                 <div class="card-link exec-margin" data-id="<?= $coord['idAsisten'] ?>" data-type="asisten"> 
                     <div class="exec-card">
                         <div class="exec-photo">
-                            <img src="<?= $coord['foto_url'] ?>" alt="<?= htmlspecialchars($coord['nama']) ?>" class="asisten-photo" loading="lazy">
+                            <img src="<?= $coord['foto_url'] ?>" alt="<?= htmlspecialchars($coord['nama']) ?>" class="asisten-photo" style="<?= Helper::objectPosStyle($coord) ?>" loading="lazy">
                         </div>
                         <div class="exec-info">
                             <span class="exec-badge">Koordinator</span>
@@ -73,7 +73,7 @@ $alumni_list      = $data['alumni'] ?? [];
                     <a href="javascript:void(0)" data-id="<?= $row['idAsisten'] ?>" data-type="asisten" class="card-link asisten-detail-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
-                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="asisten-photo" loading="lazy">
+                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="asisten-photo" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                             </div>
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
@@ -109,7 +109,7 @@ $alumni_list      = $data['alumni'] ?? [];
                     <a href="javascript:void(0)" data-id="<?= $row['idAsisten'] ?>" data-type="asisten" class="card-link asisten-detail-link">
                         <div class="staff-card">
                                 <div class="staff-photo-box">
-                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="asisten-photo" loading="lazy">
+                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" class="asisten-photo" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                             </div>
                             <div class="staff-content">
                                 <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
@@ -145,7 +145,7 @@ $alumni_list      = $data['alumni'] ?? [];
                     <a href="javascript:void(0)" data-id="<?= $row['idAsisten'] ?>" data-type="alumni" class="card-link asisten-detail-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
-                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama'] ?? '') ?>" class="asisten-photo" loading="lazy">
+                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama'] ?? '') ?>" class="asisten-photo" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                                 <span class="badge-alumni">Alumni</span>
                             </div>
                             <div class="staff-content">

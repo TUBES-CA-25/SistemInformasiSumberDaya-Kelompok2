@@ -171,6 +171,8 @@ class AsistenController extends Controller {
         try {
             // Proses Skills & Foto via Service
             $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
+            $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+            $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
 
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
                 $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
@@ -228,6 +230,8 @@ class AsistenController extends Controller {
             }
             
             $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
+            $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+            $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
 
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
                 // Hapus foto lama jika ada upload baru

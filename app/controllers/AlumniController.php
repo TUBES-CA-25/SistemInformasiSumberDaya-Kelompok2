@@ -116,6 +116,9 @@ class AlumniController extends Controller
             }
         }
 
+        $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+        $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
+
         // Handle Upload Foto via Service jika file dikirimkan
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
             $path = $this->alumniService->uploadPhoto($_FILES['foto'], $input['nama']);
@@ -182,6 +185,9 @@ class AlumniController extends Controller
                 $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
             }
         }
+
+        $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+        $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
 
         // Handle Upload Foto via Service jika file dikirimkan
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {

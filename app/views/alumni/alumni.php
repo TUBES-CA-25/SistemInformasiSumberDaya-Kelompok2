@@ -56,8 +56,9 @@
         <a href="<?= PUBLIC_URL ?>/alumni/<?= $idAlumni ?>" class="card-link">
             <div class="staff-card">
                 <div class="staff-photo-box">
-                    <img src="<?= $imgUrl ?>" 
-                         alt="<?= htmlspecialchars($row['nama']) ?>" 
+                    <img src="<?= $imgUrl ?>"
+                         alt="<?= htmlspecialchars($row['nama']) ?>"
+                         style="<?= Helper::objectPosStyle($row) ?>"
                          loading="lazy">
                 </div>
                 

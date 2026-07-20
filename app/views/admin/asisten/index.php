@@ -126,6 +126,18 @@
                                 <div id="fotoPreviewInfo" class="hidden mt-2 text-xs text-blue-600 bg-blue-50 p-2 rounded-lg items-center gap-2">
                                     <i class="fas fa-check-circle"></i> Foto sudah tersedia
                                 </div>
+
+                                <div class="mt-3">
+                                    <div id="fotoPositionBox" class="photo-position-box hidden relative w-full max-w-[220px] mx-auto aspect-square rounded-xl overflow-hidden border-2 border-blue-200 bg-gray-100 cursor-grab select-none"
+                                         data-target-x="inputFotoPosX" data-target-y="inputFotoPosY">
+                                        <img class="photo-position-img w-full h-full object-cover pointer-events-none" draggable="false" alt="Preview posisi foto">
+                                        <div class="absolute bottom-1 left-1/2 -translate-x-1/2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full pointer-events-none flex items-center gap-1 whitespace-nowrap">
+                                            <i class="fas fa-arrows-alt"></i> Geser untuk atur posisi
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="inputFotoPosX" name="foto_pos_x" value="50">
+                                <input type="hidden" id="inputFotoPosY" name="foto_pos_y" value="50">
                             </div>
                         </div>
 
@@ -221,4 +233,5 @@
 
 
 
+<script src="<?= PUBLIC_URL ?>/js/admin/photo-position.js?v=<?= time() ?>"></script>
 <script src="<?= PUBLIC_URL ?>/js/admin/asisten.js?v=<?= time() ?>"></script>

@@ -122,7 +122,7 @@ $coord       = $data['koordinator'] ?? ['nama' => 'N/A', 'initials' => 'NA'];
                         
                         <div class="coord-photo-frame">
                             <?php if (!empty($coord['foto'])): ?>
-                                <img src="<?= $coord['foto'] ?>" class="coord-img-circle" alt="Foto Koordinator" loading="lazy">
+                                <img src="<?= $coord['foto'] ?>" class="coord-img-circle" alt="Foto Koordinator" style="<?= Helper::objectPosStyle($coord) ?>" loading="lazy">
                             <?php else: ?>
                                 <div class="coord-avatar-circle"><?= htmlspecialchars($coord['initials']) ?></div>
                             <?php endif; ?>

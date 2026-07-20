@@ -21,7 +21,7 @@ $d = $data['dataDetail'] ?? null;
 
             <div class="profile-wrapper">
                 <div class="profile-image">
-                    <img src="<?= $d['foto_url'] ?>" alt="<?= htmlspecialchars($d['nama']) ?>" loading="lazy">
+                    <img src="<?= $d['foto_url'] ?>" alt="<?= htmlspecialchars($d['nama']) ?>" style="<?= Helper::objectPosStyle($d) ?>" loading="lazy">
                 </div>
                 
                 <div class="profile-content">

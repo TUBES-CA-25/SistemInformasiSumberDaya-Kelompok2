@@ -79,8 +79,16 @@ class ManajemenService {
         $filename = Helper::generateFilename('manajemen', $name, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $this->uploadPath . $filename)) {
-            // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan
-            ImageOptimizer::optimize($this->uploadPath . $filename, 400, 400, true);
+            // Kompresi & resize (TANPA crop paksa) agar foto asli utuh dan bisa diposisikan
+            // manual lewat foto_pos_x/foto_pos_y (object-position) di sisi tampilan.
+            ImageOptimizer::optimize($this->uploadPath . $filename, 800, 800, false);
+
+            // Konversi ke WebP agar ukuran file lebih kecil
+            $webpPath = ImageOptimizer::convertToWebp($this->uploadPath . $filename);
+            if ($webpPath) {
+                $filename = basename($webpPath);
+            }
+
             return 'manajemen/' . $filename;
         }
         return '';

@@ -76,6 +76,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Event listener untuk preview & reposisi foto saat file baru dipilih
+    const inputFoto = document.getElementById("inputFoto");
+    if (inputFoto) {
+        inputFoto.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Foto baru selalu dimulai dari posisi tengah
+                    PhotoPositioner.setImage("fotoPositionBox", e.target.result, 50, 50);
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+
     // Event listener untuk Koordinator Form
     const koordinatorForm = document.getElementById("koordinatorForm");
     if (koordinatorForm) {
@@ -379,17 +394,17 @@ function openFormModal(id = null) {
             }
 
             // Show existing foto info if available
+            const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
             if (item.foto) {
-                const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
                 if (fotoPreviewInfo) {
                     fotoPreviewInfo.classList.remove("hidden");
                     fotoPreviewInfo.classList.add("flex");
                 }
+                const fotoUrl = item.foto.startsWith("http") ? item.foto : UPLOADS_URL + "/" + item.foto;
+                PhotoPositioner.setImage("fotoPositionBox", fotoUrl, item.foto_pos_x, item.foto_pos_y);
             } else {
-                const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
-                if (fotoPreviewInfo) {
-                    fotoPreviewInfo.classList.add("hidden");
-                }
+                if (fotoPreviewInfo) fotoPreviewInfo.classList.add("hidden");
+                PhotoPositioner.reset("fotoPositionBox");
             }
         }
     } else {
@@ -402,6 +417,7 @@ function openFormModal(id = null) {
         if (fotoPreviewInfo) {
             fotoPreviewInfo.classList.add("hidden");
         }
+        PhotoPositioner.reset("fotoPositionBox");
     }
 }
 

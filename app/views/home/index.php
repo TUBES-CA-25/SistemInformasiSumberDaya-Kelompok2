@@ -160,7 +160,7 @@ $laboran_list = $data['laboran'] ?? [];
                 <?php foreach ($kepala_lab_list as $row) : ?>
                     <div class="staff-card-home">
                         <div class="staff-photo-box">
-                            <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                            <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                         </div>
                         <div class="staff-content">
                             <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
@@ -176,7 +176,7 @@ $laboran_list = $data['laboran'] ?? [];
                 <?php foreach ($laboran_list as $row) : ?>
                     <div class="staff-card-home">
                         <div class="staff-photo-box">
-                            <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                            <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                         </div>
                         <div class="staff-content">
                             <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>

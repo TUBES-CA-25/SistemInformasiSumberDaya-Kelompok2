@@ -31,7 +31,7 @@ $laboran_list  = $data['laboran'] ?? [];
                         
                         <div class="staff-card">
                             <div class="staff-photo-box">
-                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                             </div>
 
                             <div class="staff-content">
@@ -70,7 +70,7 @@ $laboran_list  = $data['laboran'] ?? [];
                     <a href="<?= PUBLIC_URL ?>/kepala/<?= $row['idManajemen'] ?>" class="card-link">
                         <div class="staff-card">
                             <div class="staff-photo-box">
-                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                                <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                             </div>
 
                             <div class="staff-content">

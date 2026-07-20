@@ -351,6 +351,13 @@ class FasilitasController extends Controller {
                 if (move_uploaded_file($files['tmp_name'][$key], $uploadDir . $filename)) {
                     // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan (HD resolution)
                     ImageOptimizer::optimize($uploadDir . $filename, 1920, 1080);
+
+                    // Konversi ke WebP agar ukuran file lebih kecil
+                    $webpPath = ImageOptimizer::convertToWebp($uploadDir . $filename);
+                    if ($webpPath) {
+                        $filename = basename($webpPath);
+                    }
+
                     $uploadedFiles[] = $filename;
                 }
             }

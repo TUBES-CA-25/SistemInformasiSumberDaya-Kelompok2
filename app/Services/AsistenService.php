@@ -87,8 +87,16 @@ class AsistenService {
         $filename = Helper::generateFilename($folderName, $identifier, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) {
-            // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan
-            ImageOptimizer::optimize($uploadDir . $filename, 400, 400, true);
+            // Kompresi & resize (TANPA crop paksa) agar foto asli utuh dan bisa diposisikan
+            // manual lewat foto_pos_x/foto_pos_y (object-position) di sisi tampilan.
+            ImageOptimizer::optimize($uploadDir . $filename, 800, 800, false);
+
+            // Konversi ke WebP agar ukuran file lebih kecil
+            $webpPath = ImageOptimizer::convertToWebp($uploadDir . $filename);
+            if ($webpPath) {
+                $filename = basename($webpPath);
+            }
+
             return $subFolder . $filename;
         }
 

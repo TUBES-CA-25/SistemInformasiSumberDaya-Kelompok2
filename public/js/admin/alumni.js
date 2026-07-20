@@ -3,6 +3,21 @@ let allAlumniData = [];
 document.addEventListener("DOMContentLoaded", () => {
   loadAlumni();
 
+  // Preview & reposisi foto saat file baru dipilih
+  const inputFoto = document.getElementById("inputFoto");
+  if (inputFoto) {
+    inputFoto.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          // Foto baru selalu dimulai dari posisi tengah
+          PhotoPositioner.setImage("fotoPositionBox", e.target.result, 50, 50);
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+  }
+
   // Live Search
   document
     .getElementById("searchInput")
@@ -200,10 +215,17 @@ function openFormModal(id = null, event = null) {
           document.getElementById("inputMataKuliah").value =
             d.mata_kuliah || "";
 
-          if (d.foto)
+          if (d.foto) {
             document
               .getElementById("fotoPreviewInfo")
               .classList.remove("hidden");
+            const fotoUrl = d.foto.includes("http")
+              ? d.foto
+              : ASSETS_URL + "/assets/uploads/" + d.foto;
+            PhotoPositioner.setImage("fotoPositionBox", fotoUrl, d.foto_pos_x, d.foto_pos_y);
+          } else {
+            PhotoPositioner.reset("fotoPositionBox");
+          }
         }
       });
   } else {
@@ -229,6 +251,8 @@ function openFormModal(id = null, event = null) {
       .querySelectorAll(".matkul-tag")
       .forEach((el) => el.remove());
     document.getElementById("inputMataKuliah").value = "";
+
+    PhotoPositioner.reset("fotoPositionBox");
   }
 }
 

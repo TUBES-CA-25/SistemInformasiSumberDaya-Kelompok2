@@ -152,6 +152,7 @@ function openFormModal(id = null, event = null) {
   previewEl.classList.add("hidden");
   placeholderEl.classList.remove("hidden");
   previewEl.src = "";
+  PhotoPositioner.reset("fotoPositionBox");
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
@@ -178,6 +179,7 @@ function openFormModal(id = null, event = null) {
         previewEl.src = fotoUrl;
         previewEl.classList.remove("hidden");
         placeholderEl.classList.add("hidden");
+        PhotoPositioner.setImage("fotoPositionBox", fotoUrl, data.foto_pos_x, data.foto_pos_y);
 
         // Fallback jika gambar edit juga 404
         previewEl.onerror = function () {
@@ -263,6 +265,8 @@ function previewImage(input) {
       document.getElementById("previewFoto").src = e.target.result;
       document.getElementById("previewFoto").classList.remove("hidden");
       document.getElementById("placeholderFoto").classList.add("hidden");
+      // Foto baru selalu dimulai dari posisi tengah
+      PhotoPositioner.setImage("fotoPositionBox", e.target.result, 50, 50);
     };
     reader.readAsDataURL(input.files[0]);
   }

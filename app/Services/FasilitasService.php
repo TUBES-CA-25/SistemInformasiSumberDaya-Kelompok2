@@ -183,7 +183,9 @@ class FasilitasService {
                 'nama'     => $asisten['nama'],
                 'email'    => $asisten['email'],
                 'initials' => Helper::getInitials($asisten['nama']),
-                'foto'     => !empty($asisten['foto']) ? (defined('PUBLIC_URL') ? PUBLIC_URL : '') . '/assets/uploads/' . $asisten['foto'] : null
+                'foto'     => !empty($asisten['foto']) ? (defined('PUBLIC_URL') ? PUBLIC_URL : '') . '/assets/uploads/' . $asisten['foto'] : null,
+                'foto_pos_x' => $asisten['foto_pos_x'] ?? 50,
+                'foto_pos_y' => $asisten['foto_pos_y'] ?? 50
             ];
         }
         return $info;

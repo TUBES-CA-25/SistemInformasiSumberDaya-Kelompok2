@@ -21,8 +21,9 @@ $matkulString = $data['matkul_string'] ?? '';
             <div class="profile-wrapper">
                 
                 <div class="profile-image">
-                    <img src="<?= $imgUrl ?>" 
+                    <img src="<?= $imgUrl ?>"
                          alt="<?= htmlspecialchars($alumni['nama'] ?? 'Alumni') ?>"
+                         style="<?= Helper::objectPosStyle($alumni) ?>"
                          loading="lazy">
                 </div>
                 

@@ -156,6 +156,65 @@ class ImageOptimizer
     }
 
     /**
+     * Mengkonversi file gambar (JPEG/PNG/GIF) menjadi format WebP.
+     *
+     * File asal dihapus setelah konversi berhasil agar tidak menumpuk file duplikat.
+     * SVG atau format lain yang tidak didukung GD akan dilewati (return false) dan
+     * file asal dibiarkan apa adanya.
+     *
+     * @param string $filePath Path absolut file gambar sumber (idealnya sudah dioptimalkan lewat optimize())
+     * @param int $quality Kualitas kompresi WebP (0-100)
+     * @return string|false Path absolut file .webp baru jika berhasil, false jika dilewati/gagal
+     */
+    public static function convertToWebp(string $filePath, int $quality = 80)
+    {
+        if (!file_exists($filePath) || !is_file($filePath)) {
+            return false;
+        }
+
+        if (!function_exists('imagewebp')) {
+            return false; // GD di server tidak mendukung WebP
+        }
+
+        $imageInfo = @getimagesize($filePath);
+        if ($imageInfo === false) {
+            return false;
+        }
+
+        $mime = $imageInfo['mime'];
+
+        // Sudah WebP, tidak perlu dikonversi ulang
+        if ($mime === 'image/webp') {
+            return false;
+        }
+
+        $image = self::createImageFromFile($filePath, $mime);
+        if ($image === null) {
+            return false; // Format tidak didukung GD (misal SVG)
+        }
+
+        // Pertahankan transparansi (PNG/GIF)
+        imagepalettetotruecolor($image);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+
+        $webpPath = preg_replace('/\.[^.\/]+$/', '.webp', $filePath);
+        $success = imagewebp($image, $webpPath, $quality);
+        imagedestroy($image);
+
+        if (!$success || !file_exists($webpPath)) {
+            return false;
+        }
+
+        // Hapus file asli agar tidak ada file duplikat (jpg lama + webp baru)
+        if ($webpPath !== $filePath) {
+            @unlink($filePath);
+        }
+
+        return $webpPath;
+    }
+
+    /**
      * Memperbaiki orientasi gambar JPEG berdasarkan metadata EXIF.
      * 
      * @param resource $image Resource GD Image

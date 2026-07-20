@@ -47,6 +47,9 @@ class ManajemenController extends Controller {
 
             unset($input['_method'], $input['idManajemen']);
 
+            $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+            $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
+
             $file = $_FILES['foto'] ?? null;
             if ($file && $file['error'] === UPLOAD_ERR_OK) {
                 $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -86,6 +89,9 @@ class ManajemenController extends Controller {
             }
 
             unset($input['_method'], $input['idManajemen']);
+
+            $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+            $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
 
             if ($this->service->updateManajemen($id, $input, $existing, $file)) {
                 $this->success(null, 'Manajemen updated successfully');
