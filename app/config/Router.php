@@ -251,10 +251,22 @@ class Router {
         if (!method_exists($instance, $action)) { $this->notFound(); return; }
 
         // Middleware Proteksi Admin
-        if (strpos($this->path, '/admin') === 0) {
+        $isAdminPath = strpos($this->path, '/admin') === 0;
+
+        // Proteksi mutasi data: setiap request POST/PUT/DELETE mengubah data,
+        // jadi wajib login. Ini berlaku untuk SEMUA rute (baik yang didaftarkan
+        // dengan prefix /api/... lewat index.php, maupun tanpa prefix lewat
+        // public/api.php, maupun rute web biasa seperti /modul), kecuali
+        // rute login itu sendiri yang memang harus publik.
+        $method = strtoupper($this->method);
+        $isMutating = in_array($method, ['POST', 'PUT', 'DELETE']);
+        $isPublicMutatingRoute = ($this->path === '/login');
+        $needsAuth = $isAdminPath || ($isMutating && !$isPublicMutatingRoute);
+
+        if ($needsAuth) {
             if (file_exists(APP_PATH . '/middleware/AuthMiddleware.php')) {
                 require_once APP_PATH . '/middleware/AuthMiddleware.php';
-                AuthMiddleware::check();
+                AuthMiddleware::check($isMutating && !$isAdminPath);
             }
         }
 
