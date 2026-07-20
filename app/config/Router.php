@@ -119,6 +119,7 @@ class Router {
         $this->get('/api/sanksi', 'SanksiController', 'apiIndex');
         $this->get('/api/asisten/coordinator/current', 'AsistenController', 'getCoordinator');
         $this->post('/api/asisten/coordinator/set', 'AsistenController', 'setCoordinator');
+        $this->post('/api/asisten/{id}/move-to-alumni', 'AsistenController', 'moveToAlumni');
         $this->put('/api/asisten/{id}', 'AsistenController', 'update');
         $this->delete('/api/asisten/{id}', 'AsistenController', 'delete');
         $this->get('/api/asisten/{id}', 'AsistenController', 'apiShow');

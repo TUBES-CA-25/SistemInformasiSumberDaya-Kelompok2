@@ -95,6 +95,7 @@ $apiRoutes = [
         '/sanksi-lab/{id}'              => ['controller' => 'SanksiController', 'action' => 'update'],
         '/fasilitas'                    => ['controller' => 'FasilitasController', 'action' => 'store'],
         '/asisten'                      => ['controller' => 'AsistenController', 'action' => 'store'],
+        '/asisten/{id}/move-to-alumni'  => ['controller' => 'AsistenController', 'action' => 'moveToAlumni'],
         '/alumni'                       => ['controller' => 'AlumniController', 'action' => 'store'],
         '/asisten/coordinator/set'      => ['controller' => 'AsistenController', 'action' => 'setCoordinator'],
         '/asisten/{id}/koordinator'     => ['controller' => 'AsistenController', 'action' => 'setKoordinator'],

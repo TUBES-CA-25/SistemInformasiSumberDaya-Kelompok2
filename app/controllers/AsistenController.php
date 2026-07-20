@@ -339,4 +339,107 @@ class AsistenController extends Controller {
             return $this->error('Error: ' . $e->getMessage(), null, 500);
         }
     }
+
+    /**
+     * Admin: Pindahkan Asisten ke Alumni (POST)
+     */
+    public function moveToAlumni($params) {
+        if (ob_get_level()) ob_end_clean();
+        header('Content-Type: application/json');
+
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            return $this->error('ID asisten tidak valid', null, 400);
+        }
+
+        $asisten = $this->model->getById($id);
+        if (!$asisten) {
+            return $this->error('Data asisten tidak ditemukan', null, 404);
+        }
+
+        // Get additional inputs
+        $angkatan = $_POST['angkatan'] ?? null;
+        $divisi = $_POST['divisi'] ?? 'Asisten';
+        $kesan_pesan = $_POST['kesan_pesan'] ?? '';
+
+        if (empty($angkatan)) {
+            return $this->error('Tahun angkatan wajib diisi', null, 400);
+        }
+
+        // Import AlumniModel
+        require_once ROOT_PROJECT . '/app/models/AlumniModel.php';
+        $alumniModel = new AlumniModel();
+
+        // Process photo copy if exists
+        $alumniFoto = null;
+        if (!empty($asisten['foto'])) {
+            $oldPath = ROOT_PROJECT . '/public/assets/uploads/' . $asisten['foto'];
+            if (file_exists($oldPath) && is_file($oldPath)) {
+                // Ensure directory for alumni exists
+                $alumniDir = ROOT_PROJECT . '/public/assets/uploads/alumni';
+                if (!is_dir($alumniDir)) {
+                    mkdir($alumniDir, 0777, true);
+                }
+
+                $filename = basename($asisten['foto']);
+                $newRelPath = 'alumni/' . $filename;
+                $newFullPath = ROOT_PROJECT . '/public/assets/uploads/' . $newRelPath;
+
+                if (copy($oldPath, $newFullPath)) {
+                    $alumniFoto = $newRelPath;
+                }
+            }
+        }
+
+        // Clean skills tag to format suitable for alumni
+        $keahlian = '';
+        if (!empty($asisten['skills'])) {
+            $skillsDecoded = json_decode($asisten['skills'], true);
+            if (is_array($skillsDecoded)) {
+                $keahlian = implode(', ', $skillsDecoded);
+            } else {
+                $keahlian = $asisten['skills'];
+            }
+        }
+
+        // Insert into alumni table
+        $alumniData = [
+            'nama' => $asisten['nama'],
+            'angkatan' => $angkatan,
+            'divisi' => $divisi,
+            'mata_kuliah' => '',
+            'foto' => $alumniFoto,
+            'kesan_pesan' => $kesan_pesan,
+            'keahlian' => $keahlian,
+            'email' => $asisten['email'],
+            'foto_pos_x' => $asisten['foto_pos_x'],
+            'foto_pos_y' => $asisten['foto_pos_y']
+        ];
+
+        try {
+            $inserted = $alumniModel->insert($alumniData);
+            if ($inserted) {
+                // Delete photo file of assistant
+                if (!empty($asisten['foto'])) {
+                    $this->service->deletePhoto($asisten['foto']);
+                }
+
+                // Delete assistant record
+                $this->model->delete($id, 'idAsisten');
+
+                return $this->success(null, 'Asisten berhasil dipindahkan ke Alumni');
+            } else {
+                // Cleanup copied photo if insert failed
+                if ($alumniFoto) {
+                    $fullCopiedPath = ROOT_PROJECT . '/public/assets/uploads/' . $alumniFoto;
+                    if (file_exists($fullCopiedPath)) {
+                        @unlink($fullCopiedPath);
+                    }
+                }
+                return $this->error('Gagal memasukkan data ke Alumni', null, 500);
+            }
+        } catch (Exception $e) {
+            return $this->error('Error: ' . $e->getMessage(), null, 500);
+        }
+    }
 }
