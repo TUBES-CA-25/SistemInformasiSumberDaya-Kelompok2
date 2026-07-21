@@ -153,4 +153,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
     footerLogoImg.style.cursor = "default";
   }
+
+  // ============================================
+  // 5. GLOBAL DAY / NIGHT THEME SWITCHER LOGIC
+  // ============================================
+  const themeToggle = document.getElementById("themeToggle");
+  const bgDay = document.getElementById("bgDay");
+  const bgNight = document.getElementById("bgNight");
+  
+  let nightImageAvailable = true;
+
+  // Preload test untuk foto background beranda (jika ada)
+  if (bgNight && bgDay) {
+    let bgUrl = window.getComputedStyle(bgNight).backgroundImage;
+    if (bgUrl && bgUrl !== "none") {
+      bgUrl = bgUrl.replace(/^url\(['"]?([^'"]+)['"]?\)$/, '$1');
+      
+      const testImg = new Image();
+      testImg.src = bgUrl;
+      testImg.onerror = function () {
+        console.log("Night background photo not found, applying CSS night filter fallback to day image.");
+        nightImageAvailable = false;
+        bgNight.style.display = "none";
+        if (document.body.classList.contains("night-mode")) {
+          bgDay.style.opacity = "1";
+          bgDay.classList.add("night-mode-filter");
+        }
+      };
+    }
+  }
+
+  const setDayMode = () => {
+    document.body.classList.remove("night-mode");
+    localStorage.setItem("theme", "day");
+    if (bgDay) {
+      bgDay.classList.remove("night-mode-filter");
+      bgDay.style.opacity = "1";
+    }
+    if (bgNight && nightImageAvailable) {
+      bgNight.style.opacity = "0";
+    }
+  };
+
+  const setNightMode = () => {
+    document.body.classList.add("night-mode");
+    localStorage.setItem("theme", "night");
+    if (bgNight && nightImageAvailable) {
+      bgNight.style.opacity = "1";
+      if (bgDay) bgDay.style.opacity = "0";
+    } else if (bgDay) {
+      bgDay.style.opacity = "1";
+      bgDay.classList.add("night-mode-filter");
+    }
+  };
+
+  // Toggle Action Click
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      if (document.body.classList.contains("night-mode")) {
+        setDayMode();
+      } else {
+        setNightMode();
+      }
+    });
+  }
+
+  // Load Saved Preference
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "night") {
+    setNightMode();
+  } else {
+    setDayMode();
+  }
 });

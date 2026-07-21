@@ -103,62 +103,37 @@
 
 /* --- Hero Section (Tech Pattern & Glow) --- */
 .hero-section {
-  padding: 140px 0 120px;
-  background-color: #f8fafc;
-  background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
-  background-size: 40px 40px;
+  padding: 100px 0 30px; /* Compact padding for section spacing */
+  background-color: transparent;
+  background-image: none;
   position: relative;
   overflow: hidden;
+  z-index: 1;
+}
 
-  /* Z-Index diturunkan jadi 1 agar blob dari bawah bisa lewat di atasnya */
+.hero-boxed-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 20px; /* Rounded corners matching screenshot */
+  overflow: hidden;
+  padding: 60px 50px; /* Symmetrical padding, no slider dots spacing */
+  border: 1px solid rgba(226, 232, 240, 0.15);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
   z-index: 1;
 }
 
 .hero-section::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(248, 250, 252, 0) 0%,
-    #ffffff 100%
-  );
-  pointer-events: none;
-  z-index: 0;
+  display: none !important;
 }
 
 .hero-section::before {
-  content: "";
-  position: absolute;
-  top: -150px;
-  right: -100px;
-  width: 800px;
-  height: 800px;
-  background: radial-gradient(
-    circle,
-    rgba(37, 99, 235, 0.08) 0%,
-    rgba(37, 99, 235, 0) 70%
-  );
-  border-radius: 50%;
-  z-index: 0;
-  pointer-events: none;
+  display: none !important;
 }
 
 /* Aurora mesh glow — slow ambient drift, same blue family */
+/* Aurora mesh glow — hidden to keep background photo clean */
 .hero-aurora {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(500px circle at 20% 30%, rgba(37, 99, 235, 0.12), transparent 65%),
-    radial-gradient(420px circle at 85% 20%, rgba(96, 165, 250, 0.14), transparent 60%),
-    radial-gradient(600px circle at 70% 90%, rgba(30, 58, 138, 0.08), transparent 65%);
-  background-repeat: no-repeat;
-  animation: auroraDrift 14s ease-in-out infinite alternate;
+  display: none !important;
 }
 @keyframes auroraDrift {
   0% {
@@ -183,96 +158,99 @@
 }
 .hero-content {
   flex: 1;
+  max-width: 700px; /* Constrain text width on the left */
+  background: transparent; /* No card background, overlay is on the image frame */
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  z-index: 2;
+  transition: all 0.5s ease;
 }
 .hero-eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid #dbeafe;
-  color: #1e40af;
-  font-size: 0.78rem;
-  font-weight: 700;
+  background: #2563eb; /* Solid blue badge */
+  color: #ffffff; /* White text */
+  font-size: 0.75rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  padding: 8px 16px 8px 12px;
-  border-radius: 50px;
-  margin-bottom: 22px;
-  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.06);
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  border-radius: 6px; /* Rectangular corners */
+  margin-bottom: 20px;
 }
 .eyebrow-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #2563eb;
-  flex-shrink: 0;
-  animation: badgePulse 2s ease-in-out infinite;
+  display: none; /* Removed dot */
 }
 .hero-content h1 {
-  font-size: 3.6rem;
-  color: #0f172a;
+  font-size: 3.8rem;
+  color: #ffffff; /* White title */
   line-height: 1.15;
   margin-bottom: 25px;
   font-weight: 800;
   letter-spacing: -1.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
-.text-gradient {
-  background: linear-gradient(100deg, #1e3a8a 0%, #2563eb 55%, #60a5fa 100%);
+.text-blue {
+  background: linear-gradient(100deg, #60a5fa 0%, #3b82f6 100%); /* Lighter vibrant blue gradient */
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  font-weight: 800;
 }
 .hero-content p {
-  font-size: 1.2rem;
-  color: #64748b;
-  margin-bottom: 40px;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85); /* Highly legible soft white text */
+  margin-bottom: 35px;
   line-height: 1.7;
   max-width: 90%;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
 }
 .btn-group {
   display: flex;
   gap: 15px;
+  align-items: center;
 }
 .btn-primary {
-  background: #2563eb;
-  color: #fff;
-  padding: 16px 36px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 1rem;
+  background: #2563eb; /* Blue background */
+  color: #ffffff !important; /* White text */
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   transition: all 0.3s ease;
   border: 1px solid transparent;
   text-decoration: none;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-.btn-primary::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    115deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.28) 50%,
-    transparent 80%
-  );
-  transform: translateX(-120%);
-  transition: transform 0.6s ease;
-}
-.btn-primary:hover::before {
-  transform: translateX(120%);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
 }
 .btn-primary:hover {
-  background: #1d4ed8;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+  background: #1d4ed8; /* Darker blue hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+}
+.btn-outline {
+  background: transparent;
+  color: #ffffff !important; /* White text */
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-decoration: none;
+}
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
 }
 .hero-image {
   flex: 1;
@@ -392,15 +370,9 @@
   z-index: 20; /* Lebih tinggi dari blob */
 }
 
-/* Style Dasar Blob */
+/* Style Dasar Blob — hidden to avoid visual noise */
 .blob-decoration {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.6;
-  z-index: 0;
-  animation: floatBlob 10s ease-in-out infinite alternate;
-  pointer-events: none;
+  display: none !important;
 }
 
 .blob-blue {
@@ -1142,5 +1114,150 @@
   }
   .vm-card {
     padding: 30px;
+  }
+}
+
+/* =======================================================
+   NIGHT / DAY THEME BACKDROP OVERRIDES & HOME IMPROVEMENTS
+   ======================================================= */
+
+/* Full-bleed hero background container */
+.hero-bg-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Layer behind all content */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(15, 23, 42, 0.85) 0%,
+    rgba(15, 23, 42, 0.4) 55%,
+    rgba(15, 23, 42, 0) 100%
+  ); /* Translucent black left-to-right mask */
+  z-index: 1;
+  transition: background 0.6s ease;
+}
+
+/* Simulated night-view filter for placeholder */
+.night-mode-filter {
+  filter: brightness(0.28) contrast(1.2) saturate(0.65) hue-rotate(50deg);
+}
+
+/* Night Mode variables & overrides */
+body.night-mode .hero-bg-overlay {
+  background: linear-gradient(
+    to right,
+    rgba(11, 15, 25, 0.9) 0%,
+    rgba(11, 15, 25, 0.5) 55%,
+    rgba(11, 15, 25, 0.15) 100%
+  ); /* Slightly darker left-to-right mask at night */
+}
+
+body.night-mode .hero-boxed-wrapper {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+body.night-mode .hero-section {
+  background-color: #0b0f19;
+}
+
+body.night-mode .hero-section::after {
+  display: none !important;
+}
+
+body.night-mode .hero-section::before {
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(99, 102, 241, 0) 70%
+  );
+}
+
+body.night-mode .hero-aurora {
+  background:
+    radial-gradient(500px circle at 20% 30%, rgba(99, 102, 241, 0.2), transparent 65%),
+    radial-gradient(420px circle at 85% 20%, rgba(139, 92, 246, 0.18), transparent 60%),
+    radial-gradient(600px circle at 70% 90%, rgba(79, 70, 229, 0.12), transparent 65%);
+}
+
+body.night-mode .hero-content {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+body.night-mode .hero-content h1 {
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+body.night-mode .hero-content p {
+  color: #cbd5e1;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+body.night-mode .text-gradient {
+  background: linear-gradient(100deg, #60a5fa 0%, #818cf8 55%, #c084fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+body.night-mode .hero-eyebrow {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(30, 41, 59, 0.8);
+  color: #818cf8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+body.night-mode .hero-float-chip {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(30, 41, 59, 0.8);
+  color: #ffffff;
+  box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 900px) {
+  .hero-content {
+    padding: 0;
+  }
+  .hero-content p {
+    max-width: 100%;
+  }
+  .hero-boxed-wrapper {
+    padding: 45px 30px;
+    border-radius: 16px;
+  }
+  .hero-content h1 {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-boxed-wrapper {
+    padding: 35px 20px;
+    border-radius: 12px;
+  }
+  .hero-content h1 {
+    font-size: 2.2rem;
   }
 }

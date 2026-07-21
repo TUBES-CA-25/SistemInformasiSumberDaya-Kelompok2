@@ -147,6 +147,15 @@
                 <li><a href="<?= PUBLIC_URL ?>/alumni">Alumni</a></li>
                 <li><a href="<?= PUBLIC_URL ?>/contact">Kontak</a></li>
 
+                <li class="theme-toggle-li">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Ganti Tema">
+                        <span class="toggle-slider">
+                            <i class="ri-sun-fill icon-sun"></i>
+                            <i class="ri-moon-fill icon-moon"></i>
+                        </span>
+                    </button>
+                </li>
+
                 <li>
                     <a href="<?= PUBLIC_URL ?>/apps" class="btn-nav-apps">
                         <i class="ri-apps-2-line"></i> IC-Labs Apps

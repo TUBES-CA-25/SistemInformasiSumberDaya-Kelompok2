@@ -5,24 +5,30 @@ $laboran_list = $data['laboran'] ?? [];
 ?>
 
 <section class="hero-section">
-    <div class="hero-aurora"></div>
     <div class="container">
-        <div class="hero-content reveal fade-left">
-            <span class="hero-eyebrow"><span class="eyebrow-dot"></span> Sistem Informasi Terintegrasi</span>
-            <h1>Selamat Datang di <span class="text-gradient">Portal Laboratorium</span> FIKOM UMI</h1>
-            <p>Siap untuk pengalaman praktikum yang lebih baik? Akses seluruh layanan laboratorium Fakultas Ilmu Komputer mulai dari jadwal hingga inventaris aset dengan lebih cepat dan mudah di sini.</p>
-            <div class="btn-group">
-                <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
-                    Gabung Sekarang <i class="ri-arrow-right-line"></i>
-                </a>
+        <!-- Boxed Hero Wrapper (Restricting background width and adding border-radius) -->
+        <div class="hero-boxed-wrapper">
+            <!-- Boxed Faculty Building Background -->
+            <div class="hero-bg-frame">
+                <div id="bgDay" class="hero-bg-img" style="background-image: url('<?= PUBLIC_URL ?>/images/gedung-fikom-siang.webp');"></div>
+                <div id="bgNight" class="hero-bg-img" style="background-image: url('<?= PUBLIC_URL ?>/images/gedung-fikom-malam.webp'); opacity: 0;"></div>
+                <div class="hero-bg-overlay"></div>
             </div>
-        </div>
-        <div class="hero-image reveal fade-right">
-            <div class="hero-glow-ring"></div>
-            <img src="<?= PUBLIC_URL ?>/images/logo-iclabs.png" alt="Logo ICLabs" class="hero-logo-img">
-            <div class="hero-float-chip">
-                <span class="chip-dot"></span> Layanan Aktif 24/7
+            
+            <div class="hero-content reveal fade-left">
+                <span class="hero-eyebrow">FAKULTAS ILMU KOMPUTER</span>
+                <h1>Selamat Datang di <span class="text-blue">Portal Laboratorium</span> FIKOM UMI</h1>
+                <p>Perpaduan ilmu pengetahuan dan nilai-nilai keislaman akan membawa Anda pada sebuah pengalaman belajar yang unik, yang dapat Anda temukan di Fakultas Ilmu Komputer. Dengan dukungan lingkungan belajar yang kondusif, kembangkan segala potensi yang Anda miliki.</p>
+                <div class="btn-group">
+                    <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
+                        Gabung Sekarang <i class="ri-arrow-right-line"></i>
+                    </a>
+                    <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-outline">
+                        Lihat Fasilitas <i class="ri-arrow-right-line"></i>
+                    </a>
+                </div>
             </div>
+
         </div>
     </div>
 </section>
@@ -251,4 +257,5 @@ $laboran_list = $data['laboran'] ?? [];
     </div>
 </section>
 
-<script src="<?= PUBLIC_URL ?>/js/home.js"></script>
+<?php $homeJsPath = __DIR__ . '/../../../public/js/home.js'; ?>
+<script src="<?= PUBLIC_URL ?>/js/home.js?v=<?= file_exists($homeJsPath) ? filemtime($homeJsPath) : time() ?>"></script>

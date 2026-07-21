@@ -647,3 +647,121 @@ img {
   display: block;
 }
 
+/* =======================================================
+   GLOBAL NIGHT / DAY THEME OVERRIDES
+   ======================================================= */
+
+/* --- Theme Toggle Switch inside Navbar --- */
+.theme-toggle-li {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-btn {
+  background: rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  width: 68px;
+  height: 34px;
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.toggle-slider {
+  width: 28px;
+  height: 28px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  left: 3px;
+}
+
+.toggle-slider i {
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.icon-sun {
+  color: #f59e0b;
+  opacity: 1;
+}
+
+.icon-moon {
+  color: #a855f7;
+  opacity: 0;
+  position: absolute;
+}
+
+/* Night Mode Slider Override */
+body.night-mode .theme-toggle-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(71, 85, 105, 0.8);
+}
+
+body.night-mode .toggle-slider {
+  left: 35px;
+  background: #1e293b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.night-mode .icon-sun {
+  opacity: 0;
+}
+
+body.night-mode .icon-moon {
+  opacity: 1;
+}
+
+/* --- Night Mode Navbar & Menu Layout Overrides --- */
+body.night-mode .navbar {
+  background-color: #0f172a;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.night-mode .navbar .nav-links a {
+  color: #e2e8f0;
+}
+
+body.night-mode .navbar .nav-links a:hover {
+  color: #60a5fa;
+}
+
+body.night-mode .dropdown-content {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+body.night-mode .dropdown-content a {
+  color: #e2e8f0;
+}
+
+body.night-mode .dropdown-content a:hover {
+  background-color: #273549;
+  color: #60a5fa;
+}
+
+/* Hamburger menu color on Mobile in Night Mode */
+body.night-mode .menu-toggle span {
+  background-color: #e2e8f0;
+}
+
+@media screen and (max-width: 768px) {
+  body.night-mode .nav-links {
+    background: #0f172a;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
