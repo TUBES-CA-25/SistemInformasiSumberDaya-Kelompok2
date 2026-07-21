@@ -80,8 +80,14 @@
         ];
 
         // 4. Load CSS
+        // Cache-bust dengan filemtime supaya browser tidak pernah menyajikan
+        // CSS lama yang sudah tidak cocok dengan markup terbaru (pernah
+        // menyebabkan tampilan kartu asisten jadi rusak/besar di pemuatan awal).
         if (array_key_exists($curPage, $cssMap)) {
-            echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssMap[$curPage] . '">';
+            $cssFile = $cssMap[$curPage];
+            $cssPath = __DIR__ . '/../../../public/css/' . $cssFile;
+            $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
+            echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssFile . '?v=' . $cssVersion . '">';
         }
     ?>
     

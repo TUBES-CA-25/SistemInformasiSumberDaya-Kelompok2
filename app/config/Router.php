@@ -123,6 +123,7 @@ class Router {
         $this->put('/api/asisten/{id}', 'AsistenController', 'update');
         $this->delete('/api/asisten/{id}', 'AsistenController', 'delete');
         $this->get('/api/asisten/{id}', 'AsistenController', 'apiShow');
+        $this->get('/api/sumberdaya/detail/{id}', 'DetailSumberDayaController', 'apiDetail');
         $this->post('/api/asisten', 'AsistenController', 'store');
         $this->get('/api/asisten', 'AsistenController', 'apiIndex');
         $this->get('/api/alumni/{id}', 'AlumniController', 'apiShow');

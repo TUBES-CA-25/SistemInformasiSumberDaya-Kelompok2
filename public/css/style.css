@@ -596,3 +596,54 @@ img {
   color: #fff;
   box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
 }
+
+/* -------------------------------------------------------
+   7. CORE STRUCTURE FALLBACKS (PREVENT FOUC / LAYOUT SHIFT)
+   ------------------------------------------------------- */
+/* 
+   These styles are loaded globally in style.css so that during page transitions,
+   before page-specific stylesheets (like sumberdaya.css) are loaded,
+   the card elements and images don't render at full-width or break the layout.
+*/
+.staff-grid,
+.pimpinan-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+}
+
+.staff-grid .card-link,
+.pimpinan-wrapper .card-link {
+  width: 280px;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+.exec-card {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  display: flex;
+  width: 100%;
+}
+
+.exec-photo {
+  flex: 0 0 220px;
+}
+
+.staff-photo-box {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  position: relative;
+  overflow: hidden;
+}
+
+.staff-photo-box img,
+.exec-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
