@@ -199,8 +199,11 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.add("night-mode");
     localStorage.setItem("theme", "night");
     if (bgNight && nightImageAvailable) {
-      bgNight.style.opacity = "1";
-      if (bgDay) bgDay.style.opacity = "0";
+      bgNight.style.opacity = "0.75"; // Translucent night overlay
+      if (bgDay) {
+        bgDay.style.opacity = "0.35"; // Faint day photo bleeding through as a shadow detail layer
+        bgDay.classList.remove("night-mode-filter");
+      }
     } else if (bgDay) {
       bgDay.style.opacity = "1";
       bgDay.classList.add("night-mode-filter");

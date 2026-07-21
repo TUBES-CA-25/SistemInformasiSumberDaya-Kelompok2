@@ -55,25 +55,34 @@ img {
    2. NAVBAR STYLING
    ------------------------------------------------------- */
 .navbar {
-  /* 1. Membuat elemen melayang dan tetap di posisi layar */
+  /* 1. Membuat elemen melayang dan tetap di posisi layar (Floating Capsule Card style, like Instagram Floating Nav) */
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%; /* Pastikan lebar penuh */
+  top: 15px; /* Offset from top */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%; /* Floating boxed width */
+  max-width: 1200px; /* Aligned with standard page grid */
 
   /* 2. Agar navbar berada di lapisan paling depan (tidak tertutup gambar/konten lain) */
   z-index: 9999;
 
   /* 3. Style tambahan agar terlihat rapi */
-  background-color: #ffffff; /* Wajib ada warna, jangan transparan */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bayangan tipis di bawah */
-  padding: 15px 0; /* Sesuaikan ketebalan */
+  background-color: rgba(255, 255, 255, 0.85); /* Keep existing light translucent color */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8); /* Box borders instead of full-width line */
+  border-radius: 12px; /* Subtler rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); /* Ambient soft shadow */
+  padding: 6px 24px; /* Compact padding */
+  transition: all 0.3s ease;
 }
 
 .navbar .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  max-width: 100%; /* Spans full card width */
 }
 
 /* --- LOGO UTAMA --- */
@@ -85,12 +94,12 @@ img {
 .brand-logo {
   display: flex;
   align-items: center;
-  padding: 5px 0;
+  padding: 2px 0;
   text-decoration: none;
 }
 
 .logo-img {
-  height: 80px;
+  height: 48px; /* Slimmer height to fit capsule cleanly */
   width: auto;
   object-fit: contain;
   display: block;
@@ -265,14 +274,15 @@ img {
   .nav-links {
     display: flex;
     position: absolute;
-    top: 100%;
+    top: calc(100% + 10px); /* 10px gap below the floating capsule nav */
     left: 0;
     width: 100%;
     flex-direction: column;
     background: #fff;
     padding: 0 20px;
-    border-top: 1px solid #eff6ff;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px; /* Rounded card layout on mobile */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     text-align: center;
 
     /* --- LOGIKA ANIMASI BERGULIR (SLIDE) --- */
@@ -651,6 +661,11 @@ img {
    GLOBAL NIGHT / DAY THEME OVERRIDES
    ======================================================= */
 
+body.night-mode {
+  background-color: #0b0f19;
+  color: #cbd5e1;
+}
+
 /* --- Theme Toggle Switch inside Navbar --- */
 .theme-toggle-li {
   display: flex;
@@ -724,9 +739,11 @@ body.night-mode .icon-moon {
 
 /* --- Night Mode Navbar & Menu Layout Overrides --- */
 body.night-mode .navbar {
-  background-color: #0f172a;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(10, 10, 12, 0.9) !important; /* Sleek translucent black background */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 body.night-mode .navbar .nav-links a {
@@ -738,9 +755,9 @@ body.night-mode .navbar .nav-links a:hover {
 }
 
 body.night-mode .dropdown-content {
-  background: #1e293b;
+  background: #0a0a0c; /* Matching sleek black background */
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
 }
 
 body.night-mode .dropdown-content a {
@@ -748,7 +765,7 @@ body.night-mode .dropdown-content a {
 }
 
 body.night-mode .dropdown-content a:hover {
-  background-color: #273549;
+  background-color: #1a1a1c;
   color: #60a5fa;
 }
 
@@ -759,9 +776,17 @@ body.night-mode .menu-toggle span {
 
 @media screen and (max-width: 768px) {
   body.night-mode .nav-links {
-    background: #0f172a;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    background: #0a0a0c; /* Matching sleek black background */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
   }
+}
+
+/* Global Heading Overrides in Night Mode */
+body.night-mode h1,
+body.night-mode h2,
+body.night-mode h3,
+body.night-mode h4 {
+  color: #ffffff !important;
 }
 

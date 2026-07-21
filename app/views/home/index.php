@@ -91,8 +91,10 @@ $laboran_list = $data['laboran'] ?? [];
                         <img src="<?= PUBLIC_URL ?>/images/Pusat-Kompetensi.jpg" alt="Pusat Kompetensi Digital" loading="lazy">
                     </div>
                     <div class="slide-text">
-                        <h2>Pusat Kompetensi</h2>
+                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">FASILITAS UNGGULAN</span>
+                        <h2><span class="text-blue">Pusat</span> Kompetensi</h2>
                         <p>Laboratorium FIKOM UMI hadir sebagai pusat pengembangan hard skill unggulan dengan kurikulum adaptif.</p>
+                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Selengkapnya <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -103,8 +105,10 @@ $laboran_list = $data['laboran'] ?? [];
                          <img src="<?= PUBLIC_URL ?>/images/Infrastruktur-Modern.jpg" alt="Infrastruktur Laboratorium Modern" loading="lazy">
                     </div>
                     <div class="slide-text">
-                        <h2>Infrastruktur Modern</h2>
+                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">PERANGKAT MODERN</span>
+                        <h2><span class="text-blue">Infrastruktur</span> Spesifik</h2>
                         <p>Menyediakan laboratorium spesifik (RPL, Jaringan, Multimedia) dengan perangkat spesifikasi tinggi.</p>
+                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Fasilitas <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -115,8 +119,10 @@ $laboran_list = $data['laboran'] ?? [];
                          <img src="<?= PUBLIC_URL ?>/images/RisetDanInovasi.png" alt="Riset dan Inovasi Laboratorium" loading="lazy">
                     </div>
                     <div class="slide-text">
-                        <h2>Riset & Inovasi</h2>
+                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">KOLABORASI RISET</span>
+                        <h2><span class="text-blue">Riset</span> & Inovasi</h2>
                         <p>Mendukung kegiatan penelitian mahasiswa dan dosen dengan fasilitas komputasi yang memadai.</p>
+                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Riset <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -170,7 +176,10 @@ $laboran_list = $data['laboran'] ?? [];
                         </div>
                         <div class="staff-content">
                             <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
-                            <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
+                            <span class="staff-role">
+                                <i class="ri-shield-star-line"></i>
+                                <?= str_ireplace('Kepala Laboratorium ', 'Kepala Laboratorium<br>', htmlspecialchars($row['jabatan'])) ?>
+                            </span>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -186,7 +195,10 @@ $laboran_list = $data['laboran'] ?? [];
                         </div>
                         <div class="staff-content">
                             <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
-                            <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
+                            <span class="staff-role">
+                                <i class="ri-code-box-line"></i>
+                                <?= str_ireplace('Laboran Laboratorium ', 'Laboran Laboratorium<br>', htmlspecialchars($row['jabatan'])) ?>
+                            </span>
                         </div>
                     </div>
                 <?php endforeach; ?>
