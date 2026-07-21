@@ -142,17 +142,7 @@ $laboran_list = $data['laboran'] ?? [];
     </div>
 </section>
 
-<section class="video-section">
-    <div class="container reveal fade-up">
-        <div class="section-header">
-            <span class="badge-pill">Profil Video</span>
-            <h2>Mengapa Memilih Kami?</h2>
-        </div>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/jxczLAHdX3M?rel=0" title="Profil Laboratorium FIKOM UMI" allowfullscreen></iframe>
-        </div>
-    </div>
-</section>
+
 
 <section class="management-section">
     <div class="custom-shape-divider-top">
@@ -169,7 +159,15 @@ $laboran_list = $data['laboran'] ?? [];
 
         <?php if (!empty($kepala_lab_list)) : ?>
             <div class="pimpinan-wrapper reveal fade-up">
-                <?php foreach ($kepala_lab_list as $row) : ?>
+                <?php foreach ($kepala_lab_list as $row) : 
+                    $jabatanRaw = htmlspecialchars($row['jabatan']);
+                    $roleMain = $jabatanRaw;
+                    $roleSub = '';
+                    if (stripos($jabatanRaw, 'Kepala Laboratorium') !== false) {
+                        $roleMain = 'Kepala Laboratorium';
+                        $roleSub = trim(str_ireplace('Kepala Laboratorium', '', $jabatanRaw));
+                    }
+                ?>
                     <div class="staff-card-home">
                         <div class="staff-photo-box">
                             <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
@@ -178,7 +176,12 @@ $laboran_list = $data['laboran'] ?? [];
                             <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
                             <span class="staff-role">
                                 <i class="ri-shield-star-line"></i>
-                                <?= str_ireplace('Kepala Laboratorium ', 'Kepala Laboratorium<br>', htmlspecialchars($row['jabatan'])) ?>
+                                <span class="role-text">
+                                    <span class="role-main"><?= $roleMain ?></span>
+                                    <?php if (!empty($roleSub)) : ?>
+                                        <span class="role-sub"><?= $roleSub ?></span>
+                                    <?php endif; ?>
+                                </span>
                             </span>
                         </div>
                     </div>
@@ -188,7 +191,18 @@ $laboran_list = $data['laboran'] ?? [];
 
         <?php if (!empty($laboran_list)) : ?>
             <div class="laboran-grid reveal fade-up">
-                <?php foreach ($laboran_list as $row) : ?>
+                <?php foreach ($laboran_list as $row) : 
+                    $jabatanRaw = htmlspecialchars($row['jabatan']);
+                    $roleMain = $jabatanRaw;
+                    $roleSub = '';
+                    if (stripos($jabatanRaw, 'Laboran Laboratorium') !== false) {
+                        $roleMain = 'Laboran Laboratorium';
+                        $roleSub = trim(str_ireplace('Laboran Laboratorium', '', $jabatanRaw));
+                    } else if (stripos($jabatanRaw, 'Laboran') !== false) {
+                        $roleMain = 'Laboran';
+                        $roleSub = trim(str_ireplace('Laboran', '', $jabatanRaw));
+                    }
+                ?>
                     <div class="staff-card-home">
                         <div class="staff-photo-box">
                             <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
@@ -197,7 +211,12 @@ $laboran_list = $data['laboran'] ?? [];
                             <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
                             <span class="staff-role">
                                 <i class="ri-code-box-line"></i>
-                                <?= str_ireplace('Laboran Laboratorium ', 'Laboran Laboratorium<br>', htmlspecialchars($row['jabatan'])) ?>
+                                <span class="role-text">
+                                    <span class="role-main"><?= $roleMain ?></span>
+                                    <?php if (!empty($roleSub)) : ?>
+                                        <span class="role-sub"><?= $roleSub ?></span>
+                                    <?php endif; ?>
+                                </span>
                             </span>
                         </div>
                     </div>
@@ -249,6 +268,12 @@ $laboran_list = $data['laboran'] ?? [];
 </section>
 
 <section class="partner-section">
+    <div class="container" style="margin-bottom: 25px;">
+        <div class="section-header reveal fade-up" style="margin-bottom: 0;">
+            <span class="badge-pill">KOLABORASI</span>
+            <h2>Mitra & Kerjasama</h2>
+        </div>
+    </div>
     <div class="slider">
         <div class="slide-track">
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft"></div></div>

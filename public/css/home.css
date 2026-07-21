@@ -321,12 +321,20 @@
    ======================================================= */
 
 /* Visi Misi (Layer Tinggi agar blob menimpa section bawahnya) */
-.visi-misi-section,
+.visi-misi-section {
+  position: relative;
+  overflow: visible !important;
+  z-index: 10;
+  background: #ffffff;
+  background-image: radial-gradient(rgba(37, 99, 235, 0.08) 1.2px, transparent 1.2px);
+  background-size: 30px 30px;
+  padding: 100px 0;
+}
 .info-section {
   position: relative;
-  overflow: visible !important; /* Biarkan blob keluar batas */
-  z-index: 10; /* Layer TINGGI */
-  background: #fff; /* Background Putih */
+  z-index: 10;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  border-top: 1px solid #e2e8f0;
   padding: 100px 0;
 }
 
@@ -391,20 +399,20 @@
 .vm-card {
   display: flex;
   gap: 30px;
-  padding: 50px;
-  background: #fff;
+  padding: 45px 40px;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 20px;
-  transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
   overflow: hidden;
-  z-index: 2;
+  box-shadow: 0 12px 35px -10px rgba(30, 58, 138, 0.06);
 }
 .vm-card::before {
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
-  height: 3px;
+  height: 4px;
   background: linear-gradient(90deg, #2563eb, #60a5fa);
   transform: scaleX(0);
   transform-origin: left;
@@ -415,20 +423,21 @@
 }
 .vm-card:hover {
   border-color: #3b82f6;
-  box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 25px 50px -10px rgba(37, 99, 235, 0.12);
   transform: translateY(-8px);
 }
 .vm-icon-box {
   flex-shrink: 0;
-  width: 70px;
-  height: 70px;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  width: 68px;
+  height: 68px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(96, 165, 250, 0.18) 100%);
   color: #2563eb;
-  border-radius: 16px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 1.8rem;
   transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .vm-card:hover .vm-icon-box {
@@ -532,7 +541,14 @@
 /* =======================================================
    BOLD BLUE SECTIONS (Features & Management)
    ======================================================= */
-.features-slider-section,
+.features-slider-section {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 100px 0;
+  position: relative;
+  z-index: 1;
+}
 .management-section {
   background: #ffffff;
   padding: 100px 0;
@@ -698,6 +714,7 @@
 .laboran-grid {
   display: flex;
   justify-content: center;
+  align-items: stretch;
   gap: 30px;
   flex-wrap: wrap;
   position: relative;
@@ -745,6 +762,7 @@
   background: #f8fbff;
   border-bottom: 1px solid #e2e8f0;
   overflow: hidden;
+  flex-shrink: 0;
 }
 .staff-photo-box img {
   width: 100%;
@@ -763,15 +781,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 .staff-name {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 800;
   color: #0f172a;
   margin-top: 0;
   margin-bottom: 12px;
   line-height: 1.35;
   letter-spacing: -0.2px;
+  min-height: 2.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 .staff-role {
   font-size: 0.72rem;
@@ -781,57 +807,93 @@
   letter-spacing: 0.6px;
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0.04) 100%);
   border: 1px solid rgba(37, 99, 235, 0.15);
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  line-height: 1.35;
+  gap: 8px;
+  line-height: 1.3;
+  margin-top: auto;
+  min-height: 52px;
+  width: 100%;
+  max-width: 230px;
+  box-sizing: border-box;
 }
 .staff-role i {
-  font-size: 0.9rem;
+  font-size: 1rem;
   flex-shrink: 0;
+}
+.role-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.role-main {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.role-sub {
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  opacity: 0.85;
+  margin-top: 2px;
 }
 
 /* --- Info Section Styles --- */
 .info-card {
-  background: #fff;
-  padding: 45px 35px;
-  border-radius: 20px;
+  background: #ffffff;
+  padding: 42px 36px;
+  border-radius: 24px;
   border: 1px solid #e2e8f0;
-  transition: 0.4s ease;
+  box-shadow: 0 12px 35px -10px rgba(30, 58, 138, 0.06);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
   z-index: 2;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .info-card::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  width: 0;
+  width: 100%;
   height: 4px;
-  background: #2563eb;
-  transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 .info-card:hover::before {
-  width: 100%;
+  opacity: 1;
 }
 .info-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -10px rgba(37, 99, 235, 0.12);
+  border-color: #3b82f6;
 }
 .card-icon {
-  font-size: 3rem;
-  color: #94a3b8;
-  margin-bottom: 25px;
-  transition: 0.4s;
-  display: inline-block;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(96, 165, 250, 0.18) 100%);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 24px;
+  transition: all 0.4s ease;
 }
 .info-card:hover .card-icon {
-  color: #2563eb;
-  transform: scale(1.1);
+  transform: scale(1.08) rotate(-4deg);
+  background: #2563eb;
+  color: #ffffff;
 }
 .info-card h3 {
   font-size: 1.35rem;
@@ -842,7 +904,7 @@
 .info-card p {
   color: #64748b;
   margin-bottom: 30px;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 .link-arrow {
   color: #2563eb;
@@ -851,14 +913,23 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.95rem;
-  transition: 0.3s;
+  font-size: 0.88rem;
+  padding: 8px 18px;
+  background: rgba(37, 99, 235, 0.08);
+  border-radius: 30px;
+  width: fit-content;
+  margin-top: auto;
+  transition: all 0.3s ease;
+}
+.link-arrow:hover {
+  background: #2563eb;
+  color: #ffffff;
 }
 .link-arrow i {
-  transition: 0.3s;
+  transition: transform 0.3s;
 }
 .link-arrow:hover i {
-  transform: translateX(5px);
+  transform: translateX(4px);
 }
 
 /* --- Partner Section (Moving Slider) --- */
@@ -1326,29 +1397,30 @@ body.night-mode .staff-role {
 }
 
 /* 7. Info / Partner Section */
-body.night-mode .info-section {
-  background-color: #0b0f19 !important;
-}
-body.night-mode .info-card {
-  background: #1e293b !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-body.night-mode .info-card h3 {
-  color: #ffffff !important;
-}
-body.night-mode .info-card p {
-  color: #cbd5e1 !important;
-}
+body.night-mode .visi-misi-section,
+body.night-mode .features-slider-section,
+body.night-mode .management-section,
+body.night-mode .info-section,
 body.night-mode .partner-section {
   background-color: #0b0f19 !important;
-}
-body.night-mode .partner-box {
-  background: rgba(30, 41, 59, 0.6) !important;
+  background-image: none !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
-body.night-mode .partner-box:hover {
+body.night-mode .info-card,
+body.night-mode .vm-card {
   background: #1e293b !important;
-  border-color: #2563eb !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35) !important;
+}
+body.night-mode .card-icon,
+body.night-mode .vm-icon-box {
+  background: rgba(96, 165, 250, 0.15) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.25) !important;
+}
+body.night-mode .link-arrow {
+  background: rgba(96, 165, 250, 0.15) !important;
+  color: #60a5fa !important;
 }
 
 @media (max-width: 900px) {
