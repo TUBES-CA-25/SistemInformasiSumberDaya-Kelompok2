@@ -30,8 +30,10 @@
    2. STYLE HALAMAN APPS (LAYOUT UTAMA)
    ========================================= */
 .apps-section {
-  padding: 80px 0;
-  background-color: #f8fafc;
+  margin-top: -80px;
+  padding-top: 140px;
+  padding-bottom: 80px;
+  background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 25%, #e0f2fe 100%);
   min-height: 100vh;
   font-family:
     "Inter",
@@ -313,4 +315,59 @@
   .apps-grid {
     gap: 20px;
   }
+}
+
+/* =========================================
+   APPS NIGHT MODE STYLES
+   ========================================= */
+
+body.night-mode .apps-section {
+  background: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+body.night-mode .page-header h1,
+body.night-mode .app-content h3 {
+  color: #ffffff !important;
+}
+
+body.night-mode .page-header p,
+body.night-mode .app-content p {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .header-badge {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+body.night-mode .app-card {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.night-mode .app-card:hover {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 20px 45px rgba(59, 130, 246, 0.3) !important;
+}
+
+body.night-mode .app-arrow {
+  color: #64748b !important;
+}
+
+body.night-mode .app-card:hover .app-arrow {
+  color: #60a5fa !important;
+  background-color: #0f172a !important;
+}
+
+body.night-mode .app-card.maintenance {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #1e293b,
+    #1e293b 10px,
+    #0f172a 10px,
+    #0f172a 20px
+  ) !important;
 }

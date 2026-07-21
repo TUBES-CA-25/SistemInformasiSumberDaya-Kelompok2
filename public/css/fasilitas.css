@@ -3,8 +3,10 @@
    (Tidak diubah, sesuai permintaan)
 ========================================= */
 .fasilitas-section {
-  padding: 80px 0;
-  background-color: #f8fafc;
+  margin-top: -80px;
+  padding-top: 140px;
+  padding-bottom: 80px;
+  background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 25%, #e0f2fe 100%);
   min-height: 100vh;
   font-family:
     "Inter",
@@ -1031,4 +1033,168 @@ main {
   .spec-label {
     width: 100%;
   }
+}
+
+/* =========================================
+   FASILITAS NIGHT MODE STYLES
+   ========================================= */
+
+/* 1. Global Section & Headers */
+body.night-mode .fasilitas-section {
+  background: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+body.night-mode .page-header h1,
+body.night-mode .denah-header h1,
+body.night-mode .main-title,
+body.night-mode .facility-row h3,
+body.night-mode .card-title h3,
+body.night-mode .spec-group h3,
+body.night-mode .sop-title,
+body.night-mode .code,
+body.night-mode .spec-value {
+  color: #ffffff !important;
+}
+
+body.night-mode .page-header p,
+body.night-mode .denah-header p,
+body.night-mode .description,
+body.night-mode .facility-list li,
+body.night-mode .sop-desc,
+body.night-mode .desc,
+body.night-mode .spec-label,
+body.night-mode .meta-info-row,
+body.night-mode .mini-spec-item,
+body.night-mode .btn-back {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .badge-pill,
+body.night-mode .header-badge {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+body.night-mode .btn-back:hover {
+  color: #60a5fa !important;
+}
+
+/* 2. Facility Row Cards & Detail Cards */
+body.night-mode .facility-row,
+body.night-mode .denah-card,
+body.night-mode .spec-list,
+body.night-mode .sop-wrapper {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.night-mode .facility-row:hover,
+body.night-mode .denah-card:hover,
+body.night-mode .sop-item:hover {
+  border-color: #3b82f6 !important;
+}
+
+body.night-mode .facility-img-side,
+body.night-mode .image-wrapper,
+body.night-mode .no-image-placeholder {
+  background-color: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .img-overlay-placeholder {
+  color: #475569 !important;
+}
+
+body.night-mode .mini-specs,
+body.night-mode .main-info-header,
+body.night-mode .spec-group h3,
+body.night-mode .spec-item,
+body.night-mode .card-title,
+body.night-mode .sop-header-row,
+body.night-mode .sop-item {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .mini-spec-item i,
+body.night-mode .meta-item-detail i,
+body.night-mode .spec-group h3 i,
+body.night-mode .card-title i {
+  color: #60a5fa !important;
+}
+
+body.night-mode .badge-info,
+body.night-mode .badge-type {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+}
+
+/* 3. Software Tags & Floor Plan Legends */
+body.night-mode .sw-tag {
+  background: #0f172a !important;
+  color: #cbd5e1 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.night-mode .denah-note {
+  background: rgba(245, 158, 11, 0.15) !important;
+  border-left-color: #f59e0b !important;
+  color: #fde68a !important;
+}
+
+body.night-mode .denah-note strong {
+  color: #fbbf24 !important;
+}
+
+body.night-mode .white {
+  background-color: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 4. SOP List Rows & Actions */
+body.night-mode .sop-header-row {
+  background: #0f172a !important;
+}
+
+body.night-mode .sop-header-title,
+body.night-mode .sop-number {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .sop-item:hover {
+  background-color: #0f172a !important;
+  border-left-color: #3b82f6 !important;
+}
+
+body.night-mode .sop-icon {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+}
+
+body.night-mode .btn-sop-action {
+  background: #0f172a !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+body.night-mode .btn-sop-action:hover {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+/* 5. Search Bar in Facilities */
+body.night-mode .search-input {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.night-mode .search-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .search-icon-compact {
+  color: #94a3b8 !important;
 }

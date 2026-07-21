@@ -276,20 +276,47 @@ $laboran_list = $data['laboran'] ?? [];
     </div>
     <div class="slider">
         <div class="slide-track">
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/microsoft_dark.png" alt="Microsoft">
+            </div></div>
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/nvidia_dark.png" alt="Nvidia">
+            </div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/mikrotik_dark.png" alt="Mikrotik">
+            </div></div>
             
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/microsoft_dark.png" alt="Microsoft">
+            </div></div>
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/nvidia_dark.png" alt="Nvidia">
+            </div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/mikrotik_dark.png" alt="Mikrotik">
+            </div></div>
            
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/microsoft_dark.png" alt="Microsoft">
+            </div></div>
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/nvidia_dark.png" alt="Nvidia">
+            </div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/mikrotik_dark.png" alt="Mikrotik">
+            </div></div>
         </div>
     </div>
 </section>

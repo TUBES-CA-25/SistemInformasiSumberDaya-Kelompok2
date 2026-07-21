@@ -3,10 +3,12 @@
    ========================================= */
 
 .contact-section {
-  padding: 100px 0;
+  margin-top: -80px;
+  padding-top: 140px;
+  padding-bottom: 100px;
 
-  /* Background Gradasi Halus */
-  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  /* Background Gradasi Sky Blue */
+  background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 25%, #e0f2fe 100%);
 
   min-height: 100vh;
   font-family: "Inter", system-ui, -apple-system, sans-serif;
@@ -279,4 +281,109 @@
   .map-iframe-wrapper iframe {
     height: 350px;
   }
+}
+
+/* =========================================
+   CONTACT NIGHT MODE STYLES
+   ========================================= */
+
+/* 1. Global Section & Headers */
+body.night-mode .contact-section {
+  background: linear-gradient(180deg, #0b0f19 0%, #0f172a 100%) !important;
+  color: #f8fafc !important;
+}
+
+body.night-mode .contact-info-side h2,
+body.night-mode .method-text h4,
+body.night-mode .map-header h3 {
+  color: #ffffff !important;
+}
+
+body.night-mode .contact-info-side p,
+body.night-mode .method-text span,
+body.night-mode .form-group label {
+  color: #cbd5e1 !important;
+}
+
+/* 2. Contact Method Items */
+body.night-mode .method-item {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.night-mode .method-item:hover {
+  background: #1e293b !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.night-mode .method-icon {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+}
+
+body.night-mode .method-item:hover .method-icon {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+/* 3. Contact Form Card */
+body.night-mode .contact-form-card {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.night-mode .form-group input,
+body.night-mode .form-group textarea {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+}
+
+body.night-mode .form-group input::placeholder,
+body.night-mode .form-group textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .form-group input:focus,
+body.night-mode .form-group textarea:focus {
+  background: #0f172a !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+}
+
+body.night-mode .btn-submit {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+body.night-mode .btn-submit:hover {
+  background: #1d4ed8 !important;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5) !important;
+}
+
+/* 4. Map Container */
+body.night-mode .map-container {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.night-mode .map-header {
+  background: #0f172a !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .map-header h3 i {
+  color: #60a5fa !important;
+}
+
+body.night-mode .map-iframe-wrapper iframe {
+  filter: invert(90%) hue-rotate(180deg) contrast(1.2) !important;
+}
+
+body.night-mode .map-container:hover iframe {
+  filter: invert(90%) hue-rotate(180deg) contrast(1.3) !important;
 }

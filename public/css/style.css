@@ -14,7 +14,11 @@
 }
 
 body {
-  background-color: #f8fbff; /* Background Biru Sangat Muda */
+  background-color: #eff6ff;
+  background-image:
+    radial-gradient(circle at top center, rgba(191, 219, 254, 0.7) 0%, rgba(191, 219, 254, 0.25) 18%, transparent 42%),
+    radial-gradient(circle at 20% 0%, rgba(186, 230, 253, 0.55) 0%, rgba(186, 230, 253, 0.18) 14%, transparent 34%),
+    linear-gradient(180deg, #eff6ff 0%, #f8fbff 38%, #ffffff 100%);
   color: #1a202c;
   line-height: 1.6;
   padding-top: 80px;
@@ -23,7 +27,8 @@ body {
 html,
 body {
   max-width: 100%;
-  overflow-x: hidden; /* KUNCI UTAMA: Mencegah scroll samping */
+  overflow-x: hidden;
+  /* KUNCI UTAMA: Mencegah scroll samping */
 }
 
 .container {
@@ -37,7 +42,8 @@ h1,
 h2,
 h3,
 h4 {
-  color: #1e3a8a; /* Biru Navy */
+  color: #1e3a8a;
+  /* Biru Navy */
   font-weight: 800;
 }
 
@@ -57,23 +63,29 @@ img {
 .navbar {
   /* 1. Membuat elemen melayang dan tetap di posisi layar (Floating Capsule Card style, like Instagram Floating Nav) */
   position: fixed;
-  top: 15px; /* Offset from top */
+  top: 15px;
+  /* Offset from top */
   left: 50%;
   transform: translateX(-50%);
-  width: 90%; /* Floating boxed width */
-  max-width: 1200px; /* Aligned with standard page grid */
+  width: 90%;
+  /* Floating boxed width */
+  max-width: 1200px;
+  /* Aligned with standard page grid */
 
   /* 2. Agar navbar berada di lapisan paling depan (tidak tertutup gambar/konten lain) */
   z-index: 9999;
 
   /* 3. Style tambahan agar terlihat rapi */
-  background-color: rgba(255, 255, 255, 0.85); /* Keep existing light translucent color */
+  background-color: rgba(255, 255, 255, 0.85);
+  /* Keep existing light translucent color */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8); /* Box borders instead of full-width line */
-  border-radius: 12px; /* Subtler rounded corners */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); /* Ambient soft shadow */
-  padding: 6px 24px; /* Compact padding */
+  border: 1px solid rgba(191, 219, 254, 0.85);
+  border-radius: 12px;
+  /* Subtler rounded corners */
+  box-shadow: 0 10px 30px rgba(30, 58, 138, 0.08);
+  padding: 6px 24px;
+  /* Compact padding */
   transition: all 0.3s ease;
 }
 
@@ -82,7 +94,8 @@ img {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 100%; /* Spans full card width */
+  max-width: 100%;
+  /* Spans full card width */
 }
 
 /* --- LOGO UTAMA --- */
@@ -99,7 +112,8 @@ img {
 }
 
 .logo-img {
-  height: 48px; /* Slimmer height to fit capsule cleanly */
+  height: 48px;
+  /* Slimmer height to fit capsule cleanly */
   width: auto;
   object-fit: contain;
   display: block;
@@ -190,14 +204,16 @@ img {
   display: block;
   font-weight: 500;
   transition: all 0.2s ease;
-  text-align: left; /* Desktop tetap rata kiri agar rapi */
+  text-align: left;
+  /* Desktop tetap rata kiri agar rapi */
 }
 
 /* Style saat item dropdown di-hover */
 .dropdown-content a:hover {
   background: #eff6ff;
   color: #2563eb !important;
-  padding-left: 28px; /* Sedikit geser ke kanan saat hover */
+  padding-left: 28px;
+  /* Sedikit geser ke kanan saat hover */
 }
 
 /* Class .show ini dipanggil oleh JavaScript (Klik) */
@@ -208,19 +224,9 @@ img {
   transform: translateY(0);
 }
 
-/* Panah kecil di atas dropdown (Desktop) */
+/* Panah kecil di atas dropdown (Desktop) — disembunyikan */
 .dropdown-content::before {
-  content: "";
-  position: absolute;
-  top: -6px;
-  left: 20px;
-  width: 12px;
-  height: 12px;
-  background: #fff;
-  transform: rotate(45deg);
-  border-top: 1px solid #eff6ff;
-  border-left: 1px solid #eff6ff;
-  z-index: -1;
+  display: none;
 }
 
 /* =======================================================
@@ -232,13 +238,18 @@ img {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    pointer-events: auto; /* Memastikan menu bisa diklik */
+    pointer-events: auto;
+    /* Memastikan menu bisa diklik */
   }
 }
 
-/* -------------------------------------------------------
-   4. MOBILE MENU & DROPDOWN FIX
-   ------------------------------------------------------- */
+.nav-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 10001;
+}
+
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -258,14 +269,78 @@ img {
 .menu-toggle.active span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
+
 .menu-toggle.active span:nth-child(2) {
   opacity: 0;
 }
+
 .menu-toggle.active span:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-@media screen and (max-width: 768px) {
+/* --- RESPONSIVE TABLET SCALING (992px - 1200px) --- */
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+  .nav-links {
+    gap: 16px;
+  }
+  .nav-links a {
+    font-size: 0.88rem;
+  }
+  .btn-nav-apps {
+    padding: 8px 16px;
+    font-size: 0.88rem;
+  }
+  .navbar {
+    padding: 8px 20px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .nav-actions-right {
+    gap: 10px;
+  }
+
+  .btn-nav-apps {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  /* --- Compact icon button override for theme toggle on mobile --- */
+  .theme-toggle-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(226, 232, 240, 0.9);
+    border: 1px solid rgba(203, 213, 225, 0.8);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .toggle-slider {
+    position: static;
+    background: transparent;
+    box-shadow: none;
+    width: auto;
+    height: auto;
+  }
+
+  .toggle-slider i {
+    font-size: 1.15rem;
+    position: static;
+    opacity: 1 !important;
+  }
+
+  /* In day mode: show sun icon only */
+  .icon-sun {
+    display: inline-block;
+    opacity: 1 !important;
+  }
+  .icon-moon {
+    display: none !important;
+  }
+
   .menu-toggle {
     display: flex;
     z-index: 10001;
@@ -274,15 +349,17 @@ img {
   .nav-links {
     display: flex;
     position: absolute;
-    top: calc(100% + 10px); /* 10px gap below the floating capsule nav */
+    top: calc(100% + 12px);
     left: 0;
     width: 100%;
     flex-direction: column;
-    background: #fff;
-    padding: 0 20px;
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    border-radius: 20px; /* Rounded card layout on mobile */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 0 24px;
+    border: 1px solid rgba(191, 219, 254, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(30, 58, 138, 0.12);
     text-align: center;
 
     /* --- LOGIKA ANIMASI BERGULIR (SLIDE) --- */
@@ -302,12 +379,11 @@ img {
     max-height: 100vh;
     opacity: 1;
     visibility: visible;
-    padding: 20px;
+    padding: 24px 20px;
   }
 
   /* --- FIX DROPDOWN MOBILE (ACCORDION STYLE) --- */
   .dropdown-content {
-    /* Reset style desktop */
     position: static;
     box-shadow: none;
     border: none;
@@ -315,15 +391,12 @@ img {
     padding-left: 0;
     text-align: center;
     transition: none;
-
-    /* Default Hidden di Mobile (Menunggu class .show dari JS) */
     display: none;
     opacity: 0;
   }
 
-  /* Class ini DITAMBAHKAN oleh JS saat KLIK */
   .dropdown-content.show {
-    display: block; /* Munculkan */
+    display: block;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -334,40 +407,22 @@ img {
     display: none;
   }
 
-  /* Item Link di Mobile */
   .dropdown-content a {
     padding: 10px 0;
     text-align: center;
     color: #64748b !important;
   }
 
-  /* Hover Item di Mobile */
   .dropdown-content a:hover {
     padding-left: 0;
     background: transparent;
     color: #2563eb !important;
   }
 
-  /* [PENTING] HAPUS aturan .dropdown:hover disini 
-     agar menu tidak muncul sendiri saat di-scroll di HP.
-     Sepenuhnya mengandalkan JS Click.
-  */
-
-  @keyframes fadeInMobile {
-    from {
-      opacity: 0;
-      transform: translateY(-5px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Lainnya */
   .logo-img {
-    height: 60px;
+    height: 48px;
   }
+
   .btn-nav-apps {
     width: 100%;
     justify-content: center;
@@ -376,11 +431,45 @@ img {
   }
 }
 
+@media screen and (max-width: 480px) {
+  .theme-toggle-btn {
+    width: 58px;
+    height: 30px;
+  }
+  .toggle-slider {
+    width: 24px;
+    height: 24px;
+  }
+  body.night-mode .toggle-slider {
+    left: 29px;
+  }
+  .btn-apps-text {
+    display: none;
+  }
+  .btn-nav-apps {
+    padding: 8px 10px;
+    border-radius: 10px;
+  }
+}
+
+@keyframes fadeInMobile {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -403,7 +492,8 @@ img {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1.2fr; /* 4 Kolom Proporsional */
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  /* 4 Kolom Proporsional */
   gap: 40px;
   margin-bottom: 50px;
   align-items: start;
@@ -416,21 +506,25 @@ img {
   gap: 12px;
   margin-bottom: 20px;
 }
+
 .footer-logo img {
   height: 40px;
   object-fit: contain;
 }
+
 .footer-logo span {
   font-weight: 800;
   font-size: 1.2rem;
   color: #fff;
 }
+
 .footer-desc {
   color: #94a3b8;
   line-height: 1.6;
   margin-bottom: 25px;
   padding-right: 20px;
 }
+
 .contact-list p {
   display: flex;
   align-items: center;
@@ -438,6 +532,7 @@ img {
   margin-bottom: 12px;
   color: #cbd5e1;
 }
+
 .contact-list i {
   color: #3b82f6;
   font-size: 1.2rem;
@@ -453,6 +548,7 @@ img {
   display: inline-block;
   padding-bottom: 10px;
 }
+
 .footer-section h3::after {
   content: "";
   position: absolute;
@@ -469,6 +565,7 @@ img {
   padding: 0;
   margin: 0;
 }
+
 .footer-links li {
   margin-bottom: 12px;
 }
@@ -481,7 +578,8 @@ img {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  padding-left: 0; /* Reset padding agar tidak lompat */
+  padding-left: 0;
+  /* Reset padding agar tidak lompat */
 }
 
 .footer-links a::before {
@@ -496,8 +594,10 @@ img {
 /* [FIX ANIMASI] Hover Effect */
 .footer-links a:hover {
   color: #60a5fa;
-  transform: translateX(6px); /* Geser menggunakan Transform (Lebih Smooth) */
+  transform: translateX(6px);
+  /* Geser menggunakan Transform (Lebih Smooth) */
 }
+
 .footer-links a:hover::before {
   color: #60a5fa;
 }
@@ -506,11 +606,14 @@ img {
 .footer-links a[target="_blank"] {
   color: #ffffff;
 }
+
 .footer-links a[target="_blank"]:hover {
   color: #ffffff;
 }
+
 .footer-links a[target="_blank"]::before {
-  content: "\ea90"; /* Icon External Link */
+  content: "\ea90";
+  /* Icon External Link */
   font-family: "remixicon";
   font-size: 1rem;
   color: #ffffff;
@@ -548,17 +651,21 @@ img {
     gap: 30px;
   }
 }
+
 @media (max-width: 576px) {
   .main-footer {
     padding-top: 50px;
   }
+
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+
   .footer-logo {
     justify-content: flex-start;
   }
+
   .footer-desc {
     padding-right: 0;
   }
@@ -602,7 +709,8 @@ img {
 
 .back-to-top:hover {
   background-color: #1e40af;
-  transform: translateY(-5px); /* Efek melayang saat hover */
+  transform: translateY(-5px);
+  /* Efek melayang saat hover */
   color: #fff;
   box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
 }
@@ -663,7 +771,89 @@ img {
 
 body.night-mode {
   background-color: #0b0f19;
-  color: #cbd5e1;
+  background-image: linear-gradient(180deg, #0b0f19 0%, #111827 100%) !important;
+  position: relative;
+}
+
+/* Twinkling Stars Effect for Night Mode */
+body.night-mode::before,
+body.night-mode::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+body.night-mode::before {
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 12%, #ffffff 100%, transparent),
+    radial-gradient(2px 2px at 22% 35%, rgba(255, 255, 255, 0.95) 100%, transparent),
+    radial-gradient(1px 1px at 38% 14%, rgba(255, 255, 255, 0.8) 100%, transparent),
+    radial-gradient(2px 2px at 52% 48%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 68% 18%, rgba(255, 255, 255, 0.9) 100%, transparent),
+    radial-gradient(1px 1px at 84% 36%, rgba(255, 255, 255, 0.75) 100%, transparent),
+    radial-gradient(2.5px 2.5px at 94% 10%, #93c5fd 100%, transparent),
+    radial-gradient(1.5px 1.5px at 14% 68%, rgba(255, 255, 255, 0.85) 100%, transparent),
+    radial-gradient(1px 1px at 30% 82%, rgba(255, 255, 255, 0.7) 100%, transparent),
+    radial-gradient(2px 2px at 46% 72%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 62% 86%, rgba(255, 255, 255, 0.9) 100%, transparent),
+    radial-gradient(1px 1px at 76% 78%, rgba(255, 255, 255, 0.8) 100%, transparent),
+    radial-gradient(2px 2px at 90% 92%, #ffffff 100%, transparent);
+  background-size: 100% 100%;
+  animation: starTwinkleSlow 4s ease-in-out infinite alternate;
+}
+
+body.night-mode::after {
+  background-image:
+    radial-gradient(1px 1px at 4% 42%, rgba(255, 255, 255, 0.75) 100%, transparent),
+    radial-gradient(2.5px 2.5px at 16% 24%, rgba(191, 219, 254, 0.95) 100%, transparent),
+    radial-gradient(1px 1px at 32% 56%, rgba(255, 255, 255, 0.8) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 48% 26%, #ffffff 100%, transparent),
+    radial-gradient(2px 2px at 60% 54%, rgba(191, 219, 254, 0.9) 100%, transparent),
+    radial-gradient(1px 1px at 74% 12%, rgba(255, 255, 255, 0.75) 100%, transparent),
+    radial-gradient(2px 2px at 80% 64%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 96% 46%, rgba(255, 255, 255, 0.85) 100%, transparent),
+    radial-gradient(1px 1px at 20% 94%, rgba(255, 255, 255, 0.7) 100%, transparent),
+    radial-gradient(2px 2px at 40% 96%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 56% 62%, rgba(255, 255, 255, 0.8) 100%, transparent),
+    radial-gradient(1px 1px at 70% 94%, rgba(255, 255, 255, 0.75) 100%, transparent);
+  background-size: 100% 100%;
+  animation: starTwinkleFast 3s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes starTwinkleSlow {
+  0% {
+    opacity: 0.25;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: scale(1.01);
+  }
+
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+}
+
+@keyframes starTwinkleFast {
+  0% {
+    opacity: 0.90;
+    transform: scale(1.01);
+  }
+
+  50% {
+    opacity: 0.30;
+    transform: scale(0.99);
+  }
+
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
 }
 
 /* --- Theme Toggle Switch inside Navbar --- */
@@ -739,7 +929,8 @@ body.night-mode .icon-moon {
 
 /* --- Night Mode Navbar & Menu Layout Overrides --- */
 body.night-mode .navbar {
-  background-color: rgba(10, 10, 12, 0.9) !important; /* Sleek translucent black background */
+  background-color: rgba(10, 10, 12, 0.9) !important;
+  /* Sleek translucent black background */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -747,26 +938,31 @@ body.night-mode .navbar {
 }
 
 body.night-mode .navbar .nav-links a {
-  color: #e2e8f0;
+  color: #e2e8f0 !important;
 }
 
 body.night-mode .navbar .nav-links a:hover {
-  color: #60a5fa;
+  color: #60a5fa !important;
 }
 
 body.night-mode .dropdown-content {
-  background: #0a0a0c; /* Matching sleek black background */
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+  background: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
 }
 
 body.night-mode .dropdown-content a {
-  color: #e2e8f0;
+  color: #f1f5f9 !important;
 }
 
 body.night-mode .dropdown-content a:hover {
-  background-color: #1a1a1c;
-  color: #60a5fa;
+  background-color: #0f172a !important;
+  color: #60a5fa !important;
+}
+
+/* Pastikan panah dropdown tidak muncul di dark mode */
+body.night-mode .dropdown-content::before {
+  display: none !important;
 }
 
 /* Hamburger menu color on Mobile in Night Mode */
@@ -774,11 +970,11 @@ body.night-mode .menu-toggle span {
   background-color: #e2e8f0;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 991px) {
   body.night-mode .nav-links {
-    background: #0a0a0c; /* Matching sleek black background */
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    background: #1e293b !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55) !important;
   }
 }
 
@@ -789,4 +985,3 @@ body.night-mode h3,
 body.night-mode h4 {
   color: #ffffff !important;
 }
-

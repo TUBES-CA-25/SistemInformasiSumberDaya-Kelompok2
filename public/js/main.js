@@ -199,9 +199,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.add("night-mode");
     localStorage.setItem("theme", "night");
     if (bgNight && nightImageAvailable) {
-      bgNight.style.opacity = "0.75"; // Translucent night overlay
+      bgNight.style.opacity = "1";
+      bgNight.classList.remove("night-mode-filter");
       if (bgDay) {
-        bgDay.style.opacity = "0.35"; // Faint day photo bleeding through as a shadow detail layer
+        bgDay.style.opacity = "0.08";
         bgDay.classList.remove("night-mode-filter");
       }
     } else if (bgDay) {
@@ -210,16 +211,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  // Toggle Action Click
-  if (themeToggle) {
-    themeToggle.addEventListener("click", () => {
+  // Toggle Action Click (Support desktop & mobile buttons)
+  const themeBtns = document.querySelectorAll(".theme-toggle-btn");
+  themeBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
       if (document.body.classList.contains("night-mode")) {
         setDayMode();
       } else {
         setNightMode();
       }
     });
-  }
+  });
 
   // Load Saved Preference
   const savedTheme = localStorage.getItem("theme");

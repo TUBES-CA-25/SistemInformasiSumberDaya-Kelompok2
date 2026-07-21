@@ -3,8 +3,10 @@
    ======================================================== */
 .rules-section,
 .praktikum-section {
-  padding: 80px 0;
-  background-color: #f8fafc;
+  margin-top: -80px;
+  padding-top: 140px;
+  padding-bottom: 80px;
+  background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 25%, #e0f2fe 100%);
   font-family:
     "Inter",
     system-ui,
@@ -1016,4 +1018,290 @@
   .w-action {
     width: 80px;
   }
+}
+
+/* ========================================================
+   PRAKTIKUM NIGHT MODE STYLES
+   ======================================================== */
+
+/* 1. Global Section Background & Layout */
+body.night-mode .rules-section,
+body.night-mode .praktikum-section {
+  background: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+/* 2. Headers & Typography */
+body.night-mode .rules-header h1,
+body.night-mode .page-header h1,
+body.night-mode .section-header h2,
+body.night-mode .video-title-box h2,
+body.night-mode .lab-title {
+  color: #ffffff !important;
+}
+
+body.night-mode .rules-header p,
+body.night-mode .page-header p,
+body.night-mode .section-header p,
+body.night-mode .video-desc {
+  color: #cbd5e1 !important;
+}
+
+/* 3. Badges */
+body.night-mode .badge-pill,
+body.night-mode .header-badge {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+body.night-mode .video-badge {
+  background-color: rgba(220, 38, 38, 0.15) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* 4. Rule Cards & Modul Cards */
+body.night-mode .rule-card,
+body.night-mode .schedule-wrapper,
+body.night-mode .download-card,
+body.night-mode .modul-card {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.night-mode .rule-img-box {
+  background-color: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.night-mode .rule-card h3 {
+  color: #ffffff !important;
+}
+
+body.night-mode .rule-list li {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .rule-list li i {
+  color: #60a5fa !important;
+}
+
+/* 5. Sanksi Container & Items */
+body.night-mode .sanksi-container {
+  background: #1e293b !important;
+  color: #cbd5e1 !important;
+  border-color: rgba(239, 68, 68, 0.25) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.night-mode .sanksi-title {
+  border-bottom-color: rgba(239, 68, 68, 0.25) !important;
+}
+
+body.night-mode .sanksi-title h2 {
+  color: #f87171 !important;
+}
+
+body.night-mode .sanksi-item {
+  background: #0f172a !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+body.night-mode .sanksi-item:hover {
+  background: #1e293b !important;
+  border-color: #f87171 !important;
+}
+
+body.night-mode .sanksi-icon-box {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+}
+
+body.night-mode .sanksi-content h4 {
+  color: #fca5a5 !important;
+}
+
+body.night-mode .sanksi-content p {
+  color: #cbd5e1 !important;
+}
+
+/* 6. Lab Header & Schedule Tables */
+body.night-mode .lab-header {
+  background: #0f172a !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .lab-icon {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+}
+
+body.night-mode .table-schedule,
+body.night-mode .table-modul {
+  background: #1e293b !important;
+}
+
+body.night-mode .table-schedule thead th {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+  border-bottom-color: #1e40af !important;
+}
+
+body.night-mode .table-modul thead th {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .table-schedule tbody tr,
+body.night-mode .table-modul tbody tr {
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.night-mode .table-schedule tbody tr:hover,
+body.night-mode .table-modul tbody tr:hover {
+  background-color: #0f172a !important;
+}
+
+body.night-mode .schedule-date,
+body.night-mode .matkul-name,
+body.night-mode .download-content h4 {
+  color: #f8fafc !important;
+}
+
+body.night-mode .schedule-time {
+  background: rgba(37, 99, 235, 0.25) !important;
+  color: #60a5fa !important;
+}
+
+body.night-mode .schedule-matkul,
+body.night-mode .table-schedule td:nth-child(2) {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+body.night-mode .schedule-kelas,
+body.night-mode .dosen-name,
+body.night-mode .modul-title {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .table-schedule td {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .badge-prodi {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .badge-ongoing {
+  background: rgba(22, 101, 52, 0.35) !important;
+  color: #4ade80 !important;
+  border-color: rgba(74, 222, 128, 0.4) !important;
+}
+
+body.night-mode .badge-upcoming {
+  background: rgba(37, 99, 235, 0.25) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.4) !important;
+}
+
+body.night-mode .badge-finished,
+body.night-mode .badge-scheduled {
+  background: rgba(30, 41, 59, 0.9) !important;
+  color: #94a3b8 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 7. Dropdown Select & Controls */
+body.night-mode .custom-select {
+  background-color: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #f8fafc !important;
+}
+
+body.night-mode .custom-select:focus {
+  border-color: #3b82f6 !important;
+}
+
+body.night-mode .select-icon {
+  color: #94a3b8 !important;
+}
+
+/* 8. Download Cards & Buttons */
+body.night-mode .file-icon-box {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.25) !important;
+}
+
+body.night-mode .file-meta {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .btn-external {
+  background-color: #0f172a !important;
+  color: #cbd5e1 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.night-mode .btn-external:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+body.night-mode .btn-download-pill {
+  background-color: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+}
+
+body.night-mode .btn-download-pill:hover {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+body.night-mode .empty-schedule {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.night-mode .empty-schedule h3 {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .downloads-section {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 9. Search Input & Live Clock for Jadwal Page */
+body.night-mode #search-input,
+body.night-mode .search-input-wrapper input {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.night-mode #search-input::placeholder,
+body.night-mode .search-input-wrapper input::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .search-input-wrapper i {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .live-clock-badge {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 10px 25px -5px rgba(29, 78, 216, 0.5) !important;
+}
+
+body.night-mode .custom-select option {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
 }

@@ -16,9 +16,10 @@
 }
 
 .alumni-section {
-  padding-top: 80px; /* Sedikit dikurangi */
+  margin-top: -80px;
+  padding-top: 140px;
   padding-bottom: 60px;
-  background-color: var(--bg-light);
+  background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 25%, #e0f2fe 100%);
   min-height: 100vh;
   font-family:
     "Inter",
@@ -577,4 +578,145 @@
   .staff-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* =======================================================
+   ALUMNI NIGHT MODE STYLES
+   ======================================================= */
+
+/* 1. Global Section Background & Baseline */
+body.night-mode .alumni-section {
+  background: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+/* 2. Headers, Typography & Search */
+body.night-mode .page-header h1,
+body.night-mode .profile-name,
+body.night-mode .empty-title,
+body.night-mode .section-title.mt-30 {
+  color: #ffffff !important;
+}
+
+body.night-mode .page-header p,
+body.night-mode .section-label,
+body.night-mode .btn-back,
+body.night-mode .meta-value,
+body.night-mode .empty-desc,
+body.night-mode .profile-bio.alumni-quote {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .badge-pill,
+body.night-mode .header-badge {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+body.night-mode .search-input {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.night-mode .search-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .search-icon-box {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .section-label::after {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 3. Alumni Staff Grid & Cards */
+body.night-mode .staff-card,
+body.night-mode .profile-wrapper,
+body.night-mode .profile-content {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.night-mode .staff-photo-box,
+body.night-mode .profile-image {
+  background-color: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .staff-content {
+  background: #1e293b !important;
+}
+
+body.night-mode .staff-name {
+  color: #ffffff !important;
+}
+
+body.night-mode .staff-role {
+  color: #60a5fa !important;
+}
+
+body.night-mode .staff-card:hover {
+  border-color: #3b82f6 !important;
+}
+
+/* 4. Badges & Meta Information Box */
+body.night-mode .category-badge {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+body.night-mode .divisi-badge {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .meta-info-box {
+  background-color: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .meta-label {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .section-title.mt-30 {
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .profile-bio.alumni-quote {
+  background: #0f172a !important;
+  border-left-color: #60a5fa !important;
+  color: #e2e8f0 !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+}
+
+body.night-mode .skill-tag {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.night-mode .skill-tag:hover {
+  border-color: #3b82f6 !important;
+  color: #60a5fa !important;
+}
+
+body.night-mode .btn-back:hover {
+  color: #60a5fa !important;
+}
+
+body.night-mode .btn-contact {
+  background: #2563eb !important;
+  color: #ffffff !important;
+}
+
+body.night-mode .btn-contact:hover {
+  background: #1d4ed8 !important;
 }

@@ -18,9 +18,10 @@
 }
 
 .sumberdaya-section {
-  padding-top: 100px;
+  margin-top: -80px;
+  padding-top: 140px;
   padding-bottom: 80px;
-  background-color: var(--bg-light);
+  background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 25%, #e0f2fe 100%);
   min-height: 100vh;
   font-family:
     "Inter",
@@ -1520,5 +1521,193 @@
   .modal-profile-info-header .member-specialization {
     justify-content: center;
   }
+}
+
+/* =======================================================
+   SUMBER DAYA NIGHT MODE STYLES
+   ======================================================= */
+
+/* 1. Global Section Background & Baseline */
+body.night-mode .sumberdaya-section {
+  background: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+/* 2. Headers, Typography & Search */
+body.night-mode .page-header h1,
+body.night-mode .profile-name,
+body.night-mode .exec-info h3,
+body.night-mode .section-title,
+body.night-mode .empty-title,
+body.night-mode .modal-profile-info-header h2 {
+  color: #ffffff !important;
+}
+
+body.night-mode .page-header p,
+body.night-mode .exec-role,
+body.night-mode .profile-role,
+body.night-mode .profile-bio,
+body.night-mode .section-label,
+body.night-mode .btn-back,
+body.night-mode .search-empty-state p {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .badge-pill,
+body.night-mode .header-badge {
+  background-color: rgba(37, 99, 235, 0.15) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+body.night-mode .search-input {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.night-mode .search-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .search-icon-compact {
+  color: #94a3b8 !important;
+}
+
+body.night-mode .section-label::after {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 3. Executive & Staff Cards */
+body.night-mode .exec-card,
+body.night-mode .staff-card,
+body.night-mode .profile-wrapper {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.night-mode .exec-photo,
+body.night-mode .staff-photo-box,
+body.night-mode .profile-image {
+  background-color: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .staff-content {
+  background: #1e293b !important;
+}
+
+body.night-mode .staff-name {
+  color: #ffffff !important;
+}
+
+body.night-mode .staff-role {
+  color: #60a5fa !important;
+}
+
+body.night-mode .meta-item {
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .staff-content .meta-item {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  color: #cbd5e1 !important;
+}
+
+body.night-mode .staff-card:hover .staff-content .meta-item {
+  background: rgba(37, 99, 235, 0.2) !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+  color: #60a5fa !important;
+}
+
+body.night-mode .meta-item i {
+  color: #64748b !important;
+}
+
+body.night-mode .staff-card:hover .meta-item i {
+  color: #60a5fa !important;
+}
+
+/* 4. Badges & Skill Tags */
+body.night-mode .exec-badge,
+body.night-mode .badge-pimpinan,
+body.night-mode .badge-kepala,
+body.night-mode .badge-coord {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
+}
+
+body.night-mode .badge-staff {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .badge-asisten {
+  background: rgba(14, 165, 233, 0.2) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+body.night-mode .badge-ca {
+  background: rgba(217, 119, 6, 0.2) !important;
+  color: #fbbf24 !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+}
+
+body.night-mode .skill-tag,
+body.night-mode .modal-profile-details .skill-tag {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.night-mode .modal-profile-details .skill-tag:hover {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+body.night-mode .section-title {
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.night-mode .btn-back:hover {
+  color: #60a5fa !important;
+}
+
+/* 5. Modal Dialog Night Mode */
+body.night-mode .profile-modal-content {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.night-mode .modal-profile-image {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.night-mode .modal-close-btn {
+  background: rgba(15, 23, 42, 0.8) !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.night-mode .modal-close-btn:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
+body.night-mode .modal-profile-info-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.night-mode .modal-profile-details .contact-wrapper {
+  border-top-color: rgba(255, 255, 255, 0.1) !important;
 }
 

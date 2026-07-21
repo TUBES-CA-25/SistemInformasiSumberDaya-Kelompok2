@@ -225,7 +225,7 @@ function renderJadwalDashboard() {
       finalHtml += `
             <tr>
                 <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.95rem;">${start} - ${end}</td>
-                <td style="color: #0f172a; font-weight: 700;">${item.namaMatakuliah}</td>
+                <td><span class="schedule-matkul">${item.namaMatakuliah}</span></td>
                 <td class="text-nowrap">${kelasFreq}</td>
                 <td><div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-chalkboard-teacher" style="color:#64748b;"></i><span style="font-weight:500;">${item.dosen}</span></div></td>
                 <td>${asistenDisplay}</td>
