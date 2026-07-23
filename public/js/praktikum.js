@@ -157,11 +157,33 @@ function renderJadwalDashboard() {
     now.getMinutes().toString().padStart(2, "0");
 
   if (finalFiltered.length === 0) {
+    let emptyIcon = "far fa-calendar-times";
+    let emptyTitle = "Tidak Ada Jadwal Praktikum";
+    let emptyMessage = `Tidak ada jadwal praktikum yang ditemukan.`;
+
+    if (!jadwalData || jadwalData.length === 0) {
+      emptyIcon = "far fa-calendar-alt";
+      emptyTitle = "Belum Ada Jadwal Praktikum";
+      emptyMessage = "Saat ini belum ada data jadwal praktikum yang terdaftar di dalam sistem.";
+    } else if (searchInput && searchInput.value.trim() !== "") {
+      emptyIcon = "fas fa-search";
+      emptyTitle = "Pencarian Tidak Ditemukan";
+      emptyMessage = `Tidak ditemukan jadwal praktikum yang cocok dengan kata kunci "${searchInput.value.trim()}".`;
+    } else if (labSelect && labSelect.value !== "") {
+      emptyIcon = "fas fa-desktop";
+      emptyTitle = "Ruangan Kosong";
+      emptyMessage = `Tidak ada jadwal praktikum di ${labSelect.value} untuk hari ${selectedDay}.`;
+    } else if (filteredData.length === 0) {
+      emptyIcon = "far fa-calendar-check";
+      emptyTitle = `Tidak Ada Jadwal Hari ${selectedDay}`;
+      emptyMessage = `Tidak ada kegiatan praktikum yang berlangsung pada hari ${selectedDay}. Silakan pilih hari lainnya pada menu filter di atas.`;
+    }
+
     container.innerHTML = `
         <div class="empty-schedule">
-            <i class="far fa-calendar-times"></i>
-            <h3>Tidak Ada Hasil</h3>
-            <p>Tidak ada jadwal praktikum yang cocok dengan filter atau kata kunci pencarian.</p>
+            <i class="${emptyIcon}"></i>
+            <h3>${emptyTitle}</h3>
+            <p>${emptyMessage}</p>
         </div>`;
     return;
   }
@@ -214,11 +236,15 @@ function renderJadwalDashboard() {
       }
 
       const kelasFreq = `<b>${item.kelas || "-"}</b> <span style="color:#94a3b8">/</span> ${item.frekuensi || "-"}`;
+      const cleanName = (val) => (!val || val === "-" || /^\d+$/.test(String(val).trim())) ? "" : String(val).trim();
+      const a1Name = cleanName(item.namaAsisten1);
+      const a2Name = cleanName(item.namaAsisten2);
+
       const asistenDisplay =
-        item.namaAsisten1 || item.namaAsisten2
+        (a1Name || a2Name)
           ? `<div class="asisten-cell">
-               ${item.namaAsisten1 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.namaAsisten1}</div>` : ""}
-               ${item.namaAsisten2 ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${item.namaAsisten2}</div>` : ""}
+               ${a1Name ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${a1Name}</div>` : ""}
+               ${a2Name ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${a2Name}</div>` : ""}
              </div>`
           : '<span style="color:#cbd5e1">-</span>';
 

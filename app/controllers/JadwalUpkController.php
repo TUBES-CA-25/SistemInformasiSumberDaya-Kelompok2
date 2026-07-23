@@ -245,6 +245,65 @@ class JadwalUpkController extends Controller
         exit;
     }
 
+    /**
+     * API / Admin: Download Template Excel UPK
+     */
+    public function downloadTemplate(): void {
+        $this->cleanBuffers();
+        $dir = ROOT_PROJECT . '/public/assets/templates';
+        $file = $dir . '/template_jadwal_upk.xlsx';
+        
+        if (!file_exists($file)) {
+            if (!file_exists($dir)) {
+                @mkdir($dir, 0777, true);
+            }
+            try {
+                $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
+                $sheet->setTitle('Jadwal UPK');
+                $headers = ['No', 'Prodi', 'Tanggal', 'Jam', 'Mata Kuliah', 'Dosen', 'Frekuensi', 'Kelas', 'Ruangan'];
+                $colIndex = 'A';
+                foreach ($headers as $h) {
+                    $sheet->setCellValue($colIndex . '1', $h);
+                    $colIndex++;
+                }
+                $sampleData = [
+                    [1, 'Teknik Informatika', '2025-06-20', '08:00 - 10:00', 'Pemrograman Web', 'Dr. Ir. Ahmad Hidayat, M.T.', '1', 'A', 'Laboratorium Komputer 1'],
+                    [2, 'Sistem Informasi', '2025-06-21', '10:00 - 12:00', 'Basis Data', 'Siti Nurhaliza, S.Kom., M.Cs.', '2', 'B', 'Laboratorium Komputer 2']
+                ];
+                $r = 2;
+                foreach ($sampleData as $row) {
+                    $c = 'A';
+                    foreach ($row as $v) {
+                        $sheet->setCellValue($c . $r, $v);
+                        $c++;
+                    }
+                    $r++;
+                }
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+                $writer->save($file);
+            } catch (Exception $e) {
+                header('Content-Type: text/csv');
+                header('Content-Disposition: attachment; filename="template_jadwal_upk.csv"');
+                $output = fopen('php://output', 'w');
+                fputcsv($output, ['No', 'Prodi', 'Tanggal', 'Jam', 'Mata Kuliah', 'Dosen', 'Frekuensi', 'Kelas', 'Ruangan']);
+                fputcsv($output, [1, 'Teknik Informatika', '2025-06-20', '08:00 - 10:00', 'Pemrograman Web', 'Dr. Ir. Ahmad Hidayat, M.T.', '1', 'A', 'Laboratorium Komputer 1']);
+                fclose($output);
+                exit;
+            }
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="template_jadwal_upk.xlsx"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($file));
+        readfile($file);
+        exit;
+    }
+
     // =========================================================================
     // PRIVATE HELPER METHODS (INTERNAL ONLY)
     // =========================================================================

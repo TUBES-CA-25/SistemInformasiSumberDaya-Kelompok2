@@ -187,6 +187,9 @@
                             <li>Pastikan kolom data lengkap (Prodi, Tanggal, Jam, dst).</li>
                             <li>Format Excel: <strong>.xlsx</strong> atau <strong>.xls</strong>.</li>
                         </ul>
+                        <a href="<?= PUBLIC_URL ?>/api/jadwal-upk/template" target="_blank" download="template_jadwal_upk.xlsx" class="inline-flex items-center gap-1 mt-3 text-blue-600 font-bold hover:text-blue-800 hover:underline">
+                            <i class="fas fa-download"></i> Download Template Excel UPK
+                        </a>
                     </div>
                 </div>
 

@@ -257,7 +257,7 @@
                             <li>Pastikan nama Mata Kuliah & Lab sama persis dengan di sistem.</li>
                             <li>Format waktu: <strong>HH:MM</strong> (Contoh: 08:00).</li>
                         </ul>
-                        <a href="<?= API_URL ?>/jadwal-praktikum/template" class="inline-flex items-center gap-1 mt-3 text-blue-600 font-bold hover:text-blue-800 hover:underline">
+                        <a href="<?= PUBLIC_URL ?>/api/jadwal-praktikum/template" target="_blank" download="template_jadwal_praktikum.xlsx" class="inline-flex items-center gap-1 mt-3 text-blue-600 font-bold hover:text-blue-800 hover:underline">
                             <i class="fas fa-download"></i> Download Template Excel
                         </a>
                     </div>

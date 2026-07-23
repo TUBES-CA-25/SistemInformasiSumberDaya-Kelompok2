@@ -232,7 +232,7 @@ function renderTable(data) {
 
 // --- HELPER RENDER ---
 function renderAsistenBadge(nama, foto, num) {
-  if (!nama) return `<span class="text-xs text-gray-400 italic">- Kosong -</span>`;
+  if (!nama || nama === "-" || /^\d+$/.test(String(nama).trim())) return `<span class="text-xs text-gray-400 italic">- Kosong -</span>`;
 
   // Resolve URL Foto
   let imgUrl = getFotoUrl(nama, foto);

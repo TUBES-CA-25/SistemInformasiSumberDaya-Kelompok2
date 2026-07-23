@@ -122,6 +122,9 @@ class Router {
         $this->post('/api/jadwal/delete-multiple', 'JadwalPraktikumController', 'deleteMultiple');
         $this->post('/api/jadwal-praktikum/upload', 'JadwalPraktikumController', 'uploadApi');
         $this->get('/api/jadwal-praktikum/template', 'JadwalPraktikumController', 'downloadTemplate');
+        $this->get('/jadwal-praktikum/template', 'JadwalPraktikumController', 'downloadTemplate');
+        $this->get('/admin/jadwal-praktikum/template', 'JadwalPraktikumController', 'downloadTemplate');
+        $this->get('/admin/jadwal/template', 'JadwalPraktikumController', 'downloadTemplate');
         $this->get('/api/peraturan', 'PeraturanLabController', 'apiIndex');
         $this->get('/api/sanksi', 'SanksiController', 'apiIndex');
         $this->get('/api/asisten/coordinator/current', 'AsistenController', 'getCoordinator');
@@ -174,6 +177,9 @@ class Router {
         $this->delete('/api/jadwal-upk/{id}', 'JadwalUpkController', 'delete');
         $this->post('/api/jadwal-upk/delete-multiple', 'JadwalUpkController', 'deleteMultiple');
         $this->post('/api/jadwal-upk/upload', 'JadwalUpkController', 'upload');
+        $this->get('/api/jadwal-upk/template', 'JadwalUpkController', 'downloadTemplate');
+        $this->get('/jadwal-upk/template', 'JadwalUpkController', 'downloadTemplate');
+        $this->get('/admin/jadwalupk/template', 'JadwalUpkController', 'downloadTemplate');
 
         $this->get('/api/peraturan-lab', 'PeraturanLabController', 'apiIndex');
         $this->post('/api/peraturan-lab', 'PeraturanLabController', 'store');
@@ -269,7 +275,7 @@ class Router {
         // rute login itu sendiri yang memang harus publik.
         $method = strtoupper($this->method);
         $isMutating = in_array($method, ['POST', 'PUT', 'DELETE']);
-        $isPublicMutatingRoute = ($this->path === '/login');
+        $isPublicMutatingRoute = in_array($this->path, ['/login', '/kontak', '/contact', '/kontak/send', '/api/kontak']);
         $needsAuth = $isAdminPath || ($isMutating && !$isPublicMutatingRoute);
 
         if ($needsAuth) {
