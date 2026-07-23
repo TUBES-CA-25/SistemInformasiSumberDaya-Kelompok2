@@ -18,7 +18,7 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="hero-content reveal fade-left">
                 <span class="hero-eyebrow">FAKULTAS ILMU KOMPUTER</span>
                 <h1>Selamat Datang di <span class="text-blue">Portal Laboratorium</span> FIKOM UMI</h1>
-                <p>Perpaduan ilmu pengetahuan dan nilai-nilai keislaman akan membawa Anda pada sebuah pengalaman belajar yang unik, yang dapat Anda temukan di Fakultas Ilmu Komputer. Dengan dukungan lingkungan belajar yang kondusif, kembangkan segala potensi yang Anda miliki.</p>
+                <p>ICLabs FIKOM UMI merupakan pusat inovasi teknologi dan laboratorium komputasi terpadu Fakultas Ilmu Komputer Universitas Muslim Indonesia. Didukung fasilitas riset modern, infrastruktur berperforma tinggi, dan ekosistem pembelajaran berlandaskan nilai-nilai keislaman untuk mencetak talenta digital unggul dan berdaya saing global.</p>
                 <div class="btn-group">
                     <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
                         Gabung Sekarang <i class="ri-arrow-right-line"></i>

@@ -16,8 +16,8 @@ $sanksi_data = $data['sanksi'] ?? [];
 
        <div class="rules-grid" style="margin-bottom: 30px;">
             <article class="rule-card">
-                <div class="rule-img-box" style="height: 500px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
-                    <img src="<?= PUBLIC_URL ?>/assets/uploads/Pria.webp" alt="Standar Pakaian Pria" style="max-width: 100%; max-height: 100%; object-fit: contain;" loading="lazy">
+                <div class="rule-img-box dress-code-box">
+                    <img src="<?= PUBLIC_URL ?>/assets/uploads/Pria.webp" alt="Standar Pakaian Pria" class="dress-code-img" loading="lazy">
                 </div>
                 <h3>Standar Pakaian Pria</h3>
                 <ul class="rule-list">
@@ -28,8 +28,8 @@ $sanksi_data = $data['sanksi'] ?? [];
             </article>
 
             <article class="rule-card">
-                <div class="rule-img-box" style="height: 500px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
-                     <img src="<?= PUBLIC_URL ?>/assets/uploads/Wanita.webp" alt="Standar Pakaian Wanita" style="max-width: 100%; max-height: 100%; object-fit: contain;" loading="lazy">
+                <div class="rule-img-box dress-code-box">
+                     <img src="<?= PUBLIC_URL ?>/assets/uploads/Wanita.webp" alt="Standar Pakaian Wanita" class="dress-code-img" loading="lazy">
                 </div>
                 <h3>Standar Pakaian Wanita</h3>
                 <ul class="rule-list">

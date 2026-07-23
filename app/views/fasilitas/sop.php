@@ -1,4 +1,4 @@
-<section class="sumberdaya-section" style="padding-top: 100px; padding-bottom: 100px;">
+<section class="fasilitas-section">
     <div class="container">
         
         <header class="page-header reveal fade-up">

@@ -4,8 +4,8 @@
 .rules-section,
 .praktikum-section {
   margin-top: -80px;
-  padding-top: 140px;
-  padding-bottom: 80px;
+  padding-top: 120px;
+  padding-bottom: 60px;
   background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 25%, #e0f2fe 100%);
   font-family:
     "Inter",
@@ -26,7 +26,7 @@
 .section-header {
   text-align: center;
   max-width: 800px;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 30px auto;
   padding-top: 10px;
 }
 
@@ -37,40 +37,40 @@
   align-items: center;
   background-color: #eff6ff;
   color: #2563eb;
-  padding: 8px 20px;
+  padding: 6px 14px;
   border-radius: 100px;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 24px;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
   border: 1px solid #bfdbfe;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
 }
 
 /* --- TYPOGRAPHY (JUDUL HITAM) --- */
 .rules-header h1,
 .page-header h1,
 .section-header h2 {
-  font-size: 3rem;
-  font-weight: 800;
+  font-size: 2.2rem;
+  font-weight: 850;
   color: #0f172a;
-  letter-spacing: -0.04em;
-  margin-bottom: 20px;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
   line-height: 1.2;
   margin-top: 0;
 }
 
 .section-header h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .rules-header p,
 .page-header p,
 .section-header p {
   color: #64748b;
-  font-size: 1.15rem;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  line-height: 1.45;
   margin: 0 auto;
   font-weight: 400;
   max-width: 700px;
@@ -86,16 +86,16 @@
    ======================================================== */
 .rules-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 40px;
-  margin-bottom: 80px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 60px;
 }
 
 .rule-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 24px;
-  padding: 40px;
+  border-radius: 20px;
+  padding: 24px;
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.02),
     0 10px 15px -3px rgba(0, 0, 0, 0.04);
@@ -159,10 +159,10 @@
 }
 
 .rule-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 800;
   color: #0f172a;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   letter-spacing: -0.02em;
 }
 
@@ -175,16 +175,16 @@
 .rule-list li {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 10px;
   color: #475569;
-  line-height: 1.6;
-  margin-bottom: 16px;
-  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
 .rule-list li i {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   margin-top: 2px;
   flex-shrink: 0;
   color: #2563eb;
@@ -1304,4 +1304,61 @@ body.night-mode .live-clock-badge {
 body.night-mode .custom-select option {
   background-color: #1e293b !important;
   color: #f8fafc !important;
+}
+
+/* ========================================================
+   DRESS CODE CARD IMAGES & HOVER STYLES
+   ======================================================== */
+.dress-code-box {
+  height: 360px !important;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s ease;
+}
+
+.dress-code-img {
+  height: 100%;
+  width: auto;
+  object-fit: contain !important;
+  border-radius: 0;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.rule-card:hover .dress-code-box {
+  background: linear-gradient(135deg, #f0f7ff 0%, #e2eefe 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.rule-card:hover .dress-code-img {
+  transform: scale(1.04);
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.12);
+}
+
+/* Night Mode Overrides */
+body.night-mode .dress-code-box {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.night-mode .rule-card:hover .dress-code-box {
+  background: linear-gradient(135deg, #1e293b 0%, #1e3a8a 100%) !important;
+  border-color: rgba(96, 165, 250, 0.25) !important;
+}
+
+body.night-mode .dress-code-img {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.night-mode .rule-card:hover .dress-code-img {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.55);
 }
