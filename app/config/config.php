@@ -61,13 +61,16 @@ define('DB_NAME', $_ENV['DB_DATABASE'] ?? 'sistem_manajemen_sumber_daya');
 // 4. Konfigurasi Email (SMTP)
 // --------------------------------------------------------------------------
 
+// Target email penerima notifikasi kontak admin
+define('ADMIN_EMAIL', $_ENV['ADMIN_EMAIL'] ?? 'riswangnb@gmail.com');
+
 // Host SMTP (Wajib ada agar tahu mau kirim ke server mana)
 define('SMTP_HOST', $_ENV['SMTP_HOST'] ?? 'smtp.gmail.com');
 
 // Port SMTP (587 untuk TLS, 465 untuk SSL)
 define('SMTP_PORT', $_ENV['SMTP_PORT'] ?? 587);
 
-// Username Email (Email pengirim, Wajib ada!)
+// Username Email (Email pengirim SMTP)
 define('SMTP_USER', $_ENV['SMTP_USERNAME'] ?? 'nahwakakaa@gmail.com');
 
 // Password Aplikasi (Diambil dari .env)

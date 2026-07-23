@@ -14,9 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
 
     try {
-      const formData = new FormData(this);
-      // Sesuaikan port jika perlu
-      const apiUrl = "http://127.0.0.1:8000/api.php/kontak";
+      const baseUrl = window.PUBLIC_URL || '';
+      const apiUrl = `${baseUrl}/api/kontak`;
 
       const response = await fetch(apiUrl, {
         method: "POST",

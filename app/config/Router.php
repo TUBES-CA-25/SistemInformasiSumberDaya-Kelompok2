@@ -106,8 +106,12 @@ class Router {
         $this->post('/modul', 'ModulController', 'index');
         $this->post('/modul/{id}', 'ModulController', 'index');
         $this->put('/modul/{id}', 'ModulController', 'index');
-        $this->delete('/modul/{id}', 'ModulController', 'index');
         $this->get('/contact', 'KontakController', 'index');
+        $this->get('/kontak', 'KontakController', 'index');
+        $this->post('/kontak', 'KontakController', 'send');
+        $this->post('/contact', 'KontakController', 'send');
+        $this->post('/kontak/send', 'KontakController', 'send');
+        $this->post('/api/kontak', 'KontakController', 'send');
 
         // API ROUTES
         $this->get('/api/jadwal', 'JadwalPraktikumController', 'apiIndex');
