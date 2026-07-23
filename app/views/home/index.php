@@ -6,17 +6,29 @@ $laboran_list = $data['laboran'] ?? [];
 
 <section class="hero-section">
     <div class="container">
-        <div class="hero-content reveal fade-left">
-            <h1>Selamat Datang di Portal Laboratorium FIKOM UMI</h1>
-            <p>Siap untuk pengalaman praktikum yang lebih baik? Akses seluruh layanan laboratorium Fakultas Ilmu Komputer mulai dari jadwal hingga inventaris aset dengan lebih cepat dan mudah di sini.</p>
-            <div class="btn-group">
-                <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
-                    Gabung Sekarang <i class="ri-arrow-right-line"></i>
-                </a>
+        <!-- Boxed Hero Wrapper (Restricting background width and adding border-radius) -->
+        <div class="hero-boxed-wrapper">
+            <!-- Boxed Faculty Building Background -->
+            <div class="hero-bg-frame">
+                <div id="bgDay" class="hero-bg-img" style="background-image: url('<?= PUBLIC_URL ?>/images/gedung-fikom-siang.webp');"></div>
+                <div id="bgNight" class="hero-bg-img" style="background-image: url('<?= PUBLIC_URL ?>/images/gedung-fikom-malam.webp'); opacity: 0;"></div>
+                <div class="hero-bg-overlay"></div>
             </div>
-        </div>
-        <div class="hero-image reveal fade-right">
-            <img src="<?= PUBLIC_URL ?>/images/logo-iclabs.png" alt="Logo ICLabs" class="hero-logo-img">
+            
+            <div class="hero-content reveal fade-left">
+                <span class="hero-eyebrow">FAKULTAS ILMU KOMPUTER</span>
+                <h1>Selamat Datang di <span class="text-blue">Portal Laboratorium</span> FIKOM UMI</h1>
+                <p>ICLabs FIKOM UMI merupakan pusat inovasi teknologi dan laboratorium komputasi terpadu Fakultas Ilmu Komputer Universitas Muslim Indonesia. Didukung fasilitas riset modern, infrastruktur berperforma tinggi, dan ekosistem pembelajaran berlandaskan nilai-nilai keislaman untuk mencetak talenta digital unggul dan berdaya saing global.</p>
+                <div class="btn-group">
+                    <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
+                        Gabung Sekarang <i class="ri-arrow-right-line"></i>
+                    </a>
+                    <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-outline">
+                        Lihat Fasilitas <i class="ri-arrow-right-line"></i>
+                    </a>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -76,11 +88,13 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="slide">
                 <div class="slide-content-wrapper"> 
                     <div class="slide-image">
-                        <img src="<?= PUBLIC_URL ?>/images/Pusat-Kompetensi.jpg" alt="Pusat Kompetensi Digital">
+                        <img src="<?= PUBLIC_URL ?>/images/Pusat-Kompetensi.jpg" alt="Pusat Kompetensi Digital" loading="lazy">
                     </div>
                     <div class="slide-text">
-                        <h2>Pusat Kompetensi</h2>
+                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">FASILITAS UNGGULAN</span>
+                        <h2><span class="text-blue">Pusat</span> Kompetensi</h2>
                         <p>Laboratorium FIKOM UMI hadir sebagai pusat pengembangan hard skill unggulan dengan kurikulum adaptif.</p>
+                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Selengkapnya <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -88,11 +102,13 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="slide">
                 <div class="slide-content-wrapper">
                     <div class="slide-image">
-                         <img src="<?= PUBLIC_URL ?>/images/Infrastruktur-Modern.jpg" alt="Infrastruktur Laboratorium Modern">
+                         <img src="<?= PUBLIC_URL ?>/images/Infrastruktur-Modern.jpg" alt="Infrastruktur Laboratorium Modern" loading="lazy">
                     </div>
                     <div class="slide-text">
-                        <h2>Infrastruktur Modern</h2>
+                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">PERANGKAT MODERN</span>
+                        <h2><span class="text-blue">Infrastruktur</span> Spesifik</h2>
                         <p>Menyediakan laboratorium spesifik (RPL, Jaringan, Multimedia) dengan perangkat spesifikasi tinggi.</p>
+                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Fasilitas <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -100,11 +116,13 @@ $laboran_list = $data['laboran'] ?? [];
             <div class="slide">
                 <div class="slide-content-wrapper">
                     <div class="slide-image">
-                         <img src="<?= PUBLIC_URL ?>/images/RisetDanInovasi.png" alt="Riset dan Inovasi Laboratorium">
+                         <img src="<?= PUBLIC_URL ?>/images/RisetDanInovasi.png" alt="Riset dan Inovasi Laboratorium" loading="lazy">
                     </div>
                     <div class="slide-text">
-                        <h2>Riset & Inovasi</h2>
+                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">KOLABORASI RISET</span>
+                        <h2><span class="text-blue">Riset</span> & Inovasi</h2>
                         <p>Mendukung kegiatan penelitian mahasiswa dan dosen dengan fasilitas komputasi yang memadai.</p>
+                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Riset <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -124,17 +142,7 @@ $laboran_list = $data['laboran'] ?? [];
     </div>
 </section>
 
-<section class="video-section">
-    <div class="container reveal fade-up">
-        <div class="section-header">
-            <span class="badge-pill">Profil Video</span>
-            <h2>Mengapa Memilih Kami?</h2>
-        </div>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/jxczLAHdX3M?rel=0" title="Profil Laboratorium FIKOM UMI" allowfullscreen></iframe>
-        </div>
-    </div>
-</section>
+
 
 <section class="management-section">
     <div class="custom-shape-divider-top">
@@ -151,14 +159,30 @@ $laboran_list = $data['laboran'] ?? [];
 
         <?php if (!empty($kepala_lab_list)) : ?>
             <div class="pimpinan-wrapper reveal fade-up">
-                <?php foreach ($kepala_lab_list as $row) : ?>
+                <?php foreach ($kepala_lab_list as $row) : 
+                    $jabatanRaw = htmlspecialchars($row['jabatan']);
+                    $roleMain = $jabatanRaw;
+                    $roleSub = '';
+                    if (stripos($jabatanRaw, 'Kepala Laboratorium') !== false) {
+                        $roleMain = 'Kepala Laboratorium';
+                        $roleSub = trim(str_ireplace('Kepala Laboratorium', '', $jabatanRaw));
+                    }
+                ?>
                     <div class="staff-card-home">
                         <div class="staff-photo-box">
-                            <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                            <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                         </div>
                         <div class="staff-content">
                             <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
-                            <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
+                            <span class="staff-role">
+                                <i class="ri-shield-star-line"></i>
+                                <span class="role-text">
+                                    <span class="role-main"><?= $roleMain ?></span>
+                                    <?php if (!empty($roleSub)) : ?>
+                                        <span class="role-sub"><?= $roleSub ?></span>
+                                    <?php endif; ?>
+                                </span>
+                            </span>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -167,14 +191,33 @@ $laboran_list = $data['laboran'] ?? [];
 
         <?php if (!empty($laboran_list)) : ?>
             <div class="laboran-grid reveal fade-up">
-                <?php foreach ($laboran_list as $row) : ?>
+                <?php foreach ($laboran_list as $row) : 
+                    $jabatanRaw = htmlspecialchars($row['jabatan']);
+                    $roleMain = $jabatanRaw;
+                    $roleSub = '';
+                    if (stripos($jabatanRaw, 'Laboran Laboratorium') !== false) {
+                        $roleMain = 'Laboran Laboratorium';
+                        $roleSub = trim(str_ireplace('Laboran Laboratorium', '', $jabatanRaw));
+                    } else if (stripos($jabatanRaw, 'Laboran') !== false) {
+                        $roleMain = 'Laboran';
+                        $roleSub = trim(str_ireplace('Laboran', '', $jabatanRaw));
+                    }
+                ?>
                     <div class="staff-card-home">
                         <div class="staff-photo-box">
-                            <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" loading="lazy">
+                            <img src="<?= $row['foto_url'] ?>" alt="<?= htmlspecialchars($row['nama']) ?>" style="<?= Helper::objectPosStyle($row) ?>" loading="lazy">
                         </div>
                         <div class="staff-content">
                             <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
-                            <span class="staff-role"><?= htmlspecialchars($row['jabatan']) ?></span>
+                            <span class="staff-role">
+                                <i class="ri-code-box-line"></i>
+                                <span class="role-text">
+                                    <span class="role-main"><?= $roleMain ?></span>
+                                    <?php if (!empty($roleSub)) : ?>
+                                        <span class="role-sub"><?= $roleSub ?></span>
+                                    <?php endif; ?>
+                                </span>
+                            </span>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -225,24 +268,58 @@ $laboran_list = $data['laboran'] ?? [];
 </section>
 
 <section class="partner-section">
+    <div class="container" style="margin-bottom: 25px;">
+        <div class="section-header reveal fade-up" style="margin-bottom: 0;">
+            <span class="badge-pill">KOLABORASI</span>
+            <h2>Mitra & Kerjasama</h2>
+        </div>
+    </div>
     <div class="slider">
         <div class="slide-track">
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/microsoft_dark.png" alt="Microsoft">
+            </div></div>
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/nvidia_dark.png" alt="Nvidia">
+            </div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/mikrotik_dark.png" alt="Mikrotik">
+            </div></div>
             
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/microsoft_dark.png" alt="Microsoft">
+            </div></div>
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/nvidia_dark.png" alt="Nvidia">
+            </div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/mikrotik_dark.png" alt="Mikrotik">
+            </div></div>
            
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Microsoft-Logo.png" alt="Microsoft">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/microsoft_dark.png" alt="Microsoft">
+            </div></div>
             <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/PoldaSulsel-Logo.png" alt="PoldaSulsel"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia"></div></div>
-            <div class="partner-slide"><div class="partner-box"><img src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik"></div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Nvidia-Logo.png" alt="Nvidia">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/nvidia_dark.png" alt="Nvidia">
+            </div></div>
+            <div class="partner-slide"><div class="partner-box">
+                <img class="logo-light" src="<?= PUBLIC_URL ?>/images/Mikrotik-Logo.png" alt="Mikrotik">
+                <img class="logo-dark"  src="<?= PUBLIC_URL ?>/images/mikrotik_dark.png" alt="Mikrotik">
+            </div></div>
         </div>
     </div>
 </section>
 
-<script src="<?= PUBLIC_URL ?>/js/home.js"></script>
+<?php $homeJsPath = __DIR__ . '/../../../public/js/home.js'; ?>
+<script src="<?= PUBLIC_URL ?>/js/home.js?v=<?= file_exists($homeJsPath) ? filemtime($homeJsPath) : time() ?>"></script>

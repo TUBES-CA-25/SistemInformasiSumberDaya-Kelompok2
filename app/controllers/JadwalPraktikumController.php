@@ -191,6 +191,12 @@ class JadwalPraktikumController extends Controller {
                 throw new Exception('File upload gagal');
             }
 
+            // Pengecekan file extension
+            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (!in_array($extension, ['xlsx', 'xls', 'csv'])) {
+                throw new Exception("Format file .$extension tidak didukung. Gunakan Excel (.xlsx, .xls) atau CSV (.csv).");
+            }
+
             $stats = $this->service->importFromExcel($file['tmp_name']);
             
             $msg = "Berhasil impor {$stats['success']} data.";
@@ -227,6 +233,12 @@ class JadwalPraktikumController extends Controller {
             $file = $_FILES['file'] ?? null;
             if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
                 throw new Exception('File upload gagal');
+            }
+
+            // Pengecekan file extension
+            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if ($extension !== 'csv') {
+                throw new Exception("Format file .$extension tidak didukung. Gunakan file CSV (.csv).");
             }
 
             // Process CSV similar to Excel
@@ -291,6 +303,12 @@ class JadwalPraktikumController extends Controller {
             $file = $_FILES['excel_file'] ?? null;
             if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
                 throw new Exception('File upload gagal');
+            }
+
+            // Pengecekan file extension
+            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (!in_array($extension, ['xlsx', 'xls', 'csv'])) {
+                throw new Exception("Format file .$extension tidak didukung. Gunakan Excel (.xlsx, .xls) atau CSV (.csv).");
             }
 
             $stats = $this->service->importFromExcel($file['tmp_name']);

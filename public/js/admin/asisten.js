@@ -70,8 +70,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 e.stopPropagation();
                 if (typeof hapusAsisten === "function") hapusAsisten(id);
             }
+            else if (e.target.closest(".move-alumni-btn")) {
+                e.stopPropagation();
+                if (typeof moveAsistenToAlumni === "function") moveAsistenToAlumni(id);
+            }
             else {
                 if (typeof openDetailModal === "function") openDetailModal(id);
+            }
+        });
+    }
+
+    // Event listener untuk preview & reposisi foto saat file baru dipilih
+    const inputFoto = document.getElementById("inputFoto");
+    if (inputFoto) {
+        inputFoto.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Foto baru selalu dimulai dari posisi tengah
+                    PhotoPositioner.setImage("fotoPositionBox", e.target.result, 50, 50);
+                };
+                reader.readAsDataURL(this.files[0]);
             }
         });
     }
@@ -128,6 +147,29 @@ document.addEventListener("DOMContentLoaded", function () {
     if (asistenForm) {
         asistenForm.addEventListener("submit", async function (e) {
             e.preventDefault();
+
+            // Client-side file extension validation
+            const fileInput = document.getElementById("inputFoto");
+            if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+                const fileExtension = file.name.split(".").pop().toLowerCase();
+                if (!allowedExtensions.includes(fileExtension)) {
+                    Swal.fire("Gagal", "File yang diupload harus berupa gambar/foto (jpg, jpeg, png, gif, webp, svg)", "error");
+                    return;
+                }
+            }
+
+            // Client-side email validation for UMI domain
+            const emailInput = document.getElementById("inputEmail");
+            if (emailInput) {
+                const email = emailInput.value.trim();
+                const umiEmailPattern = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*umi\.ac\.id$/i;
+                if (!umiEmailPattern.test(email)) {
+                    Swal.fire("Gagal", "Email harus menggunakan domain resmi UMI (contoh: 130202302227@student.umi.ac.id)", "error");
+                    return;
+                }
+            }
 
             const idAsisten = document.getElementById("inputIdAsisten").value;
             const formData = new FormData(this);
@@ -270,8 +312,9 @@ function renderTable(data) {
                 <td class="px-6 py-4 text-center">${statusBadge}</td>
                 <td class="px-6 py-4">
                     <div class="flex justify-center items-center gap-2">
-                        <button class="edit-btn w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center justify-center"><i class="fas fa-pen text-xs"></i></button>
-                        <button class="delete-btn w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center"><i class="fas fa-trash-alt text-xs"></i></button>
+                        <button class="move-alumni-btn w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 hover:bg-indigo-500 hover:text-white transition-all shadow-sm flex items-center justify-center" title="Pindahkan ke Alumni"><i class="fas fa-user-graduate text-xs"></i></button>
+                        <button class="edit-btn w-9 h-9 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center justify-center" title="Edit Asisten"><i class="fas fa-pen text-xs"></i></button>
+                        <button class="delete-btn w-9 h-9 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center" title="Hapus Asisten"><i class="fas fa-trash-alt text-xs"></i></button>
                     </div>
                 </td>
             `;
@@ -356,17 +399,17 @@ function openFormModal(id = null) {
             }
 
             // Show existing foto info if available
+            const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
             if (item.foto) {
-                const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
                 if (fotoPreviewInfo) {
                     fotoPreviewInfo.classList.remove("hidden");
                     fotoPreviewInfo.classList.add("flex");
                 }
+                const fotoUrl = item.foto.startsWith("http") ? item.foto : UPLOADS_URL + "/" + item.foto;
+                PhotoPositioner.setImage("fotoPositionBox", fotoUrl, item.foto_pos_x, item.foto_pos_y);
             } else {
-                const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
-                if (fotoPreviewInfo) {
-                    fotoPreviewInfo.classList.add("hidden");
-                }
+                if (fotoPreviewInfo) fotoPreviewInfo.classList.add("hidden");
+                PhotoPositioner.reset("fotoPositionBox");
             }
         }
     } else {
@@ -379,6 +422,7 @@ function openFormModal(id = null) {
         if (fotoPreviewInfo) {
             fotoPreviewInfo.classList.add("hidden");
         }
+        PhotoPositioner.reset("fotoPositionBox");
     }
 }
 
@@ -528,6 +572,87 @@ function hapusAsisten(id) {
                     loadAsisten();
                 } else {
                     Swal.fire("Gagal", res.message || "Gagal menghapus asisten", "error");
+                }
+            } catch (err) {
+                console.error(err);
+                Swal.fire("Error", "Gagal menghubungi server", "error");
+            }
+        }
+    });
+}
+
+function moveAsistenToAlumni(id) {
+    const item = allAsistenData.find(a => a.idAsisten == id);
+    if (!item) return;
+
+    const currentYear = new Date().getFullYear();
+
+    Swal.fire({
+        title: 'Pindahkan ke Alumni',
+        html: `
+            <div class="text-left space-y-4">
+                <p class="text-sm text-gray-500 mb-4">Anda akan memindahkan <strong>${item.nama}</strong> dari Asisten menjadi Alumni. Silakan lengkapi data berikut:</p>
+                <div class="mb-3">
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Tahun Angkatan <span class="text-red-500">*</span></label>
+                    <input type="number" id="swal-angkatan" class="swal2-input !m-0 !w-full" placeholder="Contoh: 2020" value="${currentYear - 3}">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Divisi / Posisi Terakhir</label>
+                    <input type="text" id="swal-divisi" class="swal2-input !m-0 !w-full" placeholder="Contoh: Koordinator Lab / Asisten" value="${item.isKoordinator == 1 ? 'Koordinator Lab' : 'Asisten'}">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Kesan & Pesan</label>
+                    <textarea id="swal-kesan-pesan" class="swal2-textarea !m-0 !w-full !h-24" placeholder="Tuliskan pengalaman atau kesan pesan selama di lab...">${item.bio || ''}</textarea>
+                </div>
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonColor: '#4f46e5',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: '<i class="fas fa-user-graduate mr-1"></i> Pindahkan',
+        cancelButtonText: 'Batal',
+        preConfirm: () => {
+            const angkatan = document.getElementById('swal-angkatan').value;
+            const divisi = document.getElementById('swal-divisi').value;
+            const kesan_pesan = document.getElementById('swal-kesan-pesan').value;
+
+            if (!angkatan) {
+                Swal.showValidationMessage('Tahun angkatan wajib diisi');
+                return false;
+            }
+
+            return { angkatan, divisi, kesan_pesan };
+        }
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Sedang memindahkan data asisten ke alumni',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                const formData = new FormData();
+                formData.append('angkatan', result.value.angkatan);
+                formData.append('divisi', result.value.divisi);
+                formData.append('kesan_pesan', result.value.kesan_pesan);
+
+                const response = await fetch(API_ENDPOINT + "/asisten/" + id + "/move-to-alumni", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const res = await response.json();
+
+                if (res.status === true || res.status === "success") {
+                    Swal.fire("Berhasil!", "Asisten telah berhasil dipindahkan menjadi Alumni.", "success");
+                    loadAsisten();
+                } else {
+                    Swal.fire("Gagal", res.message || "Gagal memindahkan asisten ke alumni", "error");
                 }
             } catch (err) {
                 console.error(err);

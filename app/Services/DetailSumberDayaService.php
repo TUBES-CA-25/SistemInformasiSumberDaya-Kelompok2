@@ -49,6 +49,8 @@ class DetailSumberDayaService {
             'sub_info'    => $asisten['jurusan'] ?? 'Teknik Informatika',
             'sub_icon'    => 'ri-graduation-cap-line',
             'foto_url'    => $this->resolvePhoto($asisten['foto'] ?? '', $asisten['nama']),
+            'foto_pos_x'  => $asisten['foto_pos_x'] ?? 50,
+            'foto_pos_y'  => $asisten['foto_pos_y'] ?? 50,
             'email'       => $asisten['email'] ?? '-',
             'bio'         => $asisten['bio'] ?: "Mahasiswa aktif dan asisten laboratorium.",
             'skills'      => $this->parseSkills($asisten['skills'] ?? ''),
@@ -66,13 +68,17 @@ class DetailSumberDayaService {
 
         $isKepala = stripos(($row['jabatan'] ?? ''), 'Kepala') !== false;
 
+        $hasNidn = (!empty($row['nidn']) && $row['nidn'] != '-');
+
         return [
             'nama'        => $row['nama'] ?? 'Tanpa Nama',
             'jabatan'     => $row['jabatan'] ?? '-',
             'kategori'    => $isKepala ? 'Pimpinan' : 'Staff Laboratorium',
-            'sub_info'    => (!empty($row['nidn']) && $row['nidn'] != '-') ? 'NIDN: ' . $row['nidn'] : 'Fakultas Ilmu Komputer',
-            'sub_icon'    => 'ri-id-card-line',
+            'sub_info'    => $hasNidn ? 'NIDN: ' . $row['nidn'] : 'Fakultas Ilmu Komputer',
+            'sub_icon'    => $hasNidn ? 'ri-award-line' : 'ri-bank-line',
             'foto_url'    => $this->resolvePhoto($row['foto'] ?? '', $row['nama']),
+            'foto_pos_x'  => $row['foto_pos_x'] ?? 50,
+            'foto_pos_y'  => $row['foto_pos_y'] ?? 50,
             'email'       => $row['email'] ?? '-',
             'bio'         => $this->resolveManajemenBio($row),
             'skills'      => [],

@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Informasi Sumber Daya Lab</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="<?= PUBLIC_URL ?>/css/variables.css">
     <link rel="stylesheet" href="<?= PUBLIC_URL ?>/css/style.css">
 
@@ -37,21 +43,23 @@
             $curPage = $aliases[$curPage];
         }
 
-        // --- PERBAIKAN DISINI ---
         // Jika halaman terdeteksi sebagai 'index.php', 'public', atau kosong, set jadi 'home'
         if ($curPage === 'index.php' || $curPage === 'public' || empty($curPage)) {
             $curPage = 'home';
         }
 
+        // Preload LCP Hero Image untuk halaman Home
+        if ($curPage === 'home') {
+            echo '<link rel="preload" as="image" href="' . PUBLIC_URL . '/images/gedung-fikom-siang.webp" type="image/webp">' . "\n";
+        }
+
         // 2. LOGIKA SMART MAPPING (Memperbaiki Detail dari Card)
-        // Kita paksa curPage menjadi kategori utama jika mengandung kata kunci tertentu
         if (strpos($curPage, 'detail') !== false || strpos($curPage, 'asisten') !== false) {
             if (strpos($curPage, 'alumni') !== false) {
                 $curPage = 'alumni'; 
             } elseif (strpos($curPage, 'fasilitas') !== false || strpos($curPage, 'laboratorium') !== false) {
                 $curPage = 'fasilitas';
             } else {
-                // Default untuk detail asisten atau manajemen lab
                 $curPage = 'sumberdaya'; 
             }
         }
@@ -76,17 +84,20 @@
             'alumni'       => 'alumni.css',
             'contact'      => 'contact.css',
             'apps'         => 'apps.css'
-            
         ];
 
         // 4. Load CSS
         if (array_key_exists($curPage, $cssMap)) {
-            echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssMap[$curPage] . '">';
+            $cssFile = $cssMap[$curPage];
+            $cssPath = __DIR__ . '/../../../public/css/' . $cssFile;
+            $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
+            echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssFile . '?v=' . $cssVersion . '">';
         }
     ?>
     
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"></noscript>
+
     <base href="<?= rtrim(PUBLIC_URL, '/') ?>/">
     <script>window.PUBLIC_URL = "<?= rtrim(PUBLIC_URL, '/') ?>";</script>
 </head>
@@ -98,12 +109,6 @@
                 <a href="<?= PUBLIC_URL ?>/home" class="brand-logo">
                     <img src="<?= PUBLIC_URL ?>/images/navbar-icon.png" alt="Logo IC-Labs" class="logo-img">
                 </a>
-            </div>
-
-            <div class="menu-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
             </div>
 
             <ul class="nav-links">
@@ -140,13 +145,26 @@
                 
                 <li><a href="<?= PUBLIC_URL ?>/alumni">Alumni</a></li>
                 <li><a href="<?= PUBLIC_URL ?>/contact">Kontak</a></li>
-
-                <li>
-                    <a href="<?= PUBLIC_URL ?>/apps" class="btn-nav-apps">
-                        <i class="ri-apps-2-line"></i> IC-Labs Apps
-                    </a>
-                </li>
             </ul>
+
+            <div class="nav-actions-right">
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Ganti Tema">
+                    <span class="toggle-slider">
+                        <i class="ri-sun-fill icon-sun"></i>
+                        <i class="ri-moon-fill icon-moon"></i>
+                    </span>
+                </button>
+
+                <a href="<?= PUBLIC_URL ?>/apps" class="btn-nav-apps">
+                    <i class="ri-apps-2-line"></i> <span class="btn-apps-text">IC-Labs Apps</span>
+                </a>
+
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
         </div>
     </nav>
     

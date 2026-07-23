@@ -69,6 +69,26 @@ class Helper {
     }
 
     /**
+     * Membatasi nilai posisi foto (persentase) ke rentang 0-100.
+     * Dipakai untuk sanitasi input foto_pos_x/foto_pos_y sebelum disimpan ke DB.
+     */
+    public static function clampPercent($value, $default = 50) {
+        if ($value === null || $value === '') return $default;
+        if (!is_numeric($value)) return $default;
+        return max(0, min(100, (float) $value));
+    }
+
+    /**
+     * Membuat atribut CSS object-position dari data foto_pos_x/foto_pos_y sebuah baris data.
+     * Fallback ke 50% 50% (tengah) jika data belum ada (misal record lama sebelum kolom ditambahkan).
+     */
+    public static function objectPosStyle($row) {
+        $x = self::clampPercent($row['foto_pos_x'] ?? null);
+        $y = self::clampPercent($row['foto_pos_y'] ?? null);
+        return 'object-position: ' . $x . '% ' . $y . '%;';
+    }
+
+    /**
      * Proses URL Foto dengan Fallback UI Avatars
      */
     public static function processPhotoUrl($fotoName, $nama) {

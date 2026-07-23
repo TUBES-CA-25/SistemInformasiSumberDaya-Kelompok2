@@ -101,11 +101,31 @@ class AlumniController extends Controller
             $this->error('Nama dan angkatan wajib diisi', null, 400);
         }
 
+        $currentYear = (int)date('Y');
+        $angkatan = (int)$input['angkatan'];
+        if ($angkatan > $currentYear) {
+            $this->error('Tahun angkatan tidak boleh melebihi tahun sekarang (' . $currentYear . ')', null, 400);
+        }
+
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            if (!in_array($ext, $allowed)) {
+                $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+            }
+        }
+
+        $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+        $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
+
         // Handle Upload Foto via Service jika file dikirimkan
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
             $path = $this->alumniService->uploadPhoto($_FILES['foto'], $input['nama']);
             if ($path) {
                 $input['foto'] = $path; // Simpan path relatif ke database
+            } else {
+                $this->error('Gagal mengupload foto alumni', null, 500);
             }
         }
 
@@ -151,11 +171,31 @@ class AlumniController extends Controller
             $this->error('Nama dan angkatan wajib diisi', null, 400);
         }
 
+        $currentYear = (int)date('Y');
+        $angkatan = (int)$input['angkatan'];
+        if ($angkatan > $currentYear) {
+            $this->error('Tahun angkatan tidak boleh melebihi tahun sekarang (' . $currentYear . ')', null, 400);
+        }
+
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            if (!in_array($ext, $allowed)) {
+                $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+            }
+        }
+
+        $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+        $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
+
         // Handle Upload Foto via Service jika file dikirimkan
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
             $path = $this->alumniService->uploadPhoto($_FILES['foto'], $input['nama']);
             if ($path) {
                 $input['foto'] = $path; // Simpan path relatif ke database
+            } else {
+                $this->error('Gagal mengupload foto alumni', null, 500);
             }
         }
 

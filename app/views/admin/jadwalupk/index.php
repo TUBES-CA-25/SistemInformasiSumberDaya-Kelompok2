@@ -25,6 +25,36 @@
     </div>
 </div>
 
+<!-- Filter Dashboard -->
+<div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 mb-6 flex flex-wrap gap-4 items-center animate__animated animate__fadeIn">
+    <div class="text-sm font-bold text-gray-700 flex items-center gap-2">
+        <i class="fas fa-filter text-blue-600"></i> Filter Data:
+    </div>
+
+    <!-- Filter Prodi -->
+    <div class="w-full sm:w-auto">
+        <select id="filterProdi" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-700">
+            <option value="">Semua Prodi</option>
+            <option value="TI">Teknik Informatika (TI)</option>
+            <option value="SI">Sistem Informasi (SI)</option>
+        </select>
+    </div>
+
+    <!-- Filter Ruangan -->
+    <div class="w-full sm:w-auto">
+        <select id="filterRuangan" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-700">
+            <option value="">Semua Ruangan</option>
+        </select>
+    </div>
+
+    <!-- Filter Dosen -->
+    <div class="w-full sm:w-auto">
+        <select id="filterDosen" onchange="applyFilters()" class="w-full sm:w-auto px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-700">
+            <option value="">Semua Dosen</option>
+        </select>
+    </div>
+</div>
+
 <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
         <div class="flex items-center gap-4">

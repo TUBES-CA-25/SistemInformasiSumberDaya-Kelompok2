@@ -234,6 +234,20 @@ class FasilitasController extends Controller {
             return;
         }
 
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            foreach ($_FILES['gambar']['name'] as $key => $name) {
+                if ($_FILES['gambar']['error'][$key] === UPLOAD_ERR_OK) {
+                    $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                    if (!in_array($ext, $allowed)) {
+                        $this->error('Format file gambar tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+                        return;
+                    }
+                }
+            }
+        }
+
         // Handle main image if uploaded
         if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
             $uploadResult = $this->handleMultipleUploads($_FILES['gambar'], $input['nama']);
@@ -273,6 +287,20 @@ class FasilitasController extends Controller {
             unset($input['fasilitas']);
         }
 
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            foreach ($_FILES['gambar']['name'] as $key => $name) {
+                if ($_FILES['gambar']['error'][$key] === UPLOAD_ERR_OK) {
+                    $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                    if (!in_array($ext, $allowed)) {
+                        $this->error('Format file gambar tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+                        return;
+                    }
+                }
+            }
+        }
+
         // Handle multiple images if uploaded
         if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
             $uploadResult = $this->handleMultipleUploads($_FILES['gambar'], $input['nama'] ?? 'lab');
@@ -305,6 +333,8 @@ class FasilitasController extends Controller {
      * Helper to handle multiple image uploads
      */
     private function handleMultipleUploads($files, $labName): array {
+        require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+
         $uploadedFiles = [];
         $uploadDir = ROOT_PROJECT . '/public/assets/uploads/';
         
@@ -313,9 +343,21 @@ class FasilitasController extends Controller {
         foreach ($files['name'] as $key => $name) {
             if ($files['error'][$key] === UPLOAD_ERR_OK) {
                 $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
+                    continue;
+                }
                 $filename = 'lab_' . time() . '_' . $key . '.' . $ext;
                 
                 if (move_uploaded_file($files['tmp_name'][$key], $uploadDir . $filename)) {
+                    // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan (HD resolution)
+                    ImageOptimizer::optimize($uploadDir . $filename, 1920, 1080);
+
+                    // Konversi ke WebP agar ukuran file lebih kecil
+                    $webpPath = ImageOptimizer::convertToWebp($uploadDir . $filename);
+                    if ($webpPath) {
+                        $filename = basename($webpPath);
+                    }
+
                     $uploadedFiles[] = $filename;
                 }
             }
@@ -357,6 +399,6 @@ class FasilitasController extends Controller {
     // =========================================================================
 
     private function getBackLink(string $jenis): string {
-        return (stripos($jenis, 'riset') !== false) ? 'index.php?page=riset' : 'index.php?page=laboratorium';
+        return (stripos($jenis, 'riset') !== false) ? PUBLIC_URL . '/riset' : PUBLIC_URL . '/laboratorium';
     }
 }

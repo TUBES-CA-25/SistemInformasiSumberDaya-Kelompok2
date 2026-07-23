@@ -6,6 +6,21 @@ const ENDPOINT_SOP = API_URL + "/sop";
 document.addEventListener("DOMContentLoaded", function () {
   loadData();
   document.getElementById("searchInput").addEventListener("keyup", renderTable);
+
+  const fileInput = document.getElementById("inputFile");
+  if (fileInput) {
+    fileInput.addEventListener("change", function (e) {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        if (fileExtension !== "pdf") {
+          showError("File yang diupload harus berupa format PDF (.pdf)");
+          this.value = ""; // Reset
+          return;
+        }
+      }
+    });
+  }
 });
 
 function loadData() {
@@ -115,6 +130,17 @@ function openFormModal(id = null) {
 
 document.getElementById("sopForm").addEventListener("submit", function (e) {
   e.preventDefault();
+
+  // Client-side file extension check
+  const fileInput = document.getElementById("inputFile");
+  if (fileInput && fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (fileExtension !== "pdf") {
+      showError("File yang diupload harus berupa format PDF (.pdf)");
+      return;
+    }
+  }
   const id = document.getElementById("inputId").value;
   // URL API disesuaikan ke /sop
   const url = id ? ENDPOINT_SOP + "/" + id : ENDPOINT_SOP;

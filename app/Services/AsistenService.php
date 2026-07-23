@@ -73,6 +73,8 @@ class AsistenService {
      * @return string|false Path relatif file jika sukses
      */
     public function uploadPhoto($file, $identifier) {
+        require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+
         $folderName = 'asisten';
         $subFolder = $folderName . '/';
         $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
@@ -80,11 +82,21 @@ class AsistenService {
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) return false;
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) return false;
 
         $filename = Helper::generateFilename($folderName, $identifier, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) {
+            // Kompresi & resize (TANPA crop paksa) agar foto asli utuh dan bisa diposisikan
+            // manual lewat foto_pos_x/foto_pos_y (object-position) di sisi tampilan.
+            ImageOptimizer::optimize($uploadDir . $filename, 800, 800, false);
+
+            // Konversi ke WebP agar ukuran file lebih kecil
+            $webpPath = ImageOptimizer::convertToWebp($uploadDir . $filename);
+            if ($webpPath) {
+                $filename = basename($webpPath);
+            }
+
             return $subFolder . $filename;
         }
 

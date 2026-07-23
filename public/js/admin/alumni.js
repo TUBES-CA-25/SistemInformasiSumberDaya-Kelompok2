@@ -3,6 +3,21 @@ let allAlumniData = [];
 document.addEventListener("DOMContentLoaded", () => {
   loadAlumni();
 
+  // Preview & reposisi foto saat file baru dipilih
+  const inputFoto = document.getElementById("inputFoto");
+  if (inputFoto) {
+    inputFoto.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          // Foto baru selalu dimulai dari posisi tengah
+          PhotoPositioner.setImage("fotoPositionBox", e.target.result, 50, 50);
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+  }
+
   // Live Search
   document
     .getElementById("searchInput")
@@ -54,7 +69,7 @@ function renderTable(data) {
       rowsHtml += `
                 <tr onclick="openDetailModal(${item.id})" class="hover:bg-blue-50 transition-colors duration-150 cursor-pointer group border-b border-gray-100">
                     <td class="px-6 py-4 text-center font-medium text-gray-500">${index + 1}</td>
-                    <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"></div></td>
+                    <td class="px-6 py-4"><div class="flex justify-center"><img src="${fotoUrl}" class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-md" loading="lazy"></div></td>
                     <td class="px-6 py-4">
                         <div class="flex flex-col">
                             <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.nama}</span>
@@ -200,10 +215,17 @@ function openFormModal(id = null, event = null) {
           document.getElementById("inputMataKuliah").value =
             d.mata_kuliah || "";
 
-          if (d.foto)
+          if (d.foto) {
             document
               .getElementById("fotoPreviewInfo")
               .classList.remove("hidden");
+            const fotoUrl = d.foto.includes("http")
+              ? d.foto
+              : ASSETS_URL + "/assets/uploads/" + d.foto;
+            PhotoPositioner.setImage("fotoPositionBox", fotoUrl, d.foto_pos_x, d.foto_pos_y);
+          } else {
+            PhotoPositioner.reset("fotoPositionBox");
+          }
         }
       });
   } else {
@@ -229,6 +251,8 @@ function openFormModal(id = null, event = null) {
       .querySelectorAll(".matkul-tag")
       .forEach((el) => el.remove());
     document.getElementById("inputMataKuliah").value = "";
+
+    PhotoPositioner.reset("fotoPositionBox");
   }
 }
 
@@ -239,13 +263,40 @@ document.getElementById("alumniForm").addEventListener("submit", function (e) {
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
 
+  // Client-side file extension validation
+  const fileInput = document.getElementById("inputFoto");
+  if (fileInput && fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (!allowedExtensions.includes(fileExtension)) {
+      showError("File yang diupload harus berupa gambar/foto (jpg, jpeg, png, gif, webp, svg)");
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+      return;
+    }
+  }
+
+  // Client-side angkatan year validation
+  const angkatanInput = document.getElementById("inputAngkatan");
+  if (angkatanInput) {
+    const angkatan = parseInt(angkatanInput.value, 10);
+    const currentYear = new Date().getFullYear();
+    if (angkatan > currentYear) {
+      showError("Tahun angkatan tidak boleh melebihi tahun sekarang (" + currentYear + ")");
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+      return;
+    }
+  }
+
   const formData = new FormData(this);
   const id = document.getElementById("inputId").value;
-  
+
   // Use PUT for update, POST for create, with _method override for FormData
   const method = id ? "PUT" : "POST";
   const url = id ? API_URL + "/alumni/" + id : API_URL + "/alumni";
-  
+
   // Add _method override for PUT requests via FormData
   if (id) {
     formData.append("_method", "PUT");

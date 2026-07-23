@@ -71,8 +71,8 @@
     <i class="ri-arrow-up-line"></i>
 </a>
 
-<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-<script src="<?= ASSETS_URL ?>/js/main.js"></script>
+<?php $mainJsPath = __DIR__ . '/../../../public/js/main.js'; ?>
+<script src="<?= ASSETS_URL ?>/js/main.js?v=<?= file_exists($mainJsPath) ? filemtime($mainJsPath) : time() ?>" defer></script>
 
 </body>
 </html>

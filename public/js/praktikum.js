@@ -83,6 +83,7 @@ function fetchJadwalData() {
     .then((res) => res.json())
     .then((res) => {
       jadwalData = res.data;
+      populateLabFilter();
       renderJadwalDashboard();
     })
     .catch((err) => {
@@ -99,6 +100,25 @@ function fetchJadwalData() {
     });
 }
 
+function populateLabFilter() {
+  const labSelect = document.getElementById("lab-select");
+  if (!labSelect) return;
+  
+  const currentVal = labSelect.value;
+  labSelect.innerHTML = '<option value="">Semua Lab</option>';
+  
+  if (Array.isArray(jadwalData)) {
+    const allLabs = [...new Set(jadwalData.map(item => item.namaLab))].filter(Boolean).sort();
+    allLabs.forEach(lab => {
+      const opt = document.createElement("option");
+      opt.value = lab;
+      opt.innerText = lab;
+      if (lab === currentVal) opt.selected = true;
+      labSelect.appendChild(opt);
+    });
+  }
+}
+
 function renderJadwalDashboard() {
   const container = document.getElementById("lab-tables-container");
   const headerDay = document.getElementById("header-day");
@@ -111,6 +131,23 @@ function renderJadwalDashboard() {
 
   const filteredData = jadwalData.filter((item) => item.hari === selectedDay);
 
+  const labSelect = document.getElementById("lab-select");
+  const searchInput = document.getElementById("search-input");
+  
+  let finalFiltered = filteredData;
+  if (labSelect && labSelect.value) {
+    finalFiltered = finalFiltered.filter(item => item.namaLab === labSelect.value);
+  }
+  if (searchInput && searchInput.value) {
+    const kw = searchInput.value.toLowerCase();
+    finalFiltered = finalFiltered.filter(item => 
+      (item.namaMatakuliah && item.namaMatakuliah.toLowerCase().includes(kw)) ||
+      (item.dosen && item.dosen.toLowerCase().includes(kw)) ||
+      (item.namaAsisten1 && item.namaAsisten1.toLowerCase().includes(kw)) ||
+      (item.namaAsisten2 && item.namaAsisten2.toLowerCase().includes(kw))
+    );
+  }
+
   const now = new Date();
   const realToday = hariIndo[now.getDay()];
   const isToday = selectedDay === realToday;
@@ -119,17 +156,17 @@ function renderJadwalDashboard() {
     ":" +
     now.getMinutes().toString().padStart(2, "0");
 
-  if (filteredData.length === 0) {
+  if (finalFiltered.length === 0) {
     container.innerHTML = `
         <div class="empty-schedule">
             <i class="far fa-calendar-times"></i>
-            <h3>Tidak Ada Praktikum</h3>
-            <p>Tidak ada jadwal praktikum terdaftar untuk hari ${selectedDay}.</p>
+            <h3>Tidak Ada Hasil</h3>
+            <p>Tidak ada jadwal praktikum yang cocok dengan filter atau kata kunci pencarian.</p>
         </div>`;
     return;
   }
 
-  const labs = [...new Set(filteredData.map((item) => item.namaLab))].sort();
+  const labs = [...new Set(finalFiltered.map((item) => item.namaLab))].sort();
   let finalHtml = "";
 
   labs.forEach((lab) => {
@@ -188,7 +225,7 @@ function renderJadwalDashboard() {
       finalHtml += `
             <tr>
                 <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.95rem;">${start} - ${end}</td>
-                <td style="color: #0f172a; font-weight: 700;">${item.namaMatakuliah}</td>
+                <td><span class="schedule-matkul">${item.namaMatakuliah}</span></td>
                 <td class="text-nowrap">${kelasFreq}</td>
                 <td><div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-chalkboard-teacher" style="color:#64748b;"></i><span style="font-weight:500;">${item.dosen}</span></div></td>
                 <td>${asistenDisplay}</td>
@@ -255,6 +292,56 @@ function initUpkPage() {
 
   // Update per detik
   setInterval(updateUpkHeader, 1000);
+}
+
+function filterJadwalUpk() {
+  const labSelect = document.getElementById("upk-lab-select");
+  const searchInput = document.getElementById("upk-search-input");
+  
+  const labVal = labSelect ? labSelect.value.toLowerCase() : "";
+  const searchVal = searchInput ? searchInput.value.toLowerCase() : "";
+  
+  const wrappers = document.querySelectorAll(".schedule-wrapper");
+  let anyVisibleWrapper = false;
+  
+  wrappers.forEach(wrapper => {
+    const rows = wrapper.querySelectorAll("tbody tr");
+    let visibleRowsCount = 0;
+    
+    rows.forEach(row => {
+      const rowRuangan = (row.dataset.ruangan || "").toLowerCase();
+      const rowMatkul = (row.dataset.matkul || "").toLowerCase();
+      const rowDosen = (row.dataset.dosen || "").toLowerCase();
+      
+      const matchesLab = !labVal || rowRuangan === labVal;
+      const matchesSearch = !searchVal || 
+                            rowMatkul.includes(searchVal) || 
+                            rowDosen.includes(searchVal);
+      
+      if (matchesLab && matchesSearch) {
+        row.style.display = "";
+        visibleRowsCount++;
+      } else {
+        row.style.display = "none";
+      }
+    });
+    
+    if (visibleRowsCount > 0) {
+      wrapper.style.display = "";
+      anyVisibleWrapper = true;
+    } else {
+      wrapper.style.display = "none";
+    }
+  });
+  
+  const emptyMsg = document.getElementById("upk-empty-message");
+  if (emptyMsg) {
+    if (!anyVisibleWrapper) {
+      emptyMsg.classList.remove("hidden");
+    } else {
+      emptyMsg.classList.add("hidden");
+    }
+  }
 }
 
 // ==========================================================================

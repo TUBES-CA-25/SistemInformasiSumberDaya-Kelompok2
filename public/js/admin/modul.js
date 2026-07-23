@@ -6,6 +6,25 @@ const API_MODUL = window.API_URL + "/modul";
 document.addEventListener("DOMContentLoaded", function () {
   loadData();
   document.getElementById("searchInput").addEventListener("keyup", renderTable);
+
+  const fileInput = document.getElementById("inputFile");
+  if (fileInput) {
+    fileInput.addEventListener("change", function (e) {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        if (fileExtension !== "pdf") {
+          if (typeof showError === "function") {
+            showError("File yang diupload harus berupa format PDF (.pdf)");
+          } else {
+            alert("File yang diupload harus berupa format PDF (.pdf)");
+          }
+          this.value = ""; // Reset
+          return;
+        }
+      }
+    });
+  }
 });
 
 async function loadData() {
@@ -113,6 +132,21 @@ document
   .getElementById("modulForm")
   .addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    // Client-side file extension check
+    const fileInput = document.getElementById("inputFile");
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (fileExtension !== "pdf") {
+        if (typeof showError === "function") {
+          showError("File yang diupload harus berupa format PDF (.pdf)");
+        } else {
+          alert("File yang diupload harus berupa format PDF (.pdf)");
+        }
+        return;
+      }
+    }
     const id = document.getElementById("inputId").value;
     const formData = new FormData(this);
     if (id) formData.append("_method", "PUT");

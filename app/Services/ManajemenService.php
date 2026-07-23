@@ -68,12 +68,27 @@ class ManajemenService {
      * Helper untuk menangani proses upload file fisik.
      */
     private function uploadFile($file, $name) {
+        require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+
         if (!is_dir($this->uploadPath)) mkdir($this->uploadPath, 0777, true);
 
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
+            return '';
+        }
         $filename = Helper::generateFilename('manajemen', $name, $ext);
         
         if (move_uploaded_file($file['tmp_name'], $this->uploadPath . $filename)) {
+            // Kompresi & resize (TANPA crop paksa) agar foto asli utuh dan bisa diposisikan
+            // manual lewat foto_pos_x/foto_pos_y (object-position) di sisi tampilan.
+            ImageOptimizer::optimize($this->uploadPath . $filename, 800, 800, false);
+
+            // Konversi ke WebP agar ukuran file lebih kecil
+            $webpPath = ImageOptimizer::convertToWebp($this->uploadPath . $filename);
+            if ($webpPath) {
+                $filename = basename($webpPath);
+            }
+
             return 'manajemen/' . $filename;
         }
         return '';

@@ -80,6 +80,8 @@ class AlumniService
      */
     public function uploadPhoto($file, $name)
     {
+        require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+
         $subFolder = 'alumni/';
         // Tentukan path absolut ke folder upload
         $uploadDir = dirname(__DIR__, 2) . '/public/assets/uploads/' . $subFolder;
@@ -89,10 +91,23 @@ class AlumniService
 
         // Ambil ekstensi dan buat nama file unik melalui Helper
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
+            return false;
+        }
         $filename = Helper::generateFilename('alumni', $name, $ext);
         
         // Pindahkan file dari temp ke folder tujuan
         if (move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) {
+            // Kompresi & resize (TANPA crop paksa) agar foto asli utuh dan bisa diposisikan
+            // manual lewat foto_pos_x/foto_pos_y (object-position) di sisi tampilan.
+            ImageOptimizer::optimize($uploadDir . $filename, 800, 800, false);
+
+            // Konversi ke WebP agar ukuran file lebih kecil
+            $webpPath = ImageOptimizer::convertToWebp($uploadDir . $filename);
+            if ($webpPath) {
+                $filename = basename($webpPath);
+            }
+
             return $subFolder . $filename;
         }
         return false;

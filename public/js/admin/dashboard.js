@@ -55,7 +55,7 @@ function renderJadwalCards(data) {
   if (!data || data.length === 0) {
     container.innerHTML = `
             <div class="flex flex-col items-center justify-center py-16 text-center">
-                <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mb-4 border border-gray-100">
+                <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-200 mb-4 border border-indigo-100">
                     <i class="fas fa-clock text-3xl"></i>
                 </div>
                 <h3 class="text-gray-600 font-bold text-lg">Tidak Ada Sesi Aktif</h3>
@@ -72,23 +72,23 @@ function renderJadwalCards(data) {
     const selesai = item.waktuSelesai.substring(0, 5);
 
     // Styling Card
-    const statusColor = "border-l-blue-500";
-    const timeBg = "bg-blue-50 text-blue-700";
+    const statusColor = "border-l-indigo-500";
+    const timeBg = "bg-indigo-50 text-indigo-700";
 
     const card = `
             <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 border-l-4 ${statusColor} group relative overflow-hidden">
-                
+
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    
+
                     <div class="flex items-center gap-5">
-                        <div class="flex flex-col items-center justify-center w-16 h-16 rounded-xl ${timeBg} border border-blue-100 flex-shrink-0 shadow-inner">
+                        <div class="flex flex-col items-center justify-center w-16 h-16 rounded-xl ${timeBg} border border-indigo-100 flex-shrink-0 shadow-inner font-mono">
                             <span class="text-sm font-bold">${mulai}</span>
-                            <div class="h-px w-8 bg-blue-200 my-0.5"></div>
-                            <span class="text-xs text-blue-500 opacity-80">${selesai}</span>
+                            <div class="h-px w-8 bg-indigo-200 my-0.5"></div>
+                            <span class="text-xs text-indigo-500 opacity-80">${selesai}</span>
                         </div>
                         
                         <div>
-                            <h4 class="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-1">
+                            <h4 class="text-lg font-bold text-gray-800 group-hover:text-indigo-600 transition-colors line-clamp-1">
                                 ${item.namaMatakuliah}
                             </h4>
                             <div class="flex flex-wrap items-center gap-2 mt-2">

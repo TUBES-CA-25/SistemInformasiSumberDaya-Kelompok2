@@ -149,10 +149,13 @@
                         </div>
 
                         <div class="relative group">
-                            <input type="password" name="password" id="password" class="floating-input block px-4 py-4 w-full text-sm text-slate-900 bg-white/60 rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer placeholder-transparent shadow-sm transition-all" placeholder=" " required />
+                            <input type="password" name="password" id="password" class="floating-input block pl-4 pr-12 py-4 w-full text-sm text-slate-900 bg-white/60 rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer placeholder-transparent shadow-sm transition-all" placeholder=" " required />
                             <label for="password" class="absolute text-sm text-slate-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-3 cursor-text pointer-events-none">
                                 <i class="fas fa-lock mr-1"></i> Password
                             </label>
+                            <button type="button" id="toggle-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors z-20">
+                                <i class="fas fa-eye" id="toggle-password-icon"></i>
+                            </button>
                         </div>
                         
                         <button type="submit" class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-lg shadow-blue-600/30 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">

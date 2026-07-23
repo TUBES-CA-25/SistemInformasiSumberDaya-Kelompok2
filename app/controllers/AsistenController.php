@@ -155,13 +155,32 @@ class AsistenController extends Controller {
             return $this->error('Nama dan Email wajib diisi', null, 400);
         }
 
+        if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL) || !preg_match('/@(?:[a-z0-9-]+\.)*umi\.ac\.id$/i', $input['email'])) {
+            return $this->error('Email harus menggunakan domain resmi UMI (contoh: 13020230100@student.umi.ac.id)', null, 400);
+        }
+
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            if (!in_array($ext, $allowed)) {
+                return $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+            }
+        }
+
         try {
             // Proses Skills & Foto via Service
             $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
+            $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+            $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
 
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
                 $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
-                if ($photoPath) $input['foto'] = $photoPath;
+                if ($photoPath) {
+                    $input['foto'] = $photoPath;
+                } else {
+                    return $this->error('Gagal mengupload foto asisten', null, 500);
+                }
             }
 
             $inserted = $this->model->insert($input);
@@ -187,20 +206,43 @@ class AsistenController extends Controller {
         $existing = $this->model->getById($id);
         if (!$existing) return $this->error('Data asisten tidak ditemukan', null, 404);
 
+        // Validasi ekstensi foto sebelum memproses
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            if (!in_array($ext, $allowed)) {
+                return $this->error('Format file foto tidak valid. Hanya menerima file gambar (jpg, jpeg, png, gif, webp, svg)', null, 400);
+            }
+        }
+
         try {
             $input = $_POST;
             
             // Remove non-database fields
             unset($input['_method']);
+
+            if (empty($input['nama']) || empty($input['email'])) {
+                return $this->error('Nama dan Email wajib diisi', null, 400);
+            }
+
+            if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL) || !preg_match('/@(?:[a-z0-9-]+\.)*umi\.ac\.id$/i', $input['email'])) {
+                return $this->error('Email harus menggunakan domain resmi UMI (contoh: 13020230100@student.umi.ac.id)', null, 400);
+            }
             
             $input['skills'] = $this->service->formatSkillsForDb($input['skills'] ?? '[]');
+            $input['foto_pos_x'] = Helper::clampPercent($input['foto_pos_x'] ?? null);
+            $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
 
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
                 // Hapus foto lama jika ada upload baru
                 if (!empty($existing['foto'])) $this->service->deletePhoto($existing['foto']);
                 
                 $photoPath = $this->service->uploadPhoto($_FILES['foto'], $input['nama']);
-                if ($photoPath) $input['foto'] = $photoPath;
+                if ($photoPath) {
+                    $input['foto'] = $photoPath;
+                } else {
+                    return $this->error('Gagal mengupload foto asisten', null, 500);
+                }
             }
 
             $updated = $this->model->update($id, $input, 'idAsisten');
@@ -292,6 +334,109 @@ class AsistenController extends Controller {
                 return $this->success(null, 'Koordinator berhasil dipilih');
             } else {
                 return $this->error('Gagal menyimpan perubahan', null, 500);
+            }
+        } catch (Exception $e) {
+            return $this->error('Error: ' . $e->getMessage(), null, 500);
+        }
+    }
+
+    /**
+     * Admin: Pindahkan Asisten ke Alumni (POST)
+     */
+    public function moveToAlumni($params) {
+        if (ob_get_level()) ob_end_clean();
+        header('Content-Type: application/json');
+
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            return $this->error('ID asisten tidak valid', null, 400);
+        }
+
+        $asisten = $this->model->getById($id);
+        if (!$asisten) {
+            return $this->error('Data asisten tidak ditemukan', null, 404);
+        }
+
+        // Get additional inputs
+        $angkatan = $_POST['angkatan'] ?? null;
+        $divisi = $_POST['divisi'] ?? 'Asisten';
+        $kesan_pesan = $_POST['kesan_pesan'] ?? '';
+
+        if (empty($angkatan)) {
+            return $this->error('Tahun angkatan wajib diisi', null, 400);
+        }
+
+        // Import AlumniModel
+        require_once ROOT_PROJECT . '/app/models/AlumniModel.php';
+        $alumniModel = new AlumniModel();
+
+        // Process photo copy if exists
+        $alumniFoto = null;
+        if (!empty($asisten['foto'])) {
+            $oldPath = ROOT_PROJECT . '/public/assets/uploads/' . $asisten['foto'];
+            if (file_exists($oldPath) && is_file($oldPath)) {
+                // Ensure directory for alumni exists
+                $alumniDir = ROOT_PROJECT . '/public/assets/uploads/alumni';
+                if (!is_dir($alumniDir)) {
+                    mkdir($alumniDir, 0777, true);
+                }
+
+                $filename = basename($asisten['foto']);
+                $newRelPath = 'alumni/' . $filename;
+                $newFullPath = ROOT_PROJECT . '/public/assets/uploads/' . $newRelPath;
+
+                if (copy($oldPath, $newFullPath)) {
+                    $alumniFoto = $newRelPath;
+                }
+            }
+        }
+
+        // Clean skills tag to format suitable for alumni
+        $keahlian = '';
+        if (!empty($asisten['skills'])) {
+            $skillsDecoded = json_decode($asisten['skills'], true);
+            if (is_array($skillsDecoded)) {
+                $keahlian = implode(', ', $skillsDecoded);
+            } else {
+                $keahlian = $asisten['skills'];
+            }
+        }
+
+        // Insert into alumni table
+        $alumniData = [
+            'nama' => $asisten['nama'],
+            'angkatan' => $angkatan,
+            'divisi' => $divisi,
+            'mata_kuliah' => '',
+            'foto' => $alumniFoto,
+            'kesan_pesan' => $kesan_pesan,
+            'keahlian' => $keahlian,
+            'email' => $asisten['email'],
+            'foto_pos_x' => $asisten['foto_pos_x'],
+            'foto_pos_y' => $asisten['foto_pos_y']
+        ];
+
+        try {
+            $inserted = $alumniModel->insert($alumniData);
+            if ($inserted) {
+                // Delete photo file of assistant
+                if (!empty($asisten['foto'])) {
+                    $this->service->deletePhoto($asisten['foto']);
+                }
+
+                // Delete assistant record
+                $this->model->delete($id, 'idAsisten');
+
+                return $this->success(null, 'Asisten berhasil dipindahkan ke Alumni');
+            } else {
+                // Cleanup copied photo if insert failed
+                if ($alumniFoto) {
+                    $fullCopiedPath = ROOT_PROJECT . '/public/assets/uploads/' . $alumniFoto;
+                    if (file_exists($fullCopiedPath)) {
+                        @unlink($fullCopiedPath);
+                    }
+                }
+                return $this->error('Gagal memasukkan data ke Alumni', null, 500);
             }
         } catch (Exception $e) {
             return $this->error('Error: ' . $e->getMessage(), null, 500);

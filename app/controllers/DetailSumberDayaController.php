@@ -47,4 +47,42 @@ class DetailSumberDayaController extends Controller {
             'judul' => 'Detail ' . ($type === 'manajemen' ? 'Staff' : 'Asisten') . ' - ' . $dataDetail['nama']
         ]);
     }
+
+    /**
+     * API Endpoint: Mengambil data detail terformat dalam format JSON
+     * URL: /api/sumberdaya/detail/{id}?type=asisten|manajemen
+     */
+    public function apiDetail(array $params = []): void {
+        if (ob_get_level()) ob_end_clean();
+        header('Content-Type: application/json');
+
+        $id = $params['id'] ?? $_GET['id'] ?? null;
+        $type = $_GET['type'] ?? 'asisten';
+
+        if (!$id) {
+            echo json_encode([
+                'status' => false,
+                'message' => 'ID tidak ditemukan'
+            ]);
+            exit;
+        }
+
+        $dataDetail = ($type === 'manajemen') 
+            ? $this->service->getFormattedManajemen((int)$id)
+            : $this->service->getFormattedAsisten((int)$id);
+
+        if (!$dataDetail) {
+            echo json_encode([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ]);
+            exit;
+        }
+
+        echo json_encode([
+            'status' => true,
+            'data' => $dataDetail
+        ]);
+        exit;
+    }
 }

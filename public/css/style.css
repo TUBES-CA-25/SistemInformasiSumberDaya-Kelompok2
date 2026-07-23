@@ -14,7 +14,11 @@
 }
 
 body {
-  background-color: #f8fbff; /* Background Biru Sangat Muda */
+  background-color: #eff6ff;
+  background-image:
+    radial-gradient(circle at top center, rgba(191, 219, 254, 0.7) 0%, rgba(191, 219, 254, 0.25) 18%, transparent 42%),
+    radial-gradient(circle at 20% 0%, rgba(186, 230, 253, 0.55) 0%, rgba(186, 230, 253, 0.18) 14%, transparent 34%),
+    linear-gradient(180deg, #eff6ff 0%, #f8fbff 38%, #ffffff 100%);
   color: #1a202c;
   line-height: 1.6;
   padding-top: 80px;
@@ -23,7 +27,8 @@ body {
 html,
 body {
   max-width: 100%;
-  overflow-x: hidden; /* KUNCI UTAMA: Mencegah scroll samping */
+  overflow-x: hidden;
+  /* KUNCI UTAMA: Mencegah scroll samping */
 }
 
 .container {
@@ -37,7 +42,8 @@ h1,
 h2,
 h3,
 h4 {
-  color: #1e3a8a; /* Biru Navy */
+  color: #1e3a8a;
+  /* Biru Navy */
   font-weight: 800;
 }
 
@@ -55,25 +61,41 @@ img {
    2. NAVBAR STYLING
    ------------------------------------------------------- */
 .navbar {
-  /* 1. Membuat elemen melayang dan tetap di posisi layar */
+  /* 1. Membuat elemen melayang dan tetap di posisi layar (Floating Capsule Card style, like Instagram Floating Nav) */
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%; /* Pastikan lebar penuh */
+  top: 15px;
+  /* Offset from top */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  /* Floating boxed width */
+  max-width: 1200px;
+  /* Aligned with standard page grid */
 
   /* 2. Agar navbar berada di lapisan paling depan (tidak tertutup gambar/konten lain) */
   z-index: 9999;
 
   /* 3. Style tambahan agar terlihat rapi */
-  background-color: #ffffff; /* Wajib ada warna, jangan transparan */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bayangan tipis di bawah */
-  padding: 15px 0; /* Sesuaikan ketebalan */
+  background-color: rgba(255, 255, 255, 0.85);
+  /* Keep existing light translucent color */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(191, 219, 254, 0.85);
+  border-radius: 12px;
+  /* Subtler rounded corners */
+  box-shadow: 0 10px 30px rgba(30, 58, 138, 0.08);
+  padding: 6px 24px;
+  /* Compact padding */
+  transition: all 0.3s ease;
 }
 
 .navbar .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
+  /* Spans full card width */
 }
 
 /* --- LOGO UTAMA --- */
@@ -85,12 +107,13 @@ img {
 .brand-logo {
   display: flex;
   align-items: center;
-  padding: 5px 0;
+  padding: 2px 0;
   text-decoration: none;
 }
 
 .logo-img {
-  height: 80px;
+  height: 48px;
+  /* Slimmer height to fit capsule cleanly */
   width: auto;
   object-fit: contain;
   display: block;
@@ -119,31 +142,38 @@ img {
   color: #2563eb;
 }
 
-/* --- TOMBOL APPS --- */
+/* --- TOMBOL APPS (MODERN SLEEK RECTANGULAR DESIGN) --- */
 .btn-nav-apps {
-  background-color: #2563eb;
-  color: #fff !important;
-  padding: 10px 24px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  color: #ffffff !important;
+  padding: 8px 16px;
+  border-radius: 10px;
   font-weight: 600;
+  font-size: 0.88rem;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-  margin-left: 10px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.2px;
 }
 
 .btn-nav-apps:hover {
-  background-color: #1d4ed8;
-  color: #fff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .btn-nav-apps i {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: normal;
+  transition: transform 0.25s ease;
+}
+
+.btn-nav-apps:hover i {
+  transform: scale(1.15);
 }
 
 /* -------------------------------------------------------
@@ -181,14 +211,16 @@ img {
   display: block;
   font-weight: 500;
   transition: all 0.2s ease;
-  text-align: left; /* Desktop tetap rata kiri agar rapi */
+  text-align: left;
+  /* Desktop tetap rata kiri agar rapi */
 }
 
 /* Style saat item dropdown di-hover */
 .dropdown-content a:hover {
   background: #eff6ff;
   color: #2563eb !important;
-  padding-left: 28px; /* Sedikit geser ke kanan saat hover */
+  padding-left: 28px;
+  /* Sedikit geser ke kanan saat hover */
 }
 
 /* Class .show ini dipanggil oleh JavaScript (Klik) */
@@ -199,19 +231,9 @@ img {
   transform: translateY(0);
 }
 
-/* Panah kecil di atas dropdown (Desktop) */
+/* Panah kecil di atas dropdown (Desktop) — disembunyikan */
 .dropdown-content::before {
-  content: "";
-  position: absolute;
-  top: -6px;
-  left: 20px;
-  width: 12px;
-  height: 12px;
-  background: #fff;
-  transform: rotate(45deg);
-  border-top: 1px solid #eff6ff;
-  border-left: 1px solid #eff6ff;
-  z-index: -1;
+  display: none;
 }
 
 /* =======================================================
@@ -223,13 +245,18 @@ img {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    pointer-events: auto; /* Memastikan menu bisa diklik */
+    pointer-events: auto;
+    /* Memastikan menu bisa diklik */
   }
 }
 
-/* -------------------------------------------------------
-   4. MOBILE MENU & DROPDOWN FIX
-   ------------------------------------------------------- */
+.nav-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 10001;
+}
+
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -249,14 +276,91 @@ img {
 .menu-toggle.active span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
+
 .menu-toggle.active span:nth-child(2) {
   opacity: 0;
 }
+
 .menu-toggle.active span:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-@media screen and (max-width: 768px) {
+/* --- RESPONSIVE TABLET SCALING (992px - 1200px) --- */
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+  .nav-links {
+    gap: 16px;
+  }
+  .nav-links a {
+    font-size: 0.88rem;
+  }
+  .btn-nav-apps {
+    padding: 8px 16px;
+    font-size: 0.88rem;
+  }
+  .navbar {
+    padding: 8px 20px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .nav-actions-right {
+    gap: 10px;
+  }
+
+  .btn-nav-apps {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  /* --- Compact icon button override for theme toggle on mobile --- */
+  .theme-toggle-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(226, 232, 240, 0.9);
+    border: 1px solid rgba(203, 213, 225, 0.8);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .toggle-slider {
+    position: static !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    width: auto !important;
+    height: auto !important;
+    left: auto !important;
+  }
+
+  .toggle-slider i {
+    font-size: 1.15rem;
+    position: static;
+  }
+
+  /* Light mode (Day): show sun icon only */
+  .icon-sun {
+    display: inline-block;
+    opacity: 1 !important;
+  }
+  .icon-moon {
+    display: none !important;
+  }
+
+  /* Dark mode (Night): show moon icon only and dark styling */
+  body.night-mode .theme-toggle-btn {
+    background: rgba(30, 41, 59, 0.9) !important;
+    border-color: rgba(71, 85, 105, 0.8) !important;
+  }
+  body.night-mode .icon-sun {
+    display: none !important;
+  }
+  body.night-mode .icon-moon {
+    display: inline-block !important;
+    opacity: 1 !important;
+  }
+
   .menu-toggle {
     display: flex;
     z-index: 10001;
@@ -265,14 +369,17 @@ img {
   .nav-links {
     display: flex;
     position: absolute;
-    top: 100%;
+    top: calc(100% + 12px);
     left: 0;
     width: 100%;
     flex-direction: column;
-    background: #fff;
-    padding: 0 20px;
-    border-top: 1px solid #eff6ff;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 0 24px;
+    border: 1px solid rgba(191, 219, 254, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(30, 58, 138, 0.12);
     text-align: center;
 
     /* --- LOGIKA ANIMASI BERGULIR (SLIDE) --- */
@@ -292,12 +399,11 @@ img {
     max-height: 100vh;
     opacity: 1;
     visibility: visible;
-    padding: 20px;
+    padding: 24px 20px;
   }
 
   /* --- FIX DROPDOWN MOBILE (ACCORDION STYLE) --- */
   .dropdown-content {
-    /* Reset style desktop */
     position: static;
     box-shadow: none;
     border: none;
@@ -305,15 +411,12 @@ img {
     padding-left: 0;
     text-align: center;
     transition: none;
-
-    /* Default Hidden di Mobile (Menunggu class .show dari JS) */
     display: none;
     opacity: 0;
   }
 
-  /* Class ini DITAMBAHKAN oleh JS saat KLIK */
   .dropdown-content.show {
-    display: block; /* Munculkan */
+    display: block;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -324,40 +427,22 @@ img {
     display: none;
   }
 
-  /* Item Link di Mobile */
   .dropdown-content a {
     padding: 10px 0;
     text-align: center;
     color: #64748b !important;
   }
 
-  /* Hover Item di Mobile */
   .dropdown-content a:hover {
     padding-left: 0;
     background: transparent;
     color: #2563eb !important;
   }
 
-  /* [PENTING] HAPUS aturan .dropdown:hover disini 
-     agar menu tidak muncul sendiri saat di-scroll di HP.
-     Sepenuhnya mengandalkan JS Click.
-  */
-
-  @keyframes fadeInMobile {
-    from {
-      opacity: 0;
-      transform: translateY(-5px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Lainnya */
   .logo-img {
-    height: 60px;
+    height: 48px;
   }
+
   .btn-nav-apps {
     width: 100%;
     justify-content: center;
@@ -366,11 +451,45 @@ img {
   }
 }
 
+@media screen and (max-width: 480px) {
+  .theme-toggle-btn {
+    width: 58px;
+    height: 30px;
+  }
+  .toggle-slider {
+    width: 24px;
+    height: 24px;
+  }
+  body.night-mode .toggle-slider {
+    left: 29px;
+  }
+  .btn-apps-text {
+    display: none;
+  }
+  .btn-nav-apps {
+    padding: 8px 10px;
+    border-radius: 10px;
+  }
+}
+
+@keyframes fadeInMobile {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -393,7 +512,8 @@ img {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1.2fr; /* 4 Kolom Proporsional */
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  /* 4 Kolom Proporsional */
   gap: 40px;
   margin-bottom: 50px;
   align-items: start;
@@ -406,21 +526,25 @@ img {
   gap: 12px;
   margin-bottom: 20px;
 }
+
 .footer-logo img {
   height: 40px;
   object-fit: contain;
 }
+
 .footer-logo span {
   font-weight: 800;
   font-size: 1.2rem;
   color: #fff;
 }
+
 .footer-desc {
   color: #94a3b8;
   line-height: 1.6;
   margin-bottom: 25px;
   padding-right: 20px;
 }
+
 .contact-list p {
   display: flex;
   align-items: center;
@@ -428,6 +552,7 @@ img {
   margin-bottom: 12px;
   color: #cbd5e1;
 }
+
 .contact-list i {
   color: #3b82f6;
   font-size: 1.2rem;
@@ -443,6 +568,7 @@ img {
   display: inline-block;
   padding-bottom: 10px;
 }
+
 .footer-section h3::after {
   content: "";
   position: absolute;
@@ -459,6 +585,7 @@ img {
   padding: 0;
   margin: 0;
 }
+
 .footer-links li {
   margin-bottom: 12px;
 }
@@ -471,7 +598,8 @@ img {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  padding-left: 0; /* Reset padding agar tidak lompat */
+  padding-left: 0;
+  /* Reset padding agar tidak lompat */
 }
 
 .footer-links a::before {
@@ -486,8 +614,10 @@ img {
 /* [FIX ANIMASI] Hover Effect */
 .footer-links a:hover {
   color: #60a5fa;
-  transform: translateX(6px); /* Geser menggunakan Transform (Lebih Smooth) */
+  transform: translateX(6px);
+  /* Geser menggunakan Transform (Lebih Smooth) */
 }
+
 .footer-links a:hover::before {
   color: #60a5fa;
 }
@@ -496,11 +626,14 @@ img {
 .footer-links a[target="_blank"] {
   color: #ffffff;
 }
+
 .footer-links a[target="_blank"]:hover {
   color: #ffffff;
 }
+
 .footer-links a[target="_blank"]::before {
-  content: "\ea90"; /* Icon External Link */
+  content: "\ea90";
+  /* Icon External Link */
   font-family: "remixicon";
   font-size: 1rem;
   color: #ffffff;
@@ -538,17 +671,21 @@ img {
     gap: 30px;
   }
 }
+
 @media (max-width: 576px) {
   .main-footer {
     padding-top: 50px;
   }
+
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+
   .footer-logo {
     justify-content: flex-start;
   }
+
   .footer-desc {
     padding-right: 0;
   }
@@ -592,7 +729,297 @@ img {
 
 .back-to-top:hover {
   background-color: #1e40af;
-  transform: translateY(-5px); /* Efek melayang saat hover */
+  transform: translateY(-5px);
+  /* Efek melayang saat hover */
   color: #fff;
   box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
+}
+
+/* -------------------------------------------------------
+   7. CORE STRUCTURE FALLBACKS (PREVENT FOUC / LAYOUT SHIFT)
+   ------------------------------------------------------- */
+/* 
+   These styles are loaded globally in style.css so that during page transitions,
+   before page-specific stylesheets (like sumberdaya.css) are loaded,
+   the card elements and images don't render at full-width or break the layout.
+*/
+.staff-grid,
+.pimpinan-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+}
+
+.staff-grid .card-link,
+.pimpinan-wrapper .card-link {
+  width: 280px;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+.exec-card {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  display: flex;
+  width: 100%;
+}
+
+.exec-photo {
+  flex: 0 0 220px;
+}
+
+.staff-photo-box {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  position: relative;
+  overflow: hidden;
+}
+
+.staff-photo-box img,
+.exec-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* =======================================================
+   GLOBAL NIGHT / DAY THEME OVERRIDES
+   ======================================================= */
+
+body.night-mode {
+  background-color: #080c14;
+  background-image: radial-gradient(circle at 50% 20%, #111827 0%, #080c14 70%, #030712 100%) !important;
+  position: relative;
+}
+
+/* Cosmic Nebula Atmosphere for Night Mode */
+body.night-mode::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: 
+    radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(147, 51, 234, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 60%);
+  animation: cosmicNebulaGlow 12s ease-in-out infinite alternate;
+}
+
+@keyframes cosmicNebulaGlow {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+}
+
+/* Canvas Starfield Layer */
+#nightStarCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+body.night-mode #nightStarCanvas {
+  opacity: 1;
+}
+
+/* CSS Fallback Twinkling Stars Effect for Night Mode */
+body.night-mode::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.7) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 35% 28%, rgba(191, 219, 254, 0.6) 100%, transparent),
+    radial-gradient(1px 1px at 68% 15%, rgba(255, 255, 255, 0.5) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 85% 42%, rgba(254, 240, 138, 0.7) 100%, transparent),
+    radial-gradient(1px 1px at 24% 75%, rgba(255, 255, 255, 0.6) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 78% 82%, rgba(191, 219, 254, 0.5) 100%, transparent);
+  background-size: 100% 100%;
+  animation: starTwinkleSlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes starTwinkleSlow {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.99);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+}
+
+/* --- Theme Toggle Switch inside Navbar --- */
+.theme-toggle-li {
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-btn {
+  background: rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  width: 68px;
+  height: 34px;
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.toggle-slider {
+  width: 28px;
+  height: 28px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  left: 3px;
+}
+
+.toggle-slider i {
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.icon-sun {
+  color: #f59e0b;
+  opacity: 1;
+}
+
+.icon-moon {
+  color: #a855f7;
+  opacity: 0;
+  position: absolute;
+}
+
+/* Night Mode Slider Override */
+body.night-mode .theme-toggle-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(71, 85, 105, 0.8);
+}
+
+body.night-mode .toggle-slider {
+  left: 35px;
+  background: #1e293b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.night-mode .icon-sun {
+  opacity: 0;
+}
+
+body.night-mode .icon-moon {
+  opacity: 1;
+}
+
+/* Global Night Mode Body Override */
+html.night-mode,
+html.night-mode body,
+body.night-mode {
+  background-color: #0b0f19 !important;
+  background-image: none !important;
+  color: #f8fafc !important;
+}
+
+/* --- Night Mode Navbar & Menu Layout Overrides --- */
+body.night-mode .navbar {
+  background-color: rgba(11, 15, 25, 0.92) !important;
+  /* Sleek translucent black background */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.night-mode .navbar .nav-links a {
+  color: #e2e8f0 !important;
+}
+
+body.night-mode .navbar .nav-links a:hover {
+  color: #60a5fa !important;
+}
+
+body.night-mode .dropdown-content {
+  background: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.night-mode .btn-nav-apps {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+body.night-mode .btn-nav-apps:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+body.night-mode .dropdown-content a {
+  color: #f1f5f9 !important;
+}
+
+body.night-mode .dropdown-content a:hover {
+  background-color: #0f172a !important;
+  color: #60a5fa !important;
+}
+
+/* Pastikan panah dropdown tidak muncul di dark mode */
+body.night-mode .dropdown-content::before {
+  display: none !important;
+}
+
+/* Hamburger menu color on Mobile in Night Mode */
+body.night-mode .menu-toggle span {
+  background-color: #e2e8f0;
+}
+
+@media screen and (max-width: 991px) {
+  body.night-mode .nav-links {
+    background: #1e293b !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55) !important;
+  }
+}
+
+/* Global Heading Overrides in Night Mode */
+body.night-mode h1,
+body.night-mode h2,
+body.night-mode h3,
+body.night-mode h4 {
+  color: #ffffff !important;
 }

@@ -66,6 +66,7 @@ function renderTable(data) {
                     <img src="${photoUrl}" 
                          class="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm inline-block bg-gray-100"
                          alt="${item.nama}"
+                         loading="lazy"
                          onerror="this.onerror=null; this.src='${defaultAvatar}';">
                 </td>
                 <td class="px-6 py-4">
@@ -151,6 +152,7 @@ function openFormModal(id = null, event = null) {
   previewEl.classList.add("hidden");
   placeholderEl.classList.remove("hidden");
   previewEl.src = "";
+  PhotoPositioner.reset("fotoPositionBox");
 
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
@@ -177,6 +179,7 @@ function openFormModal(id = null, event = null) {
         previewEl.src = fotoUrl;
         previewEl.classList.remove("hidden");
         placeholderEl.classList.add("hidden");
+        PhotoPositioner.setImage("fotoPositionBox", fotoUrl, data.foto_pos_x, data.foto_pos_y);
 
         // Fallback jika gambar edit juga 404
         previewEl.onerror = function () {
@@ -200,6 +203,19 @@ document
     e.preventDefault();
     const btn = document.getElementById("btnSave");
     const msg = document.getElementById("formMessage");
+
+    // Client-side file extension validation
+    const fileInput = document.getElementById("inputFoto");
+    if (fileInput && fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      const allowedExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        showError("File yang diupload harus berupa gambar/foto (jpg, jpeg, png, gif, webp, svg)");
+        return;
+      }
+    }
+
     const id = document.getElementById("inputId").value;
     const url = id ? API_URL + "/manajemen/" + id : API_URL + "/manajemen";
 
@@ -249,6 +265,8 @@ function previewImage(input) {
       document.getElementById("previewFoto").src = e.target.result;
       document.getElementById("previewFoto").classList.remove("hidden");
       document.getElementById("placeholderFoto").classList.add("hidden");
+      // Foto baru selalu dimulai dari posisi tengah
+      PhotoPositioner.setImage("fotoPositionBox", e.target.result, 50, 50);
     };
     reader.readAsDataURL(input.files[0]);
   }

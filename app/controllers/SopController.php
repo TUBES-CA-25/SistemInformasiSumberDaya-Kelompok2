@@ -93,6 +93,11 @@ class SopController extends Controller {
                 throw new Exception('File PDF wajib diunggah');
             }
 
+            $ext = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+            if ($ext !== 'pdf') {
+                throw new Exception('Format file harus PDF.');
+            }
+
             $result = $model->tambahDataSop($_POST, $_FILES['file']);
             
             if ($result > 0) {
@@ -117,6 +122,13 @@ class SopController extends Controller {
             $this->validateInput($_POST, ['id_sop', 'judul']);
 
             $file = $_FILES['file'] ?? ['error' => 4];
+            if (isset($file['name']) && !empty($file['name'])) {
+                $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                if ($ext !== 'pdf') {
+                    throw new Exception('Format file harus PDF.');
+                }
+            }
+
             $result = $model->updateDataSop($_POST, $file);
 
             if ($result) {

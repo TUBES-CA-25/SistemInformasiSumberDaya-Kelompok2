@@ -56,8 +56,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const fileInput = document.getElementById("fileExcel");
       if (!fileInput.files.length) return;
 
+      const file = fileInput.files[0];
+      const allowedExtensions = ["xlsx", "xls", "csv"];
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Format File Salah',
+          text: 'File yang diupload harus berupa format Excel (.xlsx, .xls) atau CSV (.csv)'
+        });
+        return;
+      }
+
       const formData = new FormData();
-      formData.append("excel_file", fileInput.files[0]);
+      formData.append("excel_file", file);
 
       const btn = document.getElementById("btnUpload");
       const progressDiv = document.getElementById("uploadProgress");
@@ -132,6 +144,18 @@ document.addEventListener("DOMContentLoaded", () => {
       fileInput.addEventListener("change", function () {
         if (this.files && this.files.length > 0) {
           const file = this.files[0];
+          const allowedExtensions = ["xlsx", "xls", "csv"];
+          const fileExtension = file.name.split(".").pop().toLowerCase();
+          if (!allowedExtensions.includes(fileExtension)) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Format File Salah',
+              text: 'File yang diupload harus berupa format Excel (.xlsx, .xls) atau CSV (.csv)'
+            });
+            this.value = ""; // Reset
+            fileInfo.classList.add("hidden");
+            return;
+          }
           fileNameDisplay.innerText = file.name;
           fileSizeDisplay.innerText = (file.size / (1024 * 1024)).toFixed(2) + " MB";
           fileInfo.classList.remove("hidden");
@@ -185,13 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   if (searchInput) {
     searchInput.addEventListener("keyup", (e) => {
-      const key = e.target.value.toLowerCase();
-      const filtered = allJadwalData.filter(i =>
-        (i.mata_kuliah && i.mata_kuliah.toLowerCase().includes(key)) ||
-        (i.dosen && i.dosen.toLowerCase().includes(key)) ||
-        (i.namaDosen && i.namaDosen.toLowerCase().includes(key))
-      );
-      renderTable(filtered);
+      applyFilters();
     });
   }
 
@@ -216,6 +234,7 @@ async function loadJadwal() {
     const result = await response.json();
     if (result.status === "success" || result.status === true) {
       allJadwalData = result.data;
+      populateAdminFilters();
       renderTable(allJadwalData);
     } else {
       allJadwalData = [];
@@ -227,6 +246,70 @@ async function loadJadwal() {
       tbody.innerHTML = `<tr><td colspan="8" class="text-center text-red-400 py-10 font-bold">Gagal sinkronisasi API: ${err.message}</td></tr>`;
     }
   }
+}
+
+function populateAdminFilters() {
+  // Populate Ruangan filter
+  const filterRuangan = document.getElementById("filterRuangan");
+  if (filterRuangan) {
+    const currentVal = filterRuangan.value;
+    filterRuangan.innerHTML = '<option value="">Semua Ruangan</option>';
+    const rooms = [...new Set(allJadwalData.map(item => item.ruangan))].filter(Boolean).sort();
+    rooms.forEach(room => {
+      const opt = document.createElement("option");
+      opt.value = room;
+      opt.innerText = room;
+      if (room === currentVal) opt.selected = true;
+      filterRuangan.appendChild(opt);
+    });
+  }
+
+  // Populate Dosen filter
+  const filterDosen = document.getElementById("filterDosen");
+  if (filterDosen) {
+    const currentVal = filterDosen.value;
+    filterDosen.innerHTML = '<option value="">Semua Dosen</option>';
+    const dosens = [...new Set(allJadwalData.map(item => item.namaDosen || item.dosen))].filter(Boolean).sort();
+    dosens.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d;
+      opt.innerText = d;
+      if (d === currentVal) opt.selected = true;
+      filterDosen.appendChild(opt);
+    });
+  }
+}
+
+window.applyFilters = function() {
+  const searchInput = document.getElementById("searchInput");
+  const keyword = searchInput ? searchInput.value.toLowerCase() : "";
+  
+  const filterProdi = document.getElementById("filterProdi") ? document.getElementById("filterProdi").value : "";
+  const filterRuangan = document.getElementById("filterRuangan") ? document.getElementById("filterRuangan").value : "";
+  const filterDosen = document.getElementById("filterDosen") ? document.getElementById("filterDosen").value : "";
+  
+  const filtered = allJadwalData.filter(item => {
+    // 1. Keyword search
+    const matchesKeyword = !keyword || 
+      (item.mata_kuliah && item.mata_kuliah.toLowerCase().includes(keyword)) ||
+      (item.dosen && item.dosen.toLowerCase().includes(keyword)) ||
+      (item.namaDosen && item.namaDosen.toLowerCase().includes(keyword)) ||
+      (item.ruangan && item.ruangan.toLowerCase().includes(keyword)) ||
+      (item.kelas && item.kelas.toLowerCase().includes(keyword));
+      
+    // 2. Prodi filter
+    const matchesProdi = !filterProdi || item.prodi === filterProdi;
+    
+    // 3. Ruangan filter
+    const matchesRuangan = !filterRuangan || item.ruangan === filterRuangan;
+    
+    // 4. Dosen filter
+    const matchesDosen = !filterDosen || (item.namaDosen === filterDosen || item.dosen === filterDosen);
+    
+    return matchesKeyword && matchesProdi && matchesRuangan && matchesDosen;
+  });
+  
+  renderTable(filtered);
 }
 
 async function loadDropdownData() {
