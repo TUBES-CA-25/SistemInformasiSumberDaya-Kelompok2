@@ -144,8 +144,14 @@ class JadwalPraktikumService {
         if (empty($name)) return null;
         if (is_numeric($name)) return (int)$name;
         
-        $db = $this->model->db;
         $name = trim($name);
+        
+        // Skip header words or class codes like "Dosen", "A1", "B2", "A1,A2"
+        if (preg_match('/^(dosen|no|kelas|[a-z][0-9](,[a-z][0-9])*)$/i', $name)) {
+            return null;
+        }
+
+        $db = $this->model->db;
 
         // 1. Exact Match
         $stmt = $db->prepare("SELECT idDosen FROM dosen WHERE LCASE(TRIM(nama)) = LCASE(?) LIMIT 1");

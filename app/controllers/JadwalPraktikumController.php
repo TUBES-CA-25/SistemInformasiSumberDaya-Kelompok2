@@ -328,17 +328,52 @@ class JadwalPraktikumController extends Controller {
      */
     public function downloadTemplate(): void {
         $this->cleanBuffers();
-        $file = ROOT_PROJECT . '/public/assets/templates/template_jadwal.xlsx';
+        $dir = ROOT_PROJECT . '/public/assets/templates';
+        $file = $dir . '/template_jadwal.xlsx';
         
         if (!file_exists($file)) {
-            // Kita buat dummy download jika file belum ada, atau error
-            $this->error('Template file tidak ditemukan');
-            return;
+            if (!file_exists($dir)) {
+                @mkdir($dir, 0777, true);
+            }
+            try {
+                $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
+                $sheet->setTitle('Jadwal Praktikum');
+                $headers = ['No', 'Kode MK', 'Nama Dosen', 'Mata Kuliah', 'SKS', 'Kelas', 'Frekuensi', 'Laboratorium', 'Hari', 'Jam', 'Prodi', 'Asisten 1', 'Asisten 2'];
+                $colIndex = 'A';
+                foreach ($headers as $h) {
+                    $sheet->setCellValue($colIndex . '1', $h);
+                    $colIndex++;
+                }
+                $sampleData = [
+                    [1, 'IF101', 'Dr. Ir. Ahmad Hidayat, M.T.', 'Pemrograman Web', 3, 'A', '1', 'Laboratorium Komputer 1', 'Senin', '08:00 - 10:30', 'Teknik Informatika', 'Aan Maulana Sampe', 'Andi Ahsan Ashuri'],
+                    [2, 'SI202', 'Siti Nurhaliza, S.Kom., M.Cs.', 'Basis Data', 3, 'B', '2', 'Laboratorium Komputer 2', 'Selasa', '10:00 - 12:30', 'Sistem Informasi', 'Wahyu Kadri Rahmat Suat', 'Farah Tsabitaputri Az Zahra']
+                ];
+                $r = 2;
+                foreach ($sampleData as $row) {
+                    $c = 'A';
+                    foreach ($row as $v) {
+                        $sheet->setCellValue($c . $r, $v);
+                        $c++;
+                    }
+                    $r++;
+                }
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+                $writer->save($file);
+            } catch (Exception $e) {
+                header('Content-Type: text/csv');
+                header('Content-Disposition: attachment; filename="template_jadwal_praktikum.csv"');
+                $output = fopen('php://output', 'w');
+                fputcsv($output, ['No', 'Kode MK', 'Nama Dosen', 'Mata Kuliah', 'SKS', 'Kelas', 'Frekuensi', 'Laboratorium', 'Hari', 'Jam', 'Prodi', 'Asisten 1', 'Asisten 2']);
+                fputcsv($output, [1, 'IF101', 'Dr. Ir. Ahmad Hidayat, M.T.', 'Pemrograman Web', 3, 'A', '1', 'Laboratorium Komputer 1', 'Senin', '08:00 - 10:30', 'Teknik Informatika', 'Aan Maulana Sampe', 'Andi Ahsan Ashuri']);
+                fclose($output);
+                exit;
+            }
         }
 
         header('Content-Description: File Transfer');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="'.basename($file).'"');
+        header('Content-Disposition: attachment; filename="template_jadwal_praktikum.xlsx"');
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');

@@ -49,8 +49,8 @@ class KontakController extends Controller {
             // Jika beda, server hosting sering menolak (dianggap spamming).
             $mail->setFrom(SMTP_USER, 'Sistem Informasi Sumber Daya');
             
-            // Penerima: Kirim notifikasi ke email Admin (riswangnb@gmail.com)
-            $mail->addAddress(defined('ADMIN_EMAIL') ? ADMIN_EMAIL : 'riswangnb@gmail.com');     
+            // Penerima: Kirim notifikasi ke email Admin (nahwakakaa@gmail.com)
+            $mail->addAddress(defined('ADMIN_EMAIL') ? ADMIN_EMAIL : 'nahwakakaa@gmail.com');     
             
             // Reply-To: Ini kuncinya!
             // Saat Admin klik "Reply" di Gmail, tujuannya langsung ke email Pengunjung.

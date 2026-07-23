@@ -25,15 +25,18 @@ class JadwalPraktikumModel extends Model {
     public function getAll(): array {
         $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
                          COALESCE(d.nama, '') as dosen, d.nama as namaDosen, d.nip as nipDosen,
-                         COALESCE(a1.nama, j.asisten1) as namaAsisten1, 
-                         COALESCE(a2.nama, j.asisten2) as namaAsisten2,
-                         a1.foto as fotoAsisten1, a2.foto as fotoAsisten2,
+                         COALESCE(a1.nama, al1.nama, IF(j.asisten1 REGEXP '^[0-9]+$', '-', j.asisten1)) as namaAsisten1, 
+                         COALESCE(a2.nama, al2.nama, IF(j.asisten2 REGEXP '^[0-9]+$', '-', j.asisten2)) as namaAsisten2,
+                         COALESCE(a1.foto, al1.foto) as fotoAsisten1, 
+                         COALESCE(a2.foto, al2.foto) as fotoAsisten2,
                          a1.idAsisten as idAsisten1, a2.idAsisten as idAsisten2
                   FROM {$this->table} j
                   LEFT JOIN matakuliah m ON j.idMatakuliah = m.idMatakuliah
                   LEFT JOIN laboratorium l ON j.idLaboratorium = l.idLaboratorium
                   LEFT JOIN asisten a1 ON j.asisten1 = a1.idAsisten
                   LEFT JOIN asisten a2 ON j.asisten2 = a2.idAsisten
+                  LEFT JOIN alumni al1 ON j.asisten1 = al1.id
+                  LEFT JOIN alumni al2 ON j.asisten2 = al2.id
                   LEFT JOIN dosen d ON j.idDosen = d.idDosen
                   ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'), 
                            j.waktuMulai ASC";

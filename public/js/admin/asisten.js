@@ -426,17 +426,154 @@ function openFormModal(id = null) {
     }
 }
 
+const PRESET_SKILLS = [
+    "Web Development", "Mobile Development", "UI/UX Design", "Database Management", 
+    "Python", "Machine Learning", "Artificial Intelligence", "Data Science", 
+    "Networking", "Cybersecurity", "Cloud Computing", "IoT", "DevOps", 
+    "Laravel", "React", "Vue.js", "Node.js", "Flutter", "Java", "C++", "PHP", 
+    "Graphic Design", "Video Editing", "System Analyst", "Quality Assurance"
+];
+
+function initTaggingSystem() {
+    const tagInput = document.getElementById("tagInput");
+    const container = document.getElementById("skillsTagContainer");
+    const suggestionsBox = document.getElementById("skillsSuggestions");
+
+    if (!tagInput || !container || !suggestionsBox) return;
+
+    // Focus input when container clicked
+    container.addEventListener("click", function (e) {
+        if (e.target !== tagInput && !e.target.closest(".skill-tag")) {
+            tagInput.focus();
+        }
+    });
+
+    // Helper: Collect all unique existing skills from data + presets
+    function getAvailableSkills() {
+        const skillsSet = new Set(PRESET_SKILLS);
+        if (Array.isArray(allAsistenData)) {
+            allAsistenData.forEach(item => {
+                if (item.skills) {
+                    try {
+                        const arr = typeof item.skills === 'string' ? JSON.parse(item.skills) : item.skills;
+                        if (Array.isArray(arr)) {
+                            arr.forEach(s => { if (s && s.trim()) skillsSet.add(s.trim()); });
+                        }
+                    } catch (e) {}
+                }
+            });
+        }
+        return Array.from(skillsSet);
+    }
+
+    // Helper: Render suggestion list
+    function renderSuggestions(query = "") {
+        const queryLower = query.trim().toLowerCase();
+        const existingTags = Array.from(container.querySelectorAll(".skill-tag")).map(t => t.textContent.trim().slice(0, -1).toLowerCase());
+        
+        const available = getAvailableSkills();
+        const matches = available.filter(s => {
+            const sLower = s.toLowerCase();
+            return !existingTags.includes(sLower) && (queryLower === "" || sLower.includes(queryLower));
+        });
+
+        if (matches.length === 0) {
+            if (queryLower !== "") {
+                suggestionsBox.innerHTML = `
+                    <div class="px-4 py-2.5 text-xs text-gray-500 italic">
+                        Tekan <kbd class="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded font-semibold text-gray-600">Enter</kbd> atau koma untuk menambahkan "${query.trim()}"
+                    </div>`;
+            } else {
+                suggestionsBox.innerHTML = `
+                    <div class="px-4 py-2.5 text-xs text-gray-400 italic">
+                        Ketik keahlian untuk melihat rekomendasi...
+                    </div>`;
+            }
+        } else {
+            suggestionsBox.innerHTML = matches.slice(0, 10).map(skill => `
+                <div class="suggestion-item px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer flex items-center justify-between transition-colors" data-skill="${skill}">
+                    <span>${skill}</span>
+                    <i class="fas fa-plus text-xs text-blue-500 opacity-60"></i>
+                </div>
+            `).join("");
+        }
+
+        suggestionsBox.classList.remove("hidden");
+    }
+
+    // Show suggestions on focus & input
+    tagInput.addEventListener("focus", function () {
+        renderSuggestions(this.value);
+    });
+
+    tagInput.addEventListener("input", function () {
+        renderSuggestions(this.value);
+    });
+
+    // Handle keydown (Enter, Comma, Backspace)
+    tagInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === ",") {
+            e.preventDefault();
+            const val = this.value.trim().replace(/,/g, "");
+            if (val) {
+                addSkillTag(val);
+                updateSkillsInput();
+                this.value = "";
+                renderSuggestions("");
+            }
+        } else if (e.key === "Backspace" && this.value === "") {
+            const tags = container.querySelectorAll(".skill-tag");
+            if (tags.length > 0) {
+                tags[tags.length - 1].remove();
+                updateSkillsInput();
+                renderSuggestions("");
+            }
+        } else if (e.key === "Escape") {
+            suggestionsBox.classList.add("hidden");
+        }
+    });
+
+    // Handle suggestion click
+    suggestionsBox.addEventListener("click", function (e) {
+        const item = e.target.closest(".suggestion-item");
+        if (item) {
+            const skill = item.dataset.skill;
+            if (skill) {
+                addSkillTag(skill);
+                updateSkillsInput();
+                tagInput.value = "";
+                tagInput.focus();
+                renderSuggestions("");
+            }
+        }
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener("click", function (e) {
+        if (!container.contains(e.target) && !suggestionsBox.contains(e.target)) {
+            suggestionsBox.classList.add("hidden");
+        }
+    });
+}
+
 function addSkillTag(skill) {
+    if (!skill || !skill.trim()) return;
+    const cleanSkill = skill.trim();
+
     const container = document.getElementById("skillsTagContainer");
     if (!container) return;
+
+    // Check for duplicates
+    const existing = Array.from(container.querySelectorAll(".skill-tag")).map(t => t.textContent.trim().slice(0, -1).toLowerCase());
+    if (existing.includes(cleanSkill.toLowerCase())) return;
 
     const tagInput = container.querySelector("#tagInput");
 
     const tag = document.createElement("span");
     tag.className = "skill-tag inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium border border-blue-200";
     tag.innerHTML = `
-        ${skill}
-        <button type="button" onclick="this.parentElement.remove(); updateSkillsInput()" class="hover:text-blue-900 font-bold">×</button>
+        ${cleanSkill}
+        <button type="button" onclick="this.parentElement.remove(); updateSkillsInput()" class="hover:text-blue-900 font-bold ml-1">×</button>
     `;
 
     container.insertBefore(tag, tagInput);
@@ -448,8 +585,8 @@ function updateSkillsInput() {
     const skills = [];
 
     tags.forEach(tag => {
-        const text = tag.textContent.trim().slice(0, -1); // Remove the × character
-        skills.push(text);
+        const text = tag.textContent.trim().slice(0, -1).trim(); // Remove the × character
+        if (text) skills.push(text);
     });
 
     document.getElementById("inputSkills").value = JSON.stringify(skills);
