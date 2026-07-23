@@ -143,7 +143,7 @@ $alumni_list      = $data['alumni'] ?? [];
 
         <?php if (!empty($alumni_list)) : ?>
             <div class="section-label mt-40">
-                <span>Alumni Asisten</span>
+                <span>Alumni</span>
             </div>
 
             <div class="staff-grid">
@@ -155,7 +155,6 @@ $alumni_list      = $data['alumni'] ?? [];
                                 <div class="photo-scrim"></div>
                                 <span class="view-hint"><i class="ri-arrow-right-up-line"></i></span>
                                 <div class="staff-overlay-info">
-                                    <span class="overlay-role role-alumni">Alumni Asisten</span>
                                     <h3 class="staff-name"><?= htmlspecialchars($row['nama'] ?? '') ?></h3>
                                 </div>
                             </div>

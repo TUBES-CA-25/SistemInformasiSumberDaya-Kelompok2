@@ -60,6 +60,34 @@ class DetailSumberDayaService {
     }
 
     /**
+     * Mengambil detail alumni dengan pengolahan role & skills.
+     */
+    public function getFormattedAlumni(int $id): ?array {
+        require_once ROOT_PROJECT . '/app/models/AlumniModel.php';
+        $alumniModel = new AlumniModel();
+        $alumni = $alumniModel->getById($id, 'id');
+        if (!$alumni) {
+            return $this->getFormattedAsisten($id);
+        }
+
+        return [
+            'nama'        => $alumni['nama'] ?? 'Tanpa Nama',
+            'jabatan'     => trim(str_ireplace(['alumni asisten', 'asisten lab', 'asisten', 'alumni'], '', $alumni['divisi'] ?? '')),
+            'kategori'    => '',
+            'sub_info'    => !empty($alumni['jurusan']) ? $alumni['jurusan'] : (!empty($alumni['angkatan']) ? 'Angkatan ' . $alumni['angkatan'] : 'Teknik Informatika'),
+            'sub_icon'    => 'ri-graduation-cap-line',
+            'foto_url'    => Helper::processPhotoUrl($alumni['foto'] ?? '', $alumni['nama']),
+            'foto_pos_x'  => $alumni['foto_pos_x'] ?? 50,
+            'foto_pos_y'  => $alumni['foto_pos_y'] ?? 50,
+            'email'       => $alumni['email'] ?? '-',
+            'bio'         => !empty($alumni['bio']) ? $alumni['bio'] : (!empty($alumni['tentang']) ? $alumni['tentang'] : "Lulusan yang telah berkarya dan berkontribusi di industri."),
+            'skills'      => $this->parseSkills($alumni['keahlian'] ?? ($alumni['skills'] ?? '')),
+            'badge_style' => 'badge-alumni',
+            'back_link'   => '/alumni'
+        ];
+    }
+
+    /**
      * Mengambil detail manajemen dengan logika bio override.
      */
     public function getFormattedManajemen(int $id): ?array {
@@ -83,7 +111,7 @@ class DetailSumberDayaService {
             'bio'         => $this->resolveManajemenBio($row),
             'skills'      => [],
             'badge_style' => $isKepala ? 'badge-kepala' : 'badge-staff',
-            'back_link'   => '/kepala'
+            'back_link'   => '/atasan'
         ];
     }
 

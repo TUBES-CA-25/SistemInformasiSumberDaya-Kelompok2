@@ -70,26 +70,24 @@ class FasilitasController extends Controller {
      * Tampilan Publik: Detail lengkap satu fasilitas.
      */
     public function detail(array $params = []): void {
-        // Ambil ID dari berbagai sumber (Router params, querystring, atau dari URL jika perlu)
-        $id = $params['id'] ?? $params['idLaboratorium'] ?? $_GET['id'] ?? null;
+        // Ambil identifier dari berbagai sumber (Router params, querystring, atau dari URL)
+        $rawId = $params['id'] ?? $params['idLaboratorium'] ?? $_GET['id'] ?? null;
 
-        // Fallback: ekstrak dari REQUEST_URI (contoh: /laboratorium/123)
-        if (empty($id) && !empty($_SERVER['REQUEST_URI'])) {
-            if (preg_match('#/laboratorium/([0-9]+)#', $_SERVER['REQUEST_URI'], $m)) {
-                $id = $m[1];
+        // Fallback: ekstrak dari REQUEST_URI (contoh: /laboratorium/start-up atau /riset/research-room-1)
+        if (empty($rawId) && !empty($_SERVER['REQUEST_URI'])) {
+            if (preg_match('#/(?:laboratorium|riset)/([0-9a-zA-Z_-]+)#', $_SERVER['REQUEST_URI'], $m)) {
+                $rawId = $m[1];
             }
         }
 
-        // Validasi ID
-        $id = (is_numeric($id)) ? (int)$id : null;
-        if ($id === null) {
+        if (empty($rawId)) {
             $this->setFlash('error', 'ID fasilitas tidak valid.');
             $this->redirect('/laboratorium');
             return;
         }
 
-        // Meminta Service mengambil data Lab + Galeri Foto + SOP/Peraturan terkait
-        $data = $this->service->getFullDetail($id);
+        // Meminta Service mengambil data Lab (mendukung Slug nama, Hash ID, maupun ID numerik)
+        $data = $this->service->getFullDetail($rawId);
 
         if (!$data) {
             // Catat log untuk investigasi lebih lanjut

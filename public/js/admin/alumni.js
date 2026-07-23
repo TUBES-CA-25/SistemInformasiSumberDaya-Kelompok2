@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         (item) =>
           (item.nama && item.nama.toLowerCase().includes(keyword)) ||
           (item.email && item.email.toLowerCase().includes(keyword)) ||
+          (item.jurusan && item.jurusan.toLowerCase().includes(keyword)) ||
           (item.angkatan && item.angkatan.toString().includes(keyword)) ||
           (item.divisi && item.divisi.toLowerCase().includes(keyword)),
       );
@@ -76,6 +77,7 @@ function renderTable(data) {
                             <span class="text-[10px] text-gray-500 uppercase mt-0.5">${item.divisi || "Alumni"}</span>
                         </div>
                     </td>
+                    <td class="px-6 py-4 text-center font-medium text-gray-600 text-xs">${item.jurusan || "Teknik Informatika"}</td>
                     <td class="px-6 py-4 text-center"><span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold border border-blue-100">${item.angkatan || "-"}</span></td>
                     <td class="px-6 py-4">
                         <div class="flex justify-center items-center gap-2">
@@ -102,6 +104,7 @@ function openDetailModal(id) {
         const d = res.data;
         document.getElementById("dNama").innerText = d.nama;
         document.getElementById("dDivisi").innerText = d.divisi || "Alumni";
+        if (document.getElementById("dJurusan")) document.getElementById("dJurusan").innerText = d.jurusan || "Teknik Informatika";
         document.getElementById("dAngkatan").innerText = d.angkatan;
         document.getElementById("dEmail").innerText = d.email || "-";
         document.getElementById("dMataKuliah").innerText = d.mata_kuliah || "-";
@@ -157,6 +160,7 @@ function openFormModal(id = null, event = null) {
           const d = res.data;
           document.getElementById("inputId").value = d.id;
           document.getElementById("inputNama").value = d.nama;
+          if (document.getElementById("inputJurusan")) document.getElementById("inputJurusan").value = d.jurusan || "Teknik Informatika";
           document.getElementById("inputAngkatan").value = d.angkatan;
           document.getElementById("inputDivisi").value = d.divisi || "";
 
@@ -237,6 +241,7 @@ function openFormModal(id = null, event = null) {
     // Reset form for new record
     document.getElementById("alumniForm").reset();
     document.getElementById("inputId").value = "";
+    if (document.getElementById("inputJurusan")) document.getElementById("inputJurusan").value = "Teknik Informatika";
 
     // Reset Keahlian Tags
     selectedKeahlian = [];

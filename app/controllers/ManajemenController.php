@@ -135,7 +135,7 @@ class ManajemenController extends Controller {
     public function detail($params = []) {
         $id = $params['id'] ?? null;
         if (!$id) {
-            $this->redirect('/kepala');
+            $this->redirect('/atasan');
             return;
         }
 

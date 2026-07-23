@@ -20,7 +20,7 @@
                 <h3>Menu Utama</h3>
                 <ul class="footer-links">
                     <li><a href="<?php echo PUBLIC_URL; ?>/home">Beranda</a></li>
-                    <li><a href="<?php echo PUBLIC_URL; ?>/kepala">Profil Pimpinan</a></li>
+                    <li><a href="<?php echo PUBLIC_URL; ?>/atasan">Profil Pimpinan</a></li>
                     <li><a href="<?php echo PUBLIC_URL; ?>/asisten">Asisten Lab</a></li>
                     <li><a href="<?php echo PUBLIC_URL; ?>/laboratorium">Fasilitas & Lab</a></li>
                     <li><a href="<?php echo PUBLIC_URL; ?>/riset">Riset & Inovasi</a></li>

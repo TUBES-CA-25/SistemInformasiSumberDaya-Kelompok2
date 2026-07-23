@@ -66,6 +66,46 @@ class FasilitasModel extends Model
     }
 
     /**
+     * Mencari detail fasilitas berdasarkan Slug nama lab, Hash ID, atau ID numerik.
+     * @param string|int $identifier
+     * @return array|null
+     */
+    public function getBySlugOrId($identifier): ?array 
+    {
+        if (empty($identifier)) return null;
+
+        // 1. Cek jika ID numerik langsung (misal: 23)
+        if (is_numeric($identifier)) {
+            $lab = $this->getById((int)$identifier);
+            if ($lab) return $lab;
+        }
+
+        // 2. Cek jika $identifier adalah Hash ID valid (misal: 2aln4nba)
+        if (class_exists('Helper')) {
+            $decodedId = Helper::decodeId($identifier);
+            if ($decodedId !== null) {
+                $lab = $this->getById($decodedId);
+                if ($lab) return $lab;
+            }
+        }
+
+        // 3. Pencarian berbasis Slug (misal: 'start-up', 'computer-network')
+        $all = $this->getAll();
+        $targetSlug = class_exists('Helper') ? Helper::slugify($identifier) : strtolower(trim($identifier));
+        
+        foreach ($all as $item) {
+            if (!empty($item['nama'])) {
+                $itemSlug = class_exists('Helper') ? Helper::slugify($item['nama']) : strtolower(trim($item['nama']));
+                if ($itemSlug === $targetSlug) {
+                    return $item;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Proteksi Integritas Data (Manual Foreign Key Check).
      * * Memeriksa apakah laboratorium masih memiliki jadwal praktikum yang aktif.
      * Sangat disarankan dipanggil sebelum menjalankan fungsi delete().

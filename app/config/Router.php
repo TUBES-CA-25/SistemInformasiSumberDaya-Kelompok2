@@ -85,6 +85,7 @@ class Router {
         $this->get('/laboratorium', 'FasilitasController', 'index');
         $this->get('/laboratorium/{id}', 'FasilitasController', 'detail');
         $this->get('/riset', 'FasilitasController', 'riset');
+        $this->get('/riset/{id}', 'FasilitasController', 'detail');
         $this->get('/denah', 'FasilitasController', 'denah');
 
         // Sumber Daya
@@ -92,6 +93,8 @@ class Router {
         $this->get('/alumni/{id}', 'AlumniController', 'detail');
         $this->get('/asisten', 'AsistenController', 'index');
         $this->get('/asisten/{id}', 'AsistenController', 'detail');
+        $this->get('/atasan', 'ManajemenController', 'index');
+        $this->get('/atasan/{id}', 'ManajemenController', 'detail');
         $this->get('/kepala', 'ManajemenController', 'index');
         $this->get('/kepala/{id}', 'ManajemenController', 'detail');
 
@@ -103,8 +106,12 @@ class Router {
         $this->post('/modul', 'ModulController', 'index');
         $this->post('/modul/{id}', 'ModulController', 'index');
         $this->put('/modul/{id}', 'ModulController', 'index');
-        $this->delete('/modul/{id}', 'ModulController', 'index');
         $this->get('/contact', 'KontakController', 'index');
+        $this->get('/kontak', 'KontakController', 'index');
+        $this->post('/kontak', 'KontakController', 'send');
+        $this->post('/contact', 'KontakController', 'send');
+        $this->post('/kontak/send', 'KontakController', 'send');
+        $this->post('/api/kontak', 'KontakController', 'send');
 
         // API ROUTES
         $this->get('/api/jadwal', 'JadwalPraktikumController', 'apiIndex');

@@ -81,16 +81,18 @@ class FasilitasService {
 
     /**
      * Menyusun data detail lengkap untuk satu fasilitas.
-     * * @param int $id ID Laboratorium.
+     * @param string|int $identifier Slug nama lab, Hash ID, atau ID numerik.
      * @return array|null
      */
-    public function getFullDetail(int $id): ?array {
-        $lab = $this->model->getById($id, 'idLaboratorium');
+    public function getFullDetail($identifier): ?array {
+        $lab = $this->model->getBySlugOrId($identifier);
         if (!$lab) return null;
+
+        $id = (int)$lab['idLaboratorium'];
 
         return [
             'lab'         => $lab,
-            'gallery'     => $this->buildGallery($lab, (int)$id),
+            'gallery'     => $this->buildGallery($lab, $id),
             'koordinator' => $this->resolveKoordinator($lab['idKordinatorAsisten'] ?? null),
             'hardware'    => $this->formatHardwareSpecs($lab),
             'software'    => $this->parseCsvList($lab['software'] ?? ''),
