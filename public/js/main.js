@@ -415,7 +415,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const setDayMode = () => {
     document.body.classList.remove("night-mode");
+    document.documentElement.classList.remove("night-mode");
     localStorage.setItem("theme", "day");
+    document.cookie = "theme=day; path=/; max-age=31536000";
     stopStarfield();
     if (bgDay) {
       bgDay.classList.remove("night-mode-filter");
@@ -428,7 +430,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const setNightMode = () => {
     document.body.classList.add("night-mode");
+    document.documentElement.classList.add("night-mode");
     localStorage.setItem("theme", "night");
+    document.cookie = "theme=night; path=/; max-age=31536000";
     initNightStarfield();
     if (bgNight && nightImageAvailable) {
       bgNight.style.opacity = "1";
@@ -457,9 +461,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Load Saved Preference
   const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "night") {
+  if (savedTheme === "night" || document.documentElement.classList.contains("night-mode")) {
     setNightMode();
-  } else {
+  } else if (savedTheme === "day") {
     setDayMode();
   }
 });

@@ -31,7 +31,8 @@
                     <th class="px-6 py-4 font-semibold text-center w-16">No</th>
                     <th class="px-6 py-4 font-semibold text-center w-24">Foto</th>
                     <th class="px-6 py-4 font-semibold">Nama Alumni</th>
-                    <th class="px-6 py-4 font-semibold text-center w-32">Angkatan</th>
+                    <th class="px-6 py-4 font-semibold text-center w-36">Jurusan</th>
+                    <th class="px-6 py-4 font-semibold text-center w-28">Angkatan</th>
                     <th class="px-6 py-4 font-semibold text-center w-40">Aksi</th>
                 </tr>
             </thead>
@@ -72,7 +73,15 @@
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30">
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Jurusan / Prodi <span class="text-red-500">*</span></label>
+                                <select id="inputJurusan" name="jurusan" required
+                                        class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50/30">
+                                    <option value="Teknik Informatika">Teknik Informatika</option>
+                                    <option value="Sistem Informasi">Sistem Informasi</option>
+                                </select>
+                            </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
                                 <input type="email" id="inputEmail" name="email" placeholder="contoh@gmail.com"
@@ -197,14 +206,18 @@
                         </div>
                     </div>
                     <div class="space-y-4 text-sm">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-gray-50/50 p-3.5 rounded-2xl border border-gray-100">
-                                <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Angkatan</p>
-                                <p id="dAngkatan" class="font-bold text-gray-800">-</p>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="bg-gray-50/50 p-3 rounded-2xl border border-gray-100">
+                                <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Jurusan</p>
+                                <p id="dJurusan" class="font-bold text-gray-800 text-xs truncate">-</p>
                             </div>
-                            <div class="bg-gray-50/50 p-3.5 rounded-2xl border border-gray-100">
+                            <div class="bg-gray-50/50 p-3 rounded-2xl border border-gray-100">
+                                <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Angkatan</p>
+                                <p id="dAngkatan" class="font-bold text-gray-800 text-xs">-</p>
+                            </div>
+                            <div class="bg-gray-50/50 p-3 rounded-2xl border border-gray-100">
                                 <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Email</p>
-                                <p id="dEmail" class="font-bold text-gray-800 truncate">-</p>
+                                <p id="dEmail" class="font-bold text-gray-800 text-xs truncate">-</p>
                             </div>
                         </div>
                         

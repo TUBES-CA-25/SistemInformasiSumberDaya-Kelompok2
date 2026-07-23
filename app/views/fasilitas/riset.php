@@ -32,9 +32,9 @@ $riset_list = $data['riset'] ?? [];
                         $finalDesc = $row['deskripsi_final'] ?? $row['deskripsi'] ?? '';
                     ?>
 
-                    <a href="<?= PUBLIC_URL ?>/laboratorium/<?= $row['idLaboratorium'] ?>"
+                    <a href="<?= PUBLIC_URL ?>/riset/<?= Helper::slugify($row['nama']) ?>"
                        class="facility-row" 
-                       data-id="<?= $row['idLaboratorium'] ?>">
+                       data-id="<?= Helper::slugify($row['nama']) ?>">
                         
                         <div class="facility-img-side" style="background: <?= $style['bg'] ?>;">
                             <?php if (!empty($finalImage)): ?>

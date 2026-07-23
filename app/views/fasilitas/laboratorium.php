@@ -28,9 +28,9 @@ $lab_list = $data['laboratorium'] ?? [];
                         $finalDesc = $row['short_desc'] ?? $row['deskripsi_final'] ?? $row['deskripsi'] ?? '';
                     ?>
 
-                    <a href="<?= PUBLIC_URL ?>/laboratorium/<?= $row['idLaboratorium'] ?>"
+                    <a href="<?= PUBLIC_URL ?>/laboratorium/<?= Helper::slugify($row['nama']) ?>"
                        class="facility-row" 
-                       data-id="<?= $row['idLaboratorium'] ?>">
+                       data-id="<?= Helper::slugify($row['nama']) ?>">
                         
                         <div class="facility-img-side">
                             <?php if (!empty($finalImage)) : ?>

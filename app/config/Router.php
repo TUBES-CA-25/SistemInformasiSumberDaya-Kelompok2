@@ -85,6 +85,7 @@ class Router {
         $this->get('/laboratorium', 'FasilitasController', 'index');
         $this->get('/laboratorium/{id}', 'FasilitasController', 'detail');
         $this->get('/riset', 'FasilitasController', 'riset');
+        $this->get('/riset/{id}', 'FasilitasController', 'detail');
         $this->get('/denah', 'FasilitasController', 'denah');
 
         // Sumber Daya
@@ -92,6 +93,8 @@ class Router {
         $this->get('/alumni/{id}', 'AlumniController', 'detail');
         $this->get('/asisten', 'AsistenController', 'index');
         $this->get('/asisten/{id}', 'AsistenController', 'detail');
+        $this->get('/atasan', 'ManajemenController', 'index');
+        $this->get('/atasan/{id}', 'ManajemenController', 'detail');
         $this->get('/kepala', 'ManajemenController', 'index');
         $this->get('/kepala/{id}', 'ManajemenController', 'detail');
 

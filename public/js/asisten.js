@@ -161,11 +161,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const id = detailLink.getAttribute("data-id");
         let type = detailLink.getAttribute("data-type") || "asisten";
 
-        // Alumni and asisten are both fetched from the asisten table API
-        if (type === "alumni") {
-          type = "asisten";
-        }
-
         if (id) {
           // Reset modal state
           modalLoading.style.display = "flex";
@@ -190,12 +185,22 @@ document.addEventListener("DOMContentLoaded", function () {
               modalImg.alt = d.nama;
               modalImg.style.objectPosition = `${d.foto_pos_x}% ${d.foto_pos_y}%`;
               
-              modalCategory.textContent = d.kategori;
-              // Apply category badge styling class
-              modalCategory.className = `category-badge ${d.badge_style}`;
+              if (d.kategori && d.kategori.trim() !== "") {
+                modalCategory.textContent = d.kategori;
+                modalCategory.className = `category-badge ${d.badge_style}`;
+                modalCategory.style.display = "inline-block";
+              } else {
+                modalCategory.style.display = "none";
+              }
               
               modalName.textContent = d.nama;
-              modalRole.textContent = d.jabatan;
+
+              if (d.jabatan && d.jabatan.trim() !== "") {
+                modalRole.textContent = d.jabatan;
+                modalRole.style.display = "block";
+              } else {
+                modalRole.style.display = "none";
+              }
               modalSubInfo.textContent = d.sub_info;
               
               if (modalSubIcon) {

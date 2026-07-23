@@ -32,25 +32,29 @@ class DetailSumberDayaController extends Controller {
         }
 
         // Delegasikan pengambilan data ke Service berdasarkan Type
-        $dataDetail = ($type === 'manajemen') 
-            ? $this->service->getFormattedManajemen((int)$id)
-            : $this->service->getFormattedAsisten((int)$id);
+        if ($type === 'manajemen') {
+            $dataDetail = $this->service->getFormattedManajemen((int)$id);
+        } elseif ($type === 'alumni') {
+            $dataDetail = $this->service->getFormattedAlumni((int)$id);
+        } else {
+            $dataDetail = $this->service->getFormattedAsisten((int)$id);
+        }
 
         // Jika data tidak ditemukan di Service
         if (!$dataDetail) {
-            $this->redirect($type === 'manajemen' ? '/kepala' : '/asisten');
+            $this->redirect($type === 'manajemen' ? '/atasan' : ($type === 'alumni' ? '/alumni' : '/asisten'));
             return;
         }
 
         $this->view('sumberdaya/detail', [
             'dataDetail' => $dataDetail,
-            'judul' => 'Detail ' . ($type === 'manajemen' ? 'Staff' : 'Asisten') . ' - ' . $dataDetail['nama']
+            'judul' => 'Detail ' . ($type === 'manajemen' ? 'Staff' : ($type === 'alumni' ? 'Alumni' : 'Asisten')) . ' - ' . $dataDetail['nama']
         ]);
     }
 
     /**
      * API Endpoint: Mengambil data detail terformat dalam format JSON
-     * URL: /api/sumberdaya/detail/{id}?type=asisten|manajemen
+     * URL: /api/sumberdaya/detail/{id}?type=asisten|manajemen|alumni
      */
     public function apiDetail(array $params = []): void {
         if (ob_get_level()) ob_end_clean();
@@ -67,9 +71,13 @@ class DetailSumberDayaController extends Controller {
             exit;
         }
 
-        $dataDetail = ($type === 'manajemen') 
-            ? $this->service->getFormattedManajemen((int)$id)
-            : $this->service->getFormattedAsisten((int)$id);
+        if ($type === 'manajemen') {
+            $dataDetail = $this->service->getFormattedManajemen((int)$id);
+        } elseif ($type === 'alumni') {
+            $dataDetail = $this->service->getFormattedAlumni((int)$id);
+        } else {
+            $dataDetail = $this->service->getFormattedAsisten((int)$id);
+        }
 
         if (!$dataDetail) {
             echo json_encode([

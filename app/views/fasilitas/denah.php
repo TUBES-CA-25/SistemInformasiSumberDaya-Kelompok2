@@ -64,6 +64,7 @@
                 
                 <div class="legend-grid-layout">
                     
+                    <!-- Kolom 1: Laboratorium Praktikum -->
                     <div class="legend-column">
                         <div class="legend-item" data-room="L1"><span class="box blue"></span> <span class="code">L1</span> <span class="desc">: Internet of Things Laboratory</span></div>
                         <div class="legend-item" data-room="L2"><span class="box blue"></span> <span class="code">L2</span> <span class="desc">: StartUp Laboratory</span></div>
@@ -72,26 +73,28 @@
                         <div class="legend-item" data-room="L5"><span class="box blue"></span> <span class="code">L5</span> <span class="desc">: Data Science Laboratory</span></div>
                         <div class="legend-item" data-room="L6"><span class="box blue"></span> <span class="code">L6</span> <span class="desc">: Computer Vision Laboratory</span></div>
                         <div class="legend-item" data-room="L7"><span class="box blue"></span> <span class="code">L7</span> <span class="desc">: Microcontroller Laboratory</span></div>
+                    </div>
+
+                    <!-- Kolom 2: Ruang Riset & Kepala Lab -->
+                    <div class="legend-column">
+                        <div class="legend-item" data-room="R1"><span class="box orange"></span> <span class="code">R1</span> <span class="desc">: Research Room 1</span></div>
+                        <div class="legend-item" data-room="R2"><span class="box orange"></span> <span class="code">R2</span> <span class="desc">: Research Room 2</span></div>
+                        <div class="legend-item" data-room="R3"><span class="box orange"></span> <span class="code">R3</span> <span class="desc">: Research Room 3</span></div>
                         
                         <div class="gap-small"></div>
                         
-                        <div class="legend-item" data-room="HN"><span class="box grey"></span> <span class="code">HN</span> <span class="desc">: Head of Networking & Programming Lab <small style="color:#60a5fa; font-weight:600;">(Ir. A. Rachman Manga', S.Kom., M.T.)</small></span></div>
-                        <div class="legend-item" data-room="HB"><span class="box grey"></span> <span class="code">HB</span> <span class="desc">: Head of Basic Laboratory<br><small style="color:#60a5fa; font-weight:600;">(Ir. Huzain Azis, S.Kom., M.Cs.)</small></span></div>
+                        <div class="legend-item" data-room="HN"><span class="box grey"></span> <span class="code">HN</span> <span class="desc">: Head of Networking & Prog. Lab</span></div>
+                        <div class="legend-item" data-room="HB"><span class="box grey"></span> <span class="code">HB</span> <span class="desc">: Head of Basic Laboratory</span></div>
                         <div class="legend-item" data-room="PR"><span class="box grey"></span> <span class="code">PR</span> <span class="desc">: PC Room</span></div>
                     </div>
 
+                    <!-- Kolom 3: Fasilitas Servis & Pendukung -->
                     <div class="legend-column">
                         <div class="legend-item" data-room="LR"><span class="box grey"></span> <span class="code">LR</span> <span class="desc">: Laboratory Services Room</span></div>
                         <div class="legend-item" data-room="AR"><span class="box grey"></span> <span class="code">AR</span> <span class="desc">: Assistant Room</span></div>
                         <div class="legend-item" data-room="WH"><span class="box grey"></span> <span class="code">WH</span> <span class="desc">: WareHouse</span></div>
                         <div class="legend-item" data-room="SI"><span class="box grey"></span> <span class="code">SI</span> <span class="desc">: Studio Informatika</span></div>
                         <div class="legend-item" data-room="SR"><span class="box grey"></span> <span class="code">SR</span> <span class="desc">: Server Room</span></div>
-                        
-                        <div class="gap-small"></div>
-
-                        <div class="legend-item" data-room="R1"><span class="box orange"></span> <span class="code">R1</span> <span class="desc">: Research Room 1</span></div>
-                        <div class="legend-item" data-room="R2"><span class="box orange"></span> <span class="code">R2</span> <span class="desc">: Research Room 2</span></div>
-                        <div class="legend-item" data-room="R3"><span class="box orange"></span> <span class="code">R3</span> <span class="desc">: Research Room 3</span></div>
                         
                         <div class="gap-small"></div>
 

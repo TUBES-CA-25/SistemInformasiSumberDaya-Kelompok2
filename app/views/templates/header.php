@@ -1,7 +1,23 @@
+<?php 
+    $isNightMode = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'night');
+?>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="<?= $isNightMode ? 'night-mode' : '' ?>">
 <head>
     <meta charset="UTF-8">
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'night' || (!theme && <?= $isNightMode ? 'true' : 'false' ?>)) {
+                    document.documentElement.classList.add('night-mode');
+                    document.write('<style id="anti-flicker-style">html, html.night-mode, body, body.night-mode { background-color: #0b0f19 !important; color: #f8fafc !important; }</style>');
+                } else if (theme === 'day') {
+                    document.documentElement.classList.remove('night-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Informasi Sumber Daya Lab</title>
     
@@ -29,9 +45,10 @@
         $aliases = [
             'tata-tertib'      => 'tatatertib',
             'peraturan'        => 'tatatertib',
-            'kepala-lab'       => 'kepala',
-            'struktur'         => 'kepala',
-            'profil'           => 'kepala',
+            'kepala-lab'       => 'atasan',
+            'struktur'         => 'atasan',
+            'profil'           => 'atasan',
+            'kepala'           => 'atasan',
             'fasilitas'        => 'riset',
             'kontak'           => 'contact',
             'hubungi'          => 'contact',
@@ -72,6 +89,7 @@
             'jadwalupk'    => 'praktikum.css',
             'modul'        => 'praktikum.css',
             'formatpenulisan' => 'praktikum.css',
+            'atasan'       => 'sumberdaya.css',
             'kepala'       => 'sumberdaya.css',
             'asisten'      => 'sumberdaya.css',
             'sumberdaya'   => 'sumberdaya.css', 
@@ -81,9 +99,9 @@
             'laboratorium' => 'fasilitas.css',
             'denah'        => 'fasilitas.css',
             'sop'          => 'fasilitas.css',
-            'alumni'       => 'alumni.css',
+            'alumni'       => 'sumberdaya.css',
             'contact'      => 'contact.css',
-            'apps'         => 'apps.css'
+            'default'      => 'home.css'
         ];
 
         // 4. Load CSS
@@ -101,7 +119,7 @@
     <base href="<?= rtrim(PUBLIC_URL, '/') ?>/">
     <script>window.PUBLIC_URL = "<?= rtrim(PUBLIC_URL, '/') ?>";</script>
 </head>
-<body>
+<body class="<?= $isNightMode ? 'night-mode' : '' ?>">
 
 <nav class="navbar">
         <div class="container">
@@ -128,7 +146,7 @@
                 <li class="dropdown">
                     <a href="javascript:void(0);" class="dropbtn">Sumber Daya ▾</a>
                     <div class="dropdown-content">
-                        <a href="<?= PUBLIC_URL ?>/kepala">Pimpinan</a>
+                        <a href="<?= PUBLIC_URL ?>/atasan">Pimpinan</a>
                         <a href="<?= PUBLIC_URL ?>/asisten">Asisten</a>
                     </div>
                 </li>

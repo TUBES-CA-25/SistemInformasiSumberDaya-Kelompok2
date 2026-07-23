@@ -117,6 +117,46 @@ class Helper {
         }
         return $imgUrl;
     }
+
+    /**
+     * Meng-encode integer ID menjadi string hash unik.
+     */
+    public static function encodeId($id, $salt = 'SistemInformasiLab2026') {
+        if ($id === null || $id === '') return '';
+        if (!is_numeric($id) || (int)$id <= 0) return (string)$id;
+        
+        $num = (int)$id;
+        $mask = hexdec(substr(md5($salt), 0, 7));
+        $obscured = $num ^ $mask;
+        $code = base_convert((string)$obscured, 10, 36);
+        $check = substr(md5($salt . $code), 0, 2);
+        return $code . $check;
+    }
+
+    /**
+     * Meng-decode string hash kembali menjadi integer ID asli.
+     * Mendukung fallback jika $hash berupa numeric ID murni.
+     */
+    public static function decodeId($hash, $salt = 'SistemInformasiLab2026') {
+        if ($hash === null || $hash === '') return null;
+        if (is_numeric($hash)) return (int)$hash;
+
+        $hash = (string)$hash;
+        if (strlen($hash) <= 2) return null;
+
+        $check = substr($hash, -2);
+        $code = substr($hash, 0, -2);
+        
+        if (substr(md5($salt . $code), 0, 2) !== $check) {
+            return null;
+        }
+
+        $obscured = base_convert($code, 36, 10);
+        $mask = hexdec(substr(md5($salt), 0, 7));
+        $num = (int)$obscured ^ $mask;
+        
+        return $num > 0 ? $num : null;
+    }
 }
 
 /**
