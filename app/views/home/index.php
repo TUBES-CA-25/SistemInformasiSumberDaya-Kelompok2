@@ -16,9 +16,9 @@ $laboran_list = $data['laboran'] ?? [];
             </div>
             
             <div class="hero-content reveal fade-left">
-                <span class="hero-eyebrow">FAKULTAS ILMU KOMPUTER</span>
-                <h1>Selamat Datang di <span class="text-blue">Portal Laboratorium</span> FIKOM UMI</h1>
-                <p>ICLabs FIKOM UMI merupakan pusat inovasi teknologi dan laboratorium komputasi terpadu Fakultas Ilmu Komputer Universitas Muslim Indonesia. Didukung fasilitas riset modern, infrastruktur berperforma tinggi, dan ekosistem pembelajaran berlandaskan nilai-nilai keislaman untuk mencetak talenta digital unggul dan berdaya saing global.</p>
+                <span class="hero-eyebrow"><i class="ri-sparkling-fill"></i> IC-LABS FIKOM UMI</span>
+                <h1>Pusat Layanan & <span class="text-blue">Sumber Daya Laboratorium</span> IC-Labs</h1>
+                <p>Portal terpadu pengelola dan manajemen sumber daya laboratorium Fakultas Ilmu Komputer UMI. Akses informasi jadwal praktikum, profil asisten, modul akademik, fasilitas riset, dan layanan ekosistem komputasi.</p>
                 <div class="btn-group">
                     <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
                         Gabung Sekarang <i class="ri-arrow-right-line"></i>
@@ -57,8 +57,8 @@ $laboran_list = $data['laboran'] ?? [];
                 <div class="vm-content">
                     <h3>Misi Utama</h3>
                     <ul class="professional-list">
-                        <li><i class="ri-checkbox-circle-line"></i> Menjadi pusat kegiatan belajar dan pelatihan...</li>
-                        <li><i class="ri-checkbox-circle-line"></i> Ikut aktif dalam menyelesaikan permasalahan...</li>
+                        <li><i class="ri-checkbox-circle-line"></i> Menjadi pusat kegiatan belajar dan pelatihan untuk merancang dan mengembangkan ilmu pengetahuan khususnya perangkat lunak dan perangkat keras komputer.</li>
+                        <li><i class="ri-checkbox-circle-line"></i> Ikut aktif dalam menyelesaikan permasalahan software dan hardware di masyarakat dengan melibatkan peran mahasiswa, asisten, dan dosen laboratorium.</li>
                     </ul>
                 </div>
             </div>
@@ -85,53 +85,72 @@ $laboran_list = $data['laboran'] ?? [];
         <button class="slider-btn next-btn" onclick="moveSlide(1)"><i class="ri-arrow-right-s-line"></i></button>
 
         <div class="slider-track" id="sliderTrack">
-            <div class="slide">
-                <div class="slide-content-wrapper"> 
-                    <div class="slide-image">
-                        <img src="<?= PUBLIC_URL ?>/images/Pusat-Kompetensi.jpg" alt="Pusat Kompetensi Digital" loading="lazy">
-                    </div>
-                    <div class="slide-text">
-                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">FASILITAS UNGGULAN</span>
-                        <h2><span class="text-blue">Pusat</span> Kompetensi</h2>
-                        <p>Laboratorium FIKOM UMI hadir sebagai pusat pengembangan hard skill unggulan dengan kurikulum adaptif.</p>
-                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Selengkapnya <i class="ri-arrow-right-line"></i></a>
+            <?php 
+            $slides = !empty($data['showcase_list']) ? $data['showcase_list'] : [
+                [
+                    'badge_text' => 'FASILITAS UNGGULAN',
+                    'judul'      => '<span class="text-blue">Pusat</span> Kompetensi',
+                    'deskripsi'  => 'Laboratorium FIKOM UMI hadir sebagai pusat pengembangan hard skill unggulan dengan kurikulum adaptif.',
+                    'img_url'    => PUBLIC_URL . '/images/Pusat-Kompetensi.jpg',
+                    'link_url'   => PUBLIC_URL . '/asisten',
+                    'link_label' => 'Lihat Selengkapnya'
+                ],
+                [
+                    'badge_text' => 'PERANGKAT MODERN',
+                    'judul'      => '<span class="text-blue">Infrastruktur</span> Spesifik',
+                    'deskripsi'  => 'Menyediakan laboratorium spesifik (RPL, Jaringan, Multimedia) dengan perangkat spesifikasi tinggi.',
+                    'img_url'    => PUBLIC_URL . '/images/Infrastruktur-Modern.jpg',
+                    'link_url'   => PUBLIC_URL . '/laboratorium',
+                    'link_label' => 'Lihat Fasilitas'
+                ],
+                [
+                    'badge_text' => 'KOLABORASI RISET',
+                    'judul'      => '<span class="text-blue">Riset</span> & Inovasi',
+                    'deskripsi'  => 'Mendukung kegiatan penelitian mahasiswa dan dosen dengan fasilitas komputasi yang memadai.',
+                    'img_url'    => PUBLIC_URL . '/images/RisetDanInovasi.png',
+                    'link_url'   => PUBLIC_URL . '/riset',
+                    'link_label' => 'Lihat Riset'
+                ]
+            ];
+
+            foreach ($slides as $idx => $slide) :
+                $badge     = htmlspecialchars($slide['badge_text'] ?? 'UNGGULAN');
+                $judul     = $slide['judul'] ?? '';
+                $deskripsi = htmlspecialchars($slide['deskripsi'] ?? '');
+                $imgUrl    = $slide['img_url'] ?? '';
+                $linkUrl   = trim($slide['link_url'] ?? '');
+                $linkLabel = htmlspecialchars($slide['link_label'] ?? '');
+                $hasLink   = !empty($linkUrl) && $linkUrl !== '#' && $linkUrl !== 'javascript:void(0)';
+            ?>
+                <div class="slide">
+                    <div class="slide-content-wrapper"> 
+                        <div class="slide-image">
+                            <img src="<?= $imgUrl ?>" alt="<?= strip_tags($judul) ?>" loading="lazy">
+                        </div>
+                        <div class="slide-text">
+                            <span class="slide-badge"><?= $badge ?></span>
+                            <h2><?= $judul ?></h2>
+                            <p><?= $deskripsi ?></p>
+                            <?php if ($hasLink): ?>
+                                <a href="<?= $linkUrl ?>" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">
+                                    <?= $linkLabel ?: 'Lihat Selengkapnya' ?> <i class="ri-arrow-right-line"></i>
+                                </a>
+                            <?php else: ?>
+                                <div class="slide-feature-tag">
+                                    <i class="ri-sparkling-fill"></i>
+                                    <span><?= $linkLabel ?: 'Laboratorium Terpadu FIKOM UMI' ?></span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="slide">
-                <div class="slide-content-wrapper">
-                    <div class="slide-image">
-                         <img src="<?= PUBLIC_URL ?>/images/Infrastruktur-Modern.jpg" alt="Infrastruktur Laboratorium Modern" loading="lazy">
-                    </div>
-                    <div class="slide-text">
-                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">PERANGKAT MODERN</span>
-                        <h2><span class="text-blue">Infrastruktur</span> Spesifik</h2>
-                        <p>Menyediakan laboratorium spesifik (RPL, Jaringan, Multimedia) dengan perangkat spesifikasi tinggi.</p>
-                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Fasilitas <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="slide">
-                <div class="slide-content-wrapper">
-                    <div class="slide-image">
-                         <img src="<?= PUBLIC_URL ?>/images/RisetDanInovasi.png" alt="Riset dan Inovasi Laboratorium" loading="lazy">
-                    </div>
-                    <div class="slide-text">
-                        <span class="hero-eyebrow" style="font-size: 0.7rem; padding: 4px 10px; margin-bottom: 12px; border-radius: 4px;">KOLABORASI RISET</span>
-                        <h2><span class="text-blue">Riset</span> & Inovasi</h2>
-                        <p>Mendukung kegiatan penelitian mahasiswa dan dosen dengan fasilitas komputasi yang memadai.</p>
-                        <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-primary" style="padding: 10px 22px; font-size: 0.88rem; margin-top: 15px; width: fit-content;">Lihat Riset <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
 
         <div class="slider-dots">
-            <button class="dot active" onclick="goToSlide(0)"></button>
-            <button class="dot" onclick="goToSlide(1)"></button>
-            <button class="dot" onclick="goToSlide(2)"></button>
+            <?php foreach ($slides as $idx => $s) : ?>
+                <button class="dot <?= $idx === 0 ? 'active' : '' ?>" onclick="goToSlide(<?= $idx ?>)"></button>
+            <?php endforeach; ?>
         </div>
     </div>
 

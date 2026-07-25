@@ -1,5 +1,9 @@
 <?php 
     $isNightMode = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'night');
+
+    // Identitas Halaman & Smart Title
+    $pageTitle = !empty($data['judul']) ? htmlspecialchars($data['judul']) : (!empty($judul) ? htmlspecialchars($judul) : 'Sistem Informasi Sumber Daya Laboratorium FIKOM UMI');
+    $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . ($_SERVER['HTTP_HOST'] ?? 'localhost') . ($_SERVER['REQUEST_URI'] ?? '');
 ?>
 <!DOCTYPE html>
 <html lang="id" class="<?= $isNightMode ? 'night-mode' : '' ?>">
@@ -19,7 +23,33 @@
         })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Informasi Sumber Daya Lab</title>
+    <title><?= $pageTitle ?> - IC-Labs FIKOM UMI</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Sistem Informasi Sumber Daya Laboratorium Terpadu Fakultas Ilmu Komputer Universitas Muslim Indonesia (IC-Labs FIKOM UMI). Akses jadwal praktikum, rekrutmen asisten, ruang laboratorium, modul, dan riset komputasi.">
+    <meta name="keywords" content="FIKOM UMI, Laboratorium FIKOM UMI, IC-Labs, Praktikum FIKOM UMI, Asisten Lab FIKOM, Jadwal Praktikum UMI, Modul Praktikum FIKOM">
+    <meta name="author" content="Laboratorium FIKOM UMI">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="<?= htmlspecialchars($currentUrl) ?>">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= htmlspecialchars($currentUrl) ?>">
+    <meta property="og:title" content="<?= $pageTitle ?> | IC-Labs FIKOM UMI">
+    <meta property="og:description" content="Portal resmi Sistem Informasi Sumber Daya Laboratorium Fakultas Ilmu Komputer Universitas Muslim Indonesia (UMI).">
+    <meta property="og:image" content="<?= PUBLIC_URL ?>/images/gedung-fikom-siang.webp">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:site_name" content="IC-Labs FIKOM UMI">
+
+    <!-- Twitter Cards Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= $pageTitle ?> | IC-Labs FIKOM UMI">
+    <meta name="twitter:description" content="Portal resmi Sistem Informasi Sumber Daya Laboratorium Fakultas Ilmu Komputer Universitas Muslim Indonesia (UMI).">
+    <meta name="twitter:image" content="<?= PUBLIC_URL ?>/images/gedung-fikom-siang.webp">
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/png" href="<?= PUBLIC_URL ?>/images/navbar-icon.png">
+    <link rel="apple-touch-icon" href="<?= PUBLIC_URL ?>/images/navbar-icon.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +71,7 @@
         // Tentukan curPage awal
         $curPage = $page ?? $pageQuery ?? ($segments[0] ?? 'home');
 
-        // Normalisasi Alias (Agar CSS tetap ke-load meski pakai URL alias)
+        // Normalisasi Alias
         $aliases = [
             'tata-tertib'      => 'tatatertib',
             'peraturan'        => 'tatatertib',
@@ -70,7 +100,7 @@
             echo '<link rel="preload" as="image" href="' . PUBLIC_URL . '/images/gedung-fikom-siang.webp" type="image/webp">' . "\n";
         }
 
-        // 2. LOGIKA SMART MAPPING (Memperbaiki Detail dari Card)
+        // 2. LOGIKA SMART MAPPING
         if (strpos($curPage, 'detail') !== false || strpos($curPage, 'asisten') !== false) {
             if (strpos($curPage, 'alumni') !== false) {
                 $curPage = 'alumni'; 
@@ -81,10 +111,12 @@
             }
         }
 
-        // 3. Mapping CSS yang Sesuai dengan Nama File di Folder CSS Anda
+        // 3. Mapping CSS
         $cssMap = [
             'home'         => 'home.css',
+            'apps'         => 'apps.css',
             'tatatertib'   => 'praktikum.css',
+            'peraturan'    => 'praktikum.css',
             'jadwal'       => 'praktikum.css',
             'jadwalupk'    => 'praktikum.css',
             'modul'        => 'praktikum.css',
@@ -105,12 +137,10 @@
         ];
 
         // 4. Load CSS
-        if (array_key_exists($curPage, $cssMap)) {
-            $cssFile = $cssMap[$curPage];
-            $cssPath = __DIR__ . '/../../../public/css/' . $cssFile;
-            $cssVersion = file_exists($cssPath) ? filemtime($cssPath) : time();
-            echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssFile . '?v=' . $cssVersion . '">';
-        }
+        $cssFile = $cssMap[$curPage] ?? $cssMap['default'];
+        $cssPath = __DIR__ . '/../../../public/css/' . $cssFile;
+        $cssVersion = file_exists($cssPath) ? filemtime($cssPath) . '_' . time() : time();
+        echo '<link rel="stylesheet" href="' . PUBLIC_URL . '/css/' . $cssFile . '?v=' . $cssVersion . '">';
     ?>
     
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" media="print" onload="this.media='all'">
@@ -118,14 +148,35 @@
 
     <base href="<?= rtrim(PUBLIC_URL, '/') ?>/">
     <script>window.PUBLIC_URL = "<?= rtrim(PUBLIC_URL, '/') ?>";</script>
+
+    <!-- Schema.org JSON-LD Structured Data untuk SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "Laboratorium Fakultas Ilmu Komputer UMI",
+      "alternateName": "IC-Labs FIKOM UMI",
+      "url": "<?= PUBLIC_URL ?>",
+      "logo": "<?= PUBLIC_URL ?>/images/navbar-icon.png",
+      "description": "Sistem Informasi Sumber Daya Laboratorium Terpadu FIKOM UMI Makassar",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Jl. Urip Sumoharjo KM.05",
+        "addressLocality": "Makassar",
+        "addressRegion": "Sulawesi Selatan",
+        "postalCode": "90231",
+        "addressCountry": "ID"
+      }
+    }
+    </script>
 </head>
 <body class="<?= $isNightMode ? 'night-mode' : '' ?>">
 
 <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="<?= PUBLIC_URL ?>/home" class="brand-logo">
-                    <img src="<?= PUBLIC_URL ?>/images/navbar-icon.png" alt="Logo IC-Labs" class="logo-img">
+                <a href="<?= PUBLIC_URL ?>/home" class="brand-logo" aria-label="Beranda IC-Labs FIKOM UMI">
+                    <img src="<?= PUBLIC_URL ?>/images/navbar-icon.png" alt="Logo IC-Labs FIKOM UMI" class="logo-img">
                 </a>
             </div>
 
@@ -173,11 +224,11 @@
                     </span>
                 </button>
 
-                <a href="<?= PUBLIC_URL ?>/apps" class="btn-nav-apps">
+                <a href="<?= PUBLIC_URL ?>/apps" class="btn-nav-apps" aria-label="Aplikasi IC-Labs">
                     <i class="ri-apps-2-line"></i> <span class="btn-apps-text">IC-Labs Apps</span>
                 </a>
 
-                <div class="menu-toggle">
+                <div class="menu-toggle" aria-label="Buka Menu Navigasi" role="button" tabindex="0">
                     <span></span>
                     <span></span>
                     <span></span>

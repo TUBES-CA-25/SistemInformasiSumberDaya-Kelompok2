@@ -35,4 +35,4 @@
     window.BASE_URL = "<?= BASE_URL ?>";
 </script>
 
-<script src="<?= PUBLIC_URL ?>/js/praktikum.js"></script>
+<script src="<?= PUBLIC_URL ?>/js/praktikum.js?v=<?= time() ?>"></script>

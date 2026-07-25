@@ -303,26 +303,71 @@ img {
 }
 
 @media screen and (max-width: 991px) {
+  body {
+    padding-top: 56px !important;
+  }
+
+  .navbar {
+    position: fixed !important;
+    top: 8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 92% !important;
+    max-width: 1200px !important;
+    border-radius: 12px !important; /* Slim compact floating capsule card */
+    padding: 4px 14px !important;
+    border: 1px solid rgba(191, 219, 254, 0.85) !important;
+    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.1) !important;
+    z-index: 9999 !important;
+  }
+
+  .navbar .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  .logo {
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .logo-img {
+    height: 32px !important;
+    width: auto !important;
+  }
+
   .nav-actions-right {
-    gap: 10px;
-  }
-
-  .btn-nav-apps {
-    padding: 8px 14px;
-    font-size: 0.85rem;
-  }
-
-  /* --- Compact icon button override for theme toggle on mobile --- */
-  .theme-toggle-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: rgba(226, 232, 240, 0.9);
-    border: 1px solid rgba(203, 213, 225, 0.8);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    padding: 0;
-    justify-content: center;
+    display: flex;
     align-items: center;
+    gap: 6px;
+  }
+
+  /* --- COMPACT ICON THEME TOGGLE BUTTON --- */
+  .theme-toggle-btn {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    border-radius: 8px !important;
+    background: rgba(241, 245, 249, 0.95);
+    border: 1px solid rgba(203, 213, 225, 0.9);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #d97706;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle-btn:active {
+    transform: scale(0.94);
   }
 
   .toggle-slider {
@@ -335,7 +380,7 @@ img {
   }
 
   .toggle-slider i {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     position: static;
   }
 
@@ -343,6 +388,7 @@ img {
   .icon-sun {
     display: inline-block;
     opacity: 1 !important;
+    color: #d97706;
   }
   .icon-moon {
     display: none !important;
@@ -359,26 +405,123 @@ img {
   body.night-mode .icon-moon {
     display: inline-block !important;
     opacity: 1 !important;
+    color: #c084fc !important;
   }
 
+  /* --- EYE-CATCHING APPS BUTTON --- */
+  .btn-nav-apps {
+    height: 32px !important;
+    padding: 0 10px !important;
+    font-size: 0.76rem !important;
+    font-weight: 700;
+    border-radius: 8px !important;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .btn-nav-apps:active {
+    transform: scale(0.94);
+  }
+
+  /* --- EYE-CATCHING BURGER MENU TOGGLE --- */
   .menu-toggle {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    border-radius: 8px !important;
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    padding: 0;
+    gap: 3px;
     z-index: 10001;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .menu-toggle:active {
+    transform: scale(0.94);
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background-color: #2563eb;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Active state when menu is opened */
+  .menu-toggle.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  }
+
+  .menu-toggle.active span {
+    background-color: #ffffff;
+  }
+
+  .menu-toggle.active span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .menu-toggle.active span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* Night Mode Overrides for Burger Menu */
+  body.night-mode .menu-toggle {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: rgba(71, 85, 105, 0.8);
+  }
+
+  body.night-mode .menu-toggle span {
+    background-color: #93c5fd;
+  }
+
+  body.night-mode .menu-toggle.active {
+    background: #2563eb;
+    border-color: #2563eb;
+  }
+
+  body.night-mode .menu-toggle.active span {
+    background-color: #ffffff;
   }
 
   .nav-links {
     display: flex;
     position: absolute;
-    top: calc(100% + 12px);
+    top: calc(100% + 10px);
     left: 0;
-    width: 100%;
+    right: 0;
+    width: 100% !important;
     flex-direction: column;
     background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     padding: 0 24px;
-    border: 1px solid rgba(191, 219, 254, 0.8);
-    border-radius: 20px;
+    border: 1px solid rgba(191, 219, 254, 0.85);
+    border-radius: 16px !important;
     box-shadow: 0 15px 35px rgba(30, 58, 138, 0.12);
     text-align: center;
 
@@ -444,27 +587,26 @@ img {
   }
 
   .btn-nav-apps {
-    width: 100%;
-    justify-content: center;
-    margin-left: 0;
-    margin-top: 10px;
+    width: auto;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    border-radius: 10px;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
 }
 
 @media screen and (max-width: 480px) {
   .theme-toggle-btn {
-    width: 58px;
-    height: 30px;
-  }
-  .toggle-slider {
-    width: 24px;
-    height: 24px;
-  }
-  body.night-mode .toggle-slider {
-    left: 29px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    padding: 0;
   }
   .btn-apps-text {
-    display: none;
+    display: none; /* Hide text on extra small phones so header row stays 100% clean */
   }
   .btn-nav-apps {
     padding: 8px 10px;

@@ -1,31 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // =================================================================
-  // 1. KONFIGURASI: Masukkan link yang sedang maintenance di sini
-  // =================================================================
-  const maintenanceLinks = [
-    "https://website-rusak.com",
-    "https://fitur-belum-siap.id",
-  ];
-
-  // =================================================================
-  // 2. LOGIKA PENANDAAN (MARKING)
-  // =================================================================
   const container = document.querySelector(".apps-grid");
+  if (!container) return;
+
   const cards = document.querySelectorAll(".app-card");
 
   cards.forEach((card) => {
-    // Ambil href dari kartu saat ini
-    const cardLink = card.getAttribute("href");
+    const isMaintenance =
+      card.classList.contains("maintenance") ||
+      card.getAttribute("data-status") === "maintenance";
 
-    // Cek apakah link kartu ini ada di daftar maintenance?
-    if (maintenanceLinks.includes(cardLink)) {
-      // Tambahkan class maintenance
+    if (isMaintenance) {
       card.classList.add("maintenance");
-
-      // Matikan Link
       card.removeAttribute("href");
 
-      // Tambahkan Badge "MAINTENANCE" jika belum ada
+      // Tambahkan badge jika belum ada
       if (!card.querySelector(".maintenance-badge")) {
         const badge = document.createElement("span");
         badge.className = "maintenance-badge";
@@ -33,29 +21,20 @@ document.addEventListener("DOMContentLoaded", function () {
         card.appendChild(badge);
       }
 
-      // Cegah klik
       card.addEventListener("click", function (e) {
         e.preventDefault();
+        e.stopPropagation();
       });
     }
   });
 
-  // =================================================================
-  // 3. LOGIKA PENGURUTAN OTOMATIS (SORTING) - NEW UPDATE 🚀
-  // =================================================================
-
-  // Ubah NodeList menjadi Array agar bisa disortir
+  // Sort: Aktif di atas, Maintenance di bawah
   const sortedCards = Array.from(cards).sort((a, b) => {
-    // Cek apakah kartu A dan B maintenance
     const isMaintA = a.classList.contains("maintenance");
     const isMaintB = b.classList.contains("maintenance");
-
-    // Logic: False (Active) harus di atas (0), True (Maintenance) di bawah (1)
     return isMaintA - isMaintB;
   });
 
-  // Masukkan ulang kartu yang sudah diurutkan ke dalam container
-  // Ini akan memindahkan posisi elemen di HTML secara otomatis
   sortedCards.forEach((card) => {
     container.appendChild(card);
   });

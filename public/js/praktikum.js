@@ -119,6 +119,29 @@ function populateLabFilter() {
   }
 }
 
+function matchesProdiFilter(targetProdi, targetMatkul, targetFrekuensi, filterVal) {
+  if (!filterVal || filterVal === "") return true;
+  
+  const val = filterVal.toLowerCase().trim();
+  const prodi = (targetProdi || "").toLowerCase().trim();
+  const freq = (targetFrekuensi || "").toLowerCase().trim();
+
+  if (val === "ti") {
+    return freq.startsWith("ti") || 
+           prodi === "ti" || 
+           prodi.includes("informatika") || 
+           prodi.includes("teknik informatika");
+  } 
+  
+  if (val === "si") {
+    return freq.startsWith("si") || 
+           prodi === "si" || 
+           prodi.includes("sistem informasi");
+  }
+
+  return prodi.includes(val) || freq.includes(val);
+}
+
 function renderJadwalDashboard() {
   const container = document.getElementById("lab-tables-container");
   const headerDay = document.getElementById("header-day");
@@ -132,20 +155,33 @@ function renderJadwalDashboard() {
   const filteredData = jadwalData.filter((item) => item.hari === selectedDay);
 
   const labSelect = document.getElementById("lab-select");
+  const prodiSelect = document.getElementById("prodi-select");
   const searchInput = document.getElementById("search-input");
   
   let finalFiltered = filteredData;
   if (labSelect && labSelect.value) {
     finalFiltered = finalFiltered.filter(item => item.namaLab === labSelect.value);
   }
-  if (searchInput && searchInput.value) {
-    const kw = searchInput.value.toLowerCase();
-    finalFiltered = finalFiltered.filter(item => 
-      (item.namaMatakuliah && item.namaMatakuliah.toLowerCase().includes(kw)) ||
-      (item.dosen && item.dosen.toLowerCase().includes(kw)) ||
-      (item.namaAsisten1 && item.namaAsisten1.toLowerCase().includes(kw)) ||
-      (item.namaAsisten2 && item.namaAsisten2.toLowerCase().includes(kw))
-    );
+  if (prodiSelect && prodiSelect.value) {
+    finalFiltered = finalFiltered.filter(item => matchesProdiFilter(item.prodi, item.namaMatakuliah, item.frekuensi, prodiSelect.value));
+  }
+  if (searchInput && searchInput.value.trim() !== "") {
+    const kw = searchInput.value.toLowerCase().trim();
+    finalFiltered = finalFiltered.filter(item => {
+      const fullText = (
+        (item.namaMatakuliah || "") + " " +
+        (item.dosen || "") + " " +
+        (item.namaAsisten1 || "") + " " +
+        (item.namaAsisten2 || "") + " " +
+        (item.frekuensi || "") + " " +
+        "kelas " + (item.kelas || "") + " " +
+        (item.kelas || "") + " " +
+        (item.kodeMatakuliah || "") + " " +
+        (item.namaLab || "") + " " +
+        (item.prodi || "")
+      ).toLowerCase();
+      return fullText.includes(kw);
+    });
   }
 
   const now = new Date();
@@ -192,7 +228,7 @@ function renderJadwalDashboard() {
   let finalHtml = "";
 
   labs.forEach((lab) => {
-    const jadwalLab = filteredData.filter((item) => item.namaLab === lab);
+    const jadwalLab = finalFiltered.filter((item) => item.namaLab === lab);
     jadwalLab.sort((a, b) => a.waktuMulai.localeCompare(b.waktuMulai));
 
     finalHtml += `
@@ -206,11 +242,11 @@ function renderJadwalDashboard() {
                 <thead>
                     <tr>
                         <th class="text-nowrap">Waktu</th>
-                        <th width="25%">Mata Kuliah</th>
+                        <th>Mata Kuliah</th>
                         <th class="text-nowrap">Kls/Freq</th>
-                        <th width="20%">Dosen</th>
-                        <th width="20%">Asisten</th>
-                        <th width="15%" class="text-center">Status</th>
+                        <th>Dosen</th>
+                        <th>Asisten</th>
+                        <th class="text-center text-nowrap">Status</th>
                     </tr>
                 </thead>
                 <tbody>`;
@@ -243,19 +279,35 @@ function renderJadwalDashboard() {
       const asistenDisplay =
         (a1Name || a2Name)
           ? `<div class="asisten-cell">
-               ${a1Name ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${a1Name}</div>` : ""}
-               ${a2Name ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; margin-right:5px;"></i> ${a2Name}</div>` : ""}
+               ${a1Name ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; flex-shrink:0;"></i> <span>${a1Name}</span></div>` : ""}
+               ${a2Name ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; flex-shrink:0;"></i> <span>${a2Name}</span></div>` : ""}
              </div>`
           : '<span style="color:#cbd5e1">-</span>';
 
+      let prodiText = item.prodi;
+      if (!prodiText && item.frekuensi) {
+        const fUpper = String(item.frekuensi).toUpperCase().trim();
+        if (fUpper.startsWith("TI")) prodiText = "TI";
+        else if (fUpper.startsWith("SI")) prodiText = "SI";
+      }
+      const prodiDisplay = prodiText ? `<span class="badge-prodi">${prodiText}</span>` : "";
+
       finalHtml += `
             <tr>
-                <td class="text-nowrap" style="font-family:'JetBrains Mono', monospace; font-size:0.95rem;">${start} - ${end}</td>
-                <td><span class="schedule-matkul">${item.namaMatakuliah}</span></td>
+                <td class="text-nowrap time-cell" style="font-family:'JetBrains Mono', monospace; font-size:0.88rem; font-weight:700;">
+                    <span class="time-range">${start} - ${end}</span>
+                    <span class="mobile-status-badge ${statusBadge}">${statusText}</span>
+                </td>
+                <td>
+                    <span class="schedule-matkul">
+                        ${item.namaMatakuliah}
+                        ${prodiDisplay}
+                    </span>
+                </td>
                 <td class="text-nowrap">${kelasFreq}</td>
-                <td><div style="display:flex; align-items:center; gap:8px;"><i class="fas fa-chalkboard-teacher" style="color:#64748b;"></i><span style="font-weight:500;">${item.dosen}</span></div></td>
+                <td><div class="dosen-cell"><i class="fas fa-chalkboard-teacher"></i><span>${item.dosen || "-"}</span></div></td>
                 <td>${asistenDisplay}</td>
-                <td style="text-align:center;"><span class="${statusBadge}">${statusText}</span></td>
+                <td class="desktop-status-cell" style="text-align:center;"><span class="${statusBadge}">${statusText}</span></td>
             </tr>`;
     });
     finalHtml += `</tbody></table></div></div>`;
@@ -322,41 +374,53 @@ function initUpkPage() {
 
 function filterJadwalUpk() {
   const labSelect = document.getElementById("upk-lab-select");
+  const prodiSelect = document.getElementById("upk-prodi-select");
   const searchInput = document.getElementById("upk-search-input");
   
   const labVal = labSelect ? labSelect.value.toLowerCase() : "";
-  const searchVal = searchInput ? searchInput.value.toLowerCase() : "";
-  
-  const wrappers = document.querySelectorAll(".schedule-wrapper");
-  let anyVisibleWrapper = false;
-  
-  wrappers.forEach(wrapper => {
-    const rows = wrapper.querySelectorAll("tbody tr");
-    let visibleRowsCount = 0;
-    
-    rows.forEach(row => {
-      const rowRuangan = (row.dataset.ruangan || "").toLowerCase();
-      const rowMatkul = (row.dataset.matkul || "").toLowerCase();
-      const rowDosen = (row.dataset.dosen || "").toLowerCase();
+  const prodiVal = prodiSelect ? prodiSelect.value.toLowerCase() : "";
+      const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : "";
       
-      const matchesLab = !labVal || rowRuangan === labVal;
-      const matchesSearch = !searchVal || 
-                            rowMatkul.includes(searchVal) || 
-                            rowDosen.includes(searchVal);
+      const wrappers = document.querySelectorAll(".schedule-wrapper");
+      let anyVisibleWrapper = false;
       
-      if (matchesLab && matchesSearch) {
-        row.style.display = "";
+      wrappers.forEach(wrapper => {
+        const rows = wrapper.querySelectorAll("tbody tr");
+        let visibleRowsCount = 0;
+        
+        rows.forEach(row => {
+          const rowText = (row.textContent || "").toLowerCase();
+          const rowRuangan = (row.dataset.ruangan || "").toLowerCase();
+          const rowMatkul = (row.dataset.matkul || "").toLowerCase();
+          const rowDosen = (row.dataset.dosen || "").toLowerCase();
+          const rowProdi = (row.dataset.prodi || "").toLowerCase();
+          const rowFreq = (row.dataset.frekuensi || "").toLowerCase();
+          const rowKelas = (row.dataset.kelas || "").toLowerCase();
+          
+          const matchesLab = !labVal || rowRuangan === labVal;
+          const matchesProdi = matchesProdiFilter(rowProdi, rowMatkul, rowFreq, prodiVal);
+          const matchesSearch = !searchVal || 
+                                rowText.includes(searchVal) ||
+                                rowMatkul.includes(searchVal) || 
+                                rowDosen.includes(searchVal) ||
+                                rowProdi.includes(searchVal) ||
+                                rowFreq.includes(searchVal) ||
+                                rowRuangan.includes(searchVal) ||
+                                rowKelas.includes(searchVal);
+      
+      if (matchesLab && matchesProdi && matchesSearch) {
+        row.style.removeProperty("display");
         visibleRowsCount++;
       } else {
-        row.style.display = "none";
+        row.style.setProperty("display", "none", "important");
       }
     });
     
     if (visibleRowsCount > 0) {
-      wrapper.style.display = "";
+      wrapper.style.removeProperty("display");
       anyVisibleWrapper = true;
     } else {
-      wrapper.style.display = "none";
+      wrapper.style.setProperty("display", "none", "important");
     }
   });
   
