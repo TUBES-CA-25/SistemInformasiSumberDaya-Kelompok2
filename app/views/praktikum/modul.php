@@ -1,21 +1,41 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <section class="praktikum-section full-height">
     <div class="container flex-grow">
         <header class="page-header">
             <span class="header-badge">Repositori Materi</span>
             <h1>Modul Praktikum</h1>
             <p>Daftar materi praktikum Teknik Informatika & Sistem Informasi untuk mendukung kegiatan belajar di Laboratorium.</p>
+
+            <div class="filter-controls" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 25px;">
+                <!-- Prodi Filter -->
+                <div class="day-selector-wrapper" style="margin-top: 0;">
+                    <select id="modul-prodi-select" class="custom-select" onchange="filterModulPage()" style="min-width: 160px;">
+                        <option value="">Semua Prodi</option>
+                        <option value="TI">Teknik Informatika (TI)</option>
+                        <option value="SI">Sistem Informasi (SI)</option>
+                    </select>
+                    <i class="fas fa-chevron-down select-icon"></i>
+                </div>
+
+                <!-- Search Input -->
+                <div class="search-input-wrapper" style="position: relative; display: inline-block;">
+                    <input type="text" id="modul-search-input" onkeyup="filterModulPage()" oninput="filterModulPage()" placeholder="Cari matakuliah, modul..." 
+                        style="padding: 12px 20px 12px 45px; border-radius: 12px; border: 2px solid #e2e8f0; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; outline: none; transition: all 0.3s; background: white; color: #0f172a; min-width: 280px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                    <i class="fas fa-search" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #64748b;"></i>
+                </div>
+            </div>
         </header>
 
         <div class="modul-grid">
             
-            <div class="modul-card">
+            <div class="modul-card" data-prodi="TI">
                 <div class="modul-header header-ti">
                     <div class="modul-icon">
-                        <i class="ri-code-s-slash-line"></i>
+                        <i class="fas fa-laptop-code"></i>
                     </div>
                     <div class="header-text">
-                        <h3 style="color: #ffffff;">Teknik Informatika</h3>
-                        <span>Fakultas Ilmu Komputer</span>
+                        <h3 style="color: #ffffff;">Teknik Informatika (TI)</h3>
+                        <span>Modul Praktikum Program Studi</span>
                     </div>
                 </div>
                 
@@ -60,14 +80,14 @@
                 </div>
             </div>
 
-            <div class="modul-card">
+            <div class="modul-card" data-prodi="SI">
                 <div class="modul-header header-si">
                     <div class="modul-icon">
-                        <i class="ri-line-chart-line"></i>
+                        <i class="fas fa-network-wired"></i>
                     </div>
                     <div class="header-text">
-                        <h3 style="color: #ffffff;">Sistem Informasi</h3>
-                        <span>Fakultas Ilmu Komputer</span>
+                        <h3 style="color: #ffffff;">Sistem Informasi (SI)</h3>
+                        <span>Modul Praktikum Program Studi</span>
                     </div>
                 </div>
 
@@ -112,6 +132,14 @@
                 </div>
             </div>
 
+            <div id="modul-empty-message" class="empty-schedule" style="grid-column: 1 / -1; margin-top: 20px; display: none;">
+                <i class="far fa-folder-open"></i>
+                <h3>Tidak Ada Modul Ditemukan</h3>
+                <p>Tidak ada modul praktikum yang cocok dengan pencarian Anda.</p>
+            </div>
+
         </div>
     </div>
 </section>
+
+<script src="<?= PUBLIC_URL ?>/js/praktikum.js?v=<?= time() ?>"></script>

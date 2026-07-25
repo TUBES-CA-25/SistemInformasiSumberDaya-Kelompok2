@@ -553,30 +553,36 @@
 
 @media (max-width: 1100px) {
   .staff-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-}
-
-@media (max-width: 900px) {
-  .staff-grid {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
   }
 }
 
 @media (max-width: 600px) {
   .staff-grid {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 12px;
   }
+  .staff-grid .card-link {
+    width: calc(50% - 6px);
+    max-width: 160px;
+  }
   .container {
-    padding: 0 16px;
+    padding: 0 14px;
   }
 }
 
 @media (max-width: 420px) {
   .staff-grid {
-    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .staff-grid .card-link {
+    width: calc(50% - 5px);
+    max-width: 150px;
   }
 }
 

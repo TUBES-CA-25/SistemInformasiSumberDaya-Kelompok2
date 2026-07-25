@@ -620,14 +620,61 @@
   width: 100%;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 991px) {
   .pimpinan-wrapper {
-    flex-direction: column;
-    align-items: center;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 18px !important;
+    margin-bottom: 30px !important;
+    width: 100% !important;
   }
+
   .pimpinan-wrapper .card-link {
-    max-width: 320px;
-    width: 100%;
+    max-width: 310px !important;
+    width: 100% !important;
+  }
+
+  .staff-photo-box {
+    aspect-ratio: 4 / 4.4 !important;
+  }
+
+  .staff-card {
+    border-radius: 16px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .staff-content {
+    padding: 12px 14px 14px !important;
+    gap: 4px !important;
+  }
+
+  .staff-name {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 2px !important;
+    line-height: 1.3 !important;
+  }
+
+  .staff-nidn {
+    font-size: 0.72rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .staff-role {
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .staff-content .meta-item {
+    padding: 5px 10px !important;
+    font-size: 0.75rem !important;
+    border-radius: 6px !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
   }
 }
 
@@ -1085,7 +1132,10 @@
    ------------------------------------------------------- */
 @media (max-width: 1100px) {
   .staff-grid {
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
   }
 }
 
@@ -1094,36 +1144,80 @@
     padding-top: 100px;
   }
   .page-header h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
 
   .staff-grid {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
   }
 
-  /* Exec Card (Mobile Stack) */
+  .staff-grid .card-link {
+    width: calc(50% - 8px);
+    max-width: 175px;
+  }
+
+  /* Exec Card (Mobile Compact Horizontal Layout with Wider Photo) */
   .exec-card {
-    flex-direction: column;
-    max-width: 400px;
+    flex-direction: row;
+    max-width: 460px;
+    margin: 0 auto 24px;
+    border-radius: 14px;
+    align-items: stretch;
   }
 
   .exec-photo {
-    flex: none;
+    flex: 0 0 135px;
+    width: 135px;
+    border-right: 1px solid var(--border);
+    border-bottom: none;
+    aspect-ratio: auto;
+  }
+
+  .exec-photo img {
     width: 100%;
-    border-right: none;
-    border-bottom: 2px solid var(--border);
-    aspect-ratio: 3 / 4;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
   }
 
   .exec-info {
-    padding: 30px;
-    text-align: center;
+    padding: 14px 16px;
+    text-align: left;
+    align-items: flex-start;
+    justify-content: center;
   }
-  .exec-info h3 {
-    font-size: 2rem;
-  }
+
   .exec-badge {
-    align-self: center;
+    align-self: flex-start;
+    padding: 3px 10px;
+    font-size: 0.68rem;
+    margin-bottom: 6px;
+  }
+
+  .exec-info h3 {
+    font-size: 1.1rem;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+
+  .exec-role {
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+  }
+
+  .exec-action {
+    width: auto;
+    margin-top: 4px !important;
+    padding-top: 0 !important;
+  }
+
+  .exec-action .btn-contact {
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    border-radius: 6px;
   }
 
   /* Detail Profile */
@@ -1148,48 +1242,134 @@
 
 @media (max-width: 768px) {
   .staff-grid {
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .staff-grid .card-link {
+    width: calc(50% - 6px);
+    max-width: 165px;
+  }
+
+  .staff-card {
+    border-radius: 14px;
+  }
+
+  .photo-scrim {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.25) 35%,
+      rgba(0, 0, 0, 0) 60%
+    );
+  }
+
+  .staff-overlay-info {
+    padding: 8px 10px;
+  }
+
+  .overlay-role {
+    font-size: 0.55rem;
+    margin: 0 0 2px;
+    letter-spacing: 0.4px;
+  }
+
+  .overlay-role::before {
+    width: 4px;
+    height: 4px;
+  }
+
+  .staff-overlay-info .staff-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+  }
+
+  .staff-content {
+    padding: 8px 10px 10px;
+    gap: 4px;
+  }
+
+  .staff-content .meta-item {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+    border-radius: 6px;
+  }
+
+  .staff-content .meta-item i {
+    font-size: 0.82rem;
   }
 }
 
 @media (max-width: 600px) {
   .container {
-    padding: 0 16px;
+    padding: 0 12px;
   }
 
   .staff-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 10px;
   }
 
   .staff-grid .card-link {
-    width: 46%;
+    width: calc(50% - 5px);
+    max-width: 160px;
   }
 
   .staff-card {
     border-radius: 12px;
   }
+
+  .staff-overlay-info {
+    padding: 6px 8px;
+  }
+
+  .overlay-role {
+    font-size: 0.52rem;
+    margin: 0 0 2px;
+  }
+
+  .staff-overlay-info .staff-name {
+    font-size: 0.78rem;
+    line-height: 1.2;
+  }
+
   .staff-content {
-    padding: 12px;
+    padding: 6px 8px 8px;
   }
+
   .staff-name {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
   }
+
   .staff-role {
-    font-size: 0.7rem;
-    margin-bottom: 10px;
+    font-size: 0.68rem;
+    margin-bottom: 6px;
   }
+
   .meta-item {
-    font-size: 0.75rem;
-  }
-  .meta-item i {
-    font-size: 0.9rem;
+    font-size: 0.68rem;
   }
 }
 
 @media (max-width: 380px) {
   .staff-grid {
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .staff-grid .card-link {
+    width: calc(50% - 4px);
+    max-width: 150px;
+  }
+
+  .staff-overlay-info {
+    padding: 5px 6px;
+  }
+
+  .staff-overlay-info .staff-name {
+    font-size: 0.74rem;
   }
 }
 
@@ -1508,33 +1688,167 @@
   box-shadow: 0 8px 16px -4px rgba(29, 78, 216, 0.35);
 }
 
-/* Responsive adjustments for modal */
-@media (max-width: 800px) {
+/* Responsive adjustments for modal (Compact Mobile Layout) */
+@media (max-width: 768px) {
+  .profile-modal-overlay {
+    padding: 12px;
+  }
+
+  .profile-modal-container {
+    border-radius: 16px;
+    max-height: calc(100vh - 24px);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .profile-modal-close {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 0.95rem;
+  }
+
   .profile-modal-body {
-    padding: 30px;
+    padding: 16px 18px;
   }
+
   .modal-profile-header-wrapper {
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    text-align: center;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    flex-direction: row;
+    gap: 14px;
+    align-items: flex-start;
+    text-align: left;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
   }
+
   .modal-profile-image {
-    flex: none;
-    width: 180px;
-    margin: 0 auto;
+    flex: 0 0 85px;
+    width: 85px;
     aspect-ratio: 3 / 4;
+    border-radius: 10px;
+    margin: 0;
   }
+
   .modal-profile-info-header {
-    align-items: center;
+    align-items: flex-start;
   }
+
   .modal-profile-info-header .category-badge {
-    align-self: center;
+    align-self: flex-start;
+    padding: 3px 8px;
+    font-size: 0.65rem;
+    margin-bottom: 4px;
   }
+
+  .modal-profile-info-header .profile-name {
+    font-size: 1.1rem;
+    line-height: 1.25;
+    margin-bottom: 2px;
+  }
+
+  .modal-profile-info-header .profile-role {
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+  }
+
+  .modal-profile-info-header .specialization-box {
+    margin-top: 4px;
+    gap: 4px;
+    width: 100%;
+  }
+
   .modal-profile-info-header .member-specialization {
+    font-size: 0.74rem;
+    padding: 4px 8px;
+    gap: 6px;
+    border-radius: 6px;
+    justify-content: flex-start;
+  }
+
+  .modal-profile-info-header .member-specialization i {
+    font-size: 0.9rem;
+  }
+
+  .modal-profile-details .section-title {
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+    padding-bottom: 3px;
+  }
+
+  .modal-profile-details .section-title::before {
+    font-size: 0.95rem;
+    margin-right: 4px;
+  }
+
+  .modal-profile-details .section-title.mt-30 {
+    margin-top: 10px !important;
+  }
+
+  .modal-profile-details .profile-bio {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+
+  .modal-profile-details .skills-container {
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .modal-profile-details .skill-tag {
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    border-radius: 5px;
+  }
+
+  .modal-profile-details .contact-wrapper {
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+
+  .modal-profile-details .btn-contact,
+  .modal-profile-details .btn-disabled {
+    width: 100%;
     justify-content: center;
+    padding: 9px 14px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-modal-overlay {
+    padding: 8px;
+  }
+
+  .profile-modal-body {
+    padding: 14px;
+  }
+
+  .modal-profile-header-wrapper {
+    gap: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  .modal-profile-image {
+    flex: 0 0 75px;
+    width: 75px;
+    border-radius: 8px;
+  }
+
+  .modal-profile-info-header .profile-name {
+    font-size: 1rem;
+  }
+
+  .modal-profile-info-header .profile-role {
+    font-size: 0.75rem;
+  }
+
+  .modal-profile-info-header .member-specialization {
+    font-size: 0.7rem;
+    padding: 3px 6px;
   }
 }
 
@@ -1695,6 +2009,7 @@ body.night-mode .btn-back:hover {
 }
 
 /* 5. Modal Dialog Night Mode */
+body.night-mode .profile-modal-container,
 body.night-mode .profile-modal-content {
   background: #1e293b !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
@@ -1706,6 +2021,7 @@ body.night-mode .modal-profile-image {
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
+body.night-mode .profile-modal-close,
 body.night-mode .modal-close-btn {
   background: rgba(15, 23, 42, 0.8) !important;
   color: #e2e8f0 !important;

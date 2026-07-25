@@ -427,9 +427,67 @@ function filterJadwalUpk() {
   const emptyMsg = document.getElementById("upk-empty-message");
   if (emptyMsg) {
     if (!anyVisibleWrapper) {
-      emptyMsg.classList.remove("hidden");
+      emptyMsg.style.removeProperty("display");
     } else {
-      emptyMsg.classList.add("hidden");
+      emptyMsg.style.setProperty("display", "none", "important");
+    }
+  }
+}
+
+// ==========================================================================
+// 3.5 LOGIKA HALAMAN: MODUL PRAKTIKUM (FILTER PRODI & SEARCH)
+// ==========================================================================
+
+function filterModulPage() {
+  const prodiSelect = document.getElementById("modul-prodi-select");
+  const searchInput = document.getElementById("modul-search-input");
+
+  const prodiVal = prodiSelect ? prodiSelect.value.toLowerCase().trim() : "";
+  const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : "";
+
+  const cards = document.querySelectorAll(".modul-card");
+  let anyVisibleCard = false;
+
+  cards.forEach(card => {
+    const cardProdi = (card.dataset.prodi || "").toLowerCase().trim();
+    const matchesProdi = !prodiVal || cardProdi === prodiVal;
+
+    if (!matchesProdi) {
+      card.style.setProperty("display", "none", "important");
+      return;
+    }
+
+    const rows = card.querySelectorAll("tbody tr");
+    let visibleRowsCount = 0;
+
+    rows.forEach(row => {
+      if (row.querySelector(".empty-state")) return;
+
+      const rowText = (row.textContent || "").toLowerCase();
+      const matchesSearch = !searchVal || rowText.includes(searchVal);
+
+      if (matchesSearch) {
+        row.style.removeProperty("display");
+        visibleRowsCount++;
+      } else {
+        row.style.setProperty("display", "none", "important");
+      }
+    });
+
+    if (visibleRowsCount > 0 || (rows.length === 1 && rows[0].querySelector(".empty-state"))) {
+      card.style.removeProperty("display");
+      anyVisibleCard = true;
+    } else {
+      card.style.setProperty("display", "none", "important");
+    }
+  });
+
+  const emptyMsg = document.getElementById("modul-empty-message");
+  if (emptyMsg) {
+    if (!anyVisibleCard) {
+      emptyMsg.style.removeProperty("display");
+    } else {
+      emptyMsg.style.setProperty("display", "none", "important");
     }
   }
 }
@@ -471,7 +529,6 @@ function initFormatPenulisanPage() {
         .map(
           (info) => `
         <article class="rule-card">
-            <div class="rule-icon icon-blue"><i class="${info.icon || "ri-book-open-line"}"></i></div>
             <h3>${info.judul}</h3>
             <ul class="rule-list">
                 ${(info.deskripsi || "")

@@ -807,29 +807,96 @@ img {
 }
 
 /* Responsif Footer */
-@media (max-width: 992px) {
-  .footer-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-  }
-}
-
-@media (max-width: 576px) {
+/* Responsif Compact Mobile Footer */
+@media (max-width: 991px) {
   .main-footer {
-    padding-top: 50px;
+    padding-top: 28px !important;
+    border-top-width: 3px !important;
   }
 
   .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .footer-section.brand-col,
+  .footer-section:nth-child(1) {
+    grid-column: 1 / -1 !important;
+  }
+
+  .footer-section:nth-child(4) {
+    grid-column: 1 / -1 !important;
   }
 
   .footer-logo {
-    justify-content: flex-start;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+    justify-content: flex-start !important;
+  }
+
+  .footer-logo img {
+    height: 32px !important;
+  }
+
+  .footer-logo span {
+    font-size: 1.05rem !important;
   }
 
   .footer-desc {
-    padding-right: 0;
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 10px !important;
+    padding-right: 0 !important;
+  }
+
+  .contact-list p {
+    font-size: 0.76rem !important;
+    margin-bottom: 4px !important;
+    gap: 6px !important;
+  }
+
+  .contact-list i {
+    font-size: 0.95rem !important;
+  }
+
+  .footer-section h3 {
+    font-size: 0.92rem !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .footer-section h3::after {
+    width: 28px !important;
+    height: 2px !important;
+  }
+
+  .footer-links li {
+    margin-bottom: 5px !important;
+  }
+
+  .footer-links a {
+    font-size: 0.76rem !important;
+  }
+
+  .footer-links a::before {
+    font-size: 0.85rem !important;
+    margin-right: 4px !important;
+  }
+
+  .separator-link {
+    margin: 8px 0 !important;
+  }
+
+  .map-wrapper {
+    height: 120px !important;
+    border-radius: 10px !important;
+  }
+
+  .copyright {
+    padding: 14px 0 !important;
+    margin-top: 14px !important;
+    font-size: 0.74rem !important;
   }
 }
 
