@@ -262,24 +262,111 @@
 }
 
 @media (max-width: 768px) {
-  .contact-section {
-    padding: 60px 0;
+  html body .contact-section {
+    margin-top: 0 !important;
+    padding-top: 14px !important;
+    padding-bottom: 25px !important;
+    min-height: auto !important;
+  }
+
+  .container {
+    padding: 0 16px !important;
+  }
+
+  .contact-wrapper {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    margin-bottom: 20px !important;
   }
 
   .contact-info-side h2 {
-    font-size: 2.2rem;
+    font-size: 1.65rem !important;
+    margin-bottom: 6px !important;
   }
 
-  .contact-form-card {
-    padding: 30px 24px;
+  .contact-info-side p {
+    font-size: 0.85rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 14px !important;
+    max-width: 100% !important;
+  }
+
+  .contact-methods {
+    gap: 10px !important;
   }
 
   .method-item {
-    padding: 15px;
+    padding: 10px 12px !important;
+    gap: 12px !important;
+    border-radius: 14px !important;
+  }
+
+  .method-icon {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 1.1rem !important;
+    border-radius: 10px !important;
+  }
+
+  .method-text h4 {
+    font-size: 0.92rem !important;
+    margin: 0 0 2px 0 !important;
+  }
+
+  .method-text span {
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .contact-form-card {
+    padding: 16px 14px !important;
+    border-radius: 18px !important;
+    margin-top: 6px !important;
+  }
+
+  .form-group {
+    margin-bottom: 12px !important;
+  }
+
+  .form-group label {
+    font-size: 0.74rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .form-group input {
+    padding: 10px 14px !important;
+    font-size: 0.88rem !important;
+    border-radius: 10px !important;
+  }
+
+  .form-group textarea {
+    padding: 10px 14px !important;
+    font-size: 0.88rem !important;
+    border-radius: 10px !important;
+    min-height: 85px !important;
+  }
+
+  .btn-submit {
+    padding: 12px !important;
+    font-size: 0.88rem !important;
+    border-radius: 10px !important;
+  }
+
+  .map-container {
+    margin-top: 20px !important;
+    border-radius: 18px !important;
+  }
+
+  .map-header {
+    padding: 10px 14px !important;
+  }
+
+  .map-header h3 {
+    font-size: 0.95rem !important;
   }
 
   .map-iframe-wrapper iframe {
-    height: 350px;
+    height: 220px !important;
   }
 }
 

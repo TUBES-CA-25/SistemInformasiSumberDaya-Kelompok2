@@ -605,6 +605,60 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 
+// ============================================
+// MOBILE TOUCH GALLERY DOTS & SWIPE ENHANCER
+// ============================================
+(function initMobileGalleryEnhancer() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const deck = document.getElementById('photoStackDeck');
+    const container = document.getElementById('photoStackContainer');
+    if (!deck || !container) return;
+
+    const cards = deck.querySelectorAll('.photo-card-item');
+    if (cards.length <= 1) return;
+
+    // Create mobile dots container
+    let dotsNav = document.getElementById('mobileGalleryDots');
+    if (!dotsNav) {
+      dotsNav = document.createElement('div');
+      dotsNav.id = 'mobileGalleryDots';
+      dotsNav.className = 'mobile-gallery-dots';
+
+      cards.forEach((card, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = `mobile-dot ${index === 0 ? 'active' : ''}`;
+        dot.setAttribute('aria-label', `Foto ${index + 1}`);
+        dot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const cardWidth = card.offsetWidth + 12;
+          deck.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+        });
+        dotsNav.appendChild(dot);
+      });
+
+      container.appendChild(dotsNav);
+    }
+
+    // Scroll listener for updating dots on mobile
+    let scrollTimer = null;
+    deck.addEventListener('scroll', () => {
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        const firstCard = cards[0];
+        if (!firstCard) return;
+        const cardWidth = firstCard.offsetWidth + 12;
+        const activeIndex = Math.round(deck.scrollLeft / cardWidth);
+        const dots = dotsNav.querySelectorAll('.mobile-dot');
+        dots.forEach((d, idx) => {
+          if (idx === activeIndex) d.classList.add('active');
+          else d.classList.remove('active');
+        });
+      }, 40);
+    }, { passive: true });
+  });
+})();
+
 
 
 
