@@ -593,6 +593,44 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.addEventListener('click', (e) => {
         if (e.target === modal) window.closeLightbox();
       });
+
+      // Touch Swipe Gesture for Lightbox on Mobile
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchEndX = 0;
+      let touchEndY = 0;
+
+      modal.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          touchEndX = touchStartX;
+          touchEndY = touchStartY;
+        }
+      }, { passive: true });
+
+      modal.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          touchEndX = e.touches[0].clientX;
+          touchEndY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      modal.addEventListener('touchend', () => {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Horizontal swipe threshold (minimum 40px, more horizontal than vertical)
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+          if (deltaX < 0) {
+            // Swipe Left -> Next photo
+            window.navLightbox(1);
+          } else {
+            // Swipe Right -> Previous photo
+            window.navLightbox(-1);
+          }
+        }
+      });
     }
 
     document.addEventListener('keydown', (e) => {

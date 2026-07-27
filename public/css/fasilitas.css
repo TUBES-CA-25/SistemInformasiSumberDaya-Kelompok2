@@ -4380,9 +4380,13 @@ body.night-mode .symmetrical-detail-view {
     animation: hintShimmer 2.5s ease-in-out infinite;
   }
 
-  /* 5. Mobile Lightbox Smooth Scale-In Animation */
+  /* 5. Mobile Lightbox Smooth Scale-In Animation & Hide Arrow Buttons */
   .lightbox-modal.active .lightbox-content {
     animation: mobileModalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .lightbox-nav-btn {
+    display: none !important;
   }
 }
 

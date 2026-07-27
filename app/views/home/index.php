@@ -16,8 +16,7 @@ $laboran_list = $data['laboran'] ?? [];
             </div>
             
             <div class="hero-content reveal fade-left">
-                <span class="hero-eyebrow"><i class="ri-sparkling-fill"></i> IC-LABS FIKOM UMI</span>
-                <h1>Pusat Layanan & <span class="text-blue">Sumber Daya Laboratorium</span> IC-Labs</h1>
+                <h1>Pusat Layanan & <span class="text-blue">Sumber Daya Laboratorium</span> IC-LABS</h1>
                 <p>Portal terpadu pengelola dan manajemen sumber daya laboratorium Fakultas Ilmu Komputer UMI. Akses informasi jadwal praktikum, profil asisten, modul akademik, fasilitas riset, dan layanan ekosistem komputasi.</p>
                 <div class="btn-group">
                     <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
@@ -34,32 +33,56 @@ $laboran_list = $data['laboran'] ?? [];
 </section>
 
 <section class="visi-misi-section">
-    <div class="blob-decoration blob-blue"></div>
-    <div class="blob-decoration blob-cyan"></div>
-
     <div class="container">
         <div class="section-header reveal fade-up">
-            <span class="badge-pill">Tentang Kami</span>
-            <h2>Komitmen & Tujuan</h2>
+            <span class="badge-pill"><i class="ri-compass-discover-line"></i> TENTANG KAMI</span>
+            <h2>Visi & Misi</h2>
         </div>
         
         <div class="visi-misi-grid">
-            <div class="vm-card reveal fade-up" style="transition-delay: 0.1s;">
-                <div class="vm-icon-box"><i class="ri-focus-2-line"></i></div>
-                <div class="vm-content">
-                    <h3>Visi Laboratorium</h3>
-                    <p>"Menjadikan laboratorium sebagai pusat kegiatan belajar dan interaksi yang dapat menghasilkan informasi dan karya baru secara ilmiah dibidang teknologi informasi."</p>
+            <!-- Visi Card -->
+            <div class="vm-card vm-card-visi reveal fade-up" style="transition-delay: 0.1s;">
+                <div class="vm-card-top">
+                    <div class="vm-icon-box icon-visi">
+                        <i class="ri-focus-2-line"></i>
+                    </div>
+                    <div class="vm-card-title">
+                        <span class="vm-sub-label">Tujuan Utama</span>
+                        <h3>Visi Laboratorium</h3>
+                    </div>
+                </div>
+
+                <div class="vm-card-body">
+                    <div class="visi-quote-box">
+                        <i class="ri-double-quotes-l quote-icon"></i>
+                        <p>"Menjadikan laboratorium sebagai pusat kegiatan belajar dan interaksi yang dapat menghasilkan informasi dan karya baru secara ilmiah dibidang teknologi informasi."</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="vm-card reveal fade-up" style="transition-delay: 0.2s;">
-                <div class="vm-icon-box"><i class="ri-list-settings-line"></i></div>
-                <div class="vm-content">
-                    <h3>Misi Utama</h3>
-                    <ul class="professional-list">
-                        <li><i class="ri-checkbox-circle-line"></i> Menjadi pusat kegiatan belajar dan pelatihan untuk merancang dan mengembangkan ilmu pengetahuan khususnya perangkat lunak dan perangkat keras komputer.</li>
-                        <li><i class="ri-checkbox-circle-line"></i> Ikut aktif dalam menyelesaikan permasalahan software dan hardware di masyarakat dengan melibatkan peran mahasiswa, asisten, dan dosen laboratorium.</li>
-                    </ul>
+            <!-- Misi Card -->
+            <div class="vm-card vm-card-misi reveal fade-up" style="transition-delay: 0.2s;">
+                <div class="vm-card-top">
+                    <div class="vm-icon-box icon-misi">
+                        <i class="ri-list-settings-line"></i>
+                    </div>
+                    <div class="vm-card-title">
+                        <span class="vm-sub-label">Komitmen Layanan</span>
+                        <h3>Misi Utama</h3>
+                    </div>
+                </div>
+
+                <div class="vm-card-body">
+                    <div class="misi-items-wrapper">
+                        <div class="misi-item-box">
+                            <div class="misi-badge">1</div>
+                            <p>Menjadi pusat kegiatan belajar dan pelatihan untuk merancang dan mengembangkan ilmu pengetahuan khususnya perangkat lunak dan perangkat keras komputer.</p>
+                        </div>
+                        <div class="misi-item-box">
+                            <div class="misi-badge">2</div>
+                            <p>Ikut aktif dalam menyelesaikan permasalahan software dan hardware di masyarakat dengan melibatkan peran mahasiswa, asisten, dan dosen laboratorium.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

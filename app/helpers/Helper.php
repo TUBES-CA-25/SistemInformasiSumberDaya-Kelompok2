@@ -157,6 +157,20 @@ class Helper {
         
         return $num > 0 ? $num : null;
     }
+
+    /**
+     * Asset Versioning Helper (Cache-Busting)
+     * Mengembalikan URL publik dengan timestamp filemtime ?v=timestamp.
+     * Contoh: Helper::asset('/css/home.css') -> "http://.../css/home.css?v=172208000"
+     */
+    public static function asset($relativePath) {
+        $cleanPath = '/' . ltrim($relativePath, '/');
+        $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : '';
+        $fullPath = defined('ROOT_PROJECT') ? (ROOT_PROJECT . '/public' . $cleanPath) : '';
+        
+        $v = (!empty($fullPath) && file_exists($fullPath)) ? filemtime($fullPath) : '1.0';
+        return $baseUrl . $cleanPath . '?v=' . $v;
+    }
 }
 
 /**
@@ -183,4 +197,8 @@ function dd($data) {
 
 function sanitize($data) {
     return htmlspecialchars(trim($data ?? ''));
+}
+
+function asset($path) {
+    return Helper::asset($path);
 }
