@@ -3,6 +3,12 @@
 // Data sudah diproses di PraktikumController::tatatertib()
 $rules_data = $data['rules'] ?? [];
 $sanksi_data = $data['sanksi'] ?? [];
+
+if (!function_exists('getRuleItemIcon')) {
+    function getRuleItemIcon($cardTitle, $itemText = '') {
+        return '<i class="ri-checkbox-circle-fill" style="color: #2563eb; flex-shrink: 0; font-size: 1.05rem;"></i>';
+    }
+}
 ?>
 
 <section class="rules-section">
@@ -47,10 +53,7 @@ $sanksi_data = $data['sanksi'] ?? [];
                     <i class="ri-movie-line"></i> Wajib Disimak
                 </div>
                 <div class="video-title-box">
-                    <h2>
-                        <span class="video-play-icon"><i class="ri-play-fill"></i></span>
-                        Video Panduan Laboratorium FIKOM UMI
-                    </h2>
+                    <h2>Video Panduan Laboratorium FIKOM UMI</h2>
                 </div>
                 <p class="video-desc">
                     Pelajari tata tertib laboratorium melalui video panduan resmi berikut ini.
@@ -78,10 +81,6 @@ $sanksi_data = $data['sanksi'] ?? [];
                             <div class="rule-img-box">
                                 <img src="<?= $row['img_url'] ?>" alt="<?= htmlspecialchars($row['judul']) ?>" loading="lazy">
                             </div>
-                        <?php else : ?>
-                            <div class="rule-icon icon-red">
-                                <i class="ri-error-warning-line"></i>
-                            </div>
                         <?php endif; ?>
                         
                         <h3><?= htmlspecialchars($row['judul']) ?></h3>
@@ -96,11 +95,13 @@ $sanksi_data = $data['sanksi'] ?? [];
                                 if (!empty($items)) {
                                     echo '<ul class="rule-list">';
                                     foreach ($items as $item) {
-                                        echo '<li><i class="ri-prohibited-line" style="color: #dc2626;"></i><span>' . htmlspecialchars($item) . '</span></li>';
+                                        $icon = getRuleItemIcon($row['judul'], $item);
+                                        echo '<li>' . $icon . '<span>' . htmlspecialchars($item) . '</span></li>';
                                     }
                                     echo '</ul>';
                                 } else {
-                                    echo '<ul class="rule-list"><li><i class="ri-prohibited-line" style="color: #dc2626;"></i><span>' . htmlspecialchars($deskripsi) . '</span></li></ul>';
+                                    $icon = getRuleItemIcon($row['judul'], $deskripsi);
+                                    echo '<ul class="rule-list"><li>' . $icon . '<span>' . htmlspecialchars($deskripsi) . '</span></li></ul>';
                                 }
                             } else {
                                 // Tampilan paragraf biasa
@@ -127,13 +128,11 @@ $sanksi_data = $data['sanksi'] ?? [];
                 <?php if (!empty($sanksi_data)) : ?>
                     <?php foreach ($sanksi_data as $row) : ?>
                         <div class="sanksi-item">
-                            <div class="sanksi-icon-box">
-                                <?php if (!empty($row['img_url'])): ?>
+                            <?php if (!empty($row['img_url'])): ?>
+                                <div class="sanksi-icon-box">
                                     <img src="<?= $row['img_url'] ?>" alt="Sanksi" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" loading="lazy">
-                                <?php else : ?>
-                                    <i class="ri-alarm-warning-fill" style="font-size: 2rem;"></i>
-                                <?php endif; ?>
-                            </div>
+                                </div>
+                            <?php endif; ?>
 
                             <div class="sanksi-content">
                                 <h4><?= htmlspecialchars($row['judul']) ?></h4>
@@ -145,13 +144,13 @@ $sanksi_data = $data['sanksi'] ?? [];
                                     if ($format === 'list') {
                                         $items = array_filter(array_map('trim', explode("\n", $deskripsi)));
                                         if (!empty($items)) {
-                                            echo '<ul style="list-style: disc; margin-left: 20px; color: #475569;">';
+                                            echo '<ul class="rule-list" style="margin-top: 8px;">';
                                             foreach ($items as $item) {
-                                                echo '<li style="margin-bottom: 6px;">' . htmlspecialchars($item) . '</li>';
+                                                echo '<li><i class="ri-error-warning-fill" style="color: #dc2626; flex-shrink: 0; font-size: 1.05rem;"></i><span>' . htmlspecialchars($item) . '</span></li>';
                                             }
                                             echo '</ul>';
                                         } else {
-                                            echo '<p>' . htmlspecialchars($deskripsi) . '</p>';
+                                            echo '<p style="color: #475569; line-height: 1.6;">' . htmlspecialchars($deskripsi) . '</p>';
                                         }
                                     } else {
                                         echo '<p style="color: #475569; line-height: 1.6;">' . nl2br(htmlspecialchars($deskripsi)) . '</p>';

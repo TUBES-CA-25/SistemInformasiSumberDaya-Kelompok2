@@ -4,7 +4,7 @@
             
             <div class="footer-section brand-col">
                 <div class="footer-logo">
-                    <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.png" alt="Logo" style="height: 40px; object-fit: contain;">
+                    <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.png" alt="Logo IC-Labs FIKOM UMI" style="height: 40px; object-fit: contain;">
                     <span style="font-weight: 800; font-size: 1.2rem; color: #fff;">IC-Labs</span>
                 </div>
                 <p class="footer-desc">
@@ -37,12 +37,12 @@
                     <li class="separator-link" style="margin: 10px 0; border-top: 1px solid #334155;"></li>
                     
                     <li>
-                        <a href="https://fikom.umi.ac.id" target="_blank" style="color: #ffffffff;">
+                        <a href="https://fikom.umi.ac.id" target="_blank" rel="noopener" style="color: #ffffffff;">
                             Website FIKOM
                         </a>
                     </li>
                     <li>
-                        <a href="https://umi.ac.id" target="_blank" style="color: #ffffffff;">
+                        <a href="https://umi.ac.id" target="_blank" rel="noopener" style="color: #ffffffff;">
                             Website UMI
                         </a>
                     </li>
@@ -54,7 +54,7 @@
                 <div class="map-wrapper">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3973.791123008261!2d119.448235!3d-5.137305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbefd3165008369%3A0x7af75b8baf265f2b!2sFakultas%20Ilmu%20Komputer%20UMI!5e0!3m2!1sid!2sus!4v1766106276722!5m2!1sid!2sus" 
-                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" title="Peta Lokasi FIKOM UMI">
                     </iframe>
                 </div>
             </div>
@@ -67,7 +67,7 @@
     </div>
 </footer>
 
-<a href="#" id="backToTop" class="back-to-top">
+<a href="#top" id="backToTop" class="back-to-top" aria-label="Kembali ke atas">
     <i class="ri-arrow-up-line"></i>
 </a>
 

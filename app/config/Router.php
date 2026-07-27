@@ -178,6 +178,14 @@ class Router {
         $this->post('/api/jadwal-upk/delete-multiple', 'JadwalUpkController', 'deleteMultiple');
         $this->post('/api/jadwal-upk/upload', 'JadwalUpkController', 'upload');
         $this->get('/api/jadwal-upk/template', 'JadwalUpkController', 'downloadTemplate');
+
+        // Showcase Slider Home Routes
+        $this->get('/admin/showcase', 'ShowcaseController', 'adminIndex');
+        $this->get('/api/showcase', 'ShowcaseController', 'apiIndex');
+        $this->post('/api/showcase', 'ShowcaseController', 'store');
+        $this->post('/api/showcase/{id}', 'ShowcaseController', 'update');
+        $this->put('/api/showcase/{id}', 'ShowcaseController', 'update');
+        $this->delete('/api/showcase/{id}', 'ShowcaseController', 'delete');
         $this->get('/jadwal-upk/template', 'JadwalUpkController', 'downloadTemplate');
         $this->get('/admin/jadwalupk/template', 'JadwalUpkController', 'downloadTemplate');
 

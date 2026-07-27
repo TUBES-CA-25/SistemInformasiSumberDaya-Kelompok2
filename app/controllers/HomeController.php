@@ -105,11 +105,33 @@ class HomeController extends Controller {
             }
         }
 
+        // Fetch Showcase Slides
+        $showcaseList = [];
+        try {
+            require_once ROOT_PROJECT . '/app/models/ShowcaseModel.php';
+            $showcaseModel = new ShowcaseModel();
+            $rawShowcase = $showcaseModel->getAllOrdered();
+            $baseUrl = defined('PUBLIC_URL') ? rtrim(PUBLIC_URL, '/') : '';
+            foreach ($rawShowcase as $item) {
+                if (isset($item['is_active']) && (int)$item['is_active'] === 0) continue;
+                $imgName = $item['gambar'] ?? '';
+                $item['img_url'] = $baseUrl . '/images/' . ($imgName ?: 'Pusat-Kompetensi.jpg');
+                if (!empty($imgName)) {
+                    $uploadPath = ROOT_PROJECT . '/public/assets/uploads/' . $imgName;
+                    if (file_exists($uploadPath)) {
+                        $item['img_url'] = $baseUrl . '/assets/uploads/' . $imgName;
+                    }
+                }
+                $showcaseList[] = $item;
+            }
+        } catch (\Throwable $e) {}
+
         // LANGKAH 5: Prepare data untuk view
         $data = [
             'judul' => 'Beranda - Portal Laboratorium',
             'kepala_lab' => $kepalLabList,
-            'laboran' => $laboranList
+            'laboran' => $laboranList,
+            'showcase_list' => $showcaseList
         ];
 
         // LANGKAH 6: Render view dengan data

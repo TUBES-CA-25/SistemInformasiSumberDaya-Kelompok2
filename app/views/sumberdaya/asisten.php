@@ -81,7 +81,6 @@ $alumni_list      = $data['alumni'] ?? [];
                                 <div class="photo-scrim"></div>
                                 <span class="view-hint"><i class="ri-arrow-right-up-line"></i></span>
                                 <div class="staff-overlay-info">
-                                    <span class="overlay-role role-asisten">Asisten Praktikum</span>
                                     <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
                                 </div>
                             </div>
@@ -118,7 +117,6 @@ $alumni_list      = $data['alumni'] ?? [];
                                 <div class="photo-scrim"></div>
                                 <span class="view-hint"><i class="ri-arrow-right-up-line"></i></span>
                                 <div class="staff-overlay-info">
-                                    <span class="overlay-role role-ca">Calon Asisten</span>
                                     <h3 class="staff-name"><?= htmlspecialchars($row['nama']) ?></h3>
                                 </div>
                             </div>

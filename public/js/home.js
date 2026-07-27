@@ -16,8 +16,23 @@ reveal();
 let currentSlide = 0;
 const track = document.getElementById("sliderTrack");
 const dots = document.querySelectorAll(".dot");
-
 const totalSlides = dots.length;
+
+let autoSlideTimer = null;
+
+function startAutoSlide() {
+  stopAutoSlide();
+  autoSlideTimer = setInterval(() => {
+    moveSlide(1, false);
+  }, 6000);
+}
+
+function stopAutoSlide() {
+  if (autoSlideTimer) {
+    clearInterval(autoSlideTimer);
+    autoSlideTimer = null;
+  }
+}
 
 function updateSlider() {
   if (track) {
@@ -30,7 +45,7 @@ function updateSlider() {
   }
 }
 
-function moveSlide(direction) {
+function moveSlide(direction, isUserAction = true) {
   currentSlide += direction;
 
   if (currentSlide < 0) {
@@ -39,16 +54,42 @@ function moveSlide(direction) {
     currentSlide = 0;
   }
   updateSlider();
+  if (isUserAction) {
+    startAutoSlide();
+  }
 }
 
 function goToSlide(index) {
   currentSlide = index;
   updateSlider();
+  startAutoSlide();
 }
 
-setInterval(() => {
-  moveSlide(1);
-}, 5000);
+// Touch Swipe gesture support for mobile touchscreen with Auto-Pause
+if (track) {
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  track.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    stopAutoSlide(); // Pause timer while user is touching screen
+  }, { passive: true });
+
+  track.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const swipeThreshold = 40;
+    if (touchEndX < touchStartX - swipeThreshold) {
+      moveSlide(1, true);
+    } else if (touchEndX > touchStartX + swipeThreshold) {
+      moveSlide(-1, true);
+    } else {
+      startAutoSlide(); // Resume timer if user just tapped without swiping
+    }
+  }, { passive: true });
+}
+
+// Start initial auto slide
+startAutoSlide();
 
 // Fungsi Counter Animation
 const counters = document.querySelectorAll(".stat-number");
