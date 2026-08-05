@@ -8,12 +8,47 @@ RewriteBase /SistemInformasiSumberDaya-Kelompok2/public/
 # 1. Lindungi folder sensitif agar tidak bisa diakses lewat browser
 RewriteRule ^(.*/)?\.git+ - [F,L]
 
-# 2. Jika file, direktori, atau link simbolik beneran ada, buka filenya (CSS, JS, Gambar)
+# 2. Set halaman indeks default ke index.php
+DirectoryIndex index.php
+
+# 3. Direct URL root public/ ke index.php dengan parameter route=
+RewriteRule ^$ index.php?route= [QSA,L]
+
+# 4. Jika file, direktori, atau link simbolik beneran ada, buka filenya (CSS, JS, Gambar)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-l
 
-# 3. Kirim semua permintaan lain ke index.php
+# 5. Kirim semua permintaan lain ke index.php
 # Gunakan [QSA] agar parameter query lain (seperti ?id=1) tetap terbaca
 # Gunakan [L] untuk menghentikan pemrosesan aturan lain jika ini sudah terpenuhi
 RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]
+
+# 4. Caching & Expiration Headers untuk Aset Statis (Gambar, CSS, JS, Fonts)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    
+    # Images & Media
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # Styles & Scripts
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+    ExpiresByType text/javascript "access plus 7 days"
+
+    # Web Fonts
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|webp|png|jpg|jpeg|gif|ico|svg|woff2|woff)$">
+        Header set Cache-Control "public, max-age=604800"
+    </FilesMatch>
+</IfModule>

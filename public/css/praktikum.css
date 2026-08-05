@@ -464,6 +464,18 @@
   vertical-align: middle;
   font-size: 0.9rem;
   line-height: 1.5;
+  color: #1e293b;
+}
+
+.table-schedule td b,
+.table-schedule td strong {
+  color: #0f172a;
+}
+
+.time-cell,
+.time-range {
+  color: #0f172a;
+  font-weight: 700;
 }
 
 /* Typography Khusus Tabel Jadwal (NEW) */
@@ -510,14 +522,15 @@
 }
 
 .schedule-kelas {
-  font-weight: 700;
-  color: #475569;
-  display: block;
+  font-weight: 800;
+  color: #0f172a;
+  display: inline-block;
 }
 
 .schedule-freq {
-  font-size: 0.85rem;
-  color: #94a3b8;
+  font-size: 0.88rem;
+  color: #334155;
+  font-weight: 600;
 }
 
 .dosen-cell {
@@ -525,9 +538,13 @@
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  color: #334155;
+  color: #1e293b;
   font-size: 0.9rem;
   line-height: 1.45;
+}
+
+.dosen-name {
+  color: #1e293b;
 }
 
 .dosen-cell i {
@@ -560,7 +577,15 @@
   display: none !important;
 }
 
-/* Status Labels */
+/* Status Labels & Responsive Cell Display */
+.mobile-status-badge {
+  display: none !important;
+}
+
+.desktop-status-cell {
+  display: table-cell !important;
+}
+
 .status-label {
   display: inline-flex;
   align-items: center;
@@ -1212,8 +1237,15 @@ body.night-mode .download-content h4 {
 }
 
 body.night-mode .schedule-time {
-  background: rgba(37, 99, 235, 0.25) !important;
-  color: #60a5fa !important;
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+body.night-mode .time-cell,
+body.night-mode .time-range {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 body.night-mode .schedule-matkul,
@@ -1223,13 +1255,30 @@ body.night-mode .table-schedule td:nth-child(2) {
 }
 
 body.night-mode .schedule-kelas,
+body.night-mode .schedule-freq,
+body.night-mode .modul-title,
+body.night-mode .asisten-name span {
+  color: #e2e8f0 !important;
+}
+
 body.night-mode .dosen-name,
-body.night-mode .modul-title {
-  color: #cbd5e1 !important;
+body.night-mode .dosen-info,
+body.night-mode .dosen-info span,
+body.night-mode .dosen-cell,
+body.night-mode .dosen-cell span,
+body.night-mode .table-schedule td:nth-child(4) {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+body.night-mode .dosen-info i,
+body.night-mode .dosen-cell i,
+body.night-mode .asisten-name i {
+  color: #60a5fa !important;
 }
 
 body.night-mode .table-schedule td {
-  color: #cbd5e1 !important;
+  color: #e2e8f0 !important;
 }
 
 body.night-mode .badge-prodi {
@@ -1324,18 +1373,28 @@ body.night-mode .downloads-section {
 
 /* 9. Search Input & Live Clock for Jadwal Page */
 body.night-mode #search-input,
-body.night-mode .search-input-wrapper input {
+body.night-mode #upk-search-input,
+body.night-mode #modul-search-input,
+body.night-mode .search-input-wrapper input,
+body.night-mode .upk-search-wrapper input,
+body.night-mode .modul-search-wrapper input {
   background-color: #1e293b !important;
   color: #f8fafc !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 body.night-mode #search-input::placeholder,
-body.night-mode .search-input-wrapper input::placeholder {
+body.night-mode #upk-search-input::placeholder,
+body.night-mode #modul-search-input::placeholder,
+body.night-mode .search-input-wrapper input::placeholder,
+body.night-mode .upk-search-wrapper input::placeholder,
+body.night-mode .modul-search-wrapper input::placeholder {
   color: #94a3b8 !important;
 }
 
-body.night-mode .search-input-wrapper i {
+body.night-mode .search-input-wrapper i,
+body.night-mode .upk-search-wrapper i,
+body.night-mode .modul-search-wrapper i {
   color: #94a3b8 !important;
 }
 
@@ -1346,7 +1405,20 @@ body.night-mode .live-clock-badge {
   box-shadow: 0 10px 25px -5px rgba(29, 78, 216, 0.5) !important;
 }
 
-body.night-mode .custom-select option {
+body.night-mode .custom-select,
+body.night-mode #day-select,
+body.night-mode #lab-select,
+body.night-mode #prodi-select,
+body.night-mode #upk-lab-select,
+body.night-mode #upk-prodi-select,
+body.night-mode #modul-prodi-select {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+body.night-mode .custom-select option,
+body.night-mode select option {
   background-color: #1e293b !important;
   color: #f8fafc !important;
 }

@@ -1,11 +1,17 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /SistemInformasiSumberDaya-Kelompok2/
-    
-    # If it's a real file or directory, don't rewrite
+
+    # Set halaman indeks default ke public/index.php
+    DirectoryIndex public/index.php
+
+    # Direct URL root (saat diakses tanpa nama file) ke public/index.php dengan parameter route
+    RewriteRule ^$ public/index.php?route= [QSA,L]
+
+    # Jika mengakses file atau direktori fisik yang benar-benar ada di root, jangan di-rewrite
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    
-    # Rewrite everything else to public/index.php with route parameter
+
+    # Rewrite semua permintaan lainnya ke public/index.php dengan parameter route
     RewriteRule ^(.*)$ public/index.php?route=$1 [QSA,L]
 </IfModule>

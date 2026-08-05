@@ -39,7 +39,7 @@ class JadwalUpkModel {
                 ORDER BY j.tanggal ASC, j.jam ASC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
     public function getById($id) {

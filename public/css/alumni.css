@@ -121,10 +121,12 @@
   .page-header h1 {
     font-size: 2.5rem;
   }
+
   .page-header p {
     font-size: 1rem;
     padding: 0 15px;
   }
+
   .alumni-section {
     padding-top: 80px;
   }
@@ -145,7 +147,8 @@
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 20px;
-  margin-top: 30px; /* Jarak atas dikurangi */
+  margin-top: 30px;
+  /* Jarak atas dikurangi */
   display: flex;
   align-items: center;
   gap: 15px;
@@ -154,7 +157,8 @@
 .section-label::after {
   content: "";
   flex: 1;
-  height: 1px; /* Garis lebih tipis */
+  height: 1px;
+  /* Garis lebih tipis */
   background: #e2e8f0;
   border-radius: 2px;
 }
@@ -163,7 +167,8 @@
 .staff-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 25px; /* Gap antar card dikurangi */
+  gap: 25px;
+  /* Gap antar card dikurangi */
   align-items: start;
 }
 
@@ -179,7 +184,8 @@
 .staff-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 16px; /* Radius sedikit dikurangi */
+  border-radius: 16px;
+  /* Radius sedikit dikurangi */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
   display: flex;
@@ -192,7 +198,8 @@
 .staff-card:hover {
   border-color: #94a3b8;
   box-shadow: var(--shadow-md);
-  transform: translateY(-5px); /* Efek naik sedikit dikurangi */
+  transform: translateY(-5px);
+  /* Efek naik sedikit dikurangi */
 }
 
 /* FOTO LIST VIEW */
@@ -218,11 +225,13 @@
 }
 
 .staff-card:hover .staff-photo-box img {
-  transform: scale(1.03); /* Zoom sedikit dikurangi */
+  transform: scale(1.03);
+  /* Zoom sedikit dikurangi */
 }
 
 .staff-content {
-  padding: 20px; /* Padding dalam card dikurangi */
+  padding: 20px;
+  /* Padding dalam card dikurangi */
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -279,6 +288,7 @@
   font-size: 0.9rem;
   transition: color 0.2s;
 }
+
 .btn-back:hover {
   color: #2563eb;
 }
@@ -319,7 +329,8 @@
 
 /* --- BAGIAN KONTEN (Lebih Rapat) --- */
 .profile-content {
-  padding: 35px; /* Padding dikurangi signifikan dari 50px */
+  padding: 35px;
+  /* Padding dikurangi signifikan dari 50px */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -328,7 +339,8 @@
 
 /* Badges */
 .alumni-badges {
-  margin-bottom: 15px; /* Jarak bawah dikurangi */
+  margin-bottom: 15px;
+  /* Jarak bawah dikurangi */
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -336,7 +348,8 @@
 
 .category-badge,
 .divisi-badge {
-  padding: 5px 14px; /* Padding badge diperkecil */
+  padding: 5px 14px;
+  /* Padding badge diperkecil */
   border-radius: 50px;
   font-size: 0.75rem;
   font-weight: 700;
@@ -360,7 +373,8 @@
 .profile-name {
   margin-top: 0;
   margin-bottom: 15px;
-  font-size: 2.4rem; /* Font size nama sedikit diperkecil */
+  font-size: 2.4rem;
+  /* Font size nama sedikit diperkecil */
   line-height: 1.1;
   color: #0f172a;
   font-weight: 900;
@@ -370,7 +384,8 @@
 /* Info Tambahan (Mata Kuliah) */
 .meta-info-box {
   margin-bottom: 25px;
-  padding: 15px; /* Padding box diperkecil */
+  padding: 15px;
+  /* Padding box diperkecil */
   background-color: #f8fafc;
   border: 1px solid #f1f5f9;
   border-radius: 10px;
@@ -397,7 +412,8 @@
 .section-title {
   color: #94a3b8;
   margin-bottom: 10px;
-  font-size: 0.85rem; /* Font judul diperkecil */
+  font-size: 0.85rem;
+  /* Font judul diperkecil */
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -405,13 +421,16 @@
 
 /* --- [MODIFIKASI COMPACT] Judul Section Kompetensi --- */
 .section-title.mt-30 {
-  margin-top: 25px; /* Jarak atas JAUH dikurangi */
-  font-size: 1rem; /* Font size diperkecil */
+  margin-top: 25px;
+  /* Jarak atas JAUH dikurangi */
+  font-size: 1rem;
+  /* Font size diperkecil */
   font-weight: 800;
   color: #0f172a;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #f1f5f9; /* Garis lebih tipis */
+  border-bottom: 1px solid #f1f5f9;
+  /* Garis lebih tipis */
 }
 
 /* Kesan Pesan (Quote Style Compact) */
@@ -419,10 +438,14 @@
   font-style: italic;
   background: #fff;
   color: #475569;
-  padding: 0 0 0 15px; /* Padding kiri dikurangi */
-  border-left: 3px solid #cbd5e1; /* Garis lebih tipis */
-  line-height: 1.5; /* Jarak antar baris dirapatkan */
-  font-size: 0.95rem; /* Font size diperkecil */
+  padding: 0 0 0 15px;
+  /* Padding kiri dikurangi */
+  border-left: 3px solid #cbd5e1;
+  /* Garis lebih tipis */
+  line-height: 1.5;
+  /* Jarak antar baris dirapatkan */
+  font-size: 0.95rem;
+  /* Font size diperkecil */
   margin-bottom: 5px;
 }
 
@@ -430,7 +453,8 @@
 .skills-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; /* Gap antar skill dikurangi */
+  gap: 8px;
+  /* Gap antar skill dikurangi */
   margin-bottom: 15px;
 }
 
@@ -440,9 +464,11 @@
   background-color: #ffffff;
   color: #475569;
   border: 1px solid #e2e8f0;
-  padding: 6px 16px; /* Padding tombol diperkecil */
+  padding: 6px 16px;
+  /* Padding tombol diperkecil */
   border-radius: 6px;
-  font-size: 0.85rem; /* Font size tombol diperkecil */
+  font-size: 0.85rem;
+  /* Font size tombol diperkecil */
   font-weight: 600;
   white-space: nowrap;
   transition: all 0.2s ease;
@@ -460,11 +486,13 @@
   gap: 10px;
   flex-wrap: wrap;
   margin-top: auto;
-  padding-top: 25px; /* Jarak atas dikurangi */
+  padding-top: 25px;
+  /* Jarak atas dikurangi */
 }
 
 .btn-contact {
-  padding: 10px 20px; /* Padding tombol diperkecil */
+  padding: 10px 20px;
+  /* Padding tombol diperkecil */
   border-radius: 8px;
   text-decoration: none;
   display: inline-flex;
@@ -498,17 +526,20 @@
   text-align: center;
   padding: 80px 0;
 }
+
 .empty-icon {
   font-size: 3.5rem;
   color: #cbd5e1;
   margin-bottom: 15px;
 }
+
 .empty-title {
   color: #0f172a;
   margin-bottom: 10px;
   font-weight: 800;
   font-size: 1.5rem;
 }
+
 .empty-desc {
   color: #64748b;
   margin-bottom: 25px;
@@ -538,7 +569,8 @@
     background: #fff;
     border: 1px solid #e2e8f0;
     border-radius: 16px;
-    padding: 25px; /* Padding mobile juga dirapatkan */
+    padding: 25px;
+    /* Padding mobile juga dirapatkan */
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
   }
 
@@ -567,10 +599,12 @@
     justify-content: center;
     gap: 12px;
   }
+
   .staff-grid .card-link {
     width: calc(50% - 6px);
     max-width: 160px;
   }
+
   .container {
     padding: 0 14px;
   }
@@ -580,6 +614,7 @@
   .staff-grid {
     gap: 10px;
   }
+
   .staff-grid .card-link {
     width: calc(50% - 5px);
     max-width: 150px;

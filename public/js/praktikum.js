@@ -271,7 +271,7 @@ function renderJadwalDashboard() {
         }
       }
 
-      const kelasFreq = `<b>${item.kelas || "-"}</b> <span style="color:#94a3b8">/</span> ${item.frekuensi || "-"}`;
+      const kelasFreq = `<span class="schedule-kelas">Kelas ${item.kelas || "-"}</span> <span class="schedule-freq">/ ${item.frekuensi || "-"}</span>`;
       const cleanName = (val) => (!val || val === "-" || /^\d+$/.test(String(val).trim())) ? "" : String(val).trim();
       const a1Name = cleanName(item.namaAsisten1);
       const a2Name = cleanName(item.namaAsisten2);
@@ -331,7 +331,6 @@ function initUpkPage() {
   function updateUpkHeader() {
     const now = new Date();
 
-    // Kita definisikan ulang array bulan lokal untuk memastikan ketersediaan
     const namaBulan = [
       "Januari",
       "Februari",
@@ -368,6 +367,9 @@ function initUpkPage() {
   // Jalankan segera
   updateUpkHeader();
 
+  // Sync filter awal
+  filterJadwalUpk();
+
   // Update per detik
   setInterval(updateUpkHeader, 1000);
 }
@@ -377,36 +379,39 @@ function filterJadwalUpk() {
   const prodiSelect = document.getElementById("upk-prodi-select");
   const searchInput = document.getElementById("upk-search-input");
   
-  const labVal = labSelect ? labSelect.value.toLowerCase() : "";
-  const prodiVal = prodiSelect ? prodiSelect.value.toLowerCase() : "";
-      const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : "";
+  const labVal = labSelect ? labSelect.value.toLowerCase().trim() : "";
+  const prodiVal = prodiSelect ? prodiSelect.value.toLowerCase().trim() : "";
+  const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : "";
       
-      const wrappers = document.querySelectorAll(".schedule-wrapper");
-      let anyVisibleWrapper = false;
+  const wrappers = document.querySelectorAll(".schedule-wrapper");
+  let anyVisibleWrapper = false;
       
-      wrappers.forEach(wrapper => {
-        const rows = wrapper.querySelectorAll("tbody tr");
-        let visibleRowsCount = 0;
-        
-        rows.forEach(row => {
-          const rowText = (row.textContent || "").toLowerCase();
-          const rowRuangan = (row.dataset.ruangan || "").toLowerCase();
-          const rowMatkul = (row.dataset.matkul || "").toLowerCase();
-          const rowDosen = (row.dataset.dosen || "").toLowerCase();
-          const rowProdi = (row.dataset.prodi || "").toLowerCase();
-          const rowFreq = (row.dataset.frekuensi || "").toLowerCase();
-          const rowKelas = (row.dataset.kelas || "").toLowerCase();
-          
-          const matchesLab = !labVal || rowRuangan === labVal;
-          const matchesProdi = matchesProdiFilter(rowProdi, rowMatkul, rowFreq, prodiVal);
-          const matchesSearch = !searchVal || 
-                                rowText.includes(searchVal) ||
-                                rowMatkul.includes(searchVal) || 
-                                rowDosen.includes(searchVal) ||
-                                rowProdi.includes(searchVal) ||
-                                rowFreq.includes(searchVal) ||
-                                rowRuangan.includes(searchVal) ||
-                                rowKelas.includes(searchVal);
+  wrappers.forEach(wrapper => {
+    const rows = wrapper.querySelectorAll("tbody tr");
+    let visibleRowsCount = 0;
+    
+    rows.forEach(row => {
+      const rowText = (row.textContent || "").toLowerCase();
+      const rowRuangan = (row.dataset.ruangan || "").toLowerCase().trim();
+      const rowMatkul = (row.dataset.matkul || "").toLowerCase().trim();
+      const rowDosen = (row.dataset.dosen || "").toLowerCase().trim();
+      const rowProdi = (row.dataset.prodi || "").toLowerCase().trim();
+      const rowFreq = (row.dataset.frekuensi || "").toLowerCase().trim();
+      const rowKelas = (row.dataset.kelas || "").toLowerCase().trim();
+      
+      const matchesLab = !labVal || rowRuangan === labVal || rowRuangan.includes(labVal);
+      const matchesProdi = typeof matchesProdiFilter === "function" 
+        ? matchesProdiFilter(rowProdi, rowMatkul, rowFreq, prodiVal) 
+        : (!prodiVal || rowProdi.includes(prodiVal) || rowFreq.includes(prodiVal));
+
+      const matchesSearch = !searchVal || 
+                            rowText.includes(searchVal) ||
+                            rowMatkul.includes(searchVal) || 
+                            rowDosen.includes(searchVal) ||
+                            rowProdi.includes(searchVal) ||
+                            rowFreq.includes(searchVal) ||
+                            rowRuangan.includes(searchVal) ||
+                            rowKelas.includes(searchVal);
       
       if (matchesLab && matchesProdi && matchesSearch) {
         row.style.removeProperty("display");
@@ -427,8 +432,10 @@ function filterJadwalUpk() {
   const emptyMsg = document.getElementById("upk-empty-message");
   if (emptyMsg) {
     if (!anyVisibleWrapper) {
+      emptyMsg.classList.remove("hidden");
       emptyMsg.style.removeProperty("display");
     } else {
+      emptyMsg.classList.add("hidden");
       emptyMsg.style.setProperty("display", "none", "important");
     }
   }
@@ -485,8 +492,10 @@ function filterModulPage() {
   const emptyMsg = document.getElementById("modul-empty-message");
   if (emptyMsg) {
     if (!anyVisibleCard) {
+      emptyMsg.classList.remove("hidden");
       emptyMsg.style.removeProperty("display");
     } else {
+      emptyMsg.classList.add("hidden");
       emptyMsg.style.setProperty("display", "none", "important");
     }
   }

@@ -60,6 +60,7 @@ class ManajemenController extends Controller {
             }
 
             if ($this->service->storeManajemen($input, $file)) {
+                Cache::forget('home_index_data');
                 $this->success(null, 'Manajemen created successfully', 201);
             }
             $this->error('Failed to create manajemen');
@@ -94,6 +95,7 @@ class ManajemenController extends Controller {
             $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
 
             if ($this->service->updateManajemen($id, $input, $existing, $file)) {
+                Cache::forget('home_index_data');
                 $this->success(null, 'Manajemen updated successfully');
             }
             $this->error('Failed to update manajemen');
@@ -108,6 +110,7 @@ class ManajemenController extends Controller {
     public function delete($params) {
         $id = $params['id'] ?? null;
         if ($this->service->delete($id)) {
+            Cache::forget('home_index_data');
             $this->success(null, 'Manajemen deleted successfully');
         }
         $this->error('Failed to delete data');
