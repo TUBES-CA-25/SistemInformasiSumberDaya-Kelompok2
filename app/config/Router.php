@@ -32,23 +32,30 @@ class Router {
      */
         private function getPath(): string
         {
-            $path = $_GET['route'] ?? $_SERVER['PATH_INFO'] ?? null;
+            if (isset($_GET['route'])) {
+                return '/' . trim($_GET['route'], '/');
+            }
 
-            if (!$path) {
-                $uri = $_SERVER['REQUEST_URI'] ?? '/';
-                $uri = explode('?', $uri)[0];
-                $script_name = $_SERVER['SCRIPT_NAME'];
-                
-                // Jika URI dimulai dengan SCRIPT_NAME (misal /api.php/...), hapus bagian itu
-                if (strpos($uri, $script_name) === 0) {
-                    $path = substr($uri, strlen($script_name));
+            if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] !== '') {
+                return '/' . trim($_SERVER['PATH_INFO'], '/');
+            }
+
+            $uri = $_SERVER['REQUEST_URI'] ?? '/';
+            $uri = explode('?', $uri)[0];
+            $script_name = $_SERVER['SCRIPT_NAME'] ?? '';
+            
+            if ($script_name !== '' && strpos($uri, $script_name) === 0) {
+                $path = substr($uri, strlen($script_name));
+            } else {
+                $script_dir = rtrim(dirname($script_name), '/\\');
+                $base_dir   = preg_replace('#/public$#i', '', $script_dir);
+
+                if ($script_dir !== '' && $script_dir !== '/' && strpos($uri, $script_dir) === 0) {
+                    $path = substr($uri, strlen($script_dir));
+                } elseif ($base_dir !== '' && $base_dir !== '/' && strpos($uri, $base_dir) === 0) {
+                    $path = substr($uri, strlen($base_dir));
                 } else {
-                    $script_dir = rtrim(dirname($script_name), '/\\');
-                    if ($script_dir !== '/' && $script_dir !== '') {
-                        $path = str_replace($script_dir, '', $uri);
-                    } else {
-                        $path = $uri;
-                    }
+                    $path = $uri;
                 }
             }
 
