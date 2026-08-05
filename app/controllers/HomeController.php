@@ -69,72 +69,72 @@ class HomeController extends Controller {
      * @return void Menampilkan view home/index
      */
     public function index() {
-        // LANGKAH 1: Fetch semua data manajemen dari database
-        $rawData = $this->model->getAll();
+        // LANGKAH 1: Fetch & cache data manajemen dan showcase (TTL 1 jam / 3600s)
+        $cachedData = Cache::remember('home_index_data', 3600, function() {
+            $rawData = $this->model->getAll();
+            $kepalLabList = [];
+            $laboranList = [];
 
-        // Initialize array untuk pembagian kategori
-        $kepalLabList = [];
-        $laboranList = [];
+            if (!empty($rawData)) {
+                foreach ($rawData as $row) {
+                    $fotoDb = $row['foto'] ?? '';
+                    $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
+                    
+                    $namaEnc = urlencode($row['nama'] ?? 'User');
+                    $row['foto_url'] = "https://ui-avatars.com/api/?name={$namaEnc}&background=eff6ff&color=2563eb&size=256&bold=true";
+                    
+                    if (!empty($fotoDb)) {
+                        $filePath = ROOT_PROJECT . '/public/assets/uploads/' . $fotoDb;
+                        if (file_exists($filePath)) {
+                            $row['foto_url'] = $baseUrl . '/assets/uploads/' . $fotoDb;
+                        }
+                    }
 
-        // LANGKAH 2: Loop dan enrich data setiap row
-        if (!empty($rawData)) {
-            foreach ($rawData as $row) {
-                // LANGKAH 3: Tentukan foto URL dengan priority
-                $fotoDb = $row['foto'] ?? '';
-                $baseUrl = defined('PUBLIC_URL') ? PUBLIC_URL : (defined('ASSETS_URL') ? ASSETS_URL : '');
-                
-                // Default: UI Avatars placeholder dengan nama person
-                $namaEnc = urlencode($row['nama'] ?? 'User');
-                $row['foto_url'] = "https://ui-avatars.com/api/?name={$namaEnc}&background=eff6ff&color=2563eb&size=256&bold=true";
-                
-                // Cek jika ada file foto lokal
-                if (!empty($fotoDb)) {
-                    $filePath = ROOT_PROJECT . '/public/assets/uploads/' . $fotoDb;
-                    if (file_exists($filePath)) {
-                        $row['foto_url'] = $baseUrl . '/assets/uploads/' . $fotoDb;
+                    if (stripos($row['jabatan'] ?? '', 'Kepala') !== false) {
+                        $kepalLabList[] = $row;
+                    } else {
+                        $laboranList[] = $row;
                     }
                 }
-
-                // LANGKAH 4: Pisahkan ke kategori berdasarkan jabatan
-                // Menggunakan stripos agar case-insensitive ('kepala', 'Kepala', 'KEPALA' semua cocok)
-                if (stripos($row['jabatan'] ?? '', 'Kepala') !== false) {
-                    $kepalLabList[] = $row;
-                } else {
-                    $laboranList[] = $row;
-                }
             }
-        }
 
-        // Fetch Showcase Slides
-        $showcaseList = [];
-        try {
-            require_once ROOT_PROJECT . '/app/models/ShowcaseModel.php';
-            $showcaseModel = new ShowcaseModel();
-            $rawShowcase = $showcaseModel->getAllOrdered();
-            $baseUrl = defined('PUBLIC_URL') ? rtrim(PUBLIC_URL, '/') : '';
-            foreach ($rawShowcase as $item) {
-                if (isset($item['is_active']) && (int)$item['is_active'] === 0) continue;
-                $imgName = $item['gambar'] ?? '';
-                $item['img_url'] = $baseUrl . '/images/' . ($imgName ?: 'Pusat-Kompetensi.jpg');
-                if (!empty($imgName)) {
-                    $uploadPath = ROOT_PROJECT . '/public/assets/uploads/' . $imgName;
-                    if (file_exists($uploadPath)) {
-                        $item['img_url'] = $baseUrl . '/assets/uploads/' . $imgName;
+            // Fetch Showcase Slides
+            $showcaseList = [];
+            try {
+                require_once ROOT_PROJECT . '/app/models/ShowcaseModel.php';
+                $showcaseModel = new ShowcaseModel();
+                $rawShowcase = $showcaseModel->getAllOrdered();
+                $baseUrl = defined('PUBLIC_URL') ? rtrim(PUBLIC_URL, '/') : '';
+                foreach ($rawShowcase as $item) {
+                    if (isset($item['is_active']) && (int)$item['is_active'] === 0) continue;
+                    $imgName = $item['gambar'] ?? '';
+                    $item['img_url'] = $baseUrl . '/images/Pusat-Kompetensi.jpg';
+                    if (!empty($imgName)) {
+                        $uploadPath = ROOT_PROJECT . '/public/assets/uploads/' . $imgName;
+                        $imagesPath = ROOT_PROJECT . '/public/images/' . $imgName;
+                        if (file_exists($uploadPath)) {
+                            $item['img_url'] = $baseUrl . '/assets/uploads/' . $imgName;
+                        } else if (file_exists($imagesPath)) {
+                            $item['img_url'] = $baseUrl . '/images/' . $imgName;
+                        }
                     }
+                    $showcaseList[] = $item;
                 }
-                $showcaseList[] = $item;
-            }
-        } catch (\Throwable $e) {}
+            } catch (\Throwable $e) {}
 
-        // LANGKAH 5: Prepare data untuk view
-        $data = [
+            return [
+                'kepala_lab' => $kepalLabList,
+                'laboran' => $laboranList,
+                'showcase_list' => $showcaseList
+            ];
+        });
+
+        // LANGKAH 2: Prepare data untuk view
+        $data = array_merge([
             'judul' => 'Beranda - Portal Laboratorium',
-            'kepala_lab' => $kepalLabList,
-            'laboran' => $laboranList,
-            'showcase_list' => $showcaseList
-        ];
+        ], $cachedData);
 
-        // LANGKAH 6: Render view dengan data
+        // LANGKAH 3: Render view dengan data
         $this->view('home/index', $data);
     }
 

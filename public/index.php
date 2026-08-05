@@ -25,6 +25,9 @@ if (file_exists(APP_PATH . '/config/config.php')) {
 if (file_exists(APP_PATH . '/helpers/Helper.php')) {
     require_once APP_PATH . '/helpers/Helper.php';
 }
+if (file_exists(APP_PATH . '/helpers/Cache.php')) {
+    require_once APP_PATH . '/helpers/Cache.php';
+}
 
 // 4. DETEKSI URL PUBLIK (Base URL)
 if (!defined('PUBLIC_URL')) {

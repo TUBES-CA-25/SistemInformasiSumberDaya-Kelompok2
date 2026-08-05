@@ -175,6 +175,7 @@ class ShowcaseController extends Controller
             ]);
 
             if ($res) {
+                Cache::forget('home_index_data');
                 $this->jsonResponse(['status' => 'success', 'message' => 'Item showcase berhasil ditambahkan & dioptimasi ke WebP!']);
             } else {
                 $this->jsonResponse(['status' => 'error', 'message' => 'Gagal menyimpan data ke database.'], 500);
@@ -218,16 +219,23 @@ class ShowcaseController extends Controller
                 return;
             }
 
-            $oldItem = $this->model->getById($id);
+            $existing = $this->model->getById($id);
+            if (!$existing) {
+                $this->jsonResponse(['status' => 'error', 'message' => 'Data showcase tidak ditemukan!'], 404);
+                return;
+            }
+
+            $gambar = $existing['gambar'] ?? '';
+
             $existingGaleri = [];
-            if (!empty($oldItem['galeri_foto'])) {
-                $decoded = json_decode($oldItem['galeri_foto'], true);
+            if (!empty($existing['galeri_foto'])) {
+                $decoded = json_decode($existing['galeri_foto'], true);
                 if (is_array($decoded)) $existingGaleri = $decoded;
             }
 
             $targetDir = ROOT_PROJECT . '/public/assets/uploads/';
-            if (!is_dir($targetDir)) {
-                @mkdir($targetDir, 0755, true);
+            if (!file_exists($targetDir)) {
+                @mkdir($targetDir, 0777, true);
             }
 
             $data = [
@@ -242,11 +250,12 @@ class ShowcaseController extends Controller
             ];
 
             if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
-                $fileTmp = $_FILES['gambar']['tmp_name'];
-                $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $_FILES['gambar']['name']);
+                $tmpName = $_FILES['gambar']['tmp_name'];
+                $originalName = $_FILES['gambar']['name'];
+                $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $originalName);
                 $targetFile = $targetDir . $fileName;
 
-                if (@move_uploaded_file($fileTmp, $targetFile)) {
+                if (@move_uploaded_file($tmpName, $targetFile)) {
                     $optimizedFileName = $this->processAndOptimizeImage($targetFile);
                     $data['gambar'] = $optimizedFileName;
                     if (!in_array($optimizedFileName, $existingGaleri)) {
@@ -276,6 +285,7 @@ class ShowcaseController extends Controller
             $res = $this->model->updateItem($id, $data);
 
             if ($res) {
+                Cache::forget('home_index_data');
                 $this->jsonResponse(['status' => 'success', 'message' => 'Item showcase berhasil diperbarui & dioptimasi ke WebP!']);
             } else {
                 $this->jsonResponse(['status' => 'error', 'message' => 'Gagal memperbarui data.'], 500);
@@ -307,6 +317,7 @@ class ShowcaseController extends Controller
 
             $res = $this->model->deleteItem($id);
             if ($res) {
+                Cache::forget('home_index_data');
                 $this->jsonResponse(['status' => 'success', 'message' => 'Item showcase berhasil dihapus!']);
             } else {
                 $this->jsonResponse(['status' => 'error', 'message' => 'Gagal menghapus item.'], 500);

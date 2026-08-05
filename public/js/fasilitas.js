@@ -593,6 +593,44 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.addEventListener('click', (e) => {
         if (e.target === modal) window.closeLightbox();
       });
+
+      // Touch Swipe Gesture for Lightbox on Mobile
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchEndX = 0;
+      let touchEndY = 0;
+
+      modal.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          touchEndX = touchStartX;
+          touchEndY = touchStartY;
+        }
+      }, { passive: true });
+
+      modal.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length === 1) {
+          touchEndX = e.touches[0].clientX;
+          touchEndY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      modal.addEventListener('touchend', () => {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Horizontal swipe threshold (minimum 40px, more horizontal than vertical)
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+          if (deltaX < 0) {
+            // Swipe Left -> Next photo
+            window.navLightbox(1);
+          } else {
+            // Swipe Right -> Previous photo
+            window.navLightbox(-1);
+          }
+        }
+      });
     }
 
     document.addEventListener('keydown', (e) => {
@@ -602,6 +640,60 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (e.key === 'ArrowRight') window.navLightbox(1);
       }
     });
+  });
+})();
+
+// ============================================
+// MOBILE TOUCH GALLERY DOTS & SWIPE ENHANCER
+// ============================================
+(function initMobileGalleryEnhancer() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const deck = document.getElementById('photoStackDeck');
+    const container = document.getElementById('photoStackContainer');
+    if (!deck || !container) return;
+
+    const cards = deck.querySelectorAll('.photo-card-item');
+    if (cards.length <= 1) return;
+
+    // Create mobile dots container
+    let dotsNav = document.getElementById('mobileGalleryDots');
+    if (!dotsNav) {
+      dotsNav = document.createElement('div');
+      dotsNav.id = 'mobileGalleryDots';
+      dotsNav.className = 'mobile-gallery-dots';
+
+      cards.forEach((card, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = `mobile-dot ${index === 0 ? 'active' : ''}`;
+        dot.setAttribute('aria-label', `Foto ${index + 1}`);
+        dot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const cardWidth = card.offsetWidth + 12;
+          deck.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+        });
+        dotsNav.appendChild(dot);
+      });
+
+      container.appendChild(dotsNav);
+    }
+
+    // Scroll listener for updating dots on mobile
+    let scrollTimer = null;
+    deck.addEventListener('scroll', () => {
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        const firstCard = cards[0];
+        if (!firstCard) return;
+        const cardWidth = firstCard.offsetWidth + 12;
+        const activeIndex = Math.round(deck.scrollLeft / cardWidth);
+        const dots = dotsNav.querySelectorAll('.mobile-dot');
+        dots.forEach((d, idx) => {
+          if (idx === activeIndex) d.classList.add('active');
+          else d.classList.remove('active');
+        });
+      }, 40);
+    }, { passive: true });
   });
 })();
 
