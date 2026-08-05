@@ -8,12 +8,18 @@ RewriteBase /SistemInformasiSumberDaya-Kelompok2/public/
 # 1. Lindungi folder sensitif agar tidak bisa diakses lewat browser
 RewriteRule ^(.*/)?\.git+ - [F,L]
 
-# 2. Jika file, direktori, atau link simbolik beneran ada, buka filenya (CSS, JS, Gambar)
+# 2. Set halaman indeks default ke index.php
+DirectoryIndex index.php
+
+# 3. Direct URL root public/ ke index.php dengan parameter route=
+RewriteRule ^$ index.php?route= [QSA,L]
+
+# 4. Jika file, direktori, atau link simbolik beneran ada, buka filenya (CSS, JS, Gambar)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-l
 
-# 3. Kirim semua permintaan lain ke index.php
+# 5. Kirim semua permintaan lain ke index.php
 # Gunakan [QSA] agar parameter query lain (seperti ?id=1) tetap terbaca
 # Gunakan [L] untuk menghentikan pemrosesan aturan lain jika ini sudah terpenuhi
 RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]
