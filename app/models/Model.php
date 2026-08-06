@@ -101,8 +101,17 @@ class Model {
         $stmt = $this->db->prepare($query);
         
         if (!$stmt) return false;
+
+        $values = [];
+        foreach ($data as $column => $value) {
+            if ($value === '' && (strpos($column, 'id') === 0 || strpos(strtolower($column), 'kordinator') !== false)) {
+                $values[] = null;
+            } else {
+                $values[] = $value;
+            }
+        }
         
-        $stmt->bind_param($types, ...array_values($data));
+        $stmt->bind_param($types, ...$values);
         $result = $stmt->execute();
         $stmt->close();
         
@@ -111,7 +120,8 @@ class Model {
 
     /**
      * Memperbarui data berdasarkan ID.
-     * * @param int|string $id ID record yang akan diupdate.
+     * 
+     * @param int|string $id ID record yang akan diupdate.
      * @param array $data Array asosiatif data baru.
      * @param string $idColumn Nama kolom primary key.
      * @return bool
@@ -124,7 +134,11 @@ class Model {
         foreach ($data as $column => $value) {
             $set .= "{$column} = ?, ";
             $types .= "s";
-            $values[] = $value;
+            if ($value === '' && (strpos($column, 'id') === 0 || strpos(strtolower($column), 'kordinator') !== false)) {
+                $values[] = null;
+            } else {
+                $values[] = $value;
+            }
         }
 
         $set = rtrim($set, ", ");

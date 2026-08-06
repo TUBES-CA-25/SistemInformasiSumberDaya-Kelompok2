@@ -118,13 +118,42 @@ class AlumniService
      * * @param string $path Relatif path file (dari database) yang akan dihapus
      * @return bool True jika berhasil dihapus atau file memang tidak ada
      */
-    public function deletePhoto($path)
+    public function deletePhoto($path, $subjectName = null)
     {
-        $fullPath = dirname(__DIR__, 2) . '/public/assets/uploads/' . $path;
-        if (file_exists($fullPath) && is_file($fullPath)) {
-            return @unlink($fullPath);
+        $uploadRoot = dirname(__DIR__, 2) . '/public/assets/uploads/';
+        $alumniDir  = $uploadRoot . 'alumni/';
+
+        if (!empty($path)) {
+            $possiblePaths = [
+                $uploadRoot . $path,
+                $alumniDir . ltrim($path, '/'),
+                $alumniDir . basename($path),
+                dirname(__DIR__, 2) . '/public/images/alumni/' . basename($path),
+                dirname(__DIR__, 2) . '/public/images/' . basename($path)
+            ];
+
+            foreach ($possiblePaths as $fullPath) {
+                if (file_exists($fullPath) && is_file($fullPath)) {
+                    @unlink($fullPath);
+                }
+            }
         }
-        return false;
+
+        // Hapus file lama berdasarkan pola slug nama alumni jika ada file terbengkalai (.png, .jpg, .webp)
+        if (!empty($subjectName)) {
+            $cleanName = Helper::slugify($subjectName);
+            $pattern = $alumniDir . "alumni_{$cleanName}_*.*";
+            $matchingFiles = glob($pattern);
+            if ($matchingFiles) {
+                foreach ($matchingFiles as $file) {
+                    if (is_file($file)) {
+                        @unlink($file);
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     // ============================================

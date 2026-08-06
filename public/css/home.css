@@ -2,30 +2,56 @@
    HOME PAGE STYLESHEET (Bold Blue Theme - FINAL LAYERED + VIDEO FIX)
    ======================================================= */
 
-/* --- Animasi Reveal --- */
+/* --- Animasi Reveal (Progressive Enhancement) --- */
+/* Content visible by default — animations only activate when JS loads */
 .reveal {
+  /* Visible by default for fast FCP/SI and no-JS fallback */
+  opacity: 1;
+}
+
+/* When JS is loaded, hide elements for reveal animation */
+html.js-loaded .reveal {
   opacity: 0;
   visibility: hidden;
   transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
   will-change: transform, opacity;
 }
 
-.reveal.fade-up {
+/* Hero content is ALWAYS visible immediately — it's the LCP element */
+html.js-loaded .hero-content.reveal {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: none;
+}
+
+html.js-loaded .reveal.fade-up {
   transform: translateY(60px);
 }
 
-.reveal.fade-left {
+html.js-loaded .reveal.fade-left {
   transform: translateX(-60px);
 }
 
-.reveal.fade-right {
+html.js-loaded .reveal.fade-right {
   transform: translateX(60px);
 }
 
-.reveal.active {
+/* Activated state — shown when scrolled into view */
+html.js-loaded .reveal.active {
   opacity: 1;
   visibility: visible;
   transform: translate(0, 0);
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html.js-loaded .reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* --- Badge & Header Default --- */
@@ -894,7 +920,7 @@
 
 .slider-track {
   display: flex;
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.65s cubic-bezier(0.34, 1.25, 0.64, 1);
 }
 
 .slide {
@@ -912,11 +938,19 @@
   border-radius: 20px;
   box-shadow: 0 20px 45px -10px rgba(30, 58, 138, 0.08);
   border: 1px solid #dbeafe;
-  transition: all 0.4s ease;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
 }
 
 .slide-content-wrapper:hover {
-  box-shadow: 0 25px 55px -10px rgba(30, 58, 138, 0.12);
+  box-shadow: 0 25px 55px -10px rgba(30, 58, 138, 0.14);
+  transform: translateY(-2px) scale(1.008);
+}
+
+.slide-content-wrapper:active {
+  transform: translateY(0) scale(0.99);
+  transition: transform 0.1s ease;
 }
 
 .slide-image {
@@ -996,59 +1030,164 @@ body.night-mode .slide-badge {
 /* Dots & Buttons */
 .slider-dots {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin-top: 50px;
+  gap: 8px;
+  margin-top: 40px;
 }
 
 .dot {
   width: 10px;
   height: 10px;
   background: #cbd5e1;
-  border-radius: 50%;
+  border-radius: 20px;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.dot:hover {
+  transform: scale(1.3);
+  background: #93c5fd;
 }
 
 .dot.active {
-  background: #2563eb;
-  transform: scale(1.3);
-  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+  width: 34px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  animation: dotSpringPop 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
+@keyframes dotSpringPop {
+  0% {
+    transform: scale(0.6);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Super Springy Bouncy Slider Buttons */
 .slider-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  width: 54px;
+  height: 54px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(191, 219, 254, 0.9);
   border-radius: 50%;
   cursor: pointer;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  color: #0f172a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  font-size: 1.4rem;
+  color: #1e3a8a;
+  box-shadow: 0 8px 24px rgba(30, 58, 138, 0.14), 0 2px 6px rgba(0, 0, 0, 0.04);
+  /* Spring Elastic Transition */
+  transition: all 0.45s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
+.slider-btn i {
+  transition: transform 0.35s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  display: inline-block;
+}
+
+/* Spring Bounce on Hover */
 .slider-btn:hover {
-  background: #0f172a;
-  color: #fff;
-  border-color: #0f172a;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.42);
+  transform: translateY(-50%) scale(1.22);
+}
+
+/* Bouncy Squish on Active Click */
+.slider-btn:active {
+  transform: translateY(-50%) scale(0.82, 1.18);
+  transition: transform 0.1s ease;
 }
 
 .prev-btn {
-  left: 10px;
+  left: -8px;
+  animation: floatIdlePrev 4s ease-in-out infinite;
+}
+
+.prev-btn:hover {
+  animation: none;
+  transform: translateY(-50%) scale(1.22);
+}
+
+.prev-btn:hover i {
+  animation: arrowBounceLeft 0.7s cubic-bezier(0.68, -0.6, 0.32, 1.6) infinite alternate;
 }
 
 .next-btn {
-  right: 10px;
+  right: -8px;
+  animation: floatIdleNext 4s ease-in-out infinite 0.5s;
+}
+
+.next-btn:hover {
+  animation: none;
+  transform: translateY(-50%) scale(1.22);
+}
+
+.next-btn:hover i {
+  animation: arrowBounceRight 0.7s cubic-bezier(0.68, -0.6, 0.32, 1.6) infinite alternate;
+}
+
+/* Idle Floating Animation */
+@keyframes floatIdlePrev {
+
+  0%,
+  100% {
+    transform: translateY(-50%);
+  }
+
+  50% {
+    transform: translateY(calc(-50% - 6px));
+  }
+}
+
+@keyframes floatIdleNext {
+
+  0%,
+  100% {
+    transform: translateY(-50%);
+  }
+
+  50% {
+    transform: translateY(calc(-50% - 6px));
+  }
+}
+
+/* Arrow Spring Bounce Animation */
+@keyframes arrowBounceLeft {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-6px) scale(1.15);
+  }
+}
+
+@keyframes arrowBounceRight {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(6px) scale(1.15);
+  }
 }
 
 /* --- Video Section (YouTube Embed Fix) --- */
@@ -1143,6 +1282,11 @@ body.night-mode .slide-badge {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(30, 58, 138, 0.14);
   border-color: #3b82f6;
+}
+
+.staff-card-home:active {
+  transform: translateY(-2px) scale(0.985);
+  transition: transform 0.1s ease;
 }
 
 .staff-photo-box {
@@ -1259,7 +1403,12 @@ body.night-mode .slide-badge {
 .info-card:hover {
   transform: translateY(-8px);
   border-color: rgba(59, 130, 246, 0.45);
-  box-shadow: 0 24px 45px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 24px 50px -10px rgba(37, 99, 235, 0.14);
+}
+
+.info-card:active {
+  transform: translateY(-2px) scale(0.985);
+  transition: transform 0.1s ease;
 }
 
 .info-card::before {
@@ -1276,12 +1425,6 @@ body.night-mode .slide-badge {
 
 .info-card:hover::before {
   opacity: 1;
-}
-
-.info-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px -10px rgba(37, 99, 235, 0.12);
-  border-color: #3b82f6;
 }
 
 .card-icon {
@@ -1922,14 +2065,26 @@ body.night-mode .slide-text p {
 }
 
 body.night-mode .slider-btn {
-  background: #1e293b !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
-  color: #ffffff !important;
+  background: rgba(30, 41, 59, 0.88) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #93c5fd !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
 }
 
 body.night-mode .slider-btn:hover {
-  background: #2563eb !important;
-  border-color: #2563eb !important;
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.45) !important;
+}
+
+body.night-mode .dot {
+  background: #334155 !important;
+}
+
+body.night-mode .dot.active {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.5) !important;
 }
 
 /* 5. Video Section */

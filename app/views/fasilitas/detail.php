@@ -228,4 +228,4 @@ $coord        = $data['koordinator'] ?? ['nama' => 'N/A', 'initials' => 'NA'];
 <script>
     window.galleryImages = <?= json_encode(array_values($gallery)) ?>;
 </script>
-<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/js/fasilitas.js"></script>
+<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/js/fasilitas.js" defer></script>

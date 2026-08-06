@@ -5,6 +5,7 @@
  */
 
 session_start();
+ob_start();
 
 // 1. ERROR REPORTING (Aktifkan saat development)
 ini_set('display_errors', 1);

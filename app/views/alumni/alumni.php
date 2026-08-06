@@ -165,5 +165,5 @@
 </div>
 
 <?php $asistenJsPath = ROOT_PROJECT . '/public/js/asisten.js'; ?>
-<script src="<?= ASSETS_URL ?>/js/asisten.js?v=<?= file_exists($asistenJsPath) ? filemtime($asistenJsPath) : time() ?>"></script>
-<script src="<?= ASSETS_URL ?>/js/alumni.js"></script>
+<script src="<?= ASSETS_URL ?>/js/asisten.js?v=<?= file_exists($asistenJsPath) ? filemtime($asistenJsPath) : time() ?>" defer></script>
+<script src="<?= ASSETS_URL ?>/js/alumni.js" defer></script>

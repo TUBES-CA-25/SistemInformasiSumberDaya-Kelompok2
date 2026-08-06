@@ -29,18 +29,18 @@ RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]
     ExpiresActive On
     ExpiresDefault "access plus 1 month"
     
-    # Images & Media
-    ExpiresByType image/webp "access plus 1 month"
-    ExpiresByType image/png "access plus 1 month"
-    ExpiresByType image/jpeg "access plus 1 month"
-    ExpiresByType image/gif "access plus 1 month"
-    ExpiresByType image/svg+xml "access plus 1 month"
+    # Images & Media — harmonized with root .htaccess (1 year)
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresByType image/x-icon "access plus 1 year"
 
-    # Styles & Scripts
-    ExpiresByType text/css "access plus 7 days"
-    ExpiresByType application/javascript "access plus 7 days"
-    ExpiresByType text/javascript "access plus 7 days"
+    # Styles & Scripts — 1 month with versioned cache busting
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
 
     # Web Fonts
     ExpiresByType font/woff2 "access plus 1 year"
@@ -48,7 +48,18 @@ RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]
 </IfModule>
 
 <IfModule mod_headers.c>
-    <FilesMatch "\.(css|js|webp|png|jpg|jpeg|gif|ico|svg|woff2|woff)$">
-        Header set Cache-Control "public, max-age=604800"
+    # CSS & JS with immutable (versioned via ?v= query string)
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=2592000, immutable"
+    </FilesMatch>
+    
+    # Images & Media with immutable
+    <FilesMatch "\.(webp|png|jpg|jpeg|gif|ico|svg)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    
+    # Vary: Accept-Encoding for proper proxy caching
+    <FilesMatch "\.(css|js|html|xml|json|svg)$">
+        Header append Vary Accept-Encoding
     </FilesMatch>
 </IfModule>

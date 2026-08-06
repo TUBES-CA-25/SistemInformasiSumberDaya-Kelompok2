@@ -196,10 +196,19 @@ document.addEventListener("DOMContentLoaded", function () {
       starCtx = starCanvas.getContext("2d");
 
       window.addEventListener("resize", resizeStarfield);
+      
+      // Throttled mousemove with requestAnimationFrame to reduce TBT
+      let mouseMoveScheduled = false;
       window.addEventListener("mousemove", (e) => {
-        mousePos.targetX = (e.clientX - window.innerWidth / 2) * 0.03;
-        mousePos.targetY = (e.clientY - window.innerHeight / 2) * 0.03;
-      });
+        if (!mouseMoveScheduled) {
+          mouseMoveScheduled = true;
+          requestAnimationFrame(() => {
+            mousePos.targetX = (e.clientX - window.innerWidth / 2) * 0.03;
+            mousePos.targetY = (e.clientY - window.innerHeight / 2) * 0.03;
+            mouseMoveScheduled = false;
+          });
+        }
+      }, { passive: true });
 
       document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
@@ -229,8 +238,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const generateStars = () => {
     stars = [];
-    // Subtle density: ~50-80 stars max for clean aesthetics
-    const count = Math.min(75, Math.max(35, Math.floor((window.innerWidth * window.innerHeight) / 18000)));
+    // Performance-tuned density: 30-55 stars for clean aesthetics & smooth FPS
+    const count = Math.min(55, Math.max(25, Math.floor((window.innerWidth * window.innerHeight) / 25000)));
     const colors = [
       "rgba(255, 255, 255, ",
       "rgba(186, 230, 253, ", // Soft Cyan

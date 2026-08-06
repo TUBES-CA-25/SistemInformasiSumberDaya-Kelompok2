@@ -182,4 +182,4 @@ $laboran_list  = $data['laboran'] ?? [];
     </div>
 </div>
 <?php $kepalaJsPath = __DIR__ . '/../../../public/js/kepala.js'; ?>
-<script src="<?= ASSETS_URL ?>/js/kepala.js?v=<?= file_exists($kepalaJsPath) ? filemtime($kepalaJsPath) : time() ?>"></script>
+<script src="<?= ASSETS_URL ?>/js/kepala.js?v=<?= file_exists($kepalaJsPath) ? filemtime($kepalaJsPath) : time() ?>" defer></script>

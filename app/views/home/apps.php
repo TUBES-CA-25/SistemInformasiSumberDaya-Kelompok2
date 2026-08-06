@@ -120,4 +120,4 @@
     </div>
 </section>
 
-<script src="<?= PUBLIC_URL ?>/js/apps.js"></script>
+<script src="<?= PUBLIC_URL ?>/js/apps.js" defer></script>
