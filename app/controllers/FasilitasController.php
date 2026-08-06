@@ -120,7 +120,7 @@ class FasilitasController extends Controller {
      */
     public function apiIndex(): void {
         // 1. Bersihkan output buffer untuk memastikan tidak ada spasi/teks liar yang merusak JSON
-        if (ob_get_level()) ob_end_clean();
+        if (ob_get_length()) ob_clean();
 
         // 2. Set header sebagai JSON
         header('Content-Type: application/json');
@@ -220,6 +220,11 @@ class FasilitasController extends Controller {
     public function store(): void {
         $input = $this->getJson() ?? $_POST;
         unset($input['_method'], $input['idLaboratorium']);
+
+        // Convert empty foreign key idKordinatorAsisten to null
+        if (array_key_exists('idKordinatorAsisten', $input) && (empty($input['idKordinatorAsisten']) || $input['idKordinatorAsisten'] === '0')) {
+            $input['idKordinatorAsisten'] = null;
+        }
         
         // Map form name to database column
         if (isset($input['fasilitas'])) {
@@ -275,9 +280,17 @@ class FasilitasController extends Controller {
     }
 
     public function update(array $params = []): void {
-        $id = $params['id'] ?? null;
+        if (ob_get_length()) ob_clean();
+        header('Content-Type: application/json');
+
+        $id = $params['id'] ?? $_POST['idLaboratorium'] ?? $_POST['id'] ?? null;
         $input = $this->getJson() ?? $_POST;
-        unset($input['_method'], $input['idLaboratorium']);
+        unset($input['_method'], $input['idLaboratorium'], $input['id']);
+
+        // Convert empty foreign key idKordinatorAsisten to null
+        if (array_key_exists('idKordinatorAsisten', $input) && (empty($input['idKordinatorAsisten']) || $input['idKordinatorAsisten'] === '0')) {
+            $input['idKordinatorAsisten'] = null;
+        }
 
         // Map form name to database column
         if (isset($input['fasilitas'])) {
@@ -301,7 +314,10 @@ class FasilitasController extends Controller {
 
         // Handle multiple images if uploaded
         if (isset($_FILES['gambar']) && !empty($_FILES['gambar']['name'][0])) {
-            $uploadResult = $this->handleMultipleUploads($_FILES['gambar'], $input['nama'] ?? 'lab');
+            $existing = $this->model->getById($id, 'idLaboratorium');
+            $labName = $input['nama'] ?? $existing['nama'] ?? 'lab';
+
+            $uploadResult = $this->handleMultipleUploads($_FILES['gambar'], $labName);
             if ($uploadResult) {
                 // Save all uploaded images to gallery
                 $gambarModel = new LaboratoriumGambarModel();
@@ -313,7 +329,6 @@ class FasilitasController extends Controller {
                 }
                 
                 // If lab doesn't have a main image yet, set the first one as main
-                $existing = $this->model->getById($id, 'idLaboratorium');
                 if (empty($existing['gambar'])) {
                     $input['gambar'] = $uploadResult[0];
                 }
@@ -334,9 +349,12 @@ class FasilitasController extends Controller {
         require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
 
         $uploadedFiles = [];
-        $uploadDir = ROOT_PROJECT . '/public/assets/uploads/';
+        $subFolder = 'laboratorium/';
+        $uploadDir = ROOT_PROJECT . '/public/assets/uploads/' . $subFolder;
         
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+
+        $cleanName = Helper::slugify($labName ?? 'lab');
 
         foreach ($files['name'] as $key => $name) {
             if ($files['error'][$key] === UPLOAD_ERR_OK) {
@@ -344,7 +362,7 @@ class FasilitasController extends Controller {
                 if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'])) {
                     continue;
                 }
-                $filename = 'lab_' . time() . '_' . $key . '.' . $ext;
+                $filename = "laboratorium_{$cleanName}_" . time() . '_' . rand(100, 999) . '.' . $ext;
                 
                 if (move_uploaded_file($files['tmp_name'][$key], $uploadDir . $filename)) {
                     // Kompresi gambar agar tidak menyebabkan lag saat ditampilkan (HD resolution)
@@ -356,7 +374,7 @@ class FasilitasController extends Controller {
                         $filename = basename($webpPath);
                     }
 
-                    $uploadedFiles[] = $filename;
+                    $uploadedFiles[] = $subFolder . $filename;
                 }
             }
         }

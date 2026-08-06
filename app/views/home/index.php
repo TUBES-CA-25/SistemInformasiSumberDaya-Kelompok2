@@ -98,15 +98,11 @@ $laboran_list = $data['laboran'] ?? [];
 
     <div class="container">
         <div class="section-header reveal fade-up">
-            <span class="badge-pill">Keunggulan Kami</span>
             <h2>Ekosistem & Fasilitas</h2>
         </div>
     </div>
     
     <div class="slider-container reveal fade-up">
-        <button class="slider-btn prev-btn" onclick="moveSlide(-1)"><i class="ri-arrow-left-s-line"></i></button>
-        <button class="slider-btn next-btn" onclick="moveSlide(1)"><i class="ri-arrow-right-s-line"></i></button>
-
         <div class="slider-track" id="sliderTrack">
             <?php 
             $slides = !empty($data['showcase_list']) ? $data['showcase_list'] : [
@@ -114,7 +110,7 @@ $laboran_list = $data['laboran'] ?? [];
                     'badge_text' => 'FASILITAS UNGGULAN',
                     'judul'      => '<span class="text-blue">Pusat</span> Kompetensi',
                     'deskripsi'  => 'Laboratorium FIKOM UMI hadir sebagai pusat pengembangan hard skill unggulan dengan kurikulum adaptif.',
-                    'img_url'    => PUBLIC_URL . '/images/Pusat-Kompetensi.jpg',
+                    'img_url'    => PUBLIC_URL . '/images/Pusat-Kompetensi.webp',
                     'link_url'   => PUBLIC_URL . '/asisten',
                     'link_label' => 'Lihat Selengkapnya'
                 ],
@@ -122,7 +118,7 @@ $laboran_list = $data['laboran'] ?? [];
                     'badge_text' => 'PERANGKAT MODERN',
                     'judul'      => '<span class="text-blue">Infrastruktur</span> Spesifik',
                     'deskripsi'  => 'Menyediakan laboratorium spesifik (RPL, Jaringan, Multimedia) dengan perangkat spesifikasi tinggi.',
-                    'img_url'    => PUBLIC_URL . '/images/Infrastruktur-Modern.jpg',
+                    'img_url'    => PUBLIC_URL . '/images/Infrastruktur-Modern.webp',
                     'link_url'   => PUBLIC_URL . '/laboratorium',
                     'link_label' => 'Lihat Fasilitas'
                 ],
@@ -130,7 +126,7 @@ $laboran_list = $data['laboran'] ?? [];
                     'badge_text' => 'KOLABORASI RISET',
                     'judul'      => '<span class="text-blue">Riset</span> & Inovasi',
                     'deskripsi'  => 'Mendukung kegiatan penelitian mahasiswa dan dosen dengan fasilitas komputasi yang memadai.',
-                    'img_url'    => PUBLIC_URL . '/images/RisetDanInovasi.png',
+                    'img_url'    => PUBLIC_URL . '/images/RisetDanInovasi.webp',
                     'link_url'   => PUBLIC_URL . '/riset',
                     'link_label' => 'Lihat Riset'
                 ]
@@ -148,7 +144,7 @@ $laboran_list = $data['laboran'] ?? [];
                 <div class="slide">
                     <div class="slide-content-wrapper"> 
                         <div class="slide-image">
-                            <img src="<?= $imgUrl ?>" alt="<?= strip_tags($judul) ?>" loading="lazy">
+                            <img src="<?= $imgUrl ?>" alt="<?= strip_tags($judul) ?>" loading="lazy" width="600" height="400">
                         </div>
                         <div class="slide-text">
                             <span class="slide-badge"><?= $badge ?></span>
@@ -195,7 +191,6 @@ $laboran_list = $data['laboran'] ?? [];
 
     <div class="container">
         <div class="section-header reveal fade-up">
-            <span class="badge-pill">Struktur Organisasi</span>
             <h2>Pimpinan & Staff Laboratorium</h2>
         </div>
 
@@ -312,7 +307,6 @@ $laboran_list = $data['laboran'] ?? [];
 <section class="partner-section">
     <div class="container" style="margin-bottom: 25px;">
         <div class="section-header reveal fade-up" style="margin-bottom: 0;">
-            <span class="badge-pill">KOLABORASI</span>
             <h2>Mitra & Kerjasama</h2>
         </div>
     </div>
@@ -364,4 +358,4 @@ $laboran_list = $data['laboran'] ?? [];
 </section>
 
 <?php $homeJsPath = __DIR__ . '/../../../public/js/home.js'; ?>
-<script src="<?= PUBLIC_URL ?>/js/home.js?v=<?= file_exists($homeJsPath) ? filemtime($homeJsPath) : time() ?>"></script>
+<script src="<?= PUBLIC_URL ?>/js/home.js?v=<?= file_exists($homeJsPath) ? filemtime($homeJsPath) : time() ?>" defer></script>

@@ -142,4 +142,4 @@
     </div>
 </section>
 
-<script src="<?= PUBLIC_URL ?>/js/praktikum.js?v=<?= time() ?>"></script>
+<script src="<?= PUBLIC_URL ?>/js/praktikum.js?v=<?= time() ?>" defer></script>

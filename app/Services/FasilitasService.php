@@ -118,8 +118,14 @@ class FasilitasService {
         $filename = $gambar['namaGambar'];
 
         // 1. Hapus file fisik
-        $filePath = ROOT_PROJECT . '/public/assets/uploads/' . $filename;
-        if (file_exists($filePath)) @unlink($filePath);
+        $possiblePaths = [
+            ROOT_PROJECT . '/public/assets/uploads/' . $filename,
+            ROOT_PROJECT . '/public/assets/uploads/laboratorium/' . ltrim($filename, '/'),
+            ROOT_PROJECT . '/public/assets/uploads/' . ltrim(str_replace('laboratorium/', '', $filename), '/')
+        ];
+        foreach ($possiblePaths as $filePath) {
+            if (file_exists($filePath) && is_file($filePath)) @unlink($filePath);
+        }
 
         // 2. Hapus dari DB Galeri
         $this->gambarModel->deleteImage($idGambar);

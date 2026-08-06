@@ -145,10 +145,12 @@
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
 }
+
 .icon-pink {
   background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
   box-shadow: 0 10px 25px -5px rgba(219, 39, 119, 0.4);
 }
+
 .icon-red {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.4);
@@ -208,11 +210,9 @@
   right: -100px;
   width: 400px;
   height: 400px;
-  background: radial-gradient(
-    circle,
-    rgba(239, 68, 68, 0.06) 0%,
-    rgba(239, 68, 68, 0) 70%
-  );
+  background: radial-gradient(circle,
+      rgba(239, 68, 68, 0.06) 0%,
+      rgba(239, 68, 68, 0) 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -235,6 +235,7 @@
   color: #991b1b;
   letter-spacing: -0.02em;
 }
+
 .sanksi-title i {
   color: #dc2626;
   font-size: 2.5rem;
@@ -286,6 +287,7 @@
   font-weight: 800;
   margin-top: 0;
 }
+
 .sanksi-content p {
   color: #475569;
   font-size: 1rem;
@@ -301,6 +303,7 @@
   margin-bottom: 40px;
   position: relative;
 }
+
 .video-badge {
   display: inline-flex;
   align-items: center;
@@ -316,6 +319,7 @@
   border: 1px solid #fecaca;
   margin-bottom: 15px;
 }
+
 .video-title-box h2 {
   font-size: 2.2rem;
   font-weight: 900;
@@ -326,6 +330,7 @@
   align-items: center;
   gap: 15px;
 }
+
 .video-play-icon {
   width: 50px;
   height: 50px;
@@ -339,6 +344,7 @@
   box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
   animation: pulse-red 2s infinite;
 }
+
 .video-desc {
   color: #64748b;
   font-size: 1.1rem;
@@ -350,11 +356,13 @@
 }
 
 @keyframes pulse-red {
+
   0%,
   100% {
     box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
     transform: scale(1);
   }
+
   70% {
     box-shadow: 0 0 0 15px rgba(220, 38, 38, 0);
     transform: scale(1.05);
@@ -434,7 +442,8 @@
 }
 
 .table-schedule thead th {
-  background: #2563eb; /* Header Biru sesuai request */
+  background: #2563eb;
+  /* Header Biru sesuai request */
   color: #ffffff;
   font-size: 0.85rem;
   font-weight: 700;
@@ -627,9 +636,11 @@
   0% {
     box-shadow: 0 0 0 0 rgba(22, 101, 52, 0.4);
   }
+
   70% {
     box-shadow: 0 0 0 5px rgba(22, 101, 52, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(22, 101, 52, 0);
   }
@@ -642,11 +653,13 @@
   text-align: center;
   border: 2px dashed #cbd5e1;
 }
+
 .empty-schedule i {
   font-size: 4rem;
   color: #94a3b8;
   margin-bottom: 20px;
 }
+
 .empty-schedule h3 {
   font-size: 1.5rem;
   color: #475569;
@@ -661,6 +674,7 @@
   padding-top: 35px;
   border-top: 2px dashed #e2e8f0;
 }
+
 .downloads-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -680,6 +694,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .download-card:hover {
   transform: translateY(-5px);
   border-color: #3b82f6;
@@ -703,6 +718,7 @@
 .download-content {
   flex: 1;
 }
+
 .download-content h4 {
   font-size: 1.1rem;
   font-weight: 700;
@@ -710,6 +726,7 @@
   margin: 0 0 5px 0;
   line-height: 1.4;
 }
+
 .file-meta {
   font-size: 0.85rem;
   color: #94a3b8;
@@ -724,6 +741,7 @@
   gap: 10px;
   flex-wrap: wrap;
 }
+
 .btn-download {
   display: inline-flex;
   align-items: center;
@@ -737,9 +755,11 @@
   text-decoration: none;
   transition: background 0.2s;
 }
+
 .btn-download:hover {
   background-color: #1d4ed8;
 }
+
 .btn-external {
   display: inline-flex;
   align-items: center;
@@ -754,6 +774,7 @@
   border: 1px solid #e2e8f0;
   transition: all 0.2s;
 }
+
 .btn-external:hover {
   background-color: #e2e8f0;
   color: #0f172a;
@@ -761,31 +782,38 @@
 
 /* --- RESPONSIVE ADJUSTMENTS --- */
 @media (max-width: 768px) {
+
   .rules-header h1,
   .page-header h1,
   .section-header h2 {
     font-size: 2.2rem;
   }
+
   .rules-section,
   .praktikum-section {
     padding: 60px 0;
   }
+
   .sanksi-container {
     padding: 40px 24px;
   }
+
   .sanksi-item {
     flex-direction: column;
   }
+
   .video-title-box h2 {
     font-size: 1.6rem;
     flex-direction: column;
     gap: 10px;
   }
+
   .table-schedule th,
   .table-schedule td {
     padding: 16px;
     font-size: 0.9rem;
   }
+
   .downloads-grid {
     grid-template-columns: 1fr;
   }
@@ -932,6 +960,7 @@
 .w-no {
   width: 50px;
 }
+
 .w-action {
   width: 120px;
 }
@@ -1484,6 +1513,7 @@ body.night-mode .rule-card:hover .dress-code-img {
    MOBILE RESPONSIVE OVERRIDES FOR TATA TERTIB & PRAKTIKUM
    ======================================================== */
 @media screen and (max-width: 991px) {
+
   .rules-section,
   .praktikum-section {
     margin-top: 0 !important;

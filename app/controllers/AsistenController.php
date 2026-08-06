@@ -219,7 +219,7 @@ class AsistenController extends Controller {
             $input = $_POST;
             
             // Remove non-database fields
-            unset($input['_method']);
+            unset($input['_method'], $input['id'], $input['idAsisten']);
 
             if (empty($input['nama']) || empty($input['email'])) {
                 return $this->error('Nama dan Email wajib diisi', null, 400);

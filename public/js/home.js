@@ -1,28 +1,57 @@
-window.addEventListener("scroll", reveal);
+/**
+ * HOME.JS - Performance-Optimized
+ * Uses IntersectionObserver instead of scroll events for reveal animations.
+ * Marks html.js-loaded to enable CSS reveal animations (progressive enhancement).
+ */
 
-function reveal() {
+// Mark JS as loaded — enables CSS reveal animations
+document.documentElement.classList.add('js-loaded');
+
+// =========================================
+// 1. REVEAL ANIMATION (IntersectionObserver)
+// =========================================
+(function initReveal() {
   var reveals = document.querySelectorAll(".reveal");
-  for (var i = 0; i < reveals.length; i++) {
-    var windowheight = window.innerHeight;
-    var revealtop = reveals[i].getBoundingClientRect().top;
-    var revealpoint = 100;
-    if (revealtop < windowheight - revealpoint) {
-      reveals[i].classList.add("active");
-    }
+  if (!reveals.length) return;
+
+  // Use IntersectionObserver for better performance (no scroll event thrashing)
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+          observer.unobserve(entry.target); // Only animate once
+        }
+      });
+    }, {
+      rootMargin: '0px 0px -80px 0px', // Trigger slightly before fully in view
+      threshold: 0.1
+    });
+
+    reveals.forEach(function(el) {
+      observer.observe(el);
+    });
+  } else {
+    // Fallback: make all visible immediately
+    reveals.forEach(function(el) {
+      el.classList.add("active");
+    });
   }
-}
-reveal();
+})();
 
-let currentSlide = 0;
-const track = document.getElementById("sliderTrack");
-const dots = document.querySelectorAll(".dot");
-const totalSlides = dots.length;
+// =========================================
+// 2. SLIDER FUNCTIONALITY
+// =========================================
+var currentSlide = 0;
+var track = document.getElementById("sliderTrack");
+var dots = document.querySelectorAll(".dot");
+var totalSlides = dots.length;
 
-let autoSlideTimer = null;
+var autoSlideTimer = null;
 
 function startAutoSlide() {
   stopAutoSlide();
-  autoSlideTimer = setInterval(() => {
+  autoSlideTimer = setInterval(function() {
     moveSlide(1, false);
   }, 6000);
 }
@@ -36,16 +65,17 @@ function stopAutoSlide() {
 
 function updateSlider() {
   if (track) {
-    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    track.style.transform = "translateX(-" + (currentSlide * 100) + "%)";
 
-    dots.forEach((dot) => dot.classList.remove("active"));
+    dots.forEach(function(dot) { dot.classList.remove("active"); });
     if (dots[currentSlide]) {
       dots[currentSlide].classList.add("active");
     }
   }
 }
 
-function moveSlide(direction, isUserAction = true) {
+function moveSlide(direction, isUserAction) {
+  if (isUserAction === undefined) isUserAction = true;
   currentSlide += direction;
 
   if (currentSlide < 0) {
@@ -65,25 +95,45 @@ function goToSlide(index) {
   startAutoSlide();
 }
 
-// Touch Swipe gesture support for mobile touchscreen with Auto-Pause
+// Touch Swipe & Card Click Navigation
 if (track) {
-  let touchStartX = 0;
-  let touchEndX = 0;
+  var touchStartX = 0;
+  var touchEndX = 0;
 
-  track.addEventListener("touchstart", (e) => {
+  // Click card to navigate (Right side -> next, Left side -> prev)
+  var slideWrappers = track.querySelectorAll(".slide-content-wrapper");
+  slideWrappers.forEach(function(card) {
+    card.addEventListener("click", function(e) {
+      // Don't trigger slide change if user clicked a link or button directly
+      if (e.target.closest("a, button")) {
+        return;
+      }
+
+      var rect = card.getBoundingClientRect();
+      var clickX = e.clientX - rect.left;
+
+      if (clickX > rect.width / 2) {
+        moveSlide(-1, true); // Clicked right side -> slide to the right
+      } else {
+        moveSlide(1, true); // Clicked left side -> slide to the left
+      }
+    });
+  });
+
+  track.addEventListener("touchstart", function(e) {
     touchStartX = e.changedTouches[0].screenX;
-    stopAutoSlide(); // Pause timer while user is touching screen
+    stopAutoSlide();
   }, { passive: true });
 
-  track.addEventListener("touchend", (e) => {
+  track.addEventListener("touchend", function(e) {
     touchEndX = e.changedTouches[0].screenX;
-    const swipeThreshold = 40;
+    var swipeThreshold = 40;
     if (touchEndX < touchStartX - swipeThreshold) {
       moveSlide(1, true);
     } else if (touchEndX > touchStartX + swipeThreshold) {
       moveSlide(-1, true);
     } else {
-      startAutoSlide(); // Resume timer if user just tapped without swiping
+      startAutoSlide();
     }
   }, { passive: true });
 }
@@ -91,40 +141,37 @@ if (track) {
 // Start initial auto slide
 startAutoSlide();
 
-// Fungsi Counter Animation
-const counters = document.querySelectorAll(".stat-number");
-const speed = 200; // Semakin kecil semakin cepat
+// =========================================
+// 3. COUNTER ANIMATION (IntersectionObserver)
+// =========================================
+var counters = document.querySelectorAll(".stat-number");
+var speed = 200;
 
-const animateCounters = () => {
-  counters.forEach((counter) => {
-    const updateCount = () => {
-      const target = +counter.getAttribute("data-target");
-      const count = +counter.innerText;
-
-      // Hitung increment agar animasi halus
-      const inc = target / speed;
+var animateCounters = function() {
+  counters.forEach(function(counter) {
+    var updateCount = function() {
+      var target = +counter.getAttribute("data-target");
+      var count = +counter.innerText;
+      var inc = target / speed;
 
       if (count < target) {
         counter.innerText = Math.ceil(count + inc);
-        setTimeout(updateCount, 20); // Kecepatan refresh
+        setTimeout(updateCount, 20);
       } else {
-        counter.innerText = target + "+"; // Tambah tanda + di akhir
+        counter.innerText = target + "+";
       }
     };
     updateCount();
   });
 };
 
-// Trigger animasi hanya saat section terlihat (Intersection Observer)
-const statsSection = document.querySelector(".stats-section");
+var statsSection = document.querySelector(".stats-section");
 if (statsSection) {
-  const observer = new IntersectionObserver((entries) => {
+  var statsObserver = new IntersectionObserver(function(entries) {
     if (entries[0].isIntersecting) {
       animateCounters();
-      observer.unobserve(statsSection); // Hanya jalankan sekali
+      statsObserver.unobserve(statsSection);
     }
   });
-  observer.observe(statsSection);
+  statsObserver.observe(statsSection);
 }
-
-

@@ -92,9 +92,10 @@ class AlumniController extends Controller
      */
     public function store()
     {
-        if (ob_get_level()) ob_end_clean();
+        if (ob_get_length()) ob_clean();
         header('Content-Type: application/json');
         $input = $_POST;
+        unset($input['id'], $input['_method']);
         
         // Validasi Sederhana
         if (empty($input['nama']) || empty($input['angkatan'])) {
@@ -153,17 +154,23 @@ class AlumniController extends Controller
      */
     public function update($params)
     {
-        if (ob_get_level()) ob_end_clean();
+        if (ob_get_length()) ob_clean();
         header('Content-Type: application/json');
         
-        $id = $params['id'] ?? null;
+        $id = $params['id'] ?? $_POST['id'] ?? $_GET['id'] ?? null;
         $input = $_POST;
         
-        // Hapus _method jika ada
-        unset($input['_method']);
+        // Hapus _method dan id dari payload update
+        unset($input['_method'], $input['id']);
         
         if (!$id) {
             $this->error('ID alumni tidak diberikan', null, 400);
+        }
+
+        // Ambil data alumni lama untuk pengecekan dan penghapusan foto lama
+        $existing = $this->model->getById($id, 'id');
+        if (!$existing) {
+            $this->error('Data alumni tidak ditemukan', null, 404);
         }
         
         // Validasi Sederhana
@@ -191,6 +198,9 @@ class AlumniController extends Controller
 
         // Handle Upload Foto via Service jika file dikirimkan
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            // Hapus foto lama jika ada agar tidak menumpuk di server
+            $this->alumniService->deletePhoto($existing['foto'] ?? '', $existing['nama'] ?? $input['nama']);
+            
             $path = $this->alumniService->uploadPhoto($_FILES['foto'], $input['nama']);
             if ($path) {
                 $input['foto'] = $path; // Simpan path relatif ke database
@@ -220,7 +230,7 @@ class AlumniController extends Controller
      */
     public function delete($params)
     {
-        if (ob_get_level()) ob_end_clean();
+        if (ob_get_length()) ob_clean();
         header('Content-Type: application/json');
         
         $id = $params['id'] ?? null;
@@ -249,8 +259,7 @@ class AlumniController extends Controller
      * * @return void Mengirimkan JSON response dengan data alumni
      */
     public function apiIndex() {
-        // Bersihkan output buffer agar JSON tidak rusak oleh warning/HTML
-        if (ob_get_level()) ob_end_clean();
+        if (ob_get_length()) ob_clean();
 
         try {
             header('Content-Type: application/json');
@@ -281,7 +290,7 @@ class AlumniController extends Controller
      */
     public function apiShow($params = [])
     {
-        if (ob_get_level()) ob_end_clean();
+        if (ob_get_length()) ob_clean();
         header('Content-Type: application/json');
 
         $id = $params['id'] ?? null;

@@ -104,14 +104,12 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.4) 45%,
-    rgba(255, 255, 255, 0.7) 50%,
-    rgba(255, 255, 255, 0.4) 55%,
-    transparent 60%
-  );
+  background: linear-gradient(45deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.4) 45%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(255, 255, 255, 0.4) 55%,
+      transparent 60%);
   transform: rotate(30deg) translate(-100%, -100%);
   transition: transform 0.6s ease;
   z-index: 0;
@@ -155,41 +153,49 @@
   color: #2563eb;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
 }
+
 .color-green {
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
   color: #16a34a;
   box-shadow: 0 4px 12px rgba(22, 163, 74, 0.12);
 }
+
 .color-purple {
   background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
   color: #9333ea;
   box-shadow: 0 4px 12px rgba(147, 51, 234, 0.12);
 }
+
 .color-orange {
   background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
   color: #ea580c;
   box-shadow: 0 4px 12px rgba(234, 88, 12, 0.12);
 }
+
 .color-red {
   background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
   color: #dc2626;
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.12);
 }
+
 .color-cyan {
   background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
   color: #0891b2;
   box-shadow: 0 4px 12px rgba(8, 145, 178, 0.12);
 }
+
 .color-yellow {
   background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
   color: #ca8a04;
   box-shadow: 0 4px 12px rgba(202, 138, 4, 0.12);
 }
+
 .color-indigo {
   background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
   color: #4f46e5;
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.12);
 }
+
 .color-pink {
   background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
   color: #db2777;
@@ -365,14 +371,12 @@ body.night-mode .app-card:hover {
 }
 
 body.night-mode .app-card::before {
-  background: linear-gradient(
-    45deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.03) 45%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.03) 55%,
-    transparent 60%
-  ) !important;
+  background: linear-gradient(45deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.03) 45%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.03) 55%,
+      transparent 60%) !important;
 }
 
 body.night-mode .app-arrow {

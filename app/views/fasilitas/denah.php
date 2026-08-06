@@ -134,4 +134,4 @@
 <script>
     const PUBLIC_BASE_URL = "<?= PUBLIC_URL ?>";
 </script>
-<script src="<?= PUBLIC_URL ?>/js/fasilitas.js"></script>
+<script src="<?= PUBLIC_URL ?>/js/fasilitas.js" defer></script>

@@ -1208,6 +1208,7 @@ main {
    COMPACT & BALANCED MOBILE STYLES (< 768px)
    ========================================= */
 @media (max-width: 768px) {
+
   html body .fasilitas-section,
   html body .detail-page-section,
   html body .symmetrical-detail-view {
@@ -1257,9 +1258,11 @@ main {
   .facility-row {
     display: flex !important;
     flex-direction: row !important;
-    align-items: stretch !important; /* Image side stretches to 100% height of right info */
+    align-items: stretch !important;
+    /* Image side stretches to 100% height of right info */
     min-height: 125px;
-    padding: 0 !important; /* Image touches top/bottom/left borders seamlessly */
+    padding: 0 !important;
+    /* Image touches top/bottom/left borders seamlessly */
     border-radius: 16px;
     overflow: hidden;
     background: #ffffff;
@@ -1309,7 +1312,8 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-width: 0; /* Ensures inner flex items truncate cleanly */
+    min-width: 0;
+    /* Ensures inner flex items truncate cleanly */
   }
 
   .facility-meta {
@@ -3270,6 +3274,7 @@ body.night-mode .photo-stack-deck.single-photo .card-inner {
    MOBILE TOUCH CAROUSEL GALLERY (REPLACES 3D DECK ON MOBILE)
    ========================================================= */
 @media (max-width: 768px) {
+
   .photo-stack-hero-wrapper,
   .detail-hero-wrapper,
   #photoDeckWrapper {
@@ -3299,11 +3304,13 @@ body.night-mode .photo-stack-deck.single-photo .card-inner {
     padding: 4px 6px 14px 6px !important;
     margin: 0 !important;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
+    /* Firefox */
   }
 
   .photo-stack-deck::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
+    display: none;
+    /* Chrome, Safari, Edge */
   }
 
   .photo-card-item,
@@ -3313,8 +3320,10 @@ body.night-mode .photo-stack-deck.single-photo .card-inner {
     position: relative !important;
     top: auto !important;
     left: auto !important;
-    transform: none !important; /* Reset 3D transforms & rotation */
-    width: calc(88vw - 36px) !important; /* Peek affordance for next photo */
+    transform: none !important;
+    /* Reset 3D transforms & rotation */
+    width: calc(88vw - 36px) !important;
+    /* Peek affordance for next photo */
     max-width: 320px !important;
     height: 210px !important;
     flex: 0 0 auto !important;
@@ -3375,7 +3384,7 @@ body.night-mode .photo-stack-deck.single-photo .card-inner {
     background: rgba(37, 99, 235, 0.9) !important;
     backdrop-filter: blur(6px) !important;
     border-radius: 20px !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
   }
 
   /* Single photo mode on mobile */
@@ -3417,6 +3426,7 @@ body.night-mode .photo-stack-deck.single-photo .card-inner {
 }
 
 @media (max-width: 480px) {
+
   .photo-card-item,
   .photo-card-item.card-pos-0,
   .photo-card-item.card-pos-1,
@@ -4343,6 +4353,7 @@ body.night-mode .symmetrical-detail-view {
    HIGH-END MOBILE ANIMATIONS & INTERACTION STATES (< 768px)
    ========================================================= */
 @media (max-width: 768px) {
+
   /* 1. Page Header & Section Entrance Animation */
   .page-header,
   .eyecatching-header {
@@ -4354,12 +4365,29 @@ body.night-mode .symmetrical-detail-view {
     animation: mobileSlideUpFade 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  .facility-grid .facility-row:nth-child(1) { animation-delay: 0.05s; }
-  .facility-grid .facility-row:nth-child(2) { animation-delay: 0.12s; }
-  .facility-grid .facility-row:nth-child(3) { animation-delay: 0.19s; }
-  .facility-grid .facility-row:nth-child(4) { animation-delay: 0.26s; }
-  .facility-grid .facility-row:nth-child(5) { animation-delay: 0.33s; }
-  .facility-grid .facility-row:nth-child(6) { animation-delay: 0.40s; }
+  .facility-grid .facility-row:nth-child(1) {
+    animation-delay: 0.05s;
+  }
+
+  .facility-grid .facility-row:nth-child(2) {
+    animation-delay: 0.12s;
+  }
+
+  .facility-grid .facility-row:nth-child(3) {
+    animation-delay: 0.19s;
+  }
+
+  .facility-grid .facility-row:nth-child(4) {
+    animation-delay: 0.26s;
+  }
+
+  .facility-grid .facility-row:nth-child(5) {
+    animation-delay: 0.33s;
+  }
+
+  .facility-grid .facility-row:nth-child(6) {
+    animation-delay: 0.40s;
+  }
 
   /* 3. Tactile Spring Press Feedback for Mobile Cards & Buttons */
   .facility-row:active,
@@ -4396,6 +4424,7 @@ body.night-mode .symmetrical-detail-view {
     opacity: 0;
     transform: translateY(-16px) scale(0.98);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -4407,6 +4436,7 @@ body.night-mode .symmetrical-detail-view {
     opacity: 0;
     transform: translateY(22px) scale(0.97);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -4414,10 +4444,13 @@ body.night-mode .symmetrical-detail-view {
 }
 
 @keyframes softPulseBadge {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.2);
   }
+
   50% {
     transform: scale(1.02);
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0);
@@ -4425,10 +4458,13 @@ body.night-mode .symmetrical-detail-view {
 }
 
 @keyframes hintShimmer {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.9;
     transform: scale(1);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.05);
@@ -4441,6 +4477,7 @@ body.night-mode .symmetrical-detail-view {
     opacity: 0;
     transform: scale(0.92);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);

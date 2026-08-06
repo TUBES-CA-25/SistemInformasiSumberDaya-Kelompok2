@@ -84,4 +84,4 @@
     </div>
 </section>
 
-<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/js/kontak.js"></script>
+<script src="<?= defined('ASSETS_URL') ? ASSETS_URL : PUBLIC_URL ?>/js/kontak.js" defer></script>

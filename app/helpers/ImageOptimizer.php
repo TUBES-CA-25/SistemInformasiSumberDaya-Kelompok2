@@ -66,7 +66,7 @@ class ImageOptimizer
         // Skip jika gambar sudah kecil (di bawah 200KB, dimensi kecil, dan tidak meminta crop)
         $fileSize = filesize($filePath);
         if (!$cropSquare && $fileSize < 200 * 1024 && $origWidth <= $maxW && $origHeight <= $maxH) {
-            imagedestroy($sourceImage);
+            @imagedestroy($sourceImage);
             return true; // Sudah optimal
         }
 
@@ -77,7 +77,7 @@ class ImageOptimizer
         $currentUsage = memory_get_usage(true);
 
         if (($currentUsage + $estimatedMemory) > $memoryLimit) {
-            imagedestroy($sourceImage);
+            @imagedestroy($sourceImage);
             return false;
         }
 
@@ -149,8 +149,8 @@ class ImageOptimizer
         $result = self::saveImage($resizedImage, $filePath, $mime);
 
         // Bersihkan memori
-        imagedestroy($sourceImage);
-        imagedestroy($resizedImage);
+        @imagedestroy($sourceImage);
+        @imagedestroy($resizedImage);
 
         return $result;
     }
@@ -200,7 +200,7 @@ class ImageOptimizer
 
         $webpPath = preg_replace('/\.[^.\/]+$/', '.webp', $filePath);
         $success = imagewebp($image, $webpPath, $quality);
-        imagedestroy($image);
+        @imagedestroy($image);
 
         if (!$success || !file_exists($webpPath)) {
             return false;
@@ -244,21 +244,21 @@ class ImageOptimizer
             case 3: // 180 degrees
                 $rotated = imagerotate($image, 180, 0);
                 if ($rotated !== false) {
-                    imagedestroy($image);
+                    @imagedestroy($image);
                     $image = $rotated;
                 }
                 break;
             case 6: // 90 degrees CW (rotate 270 CCW in imagerotate)
                 $rotated = imagerotate($image, -90, 0);
                 if ($rotated !== false) {
-                    imagedestroy($image);
+                    @imagedestroy($image);
                     $image = $rotated;
                 }
                 break;
             case 8: // 270 degrees CW (rotate 90 CCW in imagerotate)
                 $rotated = imagerotate($image, 90, 0);
                 if ($rotated !== false) {
-                    imagedestroy($image);
+                    @imagedestroy($image);
                     $image = $rotated;
                 }
                 break;

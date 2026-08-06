@@ -137,6 +137,7 @@ class Router {
         $this->get('/api/asisten/coordinator/current', 'AsistenController', 'getCoordinator');
         $this->post('/api/asisten/coordinator/set', 'AsistenController', 'setCoordinator');
         $this->post('/api/asisten/{id}/move-to-alumni', 'AsistenController', 'moveToAlumni');
+        $this->post('/api/asisten/{id}', 'AsistenController', 'update');
         $this->put('/api/asisten/{id}', 'AsistenController', 'update');
         $this->delete('/api/asisten/{id}', 'AsistenController', 'delete');
         $this->get('/api/asisten/{id}', 'AsistenController', 'apiShow');
@@ -144,6 +145,7 @@ class Router {
         $this->post('/api/asisten', 'AsistenController', 'store');
         $this->get('/api/asisten', 'AsistenController', 'apiIndex');
         $this->get('/api/alumni/{id}', 'AlumniController', 'apiShow');
+        $this->post('/api/alumni/{id}', 'AlumniController', 'update');
         $this->put('/api/alumni/{id}', 'AlumniController', 'update');
         $this->delete('/api/alumni/{id}', 'AlumniController', 'delete');
         $this->post('/api/alumni', 'AlumniController', 'store');
@@ -151,11 +153,13 @@ class Router {
         $this->get('/api/manajemen', 'ManajemenController', 'apiIndex');
         $this->get('/api/manajemen/{id}', 'ManajemenController', 'apiShow');
         $this->post('/api/manajemen', 'ManajemenController', 'store');
+        $this->post('/api/manajemen/{id}', 'ManajemenController', 'update');
         $this->put('/api/manajemen/{id}', 'ManajemenController', 'update');
         $this->delete('/api/manajemen/{id}', 'ManajemenController', 'delete');
 
         $this->get('/api/fasilitas', 'FasilitasController', 'apiIndex');
         $this->post('/api/fasilitas', 'FasilitasController', 'store');
+        $this->post('/api/fasilitas/{id}', 'FasilitasController', 'update');
         $this->put('/api/fasilitas/{id}', 'FasilitasController', 'update');
         $this->delete('/api/fasilitas/{id}', 'FasilitasController', 'delete');
         $this->delete('/api/fasilitas/image/{id}', 'FasilitasController', 'deleteImage');
@@ -163,12 +167,14 @@ class Router {
         $this->get('/api/matakuliah', 'MatakuliahController', 'apiIndex');
         $this->get('/api/matakuliah/{id}', 'MatakuliahController', 'apiShow');
         $this->post('/api/matakuliah', 'MatakuliahController', 'store');
+        $this->post('/api/matakuliah/{id}', 'MatakuliahController', 'update');
         $this->put('/api/matakuliah/{id}', 'MatakuliahController', 'update');
         $this->delete('/api/matakuliah/{id}', 'MatakuliahController', 'delete');
 
         $this->get('/api/dosen', 'DosenController', 'apiIndex');
         $this->get('/api/dosen/{id}', 'DosenController', 'apiShow');
         $this->post('/api/dosen', 'DosenController', 'store');
+        $this->post('/api/dosen/{id}', 'DosenController', 'update');
         $this->put('/api/dosen/{id}', 'DosenController', 'update');
         $this->delete('/api/dosen/{id}', 'DosenController', 'delete');
 
@@ -180,6 +186,7 @@ class Router {
 
         $this->get('/api/jadwal-upk', 'JadwalUpkController', 'apiIndex');
         $this->post('/api/jadwal-upk', 'JadwalUpkController', 'store');
+        $this->post('/api/jadwal-upk/{id}', 'JadwalUpkController', 'update');
         $this->put('/api/jadwal-upk/{id}', 'JadwalUpkController', 'update');
         $this->delete('/api/jadwal-upk/{id}', 'JadwalUpkController', 'delete');
         $this->post('/api/jadwal-upk/delete-multiple', 'JadwalUpkController', 'deleteMultiple');
@@ -306,7 +313,10 @@ class Router {
     private function notFound(): void
     {
         http_response_code(404);
-        $isApi = (strpos($this->path, '/api/') === 0) || (strpos($_SERVER['SCRIPT_NAME'], 'api.php') !== false);
+        $isApi = (strpos($this->path, '/api/') === 0) 
+              || (strpos($_SERVER['SCRIPT_NAME'] ?? '', 'api.php') !== false)
+              || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)
+              || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
         
         if ($isApi) {
             header('Content-Type: application/json');

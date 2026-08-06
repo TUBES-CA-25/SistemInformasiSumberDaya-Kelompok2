@@ -290,13 +290,16 @@ img {
   .nav-links {
     gap: 16px;
   }
+
   .nav-links a {
     font-size: 0.88rem;
   }
+
   .btn-nav-apps {
     padding: 8px 16px;
     font-size: 0.88rem;
   }
+
   .navbar {
     padding: 8px 20px;
   }
@@ -314,7 +317,8 @@ img {
     transform: translateX(-50%) !important;
     width: 92% !important;
     max-width: 1200px !important;
-    border-radius: 12px !important; /* Slim compact floating capsule card */
+    border-radius: 12px !important;
+    /* Slim compact floating capsule card */
     padding: 4px 14px !important;
     border: 1px solid rgba(191, 219, 254, 0.85) !important;
     box-shadow: 0 8px 24px rgba(30, 58, 138, 0.1) !important;
@@ -390,6 +394,7 @@ img {
     opacity: 1 !important;
     color: #d97706;
   }
+
   .icon-moon {
     display: none !important;
   }
@@ -399,9 +404,11 @@ img {
     background: rgba(30, 41, 59, 0.9) !important;
     border-color: rgba(71, 85, 105, 0.8) !important;
   }
+
   body.night-mode .icon-sun {
     display: none !important;
   }
+
   body.night-mode .icon-moon {
     display: inline-block !important;
     opacity: 1 !important;
@@ -605,9 +612,12 @@ img {
     border-radius: 10px;
     padding: 0;
   }
+
   .btn-apps-text {
-    display: none; /* Hide text on extra small phones so header row stays 100% clean */
+    display: none;
+    /* Hide text on extra small phones so header row stays 100% clean */
   }
+
   .btn-nav-apps {
     padding: 8px 10px;
     border-radius: 10px;
@@ -650,6 +660,9 @@ img {
   z-index: 10;
   margin-top: auto;
   border-top: 4px solid #3b82f6;
+  /* Paint optimization: skip rendering until near viewport */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }
 
 .footer-grid {
@@ -1011,7 +1024,7 @@ body.night-mode::before {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background: 
+  background:
     radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
     radial-gradient(circle at 85% 75%, rgba(147, 51, 234, 0.10) 0%, transparent 50%),
     radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 60%);
@@ -1021,15 +1034,14 @@ body.night-mode::before {
 @keyframes cosmicNebulaGlow {
   0% {
     opacity: 0.7;
-    transform: scale(1);
   }
+
   50% {
     opacity: 1;
-    transform: scale(1.03);
   }
+
   100% {
     opacity: 0.8;
-    transform: scale(0.98);
   }
 }
 
@@ -1071,15 +1083,23 @@ body.night-mode::after {
 @keyframes starTwinkleSlow {
   0% {
     opacity: 0.3;
-    transform: scale(0.99);
   }
+
   50% {
     opacity: 1;
-    transform: scale(1.01);
   }
+
   100% {
     opacity: 0.4;
-    transform: scale(1);
+  }
+}
+
+/* Disable expensive night-mode pseudo-element animations when reduced motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+
+  body.night-mode::before,
+  body.night-mode::after {
+    animation: none !important;
   }
 }
 

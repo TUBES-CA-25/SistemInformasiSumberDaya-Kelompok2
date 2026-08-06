@@ -247,4 +247,4 @@ $alumni_list      = $data['alumni'] ?? [];
 </div>
 
 <?php $asistenJsPath = __DIR__ . '/../../../public/js/asisten.js'; ?>
-<script src="<?= ASSETS_URL ?>/js/asisten.js?v=<?= file_exists($asistenJsPath) ? filemtime($asistenJsPath) : time() ?>"></script>
+<script src="<?= ASSETS_URL ?>/js/asisten.js?v=<?= file_exists($asistenJsPath) ? filemtime($asistenJsPath) : time() ?>" defer></script>

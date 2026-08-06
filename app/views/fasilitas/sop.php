@@ -58,4 +58,4 @@
     </div>
 </section>
 
-<script src="<?= ASSETS_URL ?>/js/sop.js"></script>
+<script src="<?= ASSETS_URL ?>/js/sop.js" defer></script>
