@@ -76,9 +76,9 @@
         <div class="hidden lg:flex w-[55%] h-full bg-blue-900 relative items-center justify-center overflow-hidden">
             
             <div class="absolute inset-0 z-0">
-                <img src="<?php echo ASSETS_URL; ?>/images/gedung-fikom-umi.jpg" 
-                     alt="Gedung" class="w-full h-full object-cover opacity-60">
-                <div class="absolute inset-0 bg-gradient-to-tr from-blue-900 via-blue-900/80 to-indigo-900/60 mix-blend-multiply"></div>
+                <img src="<?php echo ASSETS_URL; ?>/assets/uploads/gedungfikomm.webp" 
+                     alt="Gedung FIKOM UMI" class="w-full h-full object-cover opacity-75">
+                <div class="absolute inset-0 bg-gradient-to-tr from-blue-950/70 via-blue-900/50 to-indigo-900/30 mix-blend-multiply"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
             </div>
 
@@ -87,7 +87,7 @@
             <div class="relative z-20 text-center px-12 -translate-y-10">
                 
                 <div class="inline-flex items-center justify-center w-28 h-28 rounded-3xl bg-white/10 backdrop-blur-md mb-8 border border-white/20 shadow-[0_0_40px_rgba(59,130,246,0.3)] p-5 animate-levitate">
-                    <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.png" 
+                    <img src="<?php echo ASSETS_URL; ?>/images/navbar-icon.webp" 
                          alt="Logo" class="w-full h-full object-contain drop-shadow-lg">
                 </div>
                 
