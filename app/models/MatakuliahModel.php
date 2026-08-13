@@ -13,7 +13,7 @@ class MatakuliahModel extends Model
 {
     /** * @var string Nama tabel utama di database.
      */
-    protected $table = 'Matakuliah';
+    protected $table = 'matakuliah';
 
     /**
      * Mengambil satu data matakuliah berdasarkan kode uniknya.
@@ -48,8 +48,8 @@ class MatakuliahModel extends Model
     public function getMatakuliahWithAsisten(int $idMatakuliah): array 
     {
         $query = "SELECT a.*, am.tahunAjaran, am.semeserMatakuliah 
-                  FROM Asisten a
-                  JOIN AsistenMatakuliah am ON a.idAsisten = am.idAsisten
+                  FROM asisten a
+                  JOIN asistenmatakuliah am ON a.idAsisten = am.idAsisten
                   WHERE am.idMatakuliah = ?";
         
         $stmt = $this->db->prepare($query);

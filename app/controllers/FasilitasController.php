@@ -157,10 +157,15 @@ class FasilitasController extends Controller {
      * Admin: Daftar Fasilitas untuk tabel manajemen admin.
      */
     public function adminIndex(): void {
+        require_once ROOT_PROJECT . '/app/models/AsistenModel.php';
+        $asistenModel = new AsistenModel();
+        $asistenList = $asistenModel->getAll();
+
         $labs = $this->model->getAll();
         $this->view('admin/fasilitas/index', [
             'judul' => 'Kelola Fasilitas Laboratorium',
-            'laboratorium' => $labs
+            'laboratorium' => $labs,
+            'asistenList'  => $asistenList
         ]);
     }
 

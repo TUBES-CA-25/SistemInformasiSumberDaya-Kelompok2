@@ -104,24 +104,49 @@ function loadLaboratorium() {
 }
 
 function loadAsistenOptions() {
-  fetch("/api/asisten")
-    .then((res) => res.json())
-    .then((res) => {
-      if (res.data) {
-        const select = document.getElementById("inputKoordinator");
-        select.innerHTML = '<option value="">-- Pilih Asisten --</option>';
-        res.data.forEach((a) => {
-          const opt = document.createElement("option");
-          opt.value = a.idAsisten;
-          opt.text = a.nama;
-          select.appendChild(opt);
-        });
-        if (pendingKordinator) {
-          select.value = pendingKordinator;
-          pendingKordinator = null;
+  const select = document.getElementById("inputKoordinator");
+  if (!select) return;
+  
+  // Jika sudah terisi dari HTML/PHP server-side, tidak perlu overwrite kecuali pendingKordinator ada
+  if (select.options.length > 1 && !pendingKordinator) {
+    return;
+  }
+
+  const baseApi = typeof API_URL !== "undefined" ? API_URL : (window.API_URL || "");
+  const primaryUrl = baseApi ? (baseApi.endsWith("/asisten") ? baseApi : baseApi + "/asisten") : "/api/asisten";
+  
+  function tryFetch(url, isFallback = false) {
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then((res) => {
+        if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {
+          select.innerHTML = '<option value="">-- Pilih Asisten --</option>';
+          res.data.forEach((a) => {
+            const opt = document.createElement("option");
+            opt.value = a.idAsisten;
+            opt.text = a.nama;
+            select.appendChild(opt);
+          });
+          if (pendingKordinator) {
+            select.value = pendingKordinator;
+            pendingKordinator = null;
+          }
         }
-      }
-    });
+      })
+      .catch((err) => {
+        if (!isFallback) {
+          const fallbackUrl = (window.PUBLIC_URL || "") + "/api.php/asisten";
+          if (fallbackUrl !== url) {
+            tryFetch(fallbackUrl, true);
+          }
+        }
+      });
+  }
+
+  tryFetch(primaryUrl);
 }
 
 // --- OPTIMASI: Intersection Observer untuk Lazy Load Gambar Lab ---
@@ -261,9 +286,12 @@ function openFormModal(id = null, event = null) {
 
       // Koordinator
       const coordSelect = document.getElementById("inputKoordinator");
-      if (coordSelect.options.length > 1)
+      if (coordSelect.options.length <= 1) {
+        pendingKordinator = data.idKordinatorAsisten;
+        loadAsistenOptions();
+      } else {
         coordSelect.value = data.idKordinatorAsisten || "";
-      else pendingKordinator = data.idKordinatorAsisten;
+      }
 
       // Preview Gambar Lama (dengan fitur hapus)
       const savedContainer = document.getElementById("savedImagesContainer");
