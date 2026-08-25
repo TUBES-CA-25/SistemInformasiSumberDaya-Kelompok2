@@ -5,7 +5,7 @@ define('ROOT_PROJECT', getcwd());
 define('VIEW_PATH', ROOT_PROJECT . '/app/views');
 define('PUBLIC_URL', 'http://localhost');
 
-require_once 'app/Services/FasilitasService.php';
+require_once 'app/services/FasilitasService.php';
 $s = new FasilitasService();
 $full = $s->getFullDetail(30);
 if (!$full) { echo "Service returned null\n"; exit(1); }

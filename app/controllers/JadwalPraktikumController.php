@@ -2,7 +2,7 @@
 
 // Pastikan Model dan Service dimuat dengan path absolut
 require_once ROOT_PROJECT . '/app/models/JadwalPraktikumModel.php';
-require_once ROOT_PROJECT . '/app/Services/JadwalPraktikumService.php';
+require_once ROOT_PROJECT . '/app/services/JadwalPraktikumService.php';
 
 /**
  * Karena index.php sudah memuat Controller.php secara global, 

@@ -1,6 +1,6 @@
 <?php
 
-require_once ROOT_PROJECT . '/app/Services/FasilitasService.php';
+require_once ROOT_PROJECT . '/app/services/FasilitasService.php';
 require_once ROOT_PROJECT . '/app/models/FasilitasModel.php';
 require_once ROOT_PROJECT . '/app/models/LaboratoriumGambarModel.php';
 
