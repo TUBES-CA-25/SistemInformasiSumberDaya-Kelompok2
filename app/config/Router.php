@@ -221,6 +221,13 @@ class Router {
         $this->put('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'update');
         $this->delete('/api/formatpenulisan/{id}', 'FormatPenulisanController', 'delete');
 
+        $this->get('/api/user', 'UserController', 'apiIndex');
+        $this->get('/api/user/{id}', 'UserController', 'apiShow');
+        $this->post('/api/user', 'UserController', 'apiStore');
+        $this->post('/api/user/{id}', 'UserController', 'apiUpdate');
+        $this->put('/api/user/{id}', 'UserController', 'apiUpdate');
+        $this->delete('/api/user/{id}', 'UserController', 'apiDelete');
+
         // -------- AUTH & ADMIN --------
         $this->get('/iclabs-login', 'AuthController', 'login');
         $this->get('/login', 'AuthController', 'login');
@@ -322,7 +329,13 @@ class Router {
             header('Content-Type: application/json');
             echo json_encode(['status' => false, 'message' => 'API Route not found: ' . $this->path]);
         } else {
-            echo "<h1>404 Not Found</h1><p>Jalur <b>{$this->path}</b> tidak terdaftar di Router.</p>";
+            $path = $this->path;
+            $errorView = (defined('VIEW_PATH') ? VIEW_PATH : (defined('APP_PATH') ? APP_PATH . '/views' : dirname(__DIR__) . '/views')) . '/errors/404.php';
+            if (file_exists($errorView)) {
+                require_once $errorView;
+            } else {
+                echo "<h1>404 Not Found</h1><p>Jalur <b>" . htmlspecialchars($this->path) . "</b> tidak terdaftar di Router.</p>";
+            }
         }
         exit;
     }

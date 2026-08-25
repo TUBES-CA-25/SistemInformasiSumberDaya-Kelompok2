@@ -86,6 +86,8 @@ $apiRoutes = [
         '/jadwal-praktikum/template'    => ['controller' => 'JadwalPraktikumController', 'action' => 'downloadTemplate'],
         '/jadwal-upk'                   => ['controller' => 'JadwalUpkController', 'action' => 'apiIndex'],
         '/jadwal-upk/{id}'              => ['controller' => 'JadwalUpkController', 'action' => 'apiShow'],
+        '/user'                         => ['controller' => 'UserController', 'action' => 'apiIndex'],
+        '/user/{id}'                    => ['controller' => 'UserController', 'action' => 'apiShow'],
     ],
     'POST' => [
         '/sop'                          => ['controller' => 'SopController', 'action' => 'store'],
@@ -112,6 +114,8 @@ $apiRoutes = [
         '/jadwal-upk'                   => ['controller' => 'JadwalUpkController', 'action' => 'store'],
         '/jadwal-upk/delete-multiple'   => ['controller' => 'JadwalUpkController', 'action' => 'deleteMultiple'],
         '/jadwal-upk/upload'            => ['controller' => 'JadwalUpkController', 'action' => 'upload'],
+        '/user'                         => ['controller' => 'UserController', 'action' => 'apiStore'],
+        '/user/{id}'                    => ['controller' => 'UserController', 'action' => 'apiUpdate'],
     ],
     'PUT' => [
         '/sop/{id}'                     => ['controller' => 'SopController', 'action' => 'update'],
@@ -126,6 +130,7 @@ $apiRoutes = [
         '/jadwal-upk/{id}'              => ['controller' => 'JadwalUpkController', 'action' => 'update'],
         '/modul/{id}'                   => ['controller' => 'ModulController', 'action' => 'update'],
         '/formatpenulisan/{id}'         => ['controller' => 'FormatPenulisanController', 'action' => 'update'],
+        '/user/{id}'                    => ['controller' => 'UserController', 'action' => 'apiUpdate'],
     ],
     'DELETE' => [
         '/sop/{id}'                     => ['controller' => 'SopController', 'action' => 'delete'],
@@ -140,6 +145,7 @@ $apiRoutes = [
         '/jadwal-upk/{id}'              => ['controller' => 'JadwalUpkController', 'action' => 'delete'],
         '/modul/{id}'                   => ['controller' => 'ModulController', 'action' => 'delete'],
         '/formatpenulisan/{id}'         => ['controller' => 'FormatPenulisanController', 'action' => 'delete'],
+        '/user/{id}'                    => ['controller' => 'UserController', 'action' => 'apiDelete'],
     ]
 ];
 

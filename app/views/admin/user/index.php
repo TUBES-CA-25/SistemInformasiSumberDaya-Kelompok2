@@ -124,8 +124,8 @@ if (!isset($users)) {
                 <input type="hidden" id="userId" name="id">
 
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
-                    <input type="text" id="username" name="username" required 
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Email Admin <span class="text-red-500">*</span></label>
+                    <input type="email" id="username" name="username" required placeholder="contoh: user@iclabs.com"
                            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                 </div>
 

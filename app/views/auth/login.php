@@ -142,9 +142,9 @@
                     <form action="<?= PUBLIC_URL ?>/login" method="POST" class="space-y-6">
                         
                         <div class="relative group">
-                            <input type="text" name="username" id="username" class="floating-input block px-4 py-4 w-full text-sm text-slate-900 bg-white/60 rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer placeholder-transparent shadow-sm transition-all" placeholder=" " required />
-                            <label for="username" class="absolute text-sm text-slate-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-3 cursor-text pointer-events-none">
-                                <i class="fas fa-user mr-1"></i> Username
+                            <input type="email" name="email" id="email" class="floating-input block px-4 py-4 w-full text-sm text-slate-900 bg-white/60 rounded-xl border border-slate-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer placeholder-transparent shadow-sm transition-all" placeholder=" " required />
+                            <label for="email" class="absolute text-sm text-slate-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-3 cursor-text pointer-events-none">
+                                <i class="fas fa-envelope mr-1"></i> Email
                             </label>
                         </div>
 

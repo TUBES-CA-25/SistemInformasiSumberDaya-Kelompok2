@@ -35,6 +35,15 @@ class UserModel extends Model {
     }
 
     /**
+     * Mencari user berdasarkan email (tersimpan di kolom username).
+     * @param string $email
+     * @return array|null Data user atau null jika tidak ditemukan.
+     */
+    public function getByEmail(string $email): ?array {
+        return $this->getByUsername($email);
+    }
+
+    /**
      * Memperbarui timestamp login terakhir user.
      * * @param int $id ID User.
      * @return bool

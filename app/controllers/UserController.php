@@ -113,15 +113,23 @@ class UserController extends Controller {
      */
     public function apiStore(): void {
         $data = $this->getJson();
+        if (isset($data['email']) && !isset($data['username'])) {
+            $data['username'] = $data['email'];
+        }
         
         // Validasi Input Wajib
         if (empty($data['username']) || empty($data['password']) || empty($data['role'])) {
-            $this->error('Data wajib diisi (Username, Password, Role)');
+            $this->error('Data wajib diisi (Email, Password, Role)');
         }
 
-        // Validasi Username Unik
+        // Validasi Format Email
+        if (!filter_var($data['username'], FILTER_VALIDATE_EMAIL)) {
+            $this->error('Format Email tidak valid (harus berupa email seperti user@domain.com)');
+        }
+
+        // Validasi Email Unik
         if ($this->model->getByUsername($data['username'])) {
-            $this->error('Username sudah digunakan. Gunakan nama lain.');
+            $this->error('Email sudah digunakan. Gunakan email lain.');
         }
 
         if ($this->model->store($data)) {
@@ -143,8 +151,16 @@ class UserController extends Controller {
         }
 
         $data = $this->getJson();
+        if (isset($data['email']) && !isset($data['username'])) {
+            $data['username'] = $data['email'];
+        }
+
         if (empty($data['username']) || empty($data['role'])) {
-            $this->error('Username dan Role wajib diisi');
+            $this->error('Email dan Role wajib diisi');
+        }
+
+        if (!filter_var($data['username'], FILTER_VALIDATE_EMAIL)) {
+            $this->error('Format Email tidak valid (harus berupa email seperti user@domain.com)');
         }
 
         if ($this->model->update($id, $data)) {
