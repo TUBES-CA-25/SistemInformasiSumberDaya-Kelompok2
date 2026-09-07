@@ -64,15 +64,9 @@ $d = $data['dataDetail'] ?? null;
                     <?php endif; ?>
 
                     <div class="contact-wrapper">
-                        <?php if($d['email'] !== '-'): ?>
-                            <a href="mailto:<?= htmlspecialchars($d['email']); ?>" class="btn-contact">
-                                <i class="ri-mail-send-line"></i> Kirim Email
-                            </a>
-                        <?php else: ?>
-                            <button class="btn-disabled" disabled>
-                                <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
-                            </button>
-                        <?php endif; ?>
+                        <button class="btn-disabled" disabled>
+                            <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
+                        </button>
                     </div>
                 </div>
             </div>

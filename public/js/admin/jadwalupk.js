@@ -597,3 +597,65 @@ window.bulkDelete = function () {
     }
   });
 };
+
+// Toggle status aktif/nonaktif Jadwal UPK di tampilan utama
+window.toggleUpkStatus = async function () {
+  const btn = document.getElementById("btnToggleStatus");
+  if (btn) btn.disabled = true;
+
+  try {
+    const response = await fetch(`${window.API_URL}/jadwal-upk/toggle-status`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json"
+      }
+    });
+
+    const res = await response.json();
+    if (res.status === "success" || res.status === true) {
+      const isAktif = res.is_aktif;
+      
+      // Update elemen UI secara dinamis
+      const badgeContainer = document.getElementById("statusBadgeContainer");
+      const statusDot = document.getElementById("statusDot");
+      const statusLabel = document.getElementById("statusLabel");
+      const toggleIcon = document.getElementById("toggleIcon");
+      const toggleButtonText = document.getElementById("toggleButtonText");
+
+      if (badgeContainer && statusDot && statusLabel && toggleIcon && toggleButtonText) {
+        if (isAktif) {
+          badgeContainer.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+          statusDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+          statusLabel.textContent = "Aktif (Tampil)";
+          
+          btn.className = "ml-1 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all duration-200 flex items-center gap-1.5 shadow-sm bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100 hover:border-rose-300";
+          toggleIcon.className = "fas fa-eye-slash";
+          toggleButtonText.textContent = "Nonaktifkan";
+        } else {
+          badgeContainer.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300";
+          statusDot.className = "w-2 h-2 rounded-full bg-rose-500";
+          statusLabel.textContent = "Nonaktif (Disembunyikan)";
+          
+          btn.className = "ml-1 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all duration-200 flex items-center gap-1.5 shadow-sm bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300";
+          toggleIcon.className = "fas fa-eye";
+          toggleButtonText.textContent = "Aktifkan";
+        }
+      }
+
+      Swal.fire({
+        icon: isAktif ? "success" : "info",
+        title: isAktif ? "Jadwal UPK Diaktifkan!" : "Jadwal UPK Dinonaktifkan!",
+        text: res.message || (isAktif ? "Jadwal UPK sekarang tampil di menu utama dan dapat diakses mahasiswa." : "Jadwal UPK sekarang disembunyikan dari menu utama."),
+        timer: 2500,
+        showConfirmButton: false
+      });
+    } else {
+      Swal.fire("Gagal", res.message || "Gagal mengubah status jadwal UPK.", "error");
+    }
+  } catch (err) {
+    console.error("Toggle UPK status error:", err);
+    Swal.fire("Error", "Terjadi kesalahan saat menghubungi server.", "error");
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+};

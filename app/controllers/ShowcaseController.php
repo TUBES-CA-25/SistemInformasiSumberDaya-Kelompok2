@@ -8,6 +8,9 @@
 require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/models/ShowcaseModel.php';
 require_once ROOT_PROJECT . '/app/helpers/ImageOptimizer.php';
+if (file_exists(ROOT_PROJECT . '/app/helpers/Cache.php')) {
+    require_once ROOT_PROJECT . '/app/helpers/Cache.php';
+}
 
 class ShowcaseController extends Controller 
 {

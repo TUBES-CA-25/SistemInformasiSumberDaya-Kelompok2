@@ -10,6 +10,7 @@
 
 require_once ROOT_PROJECT . '/app/services/JadwalUpkService.php';
 require_once ROOT_PROJECT . '/app/models/JadwalUpkModel.php'; 
+require_once ROOT_PROJECT . '/app/models/PengaturanModel.php'; 
 
 class JadwalUpkController extends Controller 
 {
@@ -31,14 +32,17 @@ class JadwalUpkController extends Controller
 
     /**
      * Tampilan Publik: Daftar Jadwal UPK
-     * Menampilkan jadwal praktikum yang sedang berlangsung kepada mahasiswa.
-     * * @return void
+     * Menampilkan jadwal praktikum yang sedang berlangsung kepada mahasiswa jika aktif.
+     * 
+     * @return void
      */
     public function index(): void 
     {
+        $isAktif = (PengaturanModel::getSetting('jadwal_upk_aktif', '1') === '1');
         $data = [
-            'judul'  => 'Jadwal UPK Praktikum',
-            'jadwal' => $this->model->getAll() 
+            'judul'    => 'Jadwal UPK Praktikum',
+            'is_aktif' => $isAktif,
+            'jadwal'   => $isAktif ? $this->model->getAll() : []
         ];
 
         $this->view('praktikum/jadwalupk', $data);
@@ -46,17 +50,66 @@ class JadwalUpkController extends Controller
 
     /**
      * Dashboard Admin: Kelola Jadwal UPK
-     * Menampilkan tabel manajemen jadwal khusus untuk administrator.
-     * * @return void
+     * Menampilkan tabel manajemen jadwal khusus untuk administrator beserta toggle status.
+     * 
+     * @return void
      */
     public function adminIndex(): void 
     {
+        $isAktif = (PengaturanModel::getSetting('jadwal_upk_aktif', '1') === '1');
         $data = [
-            'judul'  => 'Kelola Jadwal UPK',
-            'jadwal' => $this->model->getAll()
+            'judul'    => 'Kelola Jadwal UPK',
+            'is_aktif' => $isAktif,
+            'jadwal'   => $this->model->getAll()
         ];
 
         $this->view('admin/jadwalupk/index', $data);
+    }
+
+    /**
+     * API: Ambil status aktif/nonaktif Jadwal UPK pada tampilan utama
+     */
+    public function getStatus(): void 
+    {
+        $this->cleanBuffers();
+        header('Content-Type: application/json; charset=utf-8');
+        $isAktif = (PengaturanModel::getSetting('jadwal_upk_aktif', '1') === '1');
+        echo json_encode([
+            'status'   => 'success',
+            'is_aktif' => $isAktif,
+            'message'  => $isAktif ? 'Jadwal UPK sedang AKTIF di tampilan utama' : 'Jadwal UPK sedang NONAKTIF di tampilan utama'
+        ]);
+        exit;
+    }
+
+    /**
+     * API: Toggle status aktif/nonaktif Jadwal UPK pada tampilan utama
+     */
+    public function toggleStatus(): void 
+    {
+        $this->cleanBuffers();
+        header('Content-Type: application/json; charset=utf-8');
+        try {
+            $current = PengaturanModel::getSetting('jadwal_upk_aktif', '1');
+            $newStatus = ($current === '1') ? '0' : '1';
+            PengaturanModel::setSetting('jadwal_upk_aktif', $newStatus, 'Status visibilitas Jadwal UPK pada tampilan utama (1=Aktif, 0=Nonaktif)');
+
+            $isAktif = ($newStatus === '1');
+            echo json_encode([
+                'status'   => 'success',
+                'is_aktif' => $isAktif,
+                'message'  => $isAktif 
+                    ? 'Jadwal UPK berhasil DIAKTIFKAN pada tampilan utama' 
+                    : 'Jadwal UPK berhasil DINONAKTIFKAN pada tampilan utama'
+            ]);
+        } catch (\Throwable $e) {
+            http_response_code(500);
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'Gagal mengubah status: ' . $e->getMessage()
+            ]);
+        }
+        exit;
     }
 
     /**

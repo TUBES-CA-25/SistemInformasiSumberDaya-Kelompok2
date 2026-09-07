@@ -128,79 +128,112 @@ class MatakuliahController extends Controller
      */
     public function store(): void 
     {
-        $input = $this->getJson(); // Mengambil data input (biasanya JSON AJAX)
-        unset($input['_method'], $input['idMatakuliah']);
-        
-        // 1. Validasi Input Wajib
-        $required = ['kodeMatakuliah', 'namaMatakuliah'];
-        $missing = $this->validateRequired($input, $required);
+        try {
+            $input = $this->getJson() ?: ($this->getPost() ?? []);
+            if (empty($input)) {
+                $this->error('Data input tidak boleh kosong', null, 400);
+                return;
+            }
 
-        if (!empty($missing)) {
-            $this->error('Data tidak lengkap: ' . implode(', ', $missing), null, 400);
-            return;
-        }
+            unset($input['_method'], $input['idMatakuliah']);
+            
+            // 1. Validasi Input Wajib
+            $required = ['kodeMatakuliah', 'namaMatakuliah'];
+            $missing = $this->validateRequired($input, $required);
 
-        // 2. Cek Duplikasi Kode Matakuliah
-        $existing = $this->model->getMatakuliahByKode($input['kodeMatakuliah']);
-        if ($existing) {
-            $this->error('Kode matakuliah "' . $input['kodeMatakuliah'] . '" sudah terdaftar', null, 400);
-            return;
-        }
+            if (!empty($missing)) {
+                $this->error('Data tidak lengkap: ' . implode(', ', $missing), null, 400);
+                return;
+            }
 
-        // 3. Proses Simpan
-        if ($this->model->insert($input)) {
-            $this->success(
-                ['id' => $this->model->getLastInsertId()], 
-                'Matakuliah berhasil ditambahkan', 
-                201
-            );
-        } else {
-            $this->error('Gagal menyimpan matakuliah', null, 500);
+            $kode = trim($input['kodeMatakuliah']);
+
+            // 2. Persiapkan data yang aman (kode matakuliah diperbolehkan duplikat untuk mendukung kelas paralel/ruangan sama)
+            $data = [
+                'kodeMatakuliah' => $kode,
+                'namaMatakuliah' => trim($input['namaMatakuliah']),
+                'semester'       => !empty($input['semester']) ? (int)$input['semester'] : null,
+                'sksKuliah'      => !empty($input['sksKuliah']) ? (int)$input['sksKuliah'] : null,
+            ];
+
+            // 3. Proses Simpan
+            if ($this->model->insert($data)) {
+                $this->success(
+                    ['id' => $this->model->getLastInsertId()], 
+                    'Matakuliah berhasil ditambahkan', 
+                    201
+                );
+            } else {
+                $this->error('Gagal menyimpan matakuliah', null, 500);
+            }
+        } catch (\Throwable $e) {
+            $this->error('Terjadi kesalahan: ' . $e->getMessage(), null, 500);
         }
     }
 
     /**
      * Memperbarui data matakuliah yang sudah ada (Proses PUT/POST).
-     * * @param array $params
+     * 
+     * @param array $params
      * @return void
      */
     public function update(array $params): void 
     {
-        $id = $params['id'] ?? null;
-        
-        if (!$id || !$this->model->getById($id, 'idMatakuliah')) {
-            $this->error('Matakuliah tidak ditemukan atau ID tidak valid', null, 404);
-            return;
-        }
+        try {
+            $id = $params['id'] ?? null;
+            
+            if (!$id || !$this->model->getById($id, 'idMatakuliah')) {
+                $this->error('Matakuliah tidak ditemukan atau ID tidak valid', null, 404);
+                return;
+            }
 
-        $input = $this->getJson();
-        unset($input['_method'], $input['idMatakuliah']);
-        
-        if ($this->model->update($id, $input, 'idMatakuliah')) {
-            $this->success([], 'Matakuliah updated successfully');
-        } else {
-            $this->error('Terjadi kesalahan saat memperbarui data', null, 500);
+            $input = $this->getJson() ?: ($this->getPost() ?? []);
+            if (empty($input)) {
+                $this->error('Data input tidak boleh kosong', null, 400);
+                return;
+            }
+
+            unset($input['_method'], $input['idMatakuliah']);
+
+            $data = [];
+            if (isset($input['kodeMatakuliah'])) $data['kodeMatakuliah'] = trim($input['kodeMatakuliah']);
+            if (isset($input['namaMatakuliah'])) $data['namaMatakuliah'] = trim($input['namaMatakuliah']);
+            if (array_key_exists('semester', $input)) $data['semester'] = !empty($input['semester']) ? (int)$input['semester'] : null;
+            if (array_key_exists('sksKuliah', $input)) $data['sksKuliah'] = !empty($input['sksKuliah']) ? (int)$input['sksKuliah'] : null;
+            
+            if ($this->model->update($id, $data, 'idMatakuliah')) {
+                $this->success([], 'Matakuliah updated successfully');
+            } else {
+                $this->error('Terjadi kesalahan saat memperbarui data', null, 500);
+            }
+        } catch (\Throwable $e) {
+            $this->error('Terjadi kesalahan: ' . $e->getMessage(), null, 500);
         }
     }
 
     /**
      * Menghapus data matakuliah.
-     * * @param array $params
+     * 
+     * @param array $params
      * @return void
      */
     public function delete(array $params): void 
     {
-        $id = $params['id'] ?? null;
+        try {
+            $id = $params['id'] ?? null;
 
-        if (!$id || !$this->model->getById($id, 'idMatakuliah')) {
-            $this->error('Matakuliah tidak ditemukan', null, 404);
-            return;
-        }
+            if (!$id || !$this->model->getById($id, 'idMatakuliah')) {
+                $this->error('Matakuliah tidak ditemukan', null, 404);
+                return;
+            }
 
-        if ($this->model->delete($id, 'idMatakuliah')) {
-            $this->success([], 'Matakuliah deleted successfully');
-        } else {
-            $this->error('Gagal menghapus matakuliah', null, 500);
+            if ($this->model->delete($id, 'idMatakuliah')) {
+                $this->success([], 'Matakuliah deleted successfully');
+            } else {
+                $this->error('Gagal menghapus matakuliah', null, 500);
+            }
+        } catch (\Throwable $e) {
+            $this->error('Terjadi kesalahan: ' . $e->getMessage(), null, 500);
         }
     }
 

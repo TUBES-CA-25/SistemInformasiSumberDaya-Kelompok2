@@ -17,6 +17,15 @@
 
 
 
+if (defined('APP_PATH')) {
+    if (file_exists(APP_PATH . '/helpers/Helper.php')) {
+        require_once APP_PATH . '/helpers/Helper.php';
+    }
+    if (file_exists(APP_PATH . '/helpers/Cache.php')) {
+        require_once APP_PATH . '/helpers/Cache.php';
+    }
+}
+
 class Controller {
     // =========================================================================
     // BAGIAN 1: PROPERTI

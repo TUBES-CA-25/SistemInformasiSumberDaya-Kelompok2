@@ -1,6 +1,10 @@
 <?php 
     $isNightMode = (isset($_COOKIE['theme']) && $_COOKIE['theme'] === 'night');
 
+    // Cek status Jadwal UPK aktif/nonaktif
+    require_once ROOT_PROJECT . '/app/models/PengaturanModel.php';
+    $isUpkAktif = (PengaturanModel::getSetting('jadwal_upk_aktif', '1') === '1');
+
     // Identitas Halaman & Smart Title
     $pageTitle = !empty($data['judul']) ? htmlspecialchars($data['judul']) : (!empty($judul) ? htmlspecialchars($judul) : 'Sistem Informasi Sumber Daya Laboratorium FIKOM UMI');
     $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . ($_SERVER['HTTP_HOST'] ?? 'localhost') . ($_SERVER['REQUEST_URI'] ?? '');
@@ -234,7 +238,9 @@
                     <div class="dropdown-content">
                         <a href="<?= PUBLIC_URL ?>/tatatertib">Tata Tertib</a>
                         <a href="<?= PUBLIC_URL ?>/jadwal">Jadwal Praktikum</a>
+                        <?php if ($isUpkAktif): ?>
                         <a href="<?= PUBLIC_URL ?>/jadwalupk">Jadwal UPK</a>
+                        <?php endif; ?>
                         <a href="<?= PUBLIC_URL ?>/modul">Modul Praktikum</a>
                         <a href="<?= PUBLIC_URL ?>/formatpenulisan">Format Penulisan</a>
                     </div>

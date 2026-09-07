@@ -62,15 +62,9 @@ $matkulString = $data['matkul_string'] ?? '';
                     <?php endif; ?>
 
                     <div class="contact-wrapper">
-                        <?php if(!empty($alumni['email']) && $alumni['email'] !== '-'): ?>
-                            <a href="mailto:<?= htmlspecialchars($alumni['email']); ?>" class="btn-contact">
-                                <i class="ri-mail-send-line"></i> Kirim Email
-                            </a>
-                        <?php else: ?>
-                            <button class="btn-contact btn-disabled" disabled>
-                                <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
-                            </button>
-                        <?php endif; ?>
+                        <button class="btn-contact btn-disabled" disabled>
+                            <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
+                        </button>
                     </div>
 
                 </div>

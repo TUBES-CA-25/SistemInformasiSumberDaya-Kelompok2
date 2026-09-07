@@ -1,10 +1,25 @@
-<div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 animate__animated animate__fadeIn">
-    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
-        <i class="fas fa-calendar-check text-blue-600"></i> 
-        Manajemen Jadwal UPK
-    </h1>
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4 animate__animated animate__fadeIn">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+            <i class="fas fa-calendar-check text-blue-600"></i> 
+            Manajemen Jadwal UPK
+        </h1>
+        <div class="flex flex-wrap items-center gap-2 mt-2">
+            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status Tampilan Utama:</span>
+            <div id="statusBadgeContainer" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold <?= !empty($data['is_aktif']) ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300' ?>">
+                <span class="w-2 h-2 rounded-full <?= !empty($data['is_aktif']) ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500' ?>" id="statusDot"></span>
+                <span id="statusLabel"><?= !empty($data['is_aktif']) ? 'Aktif (Tampil)' : 'Nonaktif (Disembunyikan)' ?></span>
+            </div>
+            <button onclick="toggleUpkStatus()" id="btnToggleStatus" 
+                    title="Klik untuk mengubah status aktif/nonaktif di tampilan publik"
+                    class="ml-1 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all duration-200 flex items-center gap-1.5 shadow-sm <?= !empty($data['is_aktif']) ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100 hover:border-rose-300' : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300' ?>">
+                <i class="fas <?= !empty($data['is_aktif']) ? 'fa-eye-slash' : 'fa-eye' ?>" id="toggleIcon"></i>
+                <span id="toggleButtonText"><?= !empty($data['is_aktif']) ? 'Nonaktifkan' : 'Aktifkan' ?></span>
+            </button>
+        </div>
+    </div>
     
-    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+    <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto items-center">
         <div class="relative w-full sm:w-64">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                 <i class="fas fa-search"></i>
@@ -14,12 +29,12 @@
         </div>
 
         <button onclick="openUploadModal()" 
-           class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
+           class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
             <i class="fas fa-file-excel"></i> Upload Exel
         </button>
 
         <button onclick="openFormModal()" 
-           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
+           class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 font-medium transform hover:-translate-y-0.5 whitespace-nowrap">
             <i class="fas fa-plus"></i> Tambah Jadwal
         </button>
     </div>

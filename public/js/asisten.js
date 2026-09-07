@@ -207,18 +207,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 modalSubIcon.className = d.sub_icon || 'ri-graduation-cap-line';
               }
 
-              // Email
+              // Email - Tampilkan teks email jika ada, tetapi tombol kirim email dibuat tidak berfungsi (disabled)
               if (d.email && d.email !== "-") {
                 modalEmail.textContent = d.email;
                 modalEmailBox.style.display = "flex";
-                modalMailBtn.href = `mailto:${d.email}`;
-                modalMailBtn.style.display = "inline-flex";
-                modalMailDisabled.style.display = "none";
               } else {
                 modalEmailBox.style.display = "none";
-                modalMailBtn.style.display = "none";
-                modalMailDisabled.style.display = "inline-flex";
               }
+              if (modalMailBtn) modalMailBtn.style.display = "none";
+              if (modalMailDisabled) modalMailDisabled.style.display = "inline-flex";
 
               // Bio
               modalBio.innerHTML = d.bio.replace(/\n/g, "<br>");

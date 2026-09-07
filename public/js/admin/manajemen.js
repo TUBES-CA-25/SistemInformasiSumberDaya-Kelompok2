@@ -226,7 +226,15 @@ document
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';
 
     fetch(url, { method: "POST", body: formData })
-      .then((res) => res.json())
+      .then(async (res) => {
+        const text = await res.text();
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          console.error("Non-JSON response from server:", text);
+          throw new Error("Respon server tidak valid. Silakan periksa koneksi atau coba lagi.");
+        }
+      })
       .then((data) => {
         hideLoading();
         if (
@@ -284,7 +292,15 @@ function hapusManajemen(id, event) {
   confirmDelete(() => {
     showLoading("Menghapus data...");
     fetch(API_URL + "/manajemen/" + id, { method: "DELETE" })
-      .then((res) => res.json())
+      .then(async (res) => {
+        const text = await res.text();
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          console.error("Non-JSON response from server:", text);
+          throw new Error("Respon server tidak valid.");
+        }
+      })
       .then((res) => {
         hideLoading();
         if (res.status === "success" || res.code === 200) {
@@ -298,7 +314,7 @@ function hapusManajemen(id, event) {
       })
       .catch((err) => {
         hideLoading();
-        showError("Gagal menghapus (Network Error)");
+        showError(err.message || "Gagal menghapus (Network Error)");
       });
   });
 }

@@ -165,7 +165,7 @@ function renderTable(data) {
   if (totalEl) totalEl.innerText = `Total: ${data.length}`;
 
   if (!data || data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="px-6 py-12 text-center text-gray-500"><i class="fas fa-search text-2xl mb-2"></i><p>Tidak ada data ditemukan</p></td></tr>`;
     updateBulkActionsVisibility();
     return;
   }
@@ -222,6 +222,16 @@ function renderTable(data) {
                 </td>
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <span class="${statusClass} px-2.5 py-1 rounded-full text-xs font-semibold border">${item.status || "Nonaktif"}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center gap-2">
+                        <button type="button" onclick="openFormModal(${item.idJadwal}, event)" class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center justify-center border border-transparent" title="Edit">
+                            <i class="fas fa-pen text-xs"></i>
+                        </button>
+                        <button type="button" onclick="hapusJadwal(${item.idJadwal}, event)" class="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center border border-transparent" title="Hapus">
+                            <i class="fas fa-trash-alt text-xs"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>`;
   });
@@ -379,11 +389,13 @@ function openFormModal(id = null, event = null) {
     });
 
     // Jika Mode Edit, Isi Data
+    const btnDeleteModal = document.getElementById("btnDeleteModal");
     if (id) {
       document.getElementById("formModalTitle").innerHTML =
         '<i class="fas fa-edit text-blue-600"></i> Edit Jadwal';
       document.getElementById("btnSave").innerHTML =
         '<i class="fas fa-save"></i> Update Jadwal';
+      if (btnDeleteModal) btnDeleteModal.classList.remove("hidden");
 
       const data = allJadwalData.find((i) => i.idJadwal == id);
       if (data) {
@@ -410,6 +422,7 @@ function openFormModal(id = null, event = null) {
         '<i class="fas fa-plus text-emerald-600"></i> Tambah Jadwal Baru';
       document.getElementById("btnSave").innerHTML =
         '<i class="fas fa-save"></i> Simpan Jadwal';
+      if (btnDeleteModal) btnDeleteModal.classList.add("hidden");
     }
   });
 }
@@ -615,23 +628,39 @@ function closeModal(modalId) {
   document.body.style.overflow = "auto";
 }
 
-function hapusJadwal(id, event) {
+function hapusJadwalFromModal() {
+  const id = document.getElementById("inputId").value;
+  if (!id) return;
+  closeModal("formModal");
+  hapusJadwal(id);
+}
+
+function hapusJadwal(id, event = null) {
   if (event) event.stopPropagation();
   confirmDelete(() => {
     showLoading("Menghapus data...");
     fetch(API_URL + "/jadwal/" + id, { method: "DELETE" })
       .then((res) => res.json())
-      .then(() => {
+      .then((data) => {
         hideLoading();
-        loadJadwal();
-        showSuccess("Jadwal berhasil dihapus!");
+        if (data.status === "success" || data.status === true || data.code === 200) {
+          loadJadwal();
+          showSuccess("Jadwal berhasil dihapus!");
+        } else {
+          showError(data.message || "Gagal menghapus jadwal");
+        }
       })
       .catch((err) => {
         hideLoading();
-        showError("Gagal menghapus data");
+        showError(err.message || "Gagal menghapus data");
       });
   });
 }
+
+window.openFormModal = openFormModal;
+window.hapusJadwal = hapusJadwal;
+window.hapusJadwalFromModal = hapusJadwalFromModal;
+window.bulkDelete = bulkDelete;
 
 document.onkeydown = function (evt) {
   if (evt.keyCode == 27) {

@@ -99,11 +99,12 @@
                     <th class="px-6 py-4 font-semibold min-w-[200px]">Asisten</th>
                     <th class="px-6 py-4 font-semibold text-center w-24">Kelas</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Status</th>
+                    <th class="px-6 py-4 font-semibold text-center w-28">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
                 <tr>
-                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                    <td colspan="9" class="px-6 py-12 text-center text-gray-500">
                         <div class="flex flex-col items-center gap-2">
                             <i class="fas fa-circle-notch fa-spin text-blue-500 text-2xl"></i>
                             <span class="font-medium">Memuat data...</span>
@@ -179,8 +180,8 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Frekuensi</label>
-                            <input type="text" id="inputFrekuensi" name="frekuensi" placeholder="Contoh: TI_PW-1" 
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Frekuensi <span class="text-xs text-gray-400 font-normal">(Opsional)</span></label>
+                            <input type="text" id="inputFrekuensi" name="frekuensi" placeholder="Kosongkan jika tidak ada" 
                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                         </div>
                         <div>
@@ -223,11 +224,16 @@
 
                     <div id="formMessage" class="hidden mt-4"></div>
 
-                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 mt-2">
-                        <button type="button" onclick="closeModal('formModal')" class="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 font-medium transition-colors border border-gray-200">Batal</button>
-                        <button type="submit" id="btnSave" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors flex items-center gap-2 shadow-sm shadow-blue-200">
-                            <i class="fas fa-save"></i> <span>Simpan Jadwal</span>
+                    <div class="flex justify-between items-center pt-6 border-t border-gray-100 mt-2">
+                        <button type="button" id="btnDeleteModal" onclick="hapusJadwalFromModal()" class="hidden px-4 py-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white font-medium transition-colors border border-red-200 flex items-center gap-2 text-sm shadow-sm">
+                            <i class="fas fa-trash-alt"></i> <span>Hapus Jadwal</span>
                         </button>
+                        <div class="flex justify-end gap-3 ml-auto">
+                            <button type="button" onclick="closeModal('formModal')" class="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 font-medium transition-colors border border-gray-200">Batal</button>
+                            <button type="submit" id="btnSave" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors flex items-center gap-2 shadow-sm shadow-blue-200">
+                                <i class="fas fa-save"></i> <span>Simpan Jadwal</span>
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

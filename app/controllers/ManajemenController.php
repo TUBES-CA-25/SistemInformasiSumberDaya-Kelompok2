@@ -4,6 +4,9 @@ require_once CONTROLLER_PATH . '/Controller.php';
 require_once ROOT_PROJECT . '/app/services/ManajemenService.php';
 require_once ROOT_PROJECT . '/app/models/ManajemenModel.php';
 require_once ROOT_PROJECT . '/app/services/DetailSumberDayaService.php';
+if (file_exists(ROOT_PROJECT . '/app/helpers/Cache.php')) {
+    require_once ROOT_PROJECT . '/app/helpers/Cache.php';
+}
 
 /**
  * ManajemenController - Web & API Orchestrator
@@ -60,11 +63,13 @@ class ManajemenController extends Controller {
             }
 
             if ($this->service->storeManajemen($input, $file)) {
-                Cache::forget('home_index_data');
+                if (class_exists('Cache')) {
+                    Cache::forget('home_index_data');
+                }
                 $this->success(null, 'Manajemen created successfully', 201);
             }
             $this->error('Failed to create manajemen');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->error($e->getMessage(), null, 500);
         }
     }
@@ -95,11 +100,13 @@ class ManajemenController extends Controller {
             $input['foto_pos_y'] = Helper::clampPercent($input['foto_pos_y'] ?? null);
 
             if ($this->service->updateManajemen($id, $input, $existing, $file)) {
-                Cache::forget('home_index_data');
+                if (class_exists('Cache')) {
+                    Cache::forget('home_index_data');
+                }
                 $this->success(null, 'Manajemen updated successfully');
             }
             $this->error('Failed to update manajemen');
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->error($e->getMessage(), null, 500);
         }
     }
@@ -108,12 +115,18 @@ class ManajemenController extends Controller {
      * Admin: Proses Hapus Data
      */
     public function delete($params) {
-        $id = $params['id'] ?? null;
-        if ($this->service->delete($id)) {
-            Cache::forget('home_index_data');
-            $this->success(null, 'Manajemen deleted successfully');
+        try {
+            $id = $params['id'] ?? null;
+            if ($this->service->delete($id)) {
+                if (class_exists('Cache')) {
+                    Cache::forget('home_index_data');
+                }
+                $this->success(null, 'Manajemen deleted successfully');
+            }
+            $this->error('Failed to delete data');
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage(), null, 500);
         }
-        $this->error('Failed to delete data');
     }
 
     /**

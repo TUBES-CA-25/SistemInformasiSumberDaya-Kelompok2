@@ -231,6 +231,15 @@ function renderJadwalDashboard() {
     const jadwalLab = finalFiltered.filter((item) => item.namaLab === lab);
     jadwalLab.sort((a, b) => a.waktuMulai.localeCompare(b.waktuMulai));
 
+    const hasAnyFreq = jadwalLab.some(
+      (item) =>
+        item.frekuensi &&
+        String(item.frekuensi).trim() !== "" &&
+        String(item.frekuensi).trim() !== "-" &&
+        String(item.frekuensi).trim() !== "0"
+    );
+    const thKlsFreq = hasAnyFreq ? "Kls/Freq" : "Kelas";
+
     finalHtml += `
     <div class="schedule-wrapper" style="margin-bottom: 60px;">
         <div class="lab-header">
@@ -243,7 +252,7 @@ function renderJadwalDashboard() {
                     <tr>
                         <th class="text-nowrap">Waktu</th>
                         <th>Mata Kuliah</th>
-                        <th class="text-nowrap">Kls/Freq</th>
+                        <th class="text-nowrap">${thKlsFreq}</th>
                         <th>Dosen</th>
                         <th>Asisten</th>
                         <th class="text-center text-nowrap">Status</th>
@@ -271,7 +280,10 @@ function renderJadwalDashboard() {
         }
       }
 
-      const kelasFreq = `<span class="schedule-kelas">Kelas ${item.kelas || "-"}</span> <span class="schedule-freq">/ ${item.frekuensi || "-"}</span>`;
+      const hasFreq = item.frekuensi && String(item.frekuensi).trim() !== "" && String(item.frekuensi).trim() !== "-";
+      const kelasFreq = hasFreq
+        ? `<span class="schedule-kelas">Kelas ${item.kelas || "-"}</span> <span class="schedule-freq">/ ${item.frekuensi}</span>`
+        : `<span class="schedule-kelas">Kelas ${item.kelas || "-"}</span>`;
       const cleanName = (val) => (!val || val === "-" || /^\d+$/.test(String(val).trim())) ? "" : String(val).trim();
       const a1Name = cleanName(item.namaAsisten1);
       const a2Name = cleanName(item.namaAsisten2);

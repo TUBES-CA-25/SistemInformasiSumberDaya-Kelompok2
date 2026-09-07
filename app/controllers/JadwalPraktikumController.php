@@ -261,16 +261,25 @@ class JadwalPraktikumController extends Controller {
      */
     public function delete($params = []): void {
         $this->cleanBuffers();
-        $id = $params['id'] ?? null;
-        if (!$id) {
-            $this->error('ID tidak valid', null, 400);
-            return;
-        }
+        try {
+            $id = $params['id'] ?? null;
+            if (!$id) {
+                $this->error('ID tidak valid', null, 400);
+                return;
+            }
 
-        if ($this->model->delete($id)) {
-            $this->success([], 'Jadwal berhasil dihapus');
-        } else {
-            $this->error('Gagal menghapus jadwal');
+            if (!$this->model->getById($id, 'idJadwal')) {
+                $this->error('Jadwal tidak ditemukan atau sudah dihapus', null, 404);
+                return;
+            }
+
+            if ($this->model->delete($id, 'idJadwal')) {
+                $this->success([], 'Jadwal berhasil dihapus');
+            } else {
+                $this->error('Gagal menghapus jadwal', null, 500);
+            }
+        } catch (\Throwable $e) {
+            $this->error('Terjadi kesalahan: ' . $e->getMessage(), null, 500);
         }
     }
 
@@ -279,18 +288,28 @@ class JadwalPraktikumController extends Controller {
      */
     public function deleteMultiple(): void {
         $this->cleanBuffers();
-        $data = $this->getJson();
-        $ids = $data['ids'] ?? [];
+        try {
+            $data = $this->getJson() ?: ($this->getPost() ?? []);
+            $ids = $data['ids'] ?? [];
 
-        if (empty($ids)) {
-            $this->error('Tidak ada data yang dipilih', null, 400);
-            return;
-        }
+            if (empty($ids) || !is_array($ids)) {
+                $this->error('Tidak ada data yang dipilih', null, 400);
+                return;
+            }
 
-        if ($this->model->deleteMultiple($ids)) {
-            $this->success([], count($ids) . ' jadwal berhasil dihapus');
-        } else {
-            $this->error('Gagal menghapus beberapa data');
+            $cleanIds = array_values(array_filter(array_map('intval', $ids)));
+            if (empty($cleanIds)) {
+                $this->error('ID data tidak valid', null, 400);
+                return;
+            }
+
+            if ($this->model->deleteMultiple($cleanIds)) {
+                $this->success([], count($cleanIds) . ' jadwal berhasil dihapus');
+            } else {
+                $this->error('Gagal menghapus beberapa data', null, 500);
+            }
+        } catch (\Throwable $e) {
+            $this->error('Terjadi kesalahan: ' . $e->getMessage(), null, 500);
         }
     }
 

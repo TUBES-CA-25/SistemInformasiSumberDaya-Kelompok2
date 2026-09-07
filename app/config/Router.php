@@ -166,6 +166,7 @@ class Router {
 
         $this->get('/api/matakuliah', 'MatakuliahController', 'apiIndex');
         $this->get('/api/matakuliah/{id}', 'MatakuliahController', 'apiShow');
+        $this->get('/api/matakuliah/{id}/asisten', 'MatakuliahController', 'asisten');
         $this->post('/api/matakuliah', 'MatakuliahController', 'store');
         $this->post('/api/matakuliah/{id}', 'MatakuliahController', 'update');
         $this->put('/api/matakuliah/{id}', 'MatakuliahController', 'update');
@@ -185,6 +186,8 @@ class Router {
         $this->delete('/api/modul/{id}', 'ModulController', 'delete');
 
         $this->get('/api/jadwal-upk', 'JadwalUpkController', 'apiIndex');
+        $this->get('/api/jadwal-upk/status', 'JadwalUpkController', 'getStatus');
+        $this->post('/api/jadwal-upk/toggle-status', 'JadwalUpkController', 'toggleStatus');
         $this->post('/api/jadwal-upk', 'JadwalUpkController', 'store');
         $this->post('/api/jadwal-upk/{id}', 'JadwalUpkController', 'update');
         $this->put('/api/jadwal-upk/{id}', 'JadwalUpkController', 'update');
@@ -256,9 +259,16 @@ class Router {
 
     public function dispatch(): void
     {
-        // PERBAIKAN: Baris "if empty defineRoutes" dihapus karena sudah dipindah ke __construct
         $method = strtoupper($this->method);
         if (isset($this->routes[$method])) {
+            // 1. Prioritaskan exact match untuk rute statis (mencegah pembajakan oleh rute berparameter seperti {id})
+            if (isset($this->routes[$method][$this->path])) {
+                $handler = $this->routes[$method][$this->path];
+                $this->execute($handler['controller'], $handler['action']);
+                return;
+            }
+
+            // 2. Evaluasi rute berparameter (seperti /jadwal/{id})
             foreach ($this->routes[$method] as $route => $handler) {
                 if ($this->match($route, $this->path)) {
                     $this->execute($handler['controller'], $handler['action']);

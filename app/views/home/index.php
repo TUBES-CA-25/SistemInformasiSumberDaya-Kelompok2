@@ -22,7 +22,7 @@ $laboran_list = $data['laboran'] ?? [];
                     <a href="https://iclabs.fikom.umi.ac.id/s/registrasi/login" class="btn-primary" target="_blank">
                         Gabung Sekarang <i class="ri-arrow-right-line"></i>
                     </a>
-                    <a href="<?= BASE_URL ?>/sumberdaya/asisten" class="btn-outline">
+                    <a href="<?= PUBLIC_URL ?>/laboratorium" class="btn-outline">
                         Lihat Fasilitas <i class="ri-arrow-right-line"></i>
                     </a>
                 </div>
