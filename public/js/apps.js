@@ -13,12 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
       card.classList.add("maintenance");
       card.removeAttribute("href");
 
-      // Tambahkan badge jika belum ada
-      if (!card.querySelector(".maintenance-badge")) {
-        const badge = document.createElement("span");
-        badge.className = "maintenance-badge";
-        badge.innerText = "MAINTENANCE";
-        card.appendChild(badge);
+      // Pastikan tidak ada badge yang tampil
+      const existingBadge = card.querySelector(".maintenance-badge");
+      if (existingBadge) {
+        existingBadge.remove();
       }
 
       card.addEventListener("click", function (e) {

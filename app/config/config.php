@@ -61,7 +61,12 @@ define('DB_NAME', $_ENV['DB_DATABASE'] ?? 'sistem_manajemen_sumber_daya');
 // 4. Konfigurasi Email (SMTP)
 // --------------------------------------------------------------------------
 
-// Target email penerima notifikasi kontak admin
+// Sumber email penerima notifikasi kontak:
+// - 'kontak' : Otomatis gunakan email resmi yang diatur di menu Kontak database (dinamis & fleksibel)
+// - 'env'    : Gunakan email yang tertulis pada ADMIN_EMAIL di bawah ini
+define('CONTACT_EMAIL_SOURCE', $_ENV['CONTACT_EMAIL_SOURCE'] ?? 'kontak');
+
+// Target email penerima notifikasi kontak admin (digunakan jika CONTACT_EMAIL_SOURCE='env' atau fallback)
 define('ADMIN_EMAIL', $_ENV['ADMIN_EMAIL'] ?? 'nahwakakaa@gmail.com');
 
 // Host SMTP (Wajib ada agar tahu mau kirim ke server mana)

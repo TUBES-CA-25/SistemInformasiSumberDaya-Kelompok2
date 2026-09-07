@@ -1,3 +1,27 @@
+<?php
+$footerEmail = 'fikom.iclabs@umi.ac.id';
+$footerPhone = '+62 411 455666';
+$footerMap = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3973.791123008261!2d119.448235!3d-5.137305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbefd3165008369%3A0x7af75b8baf265f2b!2sFakultas%20Ilmu%20Komputer%20UMI!5e0!3m2!1sid!2sus!4v1766106276722!5m2!1sid!2sus';
+
+if (defined('APP_PATH') && file_exists(APP_PATH . '/models/KontakModel.php')) {
+    try {
+        require_once APP_PATH . '/models/KontakModel.php';
+        $footerKontakModel = new KontakModel();
+        $activeContacts = $footerKontakModel->getActivePublic();
+        foreach ($activeContacts as $fc) {
+            if ($fc['tipe'] === 'email') {
+                $footerEmail = $fc['nilai'];
+            } elseif ($fc['tipe'] === 'whatsapp' || $fc['tipe'] === 'telepon') {
+                $footerPhone = $fc['nilai'];
+            }
+        }
+        $dbMap = $footerKontakModel->getActiveMapsUrl();
+        if (!empty($dbMap)) {
+            $footerMap = $dbMap;
+        }
+    } catch (\Throwable $e) {}
+}
+?>
 <footer class="main-footer">
     <div class="container">
         <div class="footer-grid">
@@ -11,8 +35,8 @@
                     Laboratorium terpadu Fakultas Ilmu Komputer UMI. Pusat pengembangan keahlian praktis dan riset inovatif mahasiswa.
                 </p>
                 <div class="contact-list">
-                    <p><i class="ri-mail-send-line"></i> fikom.iclabs@umi.ac.id</p>
-                    <p><i class="ri-phone-line"></i> +62 411 455666</p>
+                    <p><i class="ri-mail-send-line"></i> <?= htmlspecialchars($footerEmail) ?></p>
+                    <p><i class="ri-phone-line"></i> <?= htmlspecialchars($footerPhone) ?></p>
                 </div>
             </div>
 
@@ -53,7 +77,7 @@
                 <h3>Lokasi Kami</h3>
                 <div class="map-wrapper">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3973.791123008261!2d119.448235!3d-5.137305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbefd3165008369%3A0x7af75b8baf265f2b!2sFakultas%20Ilmu%20Komputer%20UMI!5e0!3m2!1sid!2sus!4v1766106276722!5m2!1sid!2sus" 
+                        src="<?= htmlspecialchars($footerMap) ?>" 
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" title="Peta Lokasi FIKOM UMI">
                     </iframe>
                 </div>

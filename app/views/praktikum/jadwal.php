@@ -23,6 +23,7 @@
                 <!-- Hari -->
                 <div class="day-selector-wrapper" style="margin-top: 0;">
                     <select id="day-select" class="custom-select" onchange="renderJadwalDashboard()" style="min-width: 150px;">
+                        <option value="">Semua Hari</option>
                         <option value="Senin">Senin</option>
                         <option value="Selasa">Selasa</option>
                         <option value="Rabu">Rabu</option>

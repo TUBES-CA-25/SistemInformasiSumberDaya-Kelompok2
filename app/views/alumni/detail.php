@@ -46,11 +46,13 @@ $matkulString = $data['matkul_string'] ?? '';
                             <span class="meta-value"><?= htmlspecialchars($matkulString); ?></span>
                         </div>
                     <?php endif; ?>
-                    
-                    <h4 class="section-title mt-30">Kesan & Pesan</h4>
-                    <div class="profile-bio alumni-quote">
-                        "<?= htmlspecialchars($alumni['kesan_pesan'] ?? 'Tidak ada kesan pesan.'); ?>"
-                    </div>
+
+                    <?php if (!empty($alumni['email']) && $alumni['email'] !== '-'): ?>
+                        <div class="meta-info-box">
+                            <span class="meta-label"><i class="ri-mail-line"></i> Email:</span>
+                            <span class="meta-value"><?= htmlspecialchars($alumni['email']); ?></span>
+                        </div>
+                    <?php endif; ?>
 
                     <?php if (!empty($skillsList)): ?>
                         <h4 class="section-title mt-30">Kompetensi & Keahlian</h4>
@@ -62,9 +64,15 @@ $matkulString = $data['matkul_string'] ?? '';
                     <?php endif; ?>
 
                     <div class="contact-wrapper">
-                        <button class="btn-contact btn-disabled" disabled>
-                            <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
-                        </button>
+                        <?php if (!empty($alumni['email']) && $alumni['email'] !== '-'): ?>
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?= urlencode($alumni['email']) ?>" target="_blank" rel="noopener noreferrer" class="btn-contact">
+                                <i class="ri-mail-send-line"></i> Email
+                            </a>
+                        <?php else: ?>
+                            <button class="btn-contact btn-disabled" disabled>
+                                <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
+                            </button>
+                        <?php endif; ?>
                     </div>
 
                 </div>

@@ -9,29 +9,47 @@
                 <p>Punya pertanyaan seputar praktikum atau penelitian? Kami siap membantu Anda. Silakan hubungi melalui saluran di bawah atau isi formulir pesan.</p>
                 
                 <div class="contact-methods">
-                    <div class="method-item">
-                        <div class="method-icon"><i class="ri-map-pin-2-line"></i></div>
-                        <div class="method-text">
-                            <h4>Lokasi Lab</h4>
-                            <span>Kampus II UMI, Gedung FIKOM Lt. 2 & 3<br>Jl. Urip Sumoharjo No. Km. 5, Makassar</span>
+                    <?php if (!empty($kontak)): ?>
+                        <?php foreach ($kontak as $item): ?>
+                            <div class="method-item">
+                                <div class="method-icon"><i class="<?= htmlspecialchars($item['ikon'] ?: 'ri-information-line') ?>"></i></div>
+                                <div class="method-text">
+                                    <h4><?= htmlspecialchars($item['nama']) ?></h4>
+                                    <?php if (!empty($item['tautan'])): ?>
+                                        <a href="<?= htmlspecialchars($item['tautan']) ?>" target="_blank" rel="noopener" class="hover:text-blue-600 transition-colors" style="color: inherit; text-decoration: none;">
+                                            <span><?= nl2br(htmlspecialchars($item['nilai'])) ?></span>
+                                        </a>
+                                    <?php else: ?>
+                                        <span><?= nl2br(htmlspecialchars($item['nilai'])) ?></span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="method-item">
+                            <div class="method-icon"><i class="ri-map-pin-2-line"></i></div>
+                            <div class="method-text">
+                                <h4>Lokasi Lab</h4>
+                                <span>Kampus II UMI, Gedung FIKOM Lt. 2 & 3<br>Jl. Urip Sumoharjo No. Km. 5, Makassar</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="method-item">
-                        <div class="method-icon"><i class="ri-mail-line"></i></div>
-                        <div class="method-text">
-                            <h4>Email Resmi</h4>
-                            <span>fikom.iclabs@umi.ac.id</span>
+                        <div class="method-item">
+                            <div class="method-icon"><i class="ri-mail-line"></i></div>
+                            <div class="method-text">
+                                <h4>Email Resmi</h4>
+                                <span>fikom.iclabs@umi.ac.id</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="method-item">
-                        <div class="method-icon"><i class="ri-whatsapp-line"></i></div>
-                        <div class="method-text">
-                            <h4>WhatsApp Support</h4>
-                            <span>+62 411 455666</span>
+                        <div class="method-item">
+                            <div class="method-icon"><i class="ri-whatsapp-line"></i></div>
+                            <div class="method-text">
+                                <h4>WhatsApp Support</h4>
+                                <span>+62 411 455666</span>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -70,7 +88,7 @@
             </div>
             <div class="map-iframe-wrapper">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3973.791123008261!2d119.448235!3d-5.137305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbefd3165008369%3A0x7af75b8baf265f2b!2sFakultas%20Ilmu%20Komputer%20UMI!5e0!3m2!1sid!2sus!4v1766106276722!5m2!1sid!2sus" 
+                    src="<?= htmlspecialchars(!empty($maps_url) ? $maps_url : 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3973.791123008261!2d119.448235!3d-5.137305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbefd3165008369%3A0x7af75b8baf265f2b!2sFakultas%20Ilmu%20Komputer%20UMI!5e0!3m2!1sid!2sus!4v1766106276722!5m2!1sid!2sus') ?>" 
                     width="100%" 
                     height="450" 
                     style="border:0;" 

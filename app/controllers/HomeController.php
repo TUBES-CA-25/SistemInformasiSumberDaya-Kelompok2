@@ -147,12 +147,15 @@ class HomeController extends Controller {
      * @return void Menampilkan view home/apps
      */
     public function apps() {
-        // LANGKAH 1: Prepare data untuk view
+        require_once ROOT_PROJECT . '/app/models/AppsModel.php';
+        $appsModel = new AppsModel();
+        $apps = $appsModel->getAllForPublic();
+
         $data = [
-            'judul' => 'IC-Labs Apps - Aplikasi Portal Laboratorium'
+            'judul' => 'IC-Labs Apps - Ekosistem Digital Laboratorium FIKOM UMI',
+            'apps'  => $apps
         ];
         
-        // LANGKAH 2: Render view dengan data
         $this->view('home/apps', $data);
     }
 }

@@ -139,11 +139,11 @@
                         </div>
                     </div>
 
-                    <!-- Bagian Media & Pesan -->
+                    <!-- Bagian Media -->
                     <div class="space-y-4 pt-2">
                         <div class="flex items-center gap-2 pb-2 border-b border-gray-100">
-                            <i class="fas fa-comment-dots text-emerald-500"></i>
-                            <h4 class="font-bold text-gray-800 uppercase text-xs tracking-wider">Media & Testimoni</h4>
+                            <i class="fas fa-camera text-emerald-500"></i>
+                            <h4 class="font-bold text-gray-800 uppercase text-xs tracking-wider">Media</h4>
                         </div>
 
                         <div>
@@ -169,12 +169,6 @@
                             </div>
                             <input type="hidden" id="inputFotoPosX" name="foto_pos_x" value="50">
                             <input type="hidden" id="inputFotoPosY" name="foto_pos_y" value="50">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Kesan & Pesan Selama Di Lab</label>
-                            <textarea id="inputKesanPesan" name="kesan_pesan" rows="3" placeholder="Tuliskan pengalaman berkesan Anda..."
-                                      class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 bg-gray-50/30"></textarea>
                         </div>
                     </div>
 
@@ -221,21 +215,16 @@
                             </div>
                         </div>
                         
-                        <div class="bg-blue-50/30 p-3.5 rounded-2xl border border-blue-50 flex flex-col gap-1">
+                        <div class="bg-blue-50/30 p-3.5 rounded-2xl border border-blue-50 flex flex-col gap-1.5">
                              <p class="text-[10px] uppercase font-bold text-blue-400 tracking-wider flex items-center gap-2">
                                 <i class="fas fa-book-reader text-[10px]"></i> Mata Kuliah Pernah Diajar
                              </p>
-                             <p id="dMataKuliah" class="font-semibold text-gray-700 leading-relaxed">-</p>
+                             <div id="dMataKuliah" class="flex flex-wrap gap-1.5 mt-0.5"></div>
                         </div>
 
                         <div class="space-y-2">
                             <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider ml-1">Keahlian & Kompetensi</p>
                             <div id="dKeahlian" class="flex flex-wrap gap-2"></div>
-                        </div>
-
-                        <div class="bg-indigo-50/50 p-5 rounded-3xl border border-indigo-100 italic text-gray-700 relative overflow-hidden">
-                            <i class="fas fa-quote-left text-indigo-100/50 text-5xl absolute -top-1 -left-1"></i>
-                            <span id="dKesan" class="relative z-10 block"></span>
                         </div>
                     </div>
                 </div>

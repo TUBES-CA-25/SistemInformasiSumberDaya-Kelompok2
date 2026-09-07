@@ -67,7 +67,7 @@ function loadJadwal() {
     .catch((err) => {
       console.error(err);
       document.getElementById("tableBody").innerHTML =
-        `<tr><td colspan="8" class="px-6 py-12 text-center text-red-500">Gagal memuat data: ${err.message}</td></tr>`;
+        `<tr><td colspan="9" class="px-6 py-12 text-center text-red-500">Gagal memuat data: ${err.message}</td></tr>`;
     });
 }
 
@@ -137,11 +137,11 @@ window.applyFilters = function() {
     // 4. Prodi filter
     let matchesProdi = true;
     if (filterProdi) {
-      if (filterProdi === "TI") {
-        matchesProdi = item.kodeMatakuliah && item.kodeMatakuliah.startsWith("TI");
-      } else if (filterProdi === "SI") {
-        matchesProdi = item.kodeMatakuliah && item.kodeMatakuliah.startsWith("SI");
-      }
+      const p = (item.prodi || "").toUpperCase();
+      const k = (item.kodeMatakuliah || "").toUpperCase();
+      const isSI = p === "SI" || p.includes("SISTEM INFORMASI") || k.startsWith("131") || k.startsWith("SI");
+      if (filterProdi === "TI") matchesProdi = !isSI;
+      else if (filterProdi === "SI") matchesProdi = isSI;
     }
     
     // 5. Assistant filter
@@ -184,6 +184,18 @@ function renderTable(data) {
       ? item.waktuSelesai.substring(0, 5)
       : "--:--";
 
+    let rawProdi = (item.prodi || "").toUpperCase().trim();
+    if (!rawProdi && item.kodeMatakuliah) {
+      if (item.kodeMatakuliah.startsWith("131") || item.kodeMatakuliah.startsWith("SI")) rawProdi = "SI";
+      else rawProdi = "TI";
+    }
+    const isSI = rawProdi === "SI" || rawProdi.includes("SISTEM INFORMASI") || rawProdi.includes("SI");
+    const prodiCode = isSI ? "SI" : "TI";
+    const prodiLabel = prodiCode;
+    const prodiBadgeClass = isSI
+      ? "bg-sky-50 text-sky-700 border-sky-200"
+      : "bg-blue-50 text-blue-700 border-blue-200";
+
     rowsHtml += `
             <tr class="hover:bg-blue-50 transition-colors duration-150 group border-b border-gray-100">
                 <td class="px-6 py-4 text-center">
@@ -198,6 +210,9 @@ function renderTable(data) {
                         <span class="font-bold text-gray-800 text-sm group-hover:text-blue-600 transition-colors">${item.namaMatakuliah || "-"}</span>
                         <span class="text-xs text-gray-400 font-mono mt-0.5">${item.kodeMatakuliah || "-"} | Dosen: ${item.namaDosen || "-"}</span>
                     </div>
+                </td>
+                <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
+                    <span class="${prodiBadgeClass} px-2.5 py-1 rounded-full text-xs font-bold border">${prodiLabel}</span>
                 </td>
                 <td class="px-6 py-4 text-gray-600 text-sm font-medium cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">${item.namaLab || "-"}</td>
                 <td class="px-6 py-4 cursor-pointer min-w-[160px]" onclick="openFormModal(${item.idJadwal}, event)">
@@ -222,16 +237,6 @@ function renderTable(data) {
                 </td>
                 <td class="px-6 py-4 text-center cursor-pointer" onclick="openFormModal(${item.idJadwal}, event)">
                     <span class="${statusClass} px-2.5 py-1 rounded-full text-xs font-semibold border">${item.status || "Nonaktif"}</span>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    <div class="flex justify-center items-center gap-2">
-                        <button type="button" onclick="openFormModal(${item.idJadwal}, event)" class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm flex items-center justify-center border border-transparent" title="Edit">
-                            <i class="fas fa-pen text-xs"></i>
-                        </button>
-                        <button type="button" onclick="hapusJadwal(${item.idJadwal}, event)" class="w-8 h-8 rounded-lg bg-red-100 text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm flex items-center justify-center border border-transparent" title="Hapus">
-                            <i class="fas fa-trash-alt text-xs"></i>
-                        </button>
-                    </div>
                 </td>
             </tr>`;
   });
@@ -388,6 +393,19 @@ function openFormModal(id = null, event = null) {
       asisten2Select.innerHTML += `<option value="${a.idAsisten}">${a.nama}</option>`;
     });
 
+    // Listener MK change to auto-select Prodi
+    if (mkSelect) {
+      mkSelect.onchange = function() {
+        const selOpt = mkSelect.options[mkSelect.selectedIndex];
+        if (selOpt && selOpt.text) {
+          const txt = selOpt.text.trim();
+          const isSI = txt.startsWith("131") || txt.startsWith("SI");
+          const prodiInput = document.getElementById("inputProdi");
+          if (prodiInput) prodiInput.value = isSI ? "SI" : "TI";
+        }
+      };
+    }
+
     // Jika Mode Edit, Isi Data
     const btnDeleteModal = document.getElementById("btnDeleteModal");
     if (id) {
@@ -411,6 +429,15 @@ function openFormModal(id = null, event = null) {
         document.getElementById("inputAsisten1").value = data.idAsisten1 || "";
         document.getElementById("inputAsisten2").value = data.idAsisten2 || "";
 
+        const inputProdi = document.getElementById("inputProdi");
+        if (inputProdi) {
+          let pVal = (data.prodi || "").toUpperCase();
+          if (!pVal && data.kodeMatakuliah) {
+            pVal = (data.kodeMatakuliah.startsWith("131") || data.kodeMatakuliah.startsWith("SI")) ? "SI" : "TI";
+          }
+          inputProdi.value = pVal.includes("SI") ? "SI" : "TI";
+        }
+
         // Radio Status
         const radios = document.getElementsByName("status");
         for (let r of radios) {
@@ -423,6 +450,11 @@ function openFormModal(id = null, event = null) {
       document.getElementById("btnSave").innerHTML =
         '<i class="fas fa-save"></i> Simpan Jadwal';
       if (btnDeleteModal) btnDeleteModal.classList.add("hidden");
+
+      const inputProdi = document.getElementById("inputProdi");
+      if (inputProdi) {
+        inputProdi.value = "TI";
+      }
     }
   });
 }

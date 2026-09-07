@@ -51,8 +51,23 @@ $d = $data['dataDetail'] ?? null;
                         <?php endif; ?>
                     </div>
 
-                    <h4 class="section-title" style="margin-top: 30px;">Tentang</h4>
-                    <p class="profile-bio"><?= nl2br(htmlspecialchars($d['bio'])); ?></p>
+                    <?php 
+                    $isAsisten = (strpos($d['back_link'] ?? '', 'asisten') !== false || in_array($d['kategori'] ?? '', ['Asisten Laboratorium', 'Koordinator', 'Calon Asisten', 'Asisten']));
+                    $isAlumni  = (strpos($d['back_link'] ?? '', 'alumni') !== false || ($d['badge_style'] ?? '') === 'badge-alumni');
+                    $titleBio  = $isAlumni ? 'Mata Kuliah yang Pernah Diajar' : ($isAsisten ? 'Mata Kuliah yang Diajar' : 'Tentang');
+                    ?>
+                    <h4 class="section-title" style="margin-top: 30px;"><?= $titleBio ?></h4>
+                    <?php if (!empty($d['matkul']) && is_array($d['matkul'])): ?>
+                        <div class="skills-container" style="margin-top: 10px;">
+                            <?php foreach($d['matkul'] as $mk): ?>
+                                <span class="skill-tag" style="background: #ecfdf5; color: #047857; border-color: #a7f3d0; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+                                    <i class="ri-book-open-line"></i> <?= htmlspecialchars($mk); ?>
+                                </span>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <p class="profile-bio"><?= nl2br(htmlspecialchars($d['bio'])); ?></p>
+                    <?php endif; ?>
 
                     <?php if (!empty($d['skills'])) : ?>
                         <h4 class="section-title mt-30">Kompetensi & Keahlian</h4>
@@ -64,9 +79,15 @@ $d = $data['dataDetail'] ?? null;
                     <?php endif; ?>
 
                     <div class="contact-wrapper">
-                        <button class="btn-disabled" disabled>
-                            <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
-                        </button>
+                        <?php if (!empty($d['email']) && $d['email'] !== '-'): ?>
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?= urlencode($d['email']) ?>" target="_blank" rel="noopener noreferrer" class="btn-contact">
+                                <i class="ri-mail-send-line"></i> Email
+                            </a>
+                        <?php else: ?>
+                            <button class="btn-disabled" disabled>
+                                <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

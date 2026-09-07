@@ -107,10 +107,45 @@ function openDetailModal(id) {
         if (document.getElementById("dJurusan")) document.getElementById("dJurusan").innerText = d.jurusan || "Teknik Informatika";
         document.getElementById("dAngkatan").innerText = d.angkatan;
         document.getElementById("dEmail").innerText = d.email || "-";
-        document.getElementById("dMataKuliah").innerText = d.mata_kuliah || "-";
-        document.getElementById("dKesan").innerText = d.kesan_pesan
-          ? `"${d.kesan_pesan}"`
-          : "-";
+        
+        // Render Mata Kuliah
+        const mkDiv = document.getElementById("dMataKuliah");
+        if (mkDiv) {
+          mkDiv.innerHTML = "";
+          let mks = d.mata_kuliah;
+          try {
+            if (typeof mks === "string" && mks.trim().startsWith("[")) {
+              mks = JSON.parse(mks);
+            } else if (typeof mks === "string" && mks.trim() !== "") {
+              mks = mks.split(",");
+            }
+          } catch (e) {
+            if (typeof mks === "string" && mks.trim() !== "") {
+              mks = mks.split(",");
+            }
+          }
+          if (Array.isArray(mks) && mks.length > 0) {
+            const validMks = mks
+              .map((m) =>
+                String(m)
+                  .trim()
+                  .replace(/^Koordinator\s+Praktikum:\s*/i, "")
+                  .replace(/^Asisten\s+Praktikum:\s*/i, "")
+              )
+              .filter((m) => m.length > 0);
+
+            if (validMks.length > 0) {
+              validMks.forEach((m) => {
+                mkDiv.innerHTML += `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm"><i class="fas fa-book-reader text-[10px] text-emerald-500"></i> ${escapeHtml(m)}</span>`;
+              });
+            } else {
+              mkDiv.innerHTML = `<span class="text-xs text-gray-400 italic">Belum ada mata kuliah yang dicantumkan</span>`;
+            }
+          } else {
+            mkDiv.innerHTML = `<span class="text-xs text-gray-400 italic">Belum ada mata kuliah yang dicantumkan</span>`;
+          }
+        }
+
         const fotoUrl = d.foto
           ? d.foto.includes("http")
             ? d.foto
@@ -129,7 +164,7 @@ function openDetailModal(id) {
         if (Array.isArray(skills)) {
           skills.forEach((s) => {
             if (s.trim())
-              sDiv.innerHTML += `<span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-100">${s.trim()}</span>`;
+              sDiv.innerHTML += `<span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-100">${escapeHtml(s.trim())}</span>`;
           });
         } else {
           sDiv.innerHTML = "-";
@@ -214,8 +249,6 @@ function openFormModal(id = null, event = null) {
           });
 
           document.getElementById("inputEmail").value = d.email || "";
-          document.getElementById("inputKesanPesan").value =
-            d.kesan_pesan || "";
           document.getElementById("inputMataKuliah").value =
             d.mata_kuliah || "";
 
@@ -645,3 +678,15 @@ document.addEventListener("DOMContentLoaded", () => {
   initKeahlianTagging();
   initMatkulTagging();
 });
+
+function escapeHtml(text) {
+  if (!text) return "";
+  const map = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  };
+  return String(text).replace(/[&<>"']/g, (m) => map[m]);
+}

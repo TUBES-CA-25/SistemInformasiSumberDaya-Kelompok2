@@ -179,9 +179,10 @@ class JadwalPraktikumService {
                 }
             }
 
-            // Resolve Foreign Keys
+            // Resolve Foreign Keys & Prodi
             $idMK  = $this->findOrCreateMatakuliah($kodeMK, $mk, $sks);
             $idLab = $this->findExistingLab($lab);
+            $prodi = $this->normalizeProdi($getVal('prodi'), $kodeMK, $mk);
 
             if (!$idLab) {
                 $stats['invalid']++;
@@ -199,6 +200,7 @@ class JadwalPraktikumService {
             // Simpan Jadwal Praktikum
             $this->model->insert([
                 'idMatakuliah'   => $idMK,
+                'prodi'          => $prodi,
                 'kelas'          => $kelas,
                 'idLaboratorium' => $idLab,
                 'hari'           => $hari,
@@ -259,34 +261,37 @@ class JadwalPraktikumService {
             }
         }
 
-        // Jika tidak ditemukan baris header yang jelas, gunakan default fallback template
-        if ($bestScore < 3 || empty($bestMapping)) {
-            return [
-                'headerRowIndex'    => 1,
-                'firstDataRowIndex' => 2,
-                'columnMap' => [
-                    'kode_mk'  => 1,
-                    'dosen'    => 2,
-                    'mk'       => 3,
-                    'sks'      => 4,
-                    'kelas'    => 5,
-                    'freq'     => 6,
-                    'lab'      => 7,
-                    'hari'     => 8,
-                    'jam'      => 9,
-                    'prodi'    => 10,
-                    'asisten1' => 11,
-                    'asisten2' => 12
-                ],
-                'isFallback' => true
+        // Jalankan Smart Content Inspection untuk memvalidasi atau melengkapi pemetaan kolom dari sampel data nyata
+        $firstDataRow = ($bestRow !== null) ? $bestRow + 1 : 2;
+        $contentMap = $this->detectColumnsByContent($worksheet, $firstDataRow);
+
+        // Gabungkan hasil deteksi header dengan deteksi berbasis isi sel
+        if (empty($bestMapping) || $bestScore < 3) {
+            $finalMapping = !empty($contentMap) ? $contentMap : [
+                'kode_mk'  => 1,
+                'dosen'    => 2,
+                'mk'       => 3,
+                'sks'      => 4,
+                'kelas'    => 5,
+                'freq'     => 6,
+                'lab'      => 7,
+                'hari'     => 8,
+                'jam'      => 9,
+                'prodi'    => 10,
+                'asisten1' => 11,
+                'asisten2' => 12
             ];
+            $isFallback = empty($contentMap);
+        } else {
+            $finalMapping = $this->reconcileMappingWithContent($bestMapping, $contentMap);
+            $isFallback = false;
         }
 
         return [
-            'headerRowIndex'    => $bestRow,
-            'firstDataRowIndex' => $bestRow + 1,
-            'columnMap'         => $bestMapping,
-            'isFallback'        => false
+            'headerRowIndex'    => $bestRow ?? 1,
+            'firstDataRowIndex' => $firstDataRow,
+            'columnMap'         => $finalMapping,
+            'isFallback'        => $isFallback
         ];
     }
 
@@ -339,6 +344,155 @@ class JadwalPraktikumService {
         }
 
         return $mapping;
+    }
+
+    /**
+     * Deteksi kolom pintar berdasarkan isi data aktual sel (Heuristic Content Inspection).
+     * Memeriksa sampel baris data nyata untuk memastikan kolom hari tidak tertukar dengan kode MK,
+     * kolom jam tidak tertukar dengan dosen, dan kolom dosen tidak tertukar dengan mata kuliah.
+     */
+    private function detectColumnsByContent($worksheet, int $startRow = 2, int $sampleLimit = 15): array {
+        $highestRow = min($worksheet->getHighestRow(), $startRow + $sampleLimit);
+        if ($startRow > $highestRow) return [];
+
+        $colSamples = [];
+        for ($r = $startRow; $r <= $highestRow; $r++) {
+            $row = $worksheet->getRowIterator($r, $r)->current();
+            if (!$row) continue;
+            $data = $this->extractRowData($row);
+            foreach ($data as $colIdx => $val) {
+                $valStr = trim((string)$val);
+                if ($valStr !== '') {
+                    $colSamples[$colIdx][] = $valStr;
+                }
+            }
+        }
+
+        if (empty($colSamples)) return [];
+
+        $scores = [];
+        $dayNames = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+
+        foreach ($colSamples as $colIdx => $values) {
+            $total = count($values);
+            if ($total === 0) continue;
+
+            $dayCount = 0;
+            $timeCount = 0;
+            $dosenCount = 0;
+            $labCount = 0;
+            $classCount = 0;
+            $sksCount = 0;
+            $courseLikeCount = 0;
+
+            foreach ($values as $v) {
+                $vLower = strtolower($v);
+
+                // Cek Hari
+                if (in_array($vLower, $dayNames)) $dayCount++;
+
+                // Cek Jam/Waktu
+                if (preg_match('/^\d{1,2}[:.]\d{2}/', $v) || preg_match('/\d{1,2}[:.]\d{2}\s*(?:-|–|s\/d)\s*\d{1,2}[:.]\d{2}/i', $v)) {
+                    $timeCount++;
+                }
+
+                // Cek Dosen (gelar akademik atau nama bergelar)
+                if (preg_match('/,\s*(S\.Kom|M\.Kom|M\.T|S\.T|M\.Cs|MTA|M\.Si|M\.Eng|Dr\.|Ir\.|Prof\.)/i', $v) ||
+                    preg_match('/^(Dr\.|Ir\.|Prof\.)\s+/i', $v)) {
+                    $dosenCount++;
+                }
+
+                // Cek Lab
+                if (preg_match('/^(lab|laboratorium|ruang)\s+/i', $v) || stripos($v, 'laboratorium') !== false) {
+                    $labCount++;
+                }
+
+                // Cek Kelas (misal A1, B2, C, TI-A)
+                if (preg_match('/^[A-Z][0-9]?$/i', $v) || preg_match('/^[A-Z]{2,4}-[A-Z0-9]$/i', $v)) {
+                    $classCount++;
+                }
+
+                // Cek SKS (angka 1-6 atau "3 SKS")
+                if (preg_match('/^[1-6](\s*sks)?$/i', $v)) {
+                    $sksCount++;
+                }
+
+                // Cek kemiripan MK
+                if (!$this->isInvalidCourseName($v) && strlen($v) >= 4) {
+                    $courseLikeCount++;
+                }
+            }
+
+            if ($dayCount / $total >= 0.4) $scores['hari'][$colIdx] = $dayCount / $total;
+            if ($timeCount / $total >= 0.4) $scores['jam'][$colIdx] = $timeCount / $total;
+            if ($dosenCount / $total >= 0.3) $scores['dosen'][$colIdx] = $dosenCount / $total;
+            if ($labCount / $total >= 0.3) $scores['lab'][$colIdx] = $labCount / $total;
+            if ($classCount / $total >= 0.4) $scores['kelas'][$colIdx] = $classCount / $total;
+            if ($sksCount / $total >= 0.5) $scores['sks'][$colIdx] = $sksCount / $total;
+            if ($courseLikeCount / $total >= 0.4 && $dosenCount === 0 && $dayCount === 0) {
+                $scores['mk'][$colIdx] = $courseLikeCount / $total;
+            }
+        }
+
+        $contentMap = [];
+        $assignedCols = [];
+
+        // Tetapkan kolom dengan prioritas paling spesifik
+        $order = ['hari', 'jam', 'dosen', 'lab', 'kelas', 'sks', 'mk'];
+        foreach ($order as $field) {
+            if (isset($scores[$field])) {
+                arsort($scores[$field]);
+                foreach ($scores[$field] as $colIdx => $sc) {
+                    if (!in_array($colIdx, $assignedCols)) {
+                        $contentMap[$field] = $colIdx;
+                        $assignedCols[] = $colIdx;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $contentMap;
+    }
+
+    /**
+     * Rekonsiliasi antara pemetaan header dan pemetaan data nyata.
+     * Mencegah kolom Hari/Jam tertukar menjadi Kode MK atau Dosen.
+     */
+    private function reconcileMappingWithContent(array $headerMap, array $contentMap): array {
+        $final = $headerMap;
+
+        // 1. Jika kolom yang dipetakan sebagai kode_mk atau mk ternyata isinya Hari, koreksi!
+        if (isset($contentMap['hari'])) {
+            $hariCol = $contentMap['hari'];
+            if (isset($final['kode_mk']) && $final['kode_mk'] === $hariCol) unset($final['kode_mk']);
+            if (isset($final['mk']) && $final['mk'] === $hariCol) unset($final['mk']);
+            $final['hari'] = $hariCol;
+        }
+
+        // 2. Jika kolom yang dipetakan sebagai dosen ternyata isinya Jam/Waktu, koreksi!
+        if (isset($contentMap['jam'])) {
+            $jamCol = $contentMap['jam'];
+            if (isset($final['dosen']) && $final['dosen'] === $jamCol) unset($final['dosen']);
+            if (isset($final['mk']) && $final['mk'] === $jamCol) unset($final['mk']);
+            $final['jam'] = $jamCol;
+        }
+
+        // 3. Jika kolom yang dipetakan sebagai mk ternyata isinya Dosen, pindahkan ke dosen!
+        if (isset($contentMap['dosen'])) {
+            $dosenCol = $contentMap['dosen'];
+            if (isset($final['mk']) && $final['mk'] === $dosenCol) {
+                unset($final['mk']);
+            }
+            $final['dosen'] = $dosenCol;
+        }
+
+        // 4. Jika kolom mk belum ada atau terhapus karena koreksi, gunakan kolom mk dari contentMap jika ada
+        if (!isset($final['mk']) && isset($contentMap['mk'])) {
+            $final['mk'] = $contentMap['mk'];
+        }
+
+        return $final;
     }
 
     /**
@@ -610,23 +764,156 @@ class JadwalPraktikumService {
     }
 
     /**
-     * Cari atau buat entitas Matakuliah.
-     * Mengizinkan kode MK duplikat agar beberapa kelas/jadwal berbeda 
-     * dapat berbagi kode mata kuliah yang sama tanpa error.
+     * Validasi pintar: cek apakah nama merupakan nama yang TIDAK valid untuk mata kuliah
+     * (misal: nama hari, format jam, nama dosen bergelar, atau kata kunci header).
+     */
+    private function isInvalidCourseName(?string $name): bool {
+        if (empty($name)) return true;
+        $name = trim($name);
+        $lower = strtolower($name);
+
+        // 1. Cek Hari
+        $days = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu', 'hari'];
+        if (in_array($lower, $days)) return true;
+
+        // 2. Cek Jam / Waktu
+        if (preg_match('/^\d{1,2}[:.]\d{2}/', $name) || preg_match('/^(jam|waktu|pukul)\b/i', $name)) {
+            return true;
+        }
+
+        // 3. Cek Gelar Dosen / Akademik
+        if (preg_match('/,\s*(S\.Kom|M\.Kom|M\.T|S\.T|M\.Cs|MTA|M\.Si|M\.Eng|Dr\.|Ir\.|Prof\.)/i', $name) ||
+            preg_match('/^(Dr\.|Ir\.|Prof\.)\s+/i', $name)) {
+            return true;
+        }
+
+        // 4. Cek Kata Kunci Header / Metadata
+        $keywords = ['dosen', 'hari', 'jam', 'waktu', 'ruang', 'ruangan', 'lab', 'laboratorium', 'kelas', 'sks', 'total', 'keterangan', 'asisten', 'no', 'nomor', 'belum ditetapkan', 'mata kuliah unik a'];
+        if (in_array($lower, $keywords)) return true;
+
+        // 5. Cek apakah nama ini cocok persis dengan nama dosen di database
+        $db = $this->model->db;
+        $escaped = $db->real_escape_string($name);
+        $res = $db->query("SELECT idDosen FROM dosen WHERE LCASE(TRIM(nama)) = LCASE('$escaped') LIMIT 1");
+        if ($res && $res->num_rows > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Validasi kode mata kuliah agar tidak menggunakan nama hari atau kata kunci.
+     */
+    private function isInvalidCourseCode(?string $code): bool {
+        if (empty($code)) return true;
+        $code = trim($code);
+        $lower = strtolower($code);
+        $days = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu', 'hari'];
+        if (in_array($lower, $days)) return true;
+        $keywords = ['dosen', 'hari', 'jam', 'waktu', 'ruang', 'ruangan', 'lab', 'laboratorium', 'kelas', 'sks', 'no', 'nomor'];
+        if (in_array($lower, $keywords)) return true;
+        if (preg_match('/^\d{1,2}[:.]\d{2}/', $code)) return true;
+        return false;
+    }
+
+    /**
+     * Validasi nama dosen agar tidak menggunakan jam/waktu, hari, atau lab.
+     */
+    private function isInvalidDosenName(?string $name): bool {
+        if (empty($name)) return true;
+        $name = trim($name);
+        $lower = strtolower($name);
+
+        // 1. Cek Jam / Waktu
+        if (preg_match('/^\d{1,2}[:.]\d{2}/', $name) || preg_match('/^(jam|waktu|pukul)\b/i', $name)) {
+            return true;
+        }
+
+        // 2. Cek Hari
+        $days = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu', 'hari'];
+        if (in_array($lower, $days)) return true;
+
+        // 3. Cek Kata Kunci Header / Metadata
+        $keywords = ['dosen', 'hari', 'jam', 'waktu', 'ruang', 'ruangan', 'lab', 'laboratorium', 'kelas', 'sks', 'total', 'keterangan', 'asisten', 'no', 'nomor', 'dosen test'];
+        if (in_array($lower, $keywords)) return true;
+
+        // 4. Cek apakah ini nama lab
+        if (preg_match('/^(lab|laboratorium|ruang)\s+/i', $name)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Cari atau buat entitas Matakuliah dengan validasi ketat (Smart Protection).
+     * Mencegah nama dosen, hari, atau jam masuk sebagai master mata kuliah.
      */
     private function findOrCreateMatakuliah($kodeMK, $namaMK, $sks = null) {
+        $namaMK = trim((string)$namaMK);
+        $kodeMK = trim((string)$kodeMK);
+
+        // Validasi: jika namaMK invalid, coba lihat apakah kodeMK sebenarnya nama mata kuliah
+        if ($this->isInvalidCourseName($namaMK)) {
+            if (!empty($kodeMK) && !$this->isInvalidCourseName($kodeMK)) {
+                $namaMK = $kodeMK;
+                $kodeMK = '';
+            } else {
+                return null;
+            }
+        }
+
+        if ($this->isInvalidCourseCode($kodeMK)) {
+            $kodeMK = '';
+        }
+
         if (empty($namaMK) && empty($kodeMK)) return null;
 
         $db = $this->model->db;
 
         // 1. Cari berdasarkan nama matakuliah (prioritaskan pencocokan nama agar mata kuliah sama digunakan kembali)
         if (!empty($namaMK)) {
-            $stmt = $db->prepare("SELECT idMatakuliah FROM matakuliah WHERE LCASE(TRIM(namaMatakuliah)) = LCASE(TRIM(?)) LIMIT 1");
+            $stmt = $db->prepare("SELECT idMatakuliah, kodeMatakuliah, namaMatakuliah FROM matakuliah WHERE LCASE(TRIM(namaMatakuliah)) = LCASE(TRIM(?)) LIMIT 1");
             if ($stmt) {
                 $stmt->bind_param("s", $namaMK);
                 $stmt->execute();
                 $res = $stmt->get_result()->fetch_assoc();
-                if ($res) return (int)$res['idMatakuliah'];
+                if ($res) {
+                    $id = (int)$res['idMatakuliah'];
+                    if (!empty($kodeMK) && !$this->isInvalidCourseCode($kodeMK) && $res['kodeMatakuliah'] !== $kodeMK) {
+                        $upd = $db->prepare("UPDATE matakuliah SET kodeMatakuliah = ? WHERE idMatakuliah = ?");
+                        if ($upd) {
+                            $upd->bind_param("si", $kodeMK, $id);
+                            $upd->execute();
+                        }
+                    }
+                    return $id;
+                }
+            }
+
+            // Coba pencocokan normalisasi nama (misal: "Algoritma Pemrograman" vs "Algoritma dan Pemrograman" / "Algoritma dan Pemrograman 1")
+            $norm = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', (string)$namaMK));
+            $norm = preg_replace('/(dan|1|i|ii)$/i', '', $norm);
+            if (strlen($norm) >= 6) {
+                $allRes = $db->query("SELECT idMatakuliah, kodeMatakuliah, namaMatakuliah FROM matakuliah");
+                if ($allRes) {
+                    while ($row = $allRes->fetch_assoc()) {
+                        $dbNorm = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', (string)$row['namaMatakuliah']));
+                        $dbNorm = preg_replace('/(dan|1|i|ii)$/i', '', $dbNorm);
+                        if ($dbNorm === $norm || (strlen($norm) >= 8 && (str_contains($dbNorm, $norm) || str_contains($norm, $dbNorm)))) {
+                            $id = (int)$row['idMatakuliah'];
+                            if (!empty($kodeMK) && !$this->isInvalidCourseCode($kodeMK) && $row['kodeMatakuliah'] !== $kodeMK) {
+                                $upd = $db->prepare("UPDATE matakuliah SET kodeMatakuliah = ? WHERE idMatakuliah = ?");
+                                if ($upd) {
+                                    $upd->bind_param("si", $kodeMK, $id);
+                                    $upd->execute();
+                                }
+                            }
+                            return $id;
+                        }
+                    }
+                }
             }
         }
 
@@ -641,7 +928,7 @@ class JadwalPraktikumService {
             }
         }
 
-        // 3. Jika belum terdaftar, buat record matakuliah baru (kode boleh duplikat)
+        // 3. Jika belum terdaftar dan lolos validasi, buat record matakuliah baru
         $cleanKode = !empty($kodeMK) ? trim($kodeMK) : 'MK-' . strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', (string)$namaMK), 0, 6));
         $cleanNama = !empty($namaMK) ? trim($namaMK) : $cleanKode;
         $cleanSks  = !empty($sks) ? (int)$sks : 3;
@@ -657,7 +944,8 @@ class JadwalPraktikumService {
     }
 
     /**
-     * Cari atau buat master dosen secara otomatis jika belum ada.
+     * Cari atau buat master dosen secara otomatis jika belum ada dengan validasi ketat.
+     * Mencegah format waktu ("07:00-09:30") atau hari masuk sebagai master dosen.
      */
     private function findOrCreateDosen($name) {
         if (empty($name)) return null;
@@ -665,8 +953,8 @@ class JadwalPraktikumService {
         
         $name = trim($name);
         
-        // Lewati teks kata kunci header atau kode kelas
-        if (preg_match('/^(dosen|no|kelas|[a-z][0-9](,[a-z][0-9])*)$/i', $name)) {
+        // Lewati teks kata kunci header, kode kelas, atau data tidak valid
+        if ($this->isInvalidDosenName($name)) {
             return null;
         }
 
@@ -694,5 +982,37 @@ class JadwalPraktikumService {
         $escapedName = $db->real_escape_string($name);
         $db->query("INSERT INTO dosen (nama) VALUES ('$escapedName')");
         return (int)$db->insert_id;
+    }
+
+    /**
+     * Normalisasi nama Program Studi (TI atau SI).
+     * 
+     * @param mixed $raw
+     * @param string $kodeMK
+     * @param string $namaMK
+     * @return string 'TI' atau 'SI'
+     */
+    public function normalizeProdi($raw = '', $kodeMK = '', $namaMK = ''): string {
+        $str = trim((string)$raw);
+        $upper = strtoupper($str);
+        
+        if ($upper === 'SI' || stripos($upper, 'SISTEM INFORMASI') !== false) {
+            return 'SI';
+        }
+        if ($upper === 'TI' || stripos($upper, 'INFORMATIKA') !== false) {
+            return 'TI';
+        }
+
+        // Cek dari kode matakuliah
+        $kode = strtoupper(trim((string)$kodeMK));
+        if (str_starts_with($kode, '131') || str_starts_with($kode, 'SI')) {
+            return 'SI';
+        }
+        if (str_starts_with($kode, '130') || str_starts_with($kode, 'TI')) {
+            return 'TI';
+        }
+
+        // Default ke TI
+        return 'TI';
     }
 }

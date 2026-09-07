@@ -231,6 +231,29 @@ class Router {
         $this->put('/api/user/{id}', 'UserController', 'apiUpdate');
         $this->delete('/api/user/{id}', 'UserController', 'apiDelete');
 
+        // Kontak Saluran & Kotak Masuk API
+        $this->get('/api/kontak-info', 'KontakController', 'apiIndex');
+        $this->get('/api/kontak-info/{id}', 'KontakController', 'apiShow');
+        $this->post('/api/kontak-info', 'KontakController', 'apiStore');
+        $this->post('/api/kontak-info/{id}', 'KontakController', 'apiUpdate');
+        $this->put('/api/kontak-info/{id}', 'KontakController', 'apiUpdate');
+        $this->delete('/api/kontak-info/{id}', 'KontakController', 'apiDelete');
+        $this->post('/api/kontak-info/{id}/toggle', 'KontakController', 'apiToggle');
+
+        $this->get('/api/kontak-pesan', 'KontakController', 'apiMessages');
+        $this->get('/api/kontak-pesan/{id}', 'KontakController', 'apiMessageDetail');
+        $this->post('/api/kontak-pesan/{id}/baca', 'KontakController', 'apiMarkRead');
+        $this->delete('/api/kontak-pesan/{id}', 'KontakController', 'apiDeleteMessage');
+
+        // IC-Labs Apps Routes
+        $this->get('/api/apps', 'AppsController', 'apiIndex');
+        $this->get('/api/apps/{id}', 'AppsController', 'apiShow');
+        $this->post('/api/apps', 'AppsController', 'apiStore');
+        $this->post('/api/apps/{id}', 'AppsController', 'apiUpdate');
+        $this->put('/api/apps/{id}', 'AppsController', 'apiUpdate');
+        $this->delete('/api/apps/{id}', 'AppsController', 'apiDelete');
+        $this->post('/api/apps/{id}/toggle', 'AppsController', 'apiToggle');
+
         // -------- AUTH & ADMIN --------
         $this->get('/iclabs-login', 'AuthController', 'login');
         $this->get('/login', 'AuthController', 'login');
@@ -255,6 +278,8 @@ class Router {
         $this->get('/admin/sop', 'SopController', 'adminIndex');
         $this->get('/admin/modul', 'ModulController', 'adminIndex');
         $this->get('/admin/formatpenulisan', 'FormatPenulisanController', 'adminIndex');
+        $this->get('/admin/kontak', 'KontakController', 'adminIndex');
+        $this->get('/admin/apps', 'AppsController', 'adminIndex');
     }
 
     public function dispatch(): void

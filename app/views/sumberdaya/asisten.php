@@ -224,7 +224,8 @@ $alumni_list      = $data['alumni'] ?? [];
                 
                 <!-- Details / Full Width below photo -->
                 <div class="modal-profile-details">
-                    <h4 class="section-title">Tentang</h4>
+                    <h4 class="section-title" id="modalBioTitle">Mata Kuliah yang Diajar</h4>
+                    <div id="modalMatkulContainer" class="skills-container" style="display: none; margin-top: 8px; margin-bottom: 8px;"></div>
                     <p id="modalBio" class="profile-bio"></p>
 
                     <div id="modalSkillsSection">
@@ -233,8 +234,8 @@ $alumni_list      = $data['alumni'] ?? [];
                     </div>
 
                     <div class="contact-wrapper">
-                        <a id="modalMailBtn" href="" class="btn-contact">
-                            <i class="ri-mail-send-line"></i> Kirim Email
+                        <a id="modalMailBtn" href="" target="_blank" rel="noopener noreferrer" class="btn-contact">
+                            <i class="ri-mail-send-line"></i> Email
                         </a>
                         <button id="modalMailDisabled" class="btn-disabled" style="display: none;" disabled>
                             <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia

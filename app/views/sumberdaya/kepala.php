@@ -169,8 +169,8 @@ $laboran_list  = $data['laboran'] ?? [];
                     </div>
 
                     <div class="contact-wrapper">
-                        <a id="modalMailBtn" href="" class="btn-contact">
-                            <i class="ri-mail-send-line"></i> Kirim Email
+                        <a id="modalMailBtn" href="" target="_blank" rel="noopener noreferrer" class="btn-contact">
+                            <i class="ri-mail-send-line"></i> Email
                         </a>
                         <button id="modalMailDisabled" class="btn-disabled" style="display: none;" disabled>
                             <i class="ri-mail-forbid-line"></i> Email Tidak Tersedia

@@ -515,19 +515,30 @@
 }
 
 .badge-prodi {
-  display: none !important;
-  font-size: 0.68rem;
-  background: #eff6ff;
-  color: #2563eb;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-weight: 800;
+  display: inline-flex;
   align-items: center;
-  margin-left: 6px;
-  margin-top: 0;
+  justify-content: center;
+  font-size: 0.72rem;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-weight: 800;
   vertical-align: middle;
-  border: 1px solid #bfdbfe;
   line-height: 1.2;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.badge-prodi-ti {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.badge-prodi-si {
+  background: #f0f9ff;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
 }
 
 .schedule-kelas {
@@ -543,29 +554,38 @@
 }
 
 .dosen-cell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  vertical-align: middle;
   font-weight: 600;
   color: #1e293b;
   font-size: 0.9rem;
   line-height: 1.45;
 }
 
+.dosen-info-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .dosen-name {
   color: #1e293b;
 }
 
-.dosen-cell i {
+.dosen-cell i,
+.dosen-info-box i {
   color: #2563eb;
   font-size: 0.9rem;
   flex-shrink: 0;
 }
 
 .asisten-cell {
+  vertical-align: middle;
+}
+
+.asisten-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .asisten-name {
@@ -1277,8 +1297,7 @@ body.night-mode .time-range {
   font-weight: 700 !important;
 }
 
-body.night-mode .schedule-matkul,
-body.night-mode .table-schedule td:nth-child(2) {
+body.night-mode .schedule-matkul {
   color: #ffffff !important;
   font-weight: 700 !important;
 }
@@ -1294,8 +1313,7 @@ body.night-mode .dosen-name,
 body.night-mode .dosen-info,
 body.night-mode .dosen-info span,
 body.night-mode .dosen-cell,
-body.night-mode .dosen-cell span,
-body.night-mode .table-schedule td:nth-child(4) {
+body.night-mode .dosen-cell span {
   color: #ffffff !important;
   font-weight: 600 !important;
 }
@@ -1310,10 +1328,16 @@ body.night-mode .table-schedule td {
   color: #e2e8f0 !important;
 }
 
-body.night-mode .badge-prodi {
-  background: #0f172a !important;
-  color: #94a3b8 !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+body.night-mode .badge-prodi-ti {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #93c5fd !important;
+  border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+body.night-mode .badge-prodi-si {
+  background: rgba(2, 132, 199, 0.2) !important;
+  color: #7dd3fc !important;
+  border-color: rgba(14, 165, 233, 0.4) !important;
 }
 
 body.night-mode .badge-ongoing {
@@ -1876,7 +1900,7 @@ body.night-mode .rule-card:hover .dress-code-img {
   }
 
   /* Mata Kuliah */
-  .table-schedule td:nth-child(2) {
+  .table-schedule td.matkul-cell {
     font-size: 0.96rem !important;
     font-weight: 800 !important;
     color: #0f172a !important;
@@ -1884,30 +1908,42 @@ body.night-mode .rule-card:hover .dress-code-img {
     line-height: 1.3 !important;
   }
 
-  body.night-mode .table-schedule td:nth-child(2) {
+  body.night-mode .table-schedule td.matkul-cell {
     color: #f8fafc !important;
   }
 
+  /* Prodi */
+  .table-schedule td.prodi-cell {
+    display: flex !important;
+    align-items: center !important;
+    padding: 2px 0 !important;
+  }
+
+  .table-schedule td.prodi-cell .badge-prodi {
+    font-size: 0.66rem !important;
+    padding: 2px 7px !important;
+  }
+
   /* Kelas / Frekuensi */
-  .table-schedule td:nth-child(3) {
+  .table-schedule td.kelas-cell {
     font-size: 0.78rem !important;
     color: #64748b !important;
     padding: 0 !important;
   }
 
   /* Dosen */
-  .table-schedule td:nth-child(4) {
+  .table-schedule td.dosen-cell {
     font-size: 0.78rem !important;
     color: #334155 !important;
     padding: 2px 0 0 0 !important;
   }
 
-  body.night-mode .table-schedule td:nth-child(4) {
+  body.night-mode .table-schedule td.dosen-cell {
     color: #cbd5e1 !important;
   }
 
   /* Asisten */
-  .table-schedule td:nth-child(5) {
+  .table-schedule td.asisten-cell {
     font-size: 0.76rem !important;
     padding: 0 !important;
   }

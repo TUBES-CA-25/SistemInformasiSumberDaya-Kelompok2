@@ -140,17 +140,23 @@ document.addEventListener('DOMContentLoaded', function() {
                                 modalSubIcon.className = d.sub_icon || 'ri-id-card-line';
                             }
 
-                            // Email
-                            if (d.email && d.email !== "-") {
+                            // Email - Buka langsung via Gmail di browser
+                            if (d.email && d.email !== "-" && d.email.trim() !== "") {
                                 modalEmail.textContent = d.email;
                                 modalEmailBox.style.display = "flex";
-                                modalMailBtn.href = `mailto:${d.email}`;
-                                modalMailBtn.style.display = "inline-flex";
-                                modalMailDisabled.style.display = "none";
+
+                                if (modalMailBtn) {
+                                    modalMailBtn.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(d.email)}`;
+                                    modalMailBtn.target = "_blank";
+                                    modalMailBtn.rel = "noopener noreferrer";
+                                    modalMailBtn.style.display = "inline-flex";
+                                }
+
+                                if (modalMailDisabled) modalMailDisabled.style.display = "none";
                             } else {
                                 modalEmailBox.style.display = "none";
-                                modalMailBtn.style.display = "none";
-                                modalMailDisabled.style.display = "inline-flex";
+                                if (modalMailBtn) modalMailBtn.style.display = "none";
+                                if (modalMailDisabled) modalMailDisabled.style.display = "inline-flex";
                             }
 
                             // Bio

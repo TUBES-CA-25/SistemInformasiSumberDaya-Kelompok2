@@ -112,10 +112,19 @@
                                 <input type="hidden" id="inputSkills" name="skills">
                                 <p class="text-[10px] text-gray-400 mt-1.5 italic"><i class="fas fa-info-circle"></i> Tekan Enter atau pilih saran untuk menambahkan keahlian baru.</p>
                             </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-1.5">Bio Singkat</label>
-                                <textarea id="inputBio" name="bio" rows="3" placeholder="Deskripsi singkat diri..." 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"></textarea>
+                            <div class="relative">
+                                <label class="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
+                                    <i class="fas fa-book-reader text-emerald-600"></i> Mata Kuliah yang Diajar
+                                </label>
+                                <div id="matkulTagContainer" class="flex flex-wrap gap-2 p-2.5 min-h-[45px] border border-gray-300 rounded-lg bg-white focus-within:ring-2 focus-within:ring-emerald-500 transition-all cursor-text">
+                                    <input type="text" id="tagInputMatkul" class="flex-grow outline-none text-sm min-w-[180px] bg-transparent" placeholder="Ketik nama mata kuliah (contoh: Algoritma)...">
+                                </div>
+                                <!-- Dropdown Saran Rekomendasi Mata Kuliah -->
+                                <div id="matkulSuggestions" class="hidden absolute z-[100] mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-2xl max-h-60 overflow-y-auto py-2">
+                                    <!-- List rekomendasi diisi JS -->
+                                </div>
+                                <input type="hidden" id="inputBio" name="bio">
+                                <p class="text-[10px] text-gray-400 mt-1.5 italic"><i class="fas fa-info-circle"></i> Tekan Enter atau klik saran rekomendasi untuk menambahkan mata kuliah yang diajar.</p>
                             </div>
                             <div class="p-4 bg-white border border-dashed border-gray-300 rounded-xl transition-all hover:border-blue-300">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
@@ -180,7 +189,7 @@
                                 <div class="text-right"><p class="text-xs text-gray-500">Email</p><p id="mEmail" class="font-bold">-</p></div>
                             </div>
                             <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500 mb-1">Kompetensi & Keahlian</p><div id="mSkills" class="flex flex-wrap gap-2 mt-1"></div></div>
-                            <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500 mb-1">Bio</p><p id="mBio" class="italic text-gray-700">-</p></div>
+                            <div class="bg-gray-50 p-3 rounded-lg"><p class="text-xs text-gray-500 mb-1 font-semibold text-gray-700 flex items-center gap-1"><i class="fas fa-book-reader text-blue-500"></i> Mata Kuliah yang Diajar</p><p id="mBio" class="italic text-gray-700">-</p></div>
                         </div>
                     </div>
                 </div>

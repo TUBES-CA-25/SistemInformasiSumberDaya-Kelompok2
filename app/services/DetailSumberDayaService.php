@@ -42,6 +42,45 @@ class DetailSumberDayaService {
             $info = ['jabatan' => 'Calon Asisten (CA)', 'kategori' => 'Calon Asisten', 'badge' => 'badge-ca'];
         }
 
+        $bioRaw = $asisten['bio'] ?? '';
+        $rawItems = [];
+        if (!empty($bioRaw)) {
+            $decoded = json_decode($bioRaw, true);
+            if (is_array($decoded)) {
+                $rawItems = $decoded;
+            } else {
+                $rawItems = explode(',', $bioRaw);
+            }
+        }
+
+        $matkulList = [];
+        $invalidDays = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu', 'hari'];
+        $invalidKeys = ['dosen', 'hari', 'jam', 'waktu', 'ruang', 'ruangan', 'lab', 'laboratorium', 'kelas', 'sks', 'belum ditetapkan'];
+
+        foreach ($rawItems as $item) {
+            $clean = trim((string)$item);
+            // Bersihkan prefix asisten seperti "Asisten 2 ", "Asisten ", "Asprak 1 ", dsb.
+            $clean = preg_replace('/^(asisten\s*(?:[12]|satu|dua)?|asprak\s*(?:[12]|satu|dua)?|co-?asisten)\s+/i', '', $clean);
+            $clean = trim($clean);
+
+            if (empty($clean) || strlen($clean) < 2) continue;
+            $lower = strtolower($clean);
+
+            // Filter hari dan kata kunci non-MK
+            if (in_array($lower, $invalidDays) || in_array($lower, $invalidKeys)) continue;
+            // Filter format jam
+            if (preg_match('/^\d{1,2}[:.]\d{2}/', $clean)) continue;
+            // Filter nama dosen bergelar
+            if (preg_match('/,\s*(S\.Kom|M\.Kom|M\.T|S\.T|M\.Cs|MTA|M\.Si|M\.Eng|Dr\.|Ir\.|Prof\.)/i', $clean) ||
+                preg_match('/^(Dr\.|Ir\.|Prof\.)\s+/i', $clean)) continue;
+
+            if (!in_array($clean, $matkulList)) {
+                $matkulList[] = $clean;
+            }
+        }
+
+        $formattedBio = !empty($matkulList) ? implode(', ', $matkulList) : (!empty($bioRaw) ? $bioRaw : "Belum ada mata kuliah yang dicantumkan.");
+
         return [
             'nama'        => $asisten['nama'] ?? 'Tanpa Nama',
             'jabatan'     => $info['jabatan'],
@@ -52,7 +91,8 @@ class DetailSumberDayaService {
             'foto_pos_x'  => $asisten['foto_pos_x'] ?? 50,
             'foto_pos_y'  => $asisten['foto_pos_y'] ?? 50,
             'email'       => $asisten['email'] ?? '-',
-            'bio'         => $asisten['bio'] ?: "Mahasiswa aktif dan asisten laboratorium.",
+            'bio'         => $formattedBio,
+            'matkul'      => $matkulList,
             'skills'      => $this->parseSkills($asisten['skills'] ?? ''),
             'badge_style' => $info['badge'],
             'back_link'   => '/asisten'
@@ -70,6 +110,36 @@ class DetailSumberDayaService {
             return $this->getFormattedAsisten($id);
         }
 
+        // Parsing Mata Kuliah yang Pernah Diajar
+        $matkulRaw = $alumni['mata_kuliah'] ?? '';
+        if (empty($matkulRaw) && !empty($alumni['kesan_pesan'])) {
+            $matkulRaw = $alumni['kesan_pesan'];
+        }
+
+        $rawItems = [];
+        if (!empty($matkulRaw)) {
+            $decoded = json_decode($matkulRaw, true);
+            if (is_array($decoded)) {
+                $rawItems = $decoded;
+            } else {
+                $cleaned = str_replace(['[', ']', '"', "'", '\\'], '', $matkulRaw);
+                $rawItems = explode(',', $cleaned);
+            }
+        }
+
+        $matkulList = [];
+        foreach ($rawItems as $item) {
+            $clean = trim((string)$item);
+            $clean = preg_replace('/^(asisten\s*(?:[12]|satu|dua)?|asprak\s*(?:[12]|satu|dua)?|co-?asisten)\s+/i', '', $clean);
+            $clean = trim($clean);
+            if (empty($clean) || strlen($clean) < 2) continue;
+            if (!in_array($clean, $matkulList)) {
+                $matkulList[] = $clean;
+            }
+        }
+
+        $formattedBio = !empty($matkulList) ? implode(', ', $matkulList) : "Belum ada mata kuliah yang dicantumkan.";
+
         return [
             'nama'        => $alumni['nama'] ?? 'Tanpa Nama',
             'jabatan'     => trim(str_ireplace(['alumni asisten', 'asisten lab', 'asisten', 'alumni'], '', $alumni['divisi'] ?? '')),
@@ -80,7 +150,8 @@ class DetailSumberDayaService {
             'foto_pos_x'  => $alumni['foto_pos_x'] ?? 50,
             'foto_pos_y'  => $alumni['foto_pos_y'] ?? 50,
             'email'       => $alumni['email'] ?? '-',
-            'bio'         => !empty($alumni['bio']) ? $alumni['bio'] : (!empty($alumni['tentang']) ? $alumni['tentang'] : "Lulusan yang telah berkarya dan berkontribusi di industri."),
+            'bio'         => $formattedBio,
+            'matkul'      => $matkulList,
             'skills'      => $this->parseSkills($alumni['keahlian'] ?? ($alumni['skills'] ?? '')),
             'badge_style' => 'badge-alumni',
             'back_link'   => '/alumni'

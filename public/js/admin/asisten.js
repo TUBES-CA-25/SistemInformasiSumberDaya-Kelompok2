@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadAsisten();
     if (typeof initTaggingSystem === "function") initTaggingSystem();
+    if (typeof initMatkulTaggingSystem === "function") initMatkulTaggingSystem();
 
     console.log('[admin/asisten.js] Initialization success');
 
@@ -182,6 +183,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 skills.push(text);
             });
             formData.set("skills", JSON.stringify(skills));
+
+            // Add matkul (bio) data
+            const matkulList = [];
+            const matkulTags = document.querySelectorAll("#matkulTagContainer .matkul-tag");
+            matkulTags.forEach(tag => {
+                const val = tag.dataset.matkul || tag.querySelector("span")?.textContent?.trim();
+                if (val) matkulList.push(val);
+            });
+            const tagInputMatkul = document.getElementById("tagInputMatkul");
+            if (tagInputMatkul && tagInputMatkul.value.trim()) {
+                const typedVal = tagInputMatkul.value.trim().replace(/,/g, "");
+                if (typedVal && !matkulList.some(m => m.toLowerCase() === typedVal.toLowerCase())) {
+                    matkulList.push(typedVal);
+                }
+            }
+            formData.set("bio", JSON.stringify(matkulList));
 
             const btnSave = document.getElementById("btnSave");
             const originalText = btnSave.innerHTML;
@@ -369,6 +386,13 @@ function openFormModal(id = null) {
         tags.forEach(tag => tag.remove());
     }
 
+    // Clear matkul tags
+    const matkulTagContainer = document.getElementById("matkulTagContainer");
+    if (matkulTagContainer) {
+        const tags = matkulTagContainer.querySelectorAll(".matkul-tag");
+        tags.forEach(tag => tag.remove());
+    }
+
     if (id) {
         // Edit mode
         if (titleEl) titleEl.innerHTML = '<i class="fas fa-edit text-blue-600 mr-2"></i> Edit Asisten';
@@ -379,7 +403,7 @@ function openFormModal(id = null) {
             document.getElementById("inputEmail").value = item.email || "";
             document.getElementById("inputJurusan").value = item.jurusan || "";
             document.getElementById("inputStatus").value = item.statusAktif || "Asisten";
-            document.getElementById("inputBio").value = item.bio || "";
+            document.getElementById("inputBio").value = "[]";
 
             // Handle skills
             if (item.skills) {
@@ -395,6 +419,24 @@ function openFormModal(id = null) {
                     }
                 } catch (e) {
                     console.error("Error parsing skills:", e);
+                }
+            }
+
+            // Handle Mata Kuliah yang Diajar (bio)
+            if (item.bio) {
+                try {
+                    const matkulArray = typeof item.bio === 'string' ? JSON.parse(item.bio) : item.bio;
+                    if (Array.isArray(matkulArray)) {
+                        matkulArray.forEach(mk => {
+                            const c = cleanCourseName(mk);
+                            if (isValidCourseName(c)) addMatkulTag(c);
+                        });
+                    } else if (typeof item.bio === 'string' && item.bio.trim()) {
+                        item.bio.split(',').map(s => cleanCourseName(s)).filter(isValidCourseName).forEach(mk => addMatkulTag(mk));
+                    }
+                } catch (e) {
+                    const parts = item.bio.split(',').map(s => cleanCourseName(s)).filter(isValidCourseName);
+                    parts.forEach(mk => addMatkulTag(mk));
                 }
             }
 
@@ -416,6 +458,7 @@ function openFormModal(id = null) {
         // Add mode
         if (titleEl) titleEl.innerHTML = '<i class="fas fa-plus text-blue-600 mr-2"></i> Tambah Asisten Baru';
         document.getElementById("inputIdAsisten").value = "";
+        document.getElementById("inputBio").value = "[]";
 
         // Hide foto preview info for new record
         const fotoPreviewInfo = document.getElementById("fotoPreviewInfo");
@@ -592,6 +635,276 @@ function updateSkillsInput() {
     document.getElementById("inputSkills").value = JSON.stringify(skills);
 }
 
+// --- SISTEM TAGGING MATA KULIAH YANG DIAJAR ---
+const PRESET_MATKUL = [
+    "Algoritma & Pemrograman",
+    "Struktur Data",
+    "Pemrograman Berorientasi Objek",
+    "Pemrograman Web",
+    "Basis Data",
+    "Sistem Basis Data",
+    "Jaringan Komputer",
+    "Sistem Operasi",
+    "Rekayasa Perangkat Lunak",
+    "Kecerdasan Buatan",
+    "Pemrograman Mobile",
+    "Machine Learning",
+    "Keamanan Siber & Jaringan",
+    "Cloud Computing",
+    "Interaksi Manusia & Komputer",
+    "Grafika Komputer",
+    "Pemrograman Dasar",
+    "Sistem Informasi Manajemen",
+    "Data Mining",
+    "Internet of Things (IoT)",
+    "Pengolahan Citra Digital",
+    "Komputasi Awan"
+];
+
+// Helper: Bersihkan awalan peran asisten dari nama mata kuliah
+function cleanCourseName(name) {
+    if (!name || typeof name !== 'string') return '';
+    let clean = name.trim();
+    clean = clean.replace(/^(asisten\s*(?:[12]|satu|dua)?|asprak\s*(?:[12]|satu|dua)?|co-?asisten)\s+/i, '').trim();
+    clean = clean.replace(/\s+/g, ' ');
+    return clean;
+}
+
+// Helper: Validasi pintar agar nama hari, dosen, format waktu, atau metadata tidak menjadi rekomendasi MK
+function isValidCourseName(name) {
+    if (!name || typeof name !== 'string') return false;
+    const clean = name.trim();
+    if (clean.length < 2) return false;
+    const lower = clean.toLowerCase();
+
+    // Abaikan nama hari
+    const days = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu', 'hari'];
+    if (days.includes(lower)) return false;
+
+    // Abaikan format jam / waktu
+    if (/^\d{1,2}[:.]\d{2}/.test(clean) || /^(jam|waktu|pukul)\b/i.test(clean)) return false;
+
+    // Abaikan nama dosen dengan gelar akademik
+    if (/(?:,\s*(?:S\.Kom|M\.Kom|M\.T|S\.T|M\.Cs|MTA|M\.Si|M\.Eng|Dr\.|Ir\.|Prof\.)|^(?:Dr\.|Ir\.|Prof\.)\s+)/i.test(clean)) {
+        return false;
+    }
+
+    // Abaikan kata kunci header / metadata
+    const keywords = ['dosen', 'hari', 'jam', 'waktu', 'ruang', 'ruangan', 'lab', 'laboratorium', 'kelas', 'sks', 'total', 'keterangan', 'asisten', 'no', 'nomor', 'belum ditetapkan', 'mata kuliah unik a', 'dosen test'];
+    if (keywords.includes(lower)) return false;
+
+    return true;
+}
+
+let dynamicMatkulList = [...PRESET_MATKUL];
+
+// Ambil daftar mata kuliah dari API master jika tersedia dengan validasi pintar
+async function fetchMasterCourses() {
+    try {
+        const res = await fetch((window.API_ENDPOINT || '') + "/matakuliah");
+        if (res.ok) {
+            const json = await res.json();
+            if (json.status === true && Array.isArray(json.data)) {
+                json.data.forEach(mk => {
+                    const rawName = mk.namaMatakuliah || mk.nama_matakuliah;
+                    const cleanName = cleanCourseName(rawName);
+                    if (isValidCourseName(cleanName) && !dynamicMatkulList.includes(cleanName)) {
+                        dynamicMatkulList.push(cleanName);
+                    }
+                });
+            }
+        }
+    } catch (e) {}
+}
+fetchMasterCourses();
+
+function initMatkulTaggingSystem() {
+    const tagInput = document.getElementById("tagInputMatkul");
+    const container = document.getElementById("matkulTagContainer");
+    const suggestionsBox = document.getElementById("matkulSuggestions");
+
+    if (!tagInput || !container || !suggestionsBox) return;
+
+    // Klik container fokuskan ke input
+    container.addEventListener("click", function (e) {
+        if (e.target !== tagInput && !e.target.closest(".matkul-tag")) {
+            tagInput.focus();
+        }
+    });
+
+    function getAvailableCourses() {
+        const set = new Set();
+        dynamicMatkulList.forEach(item => {
+            const c = cleanCourseName(item);
+            if (isValidCourseName(c)) set.add(c);
+        });
+
+        if (Array.isArray(allAsistenData)) {
+            allAsistenData.forEach(item => {
+                if (item.bio) {
+                    try {
+                        const arr = typeof item.bio === 'string' ? JSON.parse(item.bio) : item.bio;
+                        if (Array.isArray(arr)) {
+                            arr.forEach(m => {
+                                const c = cleanCourseName(m);
+                                if (isValidCourseName(c)) set.add(c);
+                            });
+                        }
+                    } catch(e) {
+                        item.bio.split(',').forEach(m => {
+                            const c = cleanCourseName(m);
+                            if (isValidCourseName(c)) set.add(c);
+                        });
+                    }
+                }
+            });
+        }
+        return Array.from(set);
+    }
+
+    function renderSuggestions(query = "") {
+        const queryLower = query.trim().toLowerCase();
+        const existingTags = Array.from(container.querySelectorAll(".matkul-tag")).map(t => 
+            t.dataset.matkul ? t.dataset.matkul.toLowerCase() : t.textContent.trim().slice(0, -1).toLowerCase()
+        );
+
+        const available = getAvailableCourses();
+        const matches = available.filter(m => {
+            const mLower = m.toLowerCase();
+            return !existingTags.includes(mLower) && (queryLower === "" || mLower.includes(queryLower));
+        });
+
+        if (matches.length === 0) {
+            if (queryLower !== "") {
+                suggestionsBox.innerHTML = `
+                    <div class="suggestion-item px-4 py-2.5 text-xs text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 cursor-pointer flex items-center justify-between" data-matkul="${query.trim()}">
+                        <span><i class="fas fa-plus text-emerald-500 mr-1.5"></i> Tambahkan "<b>${query.trim()}</b>"</span>
+                        <kbd class="px-1.5 py-0.5 bg-gray-100 border border-gray-300 rounded font-semibold text-gray-600">Enter</kbd>
+                    </div>`;
+            } else {
+                suggestionsBox.innerHTML = `
+                    <div class="px-4 py-2.5 text-xs text-gray-400 italic">
+                        Ketik nama mata kuliah untuk melihat rekomendasi...
+                    </div>`;
+            }
+        } else {
+            suggestionsBox.innerHTML = matches.slice(0, 8).map(matkul => `
+                <div class="suggestion-item px-4 py-2 text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 cursor-pointer flex items-center justify-between transition-colors" data-matkul="${matkul}">
+                    <span class="flex items-center gap-2">
+                        <i class="fas fa-book-reader text-xs text-emerald-500"></i>
+                        <span>${matkul}</span>
+                    </span>
+                    <i class="fas fa-plus text-xs text-emerald-500 opacity-60"></i>
+                </div>
+            `).join("");
+        }
+
+        suggestionsBox.classList.remove("hidden");
+    }
+
+    tagInput.addEventListener("focus", function () {
+        renderSuggestions(this.value);
+    });
+
+    tagInput.addEventListener("input", function () {
+        renderSuggestions(this.value);
+    });
+
+    tagInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === ",") {
+            e.preventDefault();
+            const val = this.value.trim().replace(/,/g, "");
+            if (val) {
+                addMatkulTag(val);
+                this.value = "";
+                renderSuggestions("");
+            }
+        } else if (e.key === "Backspace" && this.value === "") {
+            const tags = container.querySelectorAll(".matkul-tag");
+            if (tags.length > 0) {
+                tags[tags.length - 1].remove();
+                updateMatkulInput();
+                renderSuggestions("");
+            }
+        } else if (e.key === "Escape") {
+            suggestionsBox.classList.add("hidden");
+        }
+    });
+
+    suggestionsBox.addEventListener("click", function (e) {
+        const item = e.target.closest(".suggestion-item");
+        if (item) {
+            const matkul = item.dataset.matkul;
+            if (matkul) {
+                addMatkulTag(matkul);
+                tagInput.value = "";
+                tagInput.focus();
+                renderSuggestions("");
+            }
+        }
+    });
+
+    document.addEventListener("click", function (e) {
+        if (!container.contains(e.target) && !suggestionsBox.contains(e.target)) {
+            suggestionsBox.classList.add("hidden");
+        }
+    });
+}
+
+function addMatkulTag(matkul) {
+    if (!matkul || !matkul.trim()) return;
+    const clean = matkul.trim();
+
+    const container = document.getElementById("matkulTagContainer");
+    if (!container) return;
+
+    const existing = Array.from(container.querySelectorAll(".matkul-tag")).map(t => 
+        t.dataset.matkul ? t.dataset.matkul.toLowerCase() : t.textContent.trim().slice(0, -1).toLowerCase()
+    );
+    if (existing.includes(clean.toLowerCase())) return;
+
+    const tagInput = container.querySelector("#tagInputMatkul");
+
+    const tag = document.createElement("span");
+    tag.className = "matkul-tag inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium border border-emerald-200 animate-in fade-in zoom-in duration-150";
+    tag.dataset.matkul = clean;
+    tag.innerHTML = `
+        <i class="fas fa-book-reader text-xs opacity-75"></i>
+        <span>${clean}</span>
+        <button type="button" onclick="this.parentElement.remove(); updateMatkulInput()" class="hover:text-emerald-900 font-bold ml-1 transition-colors">×</button>
+    `;
+
+    container.insertBefore(tag, tagInput);
+    updateMatkulInput();
+}
+
+function removeMatkulTag(matkul) {
+    const container = document.getElementById("matkulTagContainer");
+    if (!container) return;
+    const target = Array.from(container.querySelectorAll(".matkul-tag")).find(t => 
+        (t.dataset.matkul || '').toLowerCase() === matkul.toLowerCase()
+    );
+    if (target) {
+        target.remove();
+        updateMatkulInput();
+    }
+}
+
+function updateMatkulInput() {
+    const container = document.getElementById("matkulTagContainer");
+    if (!container) return;
+    const tags = container.querySelectorAll(".matkul-tag");
+    const list = [];
+    tags.forEach(tag => {
+        const val = tag.dataset.matkul || tag.querySelector("span")?.textContent?.trim();
+        if (val) list.push(val);
+    });
+    const inputBio = document.getElementById("inputBio");
+    if (inputBio) {
+        inputBio.value = JSON.stringify(list);
+    }
+}
+
 function openDetailModal(id) {
     const modal = document.getElementById("detailModal");
     if (!modal) return;
@@ -599,19 +912,74 @@ function openDetailModal(id) {
     const item = allAsistenData.find(a => a.idAsisten == id);
     if (!item) return;
 
-    document.getElementById("detailNama").innerText = item.nama || "-";
-    document.getElementById("detailEmail").innerText = item.email || "-";
-    document.getElementById("detailJurusan").innerText = item.jurusan || "-";
+    const mNama = document.getElementById("mNama");
+    const mFoto = document.getElementById("mFoto");
+    const mJurusan = document.getElementById("mJurusan");
+    const mEmail = document.getElementById("mEmail");
+    const mBadges = document.getElementById("mBadges");
+    const mSkills = document.getElementById("mSkills");
+    const mBio = document.getElementById("mBio");
 
-    let status = "Tidak Aktif";
-    if (item.isKoordinator == 1) {
-        status = "Koordinator";
-    } else if (item.statusAktif == "1" || item.statusAktif === "Asisten") {
-        status = "Asisten";
-    } else if (item.statusAktif === "CA") {
-        status = "Calon Asisten";
+    if (mNama) mNama.innerText = item.nama || "-";
+    if (mJurusan) mJurusan.innerText = item.jurusan || "-";
+    if (mEmail) mEmail.innerText = item.email || "-";
+
+    if (mBio) {
+        let matkulArr = [];
+        if (item.bio) {
+            try {
+                const parsed = typeof item.bio === 'string' ? JSON.parse(item.bio) : item.bio;
+                if (Array.isArray(parsed)) {
+                    matkulArr = parsed.map(s => cleanCourseName(s)).filter(isValidCourseName);
+                } else if (typeof item.bio === 'string' && item.bio.trim()) {
+                    matkulArr = item.bio.split(',').map(s => cleanCourseName(s)).filter(isValidCourseName);
+                }
+            } catch(e) {
+                matkulArr = item.bio.split(',').map(s => cleanCourseName(s)).filter(isValidCourseName);
+            }
+        }
+        if (matkulArr.length > 0) {
+            mBio.className = "flex flex-wrap gap-1.5 mt-1";
+            mBio.innerHTML = matkulArr.map(mk => `
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <i class="fas fa-book-reader text-[10px]"></i> ${mk}
+                </span>
+            `).join('');
+        } else {
+            mBio.className = "italic text-gray-400 text-xs";
+            mBio.innerText = "Belum ada mata kuliah yang dicantumkan.";
+        }
     }
-    document.getElementById("detailStatus").innerText = status;
+
+    if (mFoto) {
+        const fotoUrl = item.foto
+            ? (item.foto.startsWith("http") ? item.foto : UPLOADS_URL + "/" + item.foto)
+            : "https://placehold.co/100x100?text=Foto";
+        mFoto.src = fotoUrl;
+        mFoto.style.objectPosition = `${item.foto_pos_x || 50}% ${item.foto_pos_y || 50}%`;
+    }
+
+    if (mBadges) {
+        let badgeHtml = "";
+        if (item.isKoordinator == 1) {
+            badgeHtml += `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800"><i class="fas fa-crown mr-1"></i> Koordinator</span>`;
+        }
+        let st = item.statusAktif || "Asisten";
+        badgeHtml += `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">${st}</span>`;
+        mBadges.innerHTML = badgeHtml;
+    }
+
+    if (mSkills) {
+        let skills = [];
+        try {
+            skills = typeof item.skills === "string" ? JSON.parse(item.skills) : item.skills;
+        } catch (e) {}
+        if (Array.isArray(skills) && skills.length > 0) {
+            mSkills.innerHTML = skills.map(s => `<span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-100">${s}</span>`).join("");
+        } else {
+            mSkills.innerHTML = '<span class="text-xs text-gray-400 italic">Tidak ada keahlian</span>';
+        }
+    }
 
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden";
@@ -737,10 +1105,6 @@ function moveAsistenToAlumni(id) {
                     <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Divisi / Posisi Terakhir</label>
                     <input type="text" id="swal-divisi" class="swal2-input !m-0 !w-full" placeholder="Contoh: Koordinator Lab / Asisten" value="${item.isKoordinator == 1 ? 'Koordinator Lab' : 'Asisten'}">
                 </div>
-                <div class="mb-3">
-                    <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Kesan & Pesan</label>
-                    <textarea id="swal-kesan-pesan" class="swal2-textarea !m-0 !w-full !h-24" placeholder="Tuliskan pengalaman atau kesan pesan selama di lab...">${item.bio || ''}</textarea>
-                </div>
             </div>
         `,
         focusConfirm: false,
@@ -752,14 +1116,13 @@ function moveAsistenToAlumni(id) {
         preConfirm: () => {
             const angkatan = document.getElementById('swal-angkatan').value;
             const divisi = document.getElementById('swal-divisi').value;
-            const kesan_pesan = document.getElementById('swal-kesan-pesan').value;
 
             if (!angkatan) {
                 Swal.showValidationMessage('Tahun angkatan wajib diisi');
                 return false;
             }
 
-            return { angkatan, divisi, kesan_pesan };
+            return { angkatan, divisi };
         }
     }).then(async (result) => {
         if (result.isConfirmed) {
@@ -776,7 +1139,6 @@ function moveAsistenToAlumni(id) {
                 const formData = new FormData();
                 formData.append('angkatan', result.value.angkatan);
                 formData.append('divisi', result.value.divisi);
-                formData.append('kesan_pesan', result.value.kesan_pesan);
 
                 const response = await fetch(API_ENDPOINT + "/asisten/" + id + "/move-to-alumni", {
                     method: "POST",

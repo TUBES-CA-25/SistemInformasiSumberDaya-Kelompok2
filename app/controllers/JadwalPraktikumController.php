@@ -2,6 +2,7 @@
 
 // Pastikan Model dan Service dimuat dengan path absolut
 require_once ROOT_PROJECT . '/app/models/JadwalPraktikumModel.php';
+require_once ROOT_PROJECT . '/app/models/MatakuliahModel.php';
 require_once ROOT_PROJECT . '/app/services/JadwalPraktikumService.php';
 
 /**
@@ -105,8 +106,15 @@ class JadwalPraktikumController extends Controller {
         $input = $this->getJson() ?? $_POST;
         
         // Pemetaan field dari form ke kolom database
+        $prodi = !empty($input['prodi']) ? strtoupper(trim($input['prodi'])) : null;
+        if (empty($prodi) && !empty($input['idMatakuliah'])) {
+            $mk = (new MatakuliahModel())->getById($input['idMatakuliah'], 'idMatakuliah');
+            $prodi = $this->service->normalizeProdi('', $mk['kodeMatakuliah'] ?? '', $mk['namaMatakuliah'] ?? '');
+        }
+
         $data = [
             'idMatakuliah'   => $input['idMatakuliah'] ?? null,
+            'prodi'          => $prodi ?: 'TI',
             'idLaboratorium' => $input['idLaboratorium'] ?? null,
             'hari'           => $input['hari'] ?? null,
             'kelas'          => strtoupper($input['kelas'] ?? ''),
@@ -146,8 +154,15 @@ class JadwalPraktikumController extends Controller {
         $input = $this->getJson() ?? $_POST;
         
         // Pemetaan field dari form ke kolom database
+        $prodi = !empty($input['prodi']) ? strtoupper(trim($input['prodi'])) : null;
+        if (empty($prodi) && !empty($input['idMatakuliah'])) {
+            $mk = (new MatakuliahModel())->getById($input['idMatakuliah'], 'idMatakuliah');
+            $prodi = $this->service->normalizeProdi('', $mk['kodeMatakuliah'] ?? '', $mk['namaMatakuliah'] ?? '');
+        }
+
         $data = [
             'idMatakuliah'   => $input['idMatakuliah'] ?? null,
+            'prodi'          => $prodi ?: 'TI',
             'idLaboratorium' => $input['idLaboratorium'] ?? null,
             'hari'           => $input['hari'] ?? null,
             'kelas'          => strtoupper($input['kelas'] ?? ''),

@@ -207,18 +207,59 @@ document.addEventListener("DOMContentLoaded", function () {
                 modalSubIcon.className = d.sub_icon || 'ri-graduation-cap-line';
               }
 
-              // Email - Tampilkan teks email jika ada, tetapi tombol kirim email dibuat tidak berfungsi (disabled)
-              if (d.email && d.email !== "-") {
+              // Email - Buka langsung via Gmail di browser
+              if (d.email && d.email !== "-" && d.email.trim() !== "") {
                 modalEmail.textContent = d.email;
                 modalEmailBox.style.display = "flex";
+
+                if (modalMailBtn) {
+                  modalMailBtn.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(d.email)}`;
+                  modalMailBtn.target = "_blank";
+                  modalMailBtn.rel = "noopener noreferrer";
+                  modalMailBtn.style.display = "inline-flex";
+                }
+
+                if (modalMailDisabled) {
+                  modalMailDisabled.style.display = "none";
+                }
               } else {
                 modalEmailBox.style.display = "none";
+                if (modalMailBtn) {
+                  modalMailBtn.style.display = "none";
+                }
+                if (modalMailDisabled) {
+                  modalMailDisabled.style.display = "inline-flex";
+                }
               }
-              if (modalMailBtn) modalMailBtn.style.display = "none";
-              if (modalMailDisabled) modalMailDisabled.style.display = "inline-flex";
 
-              // Bio
-              modalBio.innerHTML = d.bio.replace(/\n/g, "<br>");
+              // Mata Kuliah yang Diajar / Pernah Diajar
+              const modalBioTitle = document.getElementById("modalBioTitle");
+              if (modalBioTitle) {
+                modalBioTitle.textContent = (type === "alumni") 
+                  ? "Mata Kuliah yang Pernah Diajar" 
+                  : "Mata Kuliah yang Diajar";
+              }
+
+              const modalMatkulContainer = document.getElementById("modalMatkulContainer");
+              if (d.matkul && Array.isArray(d.matkul) && d.matkul.length > 0) {
+                if (modalMatkulContainer) {
+                  modalMatkulContainer.innerHTML = "";
+                  d.matkul.forEach(mk => {
+                    const tag = document.createElement("span");
+                    tag.className = "skill-tag";
+                    tag.style.cssText = "background: #ecfdf5; color: #047857; border-color: #a7f3d0; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;";
+                    tag.innerHTML = `<i class="ri-book-open-line"></i><span></span>`;
+                    tag.querySelector("span").textContent = mk;
+                    modalMatkulContainer.appendChild(tag);
+                  });
+                  modalMatkulContainer.style.display = "flex";
+                }
+                modalBio.style.display = "none";
+              } else {
+                if (modalMatkulContainer) modalMatkulContainer.style.display = "none";
+                modalBio.style.display = "block";
+                modalBio.textContent = d.bio || "Belum ada mata kuliah yang dicantumkan.";
+              }
 
               // Skills
               modalSkillsContainer.innerHTML = "";
@@ -305,7 +346,8 @@ document.addEventListener("DOMContentLoaded", function () {
         card.style.setProperty("--spot-x", `${x}%`);
         card.style.setProperty("--spot-y", `${y}%`);
       },
-      { passive: true },
+      { passive: true }
     );
   }
+
 });

@@ -119,25 +119,19 @@ function populateLabFilter() {
   }
 }
 
-function matchesProdiFilter(targetProdi, targetMatkul, targetFrekuensi, filterVal) {
+function matchesProdiFilter(targetProdi, targetMatkul, targetFrekuensi, filterVal, targetKodeMk) {
   if (!filterVal || filterVal === "") return true;
   
   const val = filterVal.toLowerCase().trim();
   const prodi = (targetProdi || "").toLowerCase().trim();
   const freq = (targetFrekuensi || "").toLowerCase().trim();
+  const kode = (targetKodeMk || "").toLowerCase().trim();
 
-  if (val === "ti") {
-    return freq.startsWith("ti") || 
-           prodi === "ti" || 
-           prodi.includes("informatika") || 
-           prodi.includes("teknik informatika");
-  } 
-  
-  if (val === "si") {
-    return freq.startsWith("si") || 
-           prodi === "si" || 
-           prodi.includes("sistem informasi");
-  }
+  const isSI = prodi === "si" || prodi === "prodi si" || prodi.includes("sistem informasi") || freq.startsWith("si") || kode.startsWith("131") || kode.startsWith("si");
+  const isTI = !isSI;
+
+  if (val === "ti") return isTI;
+  if (val === "si") return isSI;
 
   return prodi.includes(val) || freq.includes(val);
 }
@@ -150,9 +144,17 @@ function renderJadwalDashboard() {
   if (!container || !headerDay || !dropdown) return;
 
   const selectedDay = dropdown.value;
-  headerDay.innerText = "Jadwal Hari " + selectedDay;
+  const isAllDays = !selectedDay || selectedDay === "" || selectedDay === "Semua";
 
-  const filteredData = jadwalData.filter((item) => item.hari === selectedDay);
+  if (isAllDays) {
+    headerDay.innerText = "Jadwal Semua Hari";
+  } else {
+    headerDay.innerText = "Jadwal Hari " + selectedDay;
+  }
+
+  const filteredData = isAllDays
+    ? (jadwalData || [])
+    : (jadwalData || []).filter((item) => item.hari === selectedDay);
 
   const labSelect = document.getElementById("lab-select");
   const prodiSelect = document.getElementById("prodi-select");
@@ -163,7 +165,7 @@ function renderJadwalDashboard() {
     finalFiltered = finalFiltered.filter(item => item.namaLab === labSelect.value);
   }
   if (prodiSelect && prodiSelect.value) {
-    finalFiltered = finalFiltered.filter(item => matchesProdiFilter(item.prodi, item.namaMatakuliah, item.frekuensi, prodiSelect.value));
+    finalFiltered = finalFiltered.filter(item => matchesProdiFilter(item.prodi, item.namaMatakuliah, item.frekuensi, prodiSelect.value, item.kodeMatakuliah));
   }
   if (searchInput && searchInput.value.trim() !== "") {
     const kw = searchInput.value.toLowerCase().trim();
@@ -178,7 +180,9 @@ function renderJadwalDashboard() {
         (item.kelas || "") + " " +
         (item.kodeMatakuliah || "") + " " +
         (item.namaLab || "") + " " +
-        (item.prodi || "")
+        (item.prodi || "") + " " +
+        "prodi " + (item.prodi || "") + " " +
+        (item.hari || "")
       ).toLowerCase();
       return fullText.includes(kw);
     });
@@ -186,7 +190,6 @@ function renderJadwalDashboard() {
 
   const now = new Date();
   const realToday = hariIndo[now.getDay()];
-  const isToday = selectedDay === realToday;
   const jamSekarang =
     now.getHours().toString().padStart(2, "0") +
     ":" +
@@ -208,11 +211,15 @@ function renderJadwalDashboard() {
     } else if (labSelect && labSelect.value !== "") {
       emptyIcon = "fas fa-desktop";
       emptyTitle = "Ruangan Kosong";
-      emptyMessage = `Tidak ada jadwal praktikum di ${labSelect.value} untuk hari ${selectedDay}.`;
+      emptyMessage = isAllDays
+        ? `Tidak ada jadwal praktikum di ${labSelect.value}.`
+        : `Tidak ada jadwal praktikum di ${labSelect.value} untuk hari ${selectedDay}.`;
     } else if (filteredData.length === 0) {
       emptyIcon = "far fa-calendar-check";
-      emptyTitle = `Tidak Ada Jadwal Hari ${selectedDay}`;
-      emptyMessage = `Tidak ada kegiatan praktikum yang berlangsung pada hari ${selectedDay}. Silakan pilih hari lainnya pada menu filter di atas.`;
+      emptyTitle = isAllDays ? "Tidak Ada Jadwal Praktikum" : `Tidak Ada Jadwal Hari ${selectedDay}`;
+      emptyMessage = isAllDays
+        ? `Tidak ada kegiatan praktikum yang terdaftar.`
+        : `Tidak ada kegiatan praktikum yang berlangsung pada hari ${selectedDay}. Silakan pilih hari lainnya pada menu filter di atas.`;
     }
 
     container.innerHTML = `
@@ -227,9 +234,18 @@ function renderJadwalDashboard() {
   const labs = [...new Set(finalFiltered.map((item) => item.namaLab))].sort();
   let finalHtml = "";
 
+  const dayOrderMap = { "Senin": 1, "Selasa": 2, "Rabu": 3, "Kamis": 4, "Jumat": 5, "Sabtu": 6, "Minggu": 7 };
+
   labs.forEach((lab) => {
     const jadwalLab = finalFiltered.filter((item) => item.namaLab === lab);
-    jadwalLab.sort((a, b) => a.waktuMulai.localeCompare(b.waktuMulai));
+    jadwalLab.sort((a, b) => {
+      if (isAllDays) {
+        const orderA = dayOrderMap[a.hari] || 99;
+        const orderB = dayOrderMap[b.hari] || 99;
+        if (orderA !== orderB) return orderA - orderB;
+      }
+      return (a.waktuMulai || "").localeCompare(b.waktuMulai || "");
+    });
 
     const hasAnyFreq = jadwalLab.some(
       (item) =>
@@ -250,24 +266,26 @@ function renderJadwalDashboard() {
             <table class="table-schedule">
                 <thead>
                     <tr>
-                        <th class="text-nowrap">Waktu</th>
-                        <th>Mata Kuliah</th>
-                        <th class="text-nowrap">${thKlsFreq}</th>
-                        <th>Dosen</th>
-                        <th>Asisten</th>
-                        <th class="text-center text-nowrap">Status</th>
+                        <th style="width: 15%;" class="text-nowrap">${isAllDays ? "Hari & Waktu" : "Waktu"}</th>
+                        <th style="width: 22%;">Mata Kuliah</th>
+                        <th style="width: 8%; text-align: center;" class="text-nowrap">Prodi</th>
+                        <th style="width: 9%;" class="text-nowrap">${thKlsFreq}</th>
+                        <th style="width: 22%;">Dosen</th>
+                        <th style="width: 14%;">Asisten</th>
+                        <th style="width: 10%; text-align: center;" class="text-nowrap">Status</th>
                     </tr>
                 </thead>
                 <tbody>`;
 
     jadwalLab.forEach((item) => {
-      const start = item.waktuMulai.substring(0, 5);
-      const end = item.waktuSelesai.substring(0, 5);
+      const start = item.waktuMulai ? item.waktuMulai.substring(0, 5) : "--:--";
+      const end = item.waktuSelesai ? item.waktuSelesai.substring(0, 5) : "--:--";
 
       let statusBadge = "status-label badge-scheduled";
       let statusText = "TERJADWAL";
 
-      if (isToday) {
+      const rowIsToday = (item.hari === realToday);
+      if (rowIsToday) {
         if (jamSekarang >= start && jamSekarang < end) {
           statusText = "BERLANGSUNG";
           statusBadge = "status-label badge-ongoing";
@@ -290,36 +308,49 @@ function renderJadwalDashboard() {
 
       const asistenDisplay =
         (a1Name || a2Name)
-          ? `<div class="asisten-cell">
+          ? `<div class="asisten-list">
                ${a1Name ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; flex-shrink:0;"></i> <span>${a1Name}</span></div>` : ""}
                ${a2Name ? `<div class="asisten-name"><i class="fas fa-user-check" style="color:#2563eb; font-size:0.8rem; flex-shrink:0;"></i> <span>${a2Name}</span></div>` : ""}
              </div>`
           : '<span style="color:#cbd5e1">-</span>';
 
-      let prodiText = item.prodi;
-      if (!prodiText && item.frekuensi) {
+      let rawProdi = (item.prodi || "").toUpperCase().trim();
+      if (!rawProdi && item.frekuensi) {
         const fUpper = String(item.frekuensi).toUpperCase().trim();
-        if (fUpper.startsWith("TI")) prodiText = "TI";
-        else if (fUpper.startsWith("SI")) prodiText = "SI";
+        if (fUpper.startsWith("TI")) rawProdi = "TI";
+        else if (fUpper.startsWith("SI")) rawProdi = "SI";
       }
-      const prodiDisplay = prodiText ? `<span class="badge-prodi">${prodiText}</span>` : "";
+      if (!rawProdi && item.kodeMatakuliah) {
+        const kUpper = String(item.kodeMatakuliah).toUpperCase().trim();
+        if (kUpper.startsWith("131") || kUpper.startsWith("SI")) rawProdi = "SI";
+        else if (kUpper.startsWith("130") || kUpper.startsWith("TI")) rawProdi = "TI";
+      }
+      const isSI = rawProdi === "SI" || rawProdi.includes("SISTEM INFORMASI") || rawProdi.includes("SI");
+      const prodiCode = isSI ? "SI" : "TI";
+      const prodiBadgeClass = isSI ? "badge-prodi-si" : "badge-prodi-ti";
+
+      const timeDisplay = isAllDays
+        ? `<div style="display:flex; flex-direction:column;"><span style="font-size:0.72rem; font-weight:800; color:#2563eb; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">${item.hari || "-"}</span><span class="time-range">${start} - ${end}</span></div>`
+        : `<span class="time-range">${start} - ${end}</span>`;
 
       finalHtml += `
             <tr>
-                <td class="text-nowrap time-cell" style="font-family:'JetBrains Mono', monospace; font-size:0.88rem; font-weight:700;">
-                    <span class="time-range">${start} - ${end}</span>
+                <td style="width: 15%;" class="text-nowrap time-cell" style="font-family:'JetBrains Mono', monospace; font-size:0.88rem; font-weight:700;">
+                    ${timeDisplay}
                     <span class="mobile-status-badge ${statusBadge}">${statusText}</span>
                 </td>
-                <td>
+                <td style="width: 23%;" class="matkul-cell">
                     <span class="schedule-matkul">
                         ${item.namaMatakuliah}
-                        ${prodiDisplay}
                     </span>
                 </td>
-                <td class="text-nowrap">${kelasFreq}</td>
-                <td><div class="dosen-cell"><i class="fas fa-chalkboard-teacher"></i><span>${item.dosen || "-"}</span></div></td>
-                <td>${asistenDisplay}</td>
-                <td class="desktop-status-cell" style="text-align:center;"><span class="${statusBadge}">${statusText}</span></td>
+                <td style="width: 8%; text-align: center;" class="text-center text-nowrap prodi-cell">
+                    <span class="badge-prodi ${prodiBadgeClass}">${prodiCode}</span>
+                </td>
+                <td style="width: 9%;" class="text-nowrap kelas-cell">${kelasFreq}</td>
+                <td style="width: 22%;" class="dosen-cell"><div class="dosen-info-box"><i class="fas fa-chalkboard-teacher" style="color:#2563eb; font-size:0.9rem; flex-shrink:0;"></i><span>${item.dosen || "-"}</span></div></td>
+                <td style="width: 14%;" class="asisten-cell">${asistenDisplay}</td>
+                <td style="width: 10%; text-align: center;" class="desktop-status-cell"><span class="${statusBadge}">${statusText}</span></td>
             </tr>`;
     });
     finalHtml += `</tbody></table></div></div>`;
@@ -629,11 +660,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initJadwalPage();
     setInterval(fetchJadwalData, 60000);
     setInterval(() => {
-      const dropdown = document.getElementById("day-select");
-      const now = new Date();
-      if (dropdown && dropdown.value === hariIndo[now.getDay()]) {
-        renderJadwalDashboard();
-      }
+      renderJadwalDashboard();
     }, 60000);
   }
 

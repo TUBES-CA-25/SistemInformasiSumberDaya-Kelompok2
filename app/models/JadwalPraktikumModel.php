@@ -24,6 +24,16 @@ class JadwalPraktikumModel extends Model {
      */
     public function getAll(): array {
         $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
+                         COALESCE(
+                             NULLIF(TRIM(j.prodi), ''),
+                             CASE 
+                                 WHEN m.kodeMatakuliah LIKE '131%' OR m.kodeMatakuliah LIKE 'SI%' THEN 'SI'
+                                 WHEN m.kodeMatakuliah LIKE '130%' OR m.kodeMatakuliah LIKE 'TI%' THEN 'TI'
+                                 WHEN j.frekuensi LIKE 'SI%' OR j.kelas LIKE 'SI%' THEN 'SI'
+                                 WHEN j.frekuensi LIKE 'TI%' OR j.kelas LIKE 'TI%' THEN 'TI'
+                                 ELSE 'TI'
+                             END
+                         ) as prodi,
                          COALESCE(d.nama, '') as dosen, d.nama as namaDosen, d.nip as nipDosen,
                          COALESCE(a1.nama, al1.nama, IF(j.asisten1 REGEXP '^[0-9]+$', '-', j.asisten1)) as namaAsisten1, 
                          COALESCE(a2.nama, al2.nama, IF(j.asisten2 REGEXP '^[0-9]+$', '-', j.asisten2)) as namaAsisten2,
@@ -115,6 +125,16 @@ class JadwalPraktikumModel extends Model {
      */
     public function getById($id, $idColumn = 'idJadwal'): ?array {
         $query = "SELECT j.*, m.namaMatakuliah, m.kodeMatakuliah, l.nama as namaLab,
+                         COALESCE(
+                             NULLIF(TRIM(j.prodi), ''),
+                             CASE 
+                                 WHEN m.kodeMatakuliah LIKE '131%' OR m.kodeMatakuliah LIKE 'SI%' THEN 'SI'
+                                 WHEN m.kodeMatakuliah LIKE '130%' OR m.kodeMatakuliah LIKE 'TI%' THEN 'TI'
+                                 WHEN j.frekuensi LIKE 'SI%' OR j.kelas LIKE 'SI%' THEN 'SI'
+                                 WHEN j.frekuensi LIKE 'TI%' OR j.kelas LIKE 'TI%' THEN 'TI'
+                                 ELSE 'TI'
+                             END
+                         ) as prodi,
                          COALESCE(d.nama, '') as dosen, d.nama as namaDosen, d.nip as nipDosen,
                          COALESCE(a1.nama, j.asisten1) as namaAsisten1, 
                          COALESCE(a2.nama, j.asisten2) as namaAsisten2,

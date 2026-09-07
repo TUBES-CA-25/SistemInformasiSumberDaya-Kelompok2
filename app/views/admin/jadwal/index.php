@@ -94,12 +94,12 @@
                     </th>
                     <th class="px-6 py-4 font-semibold text-center w-12">No</th>
                     <th class="px-6 py-4 font-semibold">Mata Kuliah</th>
+                    <th class="px-6 py-4 font-semibold text-center w-28">Prodi</th>
                     <th class="px-6 py-4 font-semibold">Laboratorium</th>
                     <th class="px-6 py-4 font-semibold min-w-[160px]">Hari & Waktu</th>
                     <th class="px-6 py-4 font-semibold min-w-[200px]">Asisten</th>
                     <th class="px-6 py-4 font-semibold text-center w-24">Kelas</th>
                     <th class="px-6 py-4 font-semibold text-center w-32">Status</th>
-                    <th class="px-6 py-4 font-semibold text-center w-28">Aksi</th>
                 </tr>
             </thead>
             <tbody id="tableBody" class="divide-y divide-gray-200 text-gray-700 text-sm">
@@ -148,7 +148,14 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Prodi <span class="text-red-500">*</span></label>
+                            <select id="inputProdi" name="prodi" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white font-semibold">
+                                <option value="TI">TI</option>
+                                <option value="SI">SI</option>
+                            </select>
+                        </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Hari <span class="text-red-500">*</span></label>
                             <select id="inputHari" name="hari" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
