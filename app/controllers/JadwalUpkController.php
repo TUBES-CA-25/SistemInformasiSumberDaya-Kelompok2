@@ -230,19 +230,22 @@ class JadwalUpkController extends Controller
             $extension = strtolower(pathinfo($fileKey['name'], PATHINFO_EXTENSION));
             $isSuccess = false;
 
-            // 2. Delegasi Pemrosesan Berdasarkan Ekstensi
+            // 2. Delegasi Pemrosesan Berdasarkan Ekstensi dengan Smart Parser
+            $dataRows = [];
             if ($extension === 'csv') {
-                $isSuccess = $this->service->importCSV($fileKey['tmp_name']);
+                $dataRows  = $this->service->parseCSV($fileKey['tmp_name']);
+                $isSuccess = $this->model->importData($dataRows);
             } elseif (in_array($extension, ['xlsx', 'xls'])) {
                 $dataRows  = $this->service->parseExcel($fileKey['tmp_name']);
                 $isSuccess = $this->model->importData($dataRows);
             } else {
-                throw new Exception("Format file .$extension tidak didukung. Gunakan Excel atau CSV.");
+                throw new Exception("Format file .$extension tidak didukung. Gunakan Excel (.xlsx, .xls) atau CSV (.csv).");
             }
 
             // 3. Memberikan Respon Berdasarkan Hasil Akhir
             if ($isSuccess) {
-                $this->success(null, "Impor data berhasil diproses.");
+                $count = count($dataRows);
+                $this->success(['count' => $count], "Impor data berhasil! Sebanyak $count jadwal UPK berhasil diproses.");
             } else {
                 throw new Exception("Gagal menyimpan data ke database.");
             }

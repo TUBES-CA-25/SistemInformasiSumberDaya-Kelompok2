@@ -373,7 +373,7 @@ function initUpkPage() {
     const bulan = namaBulan[now.getMonth()];
     const tahun = now.getFullYear();
 
-    upkHeader.innerText = `Jadwal ${hari}, ${tanggal} ${bulan} ${tahun}`;
+    upkHeader.innerText = `${hari}, ${tanggal} ${bulan} ${tahun}`;
   }
 
   // Jalankan segera
