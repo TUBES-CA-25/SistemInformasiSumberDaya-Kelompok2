@@ -156,7 +156,7 @@ class ModulModel {
         if ($ext !== 'pdf') return false; // Validasi ekstensi khusus PDF
         
         $newName = "modul_" . uniqid() . '.' . $ext;
-        $targetDir = $_SERVER['DOCUMENT_ROOT'] . '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/modul/';
+        $targetDir = ROOT_PROJECT . '/public/assets/uploads/modul/';
         
         if (!file_exists($targetDir)) {
             mkdir($targetDir, 0777, true);
@@ -174,7 +174,7 @@ class ModulModel {
      * @return void
      */
     private function hapusFileFisik(string $fileName): void {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/SistemInformasiSumberDaya-Kelompok2/public/assets/uploads/modul/' . $fileName;
+        $path = ROOT_PROJECT . '/public/assets/uploads/modul/' . $fileName;
         if (file_exists($path) && !empty($fileName)) {
             unlink($path);
         }

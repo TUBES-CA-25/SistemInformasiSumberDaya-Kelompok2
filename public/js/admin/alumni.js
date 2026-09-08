@@ -294,7 +294,7 @@ function openFormModal(id = null, event = null) {
   }
 }
 
-document.getElementById("alumniForm").addEventListener("submit", function (e) {
+document.getElementById("alumniForm").addEventListener("submit", async function (e) {
   e.preventDefault();
   const btn = document.getElementById("btnSave");
   const formMsg = document.getElementById("formMessage");
@@ -330,6 +330,21 @@ document.getElementById("alumniForm").addEventListener("submit", function (e) {
 
   const formData = new FormData(this);
   const id = document.getElementById("inputId").value;
+
+  // Process photo cropping if zoom/position changed or new photo selected
+  if (typeof PhotoPositioner !== 'undefined') {
+    const isFileSelected = fileInput && fileInput.files && fileInput.files.length > 0;
+    const isDirty = PhotoPositioner.isDirty("fotoPositionBox");
+
+    if (isFileSelected || isDirty) {
+      const croppedBlob = await PhotoPositioner.getCroppedBlob("fotoPositionBox");
+      if (croppedBlob) {
+        formData.set("foto", croppedBlob, "foto_alumni.jpg");
+        formData.set("foto_pos_x", "50");
+        formData.set("foto_pos_y", "50");
+      }
+    }
+  }
 
   // Use PUT for update, POST for create, with _method override for FormData
   const method = id ? "PUT" : "POST";

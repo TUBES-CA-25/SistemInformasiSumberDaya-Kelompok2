@@ -200,6 +200,22 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             formData.set("bio", JSON.stringify(matkulList));
 
+            // Process photo cropping if zoom/position changed or new photo selected
+            if (typeof PhotoPositioner !== 'undefined') {
+                const inputFoto = document.getElementById("inputFoto");
+                const isFileSelected = inputFoto && inputFoto.files && inputFoto.files.length > 0;
+                const isDirty = PhotoPositioner.isDirty("fotoPositionBox");
+
+                if (isFileSelected || isDirty) {
+                    const croppedBlob = await PhotoPositioner.getCroppedBlob("fotoPositionBox");
+                    if (croppedBlob) {
+                        formData.set("foto", croppedBlob, "foto_asisten.jpg");
+                        formData.set("foto_pos_x", "50");
+                        formData.set("foto_pos_y", "50");
+                    }
+                }
+            }
+
             const btnSave = document.getElementById("btnSave");
             const originalText = btnSave.innerHTML;
             btnSave.disabled = true;

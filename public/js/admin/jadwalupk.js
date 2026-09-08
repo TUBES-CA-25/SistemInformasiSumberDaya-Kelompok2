@@ -466,14 +466,31 @@ window.openFormModal = function (id = null, event = null) {
     const data = allJadwalData.find((i) => i.id == id);
     if (data) {
       document.getElementById("inputId").value = data.id;
-      document.getElementById("inputProdi").value = data.prodi;
-      document.getElementById("inputMK").value = data.mata_kuliah;
+      
+      // Normalisasi prodi untuk konsistensi nilai select (TI / SI)
+      const prodiVal = (data.prodi === 'TI' || data.prodi === 'Teknik Informatika') ? 'TI' : ((data.prodi === 'SI' || data.prodi === 'Sistem Informasi') ? 'SI' : (data.prodi || 'TI'));
+      document.getElementById("inputProdi").value = prodiVal;
+
+      document.getElementById("inputMK").value = data.mata_kuliah || "";
       document.getElementById("inputDosen").value = data.idDosen || "";
-      document.getElementById("inputTanggal").value = data.tanggal;
-      document.getElementById("inputJam").value = data.jam;
-      document.getElementById("inputRuangan").value = data.ruangan;
-      document.getElementById("inputKelas").value = data.kelas;
-      document.getElementById("inputFreq").value = data.frekuensi;
+      document.getElementById("inputTanggal").value = data.tanggal || "";
+      document.getElementById("inputJam").value = data.jam || "";
+      
+      // Penanganan opsi select ruangan jika tidak ada di dropdown bawaan
+      const ruanganSelect = document.getElementById("inputRuangan");
+      if (ruanganSelect) {
+        let exists = Array.from(ruanganSelect.options).some(opt => opt.value === data.ruangan);
+        if (!exists && data.ruangan) {
+          const opt = document.createElement("option");
+          opt.value = data.ruangan;
+          opt.textContent = data.ruangan;
+          ruanganSelect.appendChild(opt);
+        }
+        ruanganSelect.value = data.ruangan || "";
+      }
+
+      document.getElementById("inputKelas").value = data.kelas || "";
+      document.getElementById("inputFreq").value = data.frekuensi || "";
     }
   } else {
     title.innerHTML = '<i class="fas fa-plus text-blue-600 mr-2"></i> Tambah Jadwal Baru';

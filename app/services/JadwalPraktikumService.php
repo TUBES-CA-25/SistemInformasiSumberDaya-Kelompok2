@@ -168,15 +168,9 @@ class JadwalPraktikumService {
             $asisten2 = $getVal('asisten2');
             if (empty($asisten1) && empty($asisten2) && isset($colMap['asisten_single'])) {
                 $single = $getVal('asisten_single');
-                $parts = preg_split('/\s*(?:,|\/|&|\bdan\b)\s*/i', $single);
-                $asisten1 = trim($parts[0] ?? '');
-                $asisten2 = trim($parts[1] ?? '');
+                [$asisten1, $asisten2] = $this->splitAsistenNames($single);
             } elseif (!empty($asisten1) && empty($asisten2)) {
-                $parts = preg_split('/\s*(?:,|\/|&|\bdan\b)\s*/i', $asisten1);
-                if (count($parts) > 1) {
-                    $asisten1 = trim($parts[0]);
-                    $asisten2 = trim($parts[1]);
-                }
+                [$asisten1, $asisten2] = $this->splitAsistenNames($asisten1);
             }
 
             // Resolve Foreign Keys & Prodi
@@ -668,12 +662,41 @@ class JadwalPraktikumService {
     private $asistenCache = null;
 
     /**
-     * Smart Search & Resolver ID Asisten berdasarkan nama.
-     * Mengabaikan karakter tak terlihat (zero-width space), membersihkan gelar akademik,
-     * serta mencocokkan secara tepat ke master asisten.
-     * Jika asisten belum terdaftar di master, otomatis didaftarkan agar tidak bernilai 0/hilang.
+     * Memisahkan dua nama asisten dengan cerdas tanpa memecah gelar akademik (seperti S.Kom, S.T, M.T, dll).
      */
-    private function findOrCreateAsisten($name) {
+    private function splitAsistenNames($input) {
+        if (empty($input)) return ['', ''];
+        $str = trim(preg_replace('/[\x{200B}-\x{200D}\x{2060}\x{FEFF}\x{00A0}]/u', '', (string)$input));
+        if (empty($str)) return ['', ''];
+
+        // 1. Coba pisahkan berdasarkan /, &, 'dan', 'and', ;, atau baris baru
+        $parts = preg_split('/\s*(?:\/|&|\bdan\b|\band\b|;|\r?\n)\s*/i', $str);
+        if (count($parts) > 1) {
+            return [trim($parts[0]), trim($parts[1])];
+        }
+
+        // 2. Jika ada koma (,), periksa apakah teks setelah koma adalah Gelar Akademik
+        if (str_contains($str, ',')) {
+            // Jika koma diikuti oleh gelar akademik umum (S.Kom, S.T, M.T, M.Kom, S.Pd, S.Si, B.Sc, M.Sc, Ph.D, dll)
+            if (preg_match('/,\s*(?:S\.|M\.|B\.|Ph\.|MTA|Dr\.|Ir\.|S\.Kom|M\.Kom|S\.T|M\.T|S\.Pd|M\.Pd|S\.Si|M\.Si)/i', $str)) {
+                // Terdapat gelar akademik -> Ini 1 orang asisten/alumni, JANGAN dipisah berdasarkan koma!
+                return [$str, ''];
+            }
+            
+            // Jika bukan gelar, pisahkan 2 nama berdasarkan koma
+            $commaParts = explode(',', $str, 2);
+            return [trim($commaParts[0]), trim($commaParts[1])];
+        }
+
+        return [$str, ''];
+    }
+
+    /**
+     * Smart Search & Resolver ID Asisten berdasarkan nama.
+     * 1. Mencari HANYA di tabel Master Asisten.
+     * 2. Jika tidak ditemukan di master asisten, mengembalikan nama teks tanpa mencari di alumni & tanpa membuat record asisten baru otomatis.
+     */
+    private function findAsistenIdByName($name) {
         if (empty($name)) return null;
         if (is_numeric($name)) return (int)$name;
 
@@ -683,7 +706,7 @@ class JadwalPraktikumService {
         if (empty($clean) || $clean === '-' || strtolower($clean) === 'kosong') return null;
 
         // 2. Hilangkan gelar untuk pencocokan jika ada (misal ", S.Kom")
-        $baseName = trim(preg_replace('/,\s*(S\.Kom|M\.Kom|M\.T\.|S\.T\.|M\.Cs\.|B\.Sc\.|M\.Sc\.|MTA\.|S\.Pd\.|M\.Pd\.).*$/i', '', $clean));
+        $baseName = trim(preg_replace('/,\s*(S\.Kom|M\.Kom|M\.T\.|S\.T\.|M\.Cs\.|B\.Sc\.|M\.Sc\.|MTA\.|S\.Pd\.|M\.Pd\.|S\.Si\.|M\.Si\.).*$/i', '', $clean));
 
         $db = $this->model->db;
 
@@ -705,21 +728,21 @@ class JadwalPraktikumService {
         $normInput = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $clean));
         $normBase  = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $baseName));
 
-        // a. Exact / Normalized Match
+        // a. Exact / Normalized Match di Tabel Asisten
         foreach ($this->asistenCache as $a) {
             if ($a['norm'] === $normInput || $a['norm'] === $normBase) {
                 return $a['id'];
             }
         }
 
-        // b. Containment Match (panjang >= 6)
+        // b. Containment Match di Tabel Asisten (panjang >= 6)
         foreach ($this->asistenCache as $a) {
             if (strlen($normBase) >= 6 && (str_contains($a['norm'], $normBase) || str_contains($normBase, $a['norm']))) {
                 return $a['id'];
             }
         }
 
-        // c. Fuzzy similarity (> 80%)
+        // c. Fuzzy similarity (> 80%) di Tabel Asisten
         $bestId = null;
         $bestScore = 0;
         foreach ($this->asistenCache as $a) {
@@ -731,23 +754,9 @@ class JadwalPraktikumService {
         }
         if ($bestId) return $bestId;
 
-        // d. Buat asisten baru jika belum ada sama sekali
-        $nameToInsert = !empty($baseName) ? $baseName : $clean;
-        $escaped = $db->real_escape_string($nameToInsert);
-        $db->query("INSERT INTO asisten (nama, statusAktif) VALUES ('$escaped', 'Asisten')");
-        $newId = (int)$db->insert_id;
-
-        $this->asistenCache[] = [
-            'id'   => $newId,
-            'nama' => $nameToInsert,
-            'norm' => strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $nameToInsert))
-        ];
-
-        return $newId;
-    }
-
-    private function findAsistenIdByName($name) {
-        return $this->findOrCreateAsisten($name);
+        // Jika tidak ditemukan di tabel asisten:
+        // JANGAN cari di alumni & JANGAN buat asisten baru secara otomatis! Simpan sebagai nama teks.
+        return !empty($baseName) ? $baseName : $clean;
     }
 
     /**

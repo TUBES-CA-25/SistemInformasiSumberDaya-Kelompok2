@@ -10,15 +10,6 @@
         </div>
         
         <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-50/70 border border-blue-100 text-xs text-blue-800">
-                <i class="fas fa-paper-plane text-blue-600"></i>
-                <span class="font-medium">Penerima Pesan:</span>
-                <span id="activeRecipientEmail" class="font-bold text-blue-700 font-mono"><?= htmlspecialchars($recipient_email ?? 'Memuat...') ?></span>
-                <span id="activeRecipientSource" class="text-[10px] text-gray-500 font-normal">
-                    (<?= ($email_source ?? 'kontak') === 'kontak' ? 'Otomatis dari Kontak' : 'Dari .env' ?>)
-                </span>
-            </div>
-
             <button id="btnTambahKontak" onclick="openKontakModal()" 
                class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-5 py-2.5 rounded-xl shadow-md shadow-blue-600/20 transition-all duration-200 flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm transform hover:-translate-y-0.5">
                 <i class="fas fa-plus"></i> Tambah Saluran Kontak

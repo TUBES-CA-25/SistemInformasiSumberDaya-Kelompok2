@@ -343,11 +343,10 @@ $hariIniStr = ($hariIndo[date('l', $now)] ?? date('l', $now)) . ', ' . date('d',
                             <table class="table-schedule">
                                 <thead>
                                     <tr>
-                                        <th style="min-width: 220px;">Waktu & Tanggal</th>
-                                        <th>Mata Kuliah</th>
-                                        <th><?= $hasAnyFreq ? 'Kelas / Freq' : 'Kelas' ?></th>
-                                        <th>Dosen Pengampu</th>
-                                        <th class="text-center">Status</th>
+                                        <th style="width: 24%; min-width: 200px;">Waktu & Tanggal</th>
+                                        <th style="width: 38%;">Mata Kuliah</th>
+                                        <th style="width: 28%;">Dosen Pengampu</th>
+                                        <th style="width: 10%; text-align: center;" class="text-nowrap">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -371,6 +370,28 @@ $hariIniStr = ($hariIndo[date('l', $now)] ?? date('l', $now)) . ', ' . date('d',
                                             $statusText = 'SELESAI';
                                             $statusClass = 'badge-finished';
                                         }
+
+                                        // Extract TI / SI for prodi badge
+                                        $rawProdi = strtoupper(trim($item['prodi'] ?? ''));
+                                        if (empty($rawProdi) && !empty($item['frekuensi'])) {
+                                            $fUpper = strtoupper(trim($item['frekuensi']));
+                                            if (strpos($fUpper, 'TI') === 0) $rawProdi = 'TI';
+                                            elseif (strpos($fUpper, 'SI') === 0) $rawProdi = 'SI';
+                                        }
+                                        if (empty($rawProdi) && !empty($item['kode_matakuliah'] ?? '')) {
+                                            $kUpper = strtoupper(trim($item['kode_matakuliah']));
+                                            if (strpos($kUpper, '131') === 0 || strpos($kUpper, 'SI') === 0) $rawProdi = 'SI';
+                                            elseif (strpos($kUpper, '130') === 0 || strpos($kUpper, 'TI') === 0) $rawProdi = 'TI';
+                                        }
+                                        $isSI = ($rawProdi === 'SI' || strpos($rawProdi, 'SISTEM INFORMASI') !== false);
+                                        $prodiCode = $isSI ? 'SI' : 'TI';
+                                        $prodiBadgeClass = $isSI ? 'badge-prodi-si' : 'badge-prodi-ti';
+
+                                        $hasFreq = !empty($item['frekuensi']) && trim($item['frekuensi']) !== '-' && trim($item['frekuensi']) !== '0';
+                                        $kelasVal = !empty($item['kelas']) ? $item['kelas'] : '-';
+                                        $kelasFreqStr = $hasFreq 
+                                            ? '<span class="schedule-kelas">Kelas ' . htmlspecialchars($kelasVal) . '</span> <span class="schedule-freq">/ ' . htmlspecialchars($item['frekuensi']) . '</span>'
+                                            : '<span class="schedule-kelas">Kelas ' . htmlspecialchars($kelasVal) . '</span>';
                                     ?>
                                     <tr data-ruangan="<?= htmlspecialchars($ruangan) ?>" data-matkul="<?= htmlspecialchars($item['mata_kuliah']) ?>" data-dosen="<?= htmlspecialchars($item['dosen']) ?>" data-prodi="<?= htmlspecialchars($item['prodi']) ?>" data-frekuensi="<?= htmlspecialchars($item['frekuensi']) ?>" data-kelas="<?= htmlspecialchars($item['kelas']) ?>">
                                         <td class="time-cell" style="vertical-align: middle;">
@@ -394,22 +415,19 @@ $hariIniStr = ($hariIndo[date('l', $now)] ?? date('l', $now)) . ', ' . date('d',
                                                 </span>
                                             </div>
                                         </td>
-                                        <td>
-                                            <span class="schedule-matkul">
-                                                <?= htmlspecialchars($item['mata_kuliah']) ?>
-                                                <span class="badge-prodi"><?= htmlspecialchars($item['prodi']) ?></span>
-                                            </span>
+                                        <td class="matkul-cell">
+                                            <div class="matkul-info-box">
+                                                <span class="schedule-matkul"><?= htmlspecialchars($item['mata_kuliah']) ?></span>
+                                                <div class="matkul-meta" style="display:flex; align-items:center; gap:8px; margin-top:5px; flex-wrap:wrap;">
+                                                    <span class="badge-prodi <?= $prodiBadgeClass ?>"><?= $prodiCode ?></span>
+                                                    <span class="schedule-meta-text" style="font-size:0.82rem; color:#64748b; font-weight:600;"><?= $kelasFreqStr ?></span>
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td class="text-nowrap">
-                                            <span class="schedule-kelas">Kelas <?= htmlspecialchars($item['kelas']) ?></span>
-                                            <?php if (!empty($item['frekuensi']) && trim($item['frekuensi']) !== '-'): ?>
-                                                <span class="schedule-freq">/ <?= htmlspecialchars($item['frekuensi']) ?></span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td>
-                                            <div class="dosen-info">
-                                                <i class="fas fa-user-tie"></i>
-                                                <span class="dosen-name"><?= htmlspecialchars($item['dosen']) ?></span>
+                                        <td class="dosen-cell">
+                                            <div class="dosen-info-box" style="display:flex; align-items:center; gap:8px;">
+                                                <i class="fas fa-chalkboard-teacher" style="color:#2563eb; font-size:0.9rem; flex-shrink:0;"></i>
+                                                <span class="dosen-name" style="font-weight:600; font-size:0.88rem; line-height:1.4;"><?= htmlspecialchars($item['dosen'] ?? '-') ?></span>
                                             </div>
                                         </td>
                                         <td class="desktop-status-cell text-center">

@@ -19,10 +19,10 @@
                 }
             </style>
 
-            <div class="filter-controls" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 25px;">
+            <div class="filter-controls">
                 <!-- Hari -->
-                <div class="day-selector-wrapper" style="margin-top: 0;">
-                    <select id="day-select" class="custom-select" onchange="renderJadwalDashboard()" style="min-width: 150px;">
+                <div class="day-selector-wrapper">
+                    <select id="day-select" class="custom-select" onchange="renderJadwalDashboard()">
                         <option value="">Semua Hari</option>
                         <option value="Senin">Senin</option>
                         <option value="Selasa">Selasa</option>
@@ -35,16 +35,16 @@
                 </div>
 
                 <!-- Lab/Ruangan -->
-                <div class="day-selector-wrapper" style="margin-top: 0;">
-                    <select id="lab-select" class="custom-select" onchange="renderJadwalDashboard()" style="min-width: 160px;">
+                <div class="day-selector-wrapper">
+                    <select id="lab-select" class="custom-select" onchange="renderJadwalDashboard()">
                         <option value="">Semua Lab</option>
                     </select>
                     <i class="fas fa-chevron-down select-icon"></i>
                 </div>
 
                 <!-- Prodi -->
-                <div class="day-selector-wrapper" style="margin-top: 0;">
-                    <select id="prodi-select" class="custom-select" onchange="renderJadwalDashboard()" style="min-width: 140px;">
+                <div class="day-selector-wrapper">
+                    <select id="prodi-select" class="custom-select" onchange="renderJadwalDashboard()">
                         <option value="">Semua Prodi</option>
                         <option value="TI">Teknik Informatika (TI)</option>
                         <option value="SI">Sistem Informasi (SI)</option>
@@ -53,10 +53,9 @@
                 </div>
 
                 <!-- Pencarian -->
-                <div class="search-input-wrapper" style="position: relative; display: inline-block;">
-                    <input type="text" id="search-input" onkeyup="renderJadwalDashboard()" oninput="renderJadwalDashboard()" placeholder="Cari matakuliah, dosen, asisten..." 
-                        style="padding: 12px 20px 12px 45px; border-radius: 12px; border: 2px solid #e2e8f0; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; outline: none; transition: all 0.3s; background: white; color: #0f172a; min-width: 280px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-                    <i class="fas fa-search" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #64748b;"></i>
+                <div class="search-input-wrapper">
+                    <input type="text" id="search-input" onkeyup="renderJadwalDashboard()" oninput="renderJadwalDashboard()" placeholder="Cari matakuliah, dosen, asisten...">
+                    <i class="fas fa-search search-icon"></i>
                 </div>
             </div>
         </header>

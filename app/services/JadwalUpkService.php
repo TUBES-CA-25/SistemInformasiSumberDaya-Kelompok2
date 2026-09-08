@@ -50,8 +50,8 @@ class JadwalUpkService {
             '/^(dosen.*pengampu|nama.*dosen)$/i',
         ],
         'ruangan' => [
-            '/^(ruangan|ruang|laboratorium|lab|tempat|room|lokasi|namalab|ruanglab|ruang[\s\-_]*ujian|nama[\s\-_]*ruangan)$/i',
-            '/^(ruang.*lab|nama.*lab|ruang.*ujian)$/i',
+            '/^(ruangan|ruang|laboratorium|lab|tempat|room|lokasi|namalab|ruanglab|ruang[\s\-_]*ujian|nama[\s\-_]*ruangan|tempat[\s\-_]*ujian|lokasi[\s\-_]*ujian|ruang[\s\-_]*lab|lab[\s\-_]*ujian|r[\s\-_]*ujian|r[\s\-_]*lab|ruang[\s\-_]*\/[\s\-_]*lab|lab[\s\-_]*\/[\s\-_]*ruang)$/i',
+            '/^(ruang.*lab|nama.*lab|ruang.*ujian|tempat.*ujian|lokasi.*ujian|ruang.*tempat|lab.*komputer)$/i',
         ],
         'kelas_freq' => [
             '/^(kelas[\/\s\-_]*freq|kls[\/\s\-_]*freq|kelas[\/\s\-_]*frekuensi|kls[\/\s\-_]*frekuensi)$/i',
@@ -60,7 +60,8 @@ class JadwalUpkService {
             '/^(kelas|kls|class|kelompok|group|rombel)$/i',
         ],
         'prodi' => [
-            '/^(prodi|program[\s\-_]*studi|jurusan|departemen|studi)$/i',
+            '/^(prodi|program[\s\-_]*studi|jurusan|departemen|studi|prodi[\s\-_]*jurusan|programstudi|pstudi|kdprodi|jurusan[\s\-_]*prodi)$/i',
+            '/^(program.*studi|prodi.*jurusan)$/i',
         ],
         'frekuensi' => [
             '/^(frekuensi|frekwensi|freq|frek|gelombang|pertemuan)$/i',
@@ -188,13 +189,13 @@ class JadwalUpkService {
             return isset($rowData[$idx]) ? trim((string)$rowData[$idx]) : $default;
         };
 
-        $mk      = $getVal('mata_kuliah');
-        $kodeMK  = $getVal('kode_mk');
-        $dosen   = $getVal('dosen');
-        $ruangan = $getVal('ruangan');
-        $prodi   = $this->normalizeProdi($getVal('prodi'));
-        $kelas   = strtoupper($getVal('kelas'));
-        $freq    = $getVal('frekuensi');
+        $mk         = $getVal('mata_kuliah');
+        $kodeMK     = $getVal('kode_mk');
+        $dosen      = $getVal('dosen');
+        $rawRuangan = $getVal('ruangan');
+        $rawProdi   = $getVal('prodi');
+        $kelas      = strtoupper($getVal('kelas'));
+        $freq       = $getVal('frekuensi');
 
         // Jika ada kolom gabungan kelas_freq (misal: "A/1" atau "B-2")
         if (isset($colMap['kelas_freq'])) {
@@ -228,9 +229,20 @@ class JadwalUpkService {
         }
 
         // Lewati baris jika data utama kosong sama sekali
-        if (empty($mk) && empty($ruangan) && empty($dosen)) {
+        if (empty($mk) && empty($rawRuangan) && empty($dosen)) {
             return null;
         }
+
+        $rowContext = [
+            'mata_kuliah' => $mk,
+            'kode_mk'     => $kodeMK,
+            'kelas'       => $kelas,
+            'frekuensi'   => $freq,
+            'dosen'       => $dosen
+        ];
+
+        $ruangan = $this->normalizeRuangan($rawRuangan, $rowContext);
+        $prodi   = $this->normalizeProdi($rawProdi, $rowContext);
 
         // Parsing Tanggal
         $rawTanggal = $getVal('tanggal');
@@ -580,19 +592,154 @@ class JadwalUpkService {
     }
 
     /**
-     * Normalisasi nama Program Studi.
+     * Smart Normalisasi dan Deteksi Ruangan / Laboratorium.
+     * Mengatur nama laboratorium dengan cerdas baik menggunakan kata "Lab" maupun tanpa "Lab",
+     * serta mampu mendeteksi ruangan dari teks mata kuliah atau frekuensi jika kolom ruangan kosong.
      */
-    private function normalizeProdi($raw): string {
+    public function normalizeRuangan($raw = '', array $rowContext = []): string {
         $str = trim((string)$raw);
-        if (empty($str)) return 'Teknik Informatika';
+
+        // Jika kosong, coba ekstrak dari mata_kuliah atau frekuensi
+        if (empty($str)) {
+            $combined = ($rowContext['mata_kuliah'] ?? '') . ' ' . ($rowContext['frekuensi'] ?? '') . ' ' . ($rowContext['kelas'] ?? '');
+            if (preg_match('/(Lab[\w\s\.-]+|Laboratorium[\w\s\.-]+|Start\s*Up|IoT|Computer\s*Network|Data\s*Science|Computer\s*Vision|Multimedia|Microcontroller|Research\s*Room\s*\d)/i', $combined, $m)) {
+                $str = trim($m[1]);
+            }
+        }
+
+        if (empty($str)) {
+            return 'Laboratorium Komputer 1';
+        }
+
+        // Clean common lab/room prefixes
+        $clean = preg_replace('/^(laboratorium|lab\.|lab|ruang\s+lab|ruang|ruangan|r\.)\s+/i', '', $str);
+        $clean = trim($clean);
+        $normClean = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $clean));
+        $normStr   = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $str));
+
+        // Kamus Laboratorium & Sinonim Lengkap
+        $knownLabs = [
+            'startup'                  => 'Start Up',
+            'iot'                      => 'IoT',
+            'computernetwork'          => 'Computer Network',
+            'jarkom'                   => 'Computer Network',
+            'jaringankomputer'         => 'Computer Network',
+            'jaringan'                 => 'Computer Network',
+            'datascience'              => 'Data Science',
+            'sainsdata'                => 'Data Science',
+            'ilmudata'                 => 'Data Science',
+            'computervision'           => 'Computer Vision',
+            'visikomputer'             => 'Computer Vision',
+            'vision'                   => 'Computer Vision',
+            'multimedia'               => 'Multimedia',
+            'mm'                       => 'Multimedia',
+            'microcontroller'          => 'Microcontroller',
+            'mikrokontroler'           => 'Microcontroller',
+            'mikrokontroller'          => 'Microcontroller',
+            'mikro'                    => 'Microcontroller',
+            'researchroom1'            => 'Research Room 1',
+            'riset1'                   => 'Research Room 1',
+            'ruangriset1'              => 'Research Room 1',
+            'researchroom2'            => 'Research Room 2',
+            'riset2'                   => 'Research Room 2',
+            'ruangriset2'              => 'Research Room 2',
+            'researchroom3'            => 'Research Room 3',
+            'riset3'                   => 'Research Room 3',
+            'ruangriset3'              => 'Research Room 3',
+            'softwareengineering'      => 'Lab Software Engineering',
+            'se'                       => 'Lab Software Engineering',
+            'basisdata'                => 'Lab Basis Data',
+            'database'                 => 'Lab Basis Data',
+            'bd'                       => 'Lab Basis Data',
+            'komputasicerdas'          => 'Lab KCP',
+            'kcp'                      => 'Lab KCP',
+            'pemrograman'              => 'Lab Pemrograman',
+            'sim'                      => 'Lab SIM',
+            'sisteminformasimanajemen' => 'Lab SIM',
+            'cybersecurity'            => 'Lab Cyber Security',
+            'keamanansiber'            => 'Lab Cyber Security',
+            'komputer1'                => 'Laboratorium Komputer 1',
+            'lab1'                     => 'Laboratorium Komputer 1',
+            'ruang1'                   => 'Laboratorium Komputer 1',
+            '1'                        => 'Laboratorium Komputer 1',
+            'komputer2'                => 'Laboratorium Komputer 2',
+            'lab2'                     => 'Laboratorium Komputer 2',
+            'ruang2'                   => 'Laboratorium Komputer 2',
+            '2'                        => 'Laboratorium Komputer 2',
+            'komputer3'                => 'Laboratorium Komputer 3',
+            'lab3'                     => 'Laboratorium Komputer 3',
+            'ruang3'                   => 'Laboratorium Komputer 3',
+            '3'                        => 'Laboratorium Komputer 3',
+        ];
+
+        if (isset($knownLabs[$normClean])) {
+            return $knownLabs[$normClean];
+        }
+
+        if (isset($knownLabs[$normStr])) {
+            return $knownLabs[$normStr];
+        }
+
+        // Jika string sudah memuat Lab / Laboratorium / Ruang / Research Room, format huruf kapital dengan rapi
+        if (preg_match('/^(lab|laboratorium|ruang|research)/i', $str)) {
+            return ucwords(strtolower($str));
+        }
+
+        // Fallback: Jika berupa nama tempat tanpa "Lab", tambahkan prefix "Lab "
+        return 'Lab ' . ucwords(strtolower($str));
+    }
+
+    /**
+     * Normalisasi & Autodeteksi nama Program Studi ('TI' atau 'SI').
+     * Mampu membaca 'TI', 'SI', 'Teknik Informatika', 'Sistem Informasi',
+     * maupun mendeteksi otomatis dari kode MK, nama MK, atau frekuensi/kelas.
+     */
+    public function normalizeProdi($raw = '', array $rowContext = []): string {
+        $str = trim((string)$raw);
         $upper = strtoupper($str);
-        if ($upper === 'TI' || stripos($upper, 'INFORMATIKA') !== false) {
-            return 'Teknik Informatika';
+
+        if ($upper === 'SI' || stripos($upper, 'SISTEM INFORMASI') !== false || $upper === 'S.INFORMASI' || $upper === 'SYSTEM INFORMASI') {
+            return 'SI';
         }
-        if ($upper === 'SI' || stripos($upper, 'SISTEM INFORMASI') !== false) {
-            return 'Sistem Informasi';
+        if ($upper === 'TI' || stripos($upper, 'INFORMATIKA') !== false || $upper === 'T.INFORMATIKA' || $upper === 'IF') {
+            return 'TI';
         }
-        return $str;
+
+        // 1. Deteksi dari Kode Mata Kuliah
+        $kode = strtoupper(trim((string)($rowContext['kode_mk'] ?? '')));
+        if (!empty($kode)) {
+            if (str_starts_with($kode, '131') || str_starts_with($kode, 'SI') || str_starts_with($kode, 'IFS')) {
+                return 'SI';
+            }
+            if (str_starts_with($kode, '130') || str_starts_with($kode, 'TI') || str_starts_with($kode, 'IF')) {
+                return 'TI';
+            }
+        }
+
+        // 2. Deteksi dari Kelas atau Frekuensi
+        $freq = strtoupper(trim((string)($rowContext['frekuensi'] ?? '') . ' ' . (string)($rowContext['kelas'] ?? '')));
+        if (!empty($freq)) {
+            if (preg_match('/\b(SI|SISTEMINFORMASI|SI[-_]?\d|\dSI)\b/i', $freq)) {
+                return 'SI';
+            }
+            if (preg_match('/\b(TI|INFORMATIKA|TI[-_]?\d|\dTI|IF)\b/i', $freq)) {
+                return 'TI';
+            }
+        }
+
+        // 3. Deteksi dari Nama Mata Kuliah
+        $mk = strtoupper(trim((string)($rowContext['mata_kuliah'] ?? '')));
+        if (!empty($mk)) {
+            if (preg_match('/\b(SISTEM\s+INFORMASI|MANAJEMEN\s+PROYEK|ENTERPRISE|E-BUSINESS|TATA\s+KELOLA|AUDIT\s+SISTEM|ANALISIS.*SISTEM|SIM)\b/i', $mk) || str_contains($mk, '(SI)')) {
+                return 'SI';
+            }
+            if (preg_match('/\b(INFORMATIKA|ALGORITMA|STRUKTUR\s+DATA|GRAFIKA|KECERDASAN\s+BUATAN|PEMROGRAMAN|JARINGAN|SISTEM\s+OPERASI|PENGOLAHAN\s+CITRA|KRIPTOGRAFI)\b/i', $mk) || str_contains($mk, '(TI)')) {
+                return 'TI';
+            }
+        }
+
+        // Default fallback ke TI
+        return 'TI';
     }
 
     /**

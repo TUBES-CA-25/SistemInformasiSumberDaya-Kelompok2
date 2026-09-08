@@ -618,38 +618,47 @@
 .status-label {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-size: 0.75rem;
+  justify-content: center;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.68rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .badge-ongoing {
   background: #dcfce7;
-  color: #166534;
+  color: #15803d;
   border: 1px solid #86efac;
   animation: pulse-green 2s infinite;
 }
 
 .badge-upcoming {
   background: #eff6ff;
-  color: #1e40af;
-  border: 1px solid #bfdbfe;
-}
-
-.badge-scheduled {
-  background: #eff6ff;
   color: #1d4ed8;
   border: 1px solid #bfdbfe;
 }
 
+.badge-scheduled {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
 .badge-finished {
-  background: #f1f5f9;
+  background: #f8fafc;
   color: #64748b;
   border: 1px solid #e2e8f0;
+}
+
+.badge-inactive {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
 }
 
 @keyframes pulse-green {
@@ -1057,9 +1066,17 @@
   font-size: 1rem;
 }
 
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+  width: 100%;
+}
+
 .day-selector-wrapper {
-  margin-top: 20px;
-  margin-bottom: 0px;
   position: relative;
   display: inline-block;
 }
@@ -1071,12 +1088,13 @@
   border-radius: 12px;
   padding: 12px 40px 12px 20px;
   font-family: "Inter", sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #0f172a;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  min-width: 150px;
 }
 
 .custom-select:focus {
@@ -1092,6 +1110,52 @@
   transform: translateY(-50%);
   color: #64748b;
   pointer-events: none;
+}
+
+/* Global / Desktop Search Input Styling */
+.search-input-wrapper,
+.upk-search-wrapper,
+.modul-search-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+#search-input,
+#upk-search-input,
+#modul-search-input {
+  padding: 12px 20px 12px 45px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: #0f172a;
+  min-width: 280px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+#search-input:focus,
+#upk-search-input:focus,
+#modul-search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.search-input-wrapper i.fa-search,
+.search-input-wrapper i.search-icon,
+.upk-search-wrapper i.fa-search,
+.modul-search-wrapper i.fa-search {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+  font-size: 0.95rem;
 }
 
 /* Badge khusus untuk jadwal hari lain */
@@ -1304,9 +1368,10 @@ body.night-mode .schedule-matkul {
 
 body.night-mode .schedule-kelas,
 body.night-mode .schedule-freq,
+body.night-mode .schedule-meta-text,
 body.night-mode .modul-title,
 body.night-mode .asisten-name span {
-  color: #e2e8f0 !important;
+  color: #cbd5e1 !important;
 }
 
 body.night-mode .dosen-name,
@@ -1362,6 +1427,12 @@ body.night-mode .badge-finished {
   background: rgba(30, 41, 59, 0.9) !important;
   color: #94a3b8 !important;
   border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.night-mode .badge-inactive {
+  background: rgba(220, 38, 38, 0.25) !important;
+  color: #fca5a5 !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
 }
 
 /* 7. Dropdown Select & Controls */
@@ -1729,29 +1800,34 @@ body.night-mode .rule-card:hover .dress-code-img {
   }
 
   .filter-controls {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 6px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
     margin-top: 14px !important;
     width: 100% !important;
     box-sizing: border-box !important;
   }
 
-  /* For Jadwal UPK page which has 2 select dropdowns */
-  .filter-controls:has(#upk-lab-select) {
-    grid-template-columns: 1fr 1fr !important;
-  }
-
-  /* For Modul page which has 1 select dropdown */
-  .filter-controls:has(#modul-prodi-select) {
-    grid-template-columns: 1fr !important;
-  }
-
   .day-selector-wrapper {
-    width: 100% !important;
-    max-width: 100% !important;
+    flex: 1 1 calc(50% - 4px) !important;
+    min-width: 120px !important;
     margin: 0 !important;
     position: relative !important;
+  }
+
+  /* Third wrapper (Prodi) expands to full row on mobile */
+  .day-selector-wrapper:nth-child(3) {
+    flex: 1 1 100% !important;
+  }
+
+  /* UPK page has 2 selects, each takes 50% width */
+  .filter-controls:has(#upk-lab-select) .day-selector-wrapper {
+    flex: 1 1 calc(50% - 4px) !important;
+  }
+
+  /* Modul page has 1 select, takes 100% width */
+  .filter-controls:has(#modul-prodi-select) .day-selector-wrapper {
+    flex: 1 1 100% !important;
   }
 
   .custom-select,
@@ -1763,23 +1839,39 @@ body.night-mode .rule-card:hover .dress-code-img {
   #modul-prodi-select {
     width: 100% !important;
     min-width: 0 !important;
-    padding: 6px 22px 6px 8px !important;
-    font-size: 0.76rem !important;
+    padding: 8px 28px 8px 12px !important;
+    font-size: 0.82rem !important;
     font-weight: 700 !important;
-    border-radius: 8px !important;
-    height: 38px !important;
+    border-radius: 10px !important;
+    height: 42px !important;
     box-sizing: border-box !important;
     text-overflow: ellipsis !important;
     overflow: hidden !important;
     white-space: nowrap !important;
+    background-color: #ffffff !important;
+    border: 1.5px solid #cbd5e1 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+  }
+
+  body.night-mode .custom-select,
+  body.night-mode #day-select,
+  body.night-mode #lab-select,
+  body.night-mode #prodi-select,
+  body.night-mode #upk-lab-select,
+  body.night-mode #upk-prodi-select,
+  body.night-mode #modul-prodi-select {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
   }
 
   .search-input-wrapper,
   .upk-search-wrapper,
   .modul-search-wrapper {
-    grid-column: 1 / -1 !important;
+    flex: 1 1 100% !important;
     width: 100% !important;
     margin-top: 2px !important;
+    position: relative !important;
     box-sizing: border-box !important;
   }
 
@@ -1788,20 +1880,35 @@ body.night-mode .rule-card:hover .dress-code-img {
   #modul-search-input {
     width: 100% !important;
     min-width: 0 !important;
-    padding: 6px 12px 6px 36px !important;
-    font-size: 0.8rem !important;
-    border-radius: 8px !important;
-    height: 38px !important;
+    padding: 8px 14px 8px 40px !important;
+    font-size: 0.85rem !important;
+    border-radius: 10px !important;
+    height: 42px !important;
+    border: 1.5px solid #cbd5e1 !important;
     box-sizing: border-box !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+  }
+
+  body.night-mode #search-input,
+  body.night-mode #upk-search-input,
+  body.night-mode #modul-search-input {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
   }
 
   .search-input-wrapper i.fa-search,
+  .search-input-wrapper i.search-icon,
   .upk-search-wrapper i.fa-search,
   .modul-search-wrapper i.fa-search {
-    left: 12px !important;
-    font-size: 0.85rem !important;
+    left: 14px !important;
+    font-size: 0.88rem !important;
     z-index: 5 !important;
     pointer-events: none !important;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #64748b !important;
   }
 
   /* Compact Lab Section Wrapper & Headers */
@@ -1810,21 +1917,21 @@ body.night-mode .rule-card:hover .dress-code-img {
   }
 
   .lab-header {
-    padding: 10px 14px !important;
-    border-radius: 10px !important;
-    margin-bottom: 10px !important;
+    padding: 12px 16px !important;
+    border-radius: 12px !important;
+    margin-bottom: 12px !important;
     gap: 10px !important;
   }
 
   .lab-title {
-    font-size: 1rem !important;
+    font-size: 1.05rem !important;
   }
 
   .lab-icon {
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 0.88rem !important;
-    border-radius: 8px !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 0.95rem !important;
+    border-radius: 10px !important;
   }
 
   .badge-prodi {
@@ -1864,21 +1971,30 @@ body.night-mode .rule-card:hover .dress-code-img {
   }
 
   .table-schedule tr {
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
-    border-radius: 14px !important;
+    border-radius: 16px !important;
     padding: 14px 16px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
     width: 100% !important;
     box-sizing: border-box !important;
-    gap: 6px !important;
+    gap: 8px !important;
   }
 
   body.night-mode .table-schedule tr {
     background: #1e293b !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .table-schedule td {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
   }
 
   /* Waktu & Status top header row */
@@ -1887,70 +2003,92 @@ body.night-mode .rule-card:hover .dress-code-img {
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
-    padding: 0 0 8px 0 !important;
+    padding-bottom: 8px !important;
     border-bottom: 1px dashed #e2e8f0 !important;
     font-weight: 800 !important;
     color: #2563eb !important;
-    font-size: 0.84rem !important;
+    font-size: 0.86rem !important;
   }
 
   body.night-mode .table-schedule td.time-cell {
     color: #60a5fa !important;
-    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
   }
 
   /* Mata Kuliah */
   .table-schedule td.matkul-cell {
-    font-size: 0.96rem !important;
+    padding-top: 2px !important;
+  }
+
+  .matkul-info-box .schedule-matkul {
+    font-size: 0.98rem !important;
     font-weight: 800 !important;
     color: #0f172a !important;
-    padding: 2px 0 0 0 !important;
-    line-height: 1.3 !important;
+    line-height: 1.35 !important;
   }
 
-  body.night-mode .table-schedule td.matkul-cell {
+  body.night-mode .matkul-info-box .schedule-matkul {
     color: #f8fafc !important;
-  }
-
-  /* Prodi */
-  .table-schedule td.prodi-cell {
-    display: flex !important;
-    align-items: center !important;
-    padding: 2px 0 !important;
-  }
-
-  .table-schedule td.prodi-cell .badge-prodi {
-    font-size: 0.66rem !important;
-    padding: 2px 7px !important;
-  }
-
-  /* Kelas / Frekuensi */
-  .table-schedule td.kelas-cell {
-    font-size: 0.78rem !important;
-    color: #64748b !important;
-    padding: 0 !important;
   }
 
   /* Dosen */
   .table-schedule td.dosen-cell {
-    font-size: 0.78rem !important;
-    color: #334155 !important;
-    padding: 2px 0 0 0 !important;
+    padding-top: 6px !important;
+    border-top: 1px solid #f1f5f9 !important;
   }
 
   body.night-mode .table-schedule td.dosen-cell {
+    border-top-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .dosen-info-box {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .dosen-name {
+    font-weight: 600 !important;
+    font-size: 0.84rem !important;
+    color: #334155 !important;
+  }
+
+  body.night-mode .dosen-name {
     color: #cbd5e1 !important;
   }
 
   /* Asisten */
   .table-schedule td.asisten-cell {
-    font-size: 0.76rem !important;
-    padding: 0 !important;
+    padding-top: 6px !important;
+    border-top: 1px solid #f1f5f9 !important;
+  }
+
+  body.night-mode .table-schedule td.asisten-cell {
+    border-top-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .asisten-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  .asisten-name {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 0.82rem !important;
+    color: #475569 !important;
+    font-weight: 500 !important;
+  }
+
+  body.night-mode .asisten-name {
+    color: #cbd5e1 !important;
   }
 
   .status-label {
-    padding: 3px 8px !important;
-    font-size: 0.64rem !important;
+    padding: 3px 10px !important;
+    font-size: 0.66rem !important;
     letter-spacing: 0.3px !important;
     border-radius: 6px !important;
   }

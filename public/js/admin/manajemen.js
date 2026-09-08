@@ -199,7 +199,7 @@ function openFormModal(id = null, event = null) {
 // Submit Form
 document
   .getElementById("manajemenForm")
-  .addEventListener("submit", function (e) {
+  .addEventListener("submit", async function (e) {
     e.preventDefault();
     const btn = document.getElementById("btnSave");
     const msg = document.getElementById("formMessage");
@@ -221,6 +221,21 @@ document
 
     const formData = new FormData(this);
     if (id) formData.append("_method", "PUT"); // Trik untuk update file di PHP
+
+    // Process photo cropping if zoom/position changed or new photo selected
+    if (typeof PhotoPositioner !== 'undefined') {
+      const isFileSelected = fileInput && fileInput.files && fileInput.files.length > 0;
+      const isDirty = PhotoPositioner.isDirty("fotoPositionBox");
+
+      if (isFileSelected || isDirty) {
+        const croppedBlob = await PhotoPositioner.getCroppedBlob("fotoPositionBox");
+        if (croppedBlob) {
+          formData.set("foto", croppedBlob, "foto_manajemen.jpg");
+          formData.set("foto_pos_x", "50");
+          formData.set("foto_pos_y", "50");
+        }
+      }
+    }
 
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Menyimpan...';

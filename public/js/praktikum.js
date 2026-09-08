@@ -257,48 +257,77 @@ function renderJadwalDashboard() {
     const thKlsFreq = hasAnyFreq ? "Kls/Freq" : "Kelas";
 
     finalHtml += `
-    <div class="schedule-wrapper" style="margin-bottom: 60px;">
-        <div class="lab-header">
-            <div class="lab-icon"><i class="fas fa-desktop"></i></div>
-            <h2 class="lab-title">${lab}</h2>
+    <div class="schedule-wrapper" style="margin-bottom: 40px;">
+        <div class="lab-header" style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="lab-icon"><i class="fas fa-desktop"></i></div>
+                <h2 class="lab-title" style="margin: 0;">${lab}</h2>
+            </div>
+            <span class="lab-count-badge" style="font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; padding: 4px 10px; border-radius: 20px; border: 1px solid #dbeafe;">${jadwalLab.length} Sesi</span>
         </div>
         <div class="table-responsive">
             <table class="table-schedule">
                 <thead>
                     <tr>
-                        <th style="width: 15%;" class="text-nowrap">${isAllDays ? "Hari & Waktu" : "Waktu"}</th>
-                        <th style="width: 22%;">Mata Kuliah</th>
-                        <th style="width: 8%; text-align: center;" class="text-nowrap">Prodi</th>
-                        <th style="width: 9%;" class="text-nowrap">${thKlsFreq}</th>
-                        <th style="width: 22%;">Dosen</th>
-                        <th style="width: 14%;">Asisten</th>
+                        <th style="width: 14%;" class="text-nowrap">${isAllDays ? "Hari & Waktu" : "Waktu"}</th>
+                        <th style="width: 26%;">Mata Kuliah</th>
+                        <th style="width: 27%;">Dosen</th>
+                        <th style="width: 23%;">Asisten</th>
                         <th style="width: 10%; text-align: center;" class="text-nowrap">Status</th>
                     </tr>
                 </thead>
                 <tbody>`;
 
     jadwalLab.forEach((item) => {
-      const start = item.waktuMulai ? item.waktuMulai.substring(0, 5) : "--:--";
-      const end = item.waktuSelesai ? item.waktuSelesai.substring(0, 5) : "--:--";
+      const formatTimeHHMM = (str) => {
+        if (!str) return "00:00";
+        const parts = String(str).trim().split(":");
+        if (parts.length < 2) return "00:00";
+        const h = parts[0].padStart(2, "0");
+        const m = parts[1].padStart(2, "0");
+        return `${h}:${m}`;
+      };
+
+      const start = formatTimeHHMM(item.waktuMulai);
+      const end = formatTimeHHMM(item.waktuSelesai);
+
+      const dayIndexMap = { "senin": 1, "selasa": 2, "rabu": 3, "kamis": 4, "jumat": 5, "sabtu": 6, "minggu": 7 };
+      const cleanToday = (realToday || "").trim().toLowerCase();
+      const cleanHari = (item.hari || "").trim().toLowerCase();
+      const currentDayIdx = dayIndexMap[cleanToday] || 0;
+      const itemDayIdx = dayIndexMap[cleanHari] || 0;
+
+      const rawStatus = (item.status || "").trim().toLowerCase();
+      const isInactive = (rawStatus === "nonaktif" || rawStatus === "non-aktif" || rawStatus === "dibatalkan" || rawStatus === "off");
 
       let statusBadge = "status-label badge-scheduled";
       let statusText = "TERJADWAL";
 
-      const rowIsToday = (item.hari === realToday);
-      if (rowIsToday) {
-        if (jamSekarang >= start && jamSekarang < end) {
-          statusText = "BERLANGSUNG";
-          statusBadge = "status-label badge-ongoing";
-        } else if (jamSekarang < start) {
-          statusText = "AKAN DATANG";
-          statusBadge = "status-label badge-upcoming";
-        } else {
+      if (isInactive) {
+        statusText = (item.status || "NONAKTIF").toUpperCase();
+        statusBadge = "status-label badge-inactive";
+      } else if (itemDayIdx > 0 && currentDayIdx > 0) {
+        if (itemDayIdx < currentDayIdx) {
           statusText = "SELESAI";
           statusBadge = "status-label badge-finished";
+        } else if (itemDayIdx === currentDayIdx) {
+          if (jamSekarang >= start && jamSekarang < end) {
+            statusText = "BERLANGSUNG";
+            statusBadge = "status-label badge-ongoing";
+          } else if (jamSekarang < start) {
+            statusText = "AKAN DATANG";
+            statusBadge = "status-label badge-upcoming";
+          } else {
+            statusText = "SELESAI";
+            statusBadge = "status-label badge-finished";
+          }
+        } else {
+          statusText = "AKAN DATANG";
+          statusBadge = "status-label badge-upcoming";
         }
       }
 
-      const hasFreq = item.frekuensi && String(item.frekuensi).trim() !== "" && String(item.frekuensi).trim() !== "-";
+      const hasFreq = item.frekuensi && String(item.frekuensi).trim() !== "" && String(item.frekuensi).trim() !== "-" && String(item.frekuensi).trim() !== "0";
       const kelasFreq = hasFreq
         ? `<span class="schedule-kelas">Kelas ${item.kelas || "-"}</span> <span class="schedule-freq">/ ${item.frekuensi}</span>`
         : `<span class="schedule-kelas">Kelas ${item.kelas || "-"}</span>`;
@@ -335,22 +364,29 @@ function renderJadwalDashboard() {
 
       finalHtml += `
             <tr>
-                <td style="width: 15%;" class="text-nowrap time-cell" style="font-family:'JetBrains Mono', monospace; font-size:0.88rem; font-weight:700;">
+                <td class="text-nowrap time-cell" style="font-family:'JetBrains Mono', monospace; font-size:0.88rem; font-weight:700;">
                     ${timeDisplay}
                     <span class="mobile-status-badge ${statusBadge}">${statusText}</span>
                 </td>
-                <td style="width: 23%;" class="matkul-cell">
-                    <span class="schedule-matkul">
-                        ${item.namaMatakuliah}
-                    </span>
+                <td class="matkul-cell">
+                    <div class="matkul-info-box">
+                        <span class="schedule-matkul">${item.namaMatakuliah}</span>
+                        <div class="matkul-meta" style="display:flex; align-items:center; gap:8px; margin-top:5px; flex-wrap:wrap;">
+                            <span class="badge-prodi ${prodiBadgeClass}">${prodiCode}</span>
+                            <span class="schedule-meta-text" style="font-size:0.82rem; color:#64748b; font-weight:600;">${kelasFreq}</span>
+                        </div>
+                    </div>
                 </td>
-                <td style="width: 8%; text-align: center;" class="text-center text-nowrap prodi-cell">
-                    <span class="badge-prodi ${prodiBadgeClass}">${prodiCode}</span>
+                <td class="dosen-cell">
+                    <div class="dosen-info-box">
+                        <i class="fas fa-chalkboard-teacher" style="color:#2563eb; font-size:0.9rem; flex-shrink:0;"></i>
+                        <span class="dosen-name" style="font-weight:600; font-size:0.88rem; line-height:1.4;">${item.dosen || "-"}</span>
+                    </div>
                 </td>
-                <td style="width: 9%;" class="text-nowrap kelas-cell">${kelasFreq}</td>
-                <td style="width: 22%;" class="dosen-cell"><div class="dosen-info-box"><i class="fas fa-chalkboard-teacher" style="color:#2563eb; font-size:0.9rem; flex-shrink:0;"></i><span>${item.dosen || "-"}</span></div></td>
-                <td style="width: 14%;" class="asisten-cell">${asistenDisplay}</td>
-                <td style="width: 10%; text-align: center;" class="desktop-status-cell"><span class="${statusBadge}">${statusText}</span></td>
+                <td class="asisten-cell">
+                    ${asistenDisplay}
+                </td>
+                <td class="desktop-status-cell" style="text-align: center;"><span class="${statusBadge}">${statusText}</span></td>
             </tr>`;
     });
     finalHtml += `</tbody></table></div></div>`;
